@@ -27,7 +27,7 @@ class _CurrentShopState extends State<CurrentShop> {
                           size: 100,
                         ),
                         Text(
-                          "Fish Genge",
+                          shop.name,
                           textScaleFactor: 2.5,
                         ),
                         Spacer(flex: 1,),

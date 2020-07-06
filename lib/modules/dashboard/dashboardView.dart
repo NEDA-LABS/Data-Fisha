@@ -5,6 +5,8 @@ import 'package:smartstock_flutter_mobile/models/shop.dart';
 import 'sales_performance.dart';
 import 'gross_profit_performance.dart';
 import 'stock_health.dart';
+import 'package:provider/provider.dart';
+import 'package:smartstock_flutter_mobile/providers/shop_detail_change_notifier.dart';
 
 class DashBoardView extends StatefulWidget {
   DashBoardView({Key key}) : super(key: key);
@@ -16,7 +18,15 @@ class DashBoardView extends StatefulWidget {
 class _DashBoardViewState extends State<DashBoardView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+        return Consumer<ShopDetailsChangeNotifier>(
+      builder: (context, shopDetailChangeNotifier, child) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.send),
+            onPressed: (){
+              shopDetailChangeNotifier.addShop(newShop: new Shop(name: "Joshua Shop"));
+            },
+          ),
         appBar: AppBar(
           title: Text("Dashboard"),
           actions: <Widget>[
@@ -31,17 +41,21 @@ class _DashBoardViewState extends State<DashBoardView> {
           ],
         ),
         drawer: DrawerPage(),
-        body: SafeArea(
+        body:  SafeArea(
           child: Center(
             child: ListView(
               children: <Widget>[
-                CurrentShop(shop: Shop(name: "Fish Genge")),
-                SalesPerformance(shop: Shop(name: "Fish Genge")),
-                GrossProfitPerformance(shop: Shop(name: "Fish Genge")),
-                StockHealth(shop: Shop(name: "Fish Genge"))
+                CurrentShop(shop: shopDetailChangeNotifier.shop),
+                SalesPerformance(shop: shopDetailChangeNotifier.shop),
+                GrossProfitPerformance(shop: shopDetailChangeNotifier.shop),
+                StockHealth(shop: shopDetailChangeNotifier.shop)
               ],
             ),
           ),
         ));
+      },
+    );
+    
+    
   }
 }

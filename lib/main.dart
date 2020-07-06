@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'modules/dashboard/dashboardView.dart';
 import 'configurations.dart';
+import 'package:provider/provider.dart';
+import 'providers/shop_detail_change_notifier.dart';
+import 'models/shop.dart';
 
-void main() => runApp(SmartStockApp());
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ShopDetailsChangeNotifier>(
+        create: (_) => ShopDetailsChangeNotifier(),
+      )
+    ],
+    child: SmartStockApp(),
+  ));
+}
 
 class SmartStockApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SmartStock App',
-      theme: ThemeData(
-        primarySwatch: Config.primaryColor,
-      ),
-      home: Scaffold(body: DashBoardView(),
-          ),
-    );
+  Widget build(BuildContext context) { // set the shop for the application - should be set after profile selection
+      return MaterialApp(
+        title: 'SmartStock App',
+        theme: ThemeData(
+          primarySwatch: Config.primaryColor,
+        ),
+        home: Scaffold(
+          body: Consumer<ShopDetailsChangeNotifier>(
+        builder: (context, shopDetailsChangeNotifier, child) {
+          shopDetailsChangeNotifier.addShop(newShop: Shop(name: "Fish Genge"));
+          return DashBoardView();
+        }),
+      ));
   }
-}
 
+}
