@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_flutter_mobile/modules/login/loginPage.dart';
-import 'modules/dashboard/dashboardView.dart';
-import 'configurations.dart';
 import 'package:provider/provider.dart';
+import 'package:smartstock_flutter_mobile/modules/login/loginPage.dart';
 
 import 'configurations.dart';
 import 'models/shop.dart';
@@ -30,13 +28,14 @@ class SmartStockApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Config.getSmartStockMaterialColorSwatch(),
         ),
-        home: Scaffold(
-          body: Consumer<ShopDetailsChangeNotifier>(
-              builder: (context, shopDetailsChangeNotifier, child) {
-            shopDetailsChangeNotifier.addShop(
-                newShop: Shop(name: "Fish Genge"));
-            return DashBoardView();
-          }),
-        ));
+home: LoginPage(),);
+//        home: Scaffold(
+//          body: Consumer<ShopDetailsChangeNotifier>(
+//              builder: (context, shopDetailsChangeNotifier, child) {
+//            shopDetailsChangeNotifier.addShop(
+//                newShop: Shop(name: "Fish Genge"));
+//            return DashBoardView();
+//          }),
+//        ));
   }
 }

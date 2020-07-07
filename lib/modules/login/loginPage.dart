@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Config.primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           Container(
             alignment: Alignment.center,
