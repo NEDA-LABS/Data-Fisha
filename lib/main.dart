@@ -25,7 +25,7 @@ class SmartStockApp extends StatelessWidget {
     return MaterialApp(
         title: 'SmartStock App',
         theme: ThemeData(
-          primarySwatch: Config.createMaterialColor(),
+          primarySwatch: Config.getSmartStockMaterialColorSwatch(),
         ),
         home: Scaffold(
           body: Consumer<ShopDetailsChangeNotifier>(
