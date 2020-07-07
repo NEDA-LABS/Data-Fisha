@@ -4,3 +4,4 @@ class Config{
   static const primaryColor = Colors.green;
   
 }
+
