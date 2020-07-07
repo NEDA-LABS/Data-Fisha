@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock_flutter_mobile/modules/login/loginPage.dart';
+import 'modules/dashboard/dashboardView.dart';
+import 'configurations.dart';
 import 'package:provider/provider.dart';
 
 import 'configurations.dart';
