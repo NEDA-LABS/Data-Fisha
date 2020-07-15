@@ -1,18 +1,11 @@
+import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 
-class DrawerPage extends StatefulWidget {
-  DrawerPage({Key key}) : super(key: key);
-
-  @override
-  __DrawerState createState() => __DrawerState();
-}
-
-class __DrawerState extends State<DrawerPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-       
+class DrawerComponents {
+  Widget get drawer {
+    return BFastUI.component().custom(
+      (context) => Column(
+        children: [Text("Dashboard")],
       ),
     );
   }
