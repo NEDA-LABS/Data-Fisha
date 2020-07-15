@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0-beta.0"
+  bfastui:
+    dependency: "direct main"
+    description:
+      name: bfastui
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-beta.5"
   boolean_selector:
     dependency: transitive
     description:
@@ -76,6 +83,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_modular:
+    dependency: transitive
+    description:
+      name: flutter_modular
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -123,13 +137,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   path:
     dependency: transitive
     description:
@@ -144,13 +151,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.5+1"
   sembast:
     dependency: transitive
     description:
@@ -242,4 +242,3 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.8.0 <3.0.0"
-  flutter: ">=1.12.1"
