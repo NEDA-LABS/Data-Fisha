@@ -10,6 +10,10 @@ class LoginPageState extends BFastUIState {
 
   login({@required String username, @required String password}) {
     print('login button *******');
+    BFast.auth().currentUser().then((value){
+      print(value['username']);
+      print("*********login button");
+    });
     onLoginProgress = true;
     BFast.auth().logIn(username, password).then((value) {
       print(value);
