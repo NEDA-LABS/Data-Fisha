@@ -3,17 +3,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:smartstock/shared/card_view.dart';
 
-class StockHealthComponents {
-//  final Shop shop;
-//  StockHealth({Key key, this.shop}) : super(key: key);
-//
-//  @override
-//  _StockHealthState createState() => _StockHealthState(shop: this.shop);
-//}
-//
-//class _StockHealthState extends State<StockHealth> {
-//  final Shop shop;
-
+class DashboardStockComponents {
   static var data = [
     new StockPerOutlet('Total', 12, Colors.red),
     new StockPerOutlet('Out', 20, Colors.yellow),

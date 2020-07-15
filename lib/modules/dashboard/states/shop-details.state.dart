@@ -1,5 +1,5 @@
 import 'package:bfastui/adapters/state.dart';
-import 'package:smartstock/models/shop.dart';
+import 'package:smartstock/modules/dashboard/models/shop.dart';
 
 class ShopDetailsState extends BFastUIState {
   Shop _shop;
