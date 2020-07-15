@@ -1,4 +1,4 @@
-package com.example.smartstock_flutter_mobile
+package com.fahamutech.smartstock
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

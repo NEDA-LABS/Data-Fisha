@@ -1,41 +1,42 @@
+import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/controllers/state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:smartstock_flutter_mobile/modules/login/loginPage.dart';
+import 'package:smartstock/states/shop_details.dart';
 
 import 'configurations.dart';
-import 'models/shop.dart';
-import 'modules/dashboard/dashboardView.dart';
-import 'providers/shop_detail_change_notifier.dart';
+import 'modules/dashboard/dashboard.page.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ShopDetailsChangeNotifier>(
-        create: (_) => ShopDetailsChangeNotifier(),
-      )
-    ],
-    child: SmartStockApp(),
-  ));
+  _registerStates();
+  _registerRoutes();
+  runApp(BFastUI.module(
+          title: "SmartStock",
+          theme: ThemeData(
+              primarySwatch: Config.getSmartStockMaterialColorSwatch()))
+      .start());
 }
 
-class SmartStockApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    // set the shop for the application - should be set after profile selection
-    return MaterialApp(
-        title: 'SmartStock App',
-        theme: ThemeData(
-          primarySwatch: Config.getSmartStockMaterialColorSwatch(),
-        ),
-home: LoginPage(),);
-//        home: Scaffold(
-//          body: Consumer<ShopDetailsChangeNotifier>(
-//              builder: (context, shopDetailsChangeNotifier, child) {
-//            shopDetailsChangeNotifier.addShop(
-//                newShop: Shop(name: "Fish Genge"));
-//            return DashBoardView();
-//          }),
-//        ));
-  }
+void _registerStates() {
+  // dashboard module state
+  BFastUI.states(moduleName: 'dashboard').addState(
+    BFastUIStateBinder((_) => ShopDetailsState()),
+  );
+}
+
+void _registerRoutes() {
+  // main routes
+  BFastUI.navigation().addRoute(
+    BFastUIRouter(
+      '/',
+      module: BFastUI.childModule('dashboard'),
+    ),
+  );
+  // dashboard module routes
+  BFastUI.navigation(moduleName: 'dashboard').addRoute(
+    BFastUIRouter(
+      '/',
+      page: (context, args) => DashBoardPage(),
+    ),
+  );
 }

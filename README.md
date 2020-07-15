@@ -1,4 +1,4 @@
-# smartstock_flutter_mobile
+# smartstock
 
 A new Flutter project.
 
