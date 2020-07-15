@@ -1,11 +1,11 @@
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/shared/card_view.dart';
-import 'package:smartstock/states/shop_details.dart';
+import 'package:smartstock/modules/dashboard/states/shop-details.state.dart';
 
-import '../../configurations.dart';
+import '../../../configurations.dart';
 
-class CurrentShopComponents {
+class DashboardShopComponents {
   Widget get currentShop {
     return BFastUI.component().consumer<ShopDetailsState>((_, shopDetail) {
       return CardView(cardItems: <Widget>[

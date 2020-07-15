@@ -1,14 +1,13 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/models/shop.dart';
+import 'package:smartstock/modules/dashboard/models/shop.dart';
+import 'package:smartstock/modules/dashboard/states/shop-details.state.dart';
 import 'package:smartstock/shared/drawer.dart';
-import 'package:smartstock/states/shop_details.dart';
 
-import 'current-shop.component.dart';
-import 'gross-profit-performance.component.dart';
-import 'sales-performance.component.dart';
-import 'stock-health.component.dart';
+import '../components/sales.component.dart';
+import '../components/shop.component.dart';
+import '../components/stock.component.dart';
 
 class DashBoardPage extends BFastUIPage {
   @override
@@ -19,7 +18,7 @@ class DashBoardPage extends BFastUIPage {
           onPressed: () {
             BFastUI.states()
                 .get<ShopDetailsState>()
-                .addShop(newShop: new Shop(name: "Demo Shop"));
+                .addShop(newShop: Shop(name: "Demo Shop"));
           },
         ),
         appBar: AppBar(
@@ -43,10 +42,10 @@ class DashBoardPage extends BFastUIPage {
           child: Center(
             child: ListView(
               children: <Widget>[
-                CurrentShopComponents().currentShop,
-                SalesPerformanceComponents().performance,
-                GrossProfitPerformanceComponents().grossProfit,
-                StockHealthComponents().health
+                DashboardShopComponents().currentShop,
+                DashboardSalesComponents().performance,
+                DashboardSalesComponents().grossProfit,
+                DashboardStockComponents().health
               ],
             ),
           ),
