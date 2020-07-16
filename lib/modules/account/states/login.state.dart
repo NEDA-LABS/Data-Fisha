@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bfast/bfast.dart';
+import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/adapters/state.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/foundation.dart';
@@ -23,7 +24,7 @@ class LoginPageState extends BFastUIState {
       notifyListeners();
       var user = await BFast.auth().logIn(username, password);
       if (user != null) {
-        BFastUI.navigation(moduleName: 'account').to('/dashboard');
+        BFastUI.navigation(moduleName: BFastConfig.DEFAULT_APP).to('/sales');
       } else {
         throw "User is null";
       }
