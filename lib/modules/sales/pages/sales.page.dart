@@ -1,7 +1,7 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/shared/drawer.dart';
+import 'package:smartstock/shared/componets/drawer.shared.dart';
 
 class SalesPage extends BFastUIPage {
   @override
