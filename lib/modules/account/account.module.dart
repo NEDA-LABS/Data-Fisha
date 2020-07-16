@@ -21,10 +21,6 @@ class AccountModule extends BFastUIChildModule {
         .addRoute(BFastUIRouter(
           '/login',
           page: (context, args) => LoginPage(),
-        ))
-        .addRoute(BFastUIRouter(
-          '/register',
-          page: (context, args) => RegisterPage(),
         ));
   }
 

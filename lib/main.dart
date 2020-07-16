@@ -8,8 +8,8 @@ import 'configurations.dart';
 
 void main() {
   _connectWithBFastCloudProject();
-  runApp(BFastUI.module(SmartStock()).start(
-      initialPath: '/dashboard',
+  runApp(BFastUI.module(SmartStockPos()).start(
+      initialPath: '/sales',
       title: "SmartStock",
       theme:
           ThemeData(primarySwatch: Config.getSmartStockMaterialColorSwatch())));

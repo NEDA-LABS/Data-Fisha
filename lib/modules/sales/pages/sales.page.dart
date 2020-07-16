@@ -1,7 +1,7 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/shared/componets/drawer.shared.dart';
+import 'package:smartstock/modules/account/states/login.state.dart';
 
 class SalesPage extends BFastUIPage {
   @override
@@ -10,24 +10,64 @@ class SalesPage extends BFastUIPage {
         appBar: AppBar(
           title: Text("Sales"),
           actions: <Widget>[
-            BFastUI.component().custom(
-              (context) => IconButton(
-                icon: Icon(Icons.account_circle),
-                onPressed: () {
+            BFastUI.component().consumer<LoginPageState>(
+              (context, state) => PopupMenuButton(
+                onSelected: (value) {
+                  print(value);
                   Scaffold.of(context).showSnackBar(SnackBar(
                     content: Text("Show logout options"),
                   ));
                 },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Text("Logout"),
+                        Icon(
+                          Icons.exit_to_app,
+                          color: Theme.of(context).primaryColorDark,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+                icon: Icon(Icons.account_circle),
               ),
             ),
           ],
         ),
-        // todo: drawer is not working, must be fixed
-        drawer: Drawer(child: DrawerComponents().drawer),
-        body: SafeArea(
-          child: Center(
-            child: ListView(
-              children: <Widget>[Text("Sales page")],
+        body: BFastUI.component().custom(
+          (context) => SafeArea(
+            child: Center(
+              child: ListView(
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      BFastUI.navigation(moduleName: 'sales')
+                          .to('/sales/retail');
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.shopping_cart,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      title: Text('Retails'),
+                    ),
+                  ),
+                  Divider(),
+                  FlatButton(
+                    onPressed: () {
+                      BFastUI.navigation(moduleName: 'sales')
+                          .to('/sales/whole');
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.local_shipping,
+                          color: Theme.of(context).primaryColorDark),
+                      title: Text('Wholesale'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ));

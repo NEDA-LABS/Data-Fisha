@@ -29,8 +29,8 @@ class LoginPageState extends BFastUIState {
         throw "User is null";
       }
     } catch (e) {
-      if (e != null && e['message']!=null) {
-        var message = jsonDecode(e['message']) as Map<String,dynamic>;
+      if (e != null && e['message'] != null) {
+        var message = jsonDecode(e['message']) as Map<String, dynamic>;
         throw message['error'];
       } else {
         throw 'Fails to login';
@@ -39,6 +39,11 @@ class LoginPageState extends BFastUIState {
       onLoginProgress = false;
       notifyListeners();
     }
+  }
+
+  logOut() {
+    BFast.auth().logOut();
+    BFastUI.navigation(moduleName: 'sales').to('/account/login');
   }
 
   Future resetPassword(username) async {}
