@@ -235,7 +235,7 @@ class LoginComponents {
                           fontSize: 20),
                     ),
                     onPressed: () {
-                      // _handleSubmitted();
+                      BFastUI.navigation(moduleName: 'account').to('/account/register');
                     }),
               ),
             ),
