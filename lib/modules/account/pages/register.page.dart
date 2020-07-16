@@ -11,7 +11,7 @@ class RegisterPage extends BFastUIPage {
         title: Text('Register'),
       ),
       body: Container(
-        child: ,
+        child: RegisterComponents().registerForm,
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/shared/card_view.dart';
+import 'package:smartstock/shared/componets/card-view.shared.dart';
 import 'package:smartstock/modules/dashboard/states/shop-details.state.dart';
 
 import '../../../configurations.dart';

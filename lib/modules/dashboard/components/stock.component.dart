@@ -1,7 +1,7 @@
 import 'package:bfastui/bfastui.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:smartstock/shared/card_view.dart';
+import 'package:smartstock/shared/componets/card-view.shared.dart';
 
 class DashboardStockComponents {
   static var data = [
