@@ -181,15 +181,17 @@ class LoginPage extends BFastUIPage {
                                                                 fontSize: 20),
                                                           ),
                                                           onPressed: () {
-                                                            loginPageState.login(
-                                                                username:
-                                                                    _usernameController
-                                                                        .value
-                                                                        .text,
-                                                                password:
-                                                                    _passwordController
-                                                                        .value
-                                                                        .text);
+                                                            print(">>>>>>>>>>Login pressed!!!!!");
+                                                            BFastUI.navigation(moduleName: "sales").to("/");
+                                                            // loginPageState.login(
+                                                            //     username:
+                                                            //         _usernameController
+                                                            //             .value
+                                                            //             .text,
+                                                            //     password:
+                                                            //         _passwordController
+                                                            //             .value
+                                                            //             .text);
                                                           }),
                                                     ),
                                                   ),
