@@ -13,21 +13,26 @@ class SalesPage extends BFastUIPage {
             BFastUI.component().consumer<LoginPageState>(
               (context, state) => PopupMenuButton(
                 onSelected: (value) {
-                  print(value);
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text("Show logout options"),
-                  ));
                 },
                 itemBuilder: (context) => [
                   PopupMenuItem(
-                    child: Row(
-                      children: [
-                        Text("Logout"),
-                        Icon(
-                          Icons.exit_to_app,
-                          color: Theme.of(context).primaryColorDark,
-                        )
-                      ],
+                    child: FlatButton(
+                      onPressed: () {
+                        state.logOut();
+                      },
+                      child: Row(
+                        children: [
+                          Text("Logout"),
+                          Container(
+                            width: 4,
+                            height: 0,
+                          ),
+                          Icon(
+                            Icons.exit_to_app,
+                            color: Theme.of(context).primaryColorDark,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],

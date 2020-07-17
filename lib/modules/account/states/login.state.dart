@@ -24,6 +24,7 @@ class LoginPageState extends BFastUIState {
       notifyListeners();
       var user = await BFast.auth().logIn(username, password);
       if (user != null) {
+        username = user['username'];
         BFastUI.navigation(moduleName: BFastConfig.DEFAULT_APP).to('/sales');
       } else {
         throw "User is null";
@@ -42,7 +43,11 @@ class LoginPageState extends BFastUIState {
   }
 
   logOut() {
-    BFast.auth().logOut();
+    BFast.auth().logOut().then((value)async{
+      BFast.auth().setCurrentUser(null);
+    }).catchError((r){
+      print(r);
+    });
     BFastUI.navigation(moduleName: 'sales').to('/account/login');
   }
 
