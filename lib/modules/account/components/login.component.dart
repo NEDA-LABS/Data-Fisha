@@ -213,35 +213,35 @@ class LoginComponents {
             SizedBox(
               height: 10,
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: ButtonTheme(
-                minWidth: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: 50,
-                child: RaisedButton(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0.0)),
-                    child: Text(
-                      "Open Account For Free",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                    onPressed: () {
-                      BFastUI.navigation(moduleName: 'account').to('/account/register');
-                    }),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
+//            Container(
+//              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+//              child: ButtonTheme(
+//                minWidth: MediaQuery
+//                    .of(context)
+//                    .size
+//                    .width,
+//                height: 50,
+//                child: RaisedButton(
+//                    color: Theme
+//                        .of(context)
+//                        .primaryColor,
+//                    shape: RoundedRectangleBorder(
+//                        borderRadius: BorderRadius.circular(0.0)),
+//                    child: Text(
+//                      "Open Account For Free",
+//                      style: TextStyle(
+//                          color: Colors.white,
+//                          fontWeight: FontWeight.bold,
+//                          fontSize: 20),
+//                    ),
+//                    onPressed: () {
+//                      BFastUI.navigation(moduleName: 'account').to('/account/register');
+//                    }),
+//              ),
+//            ),
+//            SizedBox(
+//              height: 10,
+//            ),
           ],
         ),
       );
