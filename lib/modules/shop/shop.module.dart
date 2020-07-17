@@ -1,7 +1,9 @@
 import 'package:bfastui/adapters/module.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/controllers/state.dart';
 import 'package:smartstock/modules/shop/pages/choose-shop.page.dart';
+import 'package:smartstock/modules/shop/states/shops.state.dart';
 
 class ShopModule extends BFastUIChildModule {
   @override
@@ -14,7 +16,8 @@ class ShopModule extends BFastUIChildModule {
 
   @override
   void initStates(String moduleName) {
-    // TODO: implement initStates
+    BFastUI.states(moduleName: moduleName).addState(
+        BFastUIStateBinder((_) => ShopState()));
   }
 
   @override

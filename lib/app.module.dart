@@ -3,6 +3,7 @@ import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:smartstock/modules/account/account.module.dart';
 import 'package:smartstock/modules/sales/sales.module.dart';
+import 'package:smartstock/modules/shop/shop.module.dart';
 
 class SmartStockPos extends BFastUIMainModule {
   @override
@@ -15,6 +16,10 @@ class SmartStockPos extends BFastUIMainModule {
         .addRoute(BFastUIRouter(
           '/sales',
           module: BFastUI.childModule(SalesModule()),
+        ))
+        .addRoute(BFastUIRouter(
+          '/shop',
+          module: BFastUI.childModule(ShopModule()),
         ));
   }
 
