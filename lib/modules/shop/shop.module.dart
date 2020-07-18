@@ -4,12 +4,14 @@ import 'package:bfastui/bfastui.dart';
 import 'package:bfastui/controllers/state.dart';
 import 'package:smartstock/modules/shop/pages/choose-shop.page.dart';
 import 'package:smartstock/modules/shop/states/shops.state.dart';
+import 'package:smartstock/shared/guards/AuthGuard.dart';
 
 class ShopModule extends BFastUIChildModule {
   @override
   void initRoutes(String moduleName) {
     BFastUI.navigation(moduleName: moduleName).addRoute(BFastUIRouter(
       '/',
+      guards: [AuthGuard()],
       page: (context, args) => ChooseShopPage(),
     ));
   }

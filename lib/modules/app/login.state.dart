@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/adapters/state.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/foundation.dart';
@@ -22,10 +21,10 @@ class LoginPageState extends BFastUIState {
     try {
       onLoginProgress = true;
       notifyListeners();
-      var user = await BFast.auth().logIn(username, password);
+      var user = await BFast.auth().logIn(username.trim(), password.trim());
       if (user != null) {
         username = user['username'];
-        BFastUI.navigation(moduleName: BFastConfig.DEFAULT_APP).to('/sales');
+        BFastUI.navigateTo('/shop');
       } else {
         throw "User is null";
       }
@@ -43,12 +42,12 @@ class LoginPageState extends BFastUIState {
   }
 
   logOut() {
-    BFast.auth().logOut().then((value)async{
+    BFast.auth().logOut().then((value) async {
       BFast.auth().setCurrentUser(null);
-    }).catchError((r){
+    }).catchError((r) {
       print(r);
     });
-    BFastUI.navigation(moduleName: 'sales').to('/account/login');
+    BFastUI.navigateTo('/login');
   }
 
   Future resetPassword(username) async {}
