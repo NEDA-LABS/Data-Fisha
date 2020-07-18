@@ -7,49 +7,8 @@ class SalesState extends BFastUIState {
   List<Stock> _stocks;
 
   List<Stock> get stocks {
-    this._stocks = [
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-      Stock(
-          productCategory: "Mifugo/ Kilimo",
-          productName: "aminogrow 100kg",
-          productPrice: "TZS 12,000.00"),
-    ];
-    
+    this._stocks = [];
+
     return this._stocks;
   }
 
@@ -57,22 +16,35 @@ class SalesState extends BFastUIState {
 
   // }
 
-  Future getStockFromRemoteAndStoreInCache() async {
-    // TODO: Implement fetch of remote stock
-    var cache = BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
-    var shop = await cache.get('activeShop');
-    var stocks = await BFast.database('NBTnryqCyALq').collection("stocks").getAll();
-    // BFast.cache();
-    print(stocks);
+  void getStockFromRemoteAndStoreInCache() async {
+    await getStockFromRemote();
+    await storeStockInCache();
     notifyListeners();
   }
 
-  // List<Stock> getStockFromRemote(){
+  Future getStockFromRemote() async{
+    var cache =
+        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
+    var shop = await cache.get('activeShop');
+    var stocks = await BFast.database().collection("stocks").getAll();
 
-  // }
+    stocks.forEach((remoteStock) {
+      Stock stock = new Stock(
+          productCategory: remoteStock["category"],
+          productName: remoteStock["product"],
+          retailPrice: remoteStock["retailPrice"].toString(),
+          wholesalePrice: remoteStock["wholesalePrice"].toString());
+      this._stocks.add(stock);
+    });
+    notifyListeners();
+  }
 
-  void storeStockInCache(){
-
+  Future storeStockInCache() async {
+    var cache =
+        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
+    // this._stocks.forEach((product) {
+      
+    // });
   }
 
   // void listenToRemoteStockUpdate(){

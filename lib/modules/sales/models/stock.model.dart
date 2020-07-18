@@ -1,11 +1,14 @@
 class Stock{
   String productCategory;
   String productName;
-  String productPrice;
+  String retailPrice;
+  String wholesalePrice;
+
 
  Stock({
     this.productCategory,
     this.productName,
-    this.productPrice,
+    this.retailPrice,
+    this.wholesalePrice
   });
 }
