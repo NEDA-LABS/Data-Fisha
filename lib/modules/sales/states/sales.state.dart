@@ -4,11 +4,9 @@ import 'package:smartstock/modules/sales/models/stock.model.dart';
 import 'package:bfast/bfast.dart';
 
 class SalesState extends BFastUIState {
-  List<Stock> _stocks;
+  List<Stock> _stocks = [];
 
   List<Stock> get stocks {
-    this._stocks = [];
-
     return this._stocks;
   }
 
@@ -16,13 +14,14 @@ class SalesState extends BFastUIState {
 
   // }
 
-  void getStockFromRemoteAndStoreInCache() async {
+  Future getStockFromRemoteAndStoreInCache() async {
     await getStockFromRemote();
     await storeStockInCache();
+    print(">>>>>>>>> Done getting data");
     notifyListeners();
   }
 
-  Future getStockFromRemote() async{
+  Future getStockFromRemote() async {
     var cache =
         BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
     var shop = await cache.get('activeShop');
@@ -43,7 +42,7 @@ class SalesState extends BFastUIState {
     var cache =
         BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
     // this._stocks.forEach((product) {
-      
+
     // });
   }
 
