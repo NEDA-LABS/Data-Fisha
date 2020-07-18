@@ -5,9 +5,19 @@ import 'package:bfast/bfast.dart';
 
 class SalesState extends BFastUIState {
   List<Stock> _stocks = [];
+  Future loading;
 
   List<Stock> get stocks {
     return this._stocks;
+  }
+
+  SalesState(){
+    this.setLoadingFuture(loading: this.getStockFromRemoteAndStoreInCache());
+  }
+
+  setLoadingFuture({Future loading}){
+    this.loading = loading;
+    notifyListeners();
   }
 
   // List<Stock> getStockFromCache(){
