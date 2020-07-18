@@ -14,7 +14,7 @@ class AlreadyAuthGuard extends BFastUIRouterGuard {
     if (user == null) {
       return true;
     } else {
-      BFastUI.navigation(moduleName: 'account').to('/sales');
+      BFastUI.navigation(moduleName: 'account').to('/shop');
       return false;
     }
   }

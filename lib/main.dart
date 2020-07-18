@@ -2,17 +2,21 @@ import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.module.dart';
 
 import 'configurations.dart';
+import 'modules/app/app.module.dart';
 
 void main() {
   _connectWithBFastCloudProject();
-  runApp(BFastUI.module(SmartStockPos()).start(
-      initialPath: '/sales',
+  runApp(
+    BFastUI.module(SmartStockPos()).start(
+      initialPath: '/shop',
       title: "SmartStock",
-      theme:
-          ThemeData(primarySwatch: Config.getSmartStockMaterialColorSwatch())));
+      theme: ThemeData(
+        primarySwatch: Config.getSmartStockMaterialColorSwatch(),
+      ),
+    ),
+  );
 }
 
 void _connectWithBFastCloudProject() {

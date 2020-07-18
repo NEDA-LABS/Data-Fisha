@@ -35,7 +35,7 @@ packages:
       name: basic_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.5"
+    version: "2.5.6"
   bfast:
     dependency: "direct main"
     description:
@@ -46,10 +46,12 @@ packages:
   bfastui:
     dependency: "direct main"
     description:
-      name: bfastui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0-beta.9"
+      path: "."
+      ref: "1.x"
+      resolved-ref: "1f4f85648e8f2f291616e6ece3eb82fbf210aee1"
+      url: "https://github.com/fahamutech/bfast-ui-flutter"
+    source: git
+    version: "1.0.0-beta.10"
   boolean_selector:
     dependency: transitive
     description:
@@ -78,6 +80,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0"
+  clock:
+    dependency: transitive
+    description:
+      name: clock
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   collection:
     dependency: transitive
     description:
@@ -105,7 +114,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -127,6 +136,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  fake_async:
+    dependency: transitive
+    description:
+      name: fake_async
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   file:
     dependency: transitive
     description:
@@ -140,12 +156,12 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_chips_input:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_chips_input
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.3"
+    version: "1.9.0-dev.3"
   flutter_colorpicker:
     dependency: transitive
     description:
@@ -227,7 +243,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.12"
+    version: "2.1.14"
   image_picker:
     dependency: transitive
     description:
@@ -283,7 +299,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.4"
+    version: "1.7.0"
   path_provider:
     dependency: transitive
     description:
@@ -325,7 +341,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "3.0.4"
   phone_number:
     dependency: transitive
     description:
@@ -361,13 +377,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.13"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.3"
   random_string:
     dependency: transitive
     description:
@@ -484,7 +493,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.15"
+    version: "0.2.16"
   typed_data:
     dependency: transitive
     description:
@@ -526,7 +535,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.6.1"
+    version: "4.2.0"
 sdks:
   dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.6 <2.0.0"

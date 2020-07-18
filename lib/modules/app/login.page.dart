@@ -1,7 +1,8 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/account/components/login.component.dart';
+
+import 'login.component.dart';
 
 class LoginPage extends BFastUIPage {
   @override

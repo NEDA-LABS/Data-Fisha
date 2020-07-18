@@ -1,7 +1,7 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/account/states/login.state.dart';
+import 'package:smartstock/modules/app/login.state.dart';
 
 class SalesPage extends BFastUIPage {
   @override
@@ -12,8 +12,7 @@ class SalesPage extends BFastUIPage {
           actions: <Widget>[
             BFastUI.component().consumer<LoginPageState>(
               (context, state) => PopupMenuButton(
-                onSelected: (value) {
-                },
+                onSelected: (value) {},
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     child: FlatButton(
@@ -23,10 +22,10 @@ class SalesPage extends BFastUIPage {
                       child: Row(
                         children: [
                           Text("Logout"),
-                          Container(
-                            width: 4,
-                            height: 0,
-                          ),
+//                          Container(
+//                            width: 2,
+//                            height: 0,
+//                          ),
                           Icon(
                             Icons.exit_to_app,
                             color: Theme.of(context).primaryColorDark,
