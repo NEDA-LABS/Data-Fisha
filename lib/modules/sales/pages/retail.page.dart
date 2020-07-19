@@ -38,11 +38,11 @@ class RetailPage extends BFastUIPage {
                             },
                             child: RetailComponents().productCardItem(
                                 productCategory:
-                                    salesState.stocks[index].productCategory,
+                                    salesState.stocks[index]['category'],
                                 productName:
-                                    salesState.stocks[index].productName,
+                                    salesState.stocks[index]['product'],
                                 productPrice: salesState
-                                    .stocks[index].retailPrice
+                                    .stocks[index]['retailPrice']
                                     .toString()),
                           ));
                 },

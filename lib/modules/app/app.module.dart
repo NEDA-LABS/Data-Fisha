@@ -11,12 +11,10 @@ class SmartStockPos extends BFastUIMainModule {
   @override
   void initRoutes(String moduleName) {
     BFastUI.navigation(moduleName: moduleName)
-        .addRoute(
-          BFastUIRouter(
-            '/login',
-            page: (context, args) => LoginPage(),
-          ),
-        )
+        .addRoute(BFastUIRouter(
+          '/login',
+          page: (context, args) => LoginPage(),
+        ))
         .addRoute(BFastUIRouter(
           '/sales',
           module: BFastUI.childModule(

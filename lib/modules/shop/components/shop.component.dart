@@ -54,7 +54,7 @@ class ShopComponents {
           Container(
             margin: EdgeInsets.all(5),
             child: RaisedButton(
-              onPressed: () async {
+              onPressed: () {
                 ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
                   print(e);

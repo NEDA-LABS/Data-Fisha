@@ -1,13 +1,14 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfast/controller/cache.dart';
 import 'package:bfastui/adapters/state.dart';
 import 'package:smartstock/modules/sales/models/stock.model.dart';
+import 'package:smartstock/shared/local-storage.utils.dart';
 
 class SalesState extends BFastUIState {
-  List<Stock> _stocks = [];
+  SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
+  List<dynamic> _stocks = [];
   Future loading;
 
-  List<Stock> get stocks {
+  List<dynamic> get stocks {
     return this._stocks;
   }
 
@@ -26,34 +27,28 @@ class SalesState extends BFastUIState {
 
   Future getStockFromRemoteAndStoreInCache() async {
     await getStockFromRemote();
-    await storeStockInCache();
-    print(">>>>>>>>> Done getting data");
+    // await storeStockInCache();
+    // print(">>>>>>>>> Done getting data");
     notifyListeners();
   }
 
   Future getStockFromRemote() async {
-    var cache =
-        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
-    var shop = await cache.get('activeShop');
-    var stocks = await BFast.database().collection("stocks").getAll();
-
-    stocks.forEach((remoteStock) {
-      Stock stock = new Stock(
-          productCategory: remoteStock["category"],
-          productName: remoteStock["product"],
-          retailPrice: remoteStock["retailPrice"].toString(),
-          wholesalePrice: remoteStock["wholesalePrice"].toString());
-      this._stocks.add(stock);
-    });
+    var shop = await _storage.getActiveShop();
+    this._stocks =
+        await BFast.database(shop['projectId']).collection("stocks").getAll();
+//    stocks.forEach((remoteStock) {
+//      Stock stock = new Stock(
+//          productCategory: remoteStock["category"],
+//          productName: remoteStock["product"],
+//          retailPrice: remoteStock["retailPrice"].toString(),
+//          wholesalePrice: remoteStock["wholesalePrice"].toString());
+//      this._stocks.add(stock);
+//    });
     notifyListeners();
   }
 
-  Future storeStockInCache() async {
-    var cache =
-        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
-    // this._stocks.forEach((product) {
-
-    // });
+  Future storeStockInCache(List<Stock> stocks) async {
+    return _storage.saveStocks(stocks);
   }
 
 // void listenToRemoteStockUpdate(){
