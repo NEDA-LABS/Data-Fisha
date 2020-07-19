@@ -4,8 +4,8 @@ import 'package:smartstock/modules/shop/states/shops.state.dart';
 
 class ShopComponents {
   Widget get chooseShop {
-    BFastUI.getState<ShopState>().getShops();
-    return BFastUI.component().consumer<ShopState>(
+    // BFastUI.getState<ShopState>().getShops();
+    return BFastUI.component().consumer<ChooseShopState>(
       (context, state) => Container(
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
@@ -55,7 +55,7 @@ class ShopComponents {
             margin: EdgeInsets.all(5),
             child: RaisedButton(
               onPressed: () async {
-                ShopState shopState = BFastUI.getState<ShopState>();
+                ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
                   print(e);
                   Scaffold.of(context).showSnackBar(

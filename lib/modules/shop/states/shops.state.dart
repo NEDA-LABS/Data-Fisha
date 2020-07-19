@@ -4,10 +4,9 @@ import 'package:bfastui/adapters/state.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:smartstock/shared/local-storage.dart';
 
-class ShopState extends BFastUIState {
+class ChooseShopState extends BFastUIState {
   var activeShop;
   List shops = [];
-
   Future getShops() async {
     try {
       var user = await BFast.auth().currentUser();
@@ -31,7 +30,6 @@ class ShopState extends BFastUIState {
       throw e;
     }
   }
-
   Future setCurrentShop(var shop) async {
     try {
       String appId = shop["applicationId"];

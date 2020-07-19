@@ -1,7 +1,7 @@
+import 'package:bfast/bfast.dart';
 import 'package:bfast/controller/cache.dart';
 import 'package:bfastui/adapters/state.dart';
 import 'package:smartstock/modules/sales/models/stock.model.dart';
-import 'package:bfast/bfast.dart';
 
 class SalesState extends BFastUIState {
   List<Stock> _stocks = [];
@@ -11,11 +11,11 @@ class SalesState extends BFastUIState {
     return this._stocks;
   }
 
-  SalesState(){
+  SalesState() {
     this.setLoadingFuture(loading: this.getStockFromRemoteAndStoreInCache());
   }
 
-  setLoadingFuture({Future loading}){
+  setLoadingFuture({Future loading}) {
     this.loading = loading;
     notifyListeners();
   }
@@ -56,7 +56,7 @@ class SalesState extends BFastUIState {
     // });
   }
 
-  // void listenToRemoteStockUpdate(){
-  //   // TODO: Implement socket to listen to remote stock updates
-  // }
+// void listenToRemoteStockUpdate(){
+//   // TODO: Implement socket to listen to remote stock updates
+// }
 }

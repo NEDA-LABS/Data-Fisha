@@ -10,7 +10,7 @@ class SmartStockPosLocalStorage {
 
   Future saveActiveShop(var shop) async {
     var response = await this.smartStockCache.set('activeShop', shop, 7);
-    BFastUI.getState<ShopState>().activeShop = shop;
+    BFastUI.getState<ChooseShopState>().activeShop = shop;
     return response;
   }
 
@@ -20,5 +20,14 @@ class SmartStockPosLocalStorage {
 
   Future saveCurrentProjectId(String projectId) async {
     return await this.smartStockCache.set<String>('cPID', projectId, 7);
+  }
+
+  Future getActiveShop() async {
+    var response = await this.smartStockCache.get('activeShop');
+    if (response != null) {
+      return response;
+    } else {
+      throw {"message": 'No Active Shop'};
+    }
   }
 }

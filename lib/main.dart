@@ -11,7 +11,7 @@ void main() {
   runApp(
     BFastUI.module(SmartStockPos()).start(
       initialPath: '/shop',
-      title: "SmartStock",
+      title: "SmartStock POS",
       theme: ThemeData(
         primarySwatch: Config.getSmartStockMaterialColorSwatch(),
       ),

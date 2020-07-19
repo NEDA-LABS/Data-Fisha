@@ -1,7 +1,6 @@
 import 'package:bfastui/adapters/module.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:bfastui/controllers/state.dart';
 import 'package:smartstock/modules/sales/sales.module.dart';
 import 'package:smartstock/modules/shop/shop.module.dart';
 
@@ -34,8 +33,9 @@ class SmartStockPos extends BFastUIMainModule {
 
   @override
   void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName).addState(
-      BFastUIStateBinder((_) => LoginPageState()),
+    BFastUI.states(moduleName: moduleName).addState<LoginPageState>(
+      (_) => LoginPageState(),
+      singleton: true,
     );
   }
 }
