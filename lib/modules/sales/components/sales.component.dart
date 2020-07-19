@@ -38,13 +38,15 @@ class SalesComponents {
   }
 
   Widget get salesRefreshButton {
-    return BFastUI.component().custom(
-      (context) => FloatingActionButton(
-        child: Icon(Icons.refresh),
-        onPressed: () {
-          BFastUI.getState<SalesState>().getStockFromRemote();
-        },
-      ),
+    return BFastUI.component().consumer<SalesState>(
+      (context, state) => !state.loadProductsProgress
+          ? FloatingActionButton(
+              child: Icon(Icons.refresh),
+              onPressed: () {
+                BFastUI.getState<SalesState>().getStockFromRemote();
+              },
+            )
+          : Container(),
     );
   }
 
