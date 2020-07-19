@@ -1,13 +1,56 @@
 import 'package:bfastui/bfastui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/app/login.state.dart';
-import 'package:smartstock/modules/sales/components/retail.component.dart';
-import 'package:smartstock/modules/sales/states/sales.state.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:smartstock_pos/modules/app/login.state.dart';
+import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
+import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesComponents {
-  AppBar salesTopBar({title = "Sales"}) {
+  PreferredSizeWidget get _searchInput {
+    return PreferredSize(
+        child: BFastUI.component().consumer<SalesState>(
+          (context, state) => Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white70,
+            ),
+            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+            width: MediaQuery.of(context).size.width * 0.9,
+            alignment: Alignment.center,
+            child: FormBuilderTextField(
+              autofocus: false,
+              maxLines: 1,
+              //  controller: state.searchInputController,
+              minLines: 1,
+              initialValue: state.searchKeyword,
+              onChanged: (value) {
+                state.filterProducts(value);
+              },
+              attribute: 'query',
+              decoration: InputDecoration(
+                hintText: "Enter a keyword...",
+                border: InputBorder.none,
+//                suffixIcon: state.searchKeyword.isNotEmpty
+//                    ? InkWell(
+//                        child: Icon(Icons.clear),
+//                        onTap: () {
+//                          state.resetSearchKeyword('');
+//                        },
+//                      )
+//                    : null,
+              ),
+            ),
+          ),
+        ),
+        preferredSize: Size.fromHeight(52));
+  }
+
+  AppBar salesTopBar({title = "Sales", showSearch = false}) {
     return AppBar(
       title: Text(title),
+      bottom: showSearch ? this._searchInput : null,
       actions: <Widget>[
         BFastUI.component().custom(
           (context) => PopupMenuButton(
@@ -90,7 +133,7 @@ class SalesComponents {
                 return BFastUI.component().custom(
                   (context) => GestureDetector(
                     onTap: () {
-                      RetailComponents().showBottomSheet(
+                      RetailComponents().addToCartSheet(
                         stock: salesState.stocks[index],
                         context: context,
                         wholesale: wholesale,
@@ -99,8 +142,9 @@ class SalesComponents {
                     child: RetailComponents().productCardItem(
                         productCategory: salesState.stocks[index]['category'],
                         productName: salesState.stocks[index]['product'],
-                        productPrice:
-                            salesState.stocks[index]['retailPrice'].toString()),
+                        productPrice: salesState.stocks[index]
+                                [wholesale ? "wholesalePrice" : 'retailPrice']
+                            .toString()),
                   ),
                 );
               },

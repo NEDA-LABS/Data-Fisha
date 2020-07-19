@@ -1,9 +1,9 @@
 import 'package:bfastui/adapters/module.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:smartstock/modules/shop/pages/choose-shop.page.dart';
-import 'package:smartstock/modules/shop/states/shops.state.dart';
-import 'package:smartstock/shared/guards/auth.guard.dart';
+import 'package:smartstock_pos/modules/shop/pages/choose-shop.page.dart';
+import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
+import 'package:smartstock_pos/shared/guards/auth.guard.dart';
 
 class ShopModule extends BFastUIChildModule {
   @override

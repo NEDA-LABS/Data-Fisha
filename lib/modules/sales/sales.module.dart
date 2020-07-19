@@ -1,11 +1,11 @@
 import 'package:bfastui/adapters/module.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:smartstock/modules/sales/guards/acive-shop.guard.dart';
-import 'package:smartstock/modules/sales/pages/retail.page.dart';
-import 'package:smartstock/modules/sales/pages/sales.page.dart';
-import 'package:smartstock/modules/sales/pages/wholesale.page.dart';
-import 'package:smartstock/modules/sales/states/sales.state.dart';
+import 'package:smartstock_pos/modules/sales/guards/acive-shop.guard.dart';
+import 'package:smartstock_pos/modules/sales/pages/retail.page.dart';
+import 'package:smartstock_pos/modules/sales/pages/sales.page.dart';
+import 'package:smartstock_pos/modules/sales/pages/wholesale.page.dart';
+import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesModule extends BFastUIChildModule {
   @override

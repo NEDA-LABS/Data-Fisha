@@ -1,4 +1,4 @@
-package com.fahamutech.smartstock
+package com.fahamutech.smartstock.pos
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

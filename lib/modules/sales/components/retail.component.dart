@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
+import 'package:intl/intl.dart';
 
 class RetailComponents {
   Widget get company {
@@ -16,7 +16,7 @@ class RetailComponents {
     );
   }
 
-  void showBottomSheet({BuildContext context, var stock, wholesale= false}) {
+  void addToCartSheet({BuildContext context, var stock, wholesale = false}) {
     Scaffold.of(context).showBottomSheet((context) => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -34,7 +34,6 @@ class RetailComponents {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-
                               flex: 1,
                               child: Center(
                                 child: Column(
@@ -44,7 +43,11 @@ class RetailComponents {
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 19),
                                     ),
-                                    Text(stock["retailPrice"].toString(),
+                                    Text(
+                                        stock[wholesale
+                                                ? "wholesalePrice"
+                                                : "retailPrice"]
+                                            .toString(),
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 25)),
                                   ],
@@ -102,10 +105,8 @@ class RetailComponents {
                       ),
                     ],
                   )),
-
                 ],
               ),
-
             ),
           ),
           height: 220,
@@ -129,15 +130,25 @@ class RetailComponents {
             ),
           ),
           Expanded(
+            child: Container(
+              padding: EdgeInsets.all(4),
               child: Text(
-            productName != null ? productName : "No Listed Name",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          )),
+                productName != null ? productName : "No Listed Name",
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
           Spacer(),
           Expanded(
               child: Text(
-            productPrice != null ? productPrice : "No Listed Price",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            productPrice != null
+                ? NumberFormat.currency(name: 'TZS ')
+                    .format(int.parse(productPrice))
+                : "No Listed Price",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
           )),
           Spacer(
             flex: 1,

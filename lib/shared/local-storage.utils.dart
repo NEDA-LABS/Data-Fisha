@@ -1,8 +1,8 @@
 import 'package:bfast/adapter/cache.dart';
 import 'package:bfast/bfast.dart';
 import 'package:bfast/controller/cache.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
-import 'package:smartstock/shared/security.utils.dart';
+import 'package:smartstock_pos/modules/sales/models/stock.model.dart';
+import 'package:smartstock_pos/shared/security.utils.dart';
 
 class SmartStockPosLocalStorage {
   CacheAdapter smartStockCache =
