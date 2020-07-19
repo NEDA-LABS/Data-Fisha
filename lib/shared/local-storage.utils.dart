@@ -100,21 +100,21 @@ class SmartStockPosLocalStorage {
         .clearAll();
   }
 
-  Future<List<Stock>> getStocks() async {
+  Future<List<dynamic>> getStocks() async {
     var shop = await this.getActiveShop();
     var stocksCache = BFast.cache(
         CacheOptions(database: 'stocks', collection: shop['projectId']));
-    return await stocksCache.get<List<Stock>>('all');
+    return await stocksCache.get<List<dynamic>>('all');
   }
 
-  Future saveStocks(List<Stock> stocks) async {
+  Future saveStocks(List<dynamic> stocks) async {
     var shop = await this.getActiveShop();
     var stocksCache = BFast.cache(
         CacheOptions(database: 'stocks', collection: shop['projectId']));
     return await stocksCache.set('all', stocks, 360);
   }
 
-  Future saveStock(Stock stock) async {
+  Future saveStock(var stock) async {
 // const shop = await this.getActiveShop();
 // const stocksCache = BFast.cache({database: 'stocks', collection: shop['projectId']});
 // return stocksCache.set(stock.objectId, stock);

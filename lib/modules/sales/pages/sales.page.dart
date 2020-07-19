@@ -1,45 +1,13 @@
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/app/login.state.dart';
+import 'package:smartstock/modules/sales/components/sales.component.dart';
 
 class SalesPage extends BFastUIPage {
   @override
   Widget build(args) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Sales"),
-          actions: <Widget>[
-            BFastUI.component().consumer<LoginPageState>(
-              (context, state) => PopupMenuButton(
-                onSelected: (value) {},
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: FlatButton(
-                      onPressed: () {
-                        state.logOut();
-                      },
-                      child: Row(
-                        children: [
-                          Text("Logout"),
-//                          Container(
-//                            width: 2,
-//                            height: 0,
-//                          ),
-                          Icon(
-                            Icons.exit_to_app,
-                            color: Theme.of(context).primaryColorDark,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-                icon: Icon(Icons.account_circle),
-              ),
-            ),
-          ],
-        ),
+        appBar: SalesComponents().salesTopBar(title: "Sales"),
         body: BFastUI.component().custom(
           (context) => SafeArea(
             child: Center(

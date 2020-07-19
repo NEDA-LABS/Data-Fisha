@@ -1,54 +1,60 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfastui/adapters/state.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
 import 'package:smartstock/shared/local-storage.utils.dart';
 
 class SalesState extends BFastUIState {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
   List<dynamic> _stocks = [];
-  Future loading;
+
+//  Future loading;
+  bool loadProductsProgress = false;
 
   List<dynamic> get stocks {
     return this._stocks;
   }
 
-  SalesState() {
-    this.setLoadingFuture(loading: this.getStockFromRemoteAndStoreInCache());
-  }
+//  SalesState() {
+//    getStockFromCache();
+//  }
 
-  setLoadingFuture({Future loading}) {
-    this.loading = loading;
-    notifyListeners();
-  }
-
-  // List<Stock> getStockFromCache(){
-
-  // }
-
-  Future getStockFromRemoteAndStoreInCache() async {
-    await getStockFromRemote();
-    // await storeStockInCache();
-    // print(">>>>>>>>> Done getting data");
-    notifyListeners();
+  Future getStockFromCache() async {
+    try {
+      loadProductsProgress = true;
+      notifyListeners();
+      var stocks = await _storage.getStocks();
+      if (stocks == null) {
+        await getStockFromRemote();
+      } else if (stocks != null && stocks.length == 0) {
+        await getStockFromRemote();
+      }
+      this._stocks = stocks;
+    } catch (e) {
+      throw e;
+    } finally {
+      loadProductsProgress = false;
+      notifyListeners();
+    }
   }
 
   Future getStockFromRemote() async {
-    var shop = await _storage.getActiveShop();
-    this._stocks =
-        await BFast.database(shop['projectId']).collection("stocks").getAll();
-//    stocks.forEach((remoteStock) {
-//      Stock stock = new Stock(
-//          productCategory: remoteStock["category"],
-//          productName: remoteStock["product"],
-//          retailPrice: remoteStock["retailPrice"].toString(),
-//          wholesalePrice: remoteStock["wholesalePrice"].toString());
-//      this._stocks.add(stock);
-//    });
-    notifyListeners();
-  }
-
-  Future storeStockInCache(List<Stock> stocks) async {
-    return _storage.saveStocks(stocks);
+    try {
+      loadProductsProgress = true;
+      notifyListeners();
+      var shop = await _storage.getActiveShop();
+      var stocks =
+          await BFast.database(shop['projectId']).collection("stocks").getAll();
+      if (stocks != null) {
+        this._stocks = stocks;
+      } else {
+        this._stocks = [];
+      }
+      await _storage.saveStocks(this._stocks);
+    } catch (e) {
+      throw e;
+    } finally {
+      loadProductsProgress = false;
+      notifyListeners();
+    }
   }
 
 // void listenToRemoteStockUpdate(){
