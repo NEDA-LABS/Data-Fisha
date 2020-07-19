@@ -46,12 +46,10 @@ packages:
   bfastui:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "1.x"
-      resolved-ref: e7695857b0747eee77425f5024df95d1856607a1
-      url: "https://github.com/fahamutech/bfast-ui-flutter"
-    source: git
-    version: "1.0.0-beta.11"
+      name: bfastui
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-beta.10"
   boolean_selector:
     dependency: transitive
     description:

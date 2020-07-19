@@ -24,10 +24,11 @@ class ChooseShopState extends BFastUIState {
         "country": user['country'],
         "region": user['region']
       });
-      notifyListeners();
       return this.shops;
     } catch (e) {
       throw e;
+    }finally{
+      notifyListeners();
     }
   }
   Future setCurrentShop(var shop) async {

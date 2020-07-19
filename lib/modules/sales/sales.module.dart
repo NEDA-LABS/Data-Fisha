@@ -31,10 +31,8 @@ class SalesModule extends BFastUIChildModule {
 
   @override
   void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName).addState<SalesState>(
-      (_) => SalesState(),
-      singleton: true,
-    );
+    BFastUI.states(moduleName: moduleName)
+        .addState(BFastUIStateBinder((_) => SalesState()));
   }
 
   @override

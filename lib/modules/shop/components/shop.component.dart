@@ -4,7 +4,7 @@ import 'package:smartstock/modules/shop/states/shops.state.dart';
 
 class ShopComponents {
   Widget get chooseShop {
-    // BFastUI.getState<ShopState>().getShops();
+    BFastUI.getState<ChooseShopState>().getShops();
     return BFastUI.component().consumer<ChooseShopState>(
       (context, state) => Container(
         height: MediaQuery.of(context).size.height,
