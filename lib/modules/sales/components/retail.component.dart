@@ -16,7 +16,7 @@ class RetailComponents {
     );
   }
 
-  void showBottomSheet({BuildContext context, var stock}) {
+  void showBottomSheet({BuildContext context, var stock, wholesale= false}) {
     Scaffold.of(context).showBottomSheet((context) => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -111,7 +111,6 @@ class RetailComponents {
           height: 220,
         ));
   }
-
 
   Widget productCardItem(
       {String productCategory, String productName, String productPrice}) {

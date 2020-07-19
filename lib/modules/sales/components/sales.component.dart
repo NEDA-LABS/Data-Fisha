@@ -90,7 +90,7 @@ class SalesComponents {
                 return BFastUI.component().custom(
                   (context) => GestureDetector(
                     onTap: () {
-                      RetailComponents().showAddToCartSheet(
+                      RetailComponents().showBottomSheet(
                         stock: salesState.stocks[index],
                         context: context,
                         wholesale: wholesale,
