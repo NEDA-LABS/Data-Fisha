@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
 
-class RetailComponents {
+class WholesaleComponents {
   Widget get company {
     return Center(
       child: InkWell(
@@ -44,7 +43,7 @@ class RetailComponents {
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 19),
                                     ),
-                                    Text(stock["retailPrice"].toString(),
+                                    Text(stock["wholesalePrice"].toString(),
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 25)),
                                   ],
