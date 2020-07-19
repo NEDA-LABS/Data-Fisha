@@ -1,7 +1,6 @@
 import 'package:bfastui/adapters/module.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:bfastui/controllers/state.dart';
 import 'package:smartstock/modules/sales/guards/acive-shop.guard.dart';
 import 'package:smartstock/modules/sales/pages/retail.page.dart';
 import 'package:smartstock/modules/sales/pages/sales.page.dart';
@@ -31,8 +30,9 @@ class SalesModule extends BFastUIChildModule {
 
   @override
   void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName)
-        .addState(BFastUIStateBinder((_) => SalesState()));
+    BFastUI.states(moduleName: moduleName).addState(
+      (_) => SalesState(),
+    );
   }
 
   @override
