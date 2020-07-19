@@ -15,5 +15,6 @@ class ActiveShopGuard extends BFastUIRouterGuard {
       BFastUI.navigateTo('/shop');
       return false;
     }
+  
   }
 }
