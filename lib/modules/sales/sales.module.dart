@@ -5,6 +5,7 @@ import 'package:smartstock_pos/modules/sales/guards/acive-shop.guard.dart';
 import 'package:smartstock_pos/modules/sales/pages/retail.page.dart';
 import 'package:smartstock_pos/modules/sales/pages/sales.page.dart';
 import 'package:smartstock_pos/modules/sales/pages/wholesale.page.dart';
+import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesModule extends BFastUIChildModule {
@@ -30,9 +31,9 @@ class SalesModule extends BFastUIChildModule {
 
   @override
   void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName).addState(
-      (_) => SalesState(),
-    );
+    BFastUI.states(moduleName: moduleName)
+        .addState((_) => SalesState())
+        .addState((i) => CartState());
   }
 
   @override

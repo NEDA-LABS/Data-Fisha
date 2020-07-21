@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:smartstock_pos/modules/app/login.state.dart';
+import 'package:smartstock_pos/modules/sales/components/cart.component.dart';
 import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
+import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesComponents {
@@ -133,8 +135,11 @@ class SalesComponents {
                 return BFastUI.component().custom(
                   (context) => GestureDetector(
                     onTap: () {
-                      RetailComponents().addToCartSheet(
-                        stock: salesState.stocks[index],
+                      CartComponents().addToCartSheet(
+                        cartModel: CartModel(
+                          product: salesState.stocks[index],
+                          quantity: 1,
+                        ),
                         context: context,
                         wholesale: wholesale,
                       );
