@@ -7,41 +7,40 @@ class SalesPage extends BFastUIPage {
   @override
   Widget build(args) {
     return Scaffold(
-        appBar: SalesComponents().salesTopBar(title: "Sales"),
-        body: BFastUI.component().custom(
-          (context) => SafeArea(
-            child: Center(
-              child: ListView(
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      BFastUI.navigation(moduleName: 'sales')
-                          .to('/sales/retail');
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.shopping_cart,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      title: Text('Retails'),
+      appBar: SalesComponents().salesTopBar(title: "Sales"),
+      body: BFastUI.component().custom(
+        (context) => SafeArea(
+          child: Center(
+            child: ListView(
+              children: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    BFastUI.navigation(moduleName: 'sales').to('/sales/retail');
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColorDark,
                     ),
+                    title: Text('Retails'),
                   ),
-                  Divider(),
-                  FlatButton(
-                    onPressed: () {
-                      BFastUI.navigation(moduleName: 'sales')
-                          .to('/sales/whole');
-                    },
-                    child: ListTile(
-                      leading: Icon(Icons.local_shipping,
-                          color: Theme.of(context).primaryColorDark),
-                      title: Text('Wholesale'),
-                    ),
+                ),
+                Divider(),
+                FlatButton(
+                  onPressed: () {
+                    BFastUI.navigation(moduleName: 'sales').to('/sales/whole');
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.local_shipping,
+                        color: Theme.of(context).primaryColorDark),
+                    title: Text('Wholesale'),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

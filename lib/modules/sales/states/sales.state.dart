@@ -8,6 +8,7 @@ class SalesState extends BFastUIState {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
   List<dynamic> _stocks = [];
   Timer _debounce;
+  bool addToCartIsActive = false;
 
   bool loadProductsProgress = false;
   bool onSearchProgress = false;
@@ -109,4 +110,14 @@ class SalesState extends BFastUIState {
 //    // searchInputController.clear();
 //    notifyListeners();
   }
+
+//  void setIsAddToCartActiveFalse() {
+//    addToCartIsActive = false;
+//    notifyListeners();
+//  }
+
+//  void setIsAddToCartActiveTrue() {
+//    addToCartIsActive = true;
+//    notifyListeners();
+//  }
 }

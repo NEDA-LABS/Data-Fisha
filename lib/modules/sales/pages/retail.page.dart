@@ -15,7 +15,7 @@ class RetailPage extends BFastUIPage {
       return Scaffold(
         appBar: SalesComponents().salesTopBar(title: "Retails", showSearch: true),
         floatingActionButton: SalesComponents().salesRefreshButton,
-        body: SalesComponents().listOfProducts(),
+        body: SalesComponents().body(),
       );
     });
   }
