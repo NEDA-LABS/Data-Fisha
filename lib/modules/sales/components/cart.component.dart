@@ -2,8 +2,6 @@ import 'package:bfastui/bfastui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
-import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 
 class CartComponents {
@@ -190,7 +188,7 @@ class CartComponents {
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Text(
             '${state.calculateCartItems()}'
-            ' Items = ${NumberFormat.currency(name: 'TZS ').format(state.getTotal(isWholesale: wholesale))}',
+            ' Items = ${NumberFormat.currency(name: 'TZS ').format(state.getFinalTotal(isWholesale: wholesale))}',
             textAlign: TextAlign.center,
             softWrap: true,
             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -201,7 +199,185 @@ class CartComponents {
   }
 
   Widget cartView({bool wholesale = false}) {
-    print(wholesale);
-    return Container();
+    return BFastUI.component().consumer<CartState>(
+      (context, cartState) => Container(
+        child: Column(
+          children: [
+            Expanded(
+                child: ListView(
+                  children: cartState.cartProductsArray
+                      .map(
+                        (cart) => Column(
+                          children: [
+                            ListTile(
+                              title: Text(cart.product['product']),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  wholesale
+                                      ? Text(
+                                          '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}'
+                                          ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
+                                      : Text(
+                                          '${cart.quantity} ${cart.product['unit']}'
+                                          ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.remove_circle,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        onPressed: () {
+                                          cartState.decrementQtyOfProductInCart(
+                                              cart.product['objectId']);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.add_circle,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        onPressed: () {
+                                          cartState.incrementQtyOfProductInCart(
+                                              cart.product['objectId']);
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              isThreeLine: false,
+                              trailing: IconButton(
+                                color: Colors.red,
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  cartState.removeCart(cart);
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: Divider(
+                                color: Colors.grey,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ),
+                flex: 1),
+            Card(
+              child: Container(
+                child: Column(
+                  children: [
+//                    Padding(
+//                      child: Divider(
+//                        color: Colors.grey,
+//                      ),
+//                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+//                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Total",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            flex: 1,
+                          ),
+                          Text(
+                            NumberFormat.currency(name: 'TZS ').format(
+                              cartState.getTotalWithoutDiscount(
+                                  isWholesale: wholesale),
+                            ),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text('Discount ( TZS )'),
+                            flex: 1,
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(),
+                            ),
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            // height: 54,
+                            width: 150,
+                            alignment: Alignment.center,
+                            child: TextFormField(
+                              autofocus: false,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              minLines: 1,
+                              keyboardType: TextInputType.number,
+                              controller: BFastUI.getState<CartState>()
+                                  .discountInputController,
+                              onChanged: (value) {
+                                cartState.setCartDiscount(value);
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Press here...",
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      height: 54,
+                      color: Theme.of(context).primaryColorDark,
+                      child: FlatButton(
+                        splashColor: Colors.grey,
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Checkout',
+                                style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              flex: 1,
+                            ),
+                            Text(
+                              '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                              softWrap: true,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              elevation: 5,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
