@@ -199,11 +199,11 @@ class CartComponents {
   }
 
   Widget cartView({bool wholesale = false}) {
-    return BFastUI.component().consumer<CartState>(
-      (context, cartState) => Container(
-        child: Column(
-          children: [
-            Expanded(
+    return Container(
+      child: Column(
+        children: [
+          BFastUI.component().consumer<CartState>(
+            (context, cartState) => Expanded(
                 child: ListView(
                   children: cartState.cartProductsArray
                       .map(
@@ -268,115 +268,128 @@ class CartComponents {
                       .toList(),
                 ),
                 flex: 1),
-            Card(
-              child: Container(
-                child: Column(
-                  children: [
-//                    Padding(
-//                      child: Divider(
-//                        color: Colors.grey,
-//                      ),
-//                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-//                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "Total",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Card(
+            child: Container(
+              child: Column(
+                children: [
+                  BFastUI.component()
+                      .consumer<CartState>((context, cartState) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Total",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  flex: 1,
+                                ),
+                                Text(
+                                  NumberFormat.currency(name: 'TZS ').format(
+                                    cartState.getTotalWithoutDiscount(
+                                        isWholesale: wholesale),
+                                  ),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                            flex: 1,
-                          ),
-                          Text(
-                            NumberFormat.currency(name: 'TZS ').format(
-                              cartState.getTotalWithoutDiscount(
-                                  isWholesale: wholesale),
-                            ),
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text('Discount ( TZS )'),
-                            flex: 1,
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(),
-                            ),
-                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                            // height: 54,
-                            width: 150,
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                              autofocus: false,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              minLines: 1,
-                              keyboardType: TextInputType.number,
-                              controller: BFastUI.getState<CartState>()
-                                  .discountInputController,
-                              onChanged: (value) {
-                                cartState.setCartDiscount(value);
-                              },
-                              decoration: InputDecoration(
-                                hintText: "Press here...",
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      height: 54,
-                      color: Theme.of(context).primaryColorDark,
-                      child: FlatButton(
-                        splashColor: Colors.grey,
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Checkout',
-                                style: TextStyle(
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                              flex: 1,
-                            ),
-                            Text(
-                              '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
-                              style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              softWrap: true,
-                            )
-                          ],
+                          )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text('Discount ( TZS )'),
+                          flex: 1,
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(),
+                          ),
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          // height: 54,
+                          width: 150,
+                          alignment: Alignment.center,
+                          child: TextFormField(
+                            autofocus: false,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            minLines: 1,
+                            keyboardType: TextInputType.number,
+                            controller: BFastUI.getState<CartState>()
+                                .discountInputController,
+                            onChanged: (value) {
+                              BFastUI.getState<CartState>()
+                                  .setCartDiscount(value);
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Press here...",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  BFastUI.component()
+                      .consumer<CartState>((context, cartState) => Container(
+                            margin: EdgeInsets.all(8),
+                            height: 54,
+                            color: Theme.of(context).primaryColorDark,
+                            child: cartState.checkoutProgress
+                                ? CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                  )
+                                : FlatButton(
+                                    splashColor: Colors.grey,
+                                    onPressed: () {
+                                      cartState.checkout().catchError((e) {
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                "Fail to checkout, please retry"),
+                                          ),
+                                        );
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'Checkout',
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          flex: 1,
+                                        ),
+                                        Text(
+                                          '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
+                                          style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          softWrap: true,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                          ))
+                ],
               ),
-              elevation: 5,
             ),
-          ],
-        ),
+            elevation: 5,
+          ),
+        ],
       ),
     );
   }
