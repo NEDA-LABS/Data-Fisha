@@ -10,7 +10,7 @@ class WholesalePage extends BFastUIPage {
       appBar:
           SalesComponents().salesTopBar(title: "Wholesale", showSearch: true),
       floatingActionButton: SalesComponents().salesRefreshButton,
-      body: SalesComponents().listOfProducts(wholesale: true),
+      body: SalesComponents().body(wholesale: true),
     );
   }
 }

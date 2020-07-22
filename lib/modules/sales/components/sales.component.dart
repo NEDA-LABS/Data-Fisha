@@ -6,6 +6,7 @@ import 'package:smartstock_pos/modules/app/login.state.dart';
 import 'package:smartstock_pos/modules/sales/components/cart.component.dart';
 import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
+import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesComponents {
@@ -84,13 +85,24 @@ class SalesComponents {
 
   Widget get salesRefreshButton {
     return BFastUI.component().consumer<SalesState>(
-      (context, state) => !state.loadProductsProgress
-          ? FloatingActionButton(
-              child: Icon(Icons.refresh),
-              onPressed: () {
-                BFastUI.getState<SalesState>().getStockFromRemote();
-              },
-            )
+      (context, salesState) => !salesState.loadProductsProgress
+          ? BFastUI.component().consumer<CartState>((context, cartState) {
+              return cartState.currentCartModel != null
+                  ? FloatingActionButton(
+                      child: Icon(Icons.close),
+                      onPressed: () {
+                        BFastUI.getState<CartState>()
+                            .setCurrentCartToBeAdded(null);
+                        Navigator.pop(context);
+                      },
+                    )
+                  : cartState.cartProductsArray.length<=0?FloatingActionButton(
+                      child: Icon(Icons.refresh),
+                      onPressed: () {
+                        salesState.getStockFromRemote();
+                      },
+                    ):Container(height: 0,width: 0,);
+            })
           : Container(),
     );
   }
@@ -133,27 +145,57 @@ class SalesComponents {
               ),
               itemBuilder: (context, index) {
                 return BFastUI.component().custom(
-                  (context) => GestureDetector(
-                    onTap: () {
-                      CartComponents().addToCartSheet(
-                        cartModel: CartModel(
+                  (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        BFastUI.getState<CartState>()
+                            .setCurrentCartToBeAdded(CartModel(
                           product: salesState.stocks[index],
                           quantity: 1,
-                        ),
-                        context: context,
-                        wholesale: wholesale,
-                      );
-                    },
-                    child: RetailComponents().productCardItem(
-                        productCategory: salesState.stocks[index]['category'],
-                        productName: salesState.stocks[index]['product'],
-                        productPrice: salesState.stocks[index]
-                                [wholesale ? "wholesalePrice" : 'retailPrice']
-                            .toString()),
-                  ),
+                        ));
+                        CartComponents().addToCartSheet(
+                          context: context,
+                          wholesale: wholesale,
+                        );
+                      },
+                      child: RetailComponents().productCardItem(
+                          productCategory: salesState.stocks[index]['category'],
+                          productName: salesState.stocks[index]['product'],
+                          productPrice: salesState.stocks[index]
+                                  [wholesale ? "wholesalePrice" : 'retailPrice']
+                              .toString()),
+                    );
+                  },
                 );
               },
             ),
+    );
+  }
+
+  Widget body({bool wholesale = false}) {
+    return Stack(
+      children: [
+        Positioned(
+          child: this.listOfProducts(wholesale: wholesale),
+          bottom: 0,
+          right: 0,
+          left: 0,
+          top: 0,
+        ),
+        Positioned(
+          child: BFastUI.component().consumer<CartState>(
+            (context, cartState) => cartState.cartProductsArray.length > 0
+                ? CartComponents().cartPreview(wholesale: wholesale)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+          ),
+          bottom: 16,
+          left: 16,
+          right: 16,
+        )
+      ],
     );
   }
 }
