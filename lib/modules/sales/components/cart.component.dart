@@ -273,9 +273,11 @@ class CartComponents {
                             ),
                           )
                           .toList()
-                      : [Container(
-                          child: Text('No item in cart'),
-                        )],
+                      : [
+                          Container(
+                            child: Text('No item in cart'),
+                          )
+                        ],
                 ),
                 flex: 1),
           ),
@@ -354,8 +356,11 @@ class CartComponents {
                             height: 54,
                             color: Theme.of(context).primaryColorDark,
                             child: cartState.checkoutProgress
-                                ? CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                    ),
                                   )
                                 : FlatButton(
                                     splashColor: Colors.grey,

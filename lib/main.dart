@@ -20,6 +20,6 @@ void main() {
 }
 
 void _connectWithBFastCloudProject() {
-  BFast.int(AppCredentials('smartstock_lb', 'smartstock'));
+  BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
   // BFast.int(AppCredentials('usJXSWzUGEmn', 'NBTnryqCyALq'));
 }

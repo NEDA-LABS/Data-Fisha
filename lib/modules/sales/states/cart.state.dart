@@ -6,6 +6,7 @@ import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/services/printer.service.dart';
 import 'package:smartstock_pos/modules/sales/services/sales.service.dart';
 import 'package:smartstock_pos/shared/date.utils.dart';
+import 'package:smartstock_pos/shared/local-storage.utils.dart';
 import 'package:smartstock_pos/shared/security.utils.dart';
 
 class CartState extends BFastUIState {
@@ -159,7 +160,7 @@ class CartState extends BFastUIState {
 //      }).catch();
 //    }
 
-      this.printCart();
+      await this.printCart();
     } finally {
       this.checkoutProgress = false;
       notifyListeners();
@@ -175,8 +176,10 @@ class CartState extends BFastUIState {
     // this.customerFormControl.setValue(null);
   }
 
-  String _cartItemsToPrinterData(List<dynamic> carts, String customer,
-      {@required bool wholesale}) {
+  Future<String> _cartItemsToPrinterData(List<dynamic> carts, String customer,
+      {@required bool wholesale}) async {
+    var currentShop = await SmartStockPosLocalStorage().getActiveShop();
+    print(currentShop);
     String data = '';
     data = data + '-------------------------------\n';
     data = data + (DateTime.now().toUtc().toString());
@@ -212,6 +215,7 @@ class CartState extends BFastUIState {
             'Total Bill : ' +
             totalBill.toString() +
             '\n--------------------------------\n');
+    data = data + currentShop['settings']['printerFooter'];
     return data;
   }
 
@@ -255,19 +259,23 @@ class CartState extends BFastUIState {
     return sales;
   }
 
-  void printCart({bool wholesale = false}) async {
+  Future printCart({bool wholesale = false}) async {
     try {
+      var currentShop = await SmartStockPosLocalStorage().getActiveShop();
       this.checkoutProgress = true;
       notifyListeners();
       String cartId = Security.generateUUID();
       List<dynamic> cartItems = this._getCartItems(wholesale: wholesale);
-      await this._printerService.posPrint(
-            data: this._cartItemsToPrinterData(cartItems, wholesale ? "" : null,
-                wholesale: wholesale),
-            printer: 'jzv3',
-            id: cartId,
-            qr: cartId,
-          );
+      if (currentShop['settings']['saleWithoutPrinter'] == false) {
+        await this._printerService.posPrint(
+              data: await this._cartItemsToPrinterData(
+                  cartItems, wholesale ? "" : null,
+                  wholesale: wholesale),
+              printer: 'jzv3',
+              id: cartId,
+              qr: cartId,
+            );
+      }
       await this.submitBill(cartId);
       //  this.checkoutProgress = false;
       // this.snack.open('Done save sales', 'Ok', {duration: 2000});

@@ -35,7 +35,7 @@ class ChooseShopState extends BFastUIState {
     try {
       String appId = shop["applicationId"];
       String projectId = shop["projectId"];
-      BFast.int(AppCredentials(appId, projectId), projectId);
+      BFast.init(AppCredentials(appId, projectId), projectId);
       shops = [];
       notifyListeners();
       var _storage = SmartStockPosLocalStorage();

@@ -41,10 +41,10 @@ packages:
     description:
       path: "."
       ref: "3.x"
-      resolved-ref: f56ac78b88c309998da7192119a3a7b328a86579
+      resolved-ref: b57903a4ee78012da645d776d1b29bfe2f4292e3
       url: "https://github.com/fahamutech/bfast-flutter"
     source: git
-    version: "3.0.0-beta.7"
+    version: "3.0.0-beta.8"
   bfastui:
     dependency: "direct main"
     description:
