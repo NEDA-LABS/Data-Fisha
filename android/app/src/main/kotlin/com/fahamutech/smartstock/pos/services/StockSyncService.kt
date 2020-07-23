@@ -1,4 +1,4 @@
-package com.fahamutech.smartstock.pos
+package com.fahamutech.smartstock.pos.services
 
 import android.app.Service
 import android.content.Intent

@@ -10,7 +10,7 @@ class SalesService {
     List batchs = [];
     sales.forEach((sale) {
       sale['cartId'] = cartId;
-      sale.batch = Security.generateUUID();
+      sale['batch'] = Security.generateUUID();
       batchs.add({
         "method": 'POST',
         "body": jsonEncode(sale),

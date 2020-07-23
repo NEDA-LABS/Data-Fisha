@@ -205,67 +205,77 @@ class CartComponents {
           BFastUI.component().consumer<CartState>(
             (context, cartState) => Expanded(
                 child: ListView(
-                  children: cartState.cartProductsArray
-                      .map(
-                        (cart) => Column(
-                          children: [
-                            ListTile(
-                              title: Text(cart.product['product']),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  wholesale
-                                      ? Text(
-                                          '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}'
-                                          ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
-                                      : Text(
-                                          '${cart.quantity} ${cart.product['unit']}'
-                                          ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
-                                  Row(
+                  children: cartState.cartProductsArray.length > 0
+                      ? cartState.cartProductsArray
+                          .map(
+                            (cart) => Column(
+                              children: [
+                                ListTile(
+                                  title: Text(cart.product['product']),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.remove_circle,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          cartState.decrementQtyOfProductInCart(
-                                              cart.product['objectId']);
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.add_circle,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          cartState.incrementQtyOfProductInCart(
-                                              cart.product['objectId']);
-                                        },
-                                      ),
+                                      wholesale
+                                          ? Text(
+                                              '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}'
+                                              ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
+                                          : Text(
+                                              '${cart.quantity} ${cart.product['unit']}'
+                                              ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.remove_circle,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            onPressed: () {
+                                              cartState
+                                                  .decrementQtyOfProductInCart(
+                                                      cart.product['objectId']);
+                                            },
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.add_circle,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            onPressed: () {
+                                              cartState
+                                                  .incrementQtyOfProductInCart(
+                                                      cart.product['objectId']);
+                                            },
+                                          ),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
-                              ),
-                              isThreeLine: false,
-                              trailing: IconButton(
-                                color: Colors.red,
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  cartState.removeCart(cart);
-                                },
-                              ),
+                                  ),
+                                  isThreeLine: false,
+                                  trailing: IconButton(
+                                    color: Colors.red,
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      cartState.removeCart(cart);
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Divider(
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Divider(
-                                color: Colors.grey,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                      .toList(),
+                          )
+                          .toList()
+                      : [Container(
+                          child: Text('No item in cart'),
+                        )],
                 ),
                 flex: 1),
           ),

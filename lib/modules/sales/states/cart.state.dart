@@ -96,7 +96,9 @@ class CartState extends BFastUIState {
   void removeCart(CartModel cartModel) {
     this.cartProductsArray.retainWhere((element) =>
         element.product['objectId'] != cartModel.product['objectId']);
-    print(cartProductsArray);
+    if (cartProductsArray.length == 0) {
+      BFastUI.navigator().pop();
+    }
     notifyListeners();
   }
 
@@ -177,14 +179,14 @@ class CartState extends BFastUIState {
       {@required bool wholesale}) {
     String data = '';
     data = data + '-------------------------------\n';
-    data = data + (DateTime.now().toUtc().toString() + '\n');
+    data = data + (DateTime.now().toUtc().toString());
 //  if (customer) {
 //  data = data.concat('-------------------------------\nTo ---> ' + customer);
 //  }
-    int totalBill = 0;
+    double totalBill = 0.0;
     int sn = 1;
     carts.forEach((cart) {
-      totalBill += cart['amount'];
+      totalBill += double.parse(cart['amount'].toString());
       data = data +
           '\n-------------------------------\n' +
           sn.toString() +
@@ -192,15 +194,15 @@ class CartState extends BFastUIState {
           cart['product'] +
           '\n' +
           'Quantity --> ' +
-          cart['quantity'] +
+          cart['quantity'].toString() +
           ' \t' +
           'Unit Price --> ' +
           (wholesale == true
-              ? cart['stock']['wholesalePrice']
-              : cart['stock']['retailPrice']) +
+              ? cart['stock']['wholesalePrice'].toString()
+              : cart['stock']['retailPrice'].toString()) +
           '\t' +
           'Sub Amount  --> ' +
-          cart['amount'] +
+          cart['amount'].toString() +
           ' \t';
 
       sn++;
@@ -259,15 +261,15 @@ class CartState extends BFastUIState {
       notifyListeners();
       String cartId = Security.generateUUID();
       List<dynamic> cartItems = this._getCartItems(wholesale: wholesale);
-      await this._printerService.print(
-          data: this._cartItemsToPrinterData(cartItems, wholesale ? "" : null,
-              wholesale: wholesale),
-          printer: 'jzv3',
-          id: cartId,
-          qr: cartId,
-      );
+      await this._printerService.posPrint(
+            data: this._cartItemsToPrinterData(cartItems, wholesale ? "" : null,
+                wholesale: wholesale),
+            printer: 'jzv3',
+            id: cartId,
+            qr: cartId,
+          );
       await this.submitBill(cartId);
-     //  this.checkoutProgress = false;
+      //  this.checkoutProgress = false;
       // this.snack.open('Done save sales', 'Ok', {duration: 2000});
       // })
       // .catchError((reason){
@@ -318,9 +320,9 @@ class CartState extends BFastUIState {
       int totalDiscount = 0,
       int totalItems = 0,
       bool wholesale = false}) {
-    double amount = wholesale
+    int amount = (wholesale
         ? (quantity * product['wholesalePrice'])
-        : (quantity * product['retailPrice']);
+        : (quantity * product['retailPrice'])) as int;
     return amount -
         _getCartItemDiscount(
             totalDiscount: totalDiscount, totalItems: totalItems);

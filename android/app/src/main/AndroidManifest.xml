@@ -10,9 +10,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="smartstock POS">
-        <service android:name=".SalesSyncService"></service>
-        <service android:name=".StockSyncService"></service>
-        <receiver android:name=".AutoStartBroadcaster">
+        <service android:name=".services.SalesSyncService"></service>
+        <service android:name=".services.StockSyncService"></service>
+        <receiver android:name=".services.AutoStartBroadcaster">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

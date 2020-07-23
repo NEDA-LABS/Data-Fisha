@@ -1,6 +1,8 @@
-package com.fahamutech.smartstock.pos
+package com.fahamutech.smartstock.pos.controllers
 
-class CacheController: CacheAdapter<kotlin.Any> {
+import com.fahamutech.smartstock.pos.adapters.CacheAdapter
+
+class CacheController: CacheAdapter<Any> {
     override suspend fun set(identifier: String, data: Any, dtl: List<Any>): Any {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

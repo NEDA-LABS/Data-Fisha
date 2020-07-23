@@ -1,4 +1,4 @@
-package com.fahamutech.smartstock.pos
+package com.fahamutech.smartstock.pos.adapters
 
 interface CacheAdapter<T> {
     suspend fun set(identifier: String, data: T, dtl: List<T>): T
