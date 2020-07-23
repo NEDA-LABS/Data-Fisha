@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/bfastui.dart';
@@ -5,8 +7,9 @@ import 'package:flutter/material.dart';
 
 import 'configurations.dart';
 import 'modules/app/app.module.dart';
+import 'package:smartstock_pos/services/sales_sync_service.dart';
 
-void main() {
+void main() async {
   _connectWithBFastCloudProject();
   runApp(
     BFastUI.module(SmartStockPos()).start(
@@ -17,6 +20,13 @@ void main() {
       ),
     ),
   );
+
+  await Isolate.spawn(startServices ,"starting the services");
+}
+
+void startServices(String arg) async {
+  var salesSyncService = SalesSyncService();
+  salesSyncService.start();
 }
 
 void _connectWithBFastCloudProject() {
