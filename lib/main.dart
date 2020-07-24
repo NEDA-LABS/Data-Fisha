@@ -25,7 +25,7 @@ void main() async {
 
 void startServices(String arg) async {
   var salesSyncService = SalesSyncService();
-  salesSyncService.start();
+  salesSyncService.run();
 }
 
 void _connectWithBFastCloudProject() {
