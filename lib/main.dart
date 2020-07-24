@@ -20,7 +20,6 @@ void main() async {
       ),
     ),
   );
-
   await Isolate.spawn(startServices ,"starting the services");
 }
 

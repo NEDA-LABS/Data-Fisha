@@ -16,7 +16,7 @@ class SalesSyncService{
   }
 
   initiateSmartStock() {
-   BFast.int(AppCredentials('smartstock_lb', 'smartstock'));
+   BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
   }
 
   // async getShops() {
