@@ -120,4 +120,9 @@ class SalesState extends BFastUIState {
 //    addToCartIsActive = true;
 //    notifyListeners();
 //  }
+@override
+  void dispose() {
+   _debounce.cancel();_debounce = null;
+    super.dispose();
+  }
 }

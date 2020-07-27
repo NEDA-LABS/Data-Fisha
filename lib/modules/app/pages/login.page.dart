@@ -2,7 +2,7 @@ import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 
-import 'login.component.dart';
+import '../components/login.component.dart';
 
 class LoginPage extends BFastUIPage {
   @override

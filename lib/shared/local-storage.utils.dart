@@ -1,7 +1,6 @@
 import 'package:bfast/adapter/cache.dart';
 import 'package:bfast/bfast.dart';
 import 'package:bfast/controller/cache.dart';
-import 'package:smartstock_pos/modules/sales/models/stock.model.dart';
 import 'package:smartstock_pos/shared/security.utils.dart';
 
 class SmartStockPosLocalStorage {
@@ -42,7 +41,8 @@ class SmartStockPosLocalStorage {
             database: 'sales', collection: activeShop['projectId']))
         .set(Security.randomString(12), batchs, 720);
   }
-   Future<List<dynamic>> getSales() async {
+
+  Future<List<dynamic>> getSales() async {
     var shop = await this.getActiveShop();
     var stocksCache = BFast.cache(
         CacheOptions(database: 'sales', collection: shop['projectId']));
@@ -112,8 +112,6 @@ class SmartStockPosLocalStorage {
         CacheOptions(database: 'stocks', collection: shop['projectId']));
     return await stocksCache.get<List<dynamic>>('all');
   }
-
- 
 
   Future saveStocks(List<dynamic> stocks) async {
     var shop = await this.getActiveShop();
