@@ -54,6 +54,16 @@ class SalesComponents {
     return AppBar(
       title: Text(title),
       bottom: showSearch ? this._searchInput : null,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          if (title == 'Sales') {
+            BFastUI.navigateTo('/shop');
+          } else {
+            BFastUI.navigateTo("/sales");
+          }
+        },
+      ),
       actions: <Widget>[
         BFastUI.component().custom(
           (context) => PopupMenuButton(
@@ -96,12 +106,17 @@ class SalesComponents {
                         Navigator.pop(context);
                       },
                     )
-                  : cartState.cartProductsArray.length<=0?FloatingActionButton(
-                      child: Icon(Icons.refresh),
-                      onPressed: () {
-                        salesState.getStockFromRemote();
-                      },
-                    ):Container(height: 0,width: 0,);
+                  : cartState.cartProductsArray.length <= 0
+                      ? FloatingActionButton(
+                          child: Icon(Icons.refresh),
+                          onPressed: () {
+                            salesState.getStockFromRemote();
+                          },
+                        )
+                      : Container(
+                          height: 0,
+                          width: 0,
+                        );
             })
           : Container(),
     );
