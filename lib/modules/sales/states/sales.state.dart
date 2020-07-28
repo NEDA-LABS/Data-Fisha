@@ -1,62 +1,128 @@
+import 'dart:async';
+
 import 'package:bfast/bfast.dart';
-import 'package:bfast/controller/cache.dart';
 import 'package:bfastui/adapters/state.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
+import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class SalesState extends BFastUIState {
-  List<Stock> _stocks = [];
-  Future loading;
+  SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
+  List<dynamic> _stocks = [];
+  Timer _debounce;
+  bool addToCartIsActive = false;
 
-  List<Stock> get stocks {
+  bool loadProductsProgress = false;
+  bool onSearchProgress = false;
+
+  String searchKeyword = '';
+
+  // TextEditingController searchInputController = TextEditingController(text: '');
+
+  List<dynamic> get stocks {
     return this._stocks;
   }
 
-  SalesState() {
-    this.setLoadingFuture(loading: this.getStockFromRemoteAndStoreInCache());
+//  SalesState() {
+//    getStockFromCache();
+//  }
+
+  Future<List<dynamic>> getStockFromCache({String productFilter}) async {
+    try {
+      loadProductsProgress = true;
+      notifyListeners();
+      var stocks = await _storage.getStocks();
+      if (stocks == null) {
+        stocks = await getStockFromRemote();
+      }
+      if (stocks != null && stocks.length == 0) {
+        stocks = await getStockFromRemote();
+      }
+      var filtered = stocks
+          ?.where((element) =>
+              element['saleable'] == null || element['saleable'] == true)
+          ?.toList();
+      if (productFilter != null && productFilter.isNotEmpty) {
+        this._stocks = filtered
+            ?.where((element) => element['product']
+                .toString()
+                .toLowerCase()
+                .contains(productFilter.toLowerCase()))
+            ?.toList();
+      } else {
+        this._stocks = filtered;
+      }
+      return this._stocks;
+    } catch (e) {
+      throw e;
+    } finally {
+      loadProductsProgress = false;
+      notifyListeners();
+    }
   }
 
-  setLoadingFuture({Future loading}) {
-    this.loading = loading;
-    notifyListeners();
-  }
-
-  // List<Stock> getStockFromCache(){
-
-  // }
-
-  Future getStockFromRemoteAndStoreInCache() async {
-    await getStockFromRemote();
-    await storeStockInCache();
-    print(">>>>>>>>> Done getting data");
-    notifyListeners();
-  }
-
-  Future getStockFromRemote() async {
-    var cache =
-        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
-    var shop = await cache.get('activeShop');
-    var stocks = await BFast.database().collection("stocks").getAll();
-
-    stocks.forEach((remoteStock) {
-      Stock stock = new Stock(
-          productCategory: remoteStock["category"],
-          productName: remoteStock["product"],
-          retailPrice: remoteStock["retailPrice"].toString(),
-          wholesalePrice: remoteStock["wholesalePrice"].toString());
-      this._stocks.add(stock);
-    });
-    notifyListeners();
-  }
-
-  Future storeStockInCache() async {
-    var cache =
-        BFast.cache(CacheOptions(collection: "config", database: "smartstock"));
-    // this._stocks.forEach((product) {
-
-    // });
+  Future<List<dynamic>> getStockFromRemote() async {
+    try {
+      loadProductsProgress = true;
+      notifyListeners();
+      var shop = await _storage.getActiveShop();
+      var stocks =
+          await BFast.database(shop['projectId']).collection("stocks").getAll();
+      if (stocks != null) {
+        stocks
+            .where((element) =>
+                element['saleable'] == null || element['saleable'] == true)
+            .toList();
+      } else {
+        stocks = [];
+      }
+      return await _storage.saveStocks(stocks);
+    } catch (e) {
+      throw e;
+    } finally {
+      loadProductsProgress = false;
+      notifyListeners();
+    }
   }
 
 // void listenToRemoteStockUpdate(){
 //   // TODO: Implement socket to listen to remote stock updates
 // }
+
+  void filterProducts(String query) {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(milliseconds: 800), () {
+      if (onSearchProgress != true && searchKeyword != query) {
+//        print(query);
+        searchKeyword = query;
+        onSearchProgress = true;
+        notifyListeners();
+        getStockFromCache(productFilter: query)
+            .catchError((_) {})
+            .whenComplete(() {
+          onSearchProgress = false;
+          notifyListeners();
+        });
+      }
+    });
+  }
+
+  void resetSearchKeyword(String s) {
+//    this.searchKeyword = s;
+//    // searchInputController.clear();
+//    notifyListeners();
+  }
+
+//  void setIsAddToCartActiveFalse() {
+//    addToCartIsActive = false;
+//    notifyListeners();
+//  }
+
+//  void setIsAddToCartActiveTrue() {
+//    addToCartIsActive = true;
+//    notifyListeners();
+//  }
+@override
+  void dispose() {
+   _debounce.cancel();_debounce = null;
+    super.dispose();
+  }
 }

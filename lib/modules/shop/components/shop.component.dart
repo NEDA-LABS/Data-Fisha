@@ -1,6 +1,6 @@
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/shop/states/shops.state.dart';
+import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
 
 class ShopComponents {
   Widget get chooseShop {
@@ -23,7 +23,7 @@ class ShopComponents {
                     "Choose Shop",
                     softWrap: true,
                     style: TextStyle(
-                        fontSize: 48,
+                        fontSize: 38,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
@@ -54,7 +54,7 @@ class ShopComponents {
           Container(
             margin: EdgeInsets.all(5),
             child: RaisedButton(
-              onPressed: () async {
+              onPressed: () {
                 ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
                   print(e);

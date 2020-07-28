@@ -1,7 +1,7 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfastui/adapters/router.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:smartstock/shared/local-storage.dart';
+import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class ActiveShopGuard extends BFastUIRouterGuard {
   @override

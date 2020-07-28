@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
+import 'package:intl/intl.dart';
 
 class RetailComponents {
   Widget get company {
@@ -14,103 +14,6 @@ class RetailComponents {
         onTap: () {},
       ),
     );
-  }
-
-  void showBottomSheet({BuildContext context, Stock stock}) {
-    print(stock.productName);
-    Scaffold.of(context).showBottomSheet((context) => Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          ),
-          child: Card(
-            elevation: 30,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-
-                              flex: 1,
-                              child: Center(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      stock.productName,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 19),
-                                    ),
-                                    Text(stock.retailPrice,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 25)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                                child: IconButton(
-                                    icon: Icon(Icons.close), onPressed: () {})),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Row(
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(
-                            Icons.add_circle,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {}),
-                      Flexible(
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(), enabled: false),
-                        ),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.remove_circle,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {}),
-                      FlatButton(
-                        onPressed: () {},
-                        child: Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.green,
-                            ),
-                            height: 30,
-                            width: 70,
-                            child: Center(
-                              child: Text(
-                                "ADD",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-               
-                ],
-              ),
-
-            ),
-          ),
-          height: 220,
-        ));
   }
 
   Widget productCardItem(
@@ -130,15 +33,31 @@ class RetailComponents {
             ),
           ),
           Expanded(
+            child: Container(
+              padding: EdgeInsets.all(4),
               child: Text(
-            productName != null ? productName : "No Listed Name",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          )),
+                productName != null ? productName : "No Listed Name",
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
+            flex: 2,
+          ),
           Spacer(),
           Expanded(
               child: Text(
-            productPrice != null ? productPrice : "No Listed Price",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            productPrice != null
+                ? NumberFormat.currency(name: 'TZS ')
+                    .format(int.parse(productPrice))
+                : "No Listed Price",
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
           )),
           Spacer(
             flex: 1,

@@ -8,10 +8,13 @@ class AuthGuard extends BFastUIRouterGuard {
     BFast.auth().authenticated().then((value) {
       BFast.auth().setCurrentUser(value);
     }).catchError((onError) {
-      BFast.auth().setCurrentUser(null);
+      try {
+        if (onError['message'].toString().contains('209')) {
+          BFast.auth().setCurrentUser(null);
+        }
+      } catch (e) {}
     });
     var user = await BFast.auth().currentUser();
-    // print(user != null ? user['username'] : null);
     if (user != null) {
       return true;
     } else {

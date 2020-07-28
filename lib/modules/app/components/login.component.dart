@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import 'login.state.dart';
+import '../states/login.state.dart';
 
 class LoginComponents {
   final GlobalKey<FormBuilderState> _loginFormState =

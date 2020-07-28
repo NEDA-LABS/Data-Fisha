@@ -2,7 +2,7 @@ import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/adapters/state.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:smartstock/shared/local-storage.dart';
+import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class ChooseShopState extends BFastUIState {
   var activeShop;
@@ -35,7 +35,7 @@ class ChooseShopState extends BFastUIState {
     try {
       String appId = shop["applicationId"];
       String projectId = shop["projectId"];
-      BFast.int(AppCredentials(appId, projectId), projectId);
+      BFast.init(AppCredentials(appId, projectId), projectId);
       shops = [];
       notifyListeners();
       var _storage = SmartStockPosLocalStorage();

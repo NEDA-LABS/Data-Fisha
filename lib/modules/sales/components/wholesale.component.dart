@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/modules/sales/models/stock.model.dart';
 
 class WholesaleComponents {
   Widget get company {
@@ -16,8 +15,7 @@ class WholesaleComponents {
     );
   }
 
-  void showBottomSheet({BuildContext context, Stock stock}) {
-    print(stock.productName);
+  void showBottomSheet({BuildContext context, var stock}) {
     Scaffold.of(context).showBottomSheet((context) => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -41,11 +39,11 @@ class WholesaleComponents {
                                 child: Column(
                                   children: <Widget>[
                                     Text(
-                                      stock.productName,
+                                      stock["product"],
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 19),
                                     ),
-                                    Text(stock.wholesalePrice,
+                                    Text(stock["wholesalePrice"].toString(),
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 25)),
                                   ],
@@ -113,36 +111,19 @@ class WholesaleComponents {
         ));
   }
 
-  Widget productCardItem(
-      {String productCategory, String productName, String productPrice}) {
+
+  Widget productCardItem({String productCategory, String productName, String productPrice}) {
     return Card(
       color: Colors.white,
       elevation: 4,
       child: Column(
         children: <Widget>[
-          Spacer(
-            flex: 1,
-          ),
-          Expanded(
-            child: Text(
-              productCategory != null ? productCategory : "No Listed Category",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          Expanded(
-              child: Text(
-            productName != null ? productName : "No Listed Name",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          )),
+          Spacer(flex: 1,),
+          Expanded(child: Text(productCategory != null ? productCategory : "No Listed Category", style: TextStyle(color: Colors.grey),),),
+          Expanded(child: Text(productName != null ? productName : "No Listed Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
           Spacer(),
-          Expanded(
-              child: Text(
-            productPrice != null ? productPrice : "No Listed Price",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          )),
-          Spacer(
-            flex: 1,
-          )
+          Expanded(child: Text(productPrice != null ? productPrice: "No Listed Price", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
+          Spacer(flex: 1,)
         ],
       ),
     );

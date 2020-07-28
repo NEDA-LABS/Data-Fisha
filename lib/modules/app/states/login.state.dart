@@ -24,7 +24,7 @@ class LoginPageState extends BFastUIState {
       var user = await BFast.auth().logIn(username.trim(), password.trim());
       if (user != null) {
         username = user['username'];
-        BFastUI.navigateTo('/shop');
+        BFastUI.navigateToAndReplace('/shop');
       } else {
         throw "User is null";
       }
