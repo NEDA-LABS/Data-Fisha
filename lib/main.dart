@@ -6,7 +6,7 @@ import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 
 import 'configurations.dart';
 import 'modules/app/app.module.dart';
-import 'modules/app/services/sales-sync.service.dart';
+import 'modules/sales/services/sales-sync.service.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -20,18 +20,16 @@ void main() async {
       ),
     ),
   );
-  // IsolateHandler().spawn(startSalesServices);
-  // Isolate.spawn(startStockSyncServices, "starting stocks sync");
-
-  startSalesServices(null);
+  startSalesServices();
+  startStockSyncServices();
 }
 
-void startSalesServices(Map args) {
+void startSalesServices() {
   SalesSyncService().start();
 }
 
-void startStockSyncServices(String args) {
-  StockSyncService().run();
+void startStockSyncServices() {
+  // StockSyncService().run();
 }
 
 void _connectWithBFastCloudProject() {

@@ -15,23 +15,34 @@ class StockSyncService {
 
 Future _startStockSocket() async {
   var smartStockCache =
-  BFast.cache(CacheOptions(database: 'smartstock', collection: 'config'));
+      BFast.cache(CacheOptions(database: 'smartstock', collection: 'config'));
   var shop = await smartStockCache.get('activeShop');
-  var event = BFast.functions().event('/stocks',
-      onConnect: (_) {
-    print("*******************");
-        print('stocks socket connect');
-        _getMissedStocks(shop, smartStockCache);
-        // event.emit({auth: null, body: {applicationId: shop?shop.applicationId: null, projectId: shop?shop.projectId:null}});
-      },
-      onDisconnect: (_) => print('stocks socket disconnect'));
+  var event = BFast.functions().event(
+    '/stocks',
+    onConnect: (_) {
+      print('stocks socket connect');
+      _getMissedStocks(shop, smartStockCache);
+    },
+    onDisconnect: (_) => print('stocks socket disconnect'),
+  );
   event.listener((data) async {
-    var smartStockCache = BFast.cache(
-        CacheOptions(database: 'smartstock', collection: 'config'));
-    var shop = await smartStockCache.get('activeShop');
-    _updateLocalStock(data['body'] ? data['body'] : data, shop)
+    print('****************start update stock**************');
+    print(data);
+    _updateLocalStock(data['body'] != null ? data['body'] : data, shop)
         .catchError((err) => print(err));
   });
+  var user = await BFast.auth().currentUser();
+  event.emit(
+    body: {'you': 'fuck*'},
+    auth: user != null && user['objectId'] != null ? user['objectId'] : null,
+  );
+  event.emit(
+    body: {
+      'applicationId': shop != null ? shop['applicationId'] : null,
+      'projectId': shop != null ? shop['projectId'] : null
+    },
+    auth: user != null && user['objectId'] != null ? user['objectId'] : null,
+  );
 }
 
 Future _getMissedStocks(shop, smartStockCache) async {
@@ -47,12 +58,12 @@ Future _getMissedStocks(shop, smartStockCache) async {
     BFast.init(
         AppCredentials(shop['applicationId'], shop['projectId'],
             cache: CacheConfigOptions(false)),
-        shop.projectId);
+        shop['projectId']);
     var stocks = await BFast.database(shop['projectId'])
         .collection('stocks')
         .getAll(null);
     await BFast.cache(
-        CacheOptions(database: 'stocks', collection: shop['projectId']))
+            CacheOptions(database: 'stocks', collection: shop['projectId']))
         .set('all', stocks);
     await smartStockCache.set('lastUpdate', lastUpdate);
   }
@@ -66,17 +77,17 @@ Future _mergeStocks(shop, lastUpdate, smartStockCache) async {
       shop['projectId']);
   var remoteStocks = await BFast.functions()
       .request(
-      '/functions/stocks/sync/${shop['projectId']}?lastUpdateTime=$lastUpdate')
+          '/functions/stocks/sync/${shop['projectId']}?lastUpdateTime=$lastUpdate')
       .get();
 
-  if (remoteStocks &&
+  if (remoteStocks != null &&
       remoteStocks['lastUpdateTime'] != null &&
       remoteStocks['projectId'] != null &&
       remoteStocks['results'] != null &&
       remoteStocks['results'] is List &&
       remoteStocks['results'].length > 0) {
     var localStocks = await stocksCache.get('all');
-    const localStockMap = {};
+    var localStockMap = {};
     if (localStocks != null && localStocks is List) {
       localStocks.forEach((value) {
         localStockMap[value['objectId']] = value;
@@ -89,7 +100,7 @@ Future _mergeStocks(shop, lastUpdate, smartStockCache) async {
         localStockMap[value['objectId']] = value;
       });
     }
-    const newStocks = [];
+    var newStocks = [];
     localStockMap.keys.forEach((key) {
       newStocks.add(localStockMap[key]);
     });
@@ -107,7 +118,6 @@ Future _mergeStocks(shop, lastUpdate, smartStockCache) async {
 }
 
 Future _updateLocalStock(data, shop) async {
-
   if (shop != null &&
       shop['applicationId'] != null &&
       shop['projectId'] != null &&
@@ -120,7 +130,7 @@ Future _updateLocalStock(data, shop) async {
     List stocks = await stocksCache.get('all');
     var operationType = data['data']['operationType'];
     Map fullDocument = data['data']['fullDocument'];
-    var documentKey = data['data']['documentKey'];
+    Map documentKey = data['data']['documentKey'];
     Map updateDescription = data['data']['updateDescription'];
     switch (operationType) {
       case 'insert':
@@ -137,7 +147,7 @@ Future _updateLocalStock(data, shop) async {
         await stocksCache.set(
             'all',
             stocks.retainWhere(
-                    (stock) => stock['objectId'] != documentKey['_id']));
+                (stock) => stock['objectId'] != documentKey['_id']));
         return;
       case 'update':
         await stocksCache.set('all', stocks.map((stock) {
@@ -168,7 +178,7 @@ Future _updateLocalStock(data, shop) async {
           } else {
             return stock;
           }
-        }));
+        }).toList());
         return;
       case 'replace':
         await stocksCache.set('all', stocks.map((stock) {

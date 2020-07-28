@@ -47,6 +47,13 @@ packages:
       url: "https://github.com/fahamutech/bfast-ui-flutter"
     source: git
     version: "1.0.0-beta.11"
+  characters:
+    dependency: transitive
+    description:
+      name: characters
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   charcode:
     dependency: transitive
     description:
@@ -60,7 +67,7 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.12"
+    version: "1.14.13"
   convert:
     dependency: transitive
     description:
@@ -136,13 +143,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.12.0"
-  flutter_isolate:
-    dependency: transitive
-    description:
-      name: flutter_isolate
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0+14"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -239,13 +239,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
-  isolate_handler:
-    dependency: "direct main"
-    description:
-      name: isolate_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   js:
     dependency: transitive
     description:
@@ -467,7 +460,7 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.6"
+    version: "1.2.0"
   uuid:
     dependency: "direct main"
     description:
@@ -511,5 +504,5 @@ packages:
     source: hosted
     version: "4.2.0"
 sdks:
-  dart: ">=2.8.0 <3.0.0"
+  dart: ">=2.9.0-14.0.dev <3.0.0"
   flutter: ">=1.12.13+hotfix.6 <2.0.0"
