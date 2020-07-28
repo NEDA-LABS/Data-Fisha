@@ -10,7 +10,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
-        // JZV3Printer.getInstance().init(this)
-        // flutterEngine.plugins.add(JZV3PrinterPlugin())
+        JZV3Printer.getInstance().init(this)
+        flutterEngine.plugins.add(JZV3PrinterPlugin())
     }
 }
