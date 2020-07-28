@@ -38,10 +38,14 @@ class RetailComponents {
               child: Text(
                 productName != null ? productName : "No Listed Name",
                 textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
+            flex: 2,
           ),
           Spacer(),
           Expanded(
@@ -50,6 +54,8 @@ class RetailComponents {
                 ? NumberFormat.currency(name: 'TZS ')
                     .format(int.parse(productPrice))
                 : "No Listed Price",
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
           )),

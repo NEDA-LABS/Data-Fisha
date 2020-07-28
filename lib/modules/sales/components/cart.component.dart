@@ -37,9 +37,12 @@ class CartComponents {
                                               Text(
                                                 state.currentCartModel
                                                     .product["product"],
+                                                softWrap: true,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 19),
+                                                    fontSize: 14),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.fromLTRB(
@@ -60,7 +63,7 @@ class CartComponents {
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 25,
+                                                    fontSize: 24,
                                                   ),
                                                 ),
                                               ),
