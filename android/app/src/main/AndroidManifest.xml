@@ -9,7 +9,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
-        android:label="smartstock POS">
+        android:label="Smartstock POS">
 <!--        <receiver android:name=".services.AutoStartBroadcaster">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
