@@ -67,14 +67,17 @@ class SalesState extends BFastUIState {
       var stocks =
           await BFast.database(shop['projectId']).collection("stocks").getAll();
       if (stocks != null) {
-        stocks
+        stocks = stocks
             .where((element) =>
                 element['saleable'] == null || element['saleable'] == true)
             .toList();
       } else {
         stocks = [];
       }
-      return await _storage.saveStocks(stocks);
+      await _storage.saveStocks(stocks);
+      this._stocks = stocks;
+      notifyListeners();
+      return stocks;
     } catch (e) {
       throw e;
     } finally {

@@ -38,7 +38,7 @@ class LoginComponents {
                   state.username.toString().isNotEmpty) {
                 state.resetPassword(state.username);
               } else {
-                Scaffold.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text("Enter your username to reset password"),
                 ));
               }
@@ -52,15 +52,15 @@ class LoginComponents {
   Widget get _userNameFormControl {
     return BFastUI.component().consumer<LoginPageState>((context, state) {
       return FormBuilderTextField(
-        attribute: 'username',
+        name: 'username',
         maxLines: 1,
         onChanged: (value) {
           state.username = value;
         },
-        validators: [
-          FormBuilderValidators.required(),
-          FormBuilderValidators.minLength(1)
-        ],
+        validator: FormBuilderValidators.compose( [
+          FormBuilderValidators.required(context),
+          FormBuilderValidators.minLength(context,1)
+        ]),
         cursorColor: Colors.black45,
         style: TextStyle(color: Colors.black45),
         decoration: InputDecoration(
@@ -90,7 +90,7 @@ class LoginComponents {
   Widget get _passwordFormControl {
     return BFastUI.component().consumer<LoginPageState>((context, state) {
       return FormBuilderTextField(
-        attribute: 'password',
+        name: 'password',
         maxLines: 1,
         cursorColor: Colors.black45,
         style: TextStyle(color: Colors.black45),
@@ -131,10 +131,10 @@ class LoginComponents {
           //labelText: 'Title',
         ),
         obscureText: !state.showPassword,
-        validators: [
-          FormBuilderValidators.required(),
-          FormBuilderValidators.minLength(1)
-        ],
+      validator: FormBuilderValidators.compose( [
+          FormBuilderValidators.required(context),
+          FormBuilderValidators.minLength(context, 1)
+        ]),
       );
     });
   }
@@ -176,12 +176,12 @@ class LoginComponents {
                                     password: _loginFormState
                                         .currentState.value['password'])
                                 .catchError((e) {
-                              Scaffold.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(e.toString()),
                               ));
                             });
                           } else {
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text("Fix all errors then submit again"),
                             ));
                           }

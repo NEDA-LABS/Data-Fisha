@@ -52,7 +52,7 @@ class RetailComponents {
               child: Text(
             productPrice != null
                 ? NumberFormat.currency(name: 'TZS ')
-                    .format(int.parse(productPrice))
+                    .format(double.parse(productPrice))
                 : "No Listed Price",
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,

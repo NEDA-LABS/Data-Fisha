@@ -5,6 +5,8 @@ import 'package:bfastui/adapters/state.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
+import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class LoginPageState extends BFastUIState {
   String username;
@@ -22,6 +24,7 @@ class LoginPageState extends BFastUIState {
       onLoginProgress = true;
       notifyListeners();
       var user = await BFast.auth().logIn(username.trim(), password.trim());
+      await BFast.auth().setCurrentUser(user);
       if (user != null) {
         username = user['username'];
         BFastUI.navigateToAndReplace('/shop');
@@ -29,6 +32,7 @@ class LoginPageState extends BFastUIState {
         throw "User is null";
       }
     } catch (e) {
+      print(e);
       if (e != null && e['message'] != null) {
         var message = jsonDecode(e['message']) as Map<String, dynamic>;
         throw message['error'];
@@ -46,6 +50,10 @@ class LoginPageState extends BFastUIState {
       BFast.auth().setCurrentUser(null);
     }).catchError((r) {
       print(r);
+    }).whenComplete((){
+      StockSyncService.stop();
+      SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
+      _storage.removeActiveShop();
     });
     BFastUI.navigateTo('/login');
   }

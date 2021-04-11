@@ -1,4 +1,3 @@
-import 'package:bfast/bfast.dart';
 import 'package:bfastui/adapters/page.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,8 @@ class RetailPage extends BFastUIPage {
     BFastUI.getState<SalesState>().getStockFromCache();
     return BFastUI.component().custom((_) {
       return Scaffold(
-        appBar: SalesComponents().salesTopBar(title: "Retails", showSearch: true),
+        appBar:
+            SalesComponents().salesTopBar(title: "Retails", showSearch: true),
         floatingActionButton: SalesComponents().salesRefreshButton,
         body: SalesComponents().body(),
       );

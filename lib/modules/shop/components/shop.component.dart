@@ -58,7 +58,7 @@ class ShopComponents {
                 ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
                   print(e);
-                  Scaffold.of(context).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Fails to set a current shop'),
                     ),

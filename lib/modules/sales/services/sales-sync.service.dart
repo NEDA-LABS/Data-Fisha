@@ -3,14 +3,13 @@ import 'dart:convert';
 
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfast/controller/cache.dart';
 import 'package:flutter/foundation.dart';
 
 class SalesSyncService {
   var shouldRun = true;
 
   start() {
-    Timer.periodic(Duration(seconds: 8), (_) {
+    Timer.periodic(Duration(seconds: 8), (_) async {
       // print("Sales synchronization started!!!!!!");
       if (shouldRun) {
         shouldRun = false;
@@ -34,18 +33,17 @@ class SalesSyncService {
       try {
         BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
             shop['projectId']);
-        var salesCache = BFast.cache(
-            CacheOptions(database: "sales", collection: shop['projectId']));
+        var salesCache =
+            BFast.cache(database: "sales", collection: shop['projectId']);
         List salesKeys = await salesCache.keys();
         for (var key in salesKeys) {
           var sales = await salesCache.get(key);
           if (!(sales is List)) {
             await salesCache.remove(key);
-            return;
           } else {
-            await compute(saveSaleAndUpdateStock, {"sales": sales, "shop": shop});
-            await salesCache.remove(key, true);
-            return;
+            await compute(
+                saveSaleAndUpdateStock, {"sales": sales, "shop": shop});
+            await salesCache.remove(key, force: true);
           }
         }
       } catch (err) {
@@ -97,6 +95,6 @@ Future saveSaleAndUpdateStock(Map map) async {
   }).toList();
   await BFast.functions()
       .request(
-      '/functions/sales/${map['shop']['projectId']}/${map['shop']['applicationId']}')
+          'https://${map['shop']['projectId']}-daas.bfast.fahamutech.com/functions/sales')
       .post({"requests": dataToSave});
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BottomBarComponents {
-  Widget  bottomBar(int currentIndex) {
+  Widget bottomBar(int currentIndex) {
     return BFastUI.component().custom(
       (context) => BottomNavigationBar(
         currentIndex: currentIndex,
@@ -12,23 +12,23 @@ class BottomBarComponents {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            title: Text('Dashboard'),
+            label: 'Dashboard',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shop),
-            title: Text('Sales'),
+            label: 'Sales',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
-            title: Text('Purchases'),
+            label: 'Purchases',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.store),
-            title: Text('Stocks'),
+            label: 'Stocks',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Account'),
+            label: 'Account',
           ),
         ],
 //        backgroundColor: Theme.of(context).primaryColor,

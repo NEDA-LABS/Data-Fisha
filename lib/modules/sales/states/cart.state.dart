@@ -23,7 +23,7 @@ class CartState extends BFastUIState {
 
   addStockToCart(CartModel cart) {
     CartModel updateItem = this.cartProductsArray.firstWhere(
-        (x) => x.product['objectId'] == cart.product['objectId'],
+        (x) => x.product['id'] == cart.product['id'],
         orElse: () => null);
     if (updateItem != null) {
       var index = this.cartProductsArray.indexOf(updateItem);
@@ -43,6 +43,9 @@ class CartState extends BFastUIState {
   }
 
   int getTotalWithoutDiscount({bool isWholesale = false}) {
+    if(this.cartProductsArray.isEmpty || this.cartProductsArray == null){
+      return 0;
+    }
     int total = this
         .cartProductsArray
         .map<int>((value) =>
@@ -57,6 +60,9 @@ class CartState extends BFastUIState {
   }
 
   int getFinalTotal({bool isWholesale = false}) {
+    if(this.cartProductsArray.isEmpty || this.cartProductsArray == null){
+      return 0;
+    }
     int total = this
             .cartProductsArray
             .map<int>((value) =>
@@ -75,7 +81,7 @@ class CartState extends BFastUIState {
 
   void decrementQtyOfProductInCart(String productId) {
     int indexOfProductInCart = cartProductsArray
-        .indexWhere((element) => element.product['objectId'] == productId);
+        .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0 &&
         this.cartProductsArray[indexOfProductInCart].quantity > 1) {
       this.cartProductsArray[indexOfProductInCart].quantity =
@@ -86,7 +92,7 @@ class CartState extends BFastUIState {
 
   void incrementQtyOfProductInCart(String productId) {
     int indexOfProductInCart = cartProductsArray
-        .indexWhere((element) => element.product['objectId'] == productId);
+        .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0) {
       cartProductsArray[indexOfProductInCart].quantity =
           cartProductsArray[indexOfProductInCart].quantity + 1;
@@ -96,7 +102,7 @@ class CartState extends BFastUIState {
 
   void removeCart(CartModel cartModel) {
     this.cartProductsArray.retainWhere((element) =>
-        element.product['objectId'] != cartModel.product['objectId']);
+        element.product['id'] != cartModel.product['id']);
     if (cartProductsArray.length == 0) {
       BFastUI.navigator().pop();
     }
@@ -250,10 +256,10 @@ class CartState extends BFastUIState {
         "date": stringDate,
         "idTra": idTra,
         "customer": null,
-        "user": currentUser != null ? currentUser['objectId'] : null,
+        "user": currentUser != null ? currentUser['id'] : null,
         "userObject": currentUser,
         "stock": value.product,
-        "stockId": value.product['objectId']
+        "stockId": value.product['id']
       });
     });
     return sales;

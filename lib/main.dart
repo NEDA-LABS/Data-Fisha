@@ -2,11 +2,11 @@ import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 
 import 'configurations.dart';
 import 'modules/app/app.module.dart';
 import 'modules/sales/services/sales-sync.service.dart';
+import 'modules/sales/services/stocks.service.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +15,7 @@ void main() async {
     BFastUI.module(SmartStockPos()).start(
       initialPath: '/shop',
       title: "SmartStock POS",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Config.getSmartStockMaterialColorSwatch(),
       ),
@@ -29,7 +30,7 @@ void startSalesServices() {
 }
 
 void startStockSyncServices() {
-  // StockSyncService().run();
+  StockSyncService.run();
 }
 
 void _connectWithBFastCloudProject() {

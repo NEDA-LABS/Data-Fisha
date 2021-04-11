@@ -1,14 +1,13 @@
 import 'package:bfast/adapter/cache.dart';
 import 'package:bfast/bfast.dart';
-import 'package:bfast/controller/cache.dart';
 import 'package:smartstock_pos/shared/security.utils.dart';
 
 class SmartStockPosLocalStorage {
   CacheAdapter smartStockCache =
-      BFast.cache(CacheOptions(database: 'smartstock', collection: 'config'));
+      BFast.cache(database: 'smartstock', collection: 'config');
 
   Future saveActiveShop(var shop) async {
-    var response = await this.smartStockCache.set('activeShop', shop, 7);
+    var response = await this.smartStockCache.set('activeShop', shop, dtl: 7);
     // BFastUI.getState<ChooseShopState>()?.activeShop = shop;
     return response;
   }
@@ -18,7 +17,7 @@ class SmartStockPosLocalStorage {
   }
 
   Future saveCurrentProjectId(String projectId) async {
-    return await this.smartStockCache.set<String>('cPID', projectId, 7);
+    return await this.smartStockCache.set<String>('cPID', projectId, dtl: 7);
   }
 
   Future getActiveShop() async {
@@ -37,15 +36,14 @@ class SmartStockPosLocalStorage {
   // BatchModel[]
   Future<dynamic> saveSales(List batchs) async {
     var activeShop = await this.getActiveShop();
-    await BFast.cache(CacheOptions(
-            database: 'sales', collection: activeShop['projectId']))
-        .set(Security.randomString(12), batchs, 720);
+    await BFast.cache(database: 'sales', collection: activeShop['projectId'])
+        .set(Security.randomString(12), batchs, dtl: 720);
   }
 
   Future<List<dynamic>> getSales() async {
     var shop = await this.getActiveShop();
-    var stocksCache = BFast.cache(
-        CacheOptions(database: 'sales', collection: shop['projectId']));
+    var stocksCache =
+        BFast.cache(database: 'sales', collection: shop['projectId']);
     return await stocksCache.get<List<dynamic>>('all');
   }
 
@@ -90,7 +88,7 @@ class SmartStockPosLocalStorage {
   }
 
   Future removeActiveShop() async {
-    var response = await this.smartStockCache.set('activeShop', null);
+    var response = await this.smartStockCache.set('activeShop', '');
 // this.eventApi.broadcast(SsmEvents.ACTIVE_SHOP_REMOVE);
     return response;
   }
@@ -101,36 +99,35 @@ class SmartStockPosLocalStorage {
 
   Future removeStocks() async {
     var shop = await this.getActiveShop();
-    return await BFast.cache(
-            CacheOptions(database: 'stocks', collection: shop['projectId']))
+    return await BFast.cache(database: 'stocks', collection: shop['projectId'])
         .clearAll();
   }
 
   Future<List<dynamic>> getStocks() async {
     var shop = await this.getActiveShop();
-    var stocksCache = BFast.cache(
-        CacheOptions(database: 'stocks', collection: shop['projectId']));
+    var stocksCache =
+        BFast.cache(database: 'stocks', collection: shop['projectId']);
     return await stocksCache.get<List<dynamic>>('all');
   }
 
   Future saveStocks(List<dynamic> stocks) async {
     var shop = await this.getActiveShop();
-    var stocksCache = BFast.cache(
-        CacheOptions(database: 'stocks', collection: shop['projectId']));
-    return await stocksCache.set('all', stocks, 360);
+    var stocksCache =
+        BFast.cache(database: 'stocks', collection: shop['projectId']);
+    return await stocksCache.set('all', stocks, dtl: 360);
   }
 
   Future saveStock(var stock) async {
 // const shop = await this.getActiveShop();
 // const stocksCache = BFast.cache({database: 'stocks', collection: shop['projectId']});
-// return stocksCache.set(stock.objectId, stock);
+// return stocksCache.set(stock.id, stock);
     return null;
   }
 
   Future<List<dynamic>> getCustomers() async {
     var shop = await this.getActiveShop();
-    var customersCache = BFast.cache(
-        CacheOptions(database: 'customers', collection: shop['projectId']));
+    var customersCache =
+        BFast.cache(database: 'customers', collection: shop['projectId']);
     List<String> customersKey = await customersCache.keys();
     const customers = [];
     for (String key in customersKey) {
@@ -141,8 +138,9 @@ class SmartStockPosLocalStorage {
 
   Future<dynamic> saveCustomer(var customer) async {
     var shop = await this.getActiveShop();
-    var customersCache = BFast.cache(
-        CacheOptions(database: 'customers', collection: shop['projectId']));
-    return await customersCache.set(customer['displayName'], customer, 360);
+    var customersCache =
+        BFast.cache(database: 'customers', collection: shop['projectId']);
+    return await customersCache.set(customer['displayName'], customer,
+        dtl: 360);
   }
 }

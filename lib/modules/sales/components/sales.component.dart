@@ -31,7 +31,7 @@ class SalesComponents {
               onChanged: (value) {
                 state.filterProducts(value);
               },
-              attribute: 'query',
+              name: 'query',
               decoration: InputDecoration(
                 hintText: "Enter a keyword...",
                 border: InputBorder.none,
@@ -152,7 +152,7 @@ class SalesComponents {
       (context, salesState) => salesState.loadProductsProgress
           ? this._showProductLoading
           : GridView.builder(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.fromLTRB(10, 10, 10 , 100),
               itemCount: salesState.stocks.length,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

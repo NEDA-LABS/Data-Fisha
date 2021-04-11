@@ -177,7 +177,7 @@ class CartComponents {
 
   Widget cartPreview({bool wholesale = false}) {
     return BFastUI.component().consumer<CartState>((context, state) {
-      return FlatButton(
+      return TextButton(
         onPressed: () {
           BFastUI.navigateTo(
               '/sales/checkout/${wholesale ? 'whole' : 'retail'}');
@@ -237,7 +237,7 @@ class CartComponents {
                                             onPressed: () {
                                               cartState
                                                   .decrementQtyOfProductInCart(
-                                                      cart.product['objectId']);
+                                                      cart.product['id']);
                                             },
                                           ),
                                           IconButton(
@@ -249,7 +249,7 @@ class CartComponents {
                                             onPressed: () {
                                               cartState
                                                   .incrementQtyOfProductInCart(
-                                                      cart.product['objectId']);
+                                                      cart.product['id']);
                                             },
                                           ),
                                         ],

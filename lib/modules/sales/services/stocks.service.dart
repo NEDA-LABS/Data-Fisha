@@ -1,196 +1,146 @@
+import 'dart:convert';
+
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfast/controller/cache.dart';
+import 'package:bfast/controller/database.dart';
+import 'package:crypto/crypto.dart';
 
 class StockSyncService {
-  run() {
-    _init();
-    _startStockSocket().catchError((err) => print(err));
+  static DatabaseChangesController changes;
+  static bool running = false;
+
+  static run() {
+    // _init();
+    // _startStockSocket().catchError((err) => print(err));
   }
 
-  _init() {
+  static stop() {
+    // if (changes != null && changes.close != null) {
+    //   changes.close();
+    // }
+    // running = false;
+  }
+
+  static _init() {
     BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
   }
-}
 
-Future _startStockSocket() async {
-  var smartStockCache =
-      BFast.cache(CacheOptions(database: 'smartstock', collection: 'config'));
-  var shop = await smartStockCache.get('activeShop');
-  var event = BFast.functions().event(
-    '/stocks',
-    onConnect: (_) {
-      print('stocks socket connect');
-      _getMissedStocks(shop, smartStockCache);
-    },
-    onDisconnect: (_) => print('stocks socket disconnect'),
-  );
-  event.listener((data) async {
-    print('****************start update stock**************');
-    print(data);
-    _updateLocalStock(data['body'] != null ? data['body'] : data, shop)
-        .catchError((err) => print(err));
-  });
-  var user = await BFast.auth().currentUser();
-  event.emit(
-    body: {'you': 'fuck*'},
-    auth: user != null && user['objectId'] != null ? user['objectId'] : null,
-  );
-  event.emit(
-    body: {
-      'applicationId': shop != null ? shop['applicationId'] : null,
-      'projectId': shop != null ? shop['projectId'] : null
-    },
-    auth: user != null && user['objectId'] != null ? user['objectId'] : null,
-  );
-}
-
-Future _getMissedStocks(shop, smartStockCache) async {
-  if (shop != null &&
-      shop['applicationId'] != null &&
-      shop['projectId'] != null) {
-    var lastUpdate = await smartStockCache.get('lastUpdate');
-    if (lastUpdate != null) {
-      await _mergeStocks(shop, lastUpdate, smartStockCache);
-      return;
+  static Future _startStockSocket() async {
+    if (running == false) {
+      try {
+        print('Stocks sync initiated');
+        print(running);
+        var smartStockCache =
+            BFast.cache(database: 'smartstock', collection: 'config');
+        var shop = await smartStockCache.get('activeShop');
+        if (shop == null) {
+          throw 'No active shop';
+        }
+        BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
+            shop['projectId']);
+        if (changes == null) {
+          changes = BFast.database(shop['projectId'])
+              .collection('stocks')
+              .query()
+              .changes(onConnect: () {
+            print('stocks socket connect');
+            _getMissedStocks(shop, smartStockCache).catchError((r1) {
+              print(r1);
+            });
+          }, onDisconnect: () {
+            print('stocks socket disconnected');
+          });
+          changes.addListener((response) {
+            print(response);
+            _updateLocalStock(response.body, shop).catchError((r2) {
+              print('');
+            });
+          });
+        }
+        running = true;
+      } catch (e) {
+        print(e);
+        print(':::::::::err connect stock sync::::::::::');
+        stop();
+      }
     }
-    lastUpdate = DateTime.now().toUtc().toString();
-    BFast.init(
-        AppCredentials(shop['applicationId'], shop['projectId'],
-            cache: CacheConfigOptions(false)),
-        shop['projectId']);
-    var stocks = await BFast.database(shop['projectId'])
-        .collection('stocks')
-        .getAll(null);
-    await BFast.cache(
-            CacheOptions(database: 'stocks', collection: shop['projectId']))
-        .set('all', stocks);
-    await smartStockCache.set('lastUpdate', lastUpdate);
   }
-}
 
-Future _mergeStocks(shop, lastUpdate, smartStockCache) async {
-  var stocksCache = BFast.cache(
-      CacheOptions(database: 'stocks', collection: shop['projectId']));
-
-  BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
-      shop['projectId']);
-  var remoteStocks = await BFast.functions()
-      .request(
-          '/functions/stocks/sync/${shop['projectId']}?lastUpdateTime=$lastUpdate')
-      .get();
-
-  if (remoteStocks != null &&
-      remoteStocks['lastUpdateTime'] != null &&
-      remoteStocks['projectId'] != null &&
-      remoteStocks['results'] != null &&
-      remoteStocks['results'] is List &&
-      remoteStocks['results'].length > 0) {
-    var localStocks = await stocksCache.get('all');
-    var localStockMap = {};
-    if (localStocks != null && localStocks is List) {
+  static Future _getMissedStocks(shop, smartStockCache) async {
+    if (shop && shop.applicationId && shop.projectId) {
+      BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
+          shop['projectId']);
+      List<dynamic> localStocks =
+          await BFast.cache(database: 'stocks', collection: shop['projectId'])
+              .get('all');
+      if (localStocks == null) {
+        localStocks = [];
+      }
+      Map<String, dynamic> hashesMap = {};
       localStocks.forEach((value) {
-        localStockMap[value['objectId']] = value;
+        var datInString = jsonEncode(value);
+        print(sha1.convert(utf8.encode(datInString)).toString());
+        print("::::::::::sha1::::::::::");
+        hashesMap[value['id']] =
+            sha1.convert(utf8.encode(datInString)).toString();
       });
-    }
-    if (remoteStocks != null &&
-        remoteStocks['results'] != null &&
-        remoteStocks['results'] is List) {
-      remoteStocks['results'].forEach((value) {
-        localStockMap[value['objectId']] = value;
+      Map<String, dynamic> missed = await BFast.functions(shop.projectId)
+          .request(
+              'https://${shop['projectId']}-daas.bfast.fahamutech.com/functions/stocks/sync')
+          .post(hashesMap);
+      hashesMap = {};
+      localStocks.forEach((value) {
+        hashesMap[value['id']] = value;
       });
+      missed.keys.forEach((mKey) {
+        if (missed[mKey] == 'DELETE') {
+          hashesMap.remove(mKey);
+        } else {
+          hashesMap[mKey] = missed[mKey];
+        }
+      });
+      localStocks = [];
+      hashesMap.keys.forEach((value) {
+        localStocks.add(hashesMap[value]);
+      });
+      await BFast.cache(database: 'stocks', collection: shop['projectId'])
+          .set('all', localStocks);
     }
-    var newStocks = [];
-    localStockMap.keys.forEach((key) {
-      newStocks.add(localStockMap[key]);
-    });
-    await stocksCache.set('all', newStocks);
-    await smartStockCache.set(
-        'lastUpdate',
-        (remoteStocks != null && remoteStocks['lastUpdateTime'] != null)
-            ? remoteStocks['lastUpdateTime']
-            : null);
-    // console.log(localStocks);
-    /// console.log(remoteStocks);
-  } else {
-    // console.log('no new stocks');
   }
-}
 
-Future _updateLocalStock(data, shop) async {
-  if (shop != null &&
-      shop['applicationId'] != null &&
-      shop['projectId'] != null &&
-      data != null &&
-      data['data'] != null) {
-    BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
-        shop['projectId']);
-    var stocksCache = BFast.cache(
-        CacheOptions(database: 'stocks', collection: shop['projectId']));
-    List stocks = await stocksCache.get('all');
-    var operationType = data['data']['operationType'];
-    Map fullDocument = data['data']['fullDocument'];
-    Map documentKey = data['data']['documentKey'];
-    Map updateDescription = data['data']['updateDescription'];
-    switch (operationType) {
-      case 'insert':
-        fullDocument['objectId'] = fullDocument['_id'];
-        fullDocument.remove('_id');
-        fullDocument['createdAt'] = fullDocument['_created_at'];
-        fullDocument.remove('_created_at');
-        fullDocument['createdAt'] = fullDocument['_created_at'];
-        fullDocument.remove('_updated_at');
-        stocks.add(fullDocument);
-        await stocksCache.set('all', stocks);
-        return;
-      case 'delete':
-        await stocksCache.set(
-            'all',
-            stocks.retainWhere(
-                (stock) => stock['objectId'] != documentKey['_id']));
-        return;
-      case 'update':
-        await stocksCache.set('all', stocks.map((stock) {
-          if (stock['objectId'] == documentKey['_id']) {
-            // updatedFields
-            // removedFields
-            Map updatedFields = updateDescription['updatedFields'];
-            List removedFields = updateDescription['removedFields'];
-            if (updateDescription != null && updatedFields != null) {
-              if (updatedFields['_updated_at'] != null) {
-                stock['updatedAt'] = updatedFields['_updated_at'];
-              }
-              List updatedFieldKeys = updatedFields.keys.toList();
-              updatedFieldKeys
-                  .retainWhere((key) => !key.toString().startsWith('_'));
-              updatedFieldKeys.forEach((key) {
-                stock[key] = updatedFields[key];
-              });
-            }
-            if (updateDescription != null &&
-                removedFields != null &&
-                removedFields is List) {
-              removedFields.forEach((key) {
-                stock.remove(key);
-              });
-            }
-            return stock;
-          } else {
-            return stock;
-          }
-        }).toList());
-        return;
-      case 'replace':
-        await stocksCache.set('all', stocks.map((stock) {
-          if (stock.objectId == documentKey['_id']) {
-            return fullDocument;
-          } else {
-            return stock;
-          }
-        }));
-        return;
-      default:
-        return;
+  static Future _updateLocalStock(body, shop) async {
+    if (shop != null &&
+        shop['applicationId'] != null &&
+        shop['projectId'] != null &&
+        body != null &&
+        body['change'] != null) {
+      BFast.init(AppCredentials(shop['applicationId'], shop['projectId']),
+          shop['projectId']);
+      var stocksCache =
+          BFast.cache(database: 'stocks', collection: shop['projectId']);
+      var operationType = body['change']['name'];
+      Map fullDocument = body['change']['snapshot'];
+      List<dynamic> stocks = await stocksCache.get('all');
+      switch (operationType) {
+        case 'create':
+          List<dynamic> _stocks =
+              stocks.where((element) => element['id'] != fullDocument['id']);
+          _stocks.insert(0, fullDocument);
+          stocksCache.set('all', _stocks);
+          return;
+        case 'delete':
+          await stocksCache.set('all',
+              stocks.where((element) => element['id'] != fullDocument['id']));
+          return;
+        case 'update':
+          stocks =
+              stocks.where((element) => element['id'] != fullDocument['id']);
+          stocks.insert(0, fullDocument);
+          stocksCache.set('all', stocks);
+          return;
+        default:
+          return;
+      }
     }
   }
 }
