@@ -17,7 +17,7 @@ class RetailComponents {
   }
 
   Widget productCardItem(
-      {String productCategory, String productName, String productPrice}) {
+      {String productCategory, String productName, int productPrice}) {
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -52,7 +52,7 @@ class RetailComponents {
               child: Text(
             productPrice != null
                 ? NumberFormat.currency(name: 'TZS ')
-                    .format(double.parse(productPrice))
+                    .format(productPrice)
                 : "No Listed Price",
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,

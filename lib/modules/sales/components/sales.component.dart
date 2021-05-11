@@ -174,11 +174,11 @@ class SalesComponents {
                         );
                       },
                       child: RetailComponents().productCardItem(
-                          productCategory: salesState.stocks[index]['category'],
-                          productName: salesState.stocks[index]['product'],
+                          productCategory: salesState.stocks[index]['category'].toString(),
+                          productName: salesState.stocks[index]['product'].toString(),
                           productPrice: salesState.stocks[index]
                                   [wholesale ? "wholesalePrice" : 'retailPrice']
-                              .toString()),
+                            ),
                     );
                   },
                 );

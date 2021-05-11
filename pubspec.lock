@@ -32,9 +32,11 @@ packages:
   bfastui:
     dependency: "direct main"
     description:
-      name: bfastui
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "3f53217c5a310b6e91883019e2a05d6226d02aa9"
+      url: "https://github.com/fahamutech/bfast-ui-flutter"
+    source: git
     version: "1.0.0"
   characters:
     dependency: transitive

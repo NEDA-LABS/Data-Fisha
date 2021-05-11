@@ -15,10 +15,10 @@ dependencies:
 #      git:
 #        url: https://github.com/fahamutech/bfast-flutter
 #        ref: master
-  bfastui:  ^1.0.0
-#    git:
-#      url: https://github.com/fahamutech/bfast-ui-flutter
-#      ref: master
+  bfastui: # ^1.0.0
+   git:
+     url: https://github.com/fahamutech/bfast-ui-flutter
+     ref: master
   flutter_form_builder: ^5.0.0
   # flutter_chips_input: ^1.9.0-dev.3
   cupertino_icons: ^0.1.2
