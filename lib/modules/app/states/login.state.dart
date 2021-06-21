@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/adapters/state.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
-class LoginPageState extends BFastUIState {
+class LoginPageState extends StateAdapter {
   String username;
   String password;
   bool onLoginProgress = false;
@@ -50,7 +50,7 @@ class LoginPageState extends BFastUIState {
       BFast.auth().setCurrentUser(null);
     }).catchError((r) {
       print(r);
-    }).whenComplete((){
+    }).whenComplete(() {
       StockSyncService.stop();
       SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
       _storage.removeActiveShop();

@@ -1,8 +1,8 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/adapters/router-guard.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 
-class AuthGuard extends BFastUIRouterGuard {
+class AuthGuard extends RouterGuardAdapter {
   @override
   Future<bool> canActivate(String url) async {
     // BFast.auth().authenticated().then((value) {

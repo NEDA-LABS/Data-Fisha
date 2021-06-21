@@ -1,5 +1,5 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/adapters/state.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
@@ -9,7 +9,7 @@ import 'package:smartstock_pos/shared/date.utils.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 import 'package:smartstock_pos/shared/security.utils.dart';
 
-class CartState extends BFastUIState {
+class CartState extends StateAdapter {
   final TextEditingController quantityInputController =
       TextEditingController(text: '1');
   final TextEditingController discountInputController =
@@ -231,6 +231,7 @@ class CartState extends BFastUIState {
         ? discountInputController.text
         : '0';
     String stringDate = toSqlDate(DateTime.now());
+    String stringTime = DateTime.now().toIso8601String().split('T')[1].replaceAll('Z', '');
     String idTra = 'n';
     String channel = wholesale ? 'whole' : 'retail';
     List<dynamic> sales = [];
@@ -254,6 +255,8 @@ class CartState extends BFastUIState {
         "unit": value.product['unit'],
         "channel": channel,
         "date": stringDate,
+        "time": stringTime,
+        "timer": stringTime,
         "idTra": idTra,
         "customer": null,
         "user": currentUser != null ? currentUser['id'] : null,

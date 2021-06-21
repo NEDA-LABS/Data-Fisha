@@ -66,7 +66,8 @@ internal class JZV3PrinterPlugin : MethodCallHandler, FlutterPlugin {
                         PrinterApi.printAddQrCode_Api(1, 150, qr)
                     }
                     PrinterApi.printFeedLine_Api(10)
-                    PrinterApi.PrnFontSet_Api(40, 100, 0)
+                    PrinterApi.PrnFontSet_Api(24, 500, 0);
+                    PrinterApi.printSetBlodText_Api(true);
                     // PrinterApi.PrnSetGray_Api(30);
                     PrinterApi.PrnLineSpaceSet_Api(5.toShort(), 0)
                     PrinterApi.PrnStr_Api(data)

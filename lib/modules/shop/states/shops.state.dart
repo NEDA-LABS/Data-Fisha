@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/adapters/state.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
-class ChooseShopState extends BFastUIState {
+class ChooseShopState extends StateAdapter {
   var activeShop;
   List shops = [];
   Future getShops() async {

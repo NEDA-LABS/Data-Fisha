@@ -1,4 +1,4 @@
-import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/adapters/state.adapter.dart';
 
-class CheckOutState extends BFastUIState{
+class CheckOutState extends StateAdapter{
 }

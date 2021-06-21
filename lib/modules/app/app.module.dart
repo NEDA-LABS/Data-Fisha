@@ -1,5 +1,5 @@
-import 'package:bfastui/adapters/module.dart';
-import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/adapters/main-module.adapter.dart';
+import 'package:bfastui/adapters/router.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:smartstock_pos/modules/sales/sales.module.dart';
 import 'package:smartstock_pos/modules/shop/shop.module.dart';
@@ -7,21 +7,21 @@ import 'package:smartstock_pos/modules/shop/shop.module.dart';
 import 'pages/login.page.dart';
 import 'states/login.state.dart';
 
-class SmartStockPos extends BFastUIMainModule {
+class AppModule extends MainModuleAdapter {
   @override
   void initRoutes(String moduleName) {
     BFastUI.navigation(moduleName: moduleName)
-        .addRoute(BFastUIRouter(
+        .addRoute(RouterAdapter(
           '/login',
           page: (context, args) => LoginPage(),
         ))
-        .addRoute(BFastUIRouter(
+        .addRoute(RouterAdapter(
           '/sales',
           module: BFastUI.childModule(
             SalesModule(),
           ),
         ))
-        .addRoute(BFastUIRouter(
+        .addRoute(RouterAdapter(
           '/shop',
           module: BFastUI.childModule(
             ShopModule(),

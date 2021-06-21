@@ -8,18 +8,29 @@ import 'modules/app/app.module.dart';
 import 'modules/sales/services/sales-sync.service.dart';
 import 'modules/sales/services/stocks.service.dart';
 
+class AppWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: "/shop",
+    );
+  }
+}
+
+
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
   _connectWithBFastCloudProject();
   runApp(
-    BFastUI.module(SmartStockPos()).start(
-      initialPath: '/shop',
-      title: "SmartStock POS",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Config.getSmartStockMaterialColorSwatch(),
-      ),
-    ),
+    BFastUI.init(
+        module: AppModule(),
+        component: MaterialApp(
+          initialRoute: '/shop',
+          title: "SmartStock POS",
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Config.getSmartStockMaterialColorSwatch(),
+          ),
+        )).start(),
   );
   startSalesServices();
   startStockSyncServices();

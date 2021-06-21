@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/adapters/router-guard.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
-class AlreadyAuthGuard extends BFastUIRouterGuard {
+class AlreadyAuthGuard extends RouterGuardAdapter {
   @override
   Future<bool> canActivate(String url) async {
     // BFast.auth().authenticated().then((value) {

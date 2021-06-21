@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/adapters/state.adapter.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
-class SalesState extends BFastUIState {
+class SalesState extends StateAdapter {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
   List<dynamic> _stocks = [];
   Timer _debounce;

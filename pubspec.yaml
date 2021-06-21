@@ -1,6 +1,7 @@
 name: smartstock_pos
 description: SmartStock mobile application
-version: 1.0.0-beta.2
+version: 1.0.0-beta.3
+publish_to: none
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -11,21 +12,21 @@ dependencies:
   uuid: ^2.2.0
   crypto: ^2.1.5
   bfast: ^4.1.1
-#    path: ../bfast-flutter
-#      git:
-#        url: https://github.com/fahamutech/bfast-flutter
-#        ref: master
-  bfastui: # ^1.0.0
-   git:
-     url: https://github.com/fahamutech/bfast-ui-flutter
-     ref: master
+  #    path: ../bfast-flutter
+  #      git:
+  #        url: https://github.com/fahamutech/bfast-flutter
+  #        ref: master
+  bfastui: ^1.1.1
+#    git:
+#      url: https://github.com/fahamutech/bfast-ui-flutter
+#      ref: master
   flutter_form_builder: ^5.0.0
   # flutter_chips_input: ^1.9.0-dev.3
   cupertino_icons: ^0.1.2
 
-dev_dependencies:
-  # flutter_test:
-  #   sdk: flutter
+#dev_dependencies:
+# flutter_test:
+#   sdk: flutter
 
 # The following section is specific to Flutter.
 flutter:

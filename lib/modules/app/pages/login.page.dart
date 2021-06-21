@@ -1,10 +1,10 @@
-import 'package:bfastui/adapters/page.dart';
+import 'package:bfastui/adapters/page.adapter.dart';
 import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 
 import '../components/login.component.dart';
 
-class LoginPage extends BFastUIPage {
+class LoginPage extends PageAdapter {
   @override
   Widget build(var args) {
     return Scaffold(
