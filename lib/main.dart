@@ -25,7 +25,6 @@ void main() async {
         module: AppModule(),
         component: MaterialApp(
           initialRoute: '/shop',
-          title: "SmartStock POS",
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Config.getSmartStockMaterialColorSwatch(),

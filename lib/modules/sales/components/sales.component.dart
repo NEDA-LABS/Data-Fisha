@@ -1,7 +1,5 @@
 import 'package:bfastui/bfastui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:smartstock_pos/modules/app/states/login.state.dart';
 import 'package:smartstock_pos/modules/sales/components/cart.component.dart';
 import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
@@ -22,29 +20,29 @@ class SalesComponents {
             padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
             width: MediaQuery.of(context).size.width * 0.9,
             alignment: Alignment.center,
-            child: FormBuilderTextField(
-              autofocus: false,
-              maxLines: 1,
-              //  controller: state.searchInputController,
-              minLines: 1,
-              initialValue: state.searchKeyword,
-              onChanged: (value) {
-                state.filterProducts(value);
-              },
-              name: 'query',
-              decoration: InputDecoration(
-                hintText: "Enter a keyword...",
-                border: InputBorder.none,
-//                suffixIcon: state.searchKeyword.isNotEmpty
-//                    ? InkWell(
-//                        child: Icon(Icons.clear),
-//                        onTap: () {
-//                          state.resetSearchKeyword('');
-//                        },
-//                      )
-//                    : null,
-              ),
-            ),
+//             child: FormBuilderTextField(
+//               autofocus: false,
+//               maxLines: 1,
+//               //  controller: state.searchInputController,
+//               minLines: 1,
+//               initialValue: state.searchKeyword,
+//               onChanged: (value) {
+//                 state.filterProducts(value);
+//               },
+//               name: 'query',
+//               decoration: InputDecoration(
+//                 hintText: "Enter a keyword...",
+//                 border: InputBorder.none,
+// //                suffixIcon: state.searchKeyword.isNotEmpty
+// //                    ? InkWell(
+// //                        child: Icon(Icons.clear),
+// //                        onTap: () {
+// //                          state.resetSearchKeyword('');
+// //                        },
+// //                      )
+// //                    : null,
+//               ),
+//             ),
           ),
         ),
         preferredSize: Size.fromHeight(52));

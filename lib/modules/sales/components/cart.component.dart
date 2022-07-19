@@ -1,7 +1,5 @@
 import 'package:bfastui/bfastui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 
 class CartComponents {
@@ -47,19 +45,19 @@ class CartComponents {
                                               Container(
                                                 padding: EdgeInsets.fromLTRB(
                                                     0, 10, 0, 0),
-                                                child: Text(
-                                                  NumberFormat.currency(
-                                                          name: 'TZS ')
-                                                      .format(
-                                                    int.parse(
-                                                      state
-                                                          .currentCartModel
-                                                          .product[wholesale
-                                                              ? "wholesalePrice"
-                                                              : "retailPrice"]
-                                                          .toString(),
-                                                    ),
-                                                  ),
+                                                child: Text('',
+                                                  // NumberFormat.currency(
+                                                  //         name: 'TZS ')
+                                                  //     .format(
+                                                  //   int.parse(
+                                                  //     state
+                                                  //         .currentCartModel
+                                                  //         .product[wholesale
+                                                  //             ? "wholesalePrice"
+                                                  //             : "retailPrice"]
+                                                  //         .toString(),
+                                                  //   ),
+                                                  // ),
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
@@ -190,8 +188,8 @@ class CartComponents {
               color: Theme.of(context).primaryColorDark,
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Text(
-            '${state.calculateCartItems()}'
-            ' Items = ${NumberFormat.currency(name: 'TZS ').format(state.getFinalTotal(isWholesale: wholesale))}',
+            '${state.calculateCartItems()}',
+            // ' Items = ${NumberFormat.currency(name: 'TZS ').format(state.getFinalTotal(isWholesale: wholesale))}',
             textAlign: TextAlign.center,
             softWrap: true,
             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -221,11 +219,11 @@ class CartComponents {
                                     children: [
                                       wholesale
                                           ? Text(
-                                              '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}'
-                                              ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
+                                              '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}')
+                                              // ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
                                           : Text(
-                                              '${cart.quantity} ${cart.product['unit']}'
-                                              ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
+                                              '${cart.quantity} ${cart.product['unit']}'),
+                                              // ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
                                       Row(
                                         children: [
                                           IconButton(
@@ -303,10 +301,11 @@ class CartComponents {
                                   flex: 1,
                                 ),
                                 Text(
-                                  NumberFormat.currency(name: 'TZS ').format(
-                                    cartState.getTotalWithoutDiscount(
-                                        isWholesale: wholesale),
-                                  ),
+                                  // NumberFormat.currency(name: 'TZS ').format(
+                                  //   cartState.getTotalWithoutDiscount(
+                                  //       isWholesale: wholesale),
+                                  // ),
+                                  '',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -389,8 +388,8 @@ class CartComponents {
                                           ),
                                           flex: 1,
                                         ),
-                                        Text(
-                                          '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
+                                        Text('',
+                                          // '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
                                           style: TextStyle(
                                             fontSize: 19,
                                             fontWeight: FontWeight.bold,
