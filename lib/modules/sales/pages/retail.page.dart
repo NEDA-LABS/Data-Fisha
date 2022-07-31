@@ -8,7 +8,7 @@ class RetailPage extends PageAdapter {
   @override
   Widget build(var args) {
     // initiate products
-    BFastUI.getState<SalesState>().getStockFromCache();
+    BFastUI.getState<SalesState>().getStockFromCache(productFilter: '');
     return BFastUI.component().custom((_) {
       return Scaffold(
         appBar:

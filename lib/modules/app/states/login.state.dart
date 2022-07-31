@@ -1,16 +1,12 @@
-import 'dart:convert';
-
 import 'package:bfast/bfast.dart';
 import 'package:bfastui/adapters/state.adapter.dart';
 import 'package:bfastui/bfastui.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class LoginPageState extends StateAdapter {
-  String username;
-  String password;
+  String username = '';
+  String password = '';
   bool onLoginProgress = false;
   bool showPassword = false;
 
@@ -19,7 +15,7 @@ class LoginPageState extends StateAdapter {
     notifyListeners();
   }
 
-  Future login({@required String username, @required String password}) async {
+  Future login({ String username, String password}) async {
     try {
       onLoginProgress = true;
       notifyListeners();
@@ -33,12 +29,12 @@ class LoginPageState extends StateAdapter {
       }
     } catch (e) {
       print(e);
-      if (e != null && e['message'] != null) {
-        var message = jsonDecode(e['message']) as Map<String, dynamic>;
-        throw message['error'];
-      } else {
+      // if (e != null && e['message'] != null) {
+      //   var message = jsonDecode(e['message']) as Map<String, dynamic>;
+      //   throw message['error'];
+      // } else {
         throw 'Fails to login';
-      }
+      // }
     } finally {
       onLoginProgress = false;
       notifyListeners();

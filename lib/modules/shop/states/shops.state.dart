@@ -31,11 +31,11 @@ class ChooseShopState extends StateAdapter {
       notifyListeners();
     }
   }
+
   Future setCurrentShop(var shop) async {
     try {
-      String appId = shop["applicationId"];
       String projectId = shop["projectId"];
-      BFast.init(AppCredentials(appId, projectId), projectId);
+      updateCurrentShop(shop);
       shops = [];
       notifyListeners();
       var _storage = SmartStockPosLocalStorage();
@@ -48,4 +48,14 @@ class ChooseShopState extends StateAdapter {
       throw e;
     }
   }
+}
+
+updateCurrentShop(var shop){
+  String appId = shop["applicationId"];
+  String projectId = shop["projectId"];
+  BFast.init(AppCredentials(
+    appId, projectId,
+    databaseURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId/v2',
+    functionsURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId',
+  ),projectId);
 }
