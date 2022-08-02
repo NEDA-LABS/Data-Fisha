@@ -1,8 +1,3 @@
-import 'package:bfastui/adapters/state.dart';
+import 'package:flutter/material.dart';
 
-class CheckOutState extends StateAdapter{
-  @override
-  void onDispose() {
-    // TODO: implement onDispose
-  }
-}
+class CheckOutState extends ChangeNotifier {}

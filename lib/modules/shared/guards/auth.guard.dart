@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/router_guard.dart';
-import 'package:bfastui/controllers/navigation.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock_pos/util.dart';
 
-class AuthGuard extends RouterGuardAdapter {
+class AuthGuard extends RouteGuard {
   @override
-  Future<bool> canActivate(String url) async {
+  Future<bool> canActivate(String url,_) async {
     var user = await BFast.auth().currentUser();
     if (user != null) {
       return true;

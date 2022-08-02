@@ -1,7 +1,6 @@
-import 'package:bfastui/controllers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
-import 'package:bfastui/controllers/component.dart';
+import 'package:smartstock_pos/util.dart';
 
 class ShopComponents {
   Widget get chooseShop {
@@ -49,51 +48,49 @@ class ShopComponents {
   }
 
   Widget _shop(var shop) {
-    return Builder(
-      builder: (context) {
-        return Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(5),
-                child: RaisedButton(
-                  onPressed: () {
-                    ChooseShopState shopState = getState<ChooseShopState>();
-                    shopState.setCurrentShop(shop).catchError((e) {
-                      print(e);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Fails to set a current shop'),
-                        ),
-                      );
-                    });
-                  },
-                  child: Container(
-//              color: Colors.white,
-                    height: 150,
-                    width: 150,
-                    child: Icon(
-                      Icons.store,
-                      color: Theme.of(context).primaryColor,
-                      size: 70,
+    return Builder(builder: (context) {
+      return Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(5),
+            child: RaisedButton(
+              onPressed: () {
+                ChooseShopState shopState = getState<ChooseShopState>();
+                shopState.setCurrentShop(shop).catchError((e) {
+                  print(e);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Fails to set a current shop'),
                     ),
-                  ),
+                  );
+                });
+              },
+              child: Container(
+//              color: Colors.white,
+                height: 150,
+                width: 150,
+                child: Icon(
+                  Icons.store,
+                  color: Theme.of(context).primaryColor,
+                  size: 70,
                 ),
               ),
-              Container(
-                width: 145,
-                child: Text(
-                  shop['businessName'],
-                  softWrap: true,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-        );
-      }
-    );
+            ),
+          ),
+          Container(
+            width: 145,
+            child: Text(
+              shop['businessName'],
+              softWrap: true,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      );
+    });
   }
 }

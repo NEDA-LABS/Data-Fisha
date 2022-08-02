@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
-import 'package:smartstock_pos/shared/security.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/security.utils.dart';
 
 class SalesService {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();

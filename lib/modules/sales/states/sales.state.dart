@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:flutter/material.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
-class SalesState extends StateAdapter {
+class SalesState extends ChangeNotifier {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
   List<dynamic> _stocks = [];
   Timer _debounce;

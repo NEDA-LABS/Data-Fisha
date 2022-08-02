@@ -1,6 +1,3 @@
-import 'package:bfastui/controllers/component.dart';
-import 'package:bfastui/controllers/navigation.dart';
-import 'package:bfastui/controllers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:smartstock_pos/modules/app/states/login.state.dart';
@@ -9,6 +6,7 @@ import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class SalesComponents {
   PreferredSizeWidget get _searchInput {

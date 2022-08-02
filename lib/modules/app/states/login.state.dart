@@ -1,21 +1,25 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
-import 'package:bfastui/controllers/navigation.dart';
+import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class LoginPageState extends StateAdapter {
+class LoginPageState extends ChangeNotifier {
   String username = '';
   String password = '';
   bool onLoginProgress = false;
   bool showPassword = false;
+
+  LoginPageState() {
+    print("I AM INITIALIZED !!");
+  }
 
   void toggleShowPassword() {
     this.showPassword = !this.showPassword;
     notifyListeners();
   }
 
-  Future login({ String username, String password}) async {
+  Future login({String username, String password}) async {
     try {
       onLoginProgress = true;
       notifyListeners();
@@ -33,7 +37,7 @@ class LoginPageState extends StateAdapter {
       //   var message = jsonDecode(e['message']) as Map<String, dynamic>;
       //   throw message['error'];
       // } else {
-        throw 'Fails to login';
+      throw 'Fails to login';
       // }
     } finally {
       onLoginProgress = false;

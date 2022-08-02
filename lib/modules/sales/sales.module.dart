@@ -1,6 +1,4 @@
-import 'package:bfastui/adapters/child_module.dart';
-import 'package:bfastui/adapters/router.dart';
-import 'package:bfastui/adapters/state.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/modules/sales/guards/acive-shop.guard.dart';
 import 'package:smartstock_pos/modules/sales/pages/checkout.page.dart';
 import 'package:smartstock_pos/modules/sales/pages/retail.page.dart';
@@ -9,37 +7,34 @@ import 'package:smartstock_pos/modules/sales/pages/wholesale.page.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
-class SalesModule extends ChildModuleAdapter {
+class SalesModule extends Module {
   @override
-  List<RouterAdapter> initRoutes(String moduleName) => [
-    RouterAdapter(
+  List<ChildRoute> get routes => [
+    ChildRoute(
       '/',
       guards: [ActiveShopGuard()],
-      page: (context, args) => SalesPage(),
+      child: (_, __) => SalesPage(),
     ),
-    RouterAdapter(
+    ChildRoute(
       '/whole',
       guards: [ActiveShopGuard()],
-      page: (context, args) => WholesalePage(),
+      child: (context, args) => WholesalePage(),
     ),
-    RouterAdapter(
+    ChildRoute(
       '/retail',
       guards: [ActiveShopGuard()],
-      page: (context, args) => RetailPage(),
+      child: (context, args) => RetailPage(),
     ),
-    RouterAdapter(
+    ChildRoute(
       '/checkout/:type',
       guards: [ActiveShopGuard()],
-      page: (context, args) => CheckoutPage(),
+      child: (context, args) => CheckoutPage(args),
     )
   ];
 
   @override
-  List<StateAdapter> initStates(String moduleName) => [
-    SalesState(),
-    CartState()
+  List<Bind> get binds => [
+    Bind.lazySingleton((i) => SalesState()),
+    Bind.lazySingleton((i) => CartState())
   ];
-
-  @override
-  String moduleName() => 'sales';
 }

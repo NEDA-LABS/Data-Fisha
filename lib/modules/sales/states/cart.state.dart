@@ -1,15 +1,14 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.dart';
-import 'package:bfastui/controllers/navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/services/printer.service.dart';
 import 'package:smartstock_pos/modules/sales/services/sales.service.dart';
-import 'package:smartstock_pos/shared/date.utils.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
-import 'package:smartstock_pos/shared/security.utils.dart';
+import 'package:smartstock_pos/modules/shared/date.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/security.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class CartState extends StateAdapter {
+class CartState extends ChangeNotifier {
   final TextEditingController quantityInputController =
       TextEditingController(text: '1');
   final TextEditingController discountInputController =

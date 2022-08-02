@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfastui/adapters/state.dart';
-import 'package:bfastui/controllers/navigation.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:flutter/material.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class ChooseShopState extends StateAdapter {
+class ChooseShopState extends ChangeNotifier {
   var activeShop;
   List shops = [];
   Future getShops() async {
@@ -47,11 +47,6 @@ class ChooseShopState extends StateAdapter {
       getShops();
       throw e;
     }
-  }
-
-  @override
-  void onDispose() {
-    // TODO: implement onDispose
   }
 }
 

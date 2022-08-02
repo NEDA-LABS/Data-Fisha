@@ -1,9 +1,7 @@
-import 'package:bfastui/controllers/component.dart';
-import 'package:bfastui/controllers/navigation.dart';
-import 'package:bfastui/controllers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class CartComponents {
   void addToCartSheet({BuildContext context, wholesale = false}) {
