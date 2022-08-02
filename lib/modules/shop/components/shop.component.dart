@@ -1,12 +1,13 @@
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/controllers/state.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
+import 'package:bfastui/controllers/component.dart';
 
 class ShopComponents {
   Widget get chooseShop {
-    BFastUI.getState<ChooseShopState>().getShops();
-    return BFastUI.component().consumer<ChooseShopState>(
-      (context, state) => Container(
+    getState<ChooseShopState>().getShops();
+    return consumerComponent<ChooseShopState>(
+      builder: (context, state) => Container(
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
         color: Theme.of(context).primaryColorDark,
@@ -48,49 +49,51 @@ class ShopComponents {
   }
 
   Widget _shop(var shop) {
-    return BFastUI.component().custom(
-      (context) => Column(
-        children: [
-          Container(
-            margin: EdgeInsets.all(5),
-            child: RaisedButton(
-              onPressed: () {
-                ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
-                shopState.setCurrentShop(shop).catchError((e) {
-                  print(e);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Fails to set a current shop'),
-                    ),
-                  );
-                });
-              },
-              child: Container(
+    return Builder(
+      builder: (context) {
+        return Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(5),
+                child: RaisedButton(
+                  onPressed: () {
+                    ChooseShopState shopState = getState<ChooseShopState>();
+                    shopState.setCurrentShop(shop).catchError((e) {
+                      print(e);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Fails to set a current shop'),
+                        ),
+                      );
+                    });
+                  },
+                  child: Container(
 //              color: Colors.white,
-                height: 150,
-                width: 150,
-                child: Icon(
-                  Icons.store,
-                  color: Theme.of(context).primaryColor,
-                  size: 70,
+                    height: 150,
+                    width: 150,
+                    child: Icon(
+                      Icons.store,
+                      color: Theme.of(context).primaryColor,
+                      size: 70,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Container(
-            width: 145,
-            child: Text(
-              shop['businessName'],
-              softWrap: true,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
-        ],
-      ),
+              Container(
+                width: 145,
+                child: Text(
+                  shop['businessName'],
+                  softWrap: true,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+        );
+      }
     );
   }
 }

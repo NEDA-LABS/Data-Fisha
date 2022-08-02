@@ -1,6 +1,6 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/controllers/module.dart';
 import 'package:flutter/material.dart';
 
 import 'configurations.dart';
@@ -8,28 +8,19 @@ import 'modules/app/app.module.dart';
 import 'modules/sales/services/sales-sync.service.dart';
 import 'modules/sales/services/stocks.service.dart';
 
-class AppWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/shop",
-    );
-  }
-}
-
-
 void main() async {
   _connectWithBFastCloudProject();
   runApp(
-    BFastUI.init(
-        module: AppModule(),
-        component: MaterialApp(
-          initialRoute: '/shop',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Config.getSmartStockMaterialColorSwatch(),
-          ),
-        )).start(),
+    bfastUiApp(
+      module: AppModule(),
+      component: MaterialApp(
+        initialRoute: '/shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Config.getSmartStockMaterialColorSwatch(),
+        ),
+      ),
+    ),
   );
   startSalesServices();
   startStockSyncServices();

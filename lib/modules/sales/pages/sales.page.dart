@@ -1,5 +1,5 @@
-import 'package:bfastui/adapters/page.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/page.dart';
+import 'package:bfastui/controllers/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/components/sales.component.dart';
 
@@ -8,15 +8,13 @@ class SalesPage extends PageAdapter {
   Widget build(args) {
     return Scaffold(
       appBar: SalesComponents().salesTopBar(title: "Sales"),
-      body: BFastUI.component().custom(
-        (context) => SafeArea(
+      body: Builder(
+        builder: (context) => SafeArea(
           child: Center(
             child: ListView(
               children: <Widget>[
                 FlatButton(
-                  onPressed: () {
-                    BFastUI.navigation(moduleName: 'sales').to('/sales/retail');
-                  },
+                  onPressed: () => navigateTo('/sales/retail'),
                   child: ListTile(
                     leading: Icon(
                       Icons.shopping_cart,
@@ -27,9 +25,7 @@ class SalesPage extends PageAdapter {
                 ),
                 Divider(),
                 FlatButton(
-                  onPressed: () {
-                    BFastUI.navigation(moduleName: 'sales').to('/sales/whole');
-                  },
+                  onPressed: () => navigateTo('/sales/whole'),
                   child: ListTile(
                     leading: Icon(Icons.local_shipping,
                         color: Theme.of(context).primaryColorDark),

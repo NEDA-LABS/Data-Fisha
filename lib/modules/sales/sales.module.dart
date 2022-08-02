@@ -1,6 +1,6 @@
-import 'package:bfastui/adapters/child-module.adapter.dart';
-import 'package:bfastui/adapters/router.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/child_module.dart';
+import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/adapters/state.dart';
 import 'package:smartstock_pos/modules/sales/guards/acive-shop.guard.dart';
 import 'package:smartstock_pos/modules/sales/pages/checkout.page.dart';
 import 'package:smartstock_pos/modules/sales/pages/retail.page.dart';
@@ -11,39 +11,35 @@ import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 
 class SalesModule extends ChildModuleAdapter {
   @override
-  void initRoutes(String moduleName) {
-    BFastUI.navigation(moduleName: moduleName)
-        .addRoute(RouterAdapter(
-          '/',
-          guards: [ActiveShopGuard()],
-          page: (context, args) => SalesPage(),
-        ))
-        .addRoute(RouterAdapter(
-          '/whole',
-          guards: [ActiveShopGuard()],
-          page: (context, args) => WholesalePage(),
-        ))
-        .addRoute(RouterAdapter(
-          '/retail',
-          guards: [ActiveShopGuard()],
-          page: (context, args) => RetailPage(),
-        ))
-        .addRoute(RouterAdapter(
-          '/checkout/:type',
-          guards: [ActiveShopGuard()],
-          page: (context, args) => CheckoutPage(),
-        ));
-  }
+  List<RouterAdapter> initRoutes(String moduleName) => [
+    RouterAdapter(
+      '/',
+      guards: [ActiveShopGuard()],
+      page: (context, args) => SalesPage(),
+    ),
+    RouterAdapter(
+      '/whole',
+      guards: [ActiveShopGuard()],
+      page: (context, args) => WholesalePage(),
+    ),
+    RouterAdapter(
+      '/retail',
+      guards: [ActiveShopGuard()],
+      page: (context, args) => RetailPage(),
+    ),
+    RouterAdapter(
+      '/checkout/:type',
+      guards: [ActiveShopGuard()],
+      page: (context, args) => CheckoutPage(),
+    )
+  ];
 
   @override
-  void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName)
-        .addState((_) => SalesState())
-        .addState((_) => CartState());
-  }
+  List<StateAdapter> initStates(String moduleName) => [
+    SalesState(),
+    CartState()
+  ];
 
   @override
-  String moduleName() {
-    return 'sales';
-  }
+  String moduleName() => 'sales';
 }

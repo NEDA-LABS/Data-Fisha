@@ -8,7 +8,6 @@ class SmartStockPosLocalStorage {
 
   Future saveActiveShop(var shop) async {
     var response = await this.smartStockCache.set('activeShop', shop, dtl: 7);
-    // BFastUI.getState<ChooseShopState>()?.activeShop = shop;
     return response;
   }
 
@@ -33,11 +32,11 @@ class SmartStockPosLocalStorage {
     return await BFast.auth().currentUser();
   }
 
-  // BatchModel[]
+
   Future<dynamic> saveSales(List batchs) async {
     var activeShop = await this.getActiveShop();
     await BFast.cache(database: 'sales', collection: activeShop['projectId'])
-        .set(Security.randomString(12), batchs, dtl: 720);
+        .set(Security.generateUUID(), batchs, dtl: 720);
   }
 
   Future<List<dynamic>> getSales() async {
@@ -46,33 +45,6 @@ class SmartStockPosLocalStorage {
         BFast.cache(database: 'sales', collection: shop['projectId']);
     return await stocksCache.get<List<dynamic>>('all');
   }
-
-//Future getActiveShop() async{
-//var response = await this.smartStockCache.get<ShopI>('activeShop');
-//if (response) {
-//return response;
-//} else {
-//throw {message: 'No Active Shop'};
-//}
-//}
-
-//Future saveActiveShop(var shop) async {
-//const response = await this.smartStockCache.set<ShopI>('activeShop', shop, {
-//dtl: 7
-//});
-//this.eventApi.broadcast(SsmEvents.ACTIVE_SHOP_SET);
-//return response;
-//}
-//
-//async getCurrentProjectId(): Promise<string> {
-//return await this.smartStockCache.get<string>('cPID');
-//}
-//
-//async saveCurrentProjectId(projectId: string): Promise<any> {
-//return await this.smartStockCache.set<string>('cPID', projectId, {
-//dtl: 7
-//});
-//}
 
   Future clearSmartStockCache() async {
     return await this.smartStockCache.clearAll();
@@ -89,7 +61,6 @@ class SmartStockPosLocalStorage {
 
   Future removeActiveShop() async {
     var response = await this.smartStockCache.set('activeShop', '');
-// this.eventApi.broadcast(SsmEvents.ACTIVE_SHOP_REMOVE);
     return response;
   }
 
@@ -118,9 +89,6 @@ class SmartStockPosLocalStorage {
   }
 
   Future saveStock(var stock) async {
-// const shop = await this.getActiveShop();
-// const stocksCache = BFast.cache({database: 'stocks', collection: shop['projectId']});
-// return stocksCache.set(stock.id, stock);
     return null;
   }
 

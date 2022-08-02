@@ -1,6 +1,6 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/router-guard.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/router_guard.dart';
+import 'package:bfastui/controllers/navigation.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
@@ -15,9 +15,8 @@ class ActiveShopGuard extends RouterGuardAdapter {
       return true;
     } else {
       StockSyncService.stop();
-      BFastUI.navigateTo('/shop');
+      navigateTo('/shop');
       return false;
     }
-  
   }
 }

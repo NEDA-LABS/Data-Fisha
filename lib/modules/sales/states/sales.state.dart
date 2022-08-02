@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
+import 'package:bfastui/adapters/state.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
@@ -31,13 +31,17 @@ class SalesState extends StateAdapter {
       if (stocks != null && stocks.length == 0) {
         stocks = await getStockFromRemote();
       }
-      var filtered = stocks.where((element) =>
-              element['saleable'] == null || element['saleable'] == true).toList();
+      var filtered = stocks
+          .where((element) =>
+              element['saleable'] == null || element['saleable'] == true)
+          .toList();
       if (productFilter.isNotEmpty) {
-        this._stocks = filtered.where((element) => element['product']
+        this._stocks = filtered
+            .where((element) => element['product']
                 .toString()
                 .toLowerCase()
-                .contains(productFilter.toLowerCase())).toList();
+                .contains(productFilter.toLowerCase()))
+            .toList();
       } else {
         this._stocks = filtered;
       }
@@ -57,7 +61,9 @@ class SalesState extends StateAdapter {
       var shop = await _storage.getActiveShop();
       updateCurrentShop(shop);
       // var urlS = BFast.getConfig(shop['projectId']).databaseURL(shop['projectId']);
-      print(BFast.getConfig(shop['projectId']).credentials[shop['projectId']].databaseURL);
+      print(BFast.getConfig(shop['projectId'])
+          .credentials[shop['projectId']]
+          .databaseURL);
       // print(urlS);
       var stocks =
           await BFast.database(shop['projectId']).collection("stocks").getAll();
@@ -106,9 +112,13 @@ class SalesState extends StateAdapter {
 //    notifyListeners();
   }
 
-@override
+  @override
   void dispose() {
-   _debounce?.cancel();_debounce = null;
+    _debounce?.cancel();
+    _debounce = null;
     super.dispose();
   }
+
+  @override
+  void onDispose() => dispose();
 }

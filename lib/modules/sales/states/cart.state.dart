@@ -1,6 +1,6 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/controllers/navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/services/printer.service.dart';
@@ -103,7 +103,7 @@ class CartState extends StateAdapter {
     this.cartProductsArray.retainWhere((element) =>
         element.product['id'] != cartModel.product['id']);
     if (cartProductsArray.length == 0) {
-      BFastUI.navigator().pop();
+      navigator().pop();
     }
     notifyListeners();
   }
@@ -149,22 +149,8 @@ class CartState extends StateAdapter {
 
   Future checkout() async {
     try {
-      //    if (this.isViewedInWholesale && !this.customerFormControl.valid) {
-//      this.snack.open('Please enter customer name, at least three characters required', 'Ok', {
-//        duration: 3000
-//      });
-//      return;
-//    }
-
       this.checkoutProgress = true;
       notifyListeners();
-
-//    if (this.customerFormControl.valid) {
-//      this.customerApi.saveCustomer({
-//        displayName: this.customerFormControl.value,
-//      }).catch();
-//    }
-
       await this.printCart();
     } finally {
       this.checkoutProgress = false;
@@ -177,7 +163,7 @@ class CartState extends StateAdapter {
     await this._salesService.saveSales(sales, cartId);
     this.cartProductsArray = [];
     currentCartModel = null;
-    BFastUI.navigator().pop();
+    navigator().pop();
     // this.customerFormControl.setValue(null);
   }
 
@@ -285,17 +271,6 @@ class CartState extends StateAdapter {
             );
       }
       await this.submitBill(cartId);
-      //  this.checkoutProgress = false;
-      // this.snack.open('Done save sales', 'Ok', {duration: 2000});
-      // })
-      // .catchError((reason){
-      // this.checkoutProgress = false;
-//    this.snack.open(
-//    reason && reason.message ? reason.message : reason.toString(),
-//    'Ok',
-//    {duration: 3000}
-//    );
-      // });
     } finally {
       checkoutProgress = false;
       notifyListeners();
@@ -350,4 +325,7 @@ class CartState extends StateAdapter {
     discountInputController.dispose();
     super.dispose();
   }
+
+  @override
+  void onDispose() => dispose();
 }

@@ -1,7 +1,7 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/controllers/navigation.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
 class ChooseShopState extends StateAdapter {
@@ -41,12 +41,17 @@ class ChooseShopState extends StateAdapter {
       var _storage = SmartStockPosLocalStorage();
       await _storage.saveCurrentProjectId(projectId);
       await _storage.saveActiveShop(shop);
-      BFastUI.navigateTo('/sales');
+      navigateTo('/sales');
       getShops();
     } catch (e) {
       getShops();
       throw e;
     }
+  }
+
+  @override
+  void onDispose() {
+    // TODO: implement onDispose
   }
 }
 

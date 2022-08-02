@@ -1,6 +1,6 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/state.dart';
+import 'package:bfastui/controllers/navigation.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
 import 'package:smartstock_pos/shared/local-storage.utils.dart';
 
@@ -23,7 +23,7 @@ class LoginPageState extends StateAdapter {
       await BFast.auth().setCurrentUser(user);
       if (user != null) {
         username = user['username'];
-        BFastUI.navigateToAndReplace('/shop');
+        navigateToAndReplace('/shop');
       } else {
         throw "User is null";
       }
@@ -51,8 +51,13 @@ class LoginPageState extends StateAdapter {
       SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
       _storage.removeActiveShop();
     });
-    BFastUI.navigateTo('/login');
+    navigateTo('/login');
   }
 
   Future resetPassword(username) async {}
+
+  @override
+  void onDispose() {
+    // TODO: implement onDispose
+  }
 }

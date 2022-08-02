@@ -1,6 +1,6 @@
-import 'package:bfastui/adapters/main-module.adapter.dart';
-import 'package:bfastui/adapters/router.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:bfastui/adapters/main_module.dart';
+import 'package:bfastui/adapters/router.dart';
+import 'package:bfastui/adapters/state.dart';
 import 'package:smartstock_pos/modules/sales/sales.module.dart';
 import 'package:smartstock_pos/modules/shop/shop.module.dart';
 
@@ -9,30 +9,21 @@ import 'states/login.state.dart';
 
 class AppModule extends MainModuleAdapter {
   @override
-  void initRoutes(String moduleName) {
-    BFastUI.navigation(moduleName: moduleName)
-        .addRoute(RouterAdapter(
+  List<RouterAdapter> initRoutes(String moduleName) => [
+        RouterAdapter(
           '/login',
           page: (context, args) => LoginPage(),
-        ))
-        .addRoute(RouterAdapter(
+        ),
+        RouterAdapter(
           '/sales',
-          module: BFastUI.childModule(
-            SalesModule(),
-          ),
-        ))
-        .addRoute(RouterAdapter(
+          module: SalesModule(),
+        ),
+        RouterAdapter(
           '/shop',
-          module: BFastUI.childModule(
-            ShopModule(),
-          ),
-        ));
-  }
+          module: ShopModule(),
+        )
+      ];
 
   @override
-  void initStates(String moduleName) {
-    BFastUI.states(moduleName: moduleName).addState(
-      (_) => LoginPageState(),
-    );
-  }
+  List<StateAdapter> initStates(_) => [LoginPageState()];
 }
