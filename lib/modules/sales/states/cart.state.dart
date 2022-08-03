@@ -83,7 +83,7 @@ class CartState extends ChangeNotifier {
     if (indexOfProductInCart >= 0 &&
         (this.cartProductsArray[indexOfProductInCart].quantity) > 1) {
       this.cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity ?? 0 - 1;
+          cartProductsArray[indexOfProductInCart].quantity - 1;
       notifyListeners();
     }
   }
@@ -93,7 +93,7 @@ class CartState extends ChangeNotifier {
         .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0) {
       cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity ?? 0 + 1;
+          cartProductsArray[indexOfProductInCart].quantity + 1;
       notifyListeners();
     }
   }
@@ -109,9 +109,8 @@ class CartState extends ChangeNotifier {
 
   void incrementQtyOfProductToBeAddedToCart() {
     if (currentCartModel != null && currentCartModel?.quantity != null) {
-      currentCartModel?.quantity = currentCartModel?.quantity ?? 0 + 1;
-      quantityInputController.text =
-          currentCartModel?.quantity.toString() ?? '';
+      currentCartModel?.quantity = currentCartModel.quantity + 1;
+      quantityInputController.text = currentCartModel.quantity.toString();
       notifyListeners();
     }
   }
