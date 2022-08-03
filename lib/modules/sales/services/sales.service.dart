@@ -21,4 +21,6 @@ class SalesService {
     });
     return await this._storage.saveSales(batchs);
   }
+
+
 }

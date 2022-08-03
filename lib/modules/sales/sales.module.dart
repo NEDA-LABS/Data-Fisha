@@ -1,9 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/modules/sales/guards/acive-shop.guard.dart';
-import 'package:smartstock_pos/modules/sales/pages/checkout.page.dart';
-import 'package:smartstock_pos/modules/sales/pages/retail.page.dart';
-import 'package:smartstock_pos/modules/sales/pages/sales.page.dart';
-import 'package:smartstock_pos/modules/sales/pages/wholesale.page.dart';
+import 'package:smartstock_pos/modules/sales/pages/checkout.dart';
+import 'package:smartstock_pos/modules/sales/pages/retail.dart';
+import 'package:smartstock_pos/modules/sales/pages/sales.dart';
+import 'package:smartstock_pos/modules/sales/pages/wholesale.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
 

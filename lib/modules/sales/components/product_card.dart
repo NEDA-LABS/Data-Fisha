@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class RetailComponents {
-  Widget get company {
-    return Center(
-      child: InkWell(
-        child: Text(
-          "SmartStock @ 2020",
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        onTap: () {},
-      ),
-    );
-  }
-
-  Widget productCardItem(
-      {String productCategory, String productName, int productPrice}) {
-    return Card(
+Widget productCardItem({
+  String productCategory,
+  String productName,
+  dynamic productPrice,
+}) =>
+    Card(
       color: Colors.white,
       elevation: 4,
       child: Column(
@@ -38,7 +27,7 @@ class RetailComponents {
                 productName != null ? productName : "No Listed Name",
                 textAlign: TextAlign.center,
                 softWrap: true,
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -46,24 +35,20 @@ class RetailComponents {
             ),
             flex: 2,
           ),
-          Spacer(),
+          Spacer(flex: 1,),
           Expanded(
               child: Text(
             productPrice != null
-                ? NumberFormat.currency(name: 'TZS ')
-                    .format(productPrice)
-                :
-                "No Listed Price",
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
+                ? NumberFormat.currency(name: 'TZS ').format(productPrice)
+                : "No Listed Price",
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
           )),
-          Spacer(
-            flex: 1,
-          )
+          // Spacer(
+          //   flex: 1,
+          // )
         ],
       ),
     );
-  }
-}

@@ -23,12 +23,11 @@ class CartState extends ChangeNotifier {
   addStockToCart(CartModel cart) {
     CartModel updateItem = this.cartProductsArray.firstWhere(
         (x) => x.product['id'] == cart.product['id'],
-        orElse: () => CartModel(product: null, quantity: null)
-    );
+        orElse: () => CartModel(product: null, quantity: null));
     if (updateItem.product != null) {
       var index = this.cartProductsArray.indexOf(updateItem);
       this.cartProductsArray[index].quantity =
-      (this.cartProductsArray[index].quantity as int) + (cart.quantity as int);
+          this.cartProductsArray[index].quantity + (cart.quantity);
     } else {
       this.cartProductsArray.add(cart);
     }
@@ -38,40 +37,41 @@ class CartState extends ChangeNotifier {
   int calculateCartItems() {
     return this
         .cartProductsArray
-        .map<int>((cartItem) => cartItem.quantity??0)
+        .map<int>((cartItem) => cartItem.quantity ?? 0)
         .reduce((value, element) => value + element);
   }
 
   int getTotalWithoutDiscount({bool isWholesale = false}) {
-    if(this.cartProductsArray.isEmpty || this.cartProductsArray == null){
+    if (this.cartProductsArray.isEmpty || this.cartProductsArray == null) {
       return 0;
     }
     int total = this
         .cartProductsArray
         .map<int>((value) =>
-            value.quantity??0 *
+            value.quantity *
             (isWholesale
                 ? value.product['wholesalePrice'] as int
                 : value.product['retailPrice'] as int))
         .reduce((a, b) => a + b);
-//    discountInputController.selection = TextSelection.fromPosition(
-//        TextPosition(offset: discountInputController.text.length));
     return total;
   }
 
   int getFinalTotal({bool isWholesale = false}) {
-    if(this.cartProductsArray.isEmpty || this.cartProductsArray == null){
+    if (this.cartProductsArray.isEmpty || this.cartProductsArray == null) {
       return 0;
     }
-    int total = this.cartProductsArray.map<int>((value) =>
-                value.quantity??0 *
+    int discount = int.parse(this.discountInputController.text.isNotEmpty
+        ? this.discountInputController.text
+        : '0');
+    int total = this
+            .cartProductsArray
+            .map<int>((value) =>
+                value.quantity *
                 (isWholesale
                     ? value.product['wholesalePrice'] as int
                     : value.product['retailPrice'] as int))
             .reduce((a, b) => a + b) -
-        int.parse(this.discountInputController.text.isNotEmpty
-            ? this.discountInputController.text
-            : '0');
+        discount;
 //    discountInputController.selection = TextSelection.fromPosition(
 //        TextPosition(offset: discountInputController.text.length));
     return total;
@@ -83,7 +83,7 @@ class CartState extends ChangeNotifier {
     if (indexOfProductInCart >= 0 &&
         (this.cartProductsArray[indexOfProductInCart].quantity) > 1) {
       this.cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity??0 - 1;
+          cartProductsArray[indexOfProductInCart].quantity ?? 0 - 1;
       notifyListeners();
     }
   }
@@ -93,31 +93,36 @@ class CartState extends ChangeNotifier {
         .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0) {
       cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity??0 + 1;
+          cartProductsArray[indexOfProductInCart].quantity ?? 0 + 1;
       notifyListeners();
     }
   }
 
-  void removeCart(CartModel cartModel) {
-    this.cartProductsArray.retainWhere((element) =>
-        element.product['id'] != cartModel.product['id']);
+  void removeCart(CartModel cartModel, wholesale) {
+    this.cartProductsArray.retainWhere(
+        (element) => element.product['id'] != cartModel.product['id']);
     if (cartProductsArray.length == 0) {
-      navigator().pop();
+      navigateToAndReplace(wholesale ? '/sales/whole' : '/sales/retail');
     }
     notifyListeners();
   }
 
   void incrementQtyOfProductToBeAddedToCart() {
     if (currentCartModel != null && currentCartModel?.quantity != null) {
-      currentCartModel?.quantity = currentCartModel?.quantity??0 + 1;
-      quantityInputController.text = currentCartModel?.quantity.toString()??'';
+      currentCartModel?.quantity = currentCartModel?.quantity ?? 0 + 1;
+      quantityInputController.text =
+          currentCartModel?.quantity.toString() ?? '';
       notifyListeners();
     }
   }
 
   void setCartQuantity(String value) {
-    currentCartModel?.quantity = int.parse(value);
-    quantityInputController.text = value;
+    if (value.isEmpty) return;
+    try {
+      currentCartModel?.quantity = int.parse(value);
+    } catch (e) {
+      print(e);
+    }
     notifyListeners();
   }
 
@@ -130,8 +135,9 @@ class CartState extends ChangeNotifier {
     if (currentCartModel != null &&
         currentCartModel?.quantity != null &&
         currentCartModel.quantity > 1) {
-      currentCartModel?.quantity = currentCartModel?.quantity??0 - 1;
-      quantityInputController.text = currentCartModel?.quantity.toString()??'';
+      currentCartModel?.quantity = currentCartModel?.quantity ?? 0 - 1;
+      quantityInputController.text =
+          currentCartModel?.quantity.toString() ?? '';
       notifyListeners();
     }
   }
@@ -146,28 +152,28 @@ class CartState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future checkout() async {
+  Future checkout({bool wholesale}) async {
     try {
       this.checkoutProgress = true;
       notifyListeners();
-      await this.printCart();
+      await this.printCart(wholesale: wholesale);
     } finally {
       this.checkoutProgress = false;
       notifyListeners();
     }
   }
 
-  Future submitBill(String cartId) async {
+  Future submitBill(String cartId, wholesale) async {
     List<dynamic> sales = await this._getSalesBatch();
     await this._salesService.saveSales(sales, cartId);
     this.cartProductsArray = [];
     currentCartModel = null;
-    navigator().pop();
+    navigateToAndReplace(wholesale ? '/sales/whole' : '/sales/retail');
     // this.customerFormControl.setValue(null);
   }
 
   Future<String> _cartItemsToPrinterData(List<dynamic> carts, String customer,
-      { bool wholesale}) async {
+      {bool wholesale}) async {
     var currentShop = await SmartStockPosLocalStorage().getActiveShop();
     // print(currentShop);
     String data = '';
@@ -225,14 +231,14 @@ class CartState extends ChangeNotifier {
             totalItems: this.cartProductsArray.length,
             totalDiscount: int.parse(discount),
             product: value.product,
-            quantity: value.quantity??0,
+            quantity: value.quantity ?? 0,
             wholesale: wholesale),
         "discount": _getCartItemDiscount(
           totalItems: this.cartProductsArray.length,
           totalDiscount: int.parse(discount),
         ),
         "quantity": wholesale
-            ? (value.quantity??0 * value.product['wholesaleQuantity'])
+            ? (value.quantity ?? 0 * value.product['wholesaleQuantity'])
             : value.quantity,
         "product": value.product['product'],
         "category": value.product['category'],
@@ -252,7 +258,7 @@ class CartState extends ChangeNotifier {
     return sales;
   }
 
-  Future printCart({bool wholesale = false}) async {
+  Future printCart({bool wholesale}) async {
     try {
       var currentShop = await SmartStockPosLocalStorage().getActiveShop();
       this.checkoutProgress = true;
@@ -269,7 +275,7 @@ class CartState extends ChangeNotifier {
               qr: cartId,
             );
       }
-      await this.submitBill(cartId);
+      await this.submitBill(cartId, wholesale);
     } finally {
       checkoutProgress = false;
       notifyListeners();
@@ -286,7 +292,7 @@ class CartState extends ChangeNotifier {
           totalItems: this.cartProductsArray.length,
           totalDiscount: int.parse(discount),
           product: value.product,
-          quantity: value.quantity??0,
+          quantity: value.quantity ?? 0,
           wholesale: wholesale,
         ),
         "product": value.product['product'],
@@ -324,7 +330,4 @@ class CartState extends ChangeNotifier {
     discountInputController.dispose();
     super.dispose();
   }
-
-  @override
-  void onDispose() => dispose();
 }

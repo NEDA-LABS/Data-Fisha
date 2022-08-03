@@ -11,7 +11,7 @@ import 'modules/sales/services/stocks.service.dart';
 
 void main() async {
   _connectWithBFastCloudProject();
-  Modular.setInitialRoute('/shop');
+  Modular.setInitialRoute('/shop/');
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/components/sales.component.dart';
+import 'package:smartstock_pos/modules/sales/components/top_bar.dart';
 import 'package:smartstock_pos/util.dart';
 
 class SalesPage extends StatelessWidget {
   @override
   Widget build(args) {
     return Scaffold(
-      appBar: SalesComponents().salesTopBar(title: "Sales"),
+      appBar: salesTopBar(title: "Sales"),
       body: Builder(
         builder: (context) => SafeArea(
           child: Center(
             child: ListView(
               children: <Widget>[
-                FlatButton(
+                TextButton(
                   onPressed: () => navigateTo('/sales/retail'),
                   child: ListTile(
                     leading: Icon(
@@ -23,7 +23,7 @@ class SalesPage extends StatelessWidget {
                   ),
                 ),
                 Divider(),
-                FlatButton(
+                TextButton(
                   onPressed: () => navigateTo('/sales/whole'),
                   child: ListTile(
                     leading: Icon(Icons.local_shipping,

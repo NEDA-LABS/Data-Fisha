@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bfast/adapter/cache.dart';
 import 'package:bfast/bfast.dart';
 import 'package:smartstock_pos/modules/shared/security.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
 class SmartStockPosLocalStorage {
   CacheAdapter smartStockCache =
@@ -31,7 +34,6 @@ class SmartStockPosLocalStorage {
   Future getActiveUser() async {
     return await BFast.auth().currentUser();
   }
-
 
   Future<dynamic> saveSales(List batchs) async {
     var activeShop = await this.getActiveShop();
@@ -78,7 +80,13 @@ class SmartStockPosLocalStorage {
     var shop = await this.getActiveShop();
     var stocksCache =
         BFast.cache(database: 'stocks', collection: shop['projectId']);
-    return await stocksCache.get<List<dynamic>>('all');
+    List stocks = await stocksCache.get<List<dynamic>>('all');
+    List _stocks = jsonDecode(jsonEncode(stocks)) as List;
+    print(_stocks.length);
+    return _stocks.map((stock) {
+      stock['quantity'] = getStockQuantity(stock: stock);
+      return stock;
+    }).toList();
   }
 
   Future saveStocks(List<dynamic> stocks) async {
