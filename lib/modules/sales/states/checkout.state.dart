@@ -1,4 +1,3 @@
-import 'package:bfastui/adapters/state.adapter.dart';
+import 'package:flutter/material.dart';
 
-class CheckOutState extends StateAdapter{
-}
+class CheckOutState extends ChangeNotifier {}

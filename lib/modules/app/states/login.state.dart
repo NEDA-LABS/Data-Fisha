@@ -1,25 +1,25 @@
-import 'dart:convert';
-
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class LoginPageState extends StateAdapter {
-  String username;
-  String password;
+class LoginPageState extends ChangeNotifier {
+  String username = '';
+  String password = '';
   bool onLoginProgress = false;
   bool showPassword = false;
+
+  LoginPageState() {
+    print("I AM INITIALIZED !!");
+  }
 
   void toggleShowPassword() {
     this.showPassword = !this.showPassword;
     notifyListeners();
   }
 
-  Future login({@required String username, @required String password}) async {
+  Future login({String username, String password}) async {
     try {
       onLoginProgress = true;
       notifyListeners();
@@ -27,18 +27,18 @@ class LoginPageState extends StateAdapter {
       await BFast.auth().setCurrentUser(user);
       if (user != null) {
         username = user['username'];
-        BFastUI.navigateToAndReplace('/shop');
+        navigateToAndReplace('/shop');
       } else {
         throw "User is null";
       }
     } catch (e) {
       print(e);
-      if (e != null && e['message'] != null) {
-        var message = jsonDecode(e['message']) as Map<String, dynamic>;
-        throw message['error'];
-      } else {
-        throw 'Fails to login';
-      }
+      // if (e != null && e['message'] != null) {
+      //   var message = jsonDecode(e['message']) as Map<String, dynamic>;
+      //   throw message['error'];
+      // } else {
+      throw 'Fails to login';
+      // }
     } finally {
       onLoginProgress = false;
       notifyListeners();
@@ -55,8 +55,13 @@ class LoginPageState extends StateAdapter {
       SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
       _storage.removeActiveShop();
     });
-    BFastUI.navigateTo('/login');
+    navigateTo('/login');
   }
 
   Future resetPassword(username) async {}
+
+  @override
+  void onDispose() {
+    // TODO: implement onDispose
+  }
 }

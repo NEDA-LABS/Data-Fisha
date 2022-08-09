@@ -1,187 +1,190 @@
-import 'package:bfastui/bfastui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class CartComponents {
   void addToCartSheet({BuildContext context, wholesale = false}) {
     Scaffold.of(context)
         .showBottomSheet((context) {
-          return BFastUI.component().consumer<CartState>((context, state) {
-            return state.currentCartModel != null
-                ? Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+          return consumerComponent<CartState>(
+            builder: (context, state) {
+              return state.currentCartModel != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
                       ),
-                    ),
-                    child: Card(
-                      elevation: 0,
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 16, 10, 10),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Center(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Text(
-                                                state.currentCartModel
-                                                    .product["product"],
-                                                softWrap: true,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    0, 10, 0, 0),
-                                                child: Text(
-                                                  NumberFormat.currency(
-                                                          name: 'TZS ')
-                                                      .format(
-                                                    int.parse(
-                                                      state
-                                                          .currentCartModel
-                                                          .product[wholesale
-                                                              ? "wholesalePrice"
-                                                              : "retailPrice"]
-                                                          .toString(),
+                      child: Card(
+                        elevation: 0,
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 16, 10, 10),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  state.currentCartModel
+                                                      ?.product["product"],
+                                                  softWrap: true,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 10, 0, 0),
+                                                  child: Text(
+                                                    '',
+                                                    // NumberFormat.currency(
+                                                    //         name: 'TZS ')
+                                                    //     .format(
+                                                    //   int.parse(
+                                                    //     state
+                                                    //         .currentCartModel
+                                                    //         .product[wholesale
+                                                    //             ? "wholesalePrice"
+                                                    //             : "retailPrice"]
+                                                    //         .toString(),
+                                                    //   ),
+                                                    // ),
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 24,
                                                     ),
                                                   ),
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24,
-                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                                child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.remove_circle,
-                                    size: 36,
-                                    color: Theme.of(context).primaryColorDark,
-                                  ),
-                                  onPressed: () {
-                                    state
-                                        .decrementQtyOfProductToBeAddedToCart();
-                                  },
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(),
-                                  ),
-                                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  height: 54,
-                                  width: MediaQuery.of(context).size.width > 200
-                                      ? 200
-                                      : MediaQuery.of(context).size.width * 0.9,
-                                  alignment: Alignment.center,
-                                  child: TextFormField(
-                                    autofocus: false,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    minLines: 1,
-                                    keyboardType: TextInputType.number,
-                                    controller: BFastUI.getState<CartState>()
-                                        .quantityInputController,
-                                    onChanged: (value) {
-                                      state.setCartQuantity(value);
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: "Enter quantity...",
-                                      border: InputBorder.none,
+                                      ],
                                     ),
                                   ),
                                 ),
-                                IconButton(
+                              ),
+                              Expanded(
+                                  child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  IconButton(
                                     icon: Icon(
-                                      Icons.add_circle,
+                                      Icons.remove_circle,
                                       size: 36,
                                       color: Theme.of(context).primaryColorDark,
                                     ),
                                     onPressed: () {
                                       state
-                                          .incrementQtyOfProductToBeAddedToCart();
-                                    }),
-                              ],
-                            )),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                child: RaisedButton(
-                                  color: Theme.of(context).primaryColor,
-                                  onPressed: () {
-                                    state
-                                        .addStockToCart(state.currentCartModel);
-                                    state.setCurrentCartToBeAdded(null);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Container(
-                                    height: 48,
-                                    child: Center(
-                                      child: Text(
-                                        "Add To Cart",
-                                        style: TextStyle(color: Colors.white),
+                                          .decrementQtyOfProductToBeAddedToCart();
+                                    },
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    height: 54,
+                                    width: MediaQuery.of(context).size.width >
+                                            200
+                                        ? 200
+                                        : MediaQuery.of(context).size.width *
+                                            0.9,
+                                    alignment: Alignment.center,
+                                    child: TextFormField(
+                                      autofocus: false,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      minLines: 1,
+                                      keyboardType: TextInputType.number,
+                                      controller: getState<CartState>()
+                                          .quantityInputController,
+                                      onChanged: (value) {
+                                        state.setCartQuantity(value);
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: "Enter quantity...",
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.add_circle,
+                                        size: 36,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                      ),
+                                      onPressed: () {
+                                        state
+                                            .incrementQtyOfProductToBeAddedToCart();
+                                      }),
+                                ],
+                              )),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  child: RaisedButton(
+                                    color: Theme.of(context).primaryColor,
+                                    onPressed: () {
+                                      state.addStockToCart(
+                                          state.currentCartModel);
+                                      state.setCurrentCartToBeAdded(null);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      height: 48,
+                                      child: Center(
+                                        child: Text(
+                                          "Add To Cart",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    height: 300,
-                  )
-                : Container(
-                    height: 0,
-                  );
-          });
+                      height: 300,
+                    )
+                  : Container(
+                      height: 0,
+                    );
+            },
+          );
         })
         .closed
-        .then((value) {
-          BFastUI.getState<CartState>().setCurrentCartToBeAdded(null);
-        })
+        .then((value) => getState<CartState>().setCurrentCartToBeAdded(null))
         .catchError((_) {});
   }
 
   Widget cartPreview({bool wholesale = false}) {
-    return BFastUI.component().consumer<CartState>((context, state) {
+    return consumerComponent<CartState>(builder: (context, state) {
       return TextButton(
-        onPressed: () {
-          BFastUI.navigateTo(
-              '/sales/checkout/${wholesale ? 'whole' : 'retail'}');
-        },
+        onPressed: () =>
+            navigateTo('/sales/checkout/${wholesale ? 'whole' : 'retail'}'),
         child: Container(
           height: 54,
           alignment: Alignment.center,
@@ -190,7 +193,7 @@ class CartComponents {
               color: Theme.of(context).primaryColorDark,
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Text(
-            '${state.calculateCartItems()}'
+            // '${state.calculateCartItems()}',
             ' Items = ${NumberFormat.currency(name: 'TZS ').format(state.getFinalTotal(isWholesale: wholesale))}',
             textAlign: TextAlign.center,
             softWrap: true,
@@ -205,8 +208,8 @@ class CartComponents {
     return Container(
       child: Column(
         children: [
-          BFastUI.component().consumer<CartState>(
-            (context, cartState) => Expanded(
+          consumerComponent<CartState>(
+            builder: (context, cartState) => Expanded(
                 child: ListView(
                   children: cartState.cartProductsArray.length > 0
                       ? cartState.cartProductsArray
@@ -221,10 +224,10 @@ class CartComponents {
                                     children: [
                                       wholesale
                                           ? Text(
-                                              '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}'
+                                              // '${cart.quantity} (x${cart.product['wholesaleQuantity']}) ${cart.product['unit']}')
                                               ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['wholesalePrice'])}')
                                           : Text(
-                                              '${cart.quantity} ${cart.product['unit']}'
+                                              // '${cart.quantity} ${cart.product['unit']}'),
                                               ' @${NumberFormat.currency(name: 'TZS ').format(cart.product['retailPrice'])}'),
                                       Row(
                                         children: [
@@ -288,8 +291,8 @@ class CartComponents {
             child: Container(
               child: Column(
                 children: [
-                  BFastUI.component()
-                      .consumer<CartState>((context, cartState) => Padding(
+                  consumerComponent<CartState>(
+                      builder: (context, cartState) => Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
@@ -338,12 +341,10 @@ class CartComponents {
                             maxLines: 1,
                             minLines: 1,
                             keyboardType: TextInputType.number,
-                            controller: BFastUI.getState<CartState>()
-                                .discountInputController,
-                            onChanged: (value) {
-                              BFastUI.getState<CartState>()
-                                  .setCartDiscount(value);
-                            },
+                            controller:
+                                getState<CartState>().discountInputController,
+                            onChanged: (value) =>
+                                getState<CartState>().setCartDiscount(value),
                             decoration: InputDecoration(
                               hintText: "Press here...",
                               border: InputBorder.none,
@@ -353,8 +354,8 @@ class CartComponents {
                       ],
                     ),
                   ),
-                  BFastUI.component()
-                      .consumer<CartState>((context, cartState) => Container(
+                  consumerComponent<CartState>(
+                      builder: (context, cartState) => Container(
                             margin: EdgeInsets.all(8),
                             height: 54,
                             color: Theme.of(context).primaryColorDark,

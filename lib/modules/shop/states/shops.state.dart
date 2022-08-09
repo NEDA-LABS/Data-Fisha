@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:flutter/material.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class ChooseShopState extends StateAdapter {
+class ChooseShopState extends ChangeNotifier {
   var activeShop;
   List shops = [];
   Future getShops() async {
@@ -31,21 +31,31 @@ class ChooseShopState extends StateAdapter {
       notifyListeners();
     }
   }
+
   Future setCurrentShop(var shop) async {
     try {
-      String appId = shop["applicationId"];
       String projectId = shop["projectId"];
-      BFast.init(AppCredentials(appId, projectId), projectId);
+      updateCurrentShop(shop);
       shops = [];
       notifyListeners();
       var _storage = SmartStockPosLocalStorage();
       await _storage.saveCurrentProjectId(projectId);
       await _storage.saveActiveShop(shop);
-      BFastUI.navigateTo('/sales');
+      navigateTo('/sales');
       getShops();
     } catch (e) {
       getShops();
       throw e;
     }
   }
+}
+
+updateCurrentShop(var shop){
+  String appId = shop["applicationId"];
+  String projectId = shop["projectId"];
+  BFast.init(AppCredentials(
+    appId, projectId,
+    databaseURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId/v2',
+    functionsURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId',
+  ),projectId);
 }

@@ -1,12 +1,12 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/router-guard.adapter.dart';
-import 'package:bfastui/bfastui.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class ActiveShopGuard extends RouterGuardAdapter {
+class ActiveShopGuard extends RouteGuard {
   @override
-  Future<bool> canActivate(String url) async {
+  Future<bool> canActivate(String url, ParallelRoute parallelRoute) async {
     SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
     var user = await BFast.auth().currentUser();
     var shop = await _storage.getActiveShop();
@@ -15,9 +15,8 @@ class ActiveShopGuard extends RouterGuardAdapter {
       return true;
     } else {
       StockSyncService.stop();
-      BFastUI.navigateTo('/shop');
+      navigateTo('/shop');
       return false;
     }
-  
   }
 }

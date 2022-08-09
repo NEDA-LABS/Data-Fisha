@@ -6,9 +6,9 @@ class Stock{
 
 
  Stock({
-    this.productCategory,
-    this.productName,
-    this.retailPrice,
-    this.wholesalePrice
+     this.productCategory,
+     this.productName,
+     this.retailPrice,
+     this.wholesalePrice
   });
 }

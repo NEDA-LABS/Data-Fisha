@@ -1,5 +1,3 @@
-import 'package:bfastui/bfastui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:smartstock_pos/modules/app/states/login.state.dart';
@@ -8,12 +6,13 @@ import 'package:smartstock_pos/modules/sales/components/retail.component.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
 import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class SalesComponents {
   PreferredSizeWidget get _searchInput {
     return PreferredSize(
-        child: BFastUI.component().consumer<SalesState>(
-          (context, state) => Container(
+        child: consumerComponent<SalesState>(
+          builder: (context, state) => Container(
             margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
@@ -25,11 +24,11 @@ class SalesComponents {
             child: FormBuilderTextField(
               autofocus: false,
               maxLines: 1,
-              //  controller: state.searchInputController,
+              // controller: state.searchInputController,
               minLines: 1,
               initialValue: state.searchKeyword,
               onChanged: (value) {
-                state.filterProducts(value);
+                state.filterProducts(value ?? '');
               },
               name: 'query',
               decoration: InputDecoration(
@@ -58,21 +57,21 @@ class SalesComponents {
         icon: Icon(Icons.arrow_back),
         onPressed: () {
           if (title == 'Sales') {
-            BFastUI.navigateTo('/shop');
+            navigateTo('/shop');
           } else {
-            BFastUI.navigateTo("/sales");
+            navigateTo("/sales");
           }
         },
       ),
       actions: <Widget>[
-        BFastUI.component().custom(
-          (context) => PopupMenuButton(
+        Builder(
+          builder: (context) => PopupMenuButton(
             onSelected: (value) {},
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: FlatButton(
                   onPressed: () {
-                    BFastUI.getState<LoginPageState>().logOut();
+                    getState<LoginPageState>().logOut();
                   },
                   child: Row(
                     children: [
@@ -94,15 +93,14 @@ class SalesComponents {
   }
 
   Widget get salesRefreshButton {
-    return BFastUI.component().consumer<SalesState>(
-      (context, salesState) => !salesState.loadProductsProgress
-          ? BFastUI.component().consumer<CartState>((context, cartState) {
+    return consumerComponent<SalesState>(
+      builder: (context, salesState) => !salesState.loadProductsProgress
+          ? consumerComponent<CartState>(builder: (context, cartState) {
               return cartState.currentCartModel != null
                   ? FloatingActionButton(
                       child: Icon(Icons.close),
                       onPressed: () {
-                        BFastUI.getState<CartState>()
-                            .setCurrentCartToBeAdded(null);
+                        getState<CartState>().setCurrentCartToBeAdded(null);
                         Navigator.pop(context);
                       },
                     )
@@ -147,70 +145,68 @@ class SalesComponents {
     );
   }
 
-  Widget listOfProducts({wholesale = false}) {
-    return BFastUI.component().consumer<SalesState>(
-      (context, salesState) => salesState.loadProductsProgress
-          ? this._showProductLoading
-          : GridView.builder(
-              padding: EdgeInsets.fromLTRB(10, 10, 10 , 100),
-              itemCount: salesState.stocks.length,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+  Widget listOfProducts({wholesale = false}) => consumerComponent<SalesState>(
+        builder: (context, salesState) => salesState.loadProductsProgress
+            ? this._showProductLoading
+            : GridView.builder(
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+                itemCount: salesState.stocks.length,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemBuilder: (context, index) {
+                  return Builder(
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: () {
+                          getState<CartState>()
+                              .setCurrentCartToBeAdded(CartModel(
+                            product: salesState.stocks[index],
+                            quantity: 1,
+                          ));
+                          CartComponents().addToCartSheet(
+                            context: context,
+                            wholesale: wholesale,
+                          );
+                        },
+                        child: RetailComponents().productCardItem(
+                            productCategory:
+                                salesState.stocks[index]['category'].toString(),
+                            productName:
+                                salesState.stocks[index]['product'].toString(),
+                            productPrice: salesState.stocks[index]
+                                [wholesale ? "wholesalePrice" : 'retailPrice']),
+                      );
+                    },
+                  );
+                },
               ),
-              itemBuilder: (context, index) {
-                return BFastUI.component().custom(
-                  (context) {
-                    return GestureDetector(
-                      onTap: () {
-                        BFastUI.getState<CartState>()
-                            .setCurrentCartToBeAdded(CartModel(
-                          product: salesState.stocks[index],
-                          quantity: 1,
-                        ));
-                        CartComponents().addToCartSheet(
-                          context: context,
-                          wholesale: wholesale,
-                        );
-                      },
-                      child: RetailComponents().productCardItem(
-                          productCategory: salesState.stocks[index]['category'].toString(),
-                          productName: salesState.stocks[index]['product'].toString(),
-                          productPrice: salesState.stocks[index]
-                                  [wholesale ? "wholesalePrice" : 'retailPrice']
-                            ),
-                    );
-                  },
-                );
-              },
-            ),
-    );
-  }
+      );
 
-  Widget body({bool wholesale = false}) {
-    return Stack(
-      children: [
-        Positioned(
-          child: this.listOfProducts(wholesale: wholesale),
-          bottom: 0,
-          right: 0,
-          left: 0,
-          top: 0,
-        ),
-        Positioned(
-          child: BFastUI.component().consumer<CartState>(
-            (context, cartState) => cartState.cartProductsArray.length > 0
-                ? CartComponents().cartPreview(wholesale: wholesale)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
+  Widget body({bool wholesale = false}) => Stack(
+        children: [
+          Positioned(
+            child: this.listOfProducts(wholesale: wholesale),
+            bottom: 0,
+            right: 0,
+            left: 0,
+            top: 0,
           ),
-          bottom: 16,
-          left: 16,
-          right: 16,
-        )
-      ],
-    );
-  }
+          Positioned(
+            child: consumerComponent<CartState>(
+              builder: (context, cartState) =>
+                  cartState.cartProductsArray.length > 0
+                      ? CartComponents().cartPreview(wholesale: wholesale)
+                      : Container(
+                          height: 0,
+                          width: 0,
+                        ),
+            ),
+            bottom: 16,
+            left: 16,
+            right: 16,
+          )
+        ],
+      );
 }

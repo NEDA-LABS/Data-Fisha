@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
+import 'package:flutter/material.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
 
-class SalesState extends StateAdapter {
+class SalesState extends ChangeNotifier {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
   List<dynamic> _stocks = [];
   Timer _debounce;
@@ -15,15 +16,9 @@ class SalesState extends StateAdapter {
 
   String searchKeyword = '';
 
-  // TextEditingController searchInputController = TextEditingController(text: '');
-
   List<dynamic> get stocks {
     return this._stocks;
   }
-
-//  SalesState() {
-//    getStockFromCache();
-//  }
 
   Future<List<dynamic>> getStockFromCache({String productFilter}) async {
     try {
@@ -37,16 +32,16 @@ class SalesState extends StateAdapter {
         stocks = await getStockFromRemote();
       }
       var filtered = stocks
-          ?.where((element) =>
+          .where((element) =>
               element['saleable'] == null || element['saleable'] == true)
-          ?.toList();
-      if (productFilter != null && productFilter.isNotEmpty) {
+          .toList();
+      if (productFilter.isNotEmpty) {
         this._stocks = filtered
-            ?.where((element) => element['product']
+            .where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))
-            ?.toList();
+            .toList();
       } else {
         this._stocks = filtered;
       }
@@ -64,8 +59,15 @@ class SalesState extends StateAdapter {
       loadProductsProgress = true;
       notifyListeners();
       var shop = await _storage.getActiveShop();
+      updateCurrentShop(shop);
+      // var urlS = BFast.getConfig(shop['projectId']).databaseURL(shop['projectId']);
+      print(BFast.getConfig(shop['projectId'])
+          .credentials[shop['projectId']]
+          .databaseURL);
+      // print(urlS);
       var stocks =
           await BFast.database(shop['projectId']).collection("stocks").getAll();
+      // print(stocks);
       if (stocks != null) {
         stocks = stocks
             .where((element) =>
@@ -86,12 +88,8 @@ class SalesState extends StateAdapter {
     }
   }
 
-// void listenToRemoteStockUpdate(){
-//   // TODO: Implement socket to listen to remote stock updates
-// }
-
   void filterProducts(String query) {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 800), () {
       if (onSearchProgress != true && searchKeyword != query) {
 //        print(query);
@@ -114,18 +112,13 @@ class SalesState extends StateAdapter {
 //    notifyListeners();
   }
 
-//  void setIsAddToCartActiveFalse() {
-//    addToCartIsActive = false;
-//    notifyListeners();
-//  }
-
-//  void setIsAddToCartActiveTrue() {
-//    addToCartIsActive = true;
-//    notifyListeners();
-//  }
-@override
+  @override
   void dispose() {
-   _debounce.cancel();_debounce = null;
+    _debounce?.cancel();
+    _debounce = null;
     super.dispose();
   }
+
+  @override
+  void onDispose() => dispose();
 }

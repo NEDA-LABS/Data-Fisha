@@ -1,7 +1,7 @@
-import 'package:bfastui/bfastui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:smartstock_pos/util.dart';
 
 import '../states/login.state.dart';
 
@@ -13,7 +13,7 @@ class LoginComponents {
     return Center(
       child: InkWell(
         child: Text(
-          "SmartStock @ 2020",
+          "SmartStock @ 2022",
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -23,8 +23,8 @@ class LoginComponents {
   }
 
   Widget get resetPassword {
-    return BFastUI.component().consumer<LoginPageState>(
-      (context, state) => Container(
+    return consumerComponent<LoginPageState>(
+      builder: (context, state) => Container(
         padding: EdgeInsets.all(16),
         child: Center(
           child: InkWell(
@@ -50,16 +50,16 @@ class LoginComponents {
   }
 
   Widget get _userNameFormControl {
-    return BFastUI.component().consumer<LoginPageState>((context, state) {
+    return consumerComponent<LoginPageState>(builder: (context, state) {
       return FormBuilderTextField(
         name: 'username',
         maxLines: 1,
         onChanged: (value) {
-          state.username = value;
+          state.username = value ?? '';
         },
-        validator: FormBuilderValidators.compose( [
-          FormBuilderValidators.required(context),
-          FormBuilderValidators.minLength(context,1)
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(),
+          FormBuilderValidators.minLength(1)
         ]),
         cursorColor: Colors.black45,
         style: TextStyle(color: Colors.black45),
@@ -88,7 +88,7 @@ class LoginComponents {
   }
 
   Widget get _passwordFormControl {
-    return BFastUI.component().consumer<LoginPageState>((context, state) {
+    return consumerComponent<LoginPageState>(builder: (context, state) {
       return FormBuilderTextField(
         name: 'password',
         maxLines: 1,
@@ -131,16 +131,16 @@ class LoginComponents {
           //labelText: 'Title',
         ),
         obscureText: !state.showPassword,
-      validator: FormBuilderValidators.compose( [
-          FormBuilderValidators.required(context),
-          FormBuilderValidators.minLength(context, 1)
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(),
+          FormBuilderValidators.minLength(1)
         ]),
       );
     });
   }
 
   Widget get _loginButtons {
-    return BFastUI.component().consumer<LoginPageState>((context, state) {
+    return consumerComponent<LoginPageState>(builder: (context, state) {
       return Container(
         child: state.onLoginProgress
             ? Container(
@@ -167,16 +167,17 @@ class LoginComponents {
                               fontSize: 20),
                         ),
                         onPressed: () {
-                          if (_loginFormState.currentState.saveAndValidate() ==
+                          if (_loginFormState.currentState?.saveAndValidate() ==
                               true) {
                             state
                                 .login(
                                     username: _loginFormState
-                                        .currentState.value['username'],
+                                        .currentState?.value['username'],
                                     password: _loginFormState
-                                        .currentState.value['password'])
+                                        .currentState?.value['password'])
                                 .catchError((e) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text(e.toString()),
                               ));
                             });
@@ -192,35 +193,6 @@ class LoginComponents {
                   SizedBox(
                     height: 10,
                   ),
-//            Container(
-//              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-//              child: ButtonTheme(
-//                minWidth: MediaQuery
-//                    .of(context)
-//                    .size
-//                    .width,
-//                height: 50,
-//                child: RaisedButton(
-//                    color: Theme
-//                        .of(context)
-//                        .primaryColor,
-//                    shape: RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(0.0)),
-//                    child: Text(
-//                      "Open Account For Free",
-//                      style: TextStyle(
-//                          color: Colors.white,
-//                          fontWeight: FontWeight.bold,
-//                          fontSize: 20),
-//                    ),
-//                    onPressed: () {
-//                      BFastUI.navigation(moduleName: 'account').to('/account/register');
-//                    }),
-//              ),
-//            ),
-//            SizedBox(
-//              height: 10,
-//            ),
                 ],
               ),
       );
@@ -228,49 +200,51 @@ class LoginComponents {
   }
 
   Widget get loginForm {
-    return BFastUI.component().custom((context) => FormBuilder(
-          key: _loginFormState,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 180.0, bottom: 10.0),
-                  child: Center(
-                    child: Text("Login",
-                        style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
+    return Builder(
+      builder: (context) => FormBuilder(
+        key: _loginFormState,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 180.0, bottom: 10.0),
+                child: Center(
+                  child: Text("Login",
+                      style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+              ),
+              Card(
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      // inputs
+                      Container(
+                          margin: EdgeInsets.only(
+                            bottom: 10,
+                            left: 10,
+                            right: 10,
+                          ),
+                          child: this._userNameFormControl),
+                      Container(
+                        margin:
+                            EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                        child: this._passwordFormControl,
+                      ),
+                      this._loginButtons
+                      // buttons
+                    ],
                   ),
                 ),
-                Card(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Column(
-                      children: [
-                        // inputs
-                        Container(
-                            margin: EdgeInsets.only(
-                              bottom: 10,
-                              left: 10,
-                              right: 10,
-                            ),
-                            child: this._userNameFormControl),
-                        Container(
-                          margin:
-                              EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                          child: this._passwordFormControl,
-                        ),
-                        this._loginButtons
-                        // buttons
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -1,15 +1,13 @@
-import 'package:bfastui/adapters/page.adapter.dart';
-import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 
 import '../components/login.component.dart';
 
-class LoginPage extends PageAdapter {
+class LoginPage extends StatelessWidget {
   @override
   Widget build(var args) {
     return Scaffold(
-      body: BFastUI.component().custom(
-        (context) => Container(
+      body: Builder(builder: (context) {
+        return Container(
           color: Theme.of(context).primaryColor,
           child: Container(
             alignment: Alignment.center,
@@ -24,8 +22,8 @@ class LoginPage extends PageAdapter {
               ],
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

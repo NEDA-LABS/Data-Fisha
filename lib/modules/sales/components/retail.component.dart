@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,7 +52,8 @@ class RetailComponents {
             productPrice != null
                 ? NumberFormat.currency(name: 'TZS ')
                     .format(productPrice)
-                : "No Listed Price",
+                :
+                "No Listed Price",
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
             style: TextStyle(

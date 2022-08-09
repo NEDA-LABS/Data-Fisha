@@ -21,9 +21,6 @@ class StockSyncService {
     // running = false;
   }
 
-  static _init() {
-    BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
-  }
 
   static Future _startStockSocket() async {
     if (running == false) {
@@ -50,7 +47,7 @@ class StockSyncService {
           }, onDisconnect: () {
             print('stocks socket disconnected');
           });
-          changes.addListener((response) {
+          changes?.addListener((response) {
             print(response);
             _updateLocalStock(response.body, shop).catchError((r2) {
               print('');
@@ -124,7 +121,7 @@ class StockSyncService {
       switch (operationType) {
         case 'create':
           List<dynamic> _stocks =
-              stocks.where((element) => element['id'] != fullDocument['id']);
+              stocks.where((element) => element['id'] != fullDocument['id']).toList();
           _stocks.insert(0, fullDocument);
           stocksCache.set('all', _stocks);
           return;
@@ -134,7 +131,7 @@ class StockSyncService {
           return;
         case 'update':
           stocks =
-              stocks.where((element) => element['id'] != fullDocument['id']);
+              stocks.where((element) => element['id'] != fullDocument['id']).toList();
           stocks.insert(0, fullDocument);
           stocksCache.set('all', stocks);
           return;

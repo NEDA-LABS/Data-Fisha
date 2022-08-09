@@ -1,15 +1,14 @@
 import 'package:bfast/bfast.dart';
-import 'package:bfastui/adapters/state.adapter.dart';
-import 'package:bfastui/bfastui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
 import 'package:smartstock_pos/modules/sales/services/printer.service.dart';
 import 'package:smartstock_pos/modules/sales/services/sales.service.dart';
-import 'package:smartstock_pos/shared/date.utils.dart';
-import 'package:smartstock_pos/shared/local-storage.utils.dart';
-import 'package:smartstock_pos/shared/security.utils.dart';
+import 'package:smartstock_pos/modules/shared/date.utils.dart';
+import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
+import 'package:smartstock_pos/modules/shared/security.utils.dart';
+import 'package:smartstock_pos/util.dart';
 
-class CartState extends StateAdapter {
+class CartState extends ChangeNotifier {
   final TextEditingController quantityInputController =
       TextEditingController(text: '1');
   final TextEditingController discountInputController =
@@ -24,11 +23,12 @@ class CartState extends StateAdapter {
   addStockToCart(CartModel cart) {
     CartModel updateItem = this.cartProductsArray.firstWhere(
         (x) => x.product['id'] == cart.product['id'],
-        orElse: () => null);
-    if (updateItem != null) {
+        orElse: () => CartModel(product: null, quantity: null)
+    );
+    if (updateItem.product != null) {
       var index = this.cartProductsArray.indexOf(updateItem);
       this.cartProductsArray[index].quantity =
-          this.cartProductsArray[index].quantity + cart.quantity;
+      (this.cartProductsArray[index].quantity as int) + (cart.quantity as int);
     } else {
       this.cartProductsArray.add(cart);
     }
@@ -38,7 +38,7 @@ class CartState extends StateAdapter {
   int calculateCartItems() {
     return this
         .cartProductsArray
-        .map<int>((cartItem) => cartItem.quantity)
+        .map<int>((cartItem) => cartItem.quantity??0)
         .reduce((value, element) => value + element);
   }
 
@@ -49,10 +49,10 @@ class CartState extends StateAdapter {
     int total = this
         .cartProductsArray
         .map<int>((value) =>
-            value.quantity *
+            value.quantity??0 *
             (isWholesale
-                ? value.product['wholesalePrice']
-                : value.product['retailPrice']))
+                ? value.product['wholesalePrice'] as int
+                : value.product['retailPrice'] as int))
         .reduce((a, b) => a + b);
 //    discountInputController.selection = TextSelection.fromPosition(
 //        TextPosition(offset: discountInputController.text.length));
@@ -63,13 +63,11 @@ class CartState extends StateAdapter {
     if(this.cartProductsArray.isEmpty || this.cartProductsArray == null){
       return 0;
     }
-    int total = this
-            .cartProductsArray
-            .map<int>((value) =>
-                value.quantity *
+    int total = this.cartProductsArray.map<int>((value) =>
+                value.quantity??0 *
                 (isWholesale
-                    ? value.product['wholesalePrice']
-                    : value.product['retailPrice']))
+                    ? value.product['wholesalePrice'] as int
+                    : value.product['retailPrice'] as int))
             .reduce((a, b) => a + b) -
         int.parse(this.discountInputController.text.isNotEmpty
             ? this.discountInputController.text
@@ -83,9 +81,9 @@ class CartState extends StateAdapter {
     int indexOfProductInCart = cartProductsArray
         .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0 &&
-        this.cartProductsArray[indexOfProductInCart].quantity > 1) {
+        (this.cartProductsArray[indexOfProductInCart].quantity) > 1) {
       this.cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity - 1;
+          cartProductsArray[indexOfProductInCart].quantity??0 - 1;
       notifyListeners();
     }
   }
@@ -95,7 +93,7 @@ class CartState extends StateAdapter {
         .indexWhere((element) => element.product['id'] == productId);
     if (indexOfProductInCart >= 0) {
       cartProductsArray[indexOfProductInCart].quantity =
-          cartProductsArray[indexOfProductInCart].quantity + 1;
+          cartProductsArray[indexOfProductInCart].quantity??0 + 1;
       notifyListeners();
     }
   }
@@ -104,21 +102,21 @@ class CartState extends StateAdapter {
     this.cartProductsArray.retainWhere((element) =>
         element.product['id'] != cartModel.product['id']);
     if (cartProductsArray.length == 0) {
-      BFastUI.navigator().pop();
+      navigator().pop();
     }
     notifyListeners();
   }
 
   void incrementQtyOfProductToBeAddedToCart() {
-    if (currentCartModel != null && currentCartModel.quantity != null) {
-      currentCartModel.quantity += 1;
-      quantityInputController.text = currentCartModel.quantity.toString();
+    if (currentCartModel != null && currentCartModel?.quantity != null) {
+      currentCartModel?.quantity = currentCartModel?.quantity??0 + 1;
+      quantityInputController.text = currentCartModel?.quantity.toString()??'';
       notifyListeners();
     }
   }
 
   void setCartQuantity(String value) {
-    currentCartModel.quantity = int.parse(value);
+    currentCartModel?.quantity = int.parse(value);
     quantityInputController.text = value;
     notifyListeners();
   }
@@ -130,10 +128,10 @@ class CartState extends StateAdapter {
 
   void decrementQtyOfProductToBeAddedToCart() {
     if (currentCartModel != null &&
-        currentCartModel.quantity != null &&
+        currentCartModel?.quantity != null &&
         currentCartModel.quantity > 1) {
-      currentCartModel.quantity -= 1;
-      quantityInputController.text = currentCartModel.quantity.toString();
+      currentCartModel?.quantity = currentCartModel?.quantity??0 - 1;
+      quantityInputController.text = currentCartModel?.quantity.toString()??'';
       notifyListeners();
     }
   }
@@ -150,22 +148,8 @@ class CartState extends StateAdapter {
 
   Future checkout() async {
     try {
-      //    if (this.isViewedInWholesale && !this.customerFormControl.valid) {
-//      this.snack.open('Please enter customer name, at least three characters required', 'Ok', {
-//        duration: 3000
-//      });
-//      return;
-//    }
-
       this.checkoutProgress = true;
       notifyListeners();
-
-//    if (this.customerFormControl.valid) {
-//      this.customerApi.saveCustomer({
-//        displayName: this.customerFormControl.value,
-//      }).catch();
-//    }
-
       await this.printCart();
     } finally {
       this.checkoutProgress = false;
@@ -178,14 +162,14 @@ class CartState extends StateAdapter {
     await this._salesService.saveSales(sales, cartId);
     this.cartProductsArray = [];
     currentCartModel = null;
-    BFastUI.navigator().pop();
+    navigator().pop();
     // this.customerFormControl.setValue(null);
   }
 
   Future<String> _cartItemsToPrinterData(List<dynamic> carts, String customer,
-      {@required bool wholesale}) async {
+      { bool wholesale}) async {
     var currentShop = await SmartStockPosLocalStorage().getActiveShop();
-    print(currentShop);
+    // print(currentShop);
     String data = '';
     data = data + '-------------------------------\n';
     data = data + (DateTime.now().toUtc().toString());
@@ -231,7 +215,7 @@ class CartState extends StateAdapter {
         ? discountInputController.text
         : '0';
     String stringDate = toSqlDate(DateTime.now());
-    String stringTime = DateTime.now().toIso8601String().split('T')[1].replaceAll('Z', '');
+    String stringTime = DateTime.now().toIso8601String();
     String idTra = 'n';
     String channel = wholesale ? 'whole' : 'retail';
     List<dynamic> sales = [];
@@ -241,14 +225,14 @@ class CartState extends StateAdapter {
             totalItems: this.cartProductsArray.length,
             totalDiscount: int.parse(discount),
             product: value.product,
-            quantity: value.quantity,
+            quantity: value.quantity??0,
             wholesale: wholesale),
         "discount": _getCartItemDiscount(
           totalItems: this.cartProductsArray.length,
           totalDiscount: int.parse(discount),
         ),
         "quantity": wholesale
-            ? (value.quantity * value.product['wholesaleQuantity'])
+            ? (value.quantity??0 * value.product['wholesaleQuantity'])
             : value.quantity,
         "product": value.product['product'],
         "category": value.product['category'],
@@ -286,17 +270,6 @@ class CartState extends StateAdapter {
             );
       }
       await this.submitBill(cartId);
-      //  this.checkoutProgress = false;
-      // this.snack.open('Done save sales', 'Ok', {duration: 2000});
-      // })
-      // .catchError((reason){
-      // this.checkoutProgress = false;
-//    this.snack.open(
-//    reason && reason.message ? reason.message : reason.toString(),
-//    'Ok',
-//    {duration: 3000}
-//    );
-      // });
     } finally {
       checkoutProgress = false;
       notifyListeners();
@@ -313,7 +286,7 @@ class CartState extends StateAdapter {
           totalItems: this.cartProductsArray.length,
           totalDiscount: int.parse(discount),
           product: value.product,
-          quantity: value.quantity,
+          quantity: value.quantity??0,
           wholesale: wholesale,
         ),
         "product": value.product['product'],
@@ -351,4 +324,7 @@ class CartState extends StateAdapter {
     discountInputController.dispose();
     super.dispose();
   }
+
+  @override
+  void onDispose() => dispose();
 }

@@ -1,12 +1,12 @@
-import 'package:bfastui/bfastui.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class ShopComponents {
   Widget get chooseShop {
-    BFastUI.getState<ChooseShopState>().getShops();
-    return BFastUI.component().consumer<ChooseShopState>(
-      (context, state) => Container(
+    getState<ChooseShopState>().getShops();
+    return consumerComponent<ChooseShopState>(
+      builder: (context, state) => Container(
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
         color: Theme.of(context).primaryColorDark,
@@ -48,14 +48,14 @@ class ShopComponents {
   }
 
   Widget _shop(var shop) {
-    return BFastUI.component().custom(
-      (context) => Column(
+    return Builder(builder: (context) {
+      return Column(
         children: [
           Container(
             margin: EdgeInsets.all(5),
             child: RaisedButton(
               onPressed: () {
-                ChooseShopState shopState = BFastUI.getState<ChooseShopState>();
+                ChooseShopState shopState = getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
                   print(e);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -90,7 +90,7 @@ class ShopComponents {
             ),
           )
         ],
-      ),
-    );
+      );
+    });
   }
 }
