@@ -4,7 +4,7 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -20,9 +20,9 @@ dependencies:
   form_builder_validators: ^8.3.0
   http: any
 
-#dev_dependencies:
-# flutter_test:
-#   sdk: flutter
+dev_dependencies:
+ flutter_test:
+   sdk: flutter
 
 # The following section is specific to Flutter.
 flutter:

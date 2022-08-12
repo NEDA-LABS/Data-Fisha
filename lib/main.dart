@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'configurations.dart';
-import 'modules/app/app.module.dart';
-import 'modules/sales/services/sales-sync.service.dart';
-import 'modules/sales/services/stocks.service.dart';
+import 'app/app.dart';
+import 'sales/services/sales-sync.service.dart';
+import 'sales/services/stocks.service.dart';
 
 void main() async {
   _connectWithBFastCloudProject();
-  Modular.setInitialRoute('/shop');
+  // Modular.setInitialRoute('/shop');
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(
@@ -21,7 +21,7 @@ void main() async {
         routerDelegate: Modular.routerDelegate,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Config.getSmartStockMaterialColorSwatch(),
+          primarySwatch: getSmartStockMaterialColorSwatch(),
         ),
       ),
     ),
@@ -30,14 +30,9 @@ void main() async {
   startStockSyncServices();
 }
 
-void startSalesServices() {
-  SalesSyncService().start();
-}
+void startSalesServices() => SalesSyncService().start();
 
-void startStockSyncServices() {
-  StockSyncService.run();
-}
+void startStockSyncServices() => StockSyncService.run();
 
-void _connectWithBFastCloudProject() {
-  BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
-}
+void _connectWithBFastCloudProject() =>
+    BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
