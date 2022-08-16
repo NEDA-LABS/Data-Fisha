@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:builders/builders.dart';
@@ -9,7 +11,16 @@ import 'modules/app/app.module.dart';
 import 'modules/sales/services/sales-sync.service.dart';
 import 'modules/sales/services/stocks.service.dart';
 
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   _connectWithBFastCloudProject();
   Modular.setInitialRoute('/shop/');
   Builders.systemInjector(Modular.get);

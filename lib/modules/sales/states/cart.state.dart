@@ -175,8 +175,8 @@ class CartState extends ChangeNotifier {
       {bool wholesale}) async {
     var currentShop = await SmartStockPosLocalStorage().getActiveShop();
     // print(currentShop);
-    String data = '';
-    data = data + '-------------------------------\n';
+    String data = currentShop['settings']['printerHeader'];
+    data = data + '\n-------------------------------\n';
     data = data + (DateTime.now().toUtc().toString());
 //  if (customer) {
 //  data = data.concat('-------------------------------\nTo ---> ' + customer);

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bfast/bfast.dart';
 import 'package:bfast/bfast_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:smartstock_pos/main.dart';
 import 'package:smartstock_pos/modules/shared/security.utils.dart';
 
 class SalesSyncService {
@@ -131,6 +133,7 @@ Future saveSaleAndUpdateStock(Map map) async {
   }).toList();
   var projectId = map['shop']['projectId'];
   var appId = map['shop']['applicationId'];
+  HttpOverrides.global = MyHttpOverrides();
   var url = Uri.parse('https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId/sale/cash');
   var r = await post(
       url,
