@@ -1,9 +1,6 @@
-import 'package:bfast/bfast.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
-import '../../common/storage.dart';
 import '../../sales/services/stocks.service.dart';
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 
 class AlreadyAuthGuard extends RouteGuard {
   @override

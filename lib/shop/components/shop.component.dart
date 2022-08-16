@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 import '../states/shops.state.dart';
 
 class ShopComponents {

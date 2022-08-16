@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 import '../states/cart.state.dart';
 
 class CartComponents {

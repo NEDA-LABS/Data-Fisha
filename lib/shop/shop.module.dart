@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-
-import '../common/guards/auth.dart';
+import 'guards/auth.dart';
 import 'pages/choose-shop.page.dart';
 import 'states/shops.state.dart';
 

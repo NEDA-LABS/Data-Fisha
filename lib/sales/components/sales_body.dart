@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 import '../states/cart.state.dart';
 import 'cart.component.dart';
 import 'list_of_products.dart';

@@ -21,13 +21,3 @@ selectorComponent<T extends ChangeNotifier, D>({
 }) =>
     Selector<T, D>(builder: builder, selector: selector);
 
-leftOrRight(bool condition) =>
-    (Function left) => (Function right) => condition ? left() : right();
-
-compose(List<Function> fns) => (arg) {
-  return (x){
-    final _reversed = fns.reversed.toList();
-    for(Function fn in _reversed) x= fn(x);
-    return x;
-  };
-};

@@ -1,10 +1,10 @@
 import 'package:bfast/bfast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:smartstock_pos/common/util.dart';
+import 'package:smartstock_pos/common/services/util.dart';
 
-import '../../common/date.dart';
+import '../../common/services/date.dart';
 import '../../common/storage.dart';
-import '../../common/security.dart';
+import '../../common/services/security.dart';
 import '../models/cart.model.dart';
 import '../services/printer.service.dart';
 import '../services/sales.service.dart';

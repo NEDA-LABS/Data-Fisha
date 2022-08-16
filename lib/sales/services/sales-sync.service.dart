@@ -6,7 +6,7 @@ import 'package:bfast/bfast_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-import '../../common/security.dart';
+import '../../common/services/security.dart';
 
 class SalesSyncService {
   var shouldRun = true;

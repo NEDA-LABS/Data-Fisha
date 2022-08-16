@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../common/storage.dart';
-import '../../common/security.dart';
+import '../../common/services/security.dart';
 
 class SalesService {
   LocalStorage _storage = LocalStorage();

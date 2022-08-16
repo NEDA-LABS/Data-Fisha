@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../../app/states/login.dart';
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 import '../states/sales.state.dart';
 
 PreferredSizeWidget get _searchInput {

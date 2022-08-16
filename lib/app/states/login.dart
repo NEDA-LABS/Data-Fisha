@@ -1,19 +1,12 @@
-import 'package:bfast/bfast.dart';
 import 'package:flutter/material.dart';
-
-import '../../common/storage.dart';
 import '../../sales/services/stocks.service.dart';
-import '../../common/util.dart';
+import '../../common/services/util.dart';
 
 class LoginPageState extends ChangeNotifier {
   String username = '';
   String password = '';
   bool onLoginProgress = false;
   bool showPassword = false;
-
-  LoginPageState() {
-    print("I AM INITIALIZED !!");
-  }
 
   void toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -34,12 +27,7 @@ class LoginPageState extends ChangeNotifier {
       }
     } catch (e) {
       print(e);
-      // if (e != null && e['message'] != null) {
-      //   var message = jsonDecode(e['message']) as Map<String, dynamic>;
-      //   throw message['error'];
-      // } else {
       throw 'Fails to login';
-      // }
     } finally {
       onLoginProgress = false;
       notifyListeners();
