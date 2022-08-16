@@ -46,7 +46,7 @@ class CacheFactory {
         return await store.record(key).get(db);
       };
 
-  remove(App app, String collection) => (String key) async {
+  Future Function(String key) remove(App app, String collection) => (String key) async {
         var db = _getDbIfNotExist();
         var store = _getStore(cacheDatabaseName(app)(collection));
         return await store.record(key).delete(db);

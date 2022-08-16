@@ -11,7 +11,7 @@ drawer(ShopModel shop) => (List<MenuModel> menus) => Drawer(
     );
 
 Widget _header(ShopModel shop) => Padding(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

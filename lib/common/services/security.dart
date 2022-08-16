@@ -1,3 +1,3 @@
 import 'package:uuid/uuid.dart';
 
-String generateUUID() => Uuid().v4();
+String generateUUID() => const Uuid().v4();

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock_pos/common/services/shop_cache.dart';
+import 'package:smartstock_pos/common/services/user_cache.dart';
 import '../../sales/services/stocks.service.dart';
 import '../../common/services/util.dart';
 
@@ -9,7 +11,7 @@ class LoginPageState extends ChangeNotifier {
   bool showPassword = false;
 
   void toggleShowPassword() {
-    this.showPassword = !this.showPassword;
+    showPassword = !showPassword;
     notifyListeners();
   }
 
@@ -35,14 +37,11 @@ class LoginPageState extends ChangeNotifier {
   }
 
   logOut() {
-    BFast.auth().logOut().then((value) async {
-      BFast.auth().setCurrentUser(null);
-    }).catchError((r) {
-      print(r);
+    removeCurrentUser().catchError((r) {
+      // print(r);
     }).whenComplete(() {
       StockSyncService.stop();
-      LocalStorage _storage = LocalStorage();
-      _storage.removeActiveShop();
+      removeActiveShop();
     });
     navigateTo('/login');
   }

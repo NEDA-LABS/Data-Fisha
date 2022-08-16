@@ -3,12 +3,17 @@ import 'package:smartstock_pos/configurations.dart';
 
 const _shopTable = 'shop';
 
-saveShopId(String id) async {
+Future saveShopId(String id) async {
   var save = CacheFactory().set(smartstockApp, _shopTable);
   return save('shop_id', id);
 }
 
-saveActiveShop(shop) async {
+Future saveActiveShop(shop) async {
   var save = CacheFactory().set(smartstockApp, _shopTable);
   return save('shop', shop);
+}
+
+Future removeActiveShop() async {
+  var rm = CacheFactory().remove(smartstockApp, _shopTable);
+  return rm('shop');
 }

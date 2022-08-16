@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock_pos/common/services/user.dart';
+import 'package:smartstock_pos/common/services/user_cache.dart';
 import 'package:smartstock_pos/common/services/util.dart';
 import 'package:smartstock_pos/configurations.dart';
 

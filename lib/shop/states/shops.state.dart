@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/common/services/shop.dart';
-import 'package:smartstock_pos/common/services/user.dart';
+import 'package:smartstock_pos/common/services/shop_cache.dart';
+import 'package:smartstock_pos/common/services/user_cache.dart';
 import '../../common/services/util.dart';
 
 class ChooseShopState extends ChangeNotifier {
