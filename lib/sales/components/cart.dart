@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
-import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
-import 'package:smartstock_pos/util.dart';
+
+import '../../core/services/util.dart';
+import '../models/cart.model.dart';
+import '../states/cart.dart';
 
 void addToCartSheet({BuildContext context, wholesale = false}) {
   Scaffold.of(context)
@@ -11,12 +12,13 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
           builder: (context, state) {
             return state.currentCartModel != null
                 ? Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       ),
                     ),
+                    height: 300,
                     child: Card(
                       elevation: 0,
                       child: Center(
@@ -40,14 +42,14 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                                 softWrap: true,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 14),
                                               ),
                                               Container(
-                                                padding: EdgeInsets.fromLTRB(
+                                                padding: const EdgeInsets.fromLTRB(
                                                     0, 10, 0, 0),
-                                                child: Text(
+                                                child: const Text(
                                                   '',
                                                   // NumberFormat.currency(
                                                   //         name: 'TZS ')
@@ -93,12 +95,12 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                 //   },
                                 // ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(),
                                   ),
-                                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   height: 54,
                                   width: MediaQuery.of(context).size.width > 200
                                       ? 200
@@ -112,7 +114,7 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
                                         state.setCartQuantity(value),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       hintText: "Enter quantity...",
                                       border: InputBorder.none,
                                     ),
@@ -128,9 +130,9 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                               ],
                             )),
                             Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                 child: RaisedButton(
                                   color: Theme.of(context).primaryColor,
                                   onPressed: () {
@@ -141,7 +143,7 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                   },
                                   child: Container(
                                     height: 48,
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         "Add To Cart",
                                         style: TextStyle(color: Colors.white),
@@ -155,7 +157,6 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                         ),
                       ),
                     ),
-                    height: 300,
                   )
                 : Container(
                     height: 0,
@@ -174,6 +175,7 @@ Widget cartView({bool wholesale = false}) {
       children: [
         consumerComponent<CartState>(
           builder: (context, cartState) => Expanded(
+            flex: 1,
             child: ListView.builder(
               itemCount: cartState.cartProductsArray.length,
               itemBuilder: (context, index) => _checkoutCartItem(
@@ -182,7 +184,6 @@ Widget cartView({bool wholesale = false}) {
                 context: context,
               ),
             ),
-            flex: 1,
           ),
         ),
         _cartSummary(wholesale: wholesale),
@@ -192,6 +193,7 @@ Widget cartView({bool wholesale = false}) {
 }
 
 Widget _cartSummary({bool wholesale}) => Card(
+      elevation: 5,
       child: Column(
         children: [
           consumerComponent<CartState>(
@@ -199,17 +201,17 @@ Widget _cartSummary({bool wholesale}) => Card(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
+                    flex: 1,
                     child: Text("Total",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
-                    flex: 1,
                   ),
                   Text(
                     NumberFormat.currency(name: 'TZS ').format(
                       cartState.getTotalWithoutDiscount(isWholesale: wholesale),
                     ),
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -219,17 +221,17 @@ Widget _cartSummary({bool wholesale}) => Card(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Expanded(
-                  child: Text('Discount ( TZS )'),
+                const Expanded(
                   flex: 1,
+                  child: Text('Discount ( TZS )'),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(),
                   ),
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                   height: 38,
                   width: 150,
                   alignment: Alignment.center,
@@ -240,7 +242,7 @@ Widget _cartSummary({bool wholesale}) => Card(
                     keyboardType: TextInputType.number,
                     onChanged: (value) =>
                         getState<CartState>().setCartDiscount(value),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "",
                       border: InputBorder.none,
                     ),
@@ -251,13 +253,13 @@ Widget _cartSummary({bool wholesale}) => Card(
           ),
           consumerComponent<CartState>(
               builder: (context, cartState) => Container(
-                    margin: EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
                     height: 54,
                     color: Theme.of(context).primaryColorDark,
                     child: cartState.checkoutProgress
                         ? Container(
                             alignment: Alignment.center,
-                            child: CircularProgressIndicator(
+                            child: const CircularProgressIndicator(
                               backgroundColor: Colors.white,
                             ),
                           )
@@ -266,7 +268,7 @@ Widget _cartSummary({bool wholesale}) => Card(
                             onPressed: () {
                               cartState.checkout(wholesale: wholesale).catchError((e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content:
                                         Text("Fail to checkout, please retry"),
                                   ),
@@ -275,7 +277,8 @@ Widget _cartSummary({bool wholesale}) => Card(
                             },
                             child: Row(
                               children: [
-                                Expanded(
+                                const Expanded(
+                                  flex: 1,
                                   child: Text(
                                     'Checkout',
                                     style: TextStyle(
@@ -284,11 +287,11 @@ Widget _cartSummary({bool wholesale}) => Card(
                                       color: Colors.white,
                                     ),
                                   ),
-                                  flex: 1,
                                 ),
                                 Text(
-                                  '${NumberFormat.currency(name: 'TZS ').format(cartState.getFinalTotal(isWholesale: wholesale))}',
-                                  style: TextStyle(
+                                  NumberFormat.currency(name: 'TZS ')
+                                      .format(cartState.getFinalTotal(isWholesale: wholesale)),
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -301,7 +304,6 @@ Widget _cartSummary({bool wholesale}) => Card(
                   ))
         ],
       ),
-      elevation: 5,
     );
 
 Widget _checkoutCartItem(
@@ -344,12 +346,12 @@ Widget _checkoutCartItem(
           isThreeLine: false,
           trailing: IconButton(
             color: Colors.red,
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () => getState<CartState>().removeCart(cart, wholesale),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
           child: Divider(color: Colors.grey),
         )
       ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/app/states/login.state.dart';
-import 'package:smartstock_pos/modules/sales/components/search_input.dart';
-import 'package:smartstock_pos/util.dart';
+import 'package:smartstock_pos/account/services/user.dart';
+import 'package:smartstock_pos/sales/components/search_input.dart';
+
+import '../../core/services/util.dart';
 
 AppBar salesTopBar({title = "Sales", showSearch = false}) {
   return AppBar(
@@ -24,9 +25,9 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
           itemBuilder: (context) => [
             PopupMenuItem(
               child: TextButton(
-                onPressed: () => getState<LoginPageState>().logOut(),
+                onPressed: () => localLogOut(),
                 child: Row(
-                  children: [
+                  children: const [
                     Text("Logout"),
                     Icon(
                       Icons.exit_to_app,
@@ -37,7 +38,7 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
               ),
             ),
           ],
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
         ),
       ),
     ],

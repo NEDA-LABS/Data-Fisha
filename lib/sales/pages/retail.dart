@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/components/refresh_button.dart';
-import 'package:smartstock_pos/modules/sales/components/sales_body.dart';
-import 'package:smartstock_pos/modules/sales/components/top_bar.dart';
-import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
-import 'package:smartstock_pos/util.dart';
+
+import '../../core/services/util.dart';
+import '../components/refresh_button.dart';
+import '../components/sales_body.dart';
+import '../components/top_bar.dart';
+import '../states/sales.dart';
 
 class RetailPage extends StatelessWidget {
+  const RetailPage({Key key}) : super(key: key);
+
   @override
   Widget build(var args) {
     // initiate products

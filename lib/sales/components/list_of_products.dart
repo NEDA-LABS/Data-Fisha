@@ -4,8 +4,8 @@ import '../../core/services/util.dart';
 import '../models/cart.model.dart';
 import '../states/cart.dart';
 import '../states/sales.dart';
-import 'cart.component.dart';
-import 'retail.component.dart';
+import 'cart.dart';
+import 'product_card.dart';
 
 Widget get _showProductLoading {
   return Container(
@@ -51,12 +51,12 @@ Widget listOfProducts({wholesale = false}) => consumerComponent<SalesState>(
                           product: salesState.stocks[index],
                           quantity: 1,
                         ));
-                        CartComponents().addToCartSheet(
+                        addToCartSheet(
                           context: context,
                           wholesale: wholesale,
                         );
                       },
-                      child: RetailComponents().productCardItem(
+                      child: productCardItem(
                           productCategory:
                               salesState.stocks[index]['category'].toString(),
                           productName:

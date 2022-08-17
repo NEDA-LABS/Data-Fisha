@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/components/cart.component.dart';
-import 'package:smartstock_pos/modules/sales/components/top_bar.dart';
-import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
-import 'package:smartstock_pos/util.dart';
+
+import '../../core/services/util.dart';
+import '../components/cart.dart';
+import '../components/top_bar.dart';
+import '../states/cart.dart';
 
 class CheckoutPage extends StatelessWidget {
   final args;
 
-  CheckoutPage(this.args);
+  const CheckoutPage(this.args,{Key key}): super(key: key);
 
   @override
   Widget build(var context) {

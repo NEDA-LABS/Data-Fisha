@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/components/cart.component.dart';
-import 'package:smartstock_pos/modules/sales/components/loading_view.dart';
-import 'package:smartstock_pos/modules/sales/components/product_card.dart';
-import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
-import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
-import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
-import 'package:smartstock_pos/util.dart';
+import 'package:smartstock_pos/sales/components/product_card.dart';
+
+import '../../core/services/util.dart';
+import '../models/cart.model.dart';
+import '../states/cart.dart';
+import '../states/sales.dart';
+import 'cart.dart';
+import 'loading_view.dart';
 
 Widget listOfProducts({wholesale = false}) =>
     selectorComponent<SalesState, bool>(

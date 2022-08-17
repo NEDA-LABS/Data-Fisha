@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/models/cart.model.dart';
-import 'package:smartstock_pos/modules/sales/states/cart.state.dart';
-import 'package:smartstock_pos/modules/sales/states/sales.state.dart';
-import 'package:smartstock_pos/util.dart';
+
+import '../../core/services/util.dart';
+import '../models/cart.model.dart';
+import '../states/cart.dart';
+import '../states/sales.dart';
 
 Widget get salesRefreshButton => selectorComponent<SalesState, bool>(
       selector: (state) => state.loadProductsProgress,

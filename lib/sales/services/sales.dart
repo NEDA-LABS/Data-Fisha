@@ -40,33 +40,3 @@ var getAllRemoteStocks = composeAsync([
   (app) => executeRule(() => _allRemoteProducts(app)),
   map(shopToApp),
 ]);
-// // try {
-// var shop = await getActiveShop();
-// var shopApp =
-//     ;
-// var products = await executeRule(() => _allRemoteProducts(shopApp));
-// print(products);
-//
-// return itOrEmptyArray(products);
-// var stocks =
-//     await BFast.database(shop['projectId']).collection("stocks").getAll();
-// // print(stocks);
-// if (stocks != null) {
-//   stocks = stocks
-//       .where((element) =>
-//           element['saleable'] == null || element['saleable'] == true)
-//       .toList();
-// } else {
-//   stocks = [];
-// }
-// await _storage.saveStocks(stocks);
-//   _stocks = []; //stocks;
-//   notifyListeners();
-//   return stocks;
-// } catch (e) {
-//   rethrow;
-// } finally {
-//   loadProductsProgress = false;
-//   notifyListeners();
-// }
-// }

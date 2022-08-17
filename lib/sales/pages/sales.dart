@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/modules/sales/components/top_bar.dart';
-import 'package:smartstock_pos/util.dart';
+
+import '../../core/services/util.dart';
+import '../components/top_bar.dart';
 
 class SalesPage extends StatelessWidget {
+  const SalesPage({Key key}) : super(key: key);
+
   @override
   Widget build(args) {
     return Scaffold(
@@ -19,16 +22,16 @@ class SalesPage extends StatelessWidget {
                       Icons.shopping_cart,
                       color: Theme.of(context).primaryColorDark,
                     ),
-                    title: Text('Retails'),
+                    title: const Text('Retails'),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 TextButton(
                   onPressed: () => navigateTo('/sales/whole'),
                   child: ListTile(
                     leading: Icon(Icons.local_shipping,
                         color: Theme.of(context).primaryColorDark),
-                    title: Text('Wholesale'),
+                    title: const Text('Wholesale'),
                   ),
                 ),
               ],

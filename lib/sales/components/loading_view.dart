@@ -10,9 +10,9 @@ Widget showProductLoading() => Container(
               height: 100,
               width: 100,
             ),
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
             Container(height: 20),
-            Text(
+            const Text(
               "Fetching products",
               style: TextStyle(fontSize: 20),
             )

@@ -10,20 +10,20 @@ Widget get salesRefreshButton {
         ? consumerComponent<CartState>(builder: (context, cartState) {
             return cartState.currentCartModel != null
                 ? FloatingActionButton(
-                    child: Icon(Icons.close),
+                    child: const Icon(Icons.close),
                     onPressed: () {
                       getState<CartState>().setCurrentCartToBeAdded(null);
                       Navigator.pop(context);
                     },
                   )
-                : cartState.cartProductsArray.length <= 0
+                : cartState.cartProductsArray.isEmpty
                     ? FloatingActionButton(
-                        child: Icon(Icons.refresh),
+                        child: const Icon(Icons.refresh),
                         onPressed: () {
                           salesState.getStockFromRemote();
                         },
                       )
-                    : Container(
+                    : SizedBox(
                         height: 0,
                         width: 0,
                       );

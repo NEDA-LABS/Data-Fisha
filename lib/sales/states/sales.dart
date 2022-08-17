@@ -33,16 +33,16 @@ class SalesState extends ChangeNotifier {
         stocks = await getStockFromRemote();
       }
       if (productFilter.isNotEmpty) {
-        _stocks = filtered
-            .where((element) => element['product']
-        this._stocks = stocks.where((element) => element['product']
+        // stocks = _stocks.where((element) => element['product']);
+        _stocks = stocks.where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))
             .toList();
-      } else {
-        _stocks = filtered;
       }
+      // else {
+      //   _stocks = filtered;
+      // }
       return _stocks;
     } catch (e) {
       rethrow;
