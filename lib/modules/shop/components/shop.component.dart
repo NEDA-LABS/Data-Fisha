@@ -23,7 +23,7 @@ class ShopComponents {
                     "Choose Shop",
                     softWrap: true,
                     style: TextStyle(
-                        fontSize: 38,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
@@ -53,7 +53,7 @@ class ShopComponents {
         children: [
           Container(
             margin: EdgeInsets.all(5),
-            child: RaisedButton(
+            child: TextButton(
               onPressed: () {
                 ChooseShopState shopState = getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
@@ -66,25 +66,26 @@ class ShopComponents {
                 });
               },
               child: Container(
-//              color: Colors.white,
-                height: 150,
-                width: 150,
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                 child: Icon(
                   Icons.store,
                   color: Theme.of(context).primaryColor,
-                  size: 70,
+                  size: 40,
                 ),
               ),
             ),
           ),
           Container(
-            width: 145,
+            width: 85,
+            decoration: BoxDecoration(shape: BoxShape.circle),
             child: Text(
               shop['businessName'],
               softWrap: true,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),

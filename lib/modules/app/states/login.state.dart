@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bfast/bfast.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/sales/services/stocks.service.dart';
@@ -9,10 +11,6 @@ class LoginPageState extends ChangeNotifier {
   String password = '';
   bool onLoginProgress = false;
   bool showPassword = false;
-
-  LoginPageState() {
-    print("I AM INITIALIZED !!");
-  }
 
   void toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -59,9 +57,4 @@ class LoginPageState extends ChangeNotifier {
   }
 
   Future resetPassword(username) async {}
-
-  @override
-  void onDispose() {
-    // TODO: implement onDispose
-  }
 }

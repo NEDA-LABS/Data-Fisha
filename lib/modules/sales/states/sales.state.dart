@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bfast/bfast.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/modules/shared/local-storage.utils.dart';
 import 'package:smartstock_pos/modules/shop/states/shops.state.dart';
+import 'package:smartstock_pos/util.dart';
 
 class SalesState extends ChangeNotifier {
   SmartStockPosLocalStorage _storage = SmartStockPosLocalStorage();
@@ -25,25 +27,18 @@ class SalesState extends ChangeNotifier {
       loadProductsProgress = true;
       notifyListeners();
       var stocks = await _storage.getStocks();
-      if (stocks == null) {
-        stocks = await getStockFromRemote();
-      }
+      if (stocks == null) return stocks = await getStockFromRemote();
       if (stocks != null && stocks.length == 0) {
         stocks = await getStockFromRemote();
       }
-      var filtered = stocks
-          .where((element) =>
-              element['saleable'] == null || element['saleable'] == true)
-          .toList();
       if (productFilter.isNotEmpty) {
-        this._stocks = filtered
-            .where((element) => element['product']
+        this._stocks = stocks.where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))
             .toList();
       } else {
-        this._stocks = filtered;
+        this._stocks = stocks;
       }
       return this._stocks;
     } catch (e) {
@@ -61,18 +56,17 @@ class SalesState extends ChangeNotifier {
       var shop = await _storage.getActiveShop();
       updateCurrentShop(shop);
       // var urlS = BFast.getConfig(shop['projectId']).databaseURL(shop['projectId']);
-      print(BFast.getConfig(shop['projectId'])
-          .credentials[shop['projectId']]
-          .databaseURL);
+      // print(BFast.getConfig(shop['projectId'])
+      //     .credentials[shop['projectId']]
+      //     .functionsURL);
       // print(urlS);
-      var stocks =
-          await BFast.database(shop['projectId']).collection("stocks").getAll();
-      // print(stocks);
-      if (stocks != null) {
-        stocks = stocks
-            .where((element) =>
-                element['saleable'] == null || element['saleable'] == true)
-            .toList();
+      String stockString = await BFast.functions(shop['projectId']).request('/stock/products').post();
+      List stocks = jsonDecode(stockString) as List;
+      if (stocks != null && stocks is List) {
+        stocks = stocks.map((stock) {
+          stock['quantity'] = getStockQuantity(stock: stock);
+          return stock;
+        }).toList();
       } else {
         stocks = [];
       }
@@ -118,7 +112,4 @@ class SalesState extends ChangeNotifier {
     _debounce = null;
     super.dispose();
   }
-
-  @override
-  void onDispose() => dispose();
 }

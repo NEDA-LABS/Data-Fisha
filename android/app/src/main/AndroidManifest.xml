@@ -2,8 +2,8 @@
     package="com.example.smartstock_mobile">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="smartstock_mobile"
-        android:name="${applicationName}"
+        android:label="SmartStock"
+        android:name=".SmartStockApp"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
