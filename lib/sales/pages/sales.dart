@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock_pos/app.dart';
+import 'package:smartstock_pos/core/components/bottom_bar.dart';
+import 'package:smartstock_pos/core/components/drawer.dart';
 
 import '../../core/services/util.dart';
 import '../components/top_bar.dart';
@@ -7,9 +10,10 @@ class SalesPage extends StatelessWidget {
   const SalesPage({Key key}) : super(key: key);
 
   @override
-  Widget build(args) {
+  Widget build(context) {
     return Scaffold(
-      appBar: salesTopBar(title: "Sales"),
+      appBar: salesTopBar(title: "Sales", showBack: false),
+      drawer: drawer(officeName: 'Menu', menus: moduleMenus()),
       body: Builder(
         builder: (context) => SafeArea(
           child: Center(
@@ -39,6 +43,7 @@ class SalesPage extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: bottomBar(1, moduleMenus(), context),
     );
   }
 }

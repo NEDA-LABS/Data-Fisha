@@ -29,7 +29,8 @@ String shopDatabaseURL(App app) =>
 String shopFunctionsURL(App app) =>
     'https://smartstock-faas.bfast.fahamutech.com/shop/${app?.projectId}/${app?.applicationId}';
 
-shopToApp(x) => App(applicationId: x['applicationId'], projectId: x['projectId']);
+shopToApp(x) =>
+    App(applicationId: x['applicationId'], projectId: x['projectId']);
 
 var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (x) => []);
 
@@ -46,4 +47,13 @@ getStockQuantity({Map<String, dynamic> stock}) {
     }
   }
   return 0;
+}
+
+const _maxSmallScreen = 640;
+const _maxMediumScreen = 1007;
+// const MAX_LARGE_SCREEN = > 1008
+
+bool isSmallScreen(BuildContext context) {
+  var width = MediaQuery.of(context).size.width;
+  return width <= _maxSmallScreen;
 }

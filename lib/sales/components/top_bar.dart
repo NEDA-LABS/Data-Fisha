@@ -4,12 +4,12 @@ import 'package:smartstock_pos/sales/components/search_input.dart';
 
 import '../../core/services/util.dart';
 
-AppBar salesTopBar({title = "Sales", showSearch = false}) {
+AppBar salesTopBar({title = "Sales", showSearch = false, showBack= true}) {
   return AppBar(
     title: Text(title),
     bottom: showSearch ? searchInput() : null,
-    leading: IconButton(
-      icon: Icon(Icons.arrow_back),
+    leading: showBack?IconButton(
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         if (title == 'Sales') {
           navigateTo('/shop');
@@ -17,7 +17,7 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
           navigateTo("/sales");
         }
       },
-    ),
+    ):null,
     actions: <Widget>[
       Builder(
         builder: (context) => PopupMenuButton(
@@ -28,11 +28,11 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
                 onPressed: () => localLogOut(),
                 child: Row(
                   children: const [
+                    // Icon(
+                    //   Icons.exit_to_app,
+                    //   // color: Theme.of(context).primaryColorDark,
+                    // ),
                     Text("Logout"),
-                    Icon(
-                      Icons.exit_to_app,
-                      // color: Theme.of(context).primaryColorDark,
-                    )
                   ],
                 ),
               ),

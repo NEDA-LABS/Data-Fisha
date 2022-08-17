@@ -27,9 +27,6 @@ MaterialColor getSmartStockMaterialColorSwatch() {
 }
 // }
 
-const maxSmallScreen = 640;
-const maxMediumScreen = 1007;
-// const MAX_LARGE_SCREEN = > 1008
 
 App smartstockApp =
     App(applicationId: 'smartstock_lb', projectId: 'smartstock');
