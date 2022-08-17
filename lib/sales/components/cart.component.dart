@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../common/services/util.dart';
-import '../states/cart.state.dart';
+import '../../core/services/util.dart';
+import '../states/cart.dart';
 
 class CartComponents {
   void addToCartSheet({BuildContext context, wholesale = false}) {

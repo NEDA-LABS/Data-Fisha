@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../common/services/util.dart';
-import '../states/cart.state.dart';
+import '../../core/services/util.dart';
+import '../states/cart.dart';
 import 'cart.component.dart';
 import 'list_of_products.dart';
 

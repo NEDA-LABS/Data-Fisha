@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../common/services/util.dart';
-import '../states/cart.state.dart';
-import '../states/sales.state.dart';
+import '../../core/services/util.dart';
+import '../states/cart.dart';
+import '../states/sales.dart';
 
 Widget get salesRefreshButton {
   return consumerComponent<SalesState>(

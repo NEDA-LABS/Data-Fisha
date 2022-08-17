@@ -2,10 +2,10 @@ import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'app.dart';
 import 'configurations.dart';
-import 'app/app.dart';
-import 'sales/services/sales-sync.service.dart';
-import 'sales/services/stocks.service.dart';
+import 'sales/services/sales_sync.dart';
+import 'sales/services/stocks.dart';
 
 void main() async {
   // Modular.setInitialRoute('/shop');

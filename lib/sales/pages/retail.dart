@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/common/services/util.dart';
+import 'package:smartstock_pos/core/services/util.dart';
 
 import '../components/sales_body.dart';
 import '../components/stock_refresh_button.dart';
 import '../components/top_bar.dart';
-import '../states/sales.state.dart';
+import '../states/sales.dart';
 
 class RetailPage extends StatelessWidget {
   @override

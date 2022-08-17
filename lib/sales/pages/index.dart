@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/common/services/util.dart';
+import 'package:smartstock_pos/core/services/util.dart';
 
 import '../components/top_bar.dart';
 

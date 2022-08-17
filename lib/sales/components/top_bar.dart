@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:smartstock_pos/account/services/user.dart';
 
-import '../../app/states/login.dart';
-import '../../common/services/util.dart';
-import '../states/sales.state.dart';
+import '../../core/services/util.dart';
+import '../states/sales.dart';
 
 PreferredSizeWidget get _searchInput {
   return PreferredSize(
       child: consumerComponent<SalesState>(
         builder: (context, state) => Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Colors.white70,
           ),
-          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           width: MediaQuery.of(context).size.width * 0.9,
           alignment: Alignment.center,
           child: FormBuilderTextField(
@@ -27,7 +27,7 @@ PreferredSizeWidget get _searchInput {
               state.filterProducts(value ?? '');
             },
             name: 'query',
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "Enter a keyword...",
               border: InputBorder.none,
 //                suffixIcon: state.searchKeyword.isNotEmpty
@@ -42,7 +42,7 @@ PreferredSizeWidget get _searchInput {
           ),
         ),
       ),
-      preferredSize: Size.fromHeight(52));
+      preferredSize: const Size.fromHeight(52));
 }
 
 AppBar salesTopBar({title = "Sales", showSearch = false}) {
@@ -50,12 +50,12 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
     title: Text(title),
     bottom: showSearch ? _searchInput : null,
     leading: IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         if (title == 'Sales') {
-          navigateTo('/shop');
+          navigateTo('/');
         } else {
-          navigateTo("/sales");
+          navigateTo("/sales/");
         }
       },
     ),
@@ -65,13 +65,11 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
           onSelected: (value) {},
           itemBuilder: (context) => [
             PopupMenuItem(
-              child: FlatButton(
-                onPressed: () {
-                  getState<LoginPageState>().logOut();
-                },
+              child: TextButton(
+                onPressed: () => localLogOut(),
                 child: Row(
                   children: [
-                    Text("Logout"),
+                    const Text("Logout"),
                     Icon(
                       Icons.exit_to_app,
                       color: Theme.of(context).primaryColorDark,
@@ -81,7 +79,7 @@ AppBar salesTopBar({title = "Sales", showSearch = false}) {
               ),
             ),
           ],
-          icon: Icon(Icons.account_circle),
+          icon: const Icon(Icons.account_circle),
         ),
       ),
     ],

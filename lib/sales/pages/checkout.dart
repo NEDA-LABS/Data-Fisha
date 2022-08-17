@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/common/services/util.dart';
+import 'package:smartstock_pos/core/services/util.dart';
 
 import '../components/cart.component.dart';
 import '../components/top_bar.dart';
-import '../states/cart.state.dart';
+import '../states/cart.dart';
 
 class CheckoutPage extends StatelessWidget {
   final args;
