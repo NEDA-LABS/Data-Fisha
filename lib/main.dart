@@ -1,15 +1,12 @@
 import 'dart:io';
-
-import 'package:bfast/bfast.dart';
-import 'package:bfast/bfast_config.dart';
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'app.dart';
 import 'configurations.dart';
-import 'modules/app/app.module.dart';
-import 'modules/sales/services/sales-sync.service.dart';
-import 'modules/sales/services/stocks.service.dart';
+import 'sales/services/sales_sync.dart';
+import 'sales/services/stocks.dart';
 
 class MyHttpOverrides extends HttpOverrides{
   @override
@@ -21,8 +18,8 @@ class MyHttpOverrides extends HttpOverrides{
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
-  _connectWithBFastCloudProject();
-  Modular.setInitialRoute('/shop/');
+  // _connectWithBFastCloudProject();
+  // Modular.setInitialRoute('/shop/');
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(
@@ -32,23 +29,11 @@ void main() async {
         routerDelegate: Modular.routerDelegate,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Config.getSmartStockMaterialColorSwatch(),
+          primarySwatch: getSmartStockMaterialColorSwatch(),
         ),
       ),
     ),
   );
-  startSalesServices();
-  startStockSyncServices();
-}
-
-void startSalesServices() {
   SalesSyncService().start();
-}
-
-void startStockSyncServices() {
   StockSyncService.run();
-}
-
-void _connectWithBFastCloudProject() {
-  BFast.init(AppCredentials('smartstock_lb', 'smartstock'));
 }

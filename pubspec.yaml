@@ -4,14 +4,14 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   uuid: any
   crypto: any
-  bfast: any
+  bfast: 5.0.0-beta.0
   flutter_modular: ^5.0.3
   builders: ^2.0.0
   cupertino_icons: any
@@ -19,6 +19,12 @@ dependencies:
   flutter_form_builder: ^7.5.0
   form_builder_validators: ^8.3.0
   http: any
+  tekartik_app_flutter_sembast:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
+      path: app_sembast
+      version: '>=0.1.0'
 
 dev_dependencies:
  flutter_test:
