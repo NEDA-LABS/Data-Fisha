@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'package:bfast/controller/database.dart';
-import 'package:bfast/options.dart';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/sales/services/sales.dart';
-import 'package:smartstock_pos/sales/services/sales_cache.dart';
-import 'package:smartstock_pos/stocks/services/stocks_cache.dart';
+import 'package:smartstock_pos/core/services/stocks.dart';
+import 'package:smartstock_pos/core/services/stocks_cache.dart';
+
+import '../../core/services/api_stocks.dart';
 
 class SalesState extends ChangeNotifier {
   List<dynamic> _stocks = [];
@@ -27,22 +25,16 @@ class SalesState extends ChangeNotifier {
     try {
       loadProductsProgress = true;
       notifyListeners();
-      var stocks = await getLocalStocks();
-      stocks ??= await getStockFromRemote();
-      if (stocks != null && stocks.length == 0) {
-        stocks = await getStockFromRemote();
-      }
+      var stocks = await getStockFromCacheOrRemote();
       if (productFilter.isNotEmpty) {
-        // stocks = _stocks.where((element) => element['product']);
         _stocks = stocks.where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))
             .toList();
+      } else {
+        _stocks = stocks;
       }
-      // else {
-      //   _stocks = filtered;
-      // }
       return _stocks;
     } catch (e) {
       rethrow;
@@ -85,9 +77,9 @@ class SalesState extends ChangeNotifier {
   }
 
   void resetSearchKeyword(String s) {
-//    this.searchKeyword = s;
-//    // searchInputController.clear();
-//    notifyListeners();
+   searchKeyword = s;
+   // searchInputController.clear();
+   notifyListeners();
   }
 
   @override

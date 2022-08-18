@@ -1,27 +1,21 @@
 import 'package:bfast/controller/function.dart';
-import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
-import 'package:http/http.dart';
+import 'package:smartstock_pos/core/services/api.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 
-var _getRequest = composeAsync([
-  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-  (path) => get(Uri.parse(path)),
-]);
-
 _getPositiveItemsRequest(App app) =>
-    () => _getRequest('${shopFunctionsURL(app)}/stock/value/items');
+    () => getHttpRequest('${shopFunctionsURL(app)}/stock/value/items');
 
 _getItemsValueRequest(App app) =>
-    () => _getRequest('${shopFunctionsURL(app)}/stock/value/purchase');
+    () => getHttpRequest('${shopFunctionsURL(app)}/stock/value/purchase');
 
 _getItemsRetailValueRequest(App app) =>
-    () => _getRequest('${shopFunctionsURL(app)}/stock/value/retail');
+    () => getHttpRequest('${shopFunctionsURL(app)}/stock/value/retail');
 
 _getItemsWholesaleRequest(App app) =>
-    () => _getRequest('${shopFunctionsURL(app)}/stock/value/whole');
+    () => getHttpRequest('${shopFunctionsURL(app)}/stock/value/whole');
 
 Future getTotalPositiveItems() => composeAsync([
       map((x) => x['total']),

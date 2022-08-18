@@ -12,7 +12,7 @@ class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ModuleRoute('/', module: AccountModule()),
-        ModuleRoute('/sales/', module: SalesModule()),
+        ModuleRoute('/sales/', guards: [AuthGuard()], module: SalesModule()),
         ModuleRoute('/stock/', guards: [AuthGuard()], module: StockModule()),
       ];
 
