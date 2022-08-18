@@ -67,7 +67,7 @@ Widget _changeOfficeTextButton() => Builder(
       builder: (context) => Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextButton(
-            onPressed: () {},
+            onPressed: () => navigateTo('/shop'),
             child: Text(
               'Change Office',
               style: TextStyle(

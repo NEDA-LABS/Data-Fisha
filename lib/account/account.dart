@@ -9,10 +9,12 @@ import 'states/shops.dart';
 class AccountModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', guards: [AuthGuard()], child: (_, __) => ChooseShopPage()),
+        ChildRoute('/',
+            guards: [AuthGuard()], child: (_, __) => ChooseShopPage()),
         ChildRoute('/login', child: (_, __) => LoginPage()),
         // ModuleRoute('/sales/', module: SalesModule()),
-        // ChildRoute('/shop', child:(_,__)=> ChooseShopPage())
+        ChildRoute('/shop',
+            guards: [AuthGuard()], child: (_, __) => ChooseShopPage())
       ];
 
   @override
