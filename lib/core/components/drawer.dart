@@ -69,7 +69,14 @@ Widget _moduleMenuItems(MenuModel item) => ExpansionTile(
         item.name,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       ),
-      children: item.pages.map(_subMenuItem).toList(),
+      children: [
+        _subMenuItem(SubMenuModule(
+            name: 'Summary',
+            link: item.link,
+            roles: item.roles,
+            onClick: () {})),
+        ...item.pages.map(_subMenuItem).toList()
+      ],
     );
 
 Widget _subMenuItem(SubMenuModule item) => GestureDetector(

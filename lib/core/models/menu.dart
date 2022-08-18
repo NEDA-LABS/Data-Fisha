@@ -21,11 +21,13 @@ class SubMenuModule {
   final String link;
   final List<String> roles;
   final Function onClick;
+  String svgName = '';
 
   SubMenuModule({
     @required this.name,
     @required this.link,
     @required this.roles,
     @required this.onClick,
+    this.svgName
   });
 }

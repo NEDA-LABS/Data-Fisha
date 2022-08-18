@@ -12,7 +12,7 @@ navigateToAndReplace(String route) => Modular.to.pushReplacementNamed(route);
 
 T getState<T>() => Modular.get<T>();
 
-consumerComponent<T extends ChangeNotifier>({
+Widget consumerComponent<T extends ChangeNotifier>({
   Widget Function(BuildContext context, T state) builder,
 }) =>
     Consumer<T>(builder: builder);
@@ -42,7 +42,7 @@ getStockQuantity({Map<String, dynamic> stock}) {
     try {
       return quantity.values.map((e) => e['q']).reduce((a, b) => a + b);
     } catch (_123) {
-      print(_123);
+      // print(_123);
       return 0;
     }
   }

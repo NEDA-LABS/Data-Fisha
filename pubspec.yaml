@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   uuid: any
   crypto: any
-  bfast: 5.0.0-beta.0
+  bfast: 5.0.0-beta.1
   flutter_modular: ^5.0.3
   builders: ^2.0.0
   cupertino_icons: any
@@ -25,6 +25,7 @@ dependencies:
       ref: dart2_3
       path: app_sembast
       version: '>=0.1.0'
+  flutter_svg: ^1.1.4
 
 dev_dependencies:
  flutter_test:
@@ -35,7 +36,8 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/data.png
+    - assets/images/
+    - assets/svg/
   # fonts:
   #   - family: Schyler
   #     fonts:

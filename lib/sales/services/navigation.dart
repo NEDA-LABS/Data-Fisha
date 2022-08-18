@@ -19,7 +19,7 @@ List<SubMenuModule> _pagesMenu() => [
 MenuModel salesMenu() => MenuModel(
       name: 'Sales',
       icon: const Icon(Icons.point_of_sale),
-      link: '/sales',
+      link: '/sales/',
       roles: [],
       pages: _pagesMenu(),
     );

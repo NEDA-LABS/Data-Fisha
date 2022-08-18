@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/account/account.dart';
+import 'package:smartstock_pos/core/guards/auth.dart';
+import 'package:smartstock_pos/stocks/services/navigation.dart';
 import 'package:smartstock_pos/stocks/stocks.dart';
 
 import '../sales/sales.dart';
@@ -11,7 +13,7 @@ class AppModule extends Module {
   List<ModularRoute> get routes => [
         ModuleRoute('/', module: AccountModule()),
         ModuleRoute('/sales/', module: SalesModule()),
-        ModuleRoute('/stock/', module: StockModule()),
+        ModuleRoute('/stock/', guards: [AuthGuard()], module: StockModule()),
       ];
 
   @override
@@ -19,5 +21,6 @@ class AppModule extends Module {
 }
 
 List<MenuModel> moduleMenus() => [
-  salesMenu(),
-];
+      salesMenu(),
+      stocksMenu(),
+    ];
