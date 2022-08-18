@@ -50,10 +50,15 @@ getStockQuantity({Map<String, dynamic> stock}) {
 }
 
 const _maxSmallScreen = 640;
-const _maxMediumScreen = 1007;
+const _maxMediumScreen = 1000;
 // const MAX_LARGE_SCREEN = > 1008
 
 bool isSmallScreen(BuildContext context) {
   var width = MediaQuery.of(context).size.width;
   return width <= _maxSmallScreen;
+}
+
+bool hasEnoughWidth(BuildContext context) {
+  var width = MediaQuery.of(context).size.width;
+  return width >= _maxMediumScreen;
 }

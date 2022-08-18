@@ -24,7 +24,7 @@ Widget bottomBar(
                 label: 'Sales',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.store),
+                icon: Icon(Icons.inventory),
                 label: 'Stocks',
               ),
               BottomNavigationBarItem(
@@ -46,10 +46,7 @@ _handleClick(int index, BuildContext context, List<MenuModel> menus) {
     case 3:
       showModalBottomSheet(
         context: context,
-        builder: (_) => modulesMenuContent(
-          'Menu',
-          menus,
-        ),
+        builder: (_) => modulesMenuContent('Menu', menus, ''),
       );
   }
 }

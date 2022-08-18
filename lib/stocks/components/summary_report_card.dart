@@ -2,8 +2,6 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock_pos/core/components/active_component.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/stocks/states/refresh_state.dart';
 
 _loading() => const Center(
       child: SizedBox(

@@ -2,14 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/models/menu.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 
-drawer({String officeName, List<MenuModel> menus}) => Drawer(
+drawer(String office, List<MenuModel> menus, String current) => Drawer(
       width: 250,
-      child: modulesMenuContent(officeName, menus),
+      backgroundColor: Colors.white,
+      child: modulesMenuContent(office, menus, current),
     );
 
-modulesMenuContent(String name, List<MenuModel> menus) => SingleChildScrollView(
+// overlayDrawer({String office, List<MenuModel> menus, String current = '/'}) {
+//   var drawerOrNull = ifDoElse(
+//     (x) => hasEnoughWidth(x),
+//     (x) => const SizedBox(height: 0, width: 0),
+//     (x) => drawer(office, menus, current),
+//   );
+//   return Builder(builder: (context) => drawerOrNull(context));
+// }
+
+modulesMenuContent(String name, List<MenuModel> menus, String current) =>
+    SingleChildScrollView(
       child: Column(
-        children: [_header(name), ...menus.map(_moduleMenuItems).toList()],
+        children: [
+          _header(name),
+          ...menus.map(_moduleMenuItems(current)).toList()
+        ],
       ),
     );
 
@@ -64,11 +78,12 @@ Widget _changeOfficeTextButton() => Builder(
       ),
     );
 
-Widget _moduleMenuItems(MenuModel item) => ExpansionTile(
+_moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
       title: Text(
         item.name,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       ),
+      initiallyExpanded: current == item.link,
       children: [
         _subMenuItem(SubMenuModule(
             name: 'Summary',
