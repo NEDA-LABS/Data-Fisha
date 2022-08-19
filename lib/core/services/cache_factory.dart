@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:smartstock_pos/configurations.dart';
@@ -45,7 +47,8 @@ class CacheFactory {
         var getSingleDb = _getDbIfNotExist(_lazyInitialize);
         var db = await getSingleDb(_db);
         var store = _getStore(cacheDatabaseName(app)(collection));
-        return await store.record(key).get(db);
+        var data = await store.record(key).get(db);
+        return data is Map || data is List ? jsonDecode(jsonEncode(data)) : data;
       };
 
   Future Function(String key) remove(App app, String collection) =>

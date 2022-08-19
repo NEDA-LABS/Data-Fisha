@@ -31,3 +31,9 @@ class SubMenuModule {
     this.svgName
   });
 }
+
+class ContextMenu{
+  final String name;
+  final Function pressed;
+  ContextMenu({@required this.name, @required this.pressed});
+}

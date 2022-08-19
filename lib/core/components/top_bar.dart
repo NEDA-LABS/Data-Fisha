@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock_pos/core/components/search_input.dart';
 
 import '../../account/services/user.dart';
 import '../services/util.dart';
@@ -7,13 +8,16 @@ AppBar topBAr({
   title = "",
   showSearch = false,
   searchInput,
+  onSearch,
   Function openDrawer,
   showBack = true,
   backLink = "/",
 }) {
   return AppBar(
     title: Text(title),
-    bottom: showSearch ? searchInput : null,
+    // toolbarHeight: 56,
+    elevation: 0,
+    bottom: showSearch ? searchInput ?? toolBarSearchInput(onSearch) : null,
     leading: showBack
         ? IconButton(
             icon: const Icon(Icons.arrow_back),

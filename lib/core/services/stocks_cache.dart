@@ -7,5 +7,5 @@ const _stocksId = 'stocks';
 Future getLocalStocks() =>
     CacheFactory().get(smartstockApp, _stocksTable)(_stocksId);
 
-saveLocalStocks(stocks) =>
+Future saveLocalStocks(stocks) =>
     CacheFactory().set(smartstockApp, _stocksTable)(_stocksId, stocks);
