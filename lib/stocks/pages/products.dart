@@ -17,11 +17,11 @@ import '../states/product_loading_state.dart';
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key key}) : super(key: key);
 
-
   _appBar(context) {
     return topBAr(
       title: "Products",
-      showBack: !hasEnoughWidth(context),
+      showBack: true,
+      // !hasEnoughWidth(context),
       backLink: '/stock/',
       showSearch: true,
       onSearch: getState<ProductsListState>().updateQuery,
