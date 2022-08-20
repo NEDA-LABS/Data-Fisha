@@ -5,7 +5,7 @@ import 'package:smartstock_pos/core/services/cache_user.dart';
 import '../../core/services/util.dart';
 
 class ChooseShopState extends ChangeNotifier {
-  var activeShop;
+  // var activeShop;
   List shops = [];
 
   Future getShops() async {
@@ -45,7 +45,7 @@ class ChooseShopState extends ChangeNotifier {
       getShops();
     } catch (e) {
       getShops();
-      throw e;
+      rethrow;
     }
   }
 }

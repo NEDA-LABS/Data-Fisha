@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/services/util.dart';
@@ -19,8 +20,8 @@ class ShopComponents {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
+                  padding: const EdgeInsets.all(16),
+                  child: const Text(
                     "Choose Shop",
                     softWrap: true,
                     style: TextStyle(
@@ -29,16 +30,16 @@ class ShopComponents {
                         color: Colors.white),
                   ),
                 ),
-                state.shops.length > 0
+                state.shops.isNotEmpty
                     ? Wrap(
                         children:
-                            state.shops.map((e) => this._shop(e)).toList(),
+                            state.shops.map((e) => _shop(e)).toList(),
                       )
                     : Container(
-                        child: CircularProgressIndicator(
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(
                           backgroundColor: Colors.white,
                         ),
-                        alignment: Alignment.center,
                       ),
               ],
             )
@@ -53,14 +54,16 @@ class ShopComponents {
       return Column(
         children: [
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             child: TextButton(
               onPressed: () {
                 ChooseShopState shopState = getState<ChooseShopState>();
                 shopState.setCurrentShop(shop).catchError((e) {
-                  print(e);
+                  if (kDebugMode) {
+                    print(e);
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Fails to set a current shop'),
                     ),
                   );
@@ -69,7 +72,7 @@ class ShopComponents {
               child: Container(
                 height: 80,
                 width: 80,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                 child: Icon(
                   Icons.store,
                   color: Theme.of(context).primaryColor,
@@ -80,11 +83,11 @@ class ShopComponents {
           ),
           Container(
             width: 85,
-            decoration: BoxDecoration(shape: BoxShape.circle),
+            decoration: const BoxDecoration(shape: BoxShape.circle),
             child: Text(
               shop['businessName'],
               softWrap: true,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

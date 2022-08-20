@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 
-// class WholesaleComponents {
-//   Widget get company {
-//     return Center(
-//       child: InkWell(
-//         child: Text(
-//           "SmartStock @ 2020",
-//           style: TextStyle(
-//               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-//         ),
-//         onTap: () {},
-//       ),
-//     );
-//   }
-
 void wholesaleBottomSheet({BuildContext context, var stock}) {
   Scaffold.of(context).showBottomSheet((context) => Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         ),
+        height: 220,
         child: Card(
           elevation: 30,
           child: Center(
@@ -38,11 +25,11 @@ void wholesaleBottomSheet({BuildContext context, var stock}) {
                                 children: <Widget>[
                                   Text(
                                     stock["product"],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black, fontSize: 19),
                                   ),
                                   Text(stock["wholesalePrice"].toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 25)),
                                 ],
                               ),
@@ -50,7 +37,8 @@ void wholesaleBottomSheet({BuildContext context, var stock}) {
                           ),
                           Expanded(
                               child: IconButton(
-                                  icon: Icon(Icons.close), onPressed: () {})),
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {})),
                         ],
                       ),
                     ),
@@ -60,24 +48,24 @@ void wholesaleBottomSheet({BuildContext context, var stock}) {
                     child: Row(
                   children: <Widget>[
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add_circle,
                           color: Colors.green,
                         ),
                         onPressed: () {}),
-                    Flexible(
+                    const Flexible(
                       child: TextField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(), enabled: false),
                       ),
                     ),
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.remove_circle,
                           color: Colors.green,
                         ),
                         onPressed: () {}),
-                    FlatButton(
+                    OutlinedButton(
                       onPressed: () {},
                       child: Center(
                         child: Container(
@@ -87,7 +75,7 @@ void wholesaleBottomSheet({BuildContext context, var stock}) {
                           ),
                           height: 30,
                           width: 70,
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "ADD",
                               style:
@@ -103,7 +91,6 @@ void wholesaleBottomSheet({BuildContext context, var stock}) {
             ),
           ),
         ),
-        height: 220,
       ));
 }
 

@@ -133,17 +133,16 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                               margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: Container(
                                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                child: RaisedButton(
-                                  color: Theme.of(context).primaryColor,
+                                child: OutlinedButton(
                                   onPressed: () {
                                     state
                                         .addStockToCart(state.currentCartModel);
                                     state.setCurrentCartToBeAdded(null);
                                     Navigator.pop(context);
                                   },
-                                  child: Container(
+                                  child: const SizedBox(
                                     height: 48,
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
                                         "Add To Cart",
                                         style: TextStyle(color: Colors.white),
@@ -170,25 +169,23 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
 }
 
 Widget cartView({bool wholesale = false}) {
-  return Container(
-    child: Column(
-      children: [
-        consumerComponent<CartState>(
-          builder: (context, cartState) => Expanded(
-            flex: 1,
-            child: ListView.builder(
-              itemCount: cartState.cartProductsArray.length,
-              itemBuilder: (context, index) => _checkoutCartItem(
-                cart: cartState.cartProductsArray[index],
-                wholesale: wholesale,
-                context: context,
-              ),
+  return Column(
+    children: [
+      consumerComponent<CartState>(
+        builder: (context, cartState) => Expanded(
+          flex: 1,
+          child: ListView.builder(
+            itemCount: cartState.cartProductsArray.length,
+            itemBuilder: (context, index) => _checkoutCartItem(
+              cart: cartState.cartProductsArray[index],
+              wholesale: wholesale,
+              context: context,
             ),
           ),
         ),
-        _cartSummary(wholesale: wholesale),
-      ],
-    ),
+      ),
+      _cartSummary(wholesale: wholesale),
+    ],
   );
 }
 

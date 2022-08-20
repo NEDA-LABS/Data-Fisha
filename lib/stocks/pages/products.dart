@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/app.dart';
@@ -54,11 +52,11 @@ class ProductsPage extends StatelessWidget {
     ]);
   }
 
-  _tableFooter() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Total 1000'),
-    ]);
-  }
+  // _tableFooter() {
+  //   return tableLikeListRow([
+  //     tableLikeListTextHeader('Total 1000'),
+  //   ]);
+  // }
 
   _fields() =>
       ['product', 'quantity', 'purchase', 'retailPrice', 'wholesalePrice'];

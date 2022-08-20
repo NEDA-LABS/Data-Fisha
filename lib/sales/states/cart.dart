@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/cache_user.dart';
 import 'package:smartstock_pos/sales/services/sales.dart';
@@ -97,7 +98,7 @@ class CartState extends ChangeNotifier {
   void removeCart(CartModel cartModel, wholesale) {
     cartProductsArray.retainWhere(
         (element) => element.product['id'] != cartModel.product['id']);
-    if (cartProductsArray.length == 0) {
+    if (cartProductsArray.isEmpty) {
       navigateToAndReplace(wholesale ? '/sales/whole' : '/sales/retail');
     }
     notifyListeners();
@@ -116,7 +117,9 @@ class CartState extends ChangeNotifier {
     try {
       currentCartModel?.quantity = int.parse(value);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     notifyListeners();
   }
@@ -172,40 +175,44 @@ class CartState extends ChangeNotifier {
     var currentShop = await getActiveShop();
     // print(currentShop);
     String data = currentShop['settings']['printerHeader'];
-    data = data + '\n-------------------------------\n';
+    data = '$data\n-------------------------------\n';
     data = data + (DateTime.now().toUtc().toString());
 //  if (customer) {
 //  data = data.concat('-------------------------------\nTo ---> ' + customer);
 //  }
     double totalBill = 0.0;
     int sn = 1;
-    carts.forEach((cart) {
+    for (var cart in carts) {
       totalBill += double.parse(cart['amount'].toString());
-      data = data +
-          '\n-------------------------------\n' +
-          sn.toString() +
-          '.  ' +
-          cart['product'] +
-          '\n' +
-          'Quantity --> ' +
-          cart['quantity'].toString() +
-          ' \t' +
-          'Unit Price --> ' +
-          (wholesale == true
-              ? cart['stock']['wholesalePrice'].toString()
-              : cart['stock']['retailPrice'].toString()) +
-          '\t' +
-          'Sub Amount  --> ' +
-          cart['amount'].toString() +
-          ' \t';
+      data = [
+        data,
+        '\n-------------------------------\n',
+        sn.toString(),
+        '.  ',
+        cart['product'],
+        '\n',
+        'Quantity --> ',
+        cart['quantity'].toString(),
+        ' \t',
+        'Unit Price --> ',
+        (wholesale == true
+            ? cart['stock']['wholesalePrice'].toString()
+            : cart['stock']['retailPrice'].toString()),
+        '\t',
+        'Sub Amount  --> ',
+        cart['amount'].toString(),
+        ' \t'
+      ].join('');
 
       sn++;
-    });
-    data = data +
-        ('\n--------------------------------\n' +
-            'Total Bill : ' +
-            totalBill.toString() +
-            '\n--------------------------------\n');
+    }
+    data = [
+      data,
+      '\n--------------------------------\n',
+      'Total Bill : ',
+      totalBill.toString(),
+      '\n--------------------------------\n',
+    ].join('');
     data = data + currentShop['settings']['printerFooter'];
     return data;
   }

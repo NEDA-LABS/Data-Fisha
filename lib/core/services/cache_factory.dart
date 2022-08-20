@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
-import 'package:smartstock_pos/configurations.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
 
 StoreRef _getStore(name) =>

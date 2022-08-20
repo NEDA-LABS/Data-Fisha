@@ -11,31 +11,31 @@ Widget productCardItem({
       elevation: 4,
       child: Column(
         children: <Widget>[
-          Spacer(
+          const Spacer(
             flex: 1,
           ),
           Expanded(
             child: Text(
-              productCategory != null ? productCategory : "No Listed Category",
-              style: TextStyle(color: Colors.grey),
+              productCategory ?? "No Listed Category",
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
           Expanded(
+            flex: 2,
             child: Container(
-              padding: EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
               child: Text(
-                productName != null ? productName : "No Listed Name",
+                productName ?? "No Listed Name",
                 textAlign: TextAlign.center,
                 softWrap: true,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
-            flex: 2,
           ),
-          Spacer(flex: 1,),
+          const Spacer(flex: 1,),
           Expanded(
               child: Text(
             productPrice != null
@@ -43,7 +43,7 @@ Widget productCardItem({
                 : "No Listed Price",
             softWrap: true,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
           )),
           // Spacer(

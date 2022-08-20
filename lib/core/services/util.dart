@@ -41,7 +41,7 @@ getStockQuantity({Map<String, dynamic> stock}) {
     Map quantity = stock['quantity'] as Map;
     try {
       return quantity.values.map((e) => e['q']).reduce((a, b) => a + b);
-    } catch (_123) {
+    } catch (a123) {
       // print(_123);
       return 0;
     }

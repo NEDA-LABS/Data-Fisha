@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-textInput(
-    {@required Function(String) onText,
-    String placeholder = '',
-    String label = ''}) {
+const _b = SizedBox();
+
+textInput({@required Function(String) onText,
+  String initialText = '',
+  String placeholder = '',
+  String label = '',
+  Widget icon = _b,
+  TextInputType type = TextInputType.none,
+  String error = ''}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -16,21 +21,42 @@ textInput(
         // height: 40,
         decoration: const BoxDecoration(
             color: Colors.white,
-            border: Border.fromBorderSide(BorderSide(color: Colors.black))),
-        child: TextField(
-          autofocus: false,
-          maxLines: 1,
-          minLines: 1,
-          onChanged: onText,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: placeholder,
-            contentPadding: EdgeInsets.all(8)
-            // labelText: label,
-            // label: Text(''),
+            border: Border.fromBorderSide(BorderSide(color: Colors.black)),
+            borderRadius: BorderRadius.all(Radius.circular(3))),
+        child: Row(
+          children: [
+            Expanded(
+                child: TextField(
+                  controller: TextEditingController(text: initialText),
+                  autofocus: false,
+                  maxLines: 1,
+                  minLines: 1,
+                  onChanged: onText,
+                  keyboardType: type,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: placeholder,
+                      contentPadding: const EdgeInsets.all(8)
+                    // labelText: label,
+                    // label: Text(''),
+                  ),
+                )),
+            icon
+          ],
+        ),
+      ),
+      error.isNotEmpty && error != null
+          ? Padding(
+        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+        child: Text(
+          error,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.red,
           ),
         ),
       )
+          : _b
     ],
   );
 }

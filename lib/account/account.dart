@@ -10,11 +10,11 @@ class AccountModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/',
-            guards: [AuthGuard()], child: (_, __) => ChooseShopPage()),
-        ChildRoute('/login', child: (_, __) => LoginPage()),
+            guards: [AuthGuard()], child: (_, __) => const ChooseShopPage()),
+        ChildRoute('/login', child: (_, __) => const LoginPage()),
         // ModuleRoute('/sales/', module: SalesModule()),
         ChildRoute('/shop',
-            guards: [AuthGuard()], child: (_, __) => ChooseShopPage())
+            guards: [AuthGuard()], child: (_, __) => const ChooseShopPage())
       ];
 
   @override

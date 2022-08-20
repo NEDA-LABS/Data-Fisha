@@ -1,9 +1,12 @@
+import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/app.dart';
 import 'package:smartstock_pos/core/components/responsive_body.dart';
 import 'package:smartstock_pos/core/components/text_input.dart';
 import 'package:smartstock_pos/core/components/top_bar.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock_pos/stocks/states/product_form_state.dart';
+
+import '../components/product_create_form.dart';
 
 class ProductCreatePage extends StatelessWidget {
   const ProductCreatePage({Key key}) : super(key: key);
@@ -25,15 +28,11 @@ class ProductCreatePage extends StatelessWidget {
           appBar: _appBar(context),
           body: Center(
             child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
+              constraints: const BoxConstraints(maxWidth: 600),
               padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-              child: ListView(
-                children: [
-                  textInput(
-                      onText: (d) {},
-                      label: 'Name',
-                      placeholder: 'Brand + Generic name'),
-                ],
+              child: Consumer<ProductFormState>(
+                builder: (context, state) =>
+                    ListView(children: productCreateForm(state)),
               ),
             ),
           ),

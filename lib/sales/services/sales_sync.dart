@@ -22,7 +22,9 @@ class SalesSyncService {
           shouldRun = true;
         });
       } else {
-        print('another save sales routine runs');
+        if (kDebugMode) {
+          print('another save sales routine runs');
+        }
       }
     });
   }
@@ -51,7 +53,9 @@ class SalesSyncService {
         }
       } catch (err) {
         // throw err;
-        print(err);
+        if (kDebugMode) {
+          print(err);
+        }
       }
     }
   }
@@ -76,7 +80,9 @@ class SalesSyncService {
       }
       return [];
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return [];
     }
   }
@@ -132,5 +138,7 @@ Future saveSaleAndUpdateStock(Map map) async {
   if (r.statusCode != 200) {
     throw Exception(r.body);
   }
-  print('done:::push sales');
+  if (kDebugMode) {
+    print('done:::push sales');
+  }
 }

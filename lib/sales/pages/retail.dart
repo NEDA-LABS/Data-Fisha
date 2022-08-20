@@ -10,7 +10,7 @@ class RetailPage extends StatelessWidget {
   const RetailPage({Key key}) : super(key: key);
 
   @override
-  Widget build(var args) {
+  Widget build(var context) {
     // initiate products
     getState<SalesState>().getStockFromCache(productFilter: '');
     return Scaffold(

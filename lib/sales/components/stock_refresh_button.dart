@@ -23,7 +23,7 @@ Widget get salesRefreshButton {
                           salesState.getStockFromRemote();
                         },
                       )
-                    : SizedBox(
+                    : const SizedBox(
                         height: 0,
                         width: 0,
                       );

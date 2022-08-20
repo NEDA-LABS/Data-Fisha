@@ -8,7 +8,7 @@ import '../../core/services/util.dart';
 
 class AlreadyAuthGuard extends RouteGuard {
   @override
-  Future<bool> canActivate(String url, var b) async {
+  Future<bool> canActivate(String path, var route) async {
     var user = await getLocalCurrentUser();
     return ifDoElse((y) => y == null, (_) => true, (_) {
       StockSyncService.stop();

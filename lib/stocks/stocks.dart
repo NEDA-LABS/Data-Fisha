@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/stocks/pages/product_create.dart';
 import 'package:smartstock_pos/stocks/pages/products.dart';
+import 'package:smartstock_pos/stocks/states/product_form_state.dart';
 
 import 'pages/index.dart';
 import 'states/product_loading_state.dart';
@@ -18,5 +19,6 @@ class StockModule extends Module {
   List<Bind<Object>> get binds => [
     Bind.lazySingleton((i) => ProductLoadingState()),
     Bind.lazySingleton((i) => ProductsListState()),
+    Bind.lazySingleton((i) => ProductFormState()),
   ];
 }

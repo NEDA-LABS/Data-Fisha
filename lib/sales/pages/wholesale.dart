@@ -8,7 +8,7 @@ class WholesalePage extends StatelessWidget {
   const WholesalePage({Key key}) : super(key: key);
 
   @override
-  Widget build(var args) {
+  Widget build(var context) {
     return Scaffold(
       appBar: salesTopBar(title: "Wholesale", showSearch: true),
       floatingActionButton: salesRefreshButton,

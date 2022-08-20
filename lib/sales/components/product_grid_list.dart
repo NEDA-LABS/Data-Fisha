@@ -20,10 +20,10 @@ Widget _productsGridList({bool wholesale}) =>
     selectorComponent<SalesState, List>(
         selector: (state) => state.stocks,
         builder: (context, stocks) => GridView.builder(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 100),
               itemCount: stocks.length,
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) => _item(

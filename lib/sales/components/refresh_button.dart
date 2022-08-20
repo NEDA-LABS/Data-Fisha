@@ -8,14 +8,14 @@ import '../states/sales.dart';
 Widget get salesRefreshButton => selectorComponent<SalesState, bool>(
       selector: (state) => state.loadProductsProgress,
       builder: (context, value) =>
-          !value ? _addToCartOrRefreshIcon() : SizedBox(width: 0,height: 0,),
+          !value ? _addToCartOrRefreshIcon() : const SizedBox(width: 0,height: 0,),
     );
 
 Widget _addToCartOrRefreshIcon() => selectorComponent<CartState, CartModel>(
       selector: (state) => state.currentCartModel,
       builder: (context, value) => value != null
           ? FloatingActionButton(
-              child: Icon(Icons.close),
+              child: const Icon(Icons.close),
               onPressed: () {
                 getState<CartState>().setCurrentCartToBeAdded(null);
                 Navigator.pop(context);
@@ -26,10 +26,10 @@ Widget _addToCartOrRefreshIcon() => selectorComponent<CartState, CartModel>(
 
 Widget _refreshStocks() => selectorComponent<CartState, List>(
       selector: (state) => state.cartProductsArray,
-      builder: (context, value) => value.length <= 0
+      builder: (context, value) => value.isEmpty
           ? FloatingActionButton(
-              child: Icon(Icons.refresh),
+              child: const Icon(Icons.refresh),
               onPressed: () => getState<SalesState>().getStockFromRemote(),
             )
-          : SizedBox(height: 0,width: 0,),
+          : const SizedBox(height: 0,width: 0,),
     );

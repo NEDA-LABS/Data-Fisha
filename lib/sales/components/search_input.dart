@@ -7,7 +7,7 @@ PreferredSizeWidget searchInput() {
   SalesState state = getState<SalesState>();
   return PreferredSize(
     child: selectorComponent<SalesState, String>(
-      selector: (_s) => _s.searchKeyword,
+      selector: (s) => s.searchKeyword,
       builder: (context, value) => Container(
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
         decoration: BoxDecoration(

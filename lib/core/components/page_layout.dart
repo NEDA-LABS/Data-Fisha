@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-pageLayout({back_link = ''}) =>
-    (Widget body) => LayoutBuilder(builder: _pageBuilder);
+// pageLayout({back_link = ''}) =>
+//     (Widget body) => const LayoutBuilder(builder: _pageBuilder);
 
-Widget _pageBuilder(BuildContext context, BoxConstraints constraints){
-
-}
+// Widget _pageBuilder(BuildContext context, BoxConstraints constraints){
+//
+// }

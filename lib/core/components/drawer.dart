@@ -8,23 +8,13 @@ drawer(String office, List<MenuModel> menus, String current) => Drawer(
       child: modulesMenuContent(office, menus, current),
     );
 
-// overlayDrawer({String office, List<MenuModel> menus, String current = '/'}) {
-//   var drawerOrNull = ifDoElse(
-//     (x) => hasEnoughWidth(x),
-//     (x) => const SizedBox(height: 0, width: 0),
-//     (x) => drawer(office, menus, current),
-//   );
-//   return Builder(builder: (context) => drawerOrNull(context));
-// }
-
 modulesMenuContent(String name, List<MenuModel> menus, String current) =>
-    SingleChildScrollView(
-      child: Column(
-        children: [
-          _header(name),
-          ...menus.map(_moduleMenuItems(current)).toList()
-        ],
-      ),
+    ListView(
+      controller: ScrollController(),
+      children: [
+        _header(name),
+        ...menus.map(_moduleMenuItems(current)).toList()
+      ],
     );
 
 Widget _header(String currentOffice) => Padding(
@@ -94,8 +84,8 @@ _moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
       ],
     );
 
-Widget _subMenuItem(SubMenuModule item) => GestureDetector(
-      onTap: () => navigateTo(item.link),
+Widget _subMenuItem(SubMenuModule item) => TextButton(
+      onPressed: () => navigateTo(item.link),
       child: ListTile(
         trailing: const Icon(Icons.chevron_right),
         title: Text(

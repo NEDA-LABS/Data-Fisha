@@ -74,7 +74,7 @@ class LoginComponents {
           ),
           enabledBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: Theme.of(context).buttonColor, width: 2.0),
+                BorderSide(color: Theme.of(context).primaryColorDark, width: 2.0),
           ),
           filled: false,
           fillColor: Colors.black45,
@@ -105,7 +105,7 @@ class LoginComponents {
           ),
           enabledBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: Theme.of(context).buttonColor, width: 2.0),
+                BorderSide(color: Theme.of(context).primaryColorDark, width: 2.0),
           ),
           filled: false,
           fillColor: Colors.black45,
@@ -158,10 +158,10 @@ class LoginComponents {
                     child: ButtonTheme(
                       minWidth: MediaQuery.of(context).size.width,
                       height: 50,
-                      child: FlatButton(
-                        color: Theme.of(context).primaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0.0)),
+                      child: OutlinedButton(
+                        // color: Theme.of(context).primaryColor,
+                        // shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(0.0)),
                         child: const Text(
                           "Login",
                           style: TextStyle(

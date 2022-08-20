@@ -26,16 +26,16 @@ class ShopModel {
   });
 
   ShopModel.fromMap(Map<String, dynamic> map)
-      : this.street = map['street'],
-        this.businessName = map['businessName'],
-        this.applicationId = map['applicationId'],
-        this.projectId = map['projectId'],
-        this.masterKey = map['masterKey'],
-        this.category = map['category'],
-        this.settings = ShopSettingsModel.fromMap(map['settings']),
-        this.ecommerce = ShopEcommerceModel.fromMap(map['ecommerce']),
-        this.country = map['country'],
-        this.region = map['region'];
+      : street = map['street'],
+        businessName = map['businessName'],
+        applicationId = map['applicationId'],
+        projectId = map['projectId'],
+        masterKey = map['masterKey'],
+        category = map['category'],
+        settings = ShopSettingsModel.fromMap(map['settings']),
+        ecommerce = ShopEcommerceModel.fromMap(map['ecommerce']),
+        country = map['country'],
+        region = map['region'];
 }
 
 class ShopSettingsModel {
@@ -71,10 +71,10 @@ class ShopEcommerceModel {
       @required this.social});
 
   ShopEcommerceModel.fromMap(Map<String, dynamic> map)
-      : this.logo = map['logo'],
-        this.about = map['about'],
-        this.cover = map['cover'],
-        this.social = Social.fromMap(map['social'] as Map<String, dynamic>);
+      : logo = map['logo'],
+        about = map['about'],
+        cover = map['cover'],
+        social = Social.fromMap(map['social'] as Map<String, dynamic>);
 }
 
 class Social {
@@ -90,8 +90,8 @@ class Social {
       @required this.whatsapp});
 
   Social.fromMap(Map<String, dynamic> map)
-      : this.facebook = map['facebook'],
-        this.instagram = map['instagram'],
-        this.whatsapp = map['whatsapp'],
-        this.twitter = map['twitter'];
+      : facebook = map['facebook'],
+        instagram = map['instagram'],
+        whatsapp = map['whatsapp'],
+        twitter = map['twitter'];
 }

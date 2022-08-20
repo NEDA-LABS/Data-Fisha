@@ -18,11 +18,11 @@ Widget get _showProductLoading {
             height: 150,
             width: 150,
           ),
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           Container(
             height: 20,
           ),
-          Text(
+          const Text(
             "Fetching products",
             style: TextStyle(fontSize: 20),
           )
@@ -36,10 +36,10 @@ Widget listOfProducts({wholesale = false}) => consumerComponent<SalesState>(
       builder: (context, salesState) => salesState.loadProductsProgress
           ? _showProductLoading
           : GridView.builder(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 100),
               itemCount: salesState.stocks.length,
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {

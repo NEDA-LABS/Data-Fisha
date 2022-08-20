@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../components/login.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({Key key}) : super(key: key);
+
   @override
-  Widget build(var args) {
+  Widget build(var context) {
     return Scaffold(
       body: Builder(builder: (context) {
-        return Container(
+        return SizedBox(
           // color: Theme.of(context).primaryColor,
           height: MediaQuery.of(context).size.height,
           child: Center(

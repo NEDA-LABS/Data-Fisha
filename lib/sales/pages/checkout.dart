@@ -6,7 +6,7 @@ import '../components/top_bar.dart';
 import '../states/cart.dart';
 
 class CheckoutPage extends StatelessWidget {
-  final args;
+  final dynamic args;
 
   const CheckoutPage(this.args,{Key key}): super(key: key);
 
