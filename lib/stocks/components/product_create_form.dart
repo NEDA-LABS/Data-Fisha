@@ -4,6 +4,9 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/text_input.dart';
+import 'package:smartstock_pos/core/services/stocks.dart';
+import 'package:smartstock_pos/stocks/services/category.dart';
+import 'package:smartstock_pos/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
 import '../states/product_form_state.dart';
@@ -24,16 +27,26 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         initialText: state.productForm['barcode'],
         icon: _mobileQrScan('')),
     choicesInput(
-      onText: (d) => state.updateFormState({"category": d}),
-      label: "Category",
-      error: state.errors['category'] ?? '',
-      initialText: state.productForm['category'],
-    ),
+        onText: (d){
+          state.updateFormState({"category": d});
+          state.refresh();
+        },
+        label: "Category",
+        error: state.errors['category'] ?? '',
+        initialText: state.productForm['category'],
+        onAdd: () => Container(),
+        onLoad:  getCategoryFromCacheOrRemote,
+        ),
     choicesInput(
-      onText: (d) => state.updateFormState({"supplier": d}),
+      onText: (d){
+        state.updateFormState({"supplier": d});
+        state.refresh();
+      },
       label: "Supplier",
       error: state.errors['supplier'] ?? '',
       initialText: state.productForm['supplier'],
+      onAdd: () => Container(),
+      onLoad: getSupplierFromCacheOrRemote,
     ),
     textInput(
       onText: (d) => state.updateFormState({"purchase": d}),
@@ -73,12 +86,17 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         placeholder: "YYYY-MM-DD ( Optional )",
         error: state.errors['expire'] ?? '',
         initialText: state.productForm['expire'],
-    type: TextInputType.datetime),
+        type: TextInputType.datetime),
     Container(
       height: 80,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-      child: OutlinedButton(onPressed: () {}, child: const Text("Continue.", style: TextStyle(fontSize: 16),)),
+      child: OutlinedButton(
+          onPressed: () {},
+          child: const Text(
+            "Continue.",
+            style: TextStyle(fontSize: 16),
+          )),
     )
   ];
 }

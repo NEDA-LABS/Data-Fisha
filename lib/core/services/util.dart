@@ -32,7 +32,7 @@ String shopFunctionsURL(App app) =>
 shopToApp(x) =>
     App(applicationId: x['applicationId'], projectId: x['projectId']);
 
-var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (x) => []);
+var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (_) => []);
 
 getStockQuantity({Map<String, dynamic> stock}) {
   if (stock == null) return 0;

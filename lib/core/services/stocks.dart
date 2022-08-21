@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smartstock_pos/core/services/api_stocks.dart';
