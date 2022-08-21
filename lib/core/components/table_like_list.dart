@@ -12,8 +12,8 @@ _errorAndRetry(String err) => Padding(
 
 _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
         onItemPressed) =>
-    TextButton(
-        onPressed: onItemPressed,
+    InkWell(
+        onTap: onItemPressed,
         child: tableLikeListRow(keys
             .map(
                 (k) => onCell != null ? onCell(k, item[k]) : Text('${item[k]}'))

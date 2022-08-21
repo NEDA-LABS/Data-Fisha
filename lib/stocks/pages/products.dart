@@ -23,6 +23,7 @@ class ProductsPage extends StatelessWidget {
       backLink: '/stock/',
       showSearch: true,
       onSearch: getState<ProductsListState>().updateQuery,
+      searchHint: 'Search...'
     );
   }
 

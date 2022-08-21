@@ -5,9 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/text_input.dart';
 
+import '../../core/components/choices_input.dart';
 import '../states/product_form_state.dart';
 
-List<Widget> productCreateForm(ProductFormState state) {
+List<Widget> productCreateForm(ProductFormState state, context) {
   return [
     textInput(
         onText: (d) => state.updateFormState({"product": d}),
@@ -22,9 +23,21 @@ List<Widget> productCreateForm(ProductFormState state) {
         error: state.errors['barcode'] ?? '',
         initialText: state.productForm['barcode'],
         icon: _mobileQrScan('')),
+    choicesInput(
+      onText: (d) => state.updateFormState({"category": d}),
+      label: "Category",
+      error: state.errors['category'] ?? '',
+      initialText: state.productForm['category'],
+    ),
+    choicesInput(
+      onText: (d) => state.updateFormState({"supplier": d}),
+      label: "Supplier",
+      error: state.errors['supplier'] ?? '',
+      initialText: state.productForm['supplier'],
+    ),
     textInput(
       onText: (d) => state.updateFormState({"purchase": d}),
-      label: "Cost ( Tsh ) / Unit price",
+      label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
       error: state.errors['purchase'] ?? '',
       initialText: state.productForm['purchase'],
@@ -47,13 +60,26 @@ List<Widget> productCreateForm(ProductFormState state) {
       type: TextInputType.number,
     ),
     textInput(
-      onText: (d) => state.updateFormState({"wholesaleQuantity": d}),
-      label: "Wholesale quantity",
-      placeholder: "",
-      error: state.errors['wholesaleQuantity'] ?? '',
-      initialText: state.productForm['wholesaleQuantity'],
+      onText: (d) => state.updateFormState({"quantity": d}),
+      label: "Quantity",
+      placeholder: "Current stock quantity",
+      error: state.errors['quantity'] ?? '',
+      initialText: state.productForm['quantity'],
       type: TextInputType.number,
     ),
+    textInput(
+        onText: (d) => state.updateFormState({"expire": d}),
+        label: "Expire",
+        placeholder: "YYYY-MM-DD ( Optional )",
+        error: state.errors['expire'] ?? '',
+        initialText: state.productForm['expire'],
+    type: TextInputType.datetime),
+    Container(
+      height: 80,
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+      child: OutlinedButton(onPressed: () {}, child: const Text("Continue.", style: TextStyle(fontSize: 16),)),
+    )
   ];
 }
 

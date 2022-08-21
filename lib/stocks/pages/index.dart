@@ -17,9 +17,16 @@ class IndexPage extends StatelessWidget {
         onBody: (d) => Scaffold(
           drawer: d,
           appBar: topBAr(title: "Stocks", showBack: false),
-          body: ListView(
+          body: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-            children: [stocksHeader(), stocksSummary()],
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 790),
+                child: Column(
+                  children: [stocksHeader(), stocksSummary()],
+                ),
+              ),
+            ),
           ),
           bottomNavigationBar: bottomBar(2, moduleMenus(), context),
         ),

@@ -19,6 +19,7 @@ class CartState extends ChangeNotifier {
   CartModel currentCartModel;
   bool checkoutProgress = false;
   final PrinterService _printerService = PrinterService();
+  String customer = '';
 
   addStockToCart(CartModel cart) {
     CartModel updateItem = cartProductsArray.firstWhere(
@@ -269,8 +270,11 @@ class CartState extends ChangeNotifier {
       List<dynamic> cartItems = _getCartItems(wholesale: wholesale);
       if (currentShop['settings']['saleWithoutPrinter'] == false) {
         await _printerService.posPrint(
-          data: await _cartItemsToPrinterData(cartItems, wholesale ? "" : null,
-              wholesale: wholesale),
+          data: await _cartItemsToPrinterData(
+            cartItems,
+            wholesale ? "" : null,
+            wholesale: wholesale,
+          ),
           printer: 'jzv3',
           id: cartId,
           qr: cartId,
@@ -311,12 +315,13 @@ class CartState extends ChangeNotifier {
     return (totalDiscount / totalItems);
   }
 
-  double _getCartItemSubAmount(
-      {int quantity = 0,
-      var product,
-      int totalDiscount = 0,
-      int totalItems = 0,
-      bool wholesale = false}) {
+  double _getCartItemSubAmount({
+    int quantity = 0,
+    var product,
+    int totalDiscount = 0,
+    int totalItems = 0,
+    bool wholesale = false,
+  }) {
     int amount = (wholesale
         ? (quantity * product['wholesalePrice'])
         : (quantity * product['retailPrice'])) as int;

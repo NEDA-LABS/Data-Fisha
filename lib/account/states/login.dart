@@ -22,7 +22,7 @@ class LoginPageState extends ChangeNotifier {
       onLoginProgress = true;
       notifyListeners();
       var loginToSmartStock = remoteLogin(smartstockApp);
-      var user = await loginToSmartStock(username.trim(), password.trim());
+      var user = await loginToSmartStock(username?.trim()??'', password?.trim()??"");
       await setLocalCurrentUser(user);
       if (user != null) {
         username = user['username'];

@@ -9,6 +9,10 @@ _title() => const Padding(
 
 _links() => Wrap(children: switchToItems(stocksMenu().pages));
 
-stocksHeader() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [_title(), _links()]);
+stocksHeader() => Row(
+  children: [
+        Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [_title(), _links()]),
+  ],
+);

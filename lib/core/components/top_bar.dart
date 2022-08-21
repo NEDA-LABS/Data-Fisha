@@ -12,12 +12,13 @@ AppBar topBAr({
   Function openDrawer,
   showBack = true,
   backLink = "/",
+  searchHint = ""
 }) {
   return AppBar(
     title: Text(title),
     // toolbarHeight: 56,
     elevation: 0,
-    bottom: showSearch ? searchInput ?? toolBarSearchInput(onSearch) : null,
+    bottom: showSearch ? searchInput ?? toolBarSearchInput(onSearch,searchHint) : null,
     leading: showBack
         ? IconButton(
             icon: const Icon(Icons.arrow_back),

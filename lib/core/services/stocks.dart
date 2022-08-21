@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smartstock_pos/core/services/api_stocks.dart';
@@ -13,14 +14,14 @@ Future<List<dynamic>> getStockFromCacheOrRemote({
   stringLike = '',
 }) async {
   var shop = await getActiveShop();
-  var stocks = skipLocal ? [] : await getLocalStocks();
+  var stocks = skipLocal ? [] : await getLocalStocks(shopToApp(shop));
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
       List rStocks = await getAllRemoteStocks(shop);
       rStocks = await compute(
           _pruneAndSortStocks, {'stocks': rStocks, 'query': stringLike});
-      await saveLocalStocks(rStocks);
+      await saveLocalStocks(shopToApp(shop),rStocks);
       return rStocks;
     },
     (x) => compute(_pruneAndSortStocks, {'stocks': x, 'query': stringLike}),

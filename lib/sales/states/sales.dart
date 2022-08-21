@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/stocks.dart';
 import 'package:smartstock_pos/core/services/stocks_cache.dart';
+import 'package:smartstock_pos/core/services/util.dart';
 
 import '../../core/services/api_stocks.dart';
 
@@ -27,7 +28,8 @@ class SalesState extends ChangeNotifier {
       notifyListeners();
       var stocks = await getStockFromCacheOrRemote();
       if (productFilter.isNotEmpty) {
-        _stocks = stocks.where((element) => element['product']
+        _stocks = stocks
+            .where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))
@@ -50,7 +52,7 @@ class SalesState extends ChangeNotifier {
       notifyListeners();
       var shop = await getActiveShop();
       _stocks = await getAllRemoteStocks(shop);
-      await saveLocalStocks(_stocks);
+      await saveLocalStocks(shopToApp(shop), _stocks);
       return _stocks;
     } finally {
       loadProductsProgress = false;
@@ -77,9 +79,9 @@ class SalesState extends ChangeNotifier {
   }
 
   void resetSearchKeyword(String s) {
-   searchKeyword = s;
-   // searchInputController.clear();
-   notifyListeners();
+    searchKeyword = s;
+    // searchInputController.clear();
+    notifyListeners();
   }
 
   @override

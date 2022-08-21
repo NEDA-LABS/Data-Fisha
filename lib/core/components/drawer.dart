@@ -84,10 +84,11 @@ _moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
       ],
     );
 
-Widget _subMenuItem(SubMenuModule item) => TextButton(
-      onPressed: () => navigateTo(item.link),
+Widget _subMenuItem(SubMenuModule item) => InkWell(
+      onTap: () => navigateTo(item.link),
       child: ListTile(
         trailing: const Icon(Icons.chevron_right),
+        dense: true,
         title: Text(
           '        ${item.name}',
           maxLines: 1,

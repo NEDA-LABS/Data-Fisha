@@ -26,13 +26,15 @@ class ProductCreatePage extends StatelessWidget {
         current: '/stock/',
         onBody: (d) => Scaffold(
           appBar: _appBar(context),
-          body: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 600),
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-              child: Consumer<ProductFormState>(
-                builder: (context, state) =>
-                    ListView(children: productCreateForm(state)),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 600),
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+                child: Consumer<ProductFormState>(
+                  builder: (context, state) =>
+                      Column(children: productCreateForm(state, context)),
+                ),
               ),
             ),
           ),

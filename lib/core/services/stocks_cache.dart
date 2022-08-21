@@ -1,11 +1,11 @@
+import 'package:bfast/options.dart';
 import 'package:smartstock_pos/core/services/cache_factory.dart';
-import 'package:smartstock_pos/configurations.dart';
 
 const _stocksTable = 'stocks';
 const _stocksId = 'stocks';
 
-Future getLocalStocks() =>
-    CacheFactory().get(smartstockApp, _stocksTable)(_stocksId);
+Future getLocalStocks(App app) =>
+    CacheFactory().get(app, _stocksTable)(_stocksId);
 
-Future saveLocalStocks(stocks) =>
-    CacheFactory().set(smartstockApp, _stocksTable)(_stocksId, stocks);
+Future saveLocalStocks(App app, stocks) =>
+    CacheFactory().set(app, _stocksTable)(_stocksId, stocks);

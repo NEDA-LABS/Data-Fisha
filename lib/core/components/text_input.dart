@@ -1,66 +1,58 @@
 import 'package:flutter/material.dart';
 
+import 'input_box_decoration.dart';
+import 'input_error_message.dart';
+
 const _b = SizedBox();
 
-textInput(
-    {@required Function(String) onText,
-    String initialText = '',
-    String placeholder = '',
-    String label = '',
-    Widget icon = _b,
-    TextInputType type = TextInputType.text,
-    String error = ''}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-        child: Text(label,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)),
-      ),
-      Container(
-        // height: 40,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.fromBorderSide(BorderSide(
-                color: error.isNotEmpty
-                    ? Colors.red
-                    : Colors.black)),
-            borderRadius: const BorderRadius.all(Radius.circular(3))),
+_labelStyle() => const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
+
+_labelPadding() => const EdgeInsets.fromLTRB(0, 8, 0, 8);
+
+_label(label) => Padding(
+    padding: _labelPadding(), child: Text(label ?? '', style: _labelStyle()));
+
+_inputPadding() => const EdgeInsets.all(8);
+
+_inputDecoration(String hint) => InputDecoration(
+    border: InputBorder.none,
+    hintText: hint ?? '',
+    contentPadding: _inputPadding());
+
+_input(error, onText, type, placeholder, icon) => Builder(
+      builder: (context) => Container(
+        decoration: inputBoxDecoration(context, error),
         child: Row(
-          children: [
-            Expanded(
-                child: TextField(
-              controller: TextEditingController(text: initialText),
-              autofocus: false,
-              maxLines: 1,
-              minLines: 1,
-              onChanged: onText,
-              keyboardType: type,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: placeholder,
-                  contentPadding: const EdgeInsets.all(8)
-                  // labelText: label,
-                  // label: Text(''),
-                  ),
-            )),
-            icon
-          ],
+          children: [_fulWidthTextField(onText, type, placeholder), icon],
         ),
       ),
-      error.isNotEmpty && error != null
-          ? Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Text(
-                error,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.red,
-                ),
-              ),
-            )
-          : _b
-    ],
-  );
-}
+    );
+
+_fulWidthTextField(onText, type, placeholder) => Expanded(
+        child: TextField(
+      autofocus: false,
+      maxLines: 1,
+      onChanged: onText,
+      keyboardType: type,
+      decoration: _inputDecoration(placeholder),
+    ));
+
+
+
+textInput({
+  @required Function(String) onText,
+  String initialText = '',
+  String placeholder = '',
+  String label = '',
+  Widget icon = _b,
+  TextInputType type = TextInputType.text,
+  String error = '',
+}) =>
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _label(label),
+        _input(error, onText, type, placeholder, icon),
+        inputErrorMessageOrEmpty(error),
+      ],
+    );

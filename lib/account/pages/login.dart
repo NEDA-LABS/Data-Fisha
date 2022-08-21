@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
                 children: <Widget>[
                   //Image.asset("assets/logo.png"),
                   LoginComponents().loginForm,
-                  LoginComponents().resetPassword,
+                  // LoginComponents().resetPassword,
                   // LoginComponents().company,
                 ],
               ),

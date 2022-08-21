@@ -60,10 +60,10 @@ class LoginComponents {
         onChanged: (value) {
           state.username = value ?? '';
         },
-        validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(),
-          FormBuilderValidators.minLength(1)
-        ]),
+        // validator: FormBuilderValidators.compose([
+        //   FormBuilderValidators.required(),
+        //   FormBuilderValidators.minLength(1)
+        // ]),
         cursorColor: Colors.black45,
         style: const TextStyle(color: Colors.black45),
         decoration: InputDecoration(
@@ -134,10 +134,10 @@ class LoginComponents {
           //labelText: 'Title',
         ),
         obscureText: !state.showPassword,
-        validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(),
-          FormBuilderValidators.minLength(1)
-        ]),
+        // validator: FormBuilderValidators.compose([
+        //   FormBuilderValidators.required(),
+        //   FormBuilderValidators.minLength(1)
+        // ]),
       );
     });
   }
@@ -155,43 +155,43 @@ class LoginComponents {
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ButtonTheme(
-                      minWidth: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: OutlinedButton(
-                        // color: Theme.of(context).primaryColor,
-                        // shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(0.0)),
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                    // width: Theme,
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    child: OutlinedButton(
+                      // color: Theme.of(context).primaryColor,
+                      // shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(0.0)),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(
+                            // color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                         ),
-                        onPressed: () {
-                          if (_loginFormState.currentState?.saveAndValidate() ==
-                              true) {
-                            state
-                                .login(
-                                    username: _loginFormState
-                                        .currentState?.value['username'],
-                                    password: _loginFormState
-                                        .currentState?.value['password'])
-                                .catchError((e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('$e'),
-                              ));
-                            });
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Fix all errors then submit again"),
-                            ));
-                          }
-                        },
                       ),
+                      onPressed: () {
+                        if (_loginFormState.currentState?.saveAndValidate() ==
+                            true) {
+                          state
+                              .login(
+                                  username: _loginFormState
+                                      .currentState?.value['username'],
+                                  password: _loginFormState
+                                      .currentState?.value['password'])
+                              .catchError((e) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(
+                              content: Text('$e'),
+                            ));
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Fix all errors then submit again"),
+                          ));
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(

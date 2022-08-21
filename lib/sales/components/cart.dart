@@ -145,7 +145,7 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                     child: Center(
                                       child: Text(
                                         "Add To Cart",
-                                        style: TextStyle(color: Colors.white),
+                                        // style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ),
