@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 import 'package:smartstock_pos/stocks/services/api_categories.dart';
-import 'package:smartstock_pos/stocks/states/product_form.dart';
+import 'package:smartstock_pos/stocks/states/product_create.dart';
 
 class CategoryCreateState extends ChangeNotifier {
   var category = {};
@@ -40,7 +40,7 @@ class CategoryCreateState extends ChangeNotifier {
     createIFValid(shop).then((r) {
       if (r == 'nope') return;
       var productFormState = getState<ProductFormState>();
-      productFormState.productForm['category'] = category['name'];
+      productFormState.product['category'] = category['name'];
       productFormState.refresh();
       navigator().maybePop();
     }).catchError((err) {

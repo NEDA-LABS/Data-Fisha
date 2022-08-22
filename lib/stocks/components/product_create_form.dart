@@ -8,7 +8,7 @@ import 'package:smartstock_pos/stocks/services/category.dart';
 import 'package:smartstock_pos/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
-import '../states/product_form.dart';
+import '../states/product_create.dart';
 
 List<Widget> productCreateForm(ProductFormState state, context) {
   return [
@@ -16,14 +16,14 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         onText: (d) => state.updateFormState({"product": d}),
         label: "Name",
         placeholder: "Brand + Generic name",
-        error: state.errors['product'] ?? '',
-        initialText: state.productForm['product']),
+        error: state.error['product'] ?? '',
+        initialText: state.product['product']),
     textInput(
         onText: (d) => state.updateFormState({"barcode": d}),
         label: "Barcode / Qrcode",
         placeholder: "Optional",
-        error: state.errors['barcode'] ?? '',
-        initialText: state.productForm['barcode'],
+        error: state.error['barcode'] ?? '',
+        initialText: state.product['barcode'],
         icon: _mobileQrScan('')),
     choicesInput(
       onText: (d) {
@@ -31,8 +31,8 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         state.refresh();
       },
       label: "Category",
-      error: state.errors['category'] ?? '',
-      initialText: state.productForm['category'],
+      error: state.error['category'] ?? '',
+      initialText: state.product['category'],
       onAdd: () => createCategoryContent(),
       onLoad: getCategoryFromCacheOrRemote,
     ),
@@ -42,8 +42,8 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         state.refresh();
       },
       label: "Supplier",
-      error: state.errors['supplier'] ?? '',
-      initialText: state.productForm['supplier'],
+      error: state.error['supplier'] ?? '',
+      initialText: state.product['supplier'],
       onAdd: () => createSupplierContent(),
       onLoad: getSupplierFromCacheOrRemote,
     ),
@@ -51,40 +51,40 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       onText: (d) => state.updateFormState({"purchase": d}),
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
-      error: state.errors['purchase'] ?? '',
-      initialText: state.productForm['purchase'],
+      error: state.error['purchase'] ?? '',
+      initialText: state.product['purchase'],
       type: TextInputType.number,
     ),
     textInput(
       onText: (d) => state.updateFormState({"retailPrice": d}),
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
-      error: state.errors['retailPrice'] ?? '',
-      initialText: state.productForm['retailPrice'],
+      error: state.error['retailPrice'] ?? '',
+      initialText: state.product['retailPrice'],
       type: TextInputType.number,
     ),
     textInput(
       onText: (d) => state.updateFormState({"wholesalePrice": d}),
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
-      error: state.errors['wholesalePrice'] ?? '',
-      initialText: state.productForm['wholesalePrice'],
+      error: state.error['wholesalePrice'] ?? '',
+      initialText: state.product['wholesalePrice'],
       type: TextInputType.number,
     ),
     textInput(
       onText: (d) => state.updateFormState({"quantity": d}),
       label: "Quantity",
       placeholder: "Current stock quantity",
-      error: state.errors['quantity'] ?? '',
-      initialText: state.productForm['quantity'],
+      error: state.error['quantity'] ?? '',
+      initialText: state.product['quantity'],
       type: TextInputType.number,
     ),
     textInput(
         onText: (d) => state.updateFormState({"expire": d}),
         label: "Expire",
         placeholder: "YYYY-MM-DD ( Optional )",
-        error: state.errors['expire'] ?? '',
-        initialText: state.productForm['expire'],
+        error: state.error['expire'] ?? '',
+        initialText: state.product['expire'],
         type: TextInputType.datetime),
     Container(
       height: 80,

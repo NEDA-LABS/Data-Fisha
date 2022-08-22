@@ -2,7 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock_pos/stocks/pages/product_create.dart';
 import 'package:smartstock_pos/stocks/pages/products.dart';
 import 'package:smartstock_pos/stocks/states/category_create.dart';
-import 'package:smartstock_pos/stocks/states/product_form.dart';
+import 'package:smartstock_pos/stocks/states/product_create.dart';
 import 'package:smartstock_pos/stocks/states/supplier_create.dart';
 
 import 'pages/index.dart';

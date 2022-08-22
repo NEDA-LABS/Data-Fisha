@@ -1,7 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/stocks/services/api_suppliers.dart';
-import 'package:smartstock_pos/stocks/states/product_form.dart';
+import 'package:smartstock_pos/stocks/states/product_create.dart';
 
 import '../../core/services/cache_shop.dart';
 import '../../core/services/util.dart';
@@ -41,7 +41,7 @@ class SupplierCreateState extends ChangeNotifier {
     createIFValid(shop).then((r) {
       if (r == 'nope') return;
       var productFormState = getState<ProductFormState>();
-      productFormState.productForm['supplier'] = supplier['name'];
+      productFormState.product['supplier'] = supplier['name'];
       productFormState.refresh();
       navigator().maybePop();
     }).catchError((err) {

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ProductFormState extends ChangeNotifier{
-  Map<String, dynamic> productForm = {};
-  Map<String, dynamic> errors = {};
+  Map<String, dynamic> product = {};
+  Map<String, dynamic> error = {};
   updateFormState(Map<String,dynamic> data){
-    productForm.addAll(data);
+    product.addAll(data);
   }
   refresh()=>notifyListeners();
+
+  create(){
+
+  }
 }
