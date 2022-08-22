@@ -26,6 +26,7 @@ Future<List<dynamic>> getCategoryFromCacheOrRemote({
 }
 
 Future<List> _sort(List data)async{
-  data.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));
+  data.sort((a, b) =>
+      '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
   return data;
 }

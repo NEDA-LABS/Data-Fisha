@@ -6,16 +6,19 @@ import 'package:smartstock_pos/core/components/input_error_message.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 
 _fullWidthText(onText, initialText) => Expanded(
-        child: TextField(
-      controller: TextEditingController(text: initialText),
-      onChanged: onText,
-      autofocus: false,
-      maxLines: 1,
-      minLines: 1,
-      readOnly: true,
-      decoration: const InputDecoration(
-          border: InputBorder.none, contentPadding: EdgeInsets.all(8)),
-    ));
+      child: TextField(
+        controller: TextEditingController(text: initialText),
+        onChanged: onText,
+        autofocus: false,
+        maxLines: 1,
+        minLines: 1,
+        readOnly: true,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(8),
+        ),
+      ),
+    );
 
 _label(label) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -45,7 +48,8 @@ choicesInput({
                   (states, updateState) => _actions(
                       onLoad(skipLocal: states['skip'] == true),
                       updateState,
-                      onText),
+                      onText,
+                      onAdd),
                 ),
               ],
             ),
@@ -56,24 +60,29 @@ choicesInput({
     );
 
 _actionsItems(AsyncSnapshot snapshot, Function([Map value]) updateState,
-        Function(String p1) onText) =>
+        Function(String p1) onText, onAdd) =>
     Row(children: [
       Builder(builder: (context) {
         return IconButton(
-            onPressed: () => showDialogOrModalSheet(
+            onPressed: () => showDialogOrModalSheetForChoose(
                 itOrEmptyArray(snapshot.data), onText)(context),
             icon: const Icon(Icons.arrow_drop_down));
       }),
-      // IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+      Builder(builder: (context) {
+        return IconButton(
+            onPressed: () => showDialogOrModalSheetForAdd(onAdd())(context),
+            icon: const Icon(Icons.add));
+      }),
       IconButton(
-          onPressed: () => updateState({'skip': true}),
-          icon: const Icon(Icons.refresh))
+        onPressed: () => updateState({'skip': true}),
+        icon: const Icon(Icons.refresh),
+      )
     ]);
 var _isLoading =
     (x) => x is AsyncSnapshot && x.connectionState == ConnectionState.waiting;
 
 _actions(Future<dynamic> future, Function([Map value]) updateState,
-        Function(String p1) onText) =>
+        Function(String p1) onText, onAdd) =>
     FutureBuilder(
       future: future,
       builder: (context, snapshot) => ifDoElse(
@@ -83,30 +92,62 @@ _actions(Future<dynamic> future, Function([Map value]) updateState,
           child: SizedBox(
               height: 16, width: 16, child: CircularProgressIndicator()),
         ),
-        (x) => _actionsItems(x, updateState, onText),
+        (x) => _actionsItems(x, updateState, onText, onAdd),
       )(snapshot),
     );
 
-showDialogOrModalSheet(List items, Function(String p1) onText) => ifDoElse(
-    (x) => hasEnoughWidth(x),
-    (x) => showDialog(
-          context: x,
-          builder: (_) => Dialog(
-            child: Container(
-              child: _dropDownContent(items, onText),
-              constraints: const BoxConstraints(
-                  maxWidth: 400, minHeight: 200, maxHeight: 300),
+showDialogOrModalSheetForChoose(List items, Function(String p1) onText) =>
+    ifDoElse(
+      (x) => hasEnoughWidth(x),
+      (x) => showDialog(
+        context: x,
+        builder: (_) => Dialog(
+          child: Container(
+            child: _dropDownContent(items, onText),
+            constraints: const BoxConstraints(
+              maxWidth: 400,
+              // minHeight: 200,
+              maxHeight: 300,
             ),
           ),
         ),
-    (x) => showModalBottomSheet(
-        context: x, builder: (context) => _dropDownContent(items, onText)));
+      ),
+      (x) => showModalBottomSheet(
+        context: x,
+        builder: (context) => _dropDownContent(
+            items.isNotEmpty
+                ? items
+                : [
+                    {'name': 'General'}
+                  ],
+            onText),
+      ),
+    );
+
+showDialogOrModalSheetForAdd(Widget content) => ifDoElse(
+      (x) => hasEnoughWidth(x),
+      (x) => showDialog(
+        context: x,
+        builder: (_) => Dialog(
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 400,
+              minHeight: 200,
+              maxHeight: 500,
+            ),
+            child: content,
+          ),
+        ),
+      ),
+      (x) => showModalBottomSheet(context: x, builder: (_) => content),
+    );
 
 _dropDownContent(List items, Function(String p1) onText) => ListView.builder(
+      // shrinkWrap: true,
       itemCount: items is List ? items.length : 0,
       itemBuilder: (context, index) => ListTile(
         title: Text(items[index]['name'] ?? ''),
-        onTap: (){
+        onTap: () {
           onText(
             items[index]['name'],
           );

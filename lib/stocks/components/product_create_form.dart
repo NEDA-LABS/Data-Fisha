@@ -1,15 +1,14 @@
-import 'dart:io';
-
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/text_input.dart';
-import 'package:smartstock_pos/core/services/stocks.dart';
+import 'package:smartstock_pos/stocks/components/create_category_content.dart';
+import 'package:smartstock_pos/stocks/components/create_supplier_content.dart';
 import 'package:smartstock_pos/stocks/services/category.dart';
 import 'package:smartstock_pos/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
-import '../states/product_form_state.dart';
+import '../states/product_form.dart';
 
 List<Widget> productCreateForm(ProductFormState state, context) {
   return [
@@ -27,25 +26,25 @@ List<Widget> productCreateForm(ProductFormState state, context) {
         initialText: state.productForm['barcode'],
         icon: _mobileQrScan('')),
     choicesInput(
-        onText: (d){
-          state.updateFormState({"category": d});
-          state.refresh();
-        },
-        label: "Category",
-        error: state.errors['category'] ?? '',
-        initialText: state.productForm['category'],
-        onAdd: () => Container(),
-        onLoad:  getCategoryFromCacheOrRemote,
-        ),
+      onText: (d) {
+        state.updateFormState({"category": d});
+        state.refresh();
+      },
+      label: "Category",
+      error: state.errors['category'] ?? '',
+      initialText: state.productForm['category'],
+      onAdd: () => createCategoryContent(),
+      onLoad: getCategoryFromCacheOrRemote,
+    ),
     choicesInput(
-      onText: (d){
+      onText: (d) {
         state.updateFormState({"supplier": d});
         state.refresh();
       },
       label: "Supplier",
       error: state.errors['supplier'] ?? '',
       initialText: state.productForm['supplier'],
-      onAdd: () => Container(),
+      onAdd: () => createSupplierContent(),
       onLoad: getSupplierFromCacheOrRemote,
     ),
     textInput(

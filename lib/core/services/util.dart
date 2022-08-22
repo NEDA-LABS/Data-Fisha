@@ -62,3 +62,5 @@ bool hasEnoughWidth(BuildContext context) {
   var width = MediaQuery.of(context).size.width;
   return width >= _maxMediumScreen;
 }
+
+and(List<Function> fns) => fns.fold(true, (a, b) => a && b() == true);

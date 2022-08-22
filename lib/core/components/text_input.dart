@@ -19,19 +19,19 @@ _inputDecoration(String hint) => InputDecoration(
     hintText: hint ?? '',
     contentPadding: _inputPadding());
 
-_input(error, onText, type, placeholder, icon) => Builder(
+_input(error, onText, type, placeholder, icon, lines) => Builder(
       builder: (context) => Container(
         decoration: inputBoxDecoration(context, error),
         child: Row(
-          children: [_fulWidthTextField(onText, type, placeholder), icon],
+          children: [_fulWidthTextField(onText, type, placeholder, lines), icon],
         ),
       ),
     );
 
-_fulWidthTextField(onText, type, placeholder) => Expanded(
+_fulWidthTextField(onText, type, placeholder, lines) => Expanded(
         child: TextField(
       autofocus: false,
-      maxLines: 1,
+      maxLines: lines,
       onChanged: onText,
       keyboardType: type,
       decoration: _inputDecoration(placeholder),
@@ -47,12 +47,13 @@ textInput({
   Widget icon = _b,
   TextInputType type = TextInputType.text,
   String error = '',
+  int lines = 1,
 }) =>
     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _label(label),
-        _input(error, onText, type, placeholder, icon),
+        _input(error, onText, type, placeholder, icon, lines),
         inputErrorMessageOrEmpty(error),
       ],
     );

@@ -2,9 +2,8 @@ import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/app.dart';
 import 'package:smartstock_pos/core/components/responsive_body.dart';
-import 'package:smartstock_pos/core/components/text_input.dart';
 import 'package:smartstock_pos/core/components/top_bar.dart';
-import 'package:smartstock_pos/stocks/states/product_form_state.dart';
+import 'package:smartstock_pos/stocks/states/product_form.dart';
 
 import '../components/product_create_form.dart';
 
@@ -32,8 +31,9 @@ class ProductCreatePage extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 600),
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
                 child: Consumer<ProductFormState>(
-                  builder: (context, state) =>
-                      Column(children: productCreateForm(state, context)),
+                  builder: (context, state) => Column(
+                    children: productCreateForm(state, context),
+                  ),
                 ),
               ),
             ),

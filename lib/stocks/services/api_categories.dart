@@ -10,6 +10,17 @@ import '../../core/services/util.dart';
 
 _allRemoteCategoriesHttpRequest(url) => get(Uri.parse(url));
 
+_createCategoryHttpRequest(category) => (url) => post(
+      Uri.parse(url),
+      headers: getInitialHeaders(),
+      body: jsonEncode(category),
+    );
+
+_createCategory(category) => composeAsync([
+      map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
+      _createCategoryHttpRequest(category)
+    ]);
+
 var _allRemoteCategories = composeAsync([
   map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
   _allRemoteCategoriesHttpRequest,
@@ -21,3 +32,12 @@ var getAllRemoteCategories = composeAsync([
       () => _allRemoteCategories('${shopFunctionsURL(app)}/stock/categories')),
   map(shopToApp),
 ]);
+
+createCategory(Map category) {
+  var createRequest = _createCategory(category);
+  return composeAsync([
+    (app) => executeHttp(
+        () => (createRequest('${shopFunctionsURL(app)}/stock/categories'))),
+    map(shopToApp)
+  ]);
+}

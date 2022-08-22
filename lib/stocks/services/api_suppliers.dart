@@ -10,6 +10,17 @@ import '../../core/services/util.dart';
 
 _allRemoteSuppliersHttpRequest(url) => get(Uri.parse(url));
 
+_createSupplierHttpRequest(supplier) => (url) => post(
+  Uri.parse(url),
+  headers: getInitialHeaders(),
+  body: jsonEncode(supplier),
+);
+
+_createSupplier(supplier) => composeAsync([
+  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
+  _createSupplierHttpRequest(supplier)
+]);
+
 var _allRemoteSuppliers = composeAsync([
   map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
   _allRemoteSuppliersHttpRequest,
@@ -21,3 +32,12 @@ var getAllRemoteSuppliers = composeAsync([
       () => _allRemoteSuppliers('${shopFunctionsURL(app)}/stock/suppliers')),
   map(shopToApp),
 ]);
+
+createSupplier(Map supplier) {
+  var createRequest = _createSupplier(supplier);
+  return composeAsync([
+        (app) => executeHttp(
+            () => (createRequest('${shopFunctionsURL(app)}/stock/suppliers'))),
+    map(shopToApp)
+  ]);
+}

@@ -7,10 +7,10 @@ import 'package:smartstock_pos/core/components/top_bar.dart';
 import 'package:smartstock_pos/core/models/menu.dart';
 import 'package:smartstock_pos/core/services/stocks.dart';
 import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/stocks/states/products_list_state.dart';
+import 'package:smartstock_pos/stocks/states/products_list.dart';
 
 import '../../core/components/table_like_list.dart';
-import '../states/product_loading_state.dart';
+import '../states/product_loading.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key key}) : super(key: key);
