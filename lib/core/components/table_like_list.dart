@@ -16,7 +16,7 @@ _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
         onTap: onItemPressed,
         child: tableLikeListRow(keys
             .map(
-                (k) => onCell != null ? onCell(k, item[k]) : Text('${item[k]}'))
+                (k) => onCell != null ? onCell(k, item[k]??'') : Text('${item[k]??''}'))
             .toList()));
 
 _tableRows(List data, context, List<String> keys, onCell, onItemPressed) =>

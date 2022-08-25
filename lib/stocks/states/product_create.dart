@@ -4,7 +4,7 @@ import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 import 'package:smartstock_pos/stocks/services/api_stock.dart';
 
-class ProductFormState extends ChangeNotifier {
+class ProductCreateState extends ChangeNotifier {
   Map<String, dynamic> product = {};
   Map<String, dynamic> error = {};
   var loading = false;

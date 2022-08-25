@@ -40,7 +40,7 @@ class SupplierCreateState extends ChangeNotifier {
     );
     createIFValid(shop).then((r) {
       if (r == 'nope') return;
-      var productFormState = getState<ProductFormState>();
+      var productFormState = getState<ProductCreateState>();
       productFormState.product['supplier'] = supplier['name'];
       productFormState.refresh();
       navigator().maybePop();

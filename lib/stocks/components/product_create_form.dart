@@ -10,7 +10,7 @@ import 'package:smartstock_pos/stocks/services/supplier.dart';
 import '../../core/components/choices_input.dart';
 import '../states/product_create.dart';
 
-List<Widget> productCreateForm(ProductFormState state, context) {
+List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
     textInput(
         onText: (d) => state.updateFormState({"product": d}),

@@ -30,7 +30,7 @@ class ProductCreatePage extends StatelessWidget {
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 600),
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: Consumer<ProductFormState>(
+                child: Consumer<ProductCreateState>(
                   builder: (context, state) => Column(
                     children: productCreateForm(
                       state,

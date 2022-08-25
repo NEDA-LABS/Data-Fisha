@@ -60,12 +60,6 @@ class _ProductPage extends State<ProductsPage> {
     ]);
   }
 
-  // _tableFooter() {
-  //   return tableLikeListRow([
-  //     tableLikeListTextHeader('Total 1000'),
-  //   ]);
-  // }
-
   _fields() =>
       ['product', 'quantity', 'purchase', 'retailPrice', 'wholesalePrice'];
 
