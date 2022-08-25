@@ -23,13 +23,13 @@ List<SubMenuModule> _pagesMenu() => [
         svgName: 'category_icon.svg',
         onClick: () {},
       ),
-      SubMenuModule(
-        name: 'Units',
-        link: '/stock/units',
-        roles: [],
-        svgName: 'unit_icon.svg',
-        onClick: () {},
-      ),
+      // SubMenuModule(
+      //   name: 'Units',
+      //   link: '/stock/units',
+      //   roles: [],
+      //   svgName: 'unit_icon.svg',
+      //   onClick: () {},
+      // ),
       SubMenuModule(
         name: 'Suppliers',
         link: '/stock/suppliers',

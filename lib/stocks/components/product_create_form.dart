@@ -52,7 +52,7 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['purchase'] ?? '',
-      initialText: state.product['purchase'],
+      initialText: state.product['purchase'].toString(),
       type: TextInputType.number,
     ),
     textInput(
@@ -60,7 +60,7 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['retailPrice'] ?? '',
-      initialText: state.product['retailPrice'],
+      initialText: state.product['retailPrice'].toString(),
       type: TextInputType.number,
     ),
     textInput(
@@ -68,7 +68,7 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['wholesalePrice'] ?? '',
-      initialText: state.product['wholesalePrice'],
+      initialText: state.product['wholesalePrice'].toString(),
       type: TextInputType.number,
     ),
     textInput(
@@ -76,7 +76,7 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       label: "Quantity",
       placeholder: "Current stock quantity",
       error: state.error['quantity'] ?? '',
-      initialText: state.product['quantity'],
+      initialText: state.product['quantity'].toString(),
       type: TextInputType.number,
     ),
     textInput(
@@ -91,10 +91,10 @@ List<Widget> productCreateForm(ProductFormState state, context) {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
       child: OutlinedButton(
-          onPressed: () {},
-          child: const Text(
-            "Continue.",
-            style: TextStyle(fontSize: 16),
+          onPressed: state.loading ? null : ()=>state.create(context),
+          child: Text(
+            state.loading ? "Waiting..." : "Continue.",
+            style: const TextStyle(fontSize: 16),
           )),
     )
   ];

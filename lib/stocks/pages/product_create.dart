@@ -32,7 +32,10 @@ class ProductCreatePage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
                 child: Consumer<ProductFormState>(
                   builder: (context, state) => Column(
-                    children: productCreateForm(state, context),
+                    children: productCreateForm(
+                      state,
+                      context,
+                    ),
                   ),
                 ),
               ),

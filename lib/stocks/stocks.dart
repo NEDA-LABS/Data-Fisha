@@ -13,8 +13,8 @@ class StockModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (_, __) => const IndexPage()),
-        ChildRoute('/products', child: (_, __) => const ProductsPage()),
-        ChildRoute('/products/create', child: (_, __) => ProductCreatePage()),
+        ChildRoute('/products', child: (_, __) => ProductsPage(__)),
+        ChildRoute('/products/create', child: (_, __) => const ProductCreatePage()),
       ];
 
   @override

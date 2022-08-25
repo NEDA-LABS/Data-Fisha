@@ -7,12 +7,10 @@ _title() => const Padding(
     child: Text("Switch to",
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)));
 
-_links() => Wrap(children: switchToItems(stocksMenu().pages));
-
-stocksHeader() => Row(
-  children: [
-        Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_title(), _links()]),
-  ],
-);
+stocksHeader() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _title(),
+        Wrap(children: switchToItems(stocksMenu().pages)),
+      ],
+    );

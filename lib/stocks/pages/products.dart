@@ -1,5 +1,6 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
+import 'package:modular_interfaces/src/route/modular_arguments.dart';
 import 'package:smartstock_pos/app.dart';
 import 'package:smartstock_pos/core/components/responsive_body.dart';
 import 'package:smartstock_pos/core/components/table_context_menu.dart';
@@ -12,19 +13,25 @@ import 'package:smartstock_pos/stocks/states/products_list.dart';
 import '../../core/components/table_like_list.dart';
 import '../states/product_loading.dart';
 
-class ProductsPage extends StatelessWidget {
-  const ProductsPage({Key key}) : super(key: key);
+class ProductsPage extends StatefulWidget {
+  final ModularArguments args;
 
+  const ProductsPage(this.args, {Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ProductPage();
+}
+
+class _ProductPage extends State<ProductsPage> {
   _appBar(context) {
     return topBAr(
-      title: "Products",
-      showBack: true,
-      // !hasEnoughWidth(context),
-      backLink: '/stock/',
-      showSearch: true,
-      onSearch: getState<ProductsListState>().updateQuery,
-      searchHint: 'Search...'
-    );
+        title: "Products",
+        showBack: true,
+        // !hasEnoughWidth(context),
+        backLink: '/stock/',
+        showSearch: true,
+        onSearch: getState<ProductsListState>().updateQuery,
+        searchHint: 'Search...');
   }
 
   _contextItems() {
@@ -82,8 +89,10 @@ class ProductsPage extends StatelessWidget {
               Consumer<ProductsListState>(
                 builder: (_, state) => Expanded(
                   child: tableLikeList(
-                    onFuture: () async =>
-                        getStockFromCacheOrRemote(stringLike: state.query),
+                    onFuture: () async => getStockFromCacheOrRemote(
+                      stringLike: state.query,
+                      skipLocal: widget.args.queryParams.containsKey('reload'),
+                    ),
                     keys: _fields(),
                     // onCell: (key,data)=>Text('@$data')
                   ),
@@ -94,4 +103,10 @@ class ProductsPage extends StatelessWidget {
           ),
         ),
       );
+
+  @override
+  void dispose() {
+    getState<ProductsListState>().updateQuery('');
+    super.dispose();
+  }
 }
