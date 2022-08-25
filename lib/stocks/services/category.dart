@@ -30,7 +30,7 @@ Future<List> _filterAndSort(Map data) async {
   String stringLike = data['query'];
   _where(x) =>
       x['name'] != null &&
-          '$x'.toLowerCase().contains(stringLike.toLowerCase());
+          '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());
 
   categories = categories.where(_where).toList();
   categories.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));

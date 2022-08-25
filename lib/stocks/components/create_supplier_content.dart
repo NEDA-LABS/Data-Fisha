@@ -20,11 +20,11 @@ createSupplierContent() => Consumer<SupplierCreateState>(
               placeholder: 'Optional',
             ),
             textInput(
-                onText: (d) => state.updateState({'number': d}),
+                onText: (d) => state.updateState({'email': d}),
                 label: "Email",
                 placeholder: 'Optional'),
             textInput(
-                onText: (d) => state.updateState({'description': d}),
+                onText: (d) => state.updateState({'address': d}),
                 label: "Address",
                 lines: 3,
                 placeholder: 'Optional'),

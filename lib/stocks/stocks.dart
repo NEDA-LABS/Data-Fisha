@@ -1,6 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock_pos/stocks/pages/suppliers.dart';
 import 'package:smartstock_pos/stocks/states/categories_list.dart';
 import 'package:smartstock_pos/stocks/states/categories_loading.dart';
+import 'package:smartstock_pos/stocks/states/suppliers_list.dart';
+import 'package:smartstock_pos/stocks/states/suppliers_loading.dart';
 
 import 'pages/categories.dart';
 import 'pages/index.dart';
@@ -18,6 +21,7 @@ class StockModule extends Module {
         ChildRoute('/', child: (_, __) => const IndexPage()),
         ChildRoute('/products', child: (_, __) => ProductsPage(__)),
         ChildRoute('/categories', child: (_, __) => CategoriesPage(__)),
+        ChildRoute('/suppliers', child: (_, __) => SuppliersPage(__)),
         ChildRoute('/products/create', child: (_, __) => const ProductCreatePage()),
       ];
 
@@ -30,5 +34,7 @@ class StockModule extends Module {
     Bind.lazySingleton((i) => CategoryCreateState()),
     Bind.lazySingleton((i) => SupplierCreateState()),
     Bind.lazySingleton((i) => CategoriesListState()),
+    Bind.lazySingleton((i) => SuppliersListState()),
+    Bind.lazySingleton((i) => SuppliersLoadingState()),
   ];
 }

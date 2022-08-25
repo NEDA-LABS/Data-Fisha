@@ -45,12 +45,15 @@ Widget _officeName(String name) => Builder(
 
 Widget _officeLogo(String url) => Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5), color: Colors.black),
-      ),
+      child: Builder(builder: (context) {
+        return Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Theme.of(context).primaryColor),
+        );
+      }),
     );
 
 Widget _changeOfficeTextButton() => Builder(
@@ -87,7 +90,7 @@ _moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
 Widget _subMenuItem(SubMenuModule item) => InkWell(
       onTap: () => navigateTo(item.link),
       child: ListTile(
-        trailing: const Icon(Icons.chevron_right),
+        // trailing: const Icon(Icons.chevron_right),
         dense: true,
         title: Text(
           '        ${item.name}',

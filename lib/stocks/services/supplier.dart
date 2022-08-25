@@ -16,17 +16,24 @@ Future<List<dynamic>> getSupplierFromCacheOrRemote({
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
       List rSuppliers = await getAllRemoteSuppliers(shop);
-      rSuppliers = await compute(_sort, rSuppliers);
+      rSuppliers = await compute(
+          _filterAndSort, {"suppliers": rSuppliers, "query": stringLike});
       await saveLocalSuppliers(shopToApp(shop), rSuppliers);
       return rSuppliers;
     },
-    (x) => compute(_sort, x as List),
+    (x) => compute(_filterAndSort, {"suppliers": x, "query": stringLike}),
   );
   return getItOrRemoteAndSave(suppliers);
 }
 
-Future<List> _sort(List data) async {
-  data.sort((a, b) =>
-      '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
-  return data;
+Future<List> _filterAndSort(Map data) async {
+  var suppliers = data['suppliers'];
+  String stringLike = data['query'];
+  _where(x) =>
+      x['name'] != null &&
+      '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());
+
+  suppliers = suppliers.where(_where).toList();
+  suppliers.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));
+  return suppliers;
 }
