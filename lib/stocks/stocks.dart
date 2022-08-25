@@ -1,7 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock_pos/stocks/pages/items.dart';
 import 'package:smartstock_pos/stocks/pages/suppliers.dart';
 import 'package:smartstock_pos/stocks/states/categories_list.dart';
 import 'package:smartstock_pos/stocks/states/categories_loading.dart';
+import 'package:smartstock_pos/stocks/states/item_create.dart';
+import 'package:smartstock_pos/stocks/states/items_list.dart';
+import 'package:smartstock_pos/stocks/states/items_loading.dart';
 import 'package:smartstock_pos/stocks/states/suppliers_list.dart';
 import 'package:smartstock_pos/stocks/states/suppliers_loading.dart';
 
@@ -22,19 +26,24 @@ class StockModule extends Module {
         ChildRoute('/products', child: (_, __) => ProductsPage(__)),
         ChildRoute('/categories', child: (_, __) => CategoriesPage(__)),
         ChildRoute('/suppliers', child: (_, __) => SuppliersPage(__)),
-        ChildRoute('/products/create', child: (_, __) => const ProductCreatePage()),
+        ChildRoute('/items', child: (_, __) => ItemsPage(__)),
+        ChildRoute('/products/create',
+            child: (_, __) => const ProductCreatePage()),
       ];
 
   @override
   List<Bind<Object>> get binds => [
-    Bind.lazySingleton((i) => ProductLoadingState()),
-    Bind.lazySingleton((i) => CategoriesLoadingState()),
-    Bind.lazySingleton((i) => ProductsListState()),
-    Bind.lazySingleton((i) => ProductCreateState()),
-    Bind.lazySingleton((i) => CategoryCreateState()),
-    Bind.lazySingleton((i) => SupplierCreateState()),
-    Bind.lazySingleton((i) => CategoriesListState()),
-    Bind.lazySingleton((i) => SuppliersListState()),
-    Bind.lazySingleton((i) => SuppliersLoadingState()),
-  ];
+        Bind.lazySingleton((i) => ProductLoadingState()),
+        Bind.lazySingleton((i) => CategoriesLoadingState()),
+        Bind.lazySingleton((i) => ProductsListState()),
+        Bind.lazySingleton((i) => ProductCreateState()),
+        Bind.lazySingleton((i) => CategoryCreateState()),
+        Bind.lazySingleton((i) => SupplierCreateState()),
+        Bind.lazySingleton((i) => CategoriesListState()),
+        Bind.lazySingleton((i) => SuppliersListState()),
+        Bind.lazySingleton((i) => SuppliersLoadingState()),
+        Bind.lazySingleton((i) => ItemCreateState()),
+        Bind.lazySingleton((i) => ItemsListState()),
+        Bind.lazySingleton((i) => ItemsLoadingState()),
+      ];
 }

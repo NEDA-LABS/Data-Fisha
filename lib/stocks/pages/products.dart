@@ -1,6 +1,5 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:modular_interfaces/src/route/modular_arguments.dart';
 import 'package:smartstock_pos/app.dart';
 import 'package:smartstock_pos/core/components/responsive_body.dart';
 import 'package:smartstock_pos/core/components/table_context_menu.dart';
@@ -14,7 +13,7 @@ import '../../core/components/table_like_list.dart';
 import '../states/product_loading.dart';
 
 class ProductsPage extends StatefulWidget {
-  final ModularArguments args;
+  final args;
 
   const ProductsPage(this.args, {Key key}) : super(key: key);
 
