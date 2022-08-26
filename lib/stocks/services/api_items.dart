@@ -10,7 +10,7 @@ import '../../core/services/util.dart';
 
 _allRemoteItemsHttpRequest(url) => get(Uri.parse(url));
 
-_createItemHttpRequest(item) => (url) => post(
+_createItemHttpRequest(item) => (url) => put(
       Uri.parse(url),
       headers: getInitialHeaders(),
       body: jsonEncode(item),

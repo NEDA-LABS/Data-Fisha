@@ -18,7 +18,7 @@ createItemContent() => Consumer<ItemCreateState>(
                 label: "Generic name",
                 placeholder: 'E.g Stock management system'),
             textInput(
-                onText: (d) => state.updateState({'generic': d}),
+                onText: (d) => state.updateState({'packaging': d}),
                 label: "Packaging",
                 placeholder: "E.g 10 Kg"),
             Container(

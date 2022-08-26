@@ -33,6 +33,6 @@ Future<List> _filterAndSort(Map data) async {
           '${x['brand']}'.toLowerCase().contains(stringLike.toLowerCase());
 
   items = items.where(_where).toList();
-  items.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));
+  items.sort((a, b) => '${a['brand']}'.toLowerCase().compareTo('${b['brand']}'.toLowerCase()));
   return items;
 }

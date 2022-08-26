@@ -3,21 +3,35 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/text_input.dart';
 import 'package:smartstock_pos/stocks/components/create_category_content.dart';
+import 'package:smartstock_pos/stocks/components/create_item_content.dart';
 import 'package:smartstock_pos/stocks/components/create_supplier_content.dart';
 import 'package:smartstock_pos/stocks/services/category.dart';
 import 'package:smartstock_pos/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
+import '../services/item.dart';
 import '../states/product_create.dart';
 
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
-    textInput(
-        onText: (d) => state.updateFormState({"product": d}),
-        label: "Name",
-        placeholder: "Brand + Generic name",
-        error: state.error['product'] ?? '',
-        initialText: state.product['product']),
+    choicesInput(
+      onText: (d) {
+        state.updateFormState({"product": d});
+        state.refresh();
+      },
+      label: "Name",
+      error: state.error['product'] ?? '',
+      initialText: state.product['product'],
+      onAdd: () => createItemContent(),
+      field: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
+      onLoad: getItemFromCacheOrRemote,
+    ),
+    // textInput(
+    //     onText: (d) => state.updateFormState({"product": d}),
+    //     label: "Name",
+    //     placeholder: "Brand + Generic name",
+    //     error: state.error['product'] ?? '',
+    //     initialText: state.product['product']),
     textInput(
         onText: (d) => state.updateFormState({"barcode": d}),
         label: "Barcode / Qrcode",
@@ -34,6 +48,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       error: state.error['category'] ?? '',
       initialText: state.product['category'],
       onAdd: () => createCategoryContent(),
+      field: (x)=>'${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     ),
     choicesInput(
@@ -45,6 +60,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       error: state.error['supplier'] ?? '',
       initialText: state.product['supplier'],
       onAdd: () => createSupplierContent(),
+      field: (x)=>'${x['name']}',
       onLoad: getSupplierFromCacheOrRemote,
     ),
     textInput(
@@ -91,7 +107,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
       child: OutlinedButton(
-          onPressed: state.loading ? null : ()=>state.create(context),
+          onPressed: state.loading ? null : () => state.create(context),
           child: Text(
             state.loading ? "Waiting..." : "Continue.",
             style: const TextStyle(fontSize: 16),

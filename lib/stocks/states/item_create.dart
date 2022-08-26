@@ -34,13 +34,14 @@ class ItemCreateState extends ChangeNotifier {
     var shop = await getActiveShop();
     var createIFValid = ifDoElse(
       (_) => _validItem(),
-      createItem({...item, 'id': '${item['brand']}'.toLowerCase()}),
+      createItem(item),
       (_) async => 'nope',
     );
     createIFValid(shop).then((r) {
       if (r == 'nope') return;
       var productFormState = getState<ProductCreateState>();
-      productFormState.product['product'] = item['name'];
+      productFormState.product['product'] =
+          '${item['brand']} ${item['generic'] ?? ''} ${item['packaging'] ?? ''}';
       productFormState.refresh();
       navigator().maybePop();
       getState<ItemsLoadingState>().update(true);

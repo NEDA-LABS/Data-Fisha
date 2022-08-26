@@ -16,11 +16,12 @@ Future<List<dynamic>> getCategoryFromCacheOrRemote({
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
       List rCategories = await getAllRemoteCategories(shop);
-      rCategories = await compute(_filterAndSort,{"categories": rCategories, "query": stringLike});
+      rCategories = await compute(
+          _filterAndSort, {"categories": rCategories, "query": stringLike});
       await saveLocalCategories(shopToApp(shop), rCategories);
       return rCategories;
     },
-    (x) => compute(_filterAndSort,{"categories": x, "query": stringLike}),
+    (x) => compute(_filterAndSort, {"categories": x, "query": stringLike}),
   );
   return getItOrRemoteAndSave(categories);
 }
@@ -30,9 +31,10 @@ Future<List> _filterAndSort(Map data) async {
   String stringLike = data['query'];
   _where(x) =>
       x['name'] != null &&
-          '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());
+      '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());
 
   categories = categories.where(_where).toList();
-  categories.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));
+  categories.sort((a, b) =>
+      '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
   return categories;
 }

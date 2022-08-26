@@ -10,7 +10,7 @@ import '../../core/services/util.dart';
 
 _allRemoteCategoriesHttpRequest(url) => get(Uri.parse(url));
 
-_createCategoryHttpRequest(category) => (url) => post(
+_createCategoryHttpRequest(category) => (url) => put(
       Uri.parse(url),
       headers: getInitialHeaders(),
       body: jsonEncode(category),

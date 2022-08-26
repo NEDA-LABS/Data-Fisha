@@ -13,7 +13,7 @@ class ProductCreatePage extends StatelessWidget {
   _appBar(context) {
     return topBAr(
       title: "Create product",
-      showBack: true, //!hasEnoughWidth(context),
+      showBack: true,
       backLink: '/stock/products',
       showSearch: false,
     );
@@ -31,12 +31,8 @@ class ProductCreatePage extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 600),
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
                 child: Consumer<ProductCreateState>(
-                  builder: (context, state) => Column(
-                    children: productCreateForm(
-                      state,
-                      context,
-                    ),
-                  ),
+                  builder: (context, state) =>
+                      Column(children: productCreateForm(state, context)),
                 ),
               ),
             ),

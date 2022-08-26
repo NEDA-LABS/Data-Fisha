@@ -10,7 +10,7 @@ import '../../core/services/util.dart';
 
 _allRemoteSuppliersHttpRequest(url) => get(Uri.parse(url));
 
-_createSupplierHttpRequest(supplier) => (url) => post(
+_createSupplierHttpRequest(supplier) => (url) => put(
   Uri.parse(url),
   headers: getInitialHeaders(),
   body: jsonEncode(supplier),

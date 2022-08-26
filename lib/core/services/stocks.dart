@@ -40,6 +40,6 @@ Future<List> _pruneAndSortStocks(Map data) async {
   }
 
   stocks = stocks.where(_where).map(_map).toList();
-  stocks.sort((a, b) => '${a['product']}'.compareTo('${b['product']}'));
+  stocks.sort((a, b) => '${a['product']}'.toLowerCase().compareTo('${b['product']}'.toLowerCase()));
   return stocks;
 }

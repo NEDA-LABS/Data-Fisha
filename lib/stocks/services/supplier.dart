@@ -34,6 +34,7 @@ Future<List> _filterAndSort(Map data) async {
       '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());
 
   suppliers = suppliers.where(_where).toList();
-  suppliers.sort((a, b) => '${a['name']}'.compareTo('${b['name']}'));
+  suppliers.sort((a, b) =>
+      '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
   return suppliers;
 }

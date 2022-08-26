@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/services/cache_shop.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 import 'package:smartstock_pos/stocks/services/api_categories.dart';
-import 'package:smartstock_pos/stocks/states/categories_list.dart';
 import 'package:smartstock_pos/stocks/states/categories_loading.dart';
 import 'package:smartstock_pos/stocks/states/product_create.dart';
 
