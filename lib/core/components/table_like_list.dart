@@ -13,7 +13,7 @@ _errorAndRetry(String err) => Padding(
 _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
         onItemPressed) =>
     InkWell(
-        onTap: onItemPressed,
+        onTap: ()=>onItemPressed(item),
         child: tableLikeListRow(keys
             .map(
                 (k) => onCell != null ? onCell(k, item[k]??'') : Text('${item[k]??''}'))
@@ -73,7 +73,7 @@ tableLikeListTextHeader(String name) => Text(
           overflow: TextOverflow.ellipsis),
     );
 
-_a() {}
+_a(dynamic) {}
 
 tableLikeList({
   @required Future Function() onFuture,

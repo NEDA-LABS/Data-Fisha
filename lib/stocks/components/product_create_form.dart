@@ -26,12 +26,6 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       field: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
       onLoad: getItemFromCacheOrRemote,
     ),
-    // textInput(
-    //     onText: (d) => state.updateFormState({"product": d}),
-    //     label: "Name",
-    //     placeholder: "Brand + Generic name",
-    //     error: state.error['product'] ?? '',
-    //     initialText: state.product['product']),
     textInput(
         onText: (d) => state.updateFormState({"barcode": d}),
         label: "Barcode / Qrcode",

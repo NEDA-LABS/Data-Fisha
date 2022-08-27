@@ -21,22 +21,17 @@ class ProductCreatePage extends StatelessWidget {
 
   @override
   Widget build(context) => responsiveBody(
-        menus: moduleMenus(),
-        current: '/stock/',
-        onBody: (d) => Scaffold(
+      menus: moduleMenus(),
+      current: '/stock/',
+      onBody: (d) => Scaffold(
           appBar: _appBar(context),
           body: SingleChildScrollView(
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 600),
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: Consumer<ProductCreateState>(
-                  builder: (context, state) =>
-                      Column(children: productCreateForm(state, context)),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+              child: Center(
+                  child: Container(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+                      child: Consumer<ProductCreateState>(
+                          builder: (context, state) => Column(
+                              children:
+                                  productCreateForm(state, context))))))));
 }

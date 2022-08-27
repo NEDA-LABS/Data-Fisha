@@ -1,12 +1,14 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/app.dart';
+import 'package:smartstock_pos/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock_pos/core/components/responsive_body.dart';
 import 'package:smartstock_pos/core/components/table_context_menu.dart';
 import 'package:smartstock_pos/core/components/top_bar.dart';
 import 'package:smartstock_pos/core/models/menu.dart';
 import 'package:smartstock_pos/core/services/stocks.dart';
 import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock_pos/stocks/components/product_details.dart';
 import 'package:smartstock_pos/stocks/states/products_list.dart';
 
 import '../../core/components/table_like_list.dart';
@@ -26,7 +28,6 @@ class _ProductPage extends State<ProductsPage> {
     return topBAr(
         title: "Products",
         showBack: true,
-        // !hasEnoughWidth(context),
         backLink: '/stock/',
         showSearch: true,
         onSearch: getState<ProductsListState>().updateQuery,
@@ -44,8 +45,8 @@ class _ProductPage extends State<ProductsPage> {
           // getState<ProductsListState>().refresh();
         },
       ),
-      ContextMenu(name: 'Import', pressed: () => {}),
-      ContextMenu(name: 'Export', pressed: () => {}),
+      // ContextMenu(name: 'Import', pressed: () => {}),
+      // ContextMenu(name: 'Export', pressed: () => {}),
     ];
   }
 
@@ -87,6 +88,9 @@ class _ProductPage extends State<ProductsPage> {
                       skipLocal: widget.args.queryParams.containsKey('reload'),
                     ),
                     keys: _fields(),
+                    onItemPressed: (item){
+                      showDialogOrModalSheet(productDetail(item), context);
+                    }
                     // onCell: (key,data)=>Text('@$data')
                   ),
                 ),

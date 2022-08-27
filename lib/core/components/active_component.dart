@@ -2,11 +2,15 @@ import 'package:flutter/widgets.dart';
 
 class ActiveComponent extends StatefulWidget {
   final Widget Function(
+    BuildContext context,
     Map states,
     Function([Map value]) updateState,
   ) builder;
+  final Map initialState;
+  static const _map = {};
 
-  const ActiveComponent(this.builder, {Key key}) : super(key: key);
+  const ActiveComponent(this.builder, {Key key, this.initialState = _map})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -15,11 +19,18 @@ class ActiveComponent extends StatefulWidget {
 class _State extends State<ActiveComponent> {
   final Map states = {};
 
-  _setState([value]) {
+  _setState([value, skip = false]) {
     states.addAll(value is Map ? value : {});
-    setState(() => states);
+    skip == false ? setState(() => states) : null;
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(states, _setState);
+  void initState() {
+    _setState(widget.initialState);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      widget.builder(context, states, _setState);
 }

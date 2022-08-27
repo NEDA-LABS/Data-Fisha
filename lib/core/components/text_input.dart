@@ -23,7 +23,10 @@ _input(error, onText, type, placeholder, icon, lines) => Builder(
       builder: (context) => Container(
         decoration: inputBoxDecoration(context, error),
         child: Row(
-          children: [_fulWidthTextField(onText, type, placeholder, lines), icon],
+          children: [
+            _fulWidthTextField(onText, type, placeholder, lines),
+            icon
+          ],
         ),
       ),
     );
@@ -36,8 +39,6 @@ _fulWidthTextField(onText, type, placeholder, lines) => Expanded(
       keyboardType: type,
       decoration: _inputDecoration(placeholder),
     ));
-
-
 
 textInput({
   @required Function(String) onText,
@@ -52,7 +53,7 @@ textInput({
     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _label(label),
+        label is String && label.isEmpty ? Container(height: 10,) : _label(label),
         _input(error, onText, type, placeholder, icon, lines),
         inputErrorMessageOrEmpty(error),
       ],
