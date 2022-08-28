@@ -30,8 +30,8 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       compute(_filterAndSort, {"items": widget.items, "q": q});
 
   _searchInput() => Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: textInput(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      child: textInput(
           onText: (d) {
             if (_debounce?.isActive ?? false) _debounce.cancel();
             _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -40,9 +40,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
               });
             });
           },
-          placeholder: 'Search...',
-        ),
-      );
+          placeholder: 'Search...'));
 
   _listBuilder(items) => ListView.builder(
       itemCount: items.length,
@@ -66,15 +64,14 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   Widget build(BuildContext context) =>
       Column(mainAxisSize: MainAxisSize.min, children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,16,0,8),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
           child: Center(
             child: Container(
               height: 8,
               width: 80,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                borderRadius: const BorderRadius.all(Radius.circular(50))
-              ),
+                  color: Theme.of(context).primaryColorDark,
+                  borderRadius: const BorderRadius.all(Radius.circular(50))),
             ),
           ),
         ),

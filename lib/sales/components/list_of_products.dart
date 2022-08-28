@@ -39,8 +39,8 @@ Widget listOfProducts({wholesale = false}) => consumerComponent<SalesState>(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 100),
               itemCount: salesState.stocks.length,
               shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 180,
               ),
               itemBuilder: (context, index) {
                 return Builder(

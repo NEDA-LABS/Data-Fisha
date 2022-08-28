@@ -13,15 +13,17 @@ Widget get salesRefreshButton => selectorComponent<SalesState, bool>(
 
 Widget _addToCartOrRefreshIcon() => selectorComponent<CartState, CartModel>(
       selector: (state) => state.currentCartModel,
-      builder: (context, value) => value != null
-          ? FloatingActionButton(
-              child: const Icon(Icons.close),
-              onPressed: () {
-                getState<CartState>().setCurrentCartToBeAdded(null);
-                Navigator.pop(context);
-              },
-            )
-          : _refreshStocks(),
+      builder: (context, value) =>
+      // value != null
+      //     ? FloatingActionButton(
+      //         child: const Icon(Icons.close),
+      //         onPressed: () {
+      //           getState<CartState>().setCurrentCartToBeAdded(null);
+      //           Navigator.pop(context);
+      //         },
+      //       )
+      //     :
+      _refreshStocks(),
     );
 
 Widget _refreshStocks() => selectorComponent<CartState, List>(

@@ -7,48 +7,43 @@ Widget productCardItem({
   dynamic productPrice,
 }) =>
     Card(
-      color: Colors.white,
-      elevation: 4,
-      child: Column(
-        children: <Widget>[
-          const Spacer(
-            flex: 1,
-          ),
-          Expanded(
-            child: Text(
-              productCategory ?? "No Listed Category",
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              child: Text(
-                productName ?? "No Listed Name",
-                textAlign: TextAlign.center,
-                softWrap: true,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        color: Colors.white,
+        // elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: Column(children: <Widget>[
+            Expanded(
+                child: Text(productCategory ?? "Category",
+                    style: const TextStyle(
+                        color: Colors.grey, overflow: TextOverflow.ellipsis))),
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                child: Text(
+                  productName ?? "Name",
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          ),
-          const Spacer(flex: 1,),
-          Expanded(
-              child: Text(
-            productPrice != null
-                ? NumberFormat.currency(name: 'TZS ').format(productPrice)
-                : "No Listed Price",
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
-          )),
-          // Spacer(
-          //   flex: 1,
-          // )
-        ],
-      ),
-    );
+            Expanded(
+                child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                        productPrice != null
+                            ? NumberFormat.currency(name: 'TZS ')
+                                .format(productPrice)
+                            : "TZS 0",
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16))))
+          ]),
+        ));

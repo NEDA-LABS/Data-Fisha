@@ -6,166 +6,153 @@ import '../models/cart.model.dart';
 import '../states/cart.dart';
 
 void addToCartSheet({BuildContext context, wholesale = false}) {
-  Scaffold.of(context)
-      .showBottomSheet((context) {
-        return consumerComponent<CartState>(
-          builder: (context, state) {
-            return state.currentCartModel != null
-                ? Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
+  showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return consumerComponent<CartState>(builder: (context, state) {
+          return state.currentCartModel != null
+              ? Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     ),
-                    height: 300,
-                    child: Card(
+                  ),
+                  height: 300,
+                  child: Card(
                       elevation: 0,
                       child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 16, 10, 10),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Center(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Text(
-                                                state.currentCartModel
-                                                    ?.product["product"],
-                                                softWrap: true,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.fromLTRB(
-                                                    0, 10, 0, 0),
-                                                child: const Text(
-                                                  '',
-                                                  // NumberFormat.currency(
-                                                  //         name: 'TZS ')
-                                                  //     .format(
-                                                  //   int.parse(
-                                                  //     state
-                                                  //         .currentCartModel
-                                                  //         .product[wholesale
-                                                  //             ? "wholesalePrice"
-                                                  //             : "retailPrice"]
-                                                  //         .toString(),
-                                                  //   ),
-                                                  // ),
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24,
-                                                  ),
+                          child: Column(children: <Widget>[
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 16, 10, 10),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                              state.currentCartModel
+                                                  ?.product["product"],
+                                              softWrap: true,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500)),
+                                          Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 0),
+                                            child: Text(
+                                              // '',
+                                              NumberFormat.currency(
+                                                      name: 'TZS ')
+                                                  .format(
+                                                int.parse(
+                                                  state
+                                                      .currentCartModel
+                                                      .product[wholesale
+                                                          ? "wholesalePrice"
+                                                          : "retailPrice"]
+                                                      .toString(),
                                                 ),
                                               ),
-                                            ],
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 19,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            // IconButton(
+                            //   icon: Icon(
+                            //     Icons.remove_circle,
+                            //     color: Theme.of(context).primaryColorDark,
+                            //   ),
+                            //   onPressed: () {
+                            //     state
+                            //         .decrementQtyOfProductToBeAddedToCart();
+                            //   },
+                            // ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(),
+                              ),
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              height: 54,
+                              width: MediaQuery.of(context).size.width > 200
+                                  ? 200
+                                  : MediaQuery.of(context).size.width * 0.9,
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                autofocus: false,
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                minLines: 1,
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) =>
+                                    state.setCartQuantity(value),
+                                decoration: const InputDecoration(
+                                  hintText: "Enter quantity...",
+                                  border: InputBorder.none,
                                 ),
                               ),
                             ),
-                            Expanded(
-                                child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                // IconButton(
-                                //   icon: Icon(
-                                //     Icons.remove_circle,
-                                //     color: Theme.of(context).primaryColorDark,
-                                //   ),
-                                //   onPressed: () {
-                                //     state
-                                //         .decrementQtyOfProductToBeAddedToCart();
-                                //   },
-                                // ),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(),
-                                  ),
-                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  height: 54,
-                                  width: MediaQuery.of(context).size.width > 200
-                                      ? 200
-                                      : MediaQuery.of(context).size.width * 0.9,
-                                  alignment: Alignment.center,
-                                  child: TextFormField(
-                                    autofocus: false,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    minLines: 1,
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) =>
-                                        state.setCartQuantity(value),
-                                    decoration: const InputDecoration(
-                                      hintText: "Enter quantity...",
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                // IconButton(
-                                //     icon: Icon(
-                                //       Icons.add_circle,
-                                //       color: Theme.of(context).primaryColorDark,
-                                //     ),
-                                //     onPressed: () => state
-                                //         .incrementQtyOfProductToBeAddedToCart()),
-                              ],
-                            )),
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    state
-                                        .addStockToCart(state.currentCartModel);
-                                    state.setCurrentCartToBeAdded(null);
-                                    Navigator.pop(context);
-                                  },
-                                  child: const SizedBox(
-                                    height: 48,
-                                    child: Center(
-                                      child: Text(
-                                        "Add To Cart",
-                                        // style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
+                            // IconButton(
+                            //     icon: Icon(
+                            //       Icons.add_circle,
+                            //       color: Theme.of(context).primaryColorDark,
+                            //     ),
+                            //     onPressed: () => state
+                            //         .incrementQtyOfProductToBeAddedToCart()),
                           ],
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(
-                    height: 0,
-                  );
-          },
-        );
-      })
-      .closed
-      .then((value) => getState<CartState>().setCurrentCartToBeAdded(null))
-      .catchError((_) {});
+                        )),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                child: OutlinedButton(
+                                    onPressed: () {
+                                      state.addStockToCart(
+                                          state.currentCartModel);
+                                      state.setCurrentCartToBeAdded(null);
+                                      Navigator.pop(context);
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Theme.of(context)
+                                                    .primaryColorDark)),
+                                    child: const SizedBox(
+                                        height: 48,
+                                        child: Center(
+                                            child: Text("Add To Cart", style: TextStyle(color: Colors.white),)))))),
+                      ]))))
+              : Container(height: 0);
+        });
+      });
 }
 
 Widget cartView({bool wholesale = false}) {
@@ -208,7 +195,8 @@ Widget _cartSummary({bool wholesale}) => Card(
                     NumberFormat.currency(name: 'TZS ').format(
                       cartState.getTotalWithoutDiscount(isWholesale: wholesale),
                     ),
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -263,7 +251,9 @@ Widget _cartSummary({bool wholesale}) => Card(
                         : TextButton(
                             // splashColor: Colors.grey,
                             onPressed: () {
-                              cartState.checkout(wholesale: wholesale).catchError((e) {
+                              cartState
+                                  .checkout(wholesale: wholesale)
+                                  .catchError((e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content:
@@ -286,8 +276,9 @@ Widget _cartSummary({bool wholesale}) => Card(
                                   ),
                                 ),
                                 Text(
-                                  NumberFormat.currency(name: 'TZS ')
-                                      .format(cartState.getFinalTotal(isWholesale: wholesale)),
+                                  NumberFormat.currency(name: 'TZS ').format(
+                                      cartState.getFinalTotal(
+                                          isWholesale: wholesale)),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

@@ -75,7 +75,7 @@ _showDialogOrModalSheetForChoose(
             builder: (_) => Dialog(
                 child: Container(
                     constraints:
-                        const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                        const BoxConstraints(maxWidth: 500, maxHeight: 300),
                     child: ChoiceInputDropdown(
                         items: items, onTitle: field, onText: onText)))),
         (x) => showModalBottomSheet(

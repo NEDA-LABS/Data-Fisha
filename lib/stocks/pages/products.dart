@@ -103,7 +103,7 @@ class _ProductPage extends State<ProductsPage> {
 
   @override
   void dispose() {
-    getState<ProductsListState>().updateQuery('');
+    // getState<ProductsListState>().updateQuery('');
     super.dispose();
   }
 }
