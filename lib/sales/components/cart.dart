@@ -1,3 +1,4 @@
+import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -8,9 +9,8 @@ import '../states/cart.dart';
 void addToCartSheet({BuildContext context, wholesale = false}) {
   showModalBottomSheet(
       context: context,
-      builder: (context) {
-        return consumerComponent<CartState>(builder: (context, state) {
-          return state.currentCartModel != null
+      builder: (context) => Consumer<CartState>(
+          builder: (context, state) => state.currentCartModel != null
               ? Container(
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -148,11 +148,12 @@ void addToCartSheet({BuildContext context, wholesale = false}) {
                                     child: const SizedBox(
                                         height: 48,
                                         child: Center(
-                                            child: Text("Add To Cart", style: TextStyle(color: Colors.white),)))))),
+                                            child: Text(
+                                          "Add To Cart",
+                                          style: TextStyle(color: Colors.white),
+                                        )))))),
                       ]))))
-              : Container(height: 0);
-        });
-      });
+              : Container(height: 0)));
 }
 
 Widget cartView({bool wholesale = false}) {
