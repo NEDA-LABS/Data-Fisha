@@ -24,7 +24,7 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPage extends State<ItemsPage> {
   _appBar(context) {
-    return topBAr(
+    return StockAppBar(
       title: "Items",
       showBack: true,
       backLink: '/stock/',

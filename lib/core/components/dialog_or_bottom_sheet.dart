@@ -20,7 +20,7 @@ showDialogOrModalSheet(Widget content, context) => hasEnoughWidth(context)
         builder: (_) => Dialog(
             child: Container(
                 constraints: const BoxConstraints(
-                    maxWidth: 700, minHeight: 200, maxHeight: 500),
+                    maxWidth: 500, minHeight: 200, maxHeight: 300),
                 child: Column(
                   children: [
                     _bar(context),

@@ -75,5 +75,5 @@ Widget numberSummaryReportCard({
   @required String title,
   @required Future Function() future,
 }) =>
-    ActiveComponent((context,states, updateState) =>
+    ActiveComponent(builder: (context,states, updateState) =>
         FutureBuilder(builder: _builder(title, updateState), future: future()));

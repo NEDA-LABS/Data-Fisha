@@ -25,7 +25,7 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductPage extends State<ProductsPage> {
   _appBar(context) {
-    return topBAr(
+    return StockAppBar(
         title: "Products",
         showBack: true,
         backLink: '/stock/',
@@ -83,16 +83,17 @@ class _ProductPage extends State<ProductsPage> {
               Consumer<ProductsListState>(
                 builder: (_, state) => Expanded(
                   child: tableLikeList(
-                    onFuture: () async => getStockFromCacheOrRemote(
-                      stringLike: state.query,
-                      skipLocal: widget.args.queryParams.containsKey('reload'),
-                    ),
-                    keys: _fields(),
-                    onItemPressed: (item){
-                      showDialogOrModalSheet(productDetail(item), context);
-                    }
-                    // onCell: (key,data)=>Text('@$data')
-                  ),
+                      onFuture: () async => getStockFromCacheOrRemote(
+                            stringLike: state.query,
+                            skipLocal:
+                                widget.args.queryParams.containsKey('reload'),
+                          ),
+                      keys: _fields(),
+                      onItemPressed: (item) {
+                        showDialogOrModalSheet(productDetail(item), context);
+                      }
+                      // onCell: (key,data)=>Text('@$data')
+                      ),
                 ),
               ),
               // _tableFooter()

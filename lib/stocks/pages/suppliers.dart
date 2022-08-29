@@ -24,7 +24,7 @@ class SuppliersPage extends StatefulWidget {
 
 class _SuppliersPage extends State<SuppliersPage> {
   _appBar(context) {
-    return topBAr(
+    return StockAppBar(
       title: "Suppliers",
       showBack: true,
       backLink: '/stock/',

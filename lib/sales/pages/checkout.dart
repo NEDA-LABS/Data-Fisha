@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/top_bar.dart';
 
 import '../../core/services/util.dart';
-import '../components/cart.dart';
-import '../components/top_bar.dart';
+import '../components/cart_preview.dart';
 import '../states/cart.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -17,15 +16,14 @@ class CheckoutPage extends StatelessWidget {
         args != null && args.params != null && args.params['type'] == 'whole';
     getState<CartState>().discountInputController.text = '0';
     return Scaffold(
-      appBar: topBAr(
-        title: "Cart - ${wholesale ? 'Wholesale' : 'Retail'}",
-        showBack: true,
-        backLink: '/sales/${wholesale ? 'whole' : 'retail'}',
-        showSearch: true,
-        onSearch: (d){},
-        searchHint: 'Customer'
-      ),
-      body: cartView(wholesale: wholesale),
+      appBar: StockAppBar(
+          title: "Cart - ${wholesale ? 'Wholesale' : 'Retail'}",
+          showBack: true,
+          backLink: '/sales/${wholesale ? 'whole' : 'retail'}',
+          showSearch: true,
+          onSearch: (d) {},
+          searchHint: 'Customer'),
+      body: cartPreview(wholesale: wholesale),
     );
   }
 }
