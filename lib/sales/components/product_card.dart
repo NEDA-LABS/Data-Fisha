@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 Widget productCardItem({
   String productCategory,
   String productName,
-  int productPrice,
+  dynamic productPrice,
 }) =>
     Card(
         color: Colors.white,

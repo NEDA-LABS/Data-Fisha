@@ -9,21 +9,21 @@ createSupplierContent() => Consumer<SupplierCreateState>(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: ListBody(children: [
-            textInput(
+            TextInput(
               onText: (d) => state.updateState({'name': d}),
               label: "Name",
               error: state.err['name'],
             ),
-            textInput(
+            TextInput(
               onText: (d) => state.updateState({'number': d}),
               label: "Mobile",
               placeholder: 'Optional',
             ),
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'email': d}),
                 label: "Email",
                 placeholder: 'Optional'),
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'address': d}),
                 label: "Address",
                 lines: 3,

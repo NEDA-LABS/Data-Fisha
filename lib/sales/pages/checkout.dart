@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/top_bar.dart';
+import 'package:smartstock_pos/sales/components/cart_drawer.dart';
 
 import '../../core/services/util.dart';
 import '../components/cart_preview.dart';
@@ -23,7 +24,7 @@ class CheckoutPage extends StatelessWidget {
           showSearch: true,
           onSearch: (d) {},
           searchHint: 'Customer'),
-      body: cartPreview(wholesale: wholesale),
+      body: cartDrawer(carts: [], wholesale: false),
     );
   }
 }

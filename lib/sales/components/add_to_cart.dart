@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock_pos/core/components/active_component.dart';
 
 import '../../core/components/text_input.dart';
-import '../../core/services/util.dart';
 import '../models/cart.model.dart';
 import 'cart.dart';
 
@@ -12,35 +12,42 @@ void addToCartView({
   @required onAddToCart,
 }) =>
     showDialog(
-        context: context,
-        builder: (c) => Dialog(
-            child: Container(
-                decoration: _addToCartBoxDecoration(),
-                height: 230,
-                child: Column(children: <Widget>[
-                  _productAndPrice(cart.product, wholesale),
-                  _cartQuantityInput(context, cart),
-                  _addToCartButton(context, cart, onAddToCart)
-                ]))));
+      context: context,
+      builder: (c) => Dialog(
+        child: ActiveComponent(
+          initialState: {"p": cart.product, "q": cart.quantity},
+          builder: (context, states, updateState) => Container(
+            decoration: _addToCartBoxDecoration(),
+            height: 230,
+            child: Column(
+              children: <Widget>[
+                _productAndPrice(states['p'], wholesale),
+                _cartQuantityInput(context, states, updateState),
+                _addToCartButton(context, states, onAddToCart)
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
-_cartQuantityInput(context, CartModel cart) => Container(
+_cartQuantityInput(context, states, updateState) => Container(
     constraints: const BoxConstraints(maxWidth: 200),
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
     padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-    child: textInput(
-        initialText: '${cart.quantity}',
+    child: TextInput(
+        initialText: '${states['q']}',
         lines: 1,
         placeholder: 'Quantity',
-        onText: (v) {
-          // TODO:
-        }));
+        type: TextInputType.number,
+        onText: (v) => updateState({'q': int.tryParse(v)})));
 
-_addToCartButton(context, cart, onAddToCart) => Container(
+_addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),
     height: 40,
     width: MediaQuery.of(context).size.width,
     child: TextButton(
-        onPressed: () => onAddToCart(cart),
+        onPressed: () => onAddToCart(CartModel(product: states['p'],quantity: states['q'])),
         style: _addToCartButtonStyle(context),
         child:
             const Text("ADD TO CART", style: TextStyle(color: Colors.white))));

@@ -31,7 +31,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
 
   _searchInput() => Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: textInput(
+      child: TextInput(
           onText: (d) {
             if (_debounce?.isActive ?? false) _debounce.cancel();
             _debounce = Timer(const Duration(milliseconds: 500), () {

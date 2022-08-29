@@ -18,7 +18,7 @@ class SalesModule extends Module {
             child: (context, args) => const WholesalePage()),
         ChildRoute('/retail',
             guards: [ActiveShopGuard()],
-            child: (context, args) => RetailPage()),
+            child: (context, args) => const RetailPage()),
         ChildRoute('/checkout/:type',
             guards: [ActiveShopGuard()],
             child: (context, args) => CheckoutPage(args))

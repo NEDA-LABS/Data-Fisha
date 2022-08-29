@@ -8,16 +8,16 @@ createItemContent() => Consumer<ItemCreateState>(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: ListBody(children: [
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'brand': d}),
                 label: "Brand name",
                 error: state.err['brand'],
                 placeholder: 'E.g Smartstock'),
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'generic': d}),
                 label: "Generic name",
                 placeholder: 'E.g Stock management system'),
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'packaging': d}),
                 label: "Packaging",
                 placeholder: "E.g 10 Kg"),

@@ -6,13 +6,13 @@ import '../models/cart.model.dart';
 import '../states/cart.dart';
 import 'cart.dart';
 
-Widget cartDrawer({@required List<CartModel> carts, bool wholesale = false}) =>
+Widget cartDrawer({@required List<CartModel> carts, bool wholesale = false, context}) =>
     Column(children: [
       Expanded(
           child: ListView.builder(
               itemCount: carts.length,
               itemBuilder: _cartListItemBuilder(carts, wholesale))),
-      _cartSummary(wholesale: wholesale)
+      _cartSummary(wholesale: wholesale, carts: carts, context: context)
     ]);
 
 Widget _cartSummary({
@@ -58,7 +58,7 @@ _submitButton(List<CartModel> carts, int discount) => TextButton(
           softWrap: true)
     ]));
 
-_getFinalTotal(List<CartModel> carts, int discount) => '';
+_getFinalTotal(List<CartModel> carts, int discount) => 0;
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
@@ -150,8 +150,8 @@ Widget _checkoutCartItem({
           ),
         ),
         const Padding(
-          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Divider(color: Colors.grey))
+            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Divider(color: Colors.grey))
       ],
     );
 

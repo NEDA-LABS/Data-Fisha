@@ -5,8 +5,10 @@ import 'list_of_products.dart';
 
 Widget salesBody({
   @required List products,
+  @required List carts,
   bool wholesale = false,
   @required onAddToCart,
+  @required BuildContext context
 }) =>
     Stack(
       children: [
@@ -24,7 +26,7 @@ Widget salesBody({
           bottom: 16,
           left: 16,
           right: 16,
-          child: cartPreview(wholesale: wholesale),
+          child: cartPreview(carts, wholesale, context),
         )
       ],
     );

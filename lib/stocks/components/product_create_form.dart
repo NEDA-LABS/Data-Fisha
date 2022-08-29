@@ -26,7 +26,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       field: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
       onLoad: getItemFromCacheOrRemote,
     ),
-    textInput(
+    TextInput(
         onText: (d) => state.updateFormState({"barcode": d}),
         label: "Barcode / Qrcode",
         placeholder: "Optional",
@@ -57,7 +57,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       field: (x)=>'${x['name']}',
       onLoad: getSupplierFromCacheOrRemote,
     ),
-    textInput(
+    TextInput(
       onText: (d) => state.updateFormState({"purchase": d}),
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
@@ -65,7 +65,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       initialText: state.product['purchase'].toString(),
       type: TextInputType.number,
     ),
-    textInput(
+    TextInput(
       onText: (d) => state.updateFormState({"retailPrice": d}),
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
@@ -73,7 +73,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       initialText: state.product['retailPrice'].toString(),
       type: TextInputType.number,
     ),
-    textInput(
+    TextInput(
       onText: (d) => state.updateFormState({"wholesalePrice": d}),
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
@@ -81,7 +81,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       initialText: state.product['wholesalePrice'].toString(),
       type: TextInputType.number,
     ),
-    textInput(
+    TextInput(
       onText: (d) => state.updateFormState({"quantity": d}),
       label: "Quantity",
       placeholder: "Current stock quantity",
@@ -89,7 +89,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       initialText: state.product['quantity'].toString(),
       type: TextInputType.number,
     ),
-    textInput(
+    TextInput(
         onText: (d) => state.updateFormState({"expire": d}),
         label: "Expire",
         placeholder: "YYYY-MM-DD ( Optional )",

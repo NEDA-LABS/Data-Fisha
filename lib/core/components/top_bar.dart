@@ -10,7 +10,7 @@ class StockAppBar extends PreferredSize with Disposable {
   final String title;
   final bool showSearch;
   final bool showBack;
-  final searchInput;
+  final Widget searchInput;
   final String backLink;
   final String searchHint;
   final Function openDrawer;
@@ -36,7 +36,7 @@ class StockAppBar extends PreferredSize with Disposable {
 
   @override
   AppBar build(BuildContext context) => AppBar(
-    elevation: 0,
+          elevation: 0,
           title: Text(title),
           bottom: showSearch
               ? searchInput ??
@@ -75,6 +75,7 @@ class StockAppBar extends PreferredSize with Disposable {
               alignment: Alignment.centerLeft,
               child: TextField(
                   autofocus: false,
+                  autocorrect: false,
                   maxLines: 1,
                   minLines: 1,
                   onChanged: (text) {

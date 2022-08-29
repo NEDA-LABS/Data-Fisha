@@ -78,12 +78,12 @@ _showDialogOrModalSheetForChoose(
                         const BoxConstraints(maxWidth: 500, maxHeight: 300),
                     child: ChoiceInputDropdown(
                         items: items, onTitle: field, onText: onText)))),
-        (x) => showModalBottomSheet(
-            isScrollControlled: true,
+        (x) => showBottomSheet(
+            // isScrollControlled: true,
             enableDrag: true,
             context: x,
             builder: (context) => FractionallySizedBox(
-                  heightFactor: 0.9,
+                  // heightFactor: 0.9,
                   child: ChoiceInputDropdown(
                       items: items, onTitle: field, onText: onText),
                 )));

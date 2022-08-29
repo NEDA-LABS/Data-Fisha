@@ -8,11 +8,11 @@ createCategoryContent() => Consumer<CategoryCreateState>(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: ListBody(children: [
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'name': d}),
                 label: "Name",
                 error: state.err['name']),
-            textInput(
+            TextInput(
                 onText: (d) => state.updateState({'description': d}),
                 label: "Description",
                 lines: 3,

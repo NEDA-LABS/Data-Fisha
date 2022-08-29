@@ -36,4 +36,6 @@ _productPressed(context, product, wholesale, onAddToCart) => addToCartView(
     onAddToCart: onAddToCart);
 
 int _getPrice(product, wholesale) =>
-    product[wholesale ? "wholesalePrice" : 'retailPrice'];
+    product[wholesale ? "wholesalePrice" : 'retailPrice'] is double
+        ? product[wholesale ? "wholesalePrice" : 'retailPrice'].toInt()
+        : product[wholesale ? "wholesalePrice" : 'retailPrice'];
