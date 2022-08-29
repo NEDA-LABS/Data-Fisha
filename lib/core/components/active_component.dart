@@ -9,7 +9,8 @@ class ActiveComponent extends StatefulWidget {
   final Map initialState;
   static const _map = {};
 
-  const ActiveComponent(this.builder, {Key key, this.initialState = _map})
+  const ActiveComponent(
+      {Key key, this.initialState = _map, @required this.builder})
       : super(key: key);
 
   @override

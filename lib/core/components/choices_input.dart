@@ -136,7 +136,7 @@ choicesInput({
 }) =>
     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       _label(label),
-      ActiveComponent((context, states, updateState) => Container(
+      ActiveComponent(builder: (context, states, updateState) => Container(
           decoration: inputBoxDecoration(context, error),
           child: Row(children: [
             _fullWidthText(onText, initialText),
