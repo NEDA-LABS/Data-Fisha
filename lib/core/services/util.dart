@@ -64,3 +64,6 @@ bool hasEnoughWidth(BuildContext context) {
 }
 
 and(List<Function> fns) => fns.fold(true, (a, b) => a && b() == true);
+
+propertyOr(String property, Function(dynamic) onOr)=>
+        ifDoElse((x) => x is Map && x.containsKey(property), (x)=>x[property], onOr);

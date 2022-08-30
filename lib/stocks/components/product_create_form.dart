@@ -14,7 +14,7 @@ import '../states/product_create.dart';
 
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"product": d});
         state.refresh();
@@ -22,8 +22,8 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Name",
       error: state.error['product'] ?? '',
       initialText: state.product['product'],
-      onAdd: () => createItemContent(),
-      field: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
+      getAddWidget: () => createItemContent(),
+      onField: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
       onLoad: getItemFromCacheOrRemote,
     ),
     TextInput(
@@ -33,7 +33,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         error: state.error['barcode'] ?? '',
         initialText: state.product['barcode'],
         icon: _mobileQrScan('')),
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"category": d});
         state.refresh();
@@ -41,11 +41,11 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Category",
       error: state.error['category'] ?? '',
       initialText: state.product['category'],
-      onAdd: () => createCategoryContent(),
-      field: (x)=>'${x['name']}',
+      getAddWidget: () => createCategoryContent(),
+      onField: (x)=>'${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     ),
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"supplier": d});
         state.refresh();
@@ -53,8 +53,8 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Supplier",
       error: state.error['supplier'] ?? '',
       initialText: state.product['supplier'],
-      onAdd: () => createSupplierContent(),
-      field: (x)=>'${x['name']}',
+      getAddWidget: () => createSupplierContent(),
+      onField: (x)=>'${x['name']}',
       onLoad: getSupplierFromCacheOrRemote,
     ),
     TextInput(

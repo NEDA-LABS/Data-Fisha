@@ -19,6 +19,7 @@ void addToCartView({
           builder: (context, states, updateState) => Container(
             decoration: _addToCartBoxDecoration(),
             height: 230,
+            constraints: const BoxConstraints(maxWidth: 400),
             child: Column(
               children: <Widget>[
                 _productAndPrice(states['p'], wholesale),
@@ -47,7 +48,8 @@ _addToCartButton(context, states, onAddToCart) => Container(
     height: 40,
     width: MediaQuery.of(context).size.width,
     child: TextButton(
-        onPressed: () => onAddToCart(CartModel(product: states['p'],quantity: states['q'])),
+        onPressed: () =>
+            onAddToCart(CartModel(product: states['p'], quantity: states['q'])),
         style: _addToCartButtonStyle(context),
         child:
             const Text("ADD TO CART", style: TextStyle(color: Colors.white))));

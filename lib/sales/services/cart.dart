@@ -1,7 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:smartstock_pos/sales/models/cart.model.dart';
 
-addToCarts(List<CartModel> carts, CartModel cart) {
+appendToCarts(cart, List carts) {
   var index = carts.indexWhere((x) => x.product['id'] == cart.product['id']);
   var updateOrAppend = ifDoElse((i) => i == -1, (i) {
     carts.add(cart);
@@ -13,5 +13,8 @@ addToCarts(List<CartModel> carts, CartModel cart) {
     carts.add(old);
     return carts;
   });
-  return updateOrAppend(index);
+  var allCarts = updateOrAppend(index);
+  allCarts.sort(
+      (a, b) => '${a.product['product']}'.compareTo('${b.product['product']}'));
+  return allCarts;
 }

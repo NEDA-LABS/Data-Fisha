@@ -1,23 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock_pos/core/components/choices_input.dart';
+import 'package:smartstock_pos/sales/components/create_customer_content.dart';
+import 'package:smartstock_pos/sales/services/customer.dart';
 
 import '../../core/services/util.dart';
-import '../models/cart.model.dart';
 import '../states/cart.dart';
 import 'cart.dart';
 
-Widget cartDrawer({@required List<CartModel> carts, bool wholesale = false, context}) =>
-    Column(children: [
-      Expanded(
-          child: ListView.builder(
-              itemCount: carts.length,
-              itemBuilder: _cartListItemBuilder(carts, wholesale))),
-      _cartSummary(wholesale: wholesale, carts: carts, context: context)
-    ]);
+Widget cartDrawer(
+        {@required List carts,
+        bool wholesale = false,
+        context,
+        @required customer,
+        @required onCustomer}) =>
+    Scaffold(
+      body: Column(children: [
+        AppBar(title: const Text('Cart'), elevation: 0),
+        ChoicesInput(
+            initialText: customer,
+            placeholder: 'Choose customer',
+            showBorder: false,
+            onText: onCustomer,
+            onLoad: getCustomerFromCacheOrRemote,
+            getAddWidget: ()=>createCustomerContent(),
+            onField: (x) => x['displayName']),
+        Expanded(
+            child: ListView.builder(
+                controller: ScrollController(),
+                itemCount: carts.length,
+                itemBuilder: _cartListItemBuilder(carts, wholesale))),
+        _cartSummary(wholesale: wholesale, carts: carts, context: context)
+      ]),
+    );
 
 Widget _cartSummary({
   @required BuildContext context,
-  @required List<CartModel> carts,
+  @required List carts,
   bool wholesale = false,
   bool isSubmitting = false,
   int discount = 0,
@@ -41,7 +60,7 @@ Widget _cartSummary({
       ),
     );
 
-_submitButton(List<CartModel> carts, int discount) => TextButton(
+_submitButton(List carts, int discount) => TextButton(
     onPressed: _submit,
     child: Row(children: [
       const Expanded(
@@ -58,12 +77,12 @@ _submitButton(List<CartModel> carts, int discount) => TextButton(
           softWrap: true)
     ]));
 
-_getFinalTotal(List<CartModel> carts, int discount) => 0;
+_getFinalTotal(List carts, int discount) => 0;
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
 
-_totalAmountRow(List<CartModel> carts) => Padding(
+_totalAmountRow(List carts) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
@@ -76,7 +95,7 @@ _totalAmountRow(List<CartModel> carts) => Padding(
       ),
     );
 
-String _getTotalAmount(List<CartModel> carts) => '';
+String _getTotalAmount(List carts) => '';
 
 _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
       padding: const EdgeInsets.all(8.0),
@@ -104,7 +123,7 @@ _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
     );
 
 Widget _checkoutCartItem({
-  @required CartModel cart,
+  @required cart,
   bool wholesale = false,
   @required BuildContext context,
 }) =>

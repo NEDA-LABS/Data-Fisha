@@ -1,9 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock_pos/sales/pages/customers.dart';
 
 import 'guards/active_shop.dart';
-import 'pages/checkout.dart';
-import 'pages/retail.dart';
 import 'pages/index.dart';
+import 'pages/retail.dart';
 import 'pages/wholesale.dart';
 import 'states/cart.dart';
 import 'states/sales.dart';
@@ -18,10 +18,10 @@ class SalesModule extends Module {
             child: (context, args) => const WholesalePage()),
         ChildRoute('/retail',
             guards: [ActiveShopGuard()],
-            child: (context, args) => const RetailPage()),
-        ChildRoute('/checkout/:type',
+            child: (context, args) => RetailPage()),
+        ChildRoute('/customers',
             guards: [ActiveShopGuard()],
-            child: (context, args) => CheckoutPage(args))
+            child: (context, args) => CustomersPage(args))
       ];
 
   @override

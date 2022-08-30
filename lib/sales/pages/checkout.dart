@@ -3,7 +3,6 @@ import 'package:smartstock_pos/core/components/top_bar.dart';
 import 'package:smartstock_pos/sales/components/cart_drawer.dart';
 
 import '../../core/services/util.dart';
-import '../components/cart_preview.dart';
 import '../states/cart.dart';
 
 class CheckoutPage extends StatelessWidget {
