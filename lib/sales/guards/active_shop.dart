@@ -6,7 +6,7 @@ import '../services/stocks.dart';
 
 class ActiveShopGuard extends RouteGuard {
   @override
-  String get redirectTo => '/shop/';
+  String get redirectTo => '/';
 
   @override
   Future<bool> canActivate(String path, ParallelRoute route) async {

@@ -83,8 +83,9 @@ class RetailPage extends StatelessWidget {
       initialState: const {'skip': false, 'query': ''},
       builder: (context, states, updateState) => responsiveBody(
           menus: moduleMenus(),
+          office: 'Menu',
           current: '/sales/',
-          showLeftDrawer: false,
+          // showLeftDrawer: true,
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,

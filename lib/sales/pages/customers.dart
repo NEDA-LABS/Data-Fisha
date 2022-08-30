@@ -19,38 +19,58 @@ class CustomersPage extends StatefulWidget {
 }
 
 class _CustomersPage extends State<CustomersPage> {
+  bool _loading = false;
+  String _query = '';
+  List _customers = [];
+
   _appBar(context) => StockAppBar(
       title: "Customers",
       showBack: true,
       backLink: '/sales/',
       showSearch: true,
-      onSearch: (d) {},
+      onSearch: (d) {
+        setState(() {
+          _query = d;
+        });
+        _refresh(skip: false);
+      },
       searchHint: 'Search...');
 
   _contextCustomers(context) => [
         ContextMenu(
-            name: 'Create',
-            pressed: () => showDialog(
-                context: context,
-                builder: (c) => Center(
-                    child: Container(
-                        constraints: const BoxConstraints(maxWidth: 500),
-                        child: Dialog(child: createCustomerContent()))))),
-        ContextMenu(name: 'Reload', pressed: () {})
+          name: 'Create',
+          pressed: () => showDialog(
+            context: context,
+            builder: (c) => Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Dialog(child: createCustomerContent()),
+              ),
+            ),
+          ),
+        ),
+        ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
       ];
 
-  _tableHeader() => tableLikeListRow(
-        [
+  _tableHeader() => SizedBox(
+    height: 38,
+    child: tableLikeListRow([
           tableLikeListTextHeader('Name'),
           tableLikeListTextHeader('Phone'),
           tableLikeListTextHeader('Email'),
-        ],
-      );
+        ]),
+  );
 
   _fields() => ['displayName', 'phone', 'email'];
 
-  _loading(bool show) =>
+  _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
+
+  @override
+  void initState() {
+    _refresh();
+    super.initState();
+  }
 
   @override
   Widget build(context) => responsiveBody(
@@ -62,14 +82,11 @@ class _CustomersPage extends State<CustomersPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               tableContextMenu(_contextCustomers(context)),
-              _loading(false),
+              _loadingView(_loading),
               _tableHeader(),
               Expanded(
                 child: tableLikeList(
-                  onFuture: () async => getCustomerFromCacheOrRemote(
-                    stringLike: '',
-                    skipLocal: widget.args.queryParams.containsKey('reload'),
-                  ),
+                  onFuture: () async => _customers,
                   keys: _fields(),
                 ),
               ), // _tableFooter()
@@ -77,6 +94,24 @@ class _CustomersPage extends State<CustomersPage> {
           ),
         ),
       );
+
+  _refresh({skip = false}) {
+    setState(() {
+      _loading = true;
+    });
+    getCustomerFromCacheOrRemote(
+      stringLike: _query,
+      skipLocal: widget.args.queryParams.containsKey('reload') || skip,
+    ).then((value) {
+      setState(() {
+        _customers = value;
+      });
+    }).whenComplete(() {
+      setState(() {
+        _loading = false;
+      });
+    });
+  }
 
   @override
   void dispose() {

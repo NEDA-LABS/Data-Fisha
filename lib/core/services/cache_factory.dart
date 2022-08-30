@@ -65,6 +65,13 @@ class CacheFactory {
     return await store.drop(db);
   }
 
+  getAll(App app, String collection) async {
+    var getSingleDb = _getDbIfNotExist(_lazyInitialize);
+    var db = await getSingleDb(_db);
+    var store = _getStore(cacheDatabaseName(app)(collection));
+    return await store.find(db);
+  }
+
   keys(App app, String collection) async {
     var getSingleDb = _getDbIfNotExist(_lazyInitialize);
     var db = await getSingleDb(_db);

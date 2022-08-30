@@ -18,8 +18,7 @@ class MyHttpOverrides extends HttpOverrides{
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
-  // _connectWithBFastCloudProject();
-  // Modular.setInitialRoute('/shop/');
+
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(

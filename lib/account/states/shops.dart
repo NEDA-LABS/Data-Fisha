@@ -49,13 +49,3 @@ class ChooseShopState extends ChangeNotifier {
     }
   }
 }
-
-// updateCurrentShop(var shop){
-//   String appId = shop["applicationId"];
-//   String projectId = shop["projectId"];
-//   BFast.init(AppCredentials(
-//     appId, projectId,
-//     databaseURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId/v2',
-//     functionsURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId',
-//   ),projectId);
-// }

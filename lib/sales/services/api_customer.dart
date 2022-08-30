@@ -33,8 +33,8 @@ var getAllRemoteCustomers = composeAsync([
   map(shopToApp),
 ]);
 
-createCustomer(Map customer) {
+prepareCreateCustomer(Map customer) {
   var createRequest = _createCustomer(customer);
-  f(app) => (createRequest('${shopFunctionsURL(app)}/sale/customers'));
+  f(app) => () => createRequest('${shopFunctionsURL(app)}/sale/customers');
   return composeAsync([(app) => executeHttp(f(app)), map(shopToApp)]);
 }

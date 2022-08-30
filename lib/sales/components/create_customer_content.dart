@@ -1,7 +1,12 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/active_component.dart';
+import 'package:smartstock_pos/core/services/cache_shop.dart';
+import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock_pos/sales/services/customer_cache.dart';
 
 import '../../core/components/text_input.dart';
+import '../services/api_customer.dart';
 
 createCustomerContent() => ActiveComponent(
       initialState: const {"loading": false},
@@ -12,12 +17,12 @@ createCustomerContent() => ActiveComponent(
             TextInput(
                 onText: (d) => updateState({'displayName': d}),
                 label: "Name",
-                error: states['err_displayName'],
+                error: states['error_d'],
                 placeholder: ''),
             TextInput(
                 onText: (d) => updateState({'phone': d}),
                 label: "Phone",
-                error: states['err_phone'],
+                error: states['error_p'],
                 placeholder: '255XXXXXXXXX'),
             TextInput(
                 onText: (d) => updateState({'email': d}),
@@ -55,5 +60,36 @@ createCustomerContent() => ActiveComponent(
       ),
     );
 
+_validateName(data) => data is String && data.isNotEmpty;
+
+_validatePhone(data) => data is String && data.isNotEmpty;
+
 _createCustomer(
-    Map<dynamic, dynamic> states, Function([Map value]) updateState) {}
+    Map<dynamic, dynamic> states, Function([Map value]) updateState) {
+  updateState({'error_d': '', 'error_p': ''});
+  if (!_validateName(states['displayName'])) {
+    updateState({'error_d': 'Name required'});
+    return;
+  }
+  if (!_validatePhone(states['phone'])) {
+    updateState({'error_p': 'Phone number required'});
+    return;
+  }
+  var customer = {
+    'displayName': states['displayName'],
+    'phone': states['phone'],
+  };
+  if (states['email'] != null) customer['email'] = states['email'];
+  if (states['tin'] != null) customer['tin'] = states['tin'];
+  var createCustomer = prepareCreateCustomer(customer);
+  getActiveShop().then((shop) {
+    updateState({'loading': true});
+    createCustomer(shop)
+        .then((value) {
+          saveLocalCustomer(shopToApp(shop), customer);
+          navigator().maybePop();
+        })
+        .catchError((onError) => updateState({'error': onError.toString()}))
+        .whenComplete(() => updateState({'loading': false}));
+  });
+}

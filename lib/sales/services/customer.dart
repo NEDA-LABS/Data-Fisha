@@ -29,6 +29,7 @@ Future<List<dynamic>> getCustomerFromCacheOrRemote({
 Future<List> _filterAndSort(Map data) async {
   var customers = data['customers'];
   String stringLike = data['query'];
+  print(stringLike);
   _where(x) =>
       '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
 
