@@ -37,9 +37,11 @@ class _ChoicesInputState extends State<ChoicesInput> {
   final _getData = propertyOr('data', (_) => []);
   final _getIsLoading = propertyOr('loading', (_) => false);
   final _getSkip = propertyOr('skip', (_) => false);
+  TextEditingController textController;
 
   @override
   void initState() {
+    textController = TextEditingController(text: widget.initialText);
     _onRefresh(skip: false);
     super.initState();
   }
@@ -52,7 +54,7 @@ class _ChoicesInputState extends State<ChoicesInput> {
 
   _fullWidthText(onText, String hintText, initialText) => Expanded(
       child: TextField(
-          controller: TextEditingController(text: initialText),
+          controller: textController,
           onChanged: onText,
           autofocus: false,
           maxLines: 1,
@@ -140,8 +142,11 @@ class _ChoicesInputState extends State<ChoicesInput> {
             child: Row(children: [
               _fullWidthText(
                   widget.onText, widget.placeholder, widget.initialText),
-              _actions(_onRefresh, widget.onText, widget.getAddWidget,
-                  widget.onField)
+              _actions(_onRefresh, (text) {
+                textController = TextEditingController(text: text);
+                _updateState({});
+                widget.onText(text);
+              }, widget.getAddWidget, widget.onField)
             ])),
         inputErrorMessageOrEmpty(widget.error)
       ]);

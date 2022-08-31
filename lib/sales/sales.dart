@@ -27,6 +27,6 @@ class SalesModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.lazySingleton((i) => SalesState()),
-        Bind.lazySingleton((i) => CartState())
+        // Bind.lazySingleton((i) => CartState())
       ];
 }

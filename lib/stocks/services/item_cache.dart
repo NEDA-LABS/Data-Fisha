@@ -9,8 +9,8 @@ const _itemsId = 'items';
 
 Future getLocalItems(App app) => composeAsync([
       itOrEmptyArray,
-      CacheFactory().get(app, _itemsTable),
+      CacheFactory().prepareGetData(app, _itemsTable),
     ])(_itemsId);
 
 Future saveLocalItems(App app, items) => CacheFactory()
-    .set(app, _itemsTable)(_itemsId, itOrEmptyArray(items));
+    .prepareSetData(app, _itemsTable)(_itemsId, itOrEmptyArray(items));

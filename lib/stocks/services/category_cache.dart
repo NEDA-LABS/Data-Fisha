@@ -9,8 +9,8 @@ const _categoriesId = 'categories';
 
 Future getLocalCategories(App app) => composeAsync([
       itOrEmptyArray,
-      CacheFactory().get(app, _categoriesTable),
+      CacheFactory().prepareGetData(app, _categoriesTable),
     ])(_categoriesId);
 
 Future saveLocalCategories(App app, categories) => CacheFactory()
-    .set(app, _categoriesTable)(_categoriesId, itOrEmptyArray(categories));
+    .prepareSetData(app, _categoriesTable)(_categoriesId, itOrEmptyArray(categories));

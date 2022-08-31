@@ -5,16 +5,16 @@ const _userTable = 'user';
 const _userId = 'current';
 
 getLocalCurrentUser() async {
-  var getUser = CacheFactory().get(smartstockApp, _userTable);
+  var getUser = CacheFactory().prepareGetData(smartstockApp, _userTable);
   return getUser(_userId);
 }
 
 setLocalCurrentUser(user)async{
-  var setData = CacheFactory().set(smartstockApp, _userTable);
+  var setData = CacheFactory().prepareSetData(smartstockApp, _userTable);
   return setData(_userId, user);
 }
 
 removeLocalCurrentUser()async{
-  var rm = CacheFactory().remove(smartstockApp, _userTable);
+  var rm = CacheFactory().prepareRemoveData(smartstockApp, _userTable);
   return rm(_userId);
 }

@@ -8,8 +8,8 @@ const _stocksId = 'stocks';
 
 Future getLocalStocks(App app) => composeAsync([
       itOrEmptyArray,
-      CacheFactory().get(app, _stocksTable),
+      CacheFactory().prepareGetData(app, _stocksTable),
     ])(_stocksId);
 
 Future saveLocalStocks(App app, stocks) =>
-    CacheFactory().set(app, _stocksTable)(_stocksId, itOrEmptyArray(stocks));
+    CacheFactory().prepareSetData(app, _stocksTable)(_stocksId, itOrEmptyArray(stocks));

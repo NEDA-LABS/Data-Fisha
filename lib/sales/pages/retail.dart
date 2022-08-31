@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock_pos/core/components/active_component.dart';
+import 'package:smartstock_pos/core/components/full_screen_dialog.dart';
 import 'package:smartstock_pos/core/services/stocks.dart';
 import 'package:smartstock_pos/core/services/util.dart';
 import 'package:smartstock_pos/sales/components/refresh_button.dart';
@@ -30,20 +31,9 @@ class RetailPage extends StatelessWidget {
         navigator().maybePop();
       };
 
-  _onShowCheckoutSheet(states, updateState, context) => () {
-        updateState({'hab': true});
-        showModalBottomSheet(
-          isScrollControlled: true,
-          enableDrag: true,
-          context: context,
-          builder: (context) => cartDrawer(
-              carts: _getCarts(states),
-              wholesale: false,
-              context: context,
-              customer: _getCustomer(states),
-              onCustomer: (d) => updateState({"customer": d})),
-        ).whenComplete(() => updateState({'hab': false}));
-      };
+  _onShowCheckoutSheet(states, updateState, context, wholesale) =>
+      () => fullScreeDialog(
+          context, _cartDrawer(states, updateState, context, wholesale));
 
   _appBar(updateState) => StockAppBar(
       title: "Retail",
@@ -89,13 +79,7 @@ class RetailPage extends StatelessWidget {
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,
-                  child: cartDrawer(
-                    carts: _getCarts(states),
-                    wholesale: false,
-                    context: context,
-                    customer: _getCustomer(states),
-                    onCustomer: (d) => updateState({"customer": d}),
-                  ),
+                  child: _cartDrawer(states, updateState, context, false),
                 )
               : null,
           onBody: (drawer) => Scaffold(
@@ -107,5 +91,34 @@ class RetailPage extends StatelessWidget {
                   builder: _getView(
                       _getCarts(states),
                       _onAddToCart(states, updateState),
-                      _onShowCheckoutSheet(states, updateState, context))))));
+                      _onShowCheckoutSheet(
+                          states, updateState, context, false))))));
+
+  _cartDrawer(states, updateState, context, wholesale) => cartDrawer(
+        onAddItem: _addCartQuantity(states, updateState),
+        onRemoveItem: _removeCart(states, updateState),
+        onCheckout: (discount) async {
+          return printAndSaveCart(
+                  states['carts'], discount, states['customer'], wholesale)
+              .then((value) {
+            updateState({'carts': []});
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Done save sale')));
+          }).catchError((error) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(error.toString())));
+          });
+        },
+        carts: _getCarts(states),
+        wholesale: false,
+        context: context,
+        customer: _getCustomer(states),
+        onCustomer: (d) => updateState({"customer": d}),
+      );
+
+  _removeCart(states, updateState) => (String id) =>
+      updateState({'carts': removeCart(id, states['carts'] ?? [])});
+
+  _addCartQuantity(states, updateState) => (String id, int q) =>
+      updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 }
