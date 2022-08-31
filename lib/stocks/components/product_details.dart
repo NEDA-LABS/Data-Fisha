@@ -17,10 +17,10 @@ productDetail(Map item) => Padding(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                outlineButton(onPressed: (){}, title: 'Edit details'),
-                outlineButton(onPressed: (){}, title: 'Add quantity'),
-                outlineButton(onPressed: (){}, title: 'Reduce quantity'),
-                outlineButton(onPressed: (){}, title: 'Delete', textColor: Colors.red),
+                // outlineButton(onPressed: (){}, title: 'Edit'),
+                // outlineButton(onPressed: (){}, title: 'Add quantity'),
+                // outlineButton(onPressed: (){}, title: 'Reduce quantity'),
+                // outlineButton(onPressed: (){}, title: 'Delete', textColor: Colors.red),
               ],
             ),
           ),

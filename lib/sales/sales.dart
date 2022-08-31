@@ -15,10 +15,10 @@ class SalesModule extends Module {
             guards: [ActiveShopGuard()], child: (_, __) => const SalesPage()),
         ChildRoute('/whole',
             guards: [ActiveShopGuard()],
-            child: (context, args) => RetailPage(wholesale: true, title: 'Wholesale')),
+            child: (context, args) => SalePage(wholesale: true, title: 'Wholesale')),
         ChildRoute('/retail',
             guards: [ActiveShopGuard()],
-            child: (context, args) => RetailPage(wholesale: false, title: 'Retail')),
+            child: (context, args) => SalePage(wholesale: false, title: 'Retail')),
         ChildRoute('/customers',
             guards: [ActiveShopGuard()],
             child: (context, args) => CustomersPage(args))

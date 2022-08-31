@@ -20,6 +20,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         state.refresh();
       },
       label: "Name",
+      placeholder: 'Select product name',
       error: state.error['product'] ?? '',
       initialText: state.product['product'],
       getAddWidget: () => createItemContent(),
@@ -39,6 +40,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         state.refresh();
       },
       label: "Category",
+      placeholder: 'Select category',
       error: state.error['category'] ?? '',
       initialText: state.product['category'],
       getAddWidget: () => createCategoryContent(),
@@ -51,6 +53,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         state.refresh();
       },
       label: "Supplier",
+      placeholder: 'Select supplier',
       error: state.error['supplier'] ?? '',
       initialText: state.product['supplier'],
       getAddWidget: () => createSupplierContent(),
@@ -62,7 +65,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['purchase'] ?? '',
-      initialText: state.product['purchase'].toString(),
+      initialText: '${state.product['purchase']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -70,7 +73,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['retailPrice'] ?? '',
-      initialText: state.product['retailPrice'].toString(),
+      initialText: '${state.product['retailPrice']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -78,7 +81,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['wholesalePrice'] ?? '',
-      initialText: state.product['wholesalePrice'].toString(),
+      initialText: '${state.product['wholesalePrice']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -86,7 +89,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Quantity",
       placeholder: "Current stock quantity",
       error: state.error['quantity'] ?? '',
-      initialText: state.product['quantity'].toString(),
+      initialText:'${state.product['quantity']??''}',
       type: TextInputType.number,
     ),
     TextInput(

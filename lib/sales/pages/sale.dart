@@ -12,10 +12,11 @@ import '../../core/components/top_bar.dart';
 import '../components/cart_drawer.dart';
 import '../components/sales_body.dart';
 
-class RetailPage extends StatelessWidget {
+class SalePage extends StatelessWidget {
   final String title;
   final bool wholesale;
-  RetailPage({
+
+  SalePage({
     @required this.title,
     @required this.wholesale,
     Key key,
@@ -39,7 +40,9 @@ class RetailPage extends StatelessWidget {
 
   _onShowCheckoutSheet(states, updateState, context, wholesale) =>
       () => fullScreeDialog(
-          context, _cartDrawer(states, updateState, context, wholesale));
+          context,
+          (refresh) =>
+              _cartDrawer(states, updateState, context, wholesale, refresh));
 
   _appBar(updateState) => StockAppBar(
       title: title,
@@ -81,11 +84,10 @@ class RetailPage extends StatelessWidget {
           menus: moduleMenus(),
           office: 'Menu',
           current: '/sales/',
-          // showLeftDrawer: true,
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,
-                  child: _cartDrawer(states, updateState, context, wholesale))
+                  child: _cartDrawer(states, updateState, context, wholesale, (a){}))
               : null,
           onBody: (drawer) => Scaffold(
               appBar: states['hab'] == true ? null : _appBar(updateState),
@@ -99,23 +101,18 @@ class RetailPage extends StatelessWidget {
                       _onShowCheckoutSheet(
                           states, updateState, context, wholesale))))));
 
-  _cartDrawer(states, updateState, context, wholesale) => cartDrawer(
-        onAddItem: _addCartQuantity(states, updateState),
-        onRemoveItem: _removeCart(states, updateState),
-        onCheckout: (discount) async {
-          var customer = '${states['customer']??''}';
-          var carts = states['carts'];
-          return printAndSaveCart(carts, discount, customer, wholesale)
-              .then((value) {
-            updateState({'carts': [], 'customer': ''});
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('Done save sale')));
-            navigator().maybePop();
-          }).catchError((error) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(error.toString())));
-          });
+  _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
+        onAddItem: (id, q) {
+          var addCart = _prepareAddCartQuantity(states, updateState);
+          addCart(id, q);
+          refresh((){});
         },
+        onRemoveItem: (id) {
+          var remove = _prepareRemoveCart(states, updateState);
+          remove(id);
+          refresh((){});
+        },
+        onCheckout: _prepareCheckout(states, updateState, context),
         carts: _getCarts(states),
         wholesale: wholesale,
         context: context,
@@ -123,9 +120,24 @@ class RetailPage extends StatelessWidget {
         onCustomer: (d) => updateState({"customer": d}),
       );
 
-  _removeCart(states, updateState) => (String id) =>
+  _prepareRemoveCart(states, updateState) => (String id) =>
       updateState({'carts': removeCart(id, states['carts'] ?? [])});
 
-  _addCartQuantity(states, updateState) => (String id, int q) =>
+  _prepareAddCartQuantity(states, updateState) => (String id, int q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
+
+  _prepareCheckout(states, updateState, context) => (discount) async {
+        var customer = '${states['customer'] ?? ''}';
+        var carts = states['carts'];
+        return printAndSaveCart(carts, discount, customer, wholesale)
+            .then((value) {
+          updateState({'carts': [], 'customer': ''});
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Done save sale')));
+          navigator().maybePop();
+        }).catchError((error) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(error.toString())));
+        });
+      };
 }

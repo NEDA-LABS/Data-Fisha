@@ -20,7 +20,4 @@ class AppModule extends Module {
   List<Bind> get binds => [];
 }
 
-List<MenuModel> moduleMenus() => [
-      salesMenu(),
-      stocksMenu(),
-    ];
+List<MenuModel> moduleMenus() => [salesMenu(), stocksMenu()];

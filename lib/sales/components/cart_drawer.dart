@@ -123,11 +123,9 @@ _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
         children: [
           const Expanded(child: Text('Discount ( TZS )')),
           Container(
-            // margin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5), border: Border.all()),
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            // height: 38,
             width: 150,
             child: TextField(
                 autofocus: false,

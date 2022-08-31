@@ -1,4 +1,4 @@
-package com.example.smartstock_mobile
+package com.fahamutech.smartstock
 
 import android.app.Application
 
