@@ -3,7 +3,7 @@ import 'package:smartstock_pos/sales/pages/customers.dart';
 
 import 'guards/active_shop.dart';
 import 'pages/index.dart';
-import 'pages/retail.dart';
+import 'pages/sale.dart';
 import 'pages/wholesale.dart';
 import 'states/cart.dart';
 import 'states/sales.dart';
@@ -15,10 +15,10 @@ class SalesModule extends Module {
             guards: [ActiveShopGuard()], child: (_, __) => const SalesPage()),
         ChildRoute('/whole',
             guards: [ActiveShopGuard()],
-            child: (context, args) => WholesalePage()),
+            child: (context, args) => RetailPage(wholesale: true, title: 'Wholesale')),
         ChildRoute('/retail',
             guards: [ActiveShopGuard()],
-            child: (context, args) => RetailPage()),
+            child: (context, args) => RetailPage(wholesale: false, title: 'Retail')),
         ChildRoute('/customers',
             guards: [ActiveShopGuard()],
             child: (context, args) => CustomersPage(args))

@@ -12,7 +12,7 @@ Widget cartDrawer(
         @required Function(dynamic) onCheckout,
         @required Function(String) onRemoveItem,
         @required Function(String, int) onAddItem,
-        bool wholesale = false,
+        @required bool wholesale,
         context,
         @required customer,
         @required onCustomer}) =>
@@ -144,7 +144,7 @@ _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
 
 Widget _checkoutCartItem(
         {@required cart,
-        bool wholesale = false,
+        @required bool wholesale,
         @required BuildContext context,
         @required Function(String, int) onAddItem,
         @required Function(String) onRemoveItem}) =>

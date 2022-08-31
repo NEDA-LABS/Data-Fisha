@@ -11,14 +11,14 @@ import 'package:smartstock_pos/sales/services/sales_cache.dart';
 import '../../core/services/security.dart';
 
 class SalesSyncService {
-  var shouldRun = true;
+  bool shouldRun = true;
 
   start() {
     Timer.periodic(const Duration(seconds: 8), (_) async {
       // print("Sales synchronization started!!!!!!");
       if (shouldRun) {
         shouldRun = false;
-        run().then((_) {}).catchError((_) {}).whenComplete(() {
+        saveSalesAndRemove().then((_) {}).catchError((_) {}).whenComplete(() {
           shouldRun = true;
         });
       } else {
@@ -27,11 +27,6 @@ class SalesSyncService {
         }
       }
     });
-  }
-
-  Future run() async {
-    // initiateSmartStock();
-    await saveSalesAndRemove();
   }
 
   Future saveSalesAndRemove() async {
@@ -106,6 +101,7 @@ Future saveSaleAndUpdateStock(Map map) async {
       'quantity': sale['quantity'] ?? 0,
       'amount': sale['amount'] ?? 0,
       'customer': sale['customer'] ?? '',
+      'customerObject': sale['customerObject'] ?? {"displayName": ""},
       'cartId': sale['cartId'],
       'discount': sale['discount'] ?? 0,
       'user': sellerObject != null ? sellerObject['username'] ?? '' : '',

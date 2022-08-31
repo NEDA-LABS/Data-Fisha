@@ -12,7 +12,7 @@ Future saveSales(List sales, String cartId) async {
     sale['batch'] = batch;
     sale['id'] = batch;
     batchs.add(
-        {"method": 'POST', "body": jsonEncode(sale), "path": '/classes/sales'});
+        {"method": 'POST', "body": jsonEncode(sale), "path": '/sale/cash'});
   }
   return saveSalesLocal(batchs);
 }

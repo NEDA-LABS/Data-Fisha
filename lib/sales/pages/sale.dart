@@ -13,7 +13,13 @@ import '../components/cart_drawer.dart';
 import '../components/sales_body.dart';
 
 class RetailPage extends StatelessWidget {
-  RetailPage({Key key}) : super(key: key);
+  final String title;
+  final bool wholesale;
+  RetailPage({
+    @required this.title,
+    @required this.wholesale,
+    Key key,
+  }) : super(key: key);
 
   final _getSkip = propertyOr('skip', (p0) => false);
   final _getQuery = propertyOr('query', (p0) => '');
@@ -36,7 +42,7 @@ class RetailPage extends StatelessWidget {
           context, _cartDrawer(states, updateState, context, wholesale));
 
   _appBar(updateState) => StockAppBar(
-      title: "Retail",
+      title: title,
       backLink: "/sales/",
       showBack: true,
       showSearch: true,
@@ -60,7 +66,7 @@ class RetailPage extends StatelessWidget {
                 : const SizedBox(height: 0),
             Expanded(
                 child: salesBody(
-                    wholesale: false,
+                    wholesale: wholesale,
                     products: snapshot.data ?? [],
                     onAddToCart: onAddToCart,
                     onShowCheckout: onShowCheckout,
@@ -79,8 +85,7 @@ class RetailPage extends StatelessWidget {
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,
-                  child: _cartDrawer(states, updateState, context, false),
-                )
+                  child: _cartDrawer(states, updateState, context, wholesale))
               : null,
           onBody: (drawer) => Scaffold(
               appBar: states['hab'] == true ? null : _appBar(updateState),
@@ -92,25 +97,27 @@ class RetailPage extends StatelessWidget {
                       _getCarts(states),
                       _onAddToCart(states, updateState),
                       _onShowCheckoutSheet(
-                          states, updateState, context, false))))));
+                          states, updateState, context, wholesale))))));
 
   _cartDrawer(states, updateState, context, wholesale) => cartDrawer(
         onAddItem: _addCartQuantity(states, updateState),
         onRemoveItem: _removeCart(states, updateState),
         onCheckout: (discount) async {
-          return printAndSaveCart(
-                  states['carts'], discount, states['customer'], wholesale)
+          var customer = '${states['customer']??''}';
+          var carts = states['carts'];
+          return printAndSaveCart(carts, discount, customer, wholesale)
               .then((value) {
-            updateState({'carts': []});
+            updateState({'carts': [], 'customer': ''});
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text('Done save sale')));
+            navigator().maybePop();
           }).catchError((error) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(error.toString())));
           });
         },
         carts: _getCarts(states),
-        wholesale: false,
+        wholesale: wholesale,
         context: context,
         customer: _getCustomer(states),
         onCustomer: (d) => updateState({"customer": d}),

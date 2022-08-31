@@ -1,4 +1,5 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smartstock_pos/sales/services/printer.dart';
 
 import '../../core/services/cache_shop.dart';
@@ -35,8 +36,8 @@ updateCartQuantity(String id, int quantity, List carts) => carts.map((e) {
       return e;
     }).toList();
 
-Future _submitBill(List carts, discount, String cartId, wholesale) async {
-  List<dynamic> sales = await _getSalesBatch(carts, discount, wholesale);
+Future _submitBill(List carts, discount, String cartId, wholesale, customer) async {
+  List<dynamic> sales = await _getSalesBatch(carts, discount, wholesale, customer);
   await saveSales(sales, cartId);
 }
 
@@ -86,7 +87,7 @@ Future<String> _cartItemsToPrinterData(List<dynamic> carts, String customer,
   return data;
 }
 
-Future<List<dynamic>> _getSalesBatch(List carts, dis, wholesale) async {
+Future<List<dynamic>> _getSalesBatch(List carts, dis, wholesale, customer) async {
   var currentUser = await getLocalCurrentUser();
   var discount = int.tryParse('$dis') ?? 0;
   String stringDate = toSqlDate(DateTime.now());
@@ -114,7 +115,8 @@ Future<List<dynamic>> _getSalesBatch(List carts, dis, wholesale) async {
       "time": stringTime,
       "timer": stringTime,
       "idTra": idTra,
-      "customer": null,
+      "customer": customer,
+      "customerObject": {'displayName':customer},
       "user": currentUser != null ? currentUser['id'] : null,
       "userObject": currentUser,
       "stock": value.product,
@@ -127,20 +129,19 @@ Future<List<dynamic>> _getSalesBatch(List carts, dis, wholesale) async {
 Future printAndSaveCart(List carts, discount, customer, wholesale) async {
   var currentShop = await getActiveShop();
   String cartId = generateUUID();
-  List<dynamic> cartItems = _getCartItems(carts, discount, wholesale, customer);
+  List<dynamic> cartItems = _getCartItems(carts, discount, wholesale, '$customer');
+  // print(await _cartItemsToPrinterData(cartItems, customer,
+  //     wholesale: wholesale));
   if (currentShop['settings']['saleWithoutPrinter'] == false) {
     await PrinterService().posPrint(
-      data: await _cartItemsToPrinterData(
-        cartItems,
-        customer,
-        wholesale: wholesale,
-      ),
+      data: await _cartItemsToPrinterData(cartItems, '$customer',
+          wholesale: wholesale),
       printer: 'jzv3',
       id: cartId,
       qr: cartId,
     );
   }
-  await _submitBill(carts, discount, cartId, wholesale);
+  await _submitBill(carts, discount, cartId, wholesale, '$customer');
 }
 
 List<dynamic> _getCartItems(List carts, dis, wholesale, customer) =>
@@ -155,7 +156,7 @@ List<dynamic> _getCartItems(List carts, dis, wholesale, customer) =>
             wholesale: wholesale),
         "product": value.product['product'],
         'customer': customer,
-        'customerObj': {'displayName': customer},
+        'customerObject': {'displayName': customer},
         "quantity": value.quantity,
         "stock": value.product,
         "discount": _getCartItemDiscount(discount, carts.length)
