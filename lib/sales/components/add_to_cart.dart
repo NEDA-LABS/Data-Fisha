@@ -41,7 +41,7 @@ _cartQuantityInput(context, states, updateState) => Container(
         lines: 1,
         placeholder: 'Quantity',
         type: TextInputType.number,
-        onText: (v) => updateState({'q': int.tryParse(v)})));
+        onText: (v) => updateState({'q': int.tryParse(v)??1})));
 
 _addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),
