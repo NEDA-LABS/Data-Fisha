@@ -16,13 +16,13 @@ List<SubMenuModule> _pagesMenu() => [
         roles: [],
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Invoices',
-      //   link: '/sales/invoice',
-      //   svgName: 'invoice_icon.svg',
-      //   roles: [],
-      //   onClick: () {},
-      // ),
+      SubMenuModule(
+        name: 'Invoices',
+        link: '/sales/invoice',
+        svgName: 'invoice_icon.svg',
+        roles: [],
+        onClick: () {},
+      ),
       SubMenuModule(
         name: 'Customers',
         link: '/sales/customers',

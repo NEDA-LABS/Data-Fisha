@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/sales/pages/customers.dart';
+import 'package:smartstock/sales/pages/invoices.dart';
 
 import 'guards/active_shop.dart';
 import 'pages/index.dart';
@@ -21,7 +22,10 @@ class SalesModule extends Module {
             child: (context, args) => SalePage(wholesale: false, title: 'Retail')),
         ChildRoute('/customers',
             guards: [ActiveShopGuard()],
-            child: (context, args) => CustomersPage(args))
+            child: (context, args) => CustomersPage(args)),
+    ChildRoute('/invoice',
+            guards: [ActiveShopGuard()],
+            child: (context, args) => InvoicesPage(args))
       ];
 
   @override
