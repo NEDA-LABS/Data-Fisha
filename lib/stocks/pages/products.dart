@@ -1,15 +1,15 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/app.dart';
-import 'package:smartstock_pos/core/components/dialog_or_bottom_sheet.dart';
-import 'package:smartstock_pos/core/components/responsive_body.dart';
-import 'package:smartstock_pos/core/components/table_context_menu.dart';
-import 'package:smartstock_pos/core/components/top_bar.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
-import 'package:smartstock_pos/core/services/stocks.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/stocks/components/product_details.dart';
-import 'package:smartstock_pos/stocks/states/products_list.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/table_context_menu.dart';
+import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/stocks.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/components/product_details.dart';
+import 'package:smartstock/stocks/states/products_list.dart';
 
 import '../../core/components/table_like_list.dart';
 import '../states/product_loading.dart';

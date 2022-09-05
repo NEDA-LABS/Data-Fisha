@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/active_component.dart';
-import 'package:smartstock_pos/core/components/full_screen_dialog.dart';
-import 'package:smartstock_pos/core/services/stocks.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/sales/components/refresh_button.dart';
-import 'package:smartstock_pos/sales/services/cart.dart';
+import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/services/stocks.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/components/refresh_button.dart';
+import 'package:smartstock/sales/services/cart.dart';
 
 import '../../app.dart';
 import '../../core/components/responsive_body.dart';

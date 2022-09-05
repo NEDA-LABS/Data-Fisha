@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/stocks/services/category.dart';
-import 'package:smartstock_pos/stocks/services/supplier.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/category.dart';
+import 'package:smartstock/stocks/services/supplier.dart';
 
 import 'suppliers_list.dart';
 

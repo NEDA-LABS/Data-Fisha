@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/services/util.dart';
 
 main() {
   group("Utils", () {

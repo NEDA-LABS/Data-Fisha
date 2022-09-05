@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/button.dart';
+import 'package:smartstock/core/components/button.dart';
 
 productDetail(Map item) => Padding(
       padding: const EdgeInsets.all(16.0),

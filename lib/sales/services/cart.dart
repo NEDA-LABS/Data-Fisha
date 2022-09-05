@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smartstock_pos/sales/services/printer.dart';
+import 'package:smartstock/sales/services/printer.dart';
 
 import '../../core/services/cache_shop.dart';
 import '../../core/services/cache_user.dart';

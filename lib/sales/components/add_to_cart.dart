@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/active_component.dart';
+import 'package:smartstock/core/components/active_component.dart';
 
 import '../../core/components/text_input.dart';
 import '../models/cart.model.dart';

@@ -1,5 +1,5 @@
 // import 'package:flutter_driver/driver_extension.dart';
-// import 'package:smartstock_pos/main.dart' as app;
+// import 'package:smartstock/main.dart' as app;
 
 // void main() {
 //   // This line enables the extension.

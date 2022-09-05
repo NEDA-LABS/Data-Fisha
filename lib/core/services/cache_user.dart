@@ -1,5 +1,5 @@
-import 'package:smartstock_pos/core/services/cache_factory.dart';
-import 'package:smartstock_pos/configurations.dart';
+import 'package:smartstock/core/services/cache_factory.dart';
+import 'package:smartstock/configurations.dart';
 
 const _userTable = 'user';
 const _userId = 'current';

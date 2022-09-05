@@ -1,10 +1,10 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/stocks/services/api_items.dart';
-import 'package:smartstock_pos/stocks/states/items_loading.dart';
-import 'package:smartstock_pos/stocks/states/product_create.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/api_items.dart';
+import 'package:smartstock/stocks/states/items_loading.dart';
+import 'package:smartstock/stocks/states/product_create.dart';
 
 class ItemCreateState extends ChangeNotifier {
   var item = {};

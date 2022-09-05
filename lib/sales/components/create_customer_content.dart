@@ -1,9 +1,9 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/active_component.dart';
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/sales/services/customer_cache.dart';
+import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/services/customer_cache.dart';
 
 import '../../core/components/text_input.dart';
 import '../services/api_customer.dart';

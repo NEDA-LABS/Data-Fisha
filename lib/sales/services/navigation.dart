@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
+import 'package:smartstock/core/models/menu.dart';
 
 List<SubMenuModule> _pagesMenu() => [
       SubMenuModule(

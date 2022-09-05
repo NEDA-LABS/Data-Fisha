@@ -1,13 +1,13 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock_pos/stocks/pages/items.dart';
-import 'package:smartstock_pos/stocks/pages/suppliers.dart';
-import 'package:smartstock_pos/stocks/states/categories_list.dart';
-import 'package:smartstock_pos/stocks/states/categories_loading.dart';
-import 'package:smartstock_pos/stocks/states/item_create.dart';
-import 'package:smartstock_pos/stocks/states/items_list.dart';
-import 'package:smartstock_pos/stocks/states/items_loading.dart';
-import 'package:smartstock_pos/stocks/states/suppliers_list.dart';
-import 'package:smartstock_pos/stocks/states/suppliers_loading.dart';
+import 'package:smartstock/stocks/pages/items.dart';
+import 'package:smartstock/stocks/pages/suppliers.dart';
+import 'package:smartstock/stocks/states/categories_list.dart';
+import 'package:smartstock/stocks/states/categories_loading.dart';
+import 'package:smartstock/stocks/states/item_create.dart';
+import 'package:smartstock/stocks/states/items_list.dart';
+import 'package:smartstock/stocks/states/items_loading.dart';
+import 'package:smartstock/stocks/states/suppliers_list.dart';
+import 'package:smartstock/stocks/states/suppliers_loading.dart';
 
 import 'pages/categories.dart';
 import 'pages/index.dart';

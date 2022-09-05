@@ -1,9 +1,9 @@
 import 'package:bfast/controller/function.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
-import 'package:smartstock_pos/core/services/api.dart';
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/services/api.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/util.dart';
 
 _getPositiveItemsRequest(App app) =>
     () => getHttpRequest('${shopFunctionsURL(app)}/stock/value/items');

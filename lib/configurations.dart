@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // blue 0xff0049a9
 
 MaterialColor getSmartStockMaterialColorSwatch() {
-  Color color = const Color(0xFF0b2e13);
+  Color color = const Color(0xff0049a9);
   List strengths = <double>[.05];
   Map<int, Color> swatch = <int, Color>{};
   final int r = color.red, g = color.green, b = color.blue;

@@ -1,6 +1,6 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/stocks/states/suppliers_loading.dart';
+import 'package:smartstock/stocks/states/suppliers_loading.dart';
 
 import '../../app.dart';
 import '../../core/components/responsive_body.dart';

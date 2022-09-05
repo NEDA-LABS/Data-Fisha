@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:smartstock_pos/sales/services/sales_cache.dart';
+import 'package:smartstock/sales/services/sales_cache.dart';
 
 import '../../core/services/security.dart';
 

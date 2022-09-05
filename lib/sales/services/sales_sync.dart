@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:bfast/options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartstock_pos/core/services/cache_user.dart';
-import 'package:smartstock_pos/core/services/util.dart';
-import 'package:smartstock_pos/sales/services/sales_cache.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/services/sales_cache.dart';
 
 import '../../core/services/security.dart';
 

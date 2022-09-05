@@ -5,9 +5,9 @@ import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/cache_user.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/util.dart';
 
 _loginHttp(App app, String username, String password) async {
   var url = databaseURL(app);

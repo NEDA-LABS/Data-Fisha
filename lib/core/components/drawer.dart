@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 
 drawer(String office, List<MenuModel> menus, String current) => Drawer(
       width: 250,

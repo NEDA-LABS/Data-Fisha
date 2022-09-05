@@ -1,7 +1,7 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/text_input.dart';
-import 'package:smartstock_pos/stocks/states/item_create.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/stocks/states/item_create.dart';
 
 createItemContent() => Consumer<ItemCreateState>(
       builder: (context, state) => Padding(

@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/drawer.dart';
+import 'package:smartstock/core/components/drawer.dart';
 
 import '../models/menu.dart';
 import '../services/util.dart';
