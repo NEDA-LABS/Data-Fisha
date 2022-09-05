@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/services/util.dart';
 
 import '../../app.dart';
@@ -7,6 +8,7 @@ import '../../core/components/table_context_menu.dart';
 import '../../core/components/table_like_list.dart';
 import '../../core/components/top_bar.dart';
 import '../../core/models/menu.dart';
+import '../components/invoice_details.dart';
 import '../services/invoice.dart';
 
 class InvoicesPage extends StatefulWidget {
@@ -34,25 +36,25 @@ class _InvoicesPage extends State<InvoicesPage> {
         });
         _refresh(skip: false);
       },
-      searchHint: 'Search...');
+      searchHint: 'Search by date...');
 
   _contextInvoices(context) => [
         ContextMenu(
           name: 'Create',
-          pressed: () => navigateTo('/sale/invoice/create'),
+          pressed: () => navigateTo('/sales/credit'),
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
       ];
 
   _tableHeader() => SizedBox(
-    height: 38,
-    child: tableLikeListRow([
+        height: 38,
+        child: tableLikeListRow([
           tableLikeListTextHeader('Date'),
           tableLikeListTextHeader('Customer'),
-          tableLikeListTextHeader('Amount'),
-          tableLikeListTextHeader('Paid'),
+          tableLikeListTextHeader('Amount ( TZS )'),
+          tableLikeListTextHeader('Paid ( TZS )'),
         ]),
-  );
+      );
 
   _fields() => ['date', 'customer', 'amount', 'payment'];
 
@@ -79,19 +81,19 @@ class _InvoicesPage extends State<InvoicesPage> {
               _tableHeader(),
               Expanded(
                 child: tableLikeList(
-                  onFuture: () async => _invoices,
-                  keys: _fields(),
-                  onCell: (a,b){
-                    if(a=='customer'){
-                      return Text('${b['displayName']}');
-                    }
-                    if(a=='payment'){
-                      return Text('${_getInvPayment(b)}');
-                    }
-                    return Text('$b');
-                  },
-                  onItemPressed: (){}
-                ),
+                    onFuture: () async => _invoices,
+                    keys: _fields(),
+                    onCell: (a, b) {
+                      if (a == 'customer') {
+                        return Text('${b['displayName']}');
+                      }
+                      if (a == 'payment') {
+                        return Text('${_getInvPayment(b)}');
+                      }
+                      return Text('$b');
+                    },
+                    onItemPressed: (item) =>
+                        showDialogOrModalSheet(invoiceDetails(context,item), context)),
               ), // _tableFooter()
             ],
           ),
@@ -122,8 +124,9 @@ class _InvoicesPage extends State<InvoicesPage> {
   }
 
   _getInvPayment(b) {
-    if(b is Map){
-      return b.values.fold(0, (a, element) => a+ int.tryParse('$element')??0);
+    if (b is Map) {
+      return b.values
+          .fold(0, (a, element) => a + int.tryParse('$element') ?? 0);
     }
     return 0;
   }

@@ -35,7 +35,7 @@ Future<List> _filterAndSort(Map data) async {
   //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
 
   // invoices = invoices.where(_where).toList();
-  invoices.sort((a, b) =>
-      '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
+  // invoices.sort((a, b) =>
+  //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
   return invoices;
 }
