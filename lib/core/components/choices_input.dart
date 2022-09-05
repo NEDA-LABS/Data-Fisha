@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/choice_input_dropdown.dart';
-import 'package:smartstock_pos/core/components/input_box_decoration.dart';
-import 'package:smartstock_pos/core/components/input_error_message.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/components/choice_input_dropdown.dart';
+import 'package:smartstock/core/components/input_box_decoration.dart';
+import 'package:smartstock/core/components/input_error_message.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ChoicesInput extends StatefulWidget {
   final Function(String) onText;

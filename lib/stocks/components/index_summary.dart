@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:smartstock_pos/core/components/summary_report_card.dart';
-import 'package:smartstock_pos/stocks/services/stocks_report.dart';
+import 'package:smartstock/core/components/summary_report_card.dart';
+import 'package:smartstock/stocks/services/stocks_report.dart';
 
 _title() => const Padding(
     padding: EdgeInsets.fromLTRB(0, 16, 0, 8),

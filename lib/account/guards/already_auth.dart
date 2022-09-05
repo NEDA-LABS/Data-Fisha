@@ -1,7 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/cache_user.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 
 import '../../sales/services/stocks.dart';
 import '../../core/services/util.dart';

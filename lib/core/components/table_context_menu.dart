@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
+import 'package:smartstock/core/models/menu.dart';
 
 _contextButton({@required String text, @required Function pressed}) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),

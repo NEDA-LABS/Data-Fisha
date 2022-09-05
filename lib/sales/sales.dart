@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock_pos/sales/pages/customers.dart';
+import 'package:smartstock/sales/pages/customers.dart';
 
 import 'guards/active_shop.dart';
 import 'pages/index.dart';

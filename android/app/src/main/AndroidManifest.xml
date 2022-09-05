@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.smartstock">
+    package="com.fahamutech.smartstock">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="SmartStock"

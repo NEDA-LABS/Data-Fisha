@@ -1,12 +1,12 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/text_input.dart';
-import 'package:smartstock_pos/stocks/components/create_category_content.dart';
-import 'package:smartstock_pos/stocks/components/create_item_content.dart';
-import 'package:smartstock_pos/stocks/components/create_supplier_content.dart';
-import 'package:smartstock_pos/stocks/services/category.dart';
-import 'package:smartstock_pos/stocks/services/supplier.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/components/create_item_content.dart';
+import 'package:smartstock/stocks/components/create_supplier_content.dart';
+import 'package:smartstock/stocks/services/category.dart';
+import 'package:smartstock/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
 import '../services/item.dart';
