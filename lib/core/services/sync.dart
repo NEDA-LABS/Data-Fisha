@@ -29,7 +29,7 @@ void syncCallbackDispatcher() {
 }
 
 Future syncLocal2Remote(dynamic) async {
-  print('------syncs routine run------');
+  // print('------syncs routine run------');
   List keys = await getLocalSyncsKeys();
   // print(keys);
   for (var key in keys) {
