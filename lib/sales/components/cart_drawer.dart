@@ -5,6 +5,7 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
+import '../services/cart.dart';
 import 'cart.dart';
 
 Widget cartDrawer(
@@ -92,11 +93,7 @@ _formatPrice(price) =>
     NumberFormat.currency(name: 'TZS ').format(int.tryParse('$price') ?? 0);
 
 _getFinalTotal(List carts, int discount, bool wholesale) =>
-    carts.fold(-discount, (t, c) => t + _getProductPrice(c, wholesale));
-
-_getProductPrice(cart, bool wholesale) => wholesale
-    ? cart.product['wholesalePrice'] * cart.quantity
-    : cart.product['retailPrice'] * cart.quantity;
+    carts.fold(-discount, (t, c) => t + getProductPrice(c, wholesale));
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
@@ -108,14 +105,13 @@ _totalAmountRow(List carts, wholesale) => Padding(
           const Expanded(
               child: Text("Total",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-          Text('${_getTotalAmount(carts, wholesale)}',
+          Text('${cartTotalAmount(carts, wholesale)}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
         ],
       ),
     );
 
-_getTotalAmount(List carts, wholesale) =>
-    carts.fold(0, (t, element) => t + _getProductPrice(element, wholesale));
+
 
 _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
       padding: const EdgeInsets.all(8.0),

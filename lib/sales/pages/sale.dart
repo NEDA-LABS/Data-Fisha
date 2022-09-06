@@ -15,10 +15,12 @@ import '../components/sales_body.dart';
 class SalePage extends StatelessWidget {
   final String title;
   final bool wholesale;
+  final Future Function(List, String, dynamic) onSubmitCart;
 
   SalePage({
     @required this.title,
     @required this.wholesale,
+    @required this.onSubmitCart,
     Key key,
   }) : super(key: key);
 
@@ -38,11 +40,10 @@ class SalePage extends StatelessWidget {
         navigator().maybePop();
       };
 
-  _onShowCheckoutSheet(states, updateState, context, wholesale) =>
-      () => fullScreeDialog(
-          context,
-          (refresh) =>
-              _cartDrawer(states, updateState, context, wholesale, refresh));
+  _onShowCheckoutSheet(states, updateState, context) => () => fullScreeDialog(
+      context,
+      (refresh) =>
+          _cartDrawer(states, updateState, context, wholesale, refresh));
 
   _appBar(updateState) => StockAppBar(
       title: title,
@@ -87,7 +88,8 @@ class SalePage extends StatelessWidget {
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,
-                  child: _cartDrawer(states, updateState, context, wholesale, (a){}))
+                  child: _cartDrawer(
+                      states, updateState, context, wholesale, (a) {}))
               : null,
           onBody: (drawer) => Scaffold(
               appBar: states['hab'] == true ? null : _appBar(updateState),
@@ -98,21 +100,28 @@ class SalePage extends StatelessWidget {
                   builder: _getView(
                       _getCarts(states),
                       _onAddToCart(states, updateState),
-                      _onShowCheckoutSheet(
-                          states, updateState, context, wholesale))))));
+                      _onShowCheckoutSheet(states, updateState, context))))));
 
   _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
         onAddItem: (id, q) {
           var addCart = _prepareAddCartQuantity(states, updateState);
           addCart(id, q);
-          refresh((){});
+          refresh(() {});
         },
         onRemoveItem: (id) {
           var remove = _prepareRemoveCart(states, updateState);
           remove(id);
-          refresh((){});
+          refresh(() {});
         },
-        onCheckout: _prepareCheckout(states, updateState, context),
+        onCheckout: (discount) {
+          var customer = '${states['customer'] ?? ''}';
+          var carts = states['carts'];
+          return onSubmitCart(carts, customer, discount).then((value) {
+            updateState({'carts': [], 'customer': ''});
+            navigator().maybePop();
+          }).catchError(_showCheckoutError(context));
+          // onCheckout
+        },
         carts: _getCarts(states),
         wholesale: wholesale,
         context: context,
@@ -126,18 +135,28 @@ class SalePage extends StatelessWidget {
   _prepareAddCartQuantity(states, updateState) => (String id, int q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
-  _prepareCheckout(states, updateState, context) => (discount) async {
-        var customer = '${states['customer'] ?? ''}';
-        var carts = states['carts'];
-        return printAndSaveCart(carts, discount, customer, wholesale)
-            .then((value) {
-          updateState({'carts': [], 'customer': ''});
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Done save sale')));
-          navigator().maybePop();
-        }).catchError((error) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(error.toString())));
-        });
+  _showCheckoutError(context) => (error) {
+        showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Container(
+                constraints:
+                    const BoxConstraints(maxWidth: 200, maxHeight: 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('Error',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400)),
+                    Expanded(
+                        child: SingleChildScrollView(child: Text('$error'))),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
       };
 }

@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/services/util.dart';
-import '../models/cart.model.dart';
-import '../states/cart.dart';
-import '../states/sales.dart';
-
 Widget salesRefreshButton({
   bool loading = false,
   @required List carts,

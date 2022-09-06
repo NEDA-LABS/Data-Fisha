@@ -41,7 +41,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   _contextInvoices(context) => [
         ContextMenu(
           name: 'Create',
-          pressed: () => navigateTo('/sales/credit'),
+          pressed: () => navigateTo('/sales/invoice/create'),
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
       ];

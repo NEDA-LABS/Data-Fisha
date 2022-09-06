@@ -9,6 +9,7 @@ import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
+import '../../core/services/util.dart';
 import '../services/item.dart';
 import '../states/product_create.dart';
 
@@ -114,9 +115,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
 }
 
 var _mobileQrScan = ifDoElse(
-  (_) =>
-      defaultTargetPlatform == TargetPlatform.iOS ||
-      defaultTargetPlatform == TargetPlatform.android,
+  (_) => isMobilePlatform(),
   (_) => IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
   (_) => const SizedBox(),
 );

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/services/stocks_cache.dart';
+import 'package:smartstock/core/services/cache_stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 
 import '../../core/services/api_stocks.dart';

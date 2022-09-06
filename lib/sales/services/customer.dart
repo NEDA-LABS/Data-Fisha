@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../../core/services/cache_shop.dart';
 import '../../core/services/util.dart';
 import 'api_customer.dart';
-import 'customer_cache.dart';
+import 'cache_customer.dart';
 
 Future<List<dynamic>> getCustomerFromCacheOrRemote({
   skipLocal = false,
