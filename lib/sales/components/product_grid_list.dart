@@ -1,11 +1,9 @@
 // import 'package:flutter/material.dart';
-// import 'package:smartstock_pos/sales/components/product_card.dart';
+// import 'package:smartstock/sales/components/product_card.dart';
 //
 // import '../../core/services/util.dart';
 // import '../models/cart.model.dart';
-// import '../states/cart.dart';
 // import '../states/index.dart';
-// import 'cart.dart';
 // import 'loading_view.dart';
 //
 // Widget listOfProducts({wholesale = false}) =>

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 
 _iconContainer(String svg) => Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),

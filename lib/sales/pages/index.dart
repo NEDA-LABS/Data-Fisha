@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/app.dart';
-import 'package:smartstock_pos/core/components/bottom_bar.dart';
-import 'package:smartstock_pos/core/components/index_page.dart';
-import 'package:smartstock_pos/core/components/responsive_body.dart';
-import 'package:smartstock_pos/core/components/top_bar.dart';
-import 'package:smartstock_pos/sales/services/navigation.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/index_page.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/sales/services/navigation.dart';
 
 import '../../core/components/switch_to_item.dart';
 

@@ -1,147 +1,153 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/active_component.dart';
-import 'package:smartstock_pos/core/components/choice_input_dropdown.dart';
-import 'package:smartstock_pos/core/components/input_box_decoration.dart';
-import 'package:smartstock_pos/core/components/input_error_message.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/components/choice_input_dropdown.dart';
+import 'package:smartstock/core/components/input_box_decoration.dart';
+import 'package:smartstock/core/components/input_error_message.dart';
+import 'package:smartstock/core/services/util.dart';
 
-_fullWidthText(onText, initialText) => Expanded(
-    child: TextField(
-        controller: TextEditingController(text: initialText),
-        onChanged: onText,
-        autofocus: false,
-        maxLines: 1,
-        minLines: 1,
-        readOnly: true,
-        decoration: const InputDecoration(
-            border: InputBorder.none, contentPadding: EdgeInsets.all(8))));
+class ChoicesInput extends StatefulWidget {
+  final Function(String) onText;
+  final Future Function({bool skipLocal}) onLoad;
+  final Widget Function() getAddWidget;
+  final String initialText;
+  final String label;
+  final String placeholder;
+  final String error;
+  final Function(dynamic) onField;
+  final bool showBorder;
 
-_label(label) => Padding(
-    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-    child: Text(label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)));
+  const ChoicesInput({
+    Key key,
+    @required this.onText,
+    @required this.onLoad,
+    @required this.getAddWidget,
+    this.initialText = '',
+    this.label = '',
+    this.placeholder = '',
+    this.error = '',
+    this.showBorder = true,
+    @required this.onField,
+  }) : super(key: key);
 
-_actionsItems(
-  AsyncSnapshot snapshot,
-  Function([Map value, bool]) updateState,
-  Function(String p1) onText,
-  onAdd,
-  Function(dynamic) field,
-  BuildContext context,
-) {
-  updateState({'skip': false}, true);
-  return Row(children: [
-    IconButton(
-        onPressed: () => _showDialogOrModalSheetForChoose(
-            itOrEmptyArray(snapshot.data), onText, field)(context),
-        icon: const Icon(Icons.arrow_drop_down)),
-    IconButton(
-        onPressed: () =>
-            _showDialogOrModalSheetForAdd(onAdd(), context)(context),
-        icon: const Icon(Icons.add)),
-    IconButton(
-        onPressed: () => updateState({'skip': true}),
-        icon: const Icon(Icons.refresh))
-  ]);
+  @override
+  State<StatefulWidget> createState() => _ChoicesInputState();
 }
 
-var _isLoading =
-    (x) => x is AsyncSnapshot && x.connectionState == ConnectionState.waiting;
+class _ChoicesInputState extends State<ChoicesInput> {
+  final _states = {};
+  final _getData = propertyOr('data', (_) => []);
+  final _getIsLoading = propertyOr('loading', (_) => false);
+  final _getSkip = propertyOr('skip', (_) => false);
+  TextEditingController textController;
 
-_actions(
-  Future<dynamic> future,
-  Function([Map value]) updateState,
-  Function(String p1) onText,
-  onAdd,
-  Function(dynamic) field,
-) =>
-    FutureBuilder(
-        future: future,
-        builder: (context, snapshot) => _isLoading(snapshot)
-            ? const Padding(
-                padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
-                child: SizedBox(
-                    height: 16, width: 16, child: CircularProgressIndicator()))
-            : _actionsItems(
-                snapshot, updateState, onText, onAdd, field, context));
+  @override
+  void initState() {
+    textController = TextEditingController(text: widget.initialText);
+    _onRefresh(skip: false);
+    super.initState();
+  }
 
-_showDialogOrModalSheetForChoose(
-        List items, Function(String p1) onText, Function(dynamic) field) =>
-    ifDoElse(
-        (x) => hasEnoughWidth(x),
-        (x) => showDialog(
-            context: x,
-            builder: (_) => Dialog(
-                child: Container(
-                    constraints:
-                        const BoxConstraints(maxWidth: 500, maxHeight: 300),
-                    child: ChoiceInputDropdown(
-                        items: items, onTitle: field, onText: onText)))),
-        (x) => showBottomSheet(
-            // isScrollControlled: true,
-            enableDrag: true,
-            context: x,
-            builder: (context) => FractionallySizedBox(
-                  // heightFactor: 0.9,
+  _updateState(Map state) {
+    setState(() {
+      _states.addAll(state);
+    });
+  }
+
+  _fullWidthText(onText, String hintText, initialText) => Expanded(
+      child: TextField(
+          controller: textController,
+          onChanged: onText,
+          autofocus: false,
+          maxLines: 1,
+          minLines: 1,
+          readOnly: true,
+          decoration: InputDecoration(
+              hintText: hintText ?? '',
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(8))));
+
+  _label(label) => Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: Text(label,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)));
+
+  _actionsItems(data, onRefresh, onText, getAddWidget, onField,
+          BuildContext context) =>
+      Row(children: [
+        IconButton(
+            onPressed: _showOptions(data, onText, onField),
+            icon: const Icon(Icons.arrow_drop_down)),
+        IconButton(
+            onPressed: () => _showDialogForAdd(getAddWidget(), context),
+            icon: const Icon(Icons.add)),
+        IconButton(onPressed: onRefresh, icon: const Icon(Icons.refresh))
+      ]);
+
+  _actions(Function onRefresh, onText, onAdd, onField) => _getIsLoading(_states)
+      ? const Padding(
+          padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
+          child: SizedBox(
+              height: 16, width: 16, child: CircularProgressIndicator()))
+      : _actionsItems(
+          _getData(_states), onRefresh, onText, onAdd, onField, context);
+
+  _showDialogOrModalSheetForChoose(context, List items, onText, onField) =>
+      hasEnoughWidth(context)
+          ? showDialog(
+              context: context,
+              builder: (_) => Dialog(
+                  child: Container(
+                      constraints:
+                          const BoxConstraints(maxWidth: 500, maxHeight: 300),
+                      child: ChoiceInputDropdown(
+                          items: items, onTitle: onField, onText: onText))))
+          : showModalBottomSheet(
+              isScrollControlled: true,
+              enableDrag: true,
+              context: context,
+              builder: (context) => FractionallySizedBox(
+                  heightFactor: 0.7,
                   child: ChoiceInputDropdown(
-                      items: items, onTitle: field, onText: onText),
-                )));
+                      items: items, onTitle: onField, onText: onText)));
 
-_showDialogOrModalSheetForAdd(Widget content, context) => ifDoElse(
-    (x) => true,// hasEnoughWidth(x),
-    (x) => showDialog(
-        context: x,
-        builder: (_) => Dialog(
-            child: Container(
-                constraints: const BoxConstraints(
-                    maxWidth: 500, minHeight: 200, maxHeight: 600),
-                child: content))),
-    (x) => showModalBottomSheet(
-        isScrollControlled: true,
-        context: x,
-        builder: (_) => FractionallySizedBox(
-            heightFactor: 0.9,
-            child: Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                    child: Center(
-                      child: Container(
-                        height: 8,
-                        width: 80,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorDark,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50))),
-                      ),
-                    ),
-                  ),
-                  content,
-                ],
-              ),
-            ))));
+  _showDialogForAdd(Widget content, context) => showDialog(
+      context: context,
+      builder: (_) => Dialog(
+          child: Container(
+              constraints: const BoxConstraints(
+                  maxWidth: 500, minHeight: 200, maxHeight: 600),
+              child: content)));
 
-choicesInput({
-  @required Function(String) onText,
-  @required Future Function({bool skipLocal}) onLoad,
-  @required Widget Function() onAdd,
-  String initialText = '',
-  String label = '',
-  String error = '',
-  @required Function(dynamic) field,
-}) =>
-    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _label(label),
-      ActiveComponent(builder: (context, states, updateState) => Container(
-          decoration: inputBoxDecoration(context, error),
-          child: Row(children: [
-            _fullWidthText(onText, initialText),
-            _actions(onLoad(skipLocal: states['skip'] == true), updateState,
-                onText, onAdd, field)
-          ]))),
-      inputErrorMessageOrEmpty(error)
-    ]);
+  _onRefresh({skip = true}) {
+    _updateState({'skip': skip, 'loading': true});
+    widget
+        .onLoad(skipLocal: _getSkip(_states))
+        .then((value) =>
+            _updateState({'data': value, 'skip': false, 'loading': false}))
+        .whenComplete(() => _updateState({'skip': false, 'loading': false}));
+  }
+
+  _showOptions(data, onText, onField) => () => _showDialogOrModalSheetForChoose(
+      context, itOrEmptyArray(data), onText, onField);
+
+  @override
+  Widget build(BuildContext context) =>
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        widget.label.isNotEmpty
+            ? _label(widget.label)
+            : const SizedBox(height: 0),
+        Container(
+            decoration: widget.showBorder
+                ? inputBoxDecoration(context, widget.error)
+                : null,
+            child: Row(children: [
+              _fullWidthText(
+                  widget.onText, widget.placeholder, widget.initialText),
+              _actions(_onRefresh, (text) {
+                textController = TextEditingController(text: text);
+                _updateState({});
+                widget.onText(text);
+              }, widget.getAddWidget, widget.onField)
+            ])),
+        inputErrorMessageOrEmpty(widget.error)
+      ]);
+}

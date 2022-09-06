@@ -1,7 +1,7 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/text_input.dart';
-import 'package:smartstock_pos/stocks/states/category_create.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/stocks/states/category_create.dart';
 
 createCategoryContent() => Consumer<CategoryCreateState>(
       builder: (context, state) => Padding(

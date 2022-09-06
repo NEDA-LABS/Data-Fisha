@@ -34,7 +34,8 @@ class CacheFactory {
     return _db;
   }
 
-  Future Function(String a, dynamic b) set(App app, String collection) =>
+  Future Function(String a, dynamic b) prepareSetData(
+          App app, String collection) =>
       (String key, dynamic data) async {
         var getSingleDb = _getDbIfNotExist(_lazyInitialize);
         var db = await getSingleDb(_db);
@@ -42,15 +43,18 @@ class CacheFactory {
         return await store.record(key).put(db, data, merge: true);
       };
 
-  Function(String key) get(App app, String collection) => (String key) async {
+  Function(String key) prepareGetData(App app, String collection) =>
+      (String key) async {
         var getSingleDb = _getDbIfNotExist(_lazyInitialize);
         var db = await getSingleDb(_db);
         var store = _getStore(cacheDatabaseName(app)(collection));
         var data = await store.record(key).get(db);
-        return data is Map || data is List ? jsonDecode(jsonEncode(data)) : data;
+        return data is Map || data is List
+            ? jsonDecode(jsonEncode(data))
+            : data;
       };
 
-  Future Function(String key) remove(App app, String collection) =>
+  Future Function(String key) prepareRemoveData(App app, String collection) =>
       (String key) async {
         var getSingleDb = _getDbIfNotExist(_lazyInitialize);
         var db = await getSingleDb(_db);
@@ -60,15 +64,33 @@ class CacheFactory {
 
   clearAll(App app, String collection) async {
     var getSingleDb = _getDbIfNotExist(_lazyInitialize);
+    var getDbName = cacheDatabaseName(app);
     var db = await getSingleDb(_db);
-    var store = _getStore(cacheDatabaseName(app)(collection));
-    return await store.drop(db);
+    return await _getStore(getDbName(collection)).drop(db);
   }
+
+  getAll(App app, String collection) async {
+    var getSingleDb = _getDbIfNotExist(_lazyInitialize);
+    var getDbName = cacheDatabaseName(app);
+    var db = await getSingleDb(_db);
+    var store = _getStore(getDbName(collection));
+    return await store.find(db);
+  }
+
+  prepareSetAll(App app, String collection) =>
+      (List keys, List values) async {
+        var getDb = _getDbIfNotExist(_lazyInitialize);
+        var getDbName = cacheDatabaseName(app);
+        var db = await getDb(_db);
+        var store = _getStore(getDbName(collection));
+        return await store.records(keys).put(db, values, merge: true);
+      };
 
   keys(App app, String collection) async {
     var getSingleDb = _getDbIfNotExist(_lazyInitialize);
+    var getDbName = cacheDatabaseName(app);
     var db = await getSingleDb(_db);
-    var store = _getStore(cacheDatabaseName(app)(collection));
+    var store = _getStore(getDbName(collection));
     return await store.findKeys(db);
   }
 }

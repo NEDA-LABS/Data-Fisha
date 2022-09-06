@@ -1,29 +1,31 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/text_input.dart';
-import 'package:smartstock_pos/stocks/components/create_category_content.dart';
-import 'package:smartstock_pos/stocks/components/create_item_content.dart';
-import 'package:smartstock_pos/stocks/components/create_supplier_content.dart';
-import 'package:smartstock_pos/stocks/services/category.dart';
-import 'package:smartstock_pos/stocks/services/supplier.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/components/create_item_content.dart';
+import 'package:smartstock/stocks/components/create_supplier_content.dart';
+import 'package:smartstock/stocks/services/category.dart';
+import 'package:smartstock/stocks/services/supplier.dart';
 
 import '../../core/components/choices_input.dart';
+import '../../core/services/util.dart';
 import '../services/item.dart';
 import '../states/product_create.dart';
 
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"product": d});
         state.refresh();
       },
       label: "Name",
+      placeholder: 'Select product name',
       error: state.error['product'] ?? '',
       initialText: state.product['product'],
-      onAdd: () => createItemContent(),
-      field: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
+      getAddWidget: () => createItemContent(),
+      onField: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
       onLoad: getItemFromCacheOrRemote,
     ),
     TextInput(
@@ -33,28 +35,30 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         error: state.error['barcode'] ?? '',
         initialText: state.product['barcode'],
         icon: _mobileQrScan('')),
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"category": d});
         state.refresh();
       },
       label: "Category",
+      placeholder: 'Select category',
       error: state.error['category'] ?? '',
       initialText: state.product['category'],
-      onAdd: () => createCategoryContent(),
-      field: (x)=>'${x['name']}',
+      getAddWidget: () => createCategoryContent(),
+      onField: (x)=>'${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     ),
-    choicesInput(
+    ChoicesInput(
       onText: (d) {
         state.updateFormState({"supplier": d});
         state.refresh();
       },
       label: "Supplier",
+      placeholder: 'Select supplier',
       error: state.error['supplier'] ?? '',
       initialText: state.product['supplier'],
-      onAdd: () => createSupplierContent(),
-      field: (x)=>'${x['name']}',
+      getAddWidget: () => createSupplierContent(),
+      onField: (x)=>'${x['name']}',
       onLoad: getSupplierFromCacheOrRemote,
     ),
     TextInput(
@@ -62,7 +66,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['purchase'] ?? '',
-      initialText: state.product['purchase'].toString(),
+      initialText: '${state.product['purchase']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -70,7 +74,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['retailPrice'] ?? '',
-      initialText: state.product['retailPrice'].toString(),
+      initialText: '${state.product['retailPrice']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -78,7 +82,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['wholesalePrice'] ?? '',
-      initialText: state.product['wholesalePrice'].toString(),
+      initialText: '${state.product['wholesalePrice']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -86,7 +90,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Quantity",
       placeholder: "Current stock quantity",
       error: state.error['quantity'] ?? '',
-      initialText: state.product['quantity'].toString(),
+      initialText:'${state.product['quantity']??''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -111,9 +115,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
 }
 
 var _mobileQrScan = ifDoElse(
-  (_) =>
-      defaultTargetPlatform == TargetPlatform.iOS ||
-      defaultTargetPlatform == TargetPlatform.android,
+  (_) => isMobilePlatform(),
   (_) => IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
   (_) => const SizedBox(),
 );

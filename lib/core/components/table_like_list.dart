@@ -12,12 +12,21 @@ _errorAndRetry(String err) => Padding(
 
 _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
         onItemPressed) =>
-    InkWell(
-        onTap: ()=>onItemPressed(item),
-        child: tableLikeListRow(keys
-            .map(
-                (k) => onCell != null ? onCell(k, item[k]??'') : Text('${item[k]??''}'))
-            .toList()));
+    Column(
+      children: [
+        Container(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: InkWell(
+              onTap: () => onItemPressed(item),
+              child: tableLikeListRow(keys
+                  .map((k) => onCell != null
+                      ? onCell(k, item[k] ?? '')
+                      : Text('${item[k] ?? ''}'))
+                  .toList())),
+        ),
+        Divider(height: 2)
+      ],
+    );
 
 _tableRows(List data, context, List<String> keys, onCell, onItemPressed) =>
     SizedBox(
@@ -47,22 +56,13 @@ Widget Function(BuildContext, AsyncSnapshot) _builder(
       return builder(snapshot);
     };
 
-Widget tableLikeListRow(List<Widget> items) => Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
-          child: Row(
-              children: items
-                  .map((e) => Expanded(
-                        flex: items.indexOf(e) == 0 ? 3 : 1,
-                        child: e,
-                      ))
-                  .toList()),
-        ),
-        const Divider(
-          height: 2,
-        )
-      ],
+Widget tableLikeListRow(List<Widget> items) => Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(
+          children: items
+              .map((e) =>
+                  Expanded(flex: items.indexOf(e) == 0 ? 3 : 1, child: e))
+              .toList()),
     );
 
 tableLikeListTextHeader(String name) => Text(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
+import 'package:smartstock/core/models/menu.dart';
 
 List<SubMenuModule> _pagesMenu() => [
       SubMenuModule(
@@ -30,13 +30,13 @@ List<SubMenuModule> _pagesMenu() => [
         roles: [],
         onClick: () {},
       ),
-      SubMenuModule(
-        name: 'Refunds',
-        link: '/sales/refund',
-        svgName: 'transfer_icon.svg',
-        roles: [],
-        onClick: () {},
-      )
+      // SubMenuModule(
+      //   name: 'Refunds',
+      //   link: '/sales/refund',
+      //   svgName: 'transfer_icon.svg',
+      //   roles: [],
+      //   onClick: () {},
+      // )
     ];
 
 MenuModel salesMenu() => MenuModel(

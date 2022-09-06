@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 // class Config{
 // const primaryColor = Color(0xffffd200);
 
+// blue 0xff0049a9
+
 MaterialColor getSmartStockMaterialColorSwatch() {
   Color color = const Color(0xff0049a9);
   List strengths = <double>[.05];

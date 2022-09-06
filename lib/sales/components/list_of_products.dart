@@ -29,11 +29,13 @@ _getCategory(product) => '${product['category']}';
 _delegate() =>
     const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180);
 
-_productPressed(context, product, wholesale, onAddToCart) => addToCartView(
-    context: context,
-    wholesale: wholesale,
-    cart: CartModel(product: product, quantity: 1),
-    onAddToCart: onAddToCart);
+_productPressed(context, product, wholesale, onAddToCart) =>
+    addToCartView(
+        context: context,
+        wholesale: wholesale,
+        cart: CartModel(product: product, quantity: 1),
+        onAddToCart: onAddToCart,
+      );
 
 int _getPrice(product, wholesale) =>
     product[wholesale ? "wholesalePrice" : 'retailPrice'] is double

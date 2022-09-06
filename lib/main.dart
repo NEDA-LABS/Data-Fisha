@@ -1,25 +1,20 @@
 import 'dart:io';
+
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/services/sync.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'app.dart';
 import 'configurations.dart';
-import 'sales/services/sales_sync.dart';
-import 'sales/services/stocks.dart';
-
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext context){
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-  }
-}
+import 'core/services/http_overrider.dart';
+import 'core/services/util.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  periodicLocalSyncs();
   HttpOverrides.global = MyHttpOverrides();
-  // _connectWithBFastCloudProject();
-  // Modular.setInitialRoute('/shop/');
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(
@@ -34,6 +29,5 @@ void main() async {
       ),
     ),
   );
-  SalesSyncService().start();
-  StockSyncService.run();
 }
+

@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock_pos/account/account.dart';
-import 'package:smartstock_pos/core/guards/auth.dart';
-import 'package:smartstock_pos/stocks/services/navigation.dart';
-import 'package:smartstock_pos/stocks/stocks.dart';
+import 'package:smartstock/account/account.dart';
+import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/stocks/services/navigation.dart';
+import 'package:smartstock/stocks/stocks.dart';
 
 import '../sales/sales.dart';
 import 'core/models/menu.dart';
@@ -20,7 +20,4 @@ class AppModule extends Module {
   List<Bind> get binds => [];
 }
 
-List<MenuModel> moduleMenus() => [
-      salesMenu(),
-      stocksMenu(),
-    ];
+List<MenuModel> moduleMenus() => [salesMenu(), stocksMenu()];

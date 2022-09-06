@@ -1,6 +1,7 @@
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:builders/builders.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -64,3 +65,10 @@ bool hasEnoughWidth(BuildContext context) {
 }
 
 and(List<Function> fns) => fns.fold(true, (a, b) => a && b() == true);
+
+propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
+    (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);
+
+isMobilePlatform() =>
+    defaultTargetPlatform == TargetPlatform.iOS ||
+    defaultTargetPlatform == TargetPlatform.android;

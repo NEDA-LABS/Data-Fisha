@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/services/cache_shop.dart';
-import 'package:smartstock_pos/core/services/cache_user.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 
 import '../../core/services/util.dart';
 
@@ -49,13 +49,3 @@ class ChooseShopState extends ChangeNotifier {
     }
   }
 }
-
-// updateCurrentShop(var shop){
-//   String appId = shop["applicationId"];
-//   String projectId = shop["projectId"];
-//   BFast.init(AppCredentials(
-//     appId, projectId,
-//     databaseURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId/v2',
-//     functionsURL: 'https://smartstock-faas.bfast.fahamutech.com/shop/$projectId/$appId',
-//   ),projectId);
-// }

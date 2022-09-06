@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/active_component.dart';
+import 'package:smartstock/core/components/active_component.dart';
 
 import '../../core/components/text_input.dart';
 import '../models/cart.model.dart';
@@ -19,6 +19,7 @@ void addToCartView({
           builder: (context, states, updateState) => Container(
             decoration: _addToCartBoxDecoration(),
             height: 230,
+            constraints: const BoxConstraints(maxWidth: 400),
             child: Column(
               children: <Widget>[
                 _productAndPrice(states['p'], wholesale),
@@ -40,14 +41,15 @@ _cartQuantityInput(context, states, updateState) => Container(
         lines: 1,
         placeholder: 'Quantity',
         type: TextInputType.number,
-        onText: (v) => updateState({'q': int.tryParse(v)})));
+        onText: (v) => updateState({'q': int.tryParse(v)??1})));
 
 _addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),
     height: 40,
     width: MediaQuery.of(context).size.width,
     child: TextButton(
-        onPressed: () => onAddToCart(CartModel(product: states['p'],quantity: states['q'])),
+        onPressed: () =>
+            onAddToCart(CartModel(product: states['p'], quantity: states['q'])),
         style: _addToCartButtonStyle(context),
         child:
             const Text("ADD TO CART", style: TextStyle(color: Colors.white))));

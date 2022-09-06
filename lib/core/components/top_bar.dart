@@ -31,7 +31,7 @@ class StockAppBar extends PreferredSize with Disposable {
     this.debounceTime = 500,
   }) : super(
             key: key,
-            preferredSize: Size.fromHeight(showSearch ? 105 : 56),
+            preferredSize: Size.fromHeight(showSearch ? 104 : 56),
             child: null);
 
   @override

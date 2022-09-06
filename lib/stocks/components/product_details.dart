@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/button.dart';
+import 'package:smartstock/core/components/button.dart';
 
 productDetail(Map item) => Padding(
       padding: const EdgeInsets.all(16.0),
@@ -17,10 +17,10 @@ productDetail(Map item) => Padding(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                outlineButton(onPressed: (){}, title: 'Edit details'),
-                outlineButton(onPressed: (){}, title: 'Add quantity'),
-                outlineButton(onPressed: (){}, title: 'Reduce quantity'),
-                outlineButton(onPressed: (){}, title: 'Delete', textColor: Colors.red),
+                // outlineButton(onPressed: (){}, title: 'Edit'),
+                // outlineButton(onPressed: (){}, title: 'Add quantity'),
+                // outlineButton(onPressed: (){}, title: 'Reduce quantity'),
+                // outlineButton(onPressed: (){}, title: 'Delete', textColor: Colors.red),
               ],
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock_pos/core/components/drawer.dart';
-import 'package:smartstock_pos/core/models/menu.dart';
-import 'package:smartstock_pos/core/services/util.dart';
+import 'package:smartstock/core/components/drawer.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 
 Widget bottomBar(
   int selected,
