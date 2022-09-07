@@ -3,13 +3,10 @@ import 'dart:io';
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/configurations.dart';
+import 'package:smartstock/core/services/http_overrider.dart';
 import 'package:smartstock/core/services/sync.dart';
-import 'package:workmanager/workmanager.dart';
-
-import 'app.dart';
-import 'configurations.dart';
-import 'core/services/http_overrider.dart';
-import 'core/services/util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,11 +1,10 @@
-import 'package:smartstock/core/services/sync.dart';
-
 import '../../core/services/cache_shop.dart';
 import '../../core/services/cache_sync.dart';
 import '../../core/services/cache_user.dart';
 import '../../core/services/date.dart';
 import '../../core/services/printer.dart';
 import '../../core/services/security.dart';
+import '../../core/services/sync.dart';
 import '../../core/services/util.dart';
 import 'cart.dart';
 

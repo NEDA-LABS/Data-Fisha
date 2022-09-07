@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bfast/options.dart';
 import 'package:flutter/foundation.dart';
@@ -8,26 +9,27 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/cache_sales.dart';
 
+import '../../core/services/http_overrider.dart';
 import '../../core/services/security.dart';
 
 class SalesSyncService {
   bool shouldRun = true;
 
-  // start() {
-  //   Timer.periodic(const Duration(seconds: 8), (_) async {
-  //     // print("Sales synchronization started!!!!!!");
-  //     if (shouldRun) {
-  //       shouldRun = false;
-  //       saveSalesAndRemove().then((_) {}).catchError((_) {}).whenComplete(() {
-  //         shouldRun = true;
-  //       });
-  //     } else {
-  //       if (kDebugMode) {
-  //         print('another save sales routine runs');
-  //       }
-  //     }
-  //   });
-  // }
+  start() {
+    Timer.periodic(const Duration(seconds: 8), (_) async {
+      // print("Sales synchronization started!!!!!!");
+      if (shouldRun) {
+        shouldRun = false;
+        saveSalesAndRemove().then((_) {}).catchError((_) {}).whenComplete(() {
+          shouldRun = true;
+        });
+      } else {
+        if (kDebugMode) {
+          print('another save sales routine runs');
+        }
+      }
+    });
+  }
 
   Future saveSalesAndRemove() async {
     final shops = await getShops();
@@ -125,6 +127,7 @@ Future saveSaleAndUpdateStock(Map map) async {
       'stockId': sale['stockId'],
     };
   }).toList();
+  HttpOverrides.global = MyHttpOverrides();
   var projectId = map['shop']['projectId'];
   var appId = map['shop']['applicationId'];
   var shopApp = App(applicationId: appId, projectId: projectId);
