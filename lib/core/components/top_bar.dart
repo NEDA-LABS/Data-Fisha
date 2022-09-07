@@ -37,7 +37,7 @@ class StockAppBar extends PreferredSize with Disposable {
   @override
   AppBar build(BuildContext context) => AppBar(
           elevation: 0,
-          title: Text(title),
+          title: Text(title, overflow: TextOverflow.ellipsis),
           bottom: showSearch
               ? searchInput ??
                   _toolBarSearchInput(onSearch, searchHint, debounceTime)

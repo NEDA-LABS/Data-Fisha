@@ -24,7 +24,7 @@ _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
                       : Text('${item[k] ?? ''}'))
                   .toList())),
         ),
-        Divider(height: 2)
+        const Divider(height: 2)
       ],
     );
 
@@ -57,7 +57,7 @@ Widget Function(BuildContext, AsyncSnapshot) _builder(
     };
 
 Widget tableLikeListRow(List<Widget> items) => Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Row(
           children: items
               .map((e) =>
@@ -65,13 +65,16 @@ Widget tableLikeListRow(List<Widget> items) => Padding(
               .toList()),
     );
 
-tableLikeListTextHeader(String name) => Text(
-      name,
-      style: const TextStyle(
-          // fontSize: 16,
-          fontWeight: FontWeight.w300,
-          overflow: TextOverflow.ellipsis),
-    );
+tableLikeListTextHeader(String name) => Padding(
+  padding: const EdgeInsets.fromLTRB(0,10,0,10),
+  child:   Text(
+        name,
+        style: const TextStyle(
+            // fontSize: 16,
+            fontWeight: FontWeight.w300,
+            overflow: TextOverflow.ellipsis),
+      ),
+);
 
 _a(dynamic) {}
 

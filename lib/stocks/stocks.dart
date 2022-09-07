@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/pages/items.dart';
+import 'package:smartstock/stocks/pages/product_edit.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
@@ -27,8 +29,22 @@ class StockModule extends Module {
         ChildRoute('/categories', child: (_, __) => CategoriesPage(__)),
         ChildRoute('/suppliers', child: (_, __) => SuppliersPage(__)),
         ChildRoute('/items', child: (_, __) => ItemsPage(__)),
-        ChildRoute('/products/create',
-            child: (_, __) => const ProductCreatePage()),
+        ChildRoute('/products/create', child: (_, __) {
+          var productState = getState<ProductCreateState>();
+          productState.setIsUpdate(false);
+          productState.clearFormState();
+          return const ProductCreatePage();
+        }),
+        ChildRoute('/products/edit', child: (_, __) {
+          var product = __.data;
+          if (product is Map && product['id'] is String) {
+            var productState = getState<ProductCreateState>();
+            productState.setIsUpdate(true);
+            productState.updateFormState(product);
+            return ProductEditPage('${product['product']}');
+          }
+          return const ProductsPage(null);
+        }),
       ];
 
   @override

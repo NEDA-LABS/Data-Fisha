@@ -85,12 +85,14 @@ class _ProductPage extends State<ProductsPage> {
                   child: tableLikeList(
                       onFuture: () async => getStockFromCacheOrRemote(
                             stringLike: state.query,
-                            skipLocal:
-                                widget.args.queryParams.containsKey('reload'),
+                            skipLocal: widget.args?.queryParams
+                                    ?.containsKey('reload') ==
+                                true,
                           ),
                       keys: _fields(),
                       onItemPressed: (item) {
-                        showDialogOrModalSheet(productDetail(item), context);
+                        showDialogOrModalSheet(
+                            productDetail(item, context), context);
                       }
                       // onCell: (key,data)=>Text('@$data')
                       ),
@@ -104,7 +106,6 @@ class _ProductPage extends State<ProductsPage> {
 
   @override
   void dispose() {
-    // getState<ProductsListState>().updateQuery('');
     super.dispose();
   }
 }
