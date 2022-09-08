@@ -1,17 +1,17 @@
 import 'package:bfast/util.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/components/create_item_content.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
+import 'package:smartstock/stocks/services/item.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
+import 'package:smartstock/stocks/states/product_create.dart';
 
-import '../../core/components/choices_input.dart';
-import '../../core/services/util.dart';
-import '../services/item.dart';
-import '../states/product_create.dart';
+
 
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [

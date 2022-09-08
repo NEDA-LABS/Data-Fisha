@@ -1,21 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
+import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/core/services/printer.dart';
+import 'package:smartstock/core/services/security.dart';
+import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
-
-import '../../core/services/cache_shop.dart';
-import '../../core/services/date.dart';
-import '../../core/services/printer.dart';
-import '../../core/services/security.dart';
-import '../../core/services/sync.dart';
-import 'api_invoice.dart';
-import 'cart.dart';
+import 'package:smartstock/sales/services/api_invoice.dart';
+import 'package:smartstock/sales/services/cart.dart';
 
 Future<List<dynamic>> getInvoiceFromCacheOrRemote({
   skipLocal = false,
   stringLike = '',
 }) async {
   var shop = await getActiveShop();
-  var invoices = [];
+  // var invoices = [];
   //skipLocal ? [] : await getLocalInvoices(shopToApp(shop));
   // var getItOrRemoteAndSave = ifDoElse(
   //   (x) => x == null || (x is List && x.isEmpty),
@@ -66,7 +65,6 @@ Future<Map> _carts2Invoice(
     "status": "not paid",
     "batchId": batchId,
     "items": carts.map((cart) {
-      print(cart);
       return {
         "amount": getCartItemSubAmount(
             totalItems: carts.length,

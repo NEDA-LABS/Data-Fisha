@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
+import 'package:smartstock/sales/services/cart.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
-import '../services/cart.dart';
-import 'cart.dart';
 
 Widget cartDrawer(
         {@required List carts,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/account/services/user.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/configurations.dart';
-import '../../sales/services/stocks.dart';
-import '../../core/services/util.dart';
-import '../services/user.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class LoginPageState extends ChangeNotifier {
   String username = '';
@@ -38,9 +37,7 @@ class LoginPageState extends ChangeNotifier {
 
   logOut() {
     removeLocalCurrentUser().catchError((r) {
-      // print(r);
     }).whenComplete(() {
-      StockSyncService.stop();
       removeActiveShop();
     });
     navigateTo('/login');

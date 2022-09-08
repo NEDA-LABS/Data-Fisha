@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/active_component.dart';
-
-import '../../core/components/text_input.dart';
-import '../models/cart.model.dart';
-import 'cart.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/sales/components/cart.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 
 void addToCartView({
   @required BuildContext context,

@@ -1,25 +1,24 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/pages/categories.dart';
+import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/items.dart';
+import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/pages/product_edit.dart';
+import 'package:smartstock/stocks/pages/products.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
+import 'package:smartstock/stocks/states/category_create.dart';
 import 'package:smartstock/stocks/states/item_create.dart';
 import 'package:smartstock/stocks/states/items_list.dart';
 import 'package:smartstock/stocks/states/items_loading.dart';
+import 'package:smartstock/stocks/states/product_create.dart';
+import 'package:smartstock/stocks/states/product_loading.dart';
+import 'package:smartstock/stocks/states/products_list.dart';
+import 'package:smartstock/stocks/states/supplier_create.dart';
 import 'package:smartstock/stocks/states/suppliers_list.dart';
 import 'package:smartstock/stocks/states/suppliers_loading.dart';
-
-import 'pages/categories.dart';
-import 'pages/index.dart';
-import 'pages/product_create.dart';
-import 'pages/products.dart';
-import 'states/category_create.dart';
-import 'states/product_create.dart';
-import 'states/product_loading.dart';
-import 'states/products_list.dart';
-import 'states/supplier_create.dart';
 
 class StockModule extends Module {
   @override

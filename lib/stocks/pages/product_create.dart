@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/stocks/components/product_create_form.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
-
-import '../components/product_create_form.dart';
 
 class ProductCreatePage extends StatelessWidget {
   const ProductCreatePage({Key key}) : super(key: key);

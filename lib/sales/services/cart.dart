@@ -109,8 +109,3 @@ Future<String> cartItemsToPrinterData(
   ].join('');
   return data;
 }
-
-// Future _submitBill(List carts, discount, String cartId, wholesale, customer) async {
-//   List<dynamic> sales = await _getSalesBatch(carts, discount, wholesale, customer);
-//   await saveSales(sales, cartId);
-// }

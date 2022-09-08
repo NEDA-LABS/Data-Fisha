@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
-
-import 'add_invoice_payment.dart';
+import 'package:smartstock/sales/components/add_invoice_payment.dart';
 
 invoiceDetails(context, item) => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

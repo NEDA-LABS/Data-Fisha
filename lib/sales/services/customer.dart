@@ -1,10 +1,10 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/services/api_customer.dart';
+import 'package:smartstock/sales/services/cache_customer.dart';
 
-import '../../core/services/cache_shop.dart';
-import '../../core/services/util.dart';
-import 'api_customer.dart';
-import 'cache_customer.dart';
 
 Future<List<dynamic>> getCustomerFromCacheOrRemote({
   skipLocal = false,

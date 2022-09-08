@@ -1,13 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
-
-import 'pages/customers.dart';
-import 'pages/invoices.dart';
-import 'services/sales.dart';
-import 'services/invoice.dart';
-import 'guards/active_shop.dart';
-import 'pages/index.dart';
-import 'pages/sale.dart';
-import 'states/sales.dart';
+import 'package:smartstock/sales/guards/active_shop.dart';
+import 'package:smartstock/sales/pages/customers.dart';
+import 'package:smartstock/sales/pages/index.dart';
+import 'package:smartstock/sales/pages/invoices.dart';
+import 'package:smartstock/sales/pages/sale.dart';
+import 'package:smartstock/sales/services/invoice.dart';
+import 'package:smartstock/sales/services/sales.dart';
+import 'package:smartstock/sales/states/sales.dart';
 
 class SalesModule extends Module {
   final home = ChildRoute(

@@ -52,7 +52,8 @@ Future syncLocal2Remote(dynamic) async {
 
 oneTimeLocalSyncs() async {
   if (isMobilePlatform()) {
-    Workmanager().registerOneOffTask('$syncsTaskId-onetime', '$syncsTaskId-onetime',
+    Workmanager().registerOneOffTask(
+        '$syncsTaskId-onetime', '$syncsTaskId-onetime',
         existingWorkPolicy: ExistingWorkPolicy.append,
         constraints: Constraints(networkType: NetworkType.connected));
   }
@@ -64,9 +65,12 @@ periodicLocalSyncs() async {
       print("::::: mobile");
     }
     Workmanager().initialize(syncCallbackDispatcher, isInDebugMode: kDebugMode);
-    Workmanager().registerPeriodicTask('$syncsTaskId-period', '$syncsTaskId-period',
-        existingWorkPolicy: ExistingWorkPolicy.replace,
-        constraints: Constraints(networkType: NetworkType.connected));
+    Workmanager().registerPeriodicTask(
+      '$syncsTaskId-period',
+      '$syncsTaskId-period',
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+      constraints: Constraints(networkType: NetworkType.connected),
+    );
   } else {
     if (kDebugMode) {
       print("::::: others");
@@ -74,7 +78,7 @@ periodicLocalSyncs() async {
     Timer.periodic(const Duration(seconds: 8), (_) async {
       if (shouldRun) {
         shouldRun = false;
-        compute(syncLocal2Remote,2).catchError((_) {}).whenComplete(() {
+        compute(syncLocal2Remote, 2).catchError((_) {}).whenComplete(() {
           shouldRun = true;
         });
       } else {

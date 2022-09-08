@@ -1,8 +1,6 @@
 import 'package:bfast/util.dart';
-import 'package:flutter/services.dart';
-
-import 'cache_shop.dart';
-import 'util.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/util.dart';
 
 var _getShopSettings =
     propertyOr('settings', (p0) => {'saleWithoutPrinter': false});

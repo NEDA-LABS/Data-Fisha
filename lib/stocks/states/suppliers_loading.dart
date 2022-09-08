@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
+import 'package:smartstock/stocks/states/suppliers_list.dart';
 
-import 'suppliers_list.dart';
 
 class SuppliersLoadingState extends ChangeNotifier {
   bool loading = false;

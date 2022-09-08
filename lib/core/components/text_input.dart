@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/input_box_decoration.dart';
+import 'package:smartstock/core/components/input_error_message.dart';
 
-import 'input_box_decoration.dart';
-import 'input_error_message.dart';
 
 const _b = SizedBox();
 

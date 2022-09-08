@@ -3,10 +3,10 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/index_page.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/switch_to_item.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/sales/services/navigation.dart';
 
-import '../../core/components/switch_to_item.dart';
 
 class SalesPage extends StatelessWidget {
   const SalesPage({Key key}) : super(key: key);

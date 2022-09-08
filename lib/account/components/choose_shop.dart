@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/services/util.dart';
-import '../states/shops.dart';
+import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ShopComponents {
   Widget get chooseShop {

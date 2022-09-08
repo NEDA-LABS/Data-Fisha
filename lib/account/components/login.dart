@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:smartstock/account/states/login.dart';
 import 'package:smartstock/core/services/util.dart';
-
-import '../states/login.dart';
 
 class LoginComponents {
   final GlobalKey<FormBuilderState> _loginFormState =

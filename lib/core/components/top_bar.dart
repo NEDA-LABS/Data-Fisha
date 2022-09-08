@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
-import '../../account/services/user.dart';
-import '../services/util.dart';
+import 'package:smartstock/account/services/user.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class StockAppBar extends PreferredSize with Disposable {
   final String title;

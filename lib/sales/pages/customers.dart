@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
-import '../../app.dart';
-import '../../core/components/responsive_body.dart';
-import '../../core/components/table_context_menu.dart';
-import '../../core/components/table_like_list.dart';
-import '../../core/components/top_bar.dart';
-import '../../core/models/menu.dart';
-import '../components/create_customer_content.dart';
-import '../services/customer.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/table_context_menu.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/sales/components/create_customer_content.dart';
+import 'package:smartstock/sales/services/customer.dart';
 
 class CustomersPage extends StatefulWidget {
   final args;
@@ -111,10 +110,5 @@ class _CustomersPage extends State<CustomersPage> {
         _loading = false;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

@@ -1,9 +1,8 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/drawer.dart';
-
-import '../models/menu.dart';
-import '../services/util.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 
 responsiveBody({
   String office = '',

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/services/util.dart';
-
-import 'cart_preview.dart';
-import 'list_of_products.dart';
+import 'package:smartstock/sales/components/cart_preview.dart';
+import 'package:smartstock/sales/components/list_of_products.dart';
 
 Widget salesBody(
         {@required List products,

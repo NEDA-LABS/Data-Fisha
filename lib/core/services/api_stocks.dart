@@ -2,8 +2,8 @@ import 'package:bfast/controller/function.dart';
 import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart';
+import 'package:smartstock/core/services/util.dart';
 
-import 'util.dart';
 
 _allRemoteProductsHttpRequest(url) => get(
       Uri.parse(url),

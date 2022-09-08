@@ -2,10 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class ActiveComponent extends StatefulWidget {
   final Widget Function(
-    BuildContext context,
-    Map states,
-    Function([Map value]) updateState,
-  ) builder;
+          BuildContext context, Map states, Function([Map value]) updateState)
+      builder;
   final Map initialState;
   static const _map = {};
 

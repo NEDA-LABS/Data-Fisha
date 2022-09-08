@@ -15,24 +15,14 @@ Widget bottomBar(
             unselectedItemColor: Colors.grey,
             onTap: (index) => _handleClick(index, context, menus),
             items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Dashboard',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.point_of_sale),
-                label: 'Sales',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.inventory),
-                label: 'Stocks',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.dehaze),
-                label: 'Menu',
-              ),
-            ],
-          )
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home), label: 'Dashboard'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.point_of_sale), label: 'Sales'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.inventory), label: 'Stocks'),
+                BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'Menu')
+              ])
         : null;
 
 _handleClick(int index, BuildContext context, List<MenuModel> menus) {
@@ -45,8 +35,7 @@ _handleClick(int index, BuildContext context, List<MenuModel> menus) {
       break;
     case 3:
       showModalBottomSheet(
-        context: context,
-        builder: (_) => modulesMenuContent('Menu', menus, ''),
-      );
+          context: context,
+          builder: (_) => modulesMenuContent('Menu', menus, ''));
   }
 }

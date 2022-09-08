@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../services/util.dart';
-import 'text_input.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
   final List items;

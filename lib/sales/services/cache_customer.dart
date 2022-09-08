@@ -1,9 +1,8 @@
 import 'package:bfast/options.dart';
-
-import '../../core/services/cache_factory.dart';
+import 'package:smartstock/core/services/cache_factory.dart';
 
 const _customersTable = 'customers';
-const _customersId = 'customers';
+// const _customersId = 'customers';
 
 Future getLocalCustomers(App app) =>
     CacheFactory().getAll(app, _customersTable);

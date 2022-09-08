@@ -1,17 +1,17 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/table_context_menu.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/services/category.dart';
+import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
 
-import '../../app.dart';
-import '../../core/components/responsive_body.dart';
-import '../../core/components/table_context_menu.dart';
-import '../../core/components/table_like_list.dart';
-import '../../core/components/top_bar.dart';
-import '../../core/models/menu.dart';
-import '../../core/services/util.dart';
-import '../components/create_category_content.dart';
-import '../services/category.dart';
-import '../states/categories_list.dart';
 
 class CategoriesPage extends StatefulWidget {
   final args;

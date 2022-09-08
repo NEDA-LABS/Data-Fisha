@@ -1,12 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/account/account.dart';
 import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/sales/sales.dart';
+import 'package:smartstock/sales/services/navigation.dart';
 import 'package:smartstock/stocks/services/navigation.dart';
 import 'package:smartstock/stocks/stocks.dart';
-
-import '../sales/sales.dart';
-import 'core/models/menu.dart';
-import 'sales/services/navigation.dart';
 
 class AppModule extends Module {
   @override

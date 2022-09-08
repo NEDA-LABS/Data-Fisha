@@ -5,8 +5,7 @@ import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart';
-
-import '../../core/services/util.dart';
+import 'package:smartstock/core/services/util.dart';
 
 _preparePatchRequest(body) => composeAsync([
       (x) => RawResponse(body: x.body, statusCode: x.statusCode),

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/item.dart';
 import 'package:smartstock/stocks/states/items_list.dart';
 
-import '../services/item.dart';
 
 class ItemsLoadingState extends ChangeNotifier {
   bool loading = false;

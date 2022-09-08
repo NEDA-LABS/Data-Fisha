@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../models/cart.model.dart';
-import 'add_to_cart.dart';
-import 'product_card.dart';
+import 'package:smartstock/sales/components/add_to_cart.dart';
+import 'package:smartstock/sales/components/product_card.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 
 Widget listOfProducts({
   wholesale = false,

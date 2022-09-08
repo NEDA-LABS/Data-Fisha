@@ -4,15 +4,15 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
+import 'package:smartstock/stocks/states/product_loading.dart';
 import 'package:smartstock/stocks/states/products_list.dart';
 
-import '../../core/components/table_like_list.dart';
-import '../states/product_loading.dart';
 
 class ProductsPage extends StatefulWidget {
   final args;

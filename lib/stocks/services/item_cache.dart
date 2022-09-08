@@ -1,8 +1,7 @@
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
+import 'package:smartstock/core/services/cache_factory.dart';
 import 'package:smartstock/core/services/util.dart';
-
-import '../../core/services/cache_factory.dart';
 
 const _itemsTable = 'items';
 const _itemsId = 'items';

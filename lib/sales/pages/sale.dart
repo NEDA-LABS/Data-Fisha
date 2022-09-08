@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/components/cart_drawer.dart';
 import 'package:smartstock/sales/components/refresh_button.dart';
+import 'package:smartstock/sales/components/sales_body.dart';
 import 'package:smartstock/sales/services/cart.dart';
-
-import '../../app.dart';
-import '../../core/components/responsive_body.dart';
-import '../../core/components/top_bar.dart';
-import '../components/cart_drawer.dart';
-import '../components/sales_body.dart';
 
 class SalePage extends StatelessWidget {
   final String title;

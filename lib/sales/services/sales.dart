@@ -1,12 +1,12 @@
-import '../../core/services/cache_shop.dart';
-import '../../core/services/cache_sync.dart';
-import '../../core/services/cache_user.dart';
-import '../../core/services/date.dart';
-import '../../core/services/printer.dart';
-import '../../core/services/security.dart';
-import '../../core/services/sync.dart';
-import '../../core/services/util.dart';
-import 'cart.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_sync.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/core/services/printer.dart';
+import 'package:smartstock/core/services/security.dart';
+import 'package:smartstock/core/services/sync.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/services/cart.dart';
 
 Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
   var currentUser = await getLocalCurrentUser();

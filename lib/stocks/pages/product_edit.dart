@@ -1,14 +1,11 @@
 import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
-import 'package:modular_interfaces/src/route/modular_arguments.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_edit_form.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
 
-import '../components/product_create_form.dart';
 
 class ProductEditPage extends StatelessWidget {
   final String productName;

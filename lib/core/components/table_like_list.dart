@@ -2,19 +2,16 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 
 _errorAndRetry(String err) => Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
+    padding: const EdgeInsets.all(10),
+    child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text(err)],
-      ),
-    );
+        children: [Text(err)]));
 
 _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
         onItemPressed) =>
-    Column(
-      children: [
-        Container(
+    Column(children: [
+      Container(
           constraints: const BoxConstraints(minHeight: 48),
           child: InkWell(
               onTap: () => onItemPressed(item),
@@ -22,21 +19,17 @@ _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
                   .map((k) => onCell != null
                       ? onCell(k, item[k] ?? '')
                       : Text('${item[k] ?? ''}'))
-                  .toList())),
-        ),
-        const Divider(height: 2)
-      ],
-    );
+                  .toList()))),
+      const Divider(height: 2)
+    ]);
 
 _tableRows(List data, context, List<String> keys, onCell, onItemPressed) =>
     SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) =>
-            _tableRow(data[index], keys, onCell, onItemPressed),
-      ),
-    );
+        height: MediaQuery.of(context).size.height,
+        child: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) =>
+                _tableRow(data[index], keys, onCell, onItemPressed)));
 
 _showErrorOrContent(context, List<String> keys, onCell, onItemPressed) =>
     ifDoElse(
@@ -66,15 +59,15 @@ Widget tableLikeListRow(List<Widget> items) => Padding(
     );
 
 tableLikeListTextHeader(String name) => Padding(
-  padding: const EdgeInsets.fromLTRB(0,10,0,10),
-  child:   Text(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Text(
         name,
         style: const TextStyle(
             // fontSize: 16,
             fontWeight: FontWeight.w300,
             overflow: TextOverflow.ellipsis),
       ),
-);
+    );
 
 _a(dynamic) {}
 

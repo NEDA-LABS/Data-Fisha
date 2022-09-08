@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../core/services/util.dart';
-import '../states/sales.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/states/sales.dart';
 
 PreferredSizeWidget searchInput() {
   SalesState state = getState<SalesState>();
