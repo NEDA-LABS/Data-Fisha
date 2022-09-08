@@ -11,15 +11,19 @@ import 'package:smartstock/sales/components/refresh_button.dart';
 import 'package:smartstock/sales/components/sales_body.dart';
 import 'package:smartstock/sales/services/cart.dart';
 
-class SalePage extends StatelessWidget {
+class SaleLikePage extends StatelessWidget {
   final String title;
   final bool wholesale;
+  final String backLink;
+  final int Function(dynamic) onGetPrice;
   final Future Function(List, String, dynamic) onSubmitCart;
 
-  SalePage({
+  SaleLikePage({
     @required this.title,
     @required this.wholesale,
     @required this.onSubmitCart,
+    @required this.backLink,
+    @required this.onGetPrice,
     Key key,
   }) : super(key: key);
 
@@ -46,7 +50,7 @@ class SalePage extends StatelessWidget {
 
   _appBar(updateState) => StockAppBar(
       title: title,
-      backLink: "/sales/",
+      backLink: backLink,
       showBack: true,
       showSearch: true,
       searchHint: "Search here...",
@@ -62,17 +66,18 @@ class SalePage extends StatelessWidget {
       snapshot is AsyncSnapshot &&
       snapshot.connectionState == ConnectionState.waiting;
 
-  _getView(carts, onAddToCart, onShowCheckout) =>
+  _getView(carts, onAddToCart, onShowCheckout, onGetPrice) =>
       (context, snapshot) => Column(children: [
             _isLoading(snapshot)
                 ? const LinearProgressIndicator()
                 : const SizedBox(height: 0),
             Expanded(
-                child: salesBody(
+                child: salesLikeBody(
                     wholesale: wholesale,
                     products: snapshot.data ?? [],
                     onAddToCart: onAddToCart,
                     onShowCheckout: onShowCheckout,
+                    onGetPrice: onGetPrice,
                     carts: carts,
                     context: context))
           ]);
@@ -83,7 +88,7 @@ class SalePage extends StatelessWidget {
       builder: (context, states, updateState) => responsiveBody(
           menus: moduleMenus(),
           office: 'Menu',
-          current: '/sales/',
+          current: backLink,
           rightDrawer: _hasCarts(states)
               ? SizedBox(
                   width: 350,
@@ -97,9 +102,11 @@ class SalePage extends StatelessWidget {
                   initialData: _getCarts(states),
                   future: _future(states),
                   builder: _getView(
-                      _getCarts(states),
-                      _onAddToCart(states, updateState),
-                      _onShowCheckoutSheet(states, updateState, context))))));
+                    _getCarts(states),
+                    _onAddToCart(states, updateState),
+                    _onShowCheckoutSheet(states, updateState, context),
+                    onGetPrice,
+                  )))));
 
   _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
         onAddItem: (id, q) {

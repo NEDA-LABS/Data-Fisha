@@ -17,19 +17,27 @@ class SalesModule extends Module {
   final wholeSale = ChildRoute(
     '/whole',
     guards: [ActiveShopGuard()],
-    child: (context, args) => SalePage(
+    child: (context, args) => SaleLikePage(
       wholesale: true,
       title: 'Wholesale',
+      backLink: '/sales/',
       onSubmitCart: onSubmitWholeSale,
+      onGetPrice: (product) {
+        return _getPrice(product, true);
+      },
     ),
   );
   final retail = ChildRoute(
     '/retail',
     guards: [ActiveShopGuard()],
-    child: (context, args) => SalePage(
+    child: (context, args) => SaleLikePage(
       wholesale: false,
       title: 'Retail',
+      backLink: '/sales/',
       onSubmitCart: onSubmitRetailSale,
+      onGetPrice: (product) {
+        return _getPrice(product, false);
+      },
     ),
   );
   final customer = ChildRoute(
@@ -45,10 +53,14 @@ class SalesModule extends Module {
   final credit = ChildRoute(
     '/invoice/create',
     guards: [ActiveShopGuard()],
-    child: (context, args) => SalePage(
+    child: (context, args) => SaleLikePage(
       wholesale: false,
       title: 'Invoice sale',
+      backLink: '/sales/invoice',
       onSubmitCart: onSubmitInvoice,
+      onGetPrice: (product) {
+        return _getPrice(product, false);
+      },
     ),
   );
 
@@ -59,3 +71,8 @@ class SalesModule extends Module {
   @override
   List<Bind> get binds => [Bind.lazySingleton((i) => SalesState())];
 }
+
+int _getPrice(product, wholesale) =>
+    product[wholesale ? "wholesalePrice" : 'retailPrice'] is double
+        ? product[wholesale ? "wholesalePrice" : 'retailPrice'].toInt()
+        : product[wholesale ? "wholesalePrice" : 'retailPrice'];

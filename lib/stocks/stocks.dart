@@ -1,12 +1,15 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/pages/sale.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/items.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/pages/product_edit.dart';
 import 'package:smartstock/stocks/pages/products.dart';
+import 'package:smartstock/stocks/pages/purchases.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
+import 'package:smartstock/stocks/services/puchase.dart';
 import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
 import 'package:smartstock/stocks/states/category_create.dart';
@@ -27,6 +30,19 @@ class StockModule extends Module {
         ChildRoute('/products', child: (_, __) => ProductsPage(__)),
         ChildRoute('/categories', child: (_, __) => CategoriesPage(__)),
         ChildRoute('/suppliers', child: (_, __) => SuppliersPage(__)),
+        ChildRoute('/purchases', child: (_, __) => PurchasesPage(__)),
+        ChildRoute(
+          '/purchases/create',
+          child: (context, args) => SaleLikePage(
+            wholesale: false,
+            title: 'Create purchase',
+            backLink: '/stock/purchases',
+            onSubmitCart: onSubmitPurchase,
+            onGetPrice: (product) {
+              return double.tryParse('${product['purchase']}') ?? 0;
+            },
+          ),
+        ),
         ChildRoute('/items', child: (_, __) => ItemsPage(__)),
         ChildRoute('/products/create', child: (_, __) {
           var productState = getState<ProductCreateState>();
