@@ -29,9 +29,9 @@ void syncCallbackDispatcher() {
 }
 
 Future syncLocal2Remote(dynamic) async {
-  // if (kDebugMode) {
+  if (kDebugMode) {
     print('------syncs routine run------');
-  // }
+  }
   List keys = await getLocalSyncsKeys();
   // print(keys);
   for (var key in keys) {
@@ -74,27 +74,27 @@ periodicLocalSyncs() async {
       constraints: Constraints(networkType: NetworkType.connected),
     );
   } else {
-    // if (kDebugMode) {
+    if (kDebugMode) {
       print("::::: others");
-    // }
+    }
     Timer.periodic(const Duration(seconds: 8), (_) async {
       if (shouldRun) {
         shouldRun = false;
         compute(syncLocal2Remote, 2).catchError((_) {
-          // if (kDebugMode) {
+          if (kDebugMode) {
             print(_);
-          // }
+          }
         }).then((value) {
-          // if (kDebugMode) {
+          if (kDebugMode) {
             print('done sync local data --> $value');
-          // }
+          }
         }).whenComplete(() {
           shouldRun = true;
         });
       } else {
-        // if (kDebugMode) {
+        if (kDebugMode) {
           print('another save sales routine runs');
-        // }
+        }
       }
     });
   }

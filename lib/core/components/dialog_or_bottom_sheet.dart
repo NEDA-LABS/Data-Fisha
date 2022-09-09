@@ -18,16 +18,5 @@ showDialogOrModalSheet(Widget content, context) => hasEnoughWidth(context)
             child: Container(
                 constraints: const BoxConstraints(
                     maxWidth: 600, minHeight: 300, maxHeight: 600),
-                child: content
-                // Column(children: [
-                //   _bar(context),
-                //   Expanded(child: SingleChildScrollView(child: content))
-                // ])
-            )))
-    : showModalBottomSheet(
-        // isScrollControlled: true,
-        context: context,
-        builder: (_) => Column(children: [
-              _bar(context),
-              Expanded(child: SingleChildScrollView(child: content))
-            ]));
+                child: content)))
+    : showModalBottomSheet(context: context, builder: (_) => content);
