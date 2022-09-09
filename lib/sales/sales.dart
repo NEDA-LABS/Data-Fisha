@@ -1,9 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/sales/components/add_sale_to_cart.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/pages/customers.dart';
 import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/sales/pages/invoices.dart';
-import 'package:smartstock/sales/pages/sale.dart';
+import 'package:smartstock/core/pages/sale_like.dart';
+import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 import 'package:smartstock/sales/services/sales.dart';
 import 'package:smartstock/sales/states/sales.dart';
@@ -22,9 +25,12 @@ class SalesModule extends Module {
       title: 'Wholesale',
       backLink: '/sales/',
       onSubmitCart: onSubmitWholeSale,
+      customerLikeLabel: 'Select customer',
       onGetPrice: (product) {
         return _getPrice(product, true);
       },
+      onAddToCartView: _onPrepareSalesAddToCartView(context, true),
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
     ),
   );
   final retail = ChildRoute(
@@ -35,9 +41,12 @@ class SalesModule extends Module {
       title: 'Retail',
       backLink: '/sales/',
       onSubmitCart: onSubmitRetailSale,
+      customerLikeLabel: 'Select customer',
       onGetPrice: (product) {
         return _getPrice(product, false);
       },
+      onAddToCartView: _onPrepareSalesAddToCartView(context, false),
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
     ),
   );
   final customer = ChildRoute(
@@ -58,9 +67,12 @@ class SalesModule extends Module {
       title: 'Invoice sale',
       backLink: '/sales/invoice',
       onSubmitCart: onSubmitInvoice,
+      customerLikeLabel: 'Select customer',
       onGetPrice: (product) {
         return _getPrice(product, false);
       },
+      onAddToCartView: _onPrepareSalesAddToCartView(context, true),
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
     ),
   );
 
@@ -71,6 +83,16 @@ class SalesModule extends Module {
   @override
   List<Bind> get binds => [Bind.lazySingleton((i) => SalesState())];
 }
+
+_onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
+      addSaleToCartView(
+          onGetPrice: (product) {
+            return _getPrice(product, wholesale);
+          },
+          cart: CartModel(product: product, quantity: 1),
+          onAddToCart: onAddToCart,
+          context: context);
+    };
 
 int _getPrice(product, wholesale) =>
     product[wholesale ? "wholesalePrice" : 'retailPrice'] is double

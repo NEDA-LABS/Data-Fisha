@@ -29,7 +29,9 @@ void syncCallbackDispatcher() {
 }
 
 Future syncLocal2Remote(dynamic) async {
-  // print('------syncs routine run------');
+  // if (kDebugMode) {
+    print('------syncs routine run------');
+  // }
   List keys = await getLocalSyncsKeys();
   // print(keys);
   for (var key in keys) {
@@ -41,9 +43,9 @@ Future syncLocal2Remote(dynamic) async {
     var response = await post(Uri.parse(getUrl(element)),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(getPayload(element)));
-    // print(response.statusCode);
     if (response.statusCode == 200) {
-      removeLocalSync(key);
+      await removeLocalSync(key);
+      return key;
     } else {
       throw response.body;
     }
@@ -72,19 +74,27 @@ periodicLocalSyncs() async {
       constraints: Constraints(networkType: NetworkType.connected),
     );
   } else {
-    if (kDebugMode) {
+    // if (kDebugMode) {
       print("::::: others");
-    }
+    // }
     Timer.periodic(const Duration(seconds: 8), (_) async {
       if (shouldRun) {
         shouldRun = false;
-        compute(syncLocal2Remote, 2).catchError((_) {}).whenComplete(() {
+        compute(syncLocal2Remote, 2).catchError((_) {
+          // if (kDebugMode) {
+            print(_);
+          // }
+        }).then((value) {
+          // if (kDebugMode) {
+            print('done sync local data --> $value');
+          // }
+        }).whenComplete(() {
           shouldRun = true;
         });
       } else {
-        if (kDebugMode) {
+        // if (kDebugMode) {
           print('another save sales routine runs');
-        }
+        // }
       }
     });
   }

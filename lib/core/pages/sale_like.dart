@@ -15,7 +15,11 @@ class SaleLikePage extends StatelessWidget {
   final String title;
   final bool wholesale;
   final String backLink;
+  final String customerLikeLabel;
+  final String checkoutCompleteMessage;
   final int Function(dynamic) onGetPrice;
+  final onCustomerLikeList;
+  final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List, String, dynamic) onSubmitCart;
 
   SaleLikePage({
@@ -24,6 +28,10 @@ class SaleLikePage extends StatelessWidget {
     @required this.onSubmitCart,
     @required this.backLink,
     @required this.onGetPrice,
+    @required this.onAddToCartView,
+    @required this.onCustomerLikeList,
+    @required this.checkoutCompleteMessage,
+    this.customerLikeLabel,
     Key key,
   }) : super(key: key);
 
@@ -66,16 +74,17 @@ class SaleLikePage extends StatelessWidget {
       snapshot is AsyncSnapshot &&
       snapshot.connectionState == ConnectionState.waiting;
 
-  _getView(carts, onAddToCart, onShowCheckout, onGetPrice) =>
+  _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) =>
       (context, snapshot) => Column(children: [
             _isLoading(snapshot)
                 ? const LinearProgressIndicator()
                 : const SizedBox(height: 0),
             Expanded(
                 child: salesLikeBody(
+                    onAddToCart: onAddToCart,
                     wholesale: wholesale,
                     products: snapshot.data ?? [],
-                    onAddToCart: onAddToCart,
+                    onAddToCartView: onAddToCartView,
                     onShowCheckout: onShowCheckout,
                     onGetPrice: onGetPrice,
                     carts: carts,
@@ -104,11 +113,13 @@ class SaleLikePage extends StatelessWidget {
                   builder: _getView(
                     _getCarts(states),
                     _onAddToCart(states, updateState),
+                    onAddToCartView,
                     _onShowCheckoutSheet(states, updateState, context),
                     onGetPrice,
                   )))));
 
   _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
+        customerLikeLabel: customerLikeLabel,
         onAddItem: (id, q) {
           var addCart = _prepareAddCartQuantity(states, updateState);
           addCart(id, q);
@@ -124,7 +135,16 @@ class SaleLikePage extends StatelessWidget {
           var carts = states['carts'];
           return onSubmitCart(carts, customer, discount).then((value) {
             updateState({'carts': [], 'customer': ''});
-            navigator().maybePop();
+            navigator().maybePop().whenComplete(() {
+              showDialog(
+                  context: context,
+                  builder: (c) => AlertDialog(
+                      title: const Text('Info',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16)),
+                      content: Text(
+                          checkoutCompleteMessage ?? 'Checkout complete.')));
+            });
           }).catchError(_showCheckoutError(context));
           // onCheckout
         },
@@ -132,7 +152,9 @@ class SaleLikePage extends StatelessWidget {
         wholesale: wholesale,
         context: context,
         customer: _getCustomer(states),
+        onCustomerLikeList: onCustomerLikeList,
         onCustomer: (d) => updateState({"customer": d}),
+        onGetPrice: onGetPrice,
       );
 
   _prepareRemoveCart(states, updateState) => (String id) =>

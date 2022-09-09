@@ -7,13 +7,15 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/cart.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
-
 Widget cartDrawer(
         {@required List carts,
         @required Function(dynamic) onCheckout,
+        @required Function(dynamic) onGetPrice,
         @required Function(String) onRemoveItem,
+        @required onCustomerLikeList,
         @required Function(String, int) onAddItem,
         @required bool wholesale,
+        String customerLikeLabel = 'Choose customer',
         context,
         @required customer,
         @required onCustomer}) =>
@@ -22,30 +24,30 @@ Widget cartDrawer(
         AppBar(title: const Text('Cart'), elevation: 0),
         ChoicesInput(
             initialText: customer,
-            placeholder: 'Choose customer',
+            placeholder: customerLikeLabel,
             showBorder: false,
             onText: onCustomer,
-            onLoad: getCustomerFromCacheOrRemote,
+            onLoad: onCustomerLikeList,
             getAddWidget: () => createCustomerContent(),
-            onField: (x) => x['displayName']),
+            onField: (x) => x['name'] ?? x['displayName']),
         Expanded(
             child: ListView.builder(
                 controller: ScrollController(),
                 itemCount: carts.length,
                 itemBuilder: _cartListItemBuilder(
-                    carts, wholesale, onAddItem, onRemoveItem))),
-        _cartSummary(carts, wholesale, context, onCheckout)
+                    carts, wholesale, onAddItem, onRemoveItem, onGetPrice))),
+        _cartSummary(carts, wholesale, context, onCheckout, onGetPrice)
       ]),
     );
 
-Widget _cartSummary(List carts, wholesale, context, onCheckout) =>
+Widget _cartSummary(List carts, wholesale, context, onCheckout, onGetPrice) =>
     ActiveComponent(
       initialState: const {'discount': 0, 'loading': false},
       builder: (context, states, updateState) => Card(
         elevation: 5,
         child: Column(
           children: [
-            _totalAmountRow(carts, wholesale),
+            _totalAmountRow(carts, wholesale, onGetPrice),
             _discountRow(states['discount'],
                 (v) => updateState({'discount': int.tryParse(v) ?? 0})),
             Container(
@@ -57,14 +59,15 @@ Widget _cartSummary(List carts, wholesale, context, onCheckout) =>
               child: states['loading']
                   ? _progressIndicator()
                   : _submitButton(carts, states['discount'], wholesale,
-                      onCheckout, updateState),
+                      onCheckout, updateState, onGetPrice),
             )
           ],
         ),
       ),
     );
 
-_submitButton(List carts, discount, bool wholesale, onCheckout, updateState) =>
+_submitButton(List carts, discount, bool wholesale, onCheckout, updateState,
+        onGetPrice) =>
     TextButton(
       onPressed: () {
         updateState({'loading': true});
@@ -79,7 +82,9 @@ _submitButton(List carts, discount, bool wholesale, onCheckout, updateState) =>
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white))),
-          Text(_formatPrice(_getFinalTotal(carts, discount, wholesale)),
+          Text(
+              _formatPrice(
+                  _getFinalTotal(carts, discount, wholesale, onGetPrice)),
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -92,26 +97,24 @@ _submitButton(List carts, discount, bool wholesale, onCheckout, updateState) =>
 _formatPrice(price) =>
     NumberFormat.currency(name: 'TZS ').format(int.tryParse('$price') ?? 0);
 
-_getFinalTotal(List carts, int discount, bool wholesale) =>
-    carts.fold(-discount, (t, c) => t + getProductPrice(c, wholesale));
+_getFinalTotal(List carts, int discount, bool wholesale, onGetPrice) => carts
+    .fold(-discount, (t, c) => t + getProductPrice(c, wholesale, onGetPrice));
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
 
-_totalAmountRow(List carts, wholesale) => Padding(
+_totalAmountRow(List carts, wholesale, onGetPrice) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           const Expanded(
               child: Text("Total",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-          Text('${cartTotalAmount(carts, wholesale)}',
+          Text('${cartTotalAmount(carts, wholesale, onGetPrice)}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
         ],
       ),
     );
-
-
 
 _discountRow(int discount, Function(dynamic) onDiscount) => Padding(
       padding: const EdgeInsets.all(8.0),
@@ -141,6 +144,7 @@ Widget _checkoutCartItem(
         @required bool wholesale,
         @required BuildContext context,
         @required Function(String, int) onAddItem,
+        @required Function(dynamic) onGetPrice,
         @required Function(String) onRemoveItem}) =>
     Column(
       children: [
@@ -152,9 +156,9 @@ Widget _checkoutCartItem(
               wholesale
                   ? Text(
                       '${cart.quantity} (x${cart.product['wholesaleQuantity']}) '
-                      '@ ${formattedAmount(cart.product, wholesale)}')
+                      '@ TZS ${onGetPrice(cart.product)}')
                   : Text('${cart.quantity} '
-                      '@ ${formattedAmount(cart.product, wholesale)}'),
+                      '@ TZS ${onGetPrice(cart.product)}'),
               Row(
                 children: [
                   IconButton(
@@ -184,9 +188,10 @@ Widget _checkoutCartItem(
       ],
     );
 
-_cartListItemBuilder(carts, wholesale, onAddItem, onRemoveItem) =>
+_cartListItemBuilder(carts, wholesale, onAddItem, onRemoveItem, onGetPrice) =>
     (context, index) => _checkoutCartItem(
         cart: carts[index],
+        onGetPrice: onGetPrice,
         wholesale: wholesale,
         context: context,
         onAddItem: onAddItem,

@@ -52,8 +52,10 @@ Future _printInvoiceItems(
 
 Future<Map> _carts2Invoice(
     List carts, dis, wholesale, customer, cartId, batchId) async {
-  var discount = int.tryParse('$dis') ?? 0;
-  var totalAmount = int.tryParse('${cartTotalAmount(carts, false)}') ?? 0;
+  var discount = double.tryParse('$dis') ?? 0;
+  var totalAmount = double.tryParse(
+          '${cartTotalAmount(carts, false, (product) => product['purchase'])}') ??
+      0;
   String date = toSqlDate(DateTime.now());
   String due = toSqlDate(DateTime.now().add(const Duration(days: 14)));
   return {
@@ -68,7 +70,7 @@ Future<Map> _carts2Invoice(
       return {
         "amount": getCartItemSubAmount(
             totalItems: carts.length,
-            totalDiscount: discount,
+            totalDiscount: discount.toInt(),
             product: cart.product,
             quantity: cart.quantity ?? 0,
             wholesale: wholesale),

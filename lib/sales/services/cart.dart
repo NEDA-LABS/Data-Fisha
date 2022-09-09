@@ -28,12 +28,12 @@ updateCartQuantity(String id, int quantity, List carts) => carts.map((e) {
       return e;
     }).toList();
 
-cartTotalAmount(List carts, wholesale) =>
-    carts.fold(0, (t, element) => t + getProductPrice(element, wholesale));
+cartTotalAmount(List carts, wholesale, onGetPrice) =>
+    carts.fold(0, (t, element) => t + getProductPrice(element, wholesale, onGetPrice));
 
-getProductPrice(cart, bool wholesale) => wholesale
-    ? cart.product['wholesalePrice'] * cart.quantity
-    : cart.product['retailPrice'] * cart.quantity;
+getProductPrice(cart, bool wholesale, onGetPrice) => wholesale
+    ? onGetPrice(cart.product) * cart.quantity
+    : onGetPrice(cart.product) * cart.quantity;
 
 double getCartItemSubAmount(
     {int quantity = 0,

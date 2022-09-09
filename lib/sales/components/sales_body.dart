@@ -6,9 +6,10 @@ import 'package:smartstock/sales/components/list_of_products.dart';
 Widget salesLikeBody(
         {@required List products,
         @required List carts,
-        bool wholesale = false,
+        @required bool wholesale,
         @required onAddToCart,
         @required onShowCheckout,
+        @required onAddToCartView,
         @required onGetPrice,
         @required BuildContext context}) =>
     Stack(children: [
@@ -18,10 +19,10 @@ Widget salesLikeBody(
           left: 0,
           right: 0,
           child: listOfProducts(
-            products: products,
-            onAddToCart: onAddToCart,
-            onGetPrice: onGetPrice
-          )),
+              onAddToCart: onAddToCart,
+              products: products,
+              onAddToCartView: onAddToCartView,
+              onGetPrice: onGetPrice)),
       hasEnoughWidth(context)
           ? const Positioned(left: 0, child: SizedBox(height: 0))
           : Positioned(

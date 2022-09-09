@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/cart.dart';
+import 'package:smartstock/stocks/components/add_purchase_detail.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
 Future<List<dynamic>> getPurchaseFromCacheOrRemote({
@@ -47,20 +51,30 @@ Future<List> _filterAndSort(Map data) async {
 //   await posPrint(data: data, qr: batchId);
 // }
 
-Future<Map> _carts2Purchase(
-    List carts, supplier, cartId, batchId, isCash) async {
-  var totalAmount = int.tryParse('${cartTotalAmount(carts, false)}') ?? 0;
-  String date = toSqlDate(DateTime.now());
-  String due = toSqlDate(DateTime.now().add(const Duration(days: 14)));
+Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
+  var currentUser = await getLocalCurrentUser();
+  var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
+  var totalAmount = double.tryParse(t) ?? 0;
+  var due = pDetail['due'];
+  var type = pDetail['type'];
+  var refNumber = pDetail['reference'];
+  String date = pDetail['date'];
+  String dueDate = date;
+  if (type == 'invoice' && ((due is String && due.isEmpty) || due == null)) {
+    dueDate = toSqlDate(DateTime.now().add(const Duration(days: 30)));
+  }
+  if (type == 'invoice' && (due is String && due.isNotEmpty)) {
+    dueDate = due;
+  }
   return {
-    "date": "2022-09-01",
-    "due": "2022-10-01",
-    "refNumber": "abc",
+    "date": date,
+    "due": dueDate,
+    "refNumber": refNumber,
     "batchId": batchId,
     "amount": totalAmount,
     "supplier": {"name": supplier},
-    "user": {"username": "test"},
-    "type": isCash ? "cash" : "credit",
+    "user": {"username": currentUser['username'] ?? ''},
+    "type": type ?? 'receipt',
     "items": carts.map((e) {
       return {
         "wholesalePrice": e.product['wholesalePrice'],
@@ -71,23 +85,34 @@ Future<Map> _carts2Purchase(
           "purchase": e.product['purchase'],
           "supplier": supplier
         },
-        "amount": 0,
-        "purchase": 0,
+        "amount": double.tryParse('${e.product['purchase']}') * e.quantity,
+        "purchase": e.product['purchase'],
         "quantity": e.quantity
       };
-    })
+    }).toList()
   };
 }
 
-Future onSubmitPurchase(List carts, String customer, discount) async {
-  if (customer == null || customer.isEmpty) throw "Supplier required";
-  String cartId = generateUUID();
-  String batchId = generateUUID();
-  var shop = await getActiveShop();
-  var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
-  // await _printPurchaseItems(carts, discount, customer, true, cartId);
-  var purchase = await _carts2Purchase(carts, customer, cartId, batchId, true);
-  print(purchase);
-  // await saveLocalSync(batchId, url, purchase);
-  // oneTimeLocalSyncs();
-}
+Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
+    (List carts, String customer, discount) async {
+      if (customer == null || customer.isEmpty) throw "Supplier required";
+      String batchId = generateUUID();
+      var shop = await getActiveShop();
+      // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
+      Map pDetail;
+      await addPurchaseDetail(
+          context: context,
+          onSubmit: (state) {
+            pDetail = state;
+            navigator().maybePop();
+          });
+      if (pDetail is! Map) {
+        throw 'Purchase details ( reference, date, due and type ) required';
+      }
+      // await _printPurchaseItems(carts, discount, customer, true, cartId);
+      var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
+      var createPurchase = prepareCreatePurchase(purchase);
+      return createPurchase(shop);
+      // await saveLocalSync(batchId, url, purchase);
+      // oneTimeLocalSyncs();
+    };
