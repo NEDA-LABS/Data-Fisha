@@ -53,7 +53,7 @@ Future syncLocal2Remote(dynamic) async {
 }
 
 oneTimeLocalSyncs() async {
-  if (isMobilePlatform()) {
+  if (isNativeMobilePlatform()) {
     Workmanager().registerOneOffTask(
         '$syncsTaskId-onetime', '$syncsTaskId-onetime',
         existingWorkPolicy: ExistingWorkPolicy.append,
@@ -62,9 +62,9 @@ oneTimeLocalSyncs() async {
 }
 
 periodicLocalSyncs() async {
-  if (isMobilePlatform()) {
+  if (isNativeMobilePlatform()) {
     if (kDebugMode) {
-      print("::::: mobile");
+      print("::::: native mobile");
     }
     Workmanager().initialize(syncCallbackDispatcher, isInDebugMode: kDebugMode);
     Workmanager().registerPeriodicTask(

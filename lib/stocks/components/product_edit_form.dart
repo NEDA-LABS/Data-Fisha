@@ -10,19 +10,6 @@ import 'package:smartstock/stocks/states/product_create.dart';
 
 List<Widget> productUpdateForm(ProductCreateState state, context) {
   return [
-    // ChoicesInput(
-    //   onText: (d) {
-    //     state.updateFormState({"product": d});
-    //     state.refresh();
-    //   },
-    //   label: "Name",
-    //   placeholder: 'Select product name',
-    //   error: state.error['product'] ?? '',
-    //   initialText: state.product['product'],
-    //   getAddWidget: () => createItemContent(),
-    //   onField: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
-    //   onLoad: getItemFromCacheOrRemote,
-    // ),
     TextInput(
         onText: (d) => state.updateFormState({"barcode": d}),
         label: "Barcode / Qrcode",
@@ -43,19 +30,6 @@ List<Widget> productUpdateForm(ProductCreateState state, context) {
       onField: (x)=>'${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     ),
-    // ChoicesInput(
-    //   onText: (d) {
-    //     state.updateFormState({"supplier": d});
-    //     state.refresh();
-    //   },
-    //   label: "Supplier",
-    //   placeholder: 'Select supplier',
-    //   error: state.error['supplier'] ?? '',
-    //   initialText: state.product['supplier'],
-    //   getAddWidget: () => createSupplierContent(),
-    //   onField: (x)=>'${x['name']}',
-    //   onLoad: getSupplierFromCacheOrRemote,
-    // ),
     TextInput(
       onText: (d) => state.updateFormState({"purchase": d}),
       label: "Purchase Cost ( Tsh ) / Unit price",
@@ -80,21 +54,6 @@ List<Widget> productUpdateForm(ProductCreateState state, context) {
       initialText: '${state.product['wholesalePrice']??''}',
       type: TextInputType.number,
     ),
-    // isUpdate?Container():TextInput(
-    //   onText: (d) => state.updateFormState({"quantity": d}),
-    //   label: "Quantity",
-    //   placeholder: "Current stock quantity",
-    //   error: state.error['quantity'] ?? '',
-    //   initialText:'${state.product['quantity']??''}',
-    //   type: TextInputType.number,
-    // ),
-    // TextInput(
-    //     onText: (d) => state.updateFormState({"expire": d}),
-    //     label: "Expire",
-    //     placeholder: "YYYY-MM-DD ( Optional )",
-    //     error: state.error['expire'] ?? '',
-    //     initialText: state.product['expire'],
-    //     type: TextInputType.datetime),
     Container(
       height: 80,
       width: MediaQuery.of(context).size.width,
@@ -110,7 +69,7 @@ List<Widget> productUpdateForm(ProductCreateState state, context) {
 }
 
 var _mobileQrScan = ifDoElse(
-  (_) => isMobilePlatform(),
+  (_) => isNativeMobilePlatform(),
   (_) => IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
   (_) => const SizedBox(),
 );

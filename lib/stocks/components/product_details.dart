@@ -7,53 +7,60 @@ import 'package:smartstock/stocks/services/product.dart';
 
 productDetail(Map item, context) => Padding(
     padding: const EdgeInsets.all(16.0),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      ListTile(
-          title: Text(item['product'] ?? '',
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-          dense: true,
-          onTap: () {}),
-      SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            outlineButton(
-                onPressed: () {
-                  navigator().maybePop().whenComplete(() {
-                    navigator()
-                        .pushNamed('/stock/products/edit', arguments: item);
-                  });
-                },
-                title: 'Edit details'),
-            outlineButton(
-                onPressed: () {
-                  navigator().maybePop().whenComplete(() => showDialog(
-                      context: context,
-                      builder: (_) => Dialog(
-                          child: Container(
-                              constraints: const BoxConstraints(maxWidth: 400),
-                              child: OffsetQuantityContent(
-                                  productId: item['id'],
-                                  product: item['product'])))));
-                },
-                title: 'Offset quantity'),
-            // outlineButton(onPressed: (){}, title: 'Track quantity'),
-            outlineButton(
-                onPressed: () {
-                  navigator().maybePop().whenComplete(() {
-                    showDialog(
-                        context: context,
-                        builder: (_) => deleteDialog(
-                            message:
-                                'Delete of "${item['product']}" is permanent, do you wish to continue ? ',
-                            onConfirm: () => deleteProduct(item['id'])));
-                  });
-                },
-                title: 'Delete',
-                textColor: Colors.red)
-          ])),
-      ...item.keys.where((k) => k != 'product').map((e) => listItem(e, item))
-    ]));
+    child: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        // mainAxisSize: MainAxisSize.min,
+      shrinkWrap: true,
+        children: [
+          ListTile(
+              title: Text(item['product'] ?? '',
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500)),
+              dense: true,
+              onTap: () {}),
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [
+                outlineButton(
+                    onPressed: () {
+                      navigator().maybePop().whenComplete(() {
+                        navigator()
+                            .pushNamed('/stock/products/edit', arguments: item);
+                      });
+                    },
+                    title: 'Edit details'),
+                outlineButton(
+                    onPressed: () {
+                      navigator().maybePop().whenComplete(() => showDialog(
+                          context: context,
+                          builder: (_) => Dialog(
+                              child: Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 400),
+                                  child: OffsetQuantityContent(
+                                      productId: item['id'],
+                                      product: item['product'])))));
+                    },
+                    title: 'Offset quantity'),
+                // outlineButton(onPressed: (){}, title: 'Track quantity'),
+                outlineButton(
+                    onPressed: () {
+                      navigator().maybePop().whenComplete(() {
+                        showDialog(
+                            context: context,
+                            builder: (_) => deleteDialog(
+                                message:
+                                    'Delete of "${item['product']}" is permanent, do you wish to continue ? ',
+                                onConfirm: () => deleteProduct(item['id'])));
+                      });
+                    },
+                    title: 'Delete',
+                    textColor: Colors.red)
+              ])),
+          ...item.keys
+              .where((k) => k != 'product')
+              .map((e) => listItem(e, item))
+        ]));
 
 listItem(e, item) => ListTile(
     title: Text('$e',

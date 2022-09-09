@@ -3,8 +3,8 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/add_invoice_payment.dart';
 
-invoiceDetails(context, item) => Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+invoiceDetails(context, item) => ListView(
+      shrinkWrap: true,
       children: [
         _header(context, item),
         const Padding(

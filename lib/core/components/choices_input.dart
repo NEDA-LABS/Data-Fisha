@@ -97,7 +97,7 @@ class _ChoicesInputState extends State<ChoicesInput> {
               builder: (_) => Dialog(
                   child: Container(
                       constraints:
-                          const BoxConstraints(maxWidth: 500, maxHeight: 300),
+                          const BoxConstraints(maxWidth: 500, minHeight: 300, maxHeight: 600),
                       child: ChoiceInputDropdown(
                           items: items, onTitle: onField, onText: onText))))
           : showModalBottomSheet(

@@ -22,50 +22,47 @@ void addPurchaseToCartView({
             'retailPrice': _getFromCartProduct(cart, 'retailPrice'),
             'wholesalePrice': _getFromCartProduct(cart, 'wholesalePrice'),
           },
-          builder: (context, states, updateState) => Wrap(
-            children: [
-              Container(
-                decoration: _addToCartBoxDecoration(),
-                // height: 230,
-                constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    _productAndPrice(states['p'], onGetPrice),
-                    TextInput(
-                        label: 'Quantity',
-                        initialText: '${states['q'] ?? 1}',
-                        lines: 1,
-                        type: TextInputType.number,
-                        onText: (v) =>
-                            updateState({'q': int.tryParse(v) ?? 1})),
-                    TextInput(
-                        label: 'Purchase price',
-                        initialText: '${states['purchase'] ?? ''}',
-                        lines: 1,
-                        type: TextInputType.number,
-                        onText: (v) =>
-                            updateState({'purchase': int.tryParse(v) ?? 1})),
-                    TextInput(
-                        label: 'New retail price',
-                        initialText: '${states['retailPrice'] ?? ''}',
-                        lines: 1,
-                        type: TextInputType.number,
-                        onText: (v) =>
-                            updateState({'retailPrice': int.tryParse(v) ?? 1})),
-                    TextInput(
-                        label: 'New wholesale price',
-                        initialText: '${states['wholesalePrice'] ?? ''}',
-                        lines: 1,
-                        type: TextInputType.number,
-                        onText: (v) => updateState(
-                            {'wholesalePrice': int.tryParse(v) ?? 1})),
-                    _addToCartButton(context, states, onAddToCart)
-                  ],
-                ),
-              )
-            ],
+          builder: (context, states, updateState) => Container(
+            decoration: _addToCartBoxDecoration(),
+            // height: 230,
+            constraints: const BoxConstraints(maxWidth: 400),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              shrinkWrap: true,
+              children: <Widget>[
+                _productAndPrice(states['p'], onGetPrice),
+                TextInput(
+                    label: 'Quantity',
+                    initialText: '${states['q'] ?? 1}',
+                    lines: 1,
+                    type: TextInputType.number,
+                    onText: (v) =>
+                        updateState({'q': int.tryParse(v) ?? 1})),
+                TextInput(
+                    label: 'Purchase price',
+                    initialText: '${states['purchase'] ?? ''}',
+                    lines: 1,
+                    type: TextInputType.number,
+                    onText: (v) =>
+                        updateState({'purchase': int.tryParse(v) ?? 1})),
+                TextInput(
+                    label: 'New retail price',
+                    initialText: '${states['retailPrice'] ?? ''}',
+                    lines: 1,
+                    type: TextInputType.number,
+                    onText: (v) =>
+                        updateState({'retailPrice': int.tryParse(v) ?? 1})),
+                TextInput(
+                    label: 'New wholesale price',
+                    initialText: '${states['wholesalePrice'] ?? ''}',
+                    lines: 1,
+                    type: TextInputType.number,
+                    onText: (v) => updateState(
+                        {'wholesalePrice': int.tryParse(v) ?? 1})),
+                _addToCartButton(context, states, onAddToCart)
+              ],
+            ),
           ),
         ),
       ),

@@ -7,7 +7,8 @@ import 'package:smartstock/sales/services/api_invoice.dart';
 
 addInvoicePaymentContent(String id) => ActiveComponent(
     initialState: const {"loading": false},
-    builder: (context, states, updateState) => Padding(
+    builder: (context, states, updateState) => Container(
+      constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
             child: ListBody(children: [

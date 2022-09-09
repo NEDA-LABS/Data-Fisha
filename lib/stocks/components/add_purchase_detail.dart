@@ -20,57 +20,51 @@ Future addPurchaseDetail({
             'date': '',
             'due': ''
           },
-          builder: (context, states, updateState) => Wrap(
-            children: [
-              Container(
-                decoration: _addToCartBoxDecoration(),
-                // height: 230,
-                constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView(
-                  shrinkWrap: true,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CheckboxListTile(
-                          title: const Text("Is this invoice purchased?"),
-                          value: states['type'] == 'invoice',
-                          onChanged: (b) => b
-                              ? updateState({'type': 'invoice'})
-                              : updateState({'type': 'receipt'})),
-                    ),
-                    TextInput(
-                        label: 'Purchase reference',
-                        initialText: '${states['reference']}',
-                        lines: 1,
-                        error: states['error_r'],
-                        type: TextInputType.text,
-                        onText: (v) => updateState({'reference': v})),
-                    DateInput(
-                      label: 'Purchase date',
-                      onText: (d) => updateState({'date': d}),
-                      error: states['error_d'],
-                      firstDate:
-                          DateTime.now().subtract(const Duration(days: 360)),
-                      lastDate: DateTime.now(),
-                      initialDate: DateTime.now(),
-                    ),
-                    states['type'] == 'invoice'
-                        ? DateInput(
-                            label: 'Payment due date',
-                            onText: (d) => updateState({'due': d}),
-                            firstDate: DateTime.now(),
-                            lastDate:
-                                DateTime.now().add(const Duration(days: 360)),
-                            initialDate: DateTime.now(),
-                          )
-                        : Container(),
-                    _addToCartButton(context, states, updateState, onSubmit),
-                  ],
+          builder: (context, states, updateState) => Container(
+            decoration: _addToCartBoxDecoration(),
+            constraints: const BoxConstraints(maxWidth: 400),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: CheckboxListTile(
+                      title: const Text("Is this invoice purchased?"),
+                      value: states['type'] == 'invoice',
+                      onChanged: (b) => b
+                          ? updateState({'type': 'invoice'})
+                          : updateState({'type': 'receipt'})),
                 ),
-              )
-            ],
+                TextInput(
+                    label: 'Purchase reference',
+                    initialText: '${states['reference']}',
+                    lines: 1,
+                    error: states['error_r'],
+                    type: TextInputType.text,
+                    onText: (v) => updateState({'reference': v})),
+                DateInput(
+                  label: 'Purchase date',
+                  onText: (d) => updateState({'date': d}),
+                  error: states['error_d'],
+                  firstDate:
+                  DateTime.now().subtract(const Duration(days: 360)),
+                  lastDate: DateTime.now(),
+                  initialDate: DateTime.now(),
+                ),
+                states['type'] == 'invoice'
+                    ? DateInput(
+                  label: 'Payment due date',
+                  onText: (d) => updateState({'due': d}),
+                  firstDate: DateTime.now(),
+                  lastDate:
+                  DateTime.now().add(const Duration(days: 360)),
+                  initialDate: DateTime.now(),
+                )
+                    : Container(),
+                _addToCartButton(context, states, updateState, onSubmit),
+              ],
+            ),
           ),
         ),
       ),

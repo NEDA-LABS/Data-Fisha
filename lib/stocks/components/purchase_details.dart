@@ -3,8 +3,10 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_payment.dart';
 
-purchaseDetails(context, item) => Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+purchaseDetails(context, item) => ListView(
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
+      // mainAxisSize: MainAxisSize.min,
+      shrinkWrap: true,
       children: [
         _header(context, item),
         const Padding(
