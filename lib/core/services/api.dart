@@ -11,9 +11,15 @@ preparePutRequest(body) => (url) => put(
   body: jsonEncode(body),
 );
 
+preparePostRequest(body) => (url) => post(
+  Uri.parse(url),
+  headers: getInitialHeaders(),
+  body: jsonEncode(body),
+);
+
 getRequest(url) => get(Uri.parse(url));
 
-patchRequest(body) => (url) => patch(
+preparePatchRequest(body) => (url) => patch(
   Uri.parse(url),
   headers: getInitialHeaders(),
   body: jsonEncode(body),

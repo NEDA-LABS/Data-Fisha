@@ -11,7 +11,7 @@ _prepareCreateRequest(purchase) => composeAsync([
 
 _preparePatchRequest(body) => composeAsync([
       map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-      patchRequest(body)
+      preparePatchRequest(body)
     ]);
 
 var _getPurchases = composeAsync([

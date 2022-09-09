@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -96,6 +97,11 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
   await _printInvoiceItems(carts, discount, customer, true, cartId);
   var invoice =
       await _carts2Invoice(carts, discount, true, customer, cartId, batchId);
-  await saveLocalSync(batchId, url, invoice);
-  oneTimeLocalSyncs();
+  if (isWebMobilePlatform()) {
+    var saveInvoice = preparePutRequest(invoice);
+    return saveInvoice(url);
+  } else {
+    await saveLocalSync(batchId, url, invoice);
+    oneTimeLocalSyncs();
+  }
 }
