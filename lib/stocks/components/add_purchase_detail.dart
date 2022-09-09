@@ -27,8 +27,9 @@ Future addPurchaseDetail({
                 // height: 230,
                 constraints: const BoxConstraints(maxWidth: 400),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: ListView(
+                  shrinkWrap: true,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
