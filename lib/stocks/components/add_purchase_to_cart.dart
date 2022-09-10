@@ -38,28 +38,28 @@ void addPurchaseToCartView({
                     lines: 1,
                     type: TextInputType.number,
                     onText: (v) =>
-                        updateState({'q': int.tryParse(v) ?? 1})),
+                        updateState({'q': doubleOrZero(v)})),
                 TextInput(
                     label: 'Purchase price',
                     initialText: '${states['purchase'] ?? ''}',
                     lines: 1,
                     type: TextInputType.number,
                     onText: (v) =>
-                        updateState({'purchase': int.tryParse(v) ?? 1})),
+                        updateState({'purchase': doubleOrZero(v)})),
                 TextInput(
                     label: 'New retail price',
                     initialText: '${states['retailPrice'] ?? ''}',
                     lines: 1,
                     type: TextInputType.number,
                     onText: (v) =>
-                        updateState({'retailPrice': int.tryParse(v) ?? 1})),
+                        updateState({'retailPrice': doubleOrZero(v)})),
                 TextInput(
                     label: 'New wholesale price',
                     initialText: '${states['wholesalePrice'] ?? ''}',
                     lines: 1,
                     type: TextInputType.number,
                     onText: (v) => updateState(
-                        {'wholesalePrice': int.tryParse(v) ?? 1})),
+                        {'wholesalePrice': doubleOrZero(v)})),
                 _addToCartButton(context, states, onAddToCart)
               ],
             ),

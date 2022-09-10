@@ -2,6 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/services/util.dart';
 
 _loading() => const Center(
       child: SizedBox(
@@ -35,7 +36,7 @@ _dataAndRefresh(data, String title, updateState){
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
             child: Text(
-              NumberFormat().format(double.tryParse('$data')??0),
+              NumberFormat().format(doubleOrZero('$data')),
               style:
               const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
             ),

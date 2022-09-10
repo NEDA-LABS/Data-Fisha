@@ -54,7 +54,7 @@ Future<List> _filterAndSort(Map data) async {
 Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
   var currentUser = await getLocalCurrentUser();
   var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
-  var totalAmount = double.tryParse(t) ?? 0;
+  var totalAmount = doubleOrZero(t);
   var due = pDetail['due'];
   var type = pDetail['type'];
   var refNumber = pDetail['reference'];
@@ -85,7 +85,8 @@ Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
           "purchase": e.product['purchase'],
           "supplier": supplier
         },
-        "amount": double.tryParse('${e.product['purchase']}') * e.quantity,
+        "amount":
+            doubleOrZero('${e.product['purchase']}') * doubleOrZero(e.quantity),
         "purchase": e.product['purchase'],
         "quantity": e.quantity
       };

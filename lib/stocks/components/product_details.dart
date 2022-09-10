@@ -8,8 +8,6 @@ import 'package:smartstock/stocks/services/product.dart';
 productDetail(Map item, context) => Padding(
     padding: const EdgeInsets.all(16.0),
     child: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        // mainAxisSize: MainAxisSize.min,
       shrinkWrap: true,
         children: [
           ListTile(

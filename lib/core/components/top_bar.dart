@@ -14,7 +14,7 @@ class StockAppBar extends PreferredSize with Disposable {
   final String searchHint;
   final Function openDrawer;
   final Function(String) onSearch;
-  final int debounceTime;
+  final dynamic debounceTime;
   Timer _debounce;
 
   StockAppBar({
@@ -64,7 +64,7 @@ class StockAppBar extends PreferredSize with Disposable {
   PreferredSizeWidget _toolBarSearchInput(
     Function(String) onSearch,
     String placeholder,
-    int debounceTime,
+    dynamic debounceTime,
   ) =>
       PreferredSize(
           preferredSize: const Size.fromHeight(49),

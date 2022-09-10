@@ -4,8 +4,6 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_payment.dart';
 
 purchaseDetails(context, item) => ListView(
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
-      // mainAxisSize: MainAxisSize.min,
       shrinkWrap: true,
       children: [
         _header(context, item),
@@ -59,7 +57,8 @@ purchaseDetails(context, item) => ListView(
                       });
                     },
                     child: const Text('Add payment',
-                        style: TextStyle(fontSize: 16))))
+                        style: TextStyle(fontSize: 16)))),
+        const SizedBox(height: 24)
       ],
     );
 

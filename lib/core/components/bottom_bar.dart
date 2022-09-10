@@ -25,7 +25,7 @@ Widget bottomBar(
               ])
         : null;
 
-_handleClick(int index, BuildContext context, List<MenuModel> menus) {
+_handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
   switch (index) {
     case 1:
       navigateTo('/sales');

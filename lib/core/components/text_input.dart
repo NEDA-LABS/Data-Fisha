@@ -16,7 +16,7 @@ class TextInput extends StatefulWidget {
   final Widget icon;
   final TextInputType type;
   final int lines;
-  final int debounceTime;
+  final dynamic debounceTime;
 
   const TextInput({
     Key key,
@@ -54,7 +54,7 @@ class _TextInputState extends State<TextInput> {
       contentPadding: _inputPadding());
 
   _input(error, onText, type, placeholder, icon, lines,
-          TextEditingController controller, int debounceTime) =>
+          TextEditingController controller, dynamic debounceTime) =>
       Builder(
         builder: (context) => Container(
           decoration: inputBoxDecoration(context, error),
@@ -69,7 +69,7 @@ class _TextInputState extends State<TextInput> {
       );
 
   _fulWidthTextField(onText, type, placeholder, lines,
-          TextEditingController controller, int debounceTime) =>
+          TextEditingController controller, dynamic debounceTime) =>
       Expanded(
           child: TextField(
         controller: controller,

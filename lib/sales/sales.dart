@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/add_sale_to_cart.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -94,7 +95,5 @@ _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
           context: context);
     };
 
-int _getPrice(product, wholesale) =>
-    product[wholesale ? "wholesalePrice" : 'retailPrice'] is double
-        ? product[wholesale ? "wholesalePrice" : 'retailPrice'].toInt()
-        : product[wholesale ? "wholesalePrice" : 'retailPrice'];
+dynamic _getPrice(product, wholesale) =>
+    doubleOrZero(product[wholesale ? "wholesalePrice" : 'retailPrice']);

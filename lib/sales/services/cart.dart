@@ -79,7 +79,7 @@ Future<String> cartItemsToPrinterData(
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in carts) {
-    totalBill += double.parse(cart['amount'].toString());
+    totalBill += doubleOrZero(cart['amount']);
     data = [
       data,
       '\n-------------------------------\n',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/services/util.dart';
 
 Widget productCardItem({
   String productCategory,
@@ -33,7 +34,7 @@ Widget productCardItem({
                       child: Text(
                           productPrice != null
                               ? NumberFormat.currency(name: 'TZS ')
-                                  .format(productPrice)
+                                  .format(doubleOrZero(productPrice))
                               : "TZS 0",
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,

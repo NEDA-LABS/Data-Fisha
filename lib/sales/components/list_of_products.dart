@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/add_to_cart.dart';
 import 'package:smartstock/sales/components/product_card.dart';
 
 Widget listOfProducts({
   @required List<dynamic> products,
   @required onAddToCart,
-  @required int Function(dynamic) onGetPrice,
-  @required Function(dynamic product, Function(dynamic) onAddToCart) onAddToCartView,
+  @required dynamic Function(dynamic) onGetPrice,
+  @required
+      Function(dynamic product, Function(dynamic) onAddToCart) onAddToCartView,
 }) =>
     GridView.builder(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 100),
@@ -27,4 +26,3 @@ _getCategory(product) => '${product['category']}';
 
 _delegate() =>
     const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180);
-

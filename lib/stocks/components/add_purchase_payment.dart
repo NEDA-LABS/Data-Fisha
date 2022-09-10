@@ -54,7 +54,7 @@ _submitAddPurchasePayment(
     updateState({'error_q': 'Amount required'});
     return;
   }
-  var payment = {'amount': double.tryParse("${states['amount']}") ?? 0};
+  var payment = {'amount': doubleOrZero("${states['amount']}")};
   var patchPurchase = preparePatchPurchasePayment(id, payment);
   getActiveShop().then((shop) {
     updateState({'loading': true});

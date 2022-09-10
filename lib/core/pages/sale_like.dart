@@ -17,7 +17,7 @@ class SaleLikePage extends StatelessWidget {
   final String backLink;
   final String customerLikeLabel;
   final String checkoutCompleteMessage;
-  final int Function(dynamic) onGetPrice;
+  final dynamic Function(dynamic) onGetPrice;
   final onCustomerLikeList;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List, String, dynamic) onSubmitCart;

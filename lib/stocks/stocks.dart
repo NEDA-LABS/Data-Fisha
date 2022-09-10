@@ -43,7 +43,7 @@ class StockModule extends Module {
             customerLikeLabel: 'Choose supplier',
             onSubmitCart: prepareOnSubmitPurchase(context),
             onGetPrice: (product) {
-              return double.tryParse('${product['purchase']}') ?? 0;
+              return doubleOrZero('${product['purchase']}');
             },
             onAddToCartView: _onPrepareSalesAddToCartView(context, false),
             onCustomerLikeList: getSupplierFromCacheOrRemote,
@@ -88,7 +88,7 @@ class StockModule extends Module {
 _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
       addPurchaseToCartView(
           onGetPrice: (product) {
-            return double.tryParse('${product['purchase']}') ?? 0;
+            return doubleOrZero('${product['purchase']}');
           },
           cart: CartModel(product: product, quantity: 1),
           onAddToCart: onAddToCart,
