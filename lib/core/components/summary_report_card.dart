@@ -23,31 +23,33 @@ _errorAndRetry(String err, state) => Padding(
       ),
     );
 
-_dataAndRefresh(data, String title, updateState) => Padding(
-      padding: const EdgeInsets.all(10),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(title),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
-              child: Text(
-                NumberFormat().format(data),
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
+_dataAndRefresh(data, String title, updateState){
+  return  Padding(
+    padding: const EdgeInsets.all(10),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(title),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+            child: Text(
+              NumberFormat().format(double.tryParse('$data')??0),
+              style:
+              const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: OutlinedButton(
-                  onPressed: () => updateState(), child: const Text('Refresh')),
-            )
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: OutlinedButton(
+                onPressed: () => updateState(), child: const Text('Refresh')),
+          )
+        ],
       ),
-    );
+    ),
+  );
+}
 
 _showErrorOrContent(String title, updateState) => ifDoElse(
       (x) => x.hasError,

@@ -37,6 +37,13 @@ List<SubMenuModule> _pagesMenu() => [
         svgName: 'supplier_icon.svg',
         onClick: () {},
       ),
+      SubMenuModule(
+        name: 'Purchases',
+        link: '/stock/purchases',
+        roles: [],
+        svgName: 'store_icon.svg',
+        onClick: () {},
+      ),
       // SubMenuModule(
       //   name: 'Transfer',
       //   link: '/stock/transfers',

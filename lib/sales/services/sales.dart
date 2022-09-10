@@ -1,3 +1,4 @@
+import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -57,25 +58,26 @@ Future _printSaleItems(
   await posPrint(data: data, qr: batchId);
 }
 
-Future onSubmitRetailSale(List carts, String customer, discount) async {
+_onSubmitSale(List carts, String customer, discount, wholesale)async{
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
-  await _printSaleItems(carts, discount, customer, false, cartId);
-  var sales = await _carts2Sales(carts, discount, false, customer, cartId);
-  await saveLocalSync(batchId, url, sales);
-  oneTimeLocalSyncs();
+  await _printSaleItems(carts, discount, customer, wholesale, cartId);
+  var sales = await _carts2Sales(carts, discount, wholesale, customer, cartId);
+  if(isWebMobilePlatform()){
+    var saveSales = preparePostRequest(sales);
+    return saveSales(url);
+  }else{
+    await saveLocalSync(batchId, url, sales);
+    oneTimeLocalSyncs();
+  }
+}
+Future onSubmitRetailSale(List carts, String customer, discount) async {
+  return _onSubmitSale(carts, customer, discount, false);
 }
 
 Future onSubmitWholeSale(List carts, String customer, discount) async {
   if (customer == null || customer.isEmpty) throw "Customer required";
-  String cartId = generateUUID();
-  String batchId = generateUUID();
-  var shop = await getActiveShop();
-  var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
-  await _printSaleItems(carts, discount, customer, true, cartId);
-  var sales = await _carts2Sales(carts, discount, true, customer, cartId);
-  await saveLocalSync(batchId, url, sales);
-  oneTimeLocalSyncs();
+  return _onSubmitSale(carts, customer, discount, true);
 }

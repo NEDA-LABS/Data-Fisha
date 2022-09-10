@@ -43,6 +43,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
 
   _listBuilder(items) => ListView.builder(
       itemCount: items.length,
+      shrinkWrap: true,
       itemBuilder: (context, index) => ListTile(
           title: Text('${widget.onTitle(items[index])}' ?? ''),
           onTap: () {
@@ -62,18 +63,18 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   @override
   Widget build(BuildContext context) =>
       Column(mainAxisSize: MainAxisSize.min, children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-          child: Center(
-            child: Container(
-              height: 8,
-              width: 80,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorDark,
-                  borderRadius: const BorderRadius.all(Radius.circular(50))),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+        //   child: Center(
+        //     child: Container(
+        //       height: 8,
+        //       width: 80,
+        //       decoration: BoxDecoration(
+        //           color: Theme.of(context).primaryColorDark,
+        //           borderRadius: const BorderRadius.all(Radius.circular(50))),
+        //     ),
+        //   ),
+        // ),
         _searchInput(),
         _itemsList(),
       ]);

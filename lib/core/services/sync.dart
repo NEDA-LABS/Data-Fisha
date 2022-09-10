@@ -29,7 +29,9 @@ void syncCallbackDispatcher() {
 }
 
 Future syncLocal2Remote(dynamic) async {
-  // print('------syncs routine run------');
+  if (kDebugMode) {
+    print('------syncs routine run------');
+  }
   List keys = await getLocalSyncsKeys();
   // print(keys);
   for (var key in keys) {
@@ -41,9 +43,9 @@ Future syncLocal2Remote(dynamic) async {
     var response = await post(Uri.parse(getUrl(element)),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(getPayload(element)));
-    // print(response.statusCode);
     if (response.statusCode == 200) {
-      removeLocalSync(key);
+      await removeLocalSync(key);
+      return key;
     } else {
       throw response.body;
     }
@@ -51,7 +53,7 @@ Future syncLocal2Remote(dynamic) async {
 }
 
 oneTimeLocalSyncs() async {
-  if (isMobilePlatform()) {
+  if (isNativeMobilePlatform()) {
     Workmanager().registerOneOffTask(
         '$syncsTaskId-onetime', '$syncsTaskId-onetime',
         existingWorkPolicy: ExistingWorkPolicy.append,
@@ -60,9 +62,9 @@ oneTimeLocalSyncs() async {
 }
 
 periodicLocalSyncs() async {
-  if (isMobilePlatform()) {
+  if (isNativeMobilePlatform()) {
     if (kDebugMode) {
-      print("::::: mobile");
+      print("::::: native mobile");
     }
     Workmanager().initialize(syncCallbackDispatcher, isInDebugMode: kDebugMode);
     Workmanager().registerPeriodicTask(
@@ -78,7 +80,15 @@ periodicLocalSyncs() async {
     Timer.periodic(const Duration(seconds: 8), (_) async {
       if (shouldRun) {
         shouldRun = false;
-        compute(syncLocal2Remote, 2).catchError((_) {}).whenComplete(() {
+        compute(syncLocal2Remote, 2).catchError((_) {
+          if (kDebugMode) {
+            print(_);
+          }
+        }).then((value) {
+          if (kDebugMode) {
+            print('done sync local data --> $value');
+          }
+        }).whenComplete(() {
           shouldRun = true;
         });
       } else {

@@ -5,11 +5,11 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
-void addToCartView({
+void addSaleToCartView({
   @required BuildContext context,
-  bool wholesale = false,
   @required CartModel cart,
   @required onAddToCart,
+  @required onGetPrice,
 }) =>
     showDialog(
       context: context,
@@ -22,7 +22,7 @@ void addToCartView({
             constraints: const BoxConstraints(maxWidth: 400),
             child: Column(
               children: <Widget>[
-                _productAndPrice(states['p'], wholesale),
+                _productAndPrice(states['p'], onGetPrice),
                 _cartQuantityInput(context, states, updateState),
                 _addToCartButton(context, states, onAddToCart)
               ],
@@ -58,19 +58,19 @@ _addToCartButtonStyle(context) => ButtonStyle(
     backgroundColor:
         MaterialStateProperty.all(Theme.of(context).primaryColorDark));
 
-_productAndPrice(Map<String, dynamic> product, wholesale) => Padding(
+_productAndPrice(Map<String, dynamic> product, onGetPrice) => Padding(
     padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
     child: Column(children: <Widget>[
       Text(product["product"],
           softWrap: true,
           style: const TextStyle(
               color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
-      _amountWidget(product, wholesale)
+      _amountWidget(product, onGetPrice)
     ]));
 
-_amountWidget(product, wholesale) => Container(
+_amountWidget(product,onGetPrice) => Container(
     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-    child: Text(formattedAmount(product, wholesale),
+    child: Text('TZS ${onGetPrice(product)}', //formattedAmount(product, wholesale),
         style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17)));
 

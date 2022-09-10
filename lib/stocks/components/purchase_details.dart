@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/add_invoice_payment.dart';
+import 'package:smartstock/stocks/components/add_purchase_payment.dart';
 
-invoiceDetails(context, item) => ListView(
+purchaseDetails(context, item) => ListView(
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
+      // mainAxisSize: MainAxisSize.min,
       shrinkWrap: true,
       children: [
         _header(context, item),
@@ -18,7 +20,7 @@ invoiceDetails(context, item) => ListView(
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
-                      child: Text('${item['stock']['product']}')),
+                      child: Text('${item['product']['product']}')),
                   Text('${item['quantity']}'),
                   Text('${item['amount']}'),
                 ]))
@@ -41,21 +43,23 @@ invoiceDetails(context, item) => ListView(
                   Text('${item['amount']}'),
                 ]))
             .toList(),
-        Container(
-          height: 40,
-          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
-          child: OutlinedButton(
-            onPressed: () {
-              navigator().maybePop().whenComplete(() {
-                showDialog(
-                    context: context,
-                    builder: (_) =>
-                        Dialog(child: addInvoicePaymentContent(item['id'])));
-              });
-            },
-            child: const Text('Add payment', style: TextStyle(fontSize: 16)),
-          ),
-        )
+        item['type'] == 'cash' || item['type'] == 'receipt'
+            ? Container()
+            : Container(
+                height: 40,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
+                child: OutlinedButton(
+                    onPressed: () {
+                      navigator().maybePop().whenComplete(() {
+                        showDialog(
+                            context: context,
+                            builder: (_) => Dialog(
+                                child: addPurchasePaymentContent(item['id'])));
+                      });
+                    },
+                    child: const Text('Add payment',
+                        style: TextStyle(fontSize: 16))))
       ],
     );
 
@@ -86,7 +90,7 @@ _header(context, item) => Container(
         children: [
           const Expanded(
               child: Text(
-            'Invoice details',
+            'Purchase details',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: Colors.white, fontSize: 16),
           )),

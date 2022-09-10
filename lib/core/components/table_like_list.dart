@@ -8,7 +8,7 @@ _errorAndRetry(String err) => Padding(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [Text(err)]));
 
-_tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
+_tableRow(item, List<String> keys, Widget Function(String, dynamic, dynamic) onCell,
         onItemPressed) =>
     Column(children: [
       Container(
@@ -17,7 +17,7 @@ _tableRow(item, List<String> keys, Widget Function(String, dynamic) onCell,
               onTap: () => onItemPressed(item),
               child: tableLikeListRow(keys
                   .map((k) => onCell != null
-                      ? onCell(k, item[k] ?? '')
+                      ? onCell(k, item[k] ?? '', item)
                       : Text('${item[k] ?? ''}'))
                   .toList()))),
       const Divider(height: 2)
@@ -75,7 +75,7 @@ tableLikeList({
   @required Future Function() onFuture,
   @required List<String> keys,
   onItemPressed = _a,
-  Widget Function(String key, dynamic data) onCell,
+  Widget Function(String key, dynamic, dynamic) onCell,
 }) =>
     FutureBuilder(
         future: onFuture(), builder: _builder(keys, onCell, onItemPressed));

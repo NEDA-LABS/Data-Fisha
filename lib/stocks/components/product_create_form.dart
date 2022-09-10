@@ -115,7 +115,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
 }
 
 var _mobileQrScan = ifDoElse(
-  (_) => isMobilePlatform(),
+  (_) => isNativeMobilePlatform(),
   (_) => IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
   (_) => const SizedBox(),
 );

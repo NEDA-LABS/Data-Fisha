@@ -7,27 +7,27 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/invoice_details.dart';
-import 'package:smartstock/sales/services/invoice.dart';
+import 'package:smartstock/stocks/components/purchase_details.dart';
+import 'package:smartstock/stocks/services/puchase.dart';
 
-class InvoicesPage extends StatefulWidget {
+class PurchasesPage extends StatefulWidget {
   final args;
 
-  const InvoicesPage(this.args, {Key key}) : super(key: key);
+  const PurchasesPage(this.args, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _InvoicesPage();
+  State<StatefulWidget> createState() => _PurchasesPage();
 }
 
-class _InvoicesPage extends State<InvoicesPage> {
+class _PurchasesPage extends State<PurchasesPage> {
   bool _loading = false;
   String _query = '';
-  List _invoices = [];
+  List _purchases = [];
 
   _appBar(context) => StockAppBar(
-      title: "Invoices",
+      title: "Purchases",
       showBack: true,
-      backLink: '/sales/',
+      backLink: '/stock/',
       showSearch: true,
       onSearch: (d) {
         setState(() {
@@ -35,12 +35,12 @@ class _InvoicesPage extends State<InvoicesPage> {
         });
         _refresh(skip: false);
       },
-      searchHint: 'Search by date...');
+      searchHint: 'Search...');
 
-  _contextInvoices(context) => [
+  _contextPurchases(context) => [
         ContextMenu(
           name: 'Create',
-          pressed: () => navigateTo('/sales/invoice/create'),
+          pressed: () => navigateTo('/stock/purchases/create'),
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
       ];
@@ -48,14 +48,19 @@ class _InvoicesPage extends State<InvoicesPage> {
   _tableHeader() => SizedBox(
         height: 38,
         child: tableLikeListRow([
-          tableLikeListTextHeader('Date'),
-          tableLikeListTextHeader('Customer'),
-          tableLikeListTextHeader('Amount ( TZS )'),
+          tableLikeListTextHeader('Reference'),
+          tableLikeListTextHeader('Type'),
+          tableLikeListTextHeader('Cost ( TZS )'),
           tableLikeListTextHeader('Paid ( TZS )'),
         ]),
       );
 
-  _fields() => ['date', 'customer', 'amount', 'payment'];
+  _fields() => [
+        'refNumber',
+        'type',
+        'amount',
+        'payment',
+      ];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -69,30 +74,36 @@ class _InvoicesPage extends State<InvoicesPage> {
   @override
   Widget build(context) => responsiveBody(
         menus: moduleMenus(),
-        current: '/sales/',
+        current: '/stock/',
         onBody: (d) => Scaffold(
           appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              tableContextMenu(_contextInvoices(context)),
+              tableContextMenu(_contextPurchases(context)),
               _loadingView(_loading),
               _tableHeader(),
               Expanded(
                 child: tableLikeList(
-                    onFuture: () async => _invoices,
+                    onFuture: () async => _purchases,
                     keys: _fields(),
                     onCell: (a, b, c) {
-                      if (a == 'customer') {
-                        return Text('${b['displayName']}');
+                      // if (a == 'refNumber') {
+                      //   return Text('${c['type']} : ${c['refNumber']}');
+                      // }
+                      if (a == 'payment' && c['type'] == 'cash') {
+                        return Text('${c['amount']}');
                       }
-                      if (a == 'payment') {
+                      if (a == 'payment' && c['type'] == 'receipt') {
+                        return Text('${c['amount']}');
+                      }
+                      if (a == 'payment' && c['type'] == 'invoice') {
                         return Text('${_getInvPayment(b)}');
                       }
                       return Text('$b');
                     },
-                    onItemPressed: (item) =>
-                        showDialogOrModalSheet(invoiceDetails(context,item), context)),
+                    onItemPressed: (item) => showDialogOrModalSheet(
+                        purchaseDetails(context, item), context)),
               ), // _tableFooter()
             ],
           ),
@@ -103,12 +114,12 @@ class _InvoicesPage extends State<InvoicesPage> {
     setState(() {
       _loading = true;
     });
-    getInvoiceFromCacheOrRemote(
+    getPurchaseFromCacheOrRemote(
       stringLike: _query,
       skipLocal: widget.args.queryParams.containsKey('reload') || skip,
     ).then((value) {
       setState(() {
-        _invoices = value;
+        _purchases = value;
       });
     }).whenComplete(() {
       setState(() {
@@ -125,7 +136,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   _getInvPayment(b) {
     if (b is Map) {
       return b.values
-          .fold(0, (a, element) => a + doubleOrZero('$element'));
+          .fold(0, (a, element) => a + int.tryParse('$element') ?? 0);
     }
     return 0;
   }
