@@ -125,7 +125,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   _getInvPayment(b) {
     if (b is Map) {
       return b.values
-          .fold(0, (a, element) => a + int.tryParse('$element') ?? 0);
+          .fold(0, (a, element) => a + doubleOrZero('$element'));
     }
     return 0;
   }

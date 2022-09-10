@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/cart.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
-
 Widget cartDrawer(
         {@required List carts,
         @required Function(dynamic) onCheckout,
         @required Function(String) onRemoveItem,
-        @required Function(String, int) onAddItem,
+        @required Function(String, dynamic) onAddItem,
         @required bool wholesale,
         context,
         @required customer,
@@ -47,7 +47,7 @@ Widget _cartSummary(List carts, wholesale, context, onCheckout) =>
           children: [
             _totalAmountRow(carts, wholesale),
             _discountRow(states['discount'],
-                (v) => updateState({'discount': int.tryParse(v) ?? 0})),
+                (v) => updateState({'discount': doubleOrZero(v)})),
             Container(
               margin: const EdgeInsets.all(8),
               height: 54,
@@ -90,9 +90,9 @@ _submitButton(List carts, discount, bool wholesale, onCheckout, updateState) =>
     );
 
 _formatPrice(price) =>
-    NumberFormat.currency(name: 'TZS ').format(int.tryParse('$price') ?? 0);
+    NumberFormat.currency(name: 'TZS ').format(doubleOrZero('$price'));
 
-_getFinalTotal(List carts, int discount, bool wholesale) =>
+_getFinalTotal(List carts, dynamic discount, bool wholesale) =>
     carts.fold(-discount, (t, c) => t + getProductPrice(c, wholesale));
 
 _progressIndicator() => const Center(
@@ -111,9 +111,7 @@ _totalAmountRow(List carts, wholesale) => Padding(
       ),
     );
 
-
-
-_discountRow(int discount, Function(dynamic) onDiscount) => Padding(
+_discountRow(dynamic discount, Function(dynamic) onDiscount) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
@@ -140,7 +138,7 @@ Widget _checkoutCartItem(
         {@required cart,
         @required bool wholesale,
         @required BuildContext context,
-        @required Function(String, int) onAddItem,
+        @required Function(String, dynamic) onAddItem,
         @required Function(String) onRemoveItem}) =>
     Column(
       children: [

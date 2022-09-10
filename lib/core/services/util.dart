@@ -35,10 +35,9 @@ shopToApp(x) =>
 
 var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (_) => []);
 
-getStockQuantity({Map<String, dynamic> stock}) {
+getStockQuantity({stock}) {
   if (stock == null) return 0;
-  if (stock['quantity'] is int) return stock['quantity'];
-  if (stock['quantity'] != null) {
+  if (stock is Map && stock['quantity'] is Map ) {
     Map quantity = stock['quantity'] as Map;
     try {
       return quantity.values.map((e) => e['q']).reduce((a, b) => a + b);
@@ -47,6 +46,7 @@ getStockQuantity({Map<String, dynamic> stock}) {
       return 0;
     }
   }
+  if (stock is Map) return stock['quantity'];
   return 0;
 }
 
@@ -72,3 +72,5 @@ propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
 isMobilePlatform() =>
     defaultTargetPlatform == TargetPlatform.iOS ||
     defaultTargetPlatform == TargetPlatform.android;
+
+doubleOrZero(data) => double.tryParse('$data') ?? 0;

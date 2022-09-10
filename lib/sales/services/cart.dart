@@ -1,4 +1,5 @@
 import 'package:bfast/util.dart';
+import 'package:smartstock/core/services/util.dart';
 
 appendToCarts(cart, List carts) {
   var index = carts.indexWhere((x) => x.product['id'] == cart.product['id']);
@@ -21,7 +22,7 @@ appendToCarts(cart, List carts) {
 removeCart(String id, List carts) =>
     carts.where((element) => element.product['id'] != id).toList();
 
-updateCartQuantity(String id, int quantity, List carts) => carts.map((e) {
+updateCartQuantity(String id, dynamic quantity, List carts) => carts.map((e) {
       if (e.product['id'] == id) {
         e.quantity = (e.quantity + quantity) > 1 ? (e.quantity + quantity) : 1;
       }
@@ -36,21 +37,21 @@ getProductPrice(cart, bool wholesale) => wholesale
     : cart.product['retailPrice'] * cart.quantity;
 
 double getCartItemSubAmount(
-    {int quantity = 0,
+    {dynamic quantity = 0.0,
     var product,
-    int totalDiscount = 0,
-    int totalItems = 0,
+    dynamic totalDiscount = 0.0,
+    dynamic totalItems = 0.0,
     bool wholesale = false}) {
-  int amount = (wholesale
+  dynamic amount = (wholesale
       ? (quantity * product['wholesalePrice'])
-      : (quantity * product['retailPrice'])) as int;
+      : (quantity * product['retailPrice']));
   return amount - getCartItemDiscount(totalDiscount, totalItems);
 }
 
 double getCartItemDiscount(discount, items) => discount / items;
 
 List cartItems(List carts, dis, wholesale, customer) => carts.map((value) {
-      var discount = int.tryParse('$dis') ?? 0;
+      var discount = doubleOrZero('$dis');
       return {
         "amount": getCartItemSubAmount(
             totalItems: carts.length,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
@@ -40,7 +41,7 @@ _cartQuantityInput(context, states, updateState) => Container(
         lines: 1,
         placeholder: 'Quantity',
         type: TextInputType.number,
-        onText: (v) => updateState({'q': int.tryParse(v)??1})));
+        onText: (v) => updateState({'q': doubleOrZero(v)})));
 
 _addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),

@@ -45,7 +45,7 @@ _submitAddInvoicePayment(String id, Map<dynamic, dynamic> states,
     updateState({'error': 'Amount required'});
     return;
   }
-  var payment = {'amount': int.tryParse("${states['amount']}") ?? 0};
+  var payment = {'amount': doubleOrZero("${states['amount']}")};
   var patchInvoice = prepareAddPayment(id, payment);
   getActiveShop().then((shop) {
     updateState({'loading': true});

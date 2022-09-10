@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/add_to_cart.dart';
 import 'package:smartstock/sales/components/product_card.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -36,7 +37,5 @@ _productPressed(context, product, wholesale, onAddToCart) =>
         onAddToCart: onAddToCart,
       );
 
-int _getPrice(product, wholesale) =>
-    product[wholesale ? "wholesalePrice" : 'retailPrice'] is double
-        ? product[wholesale ? "wholesalePrice" : 'retailPrice'].toInt()
-        : product[wholesale ? "wholesalePrice" : 'retailPrice'];
+dynamic _getPrice(product, wholesale) =>
+    doubleOrZero(product[wholesale ? "wholesalePrice" : 'retailPrice']);

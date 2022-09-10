@@ -17,7 +17,7 @@ class OffsetQuantityContent extends StatefulWidget {
 }
 
 class _State extends State<OffsetQuantityContent> {
-  int quantity = 0;
+  dynamic quantity = 0;
   String qErr = '';
   String reqErr = '';
   bool progress = false;
@@ -30,7 +30,7 @@ class _State extends State<OffsetQuantityContent> {
             TextInput(
                 onText: (d) {
                   setState(() {
-                    quantity = int.tryParse(d) ?? 0;
+                    quantity = doubleOrZero(d);
                   });
                 },
                 initialText: '0',

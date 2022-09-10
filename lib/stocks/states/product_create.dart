@@ -39,11 +39,9 @@ class ProductCreateState extends ChangeNotifier {
   _fieldIsValidNumber(field) {
     var valid = ifDoElse(
       (x) =>
-          int.tryParse('${product[x] ?? ''}'.isNotEmpty ? '${product[x]}' : '0')
-              is int &&
-          int.tryParse(
-                  '${product[x] ?? ''}'.isNotEmpty ? '${product[x]}' : '0') >=
-              0,
+          doubleOrZero(
+              '${product[x] ?? ''}'.isNotEmpty ? '${product[x]}' : '0') >=
+          0,
       (x) => true,
       (x) {
         error[x] = 'Required, and must be greater than zero';
@@ -68,13 +66,12 @@ class ProductCreateState extends ChangeNotifier {
     ].where((element) => element == false);
     var createIfValid = ifDoElse(
         (f) => f.length > 0, (x) async => throw "Fix all issues", (x) async {
-      product['retailPrice'] = int.parse(product['retailPrice'].toString());
-      product['wholesalePrice'] =
-          int.parse(product['wholesalePrice'].toString());
+      product['retailPrice'] = doubleOrZero(product['retailPrice']);
+      product['wholesalePrice'] = doubleOrZero(product['wholesalePrice']);
       if (!isUpdate) {
-        product['quantity'] = int.parse(product['quantity'].toString());
+        product['quantity'] = doubleOrZero(product['quantity']);
       }
-      product['purchase'] = int.parse(product['purchase'].toString());
+      product['purchase'] = doubleOrZero(product['purchase']);
       product['stockable'] = true;
       product['purchasable'] = true;
       product['saleable'] = true;

@@ -131,7 +131,7 @@ class SalePage extends StatelessWidget {
   _prepareRemoveCart(states, updateState) => (String id) =>
       updateState({'carts': removeCart(id, states['carts'] ?? [])});
 
-  _prepareAddCartQuantity(states, updateState) => (String id, int q) =>
+  _prepareAddCartQuantity(states, updateState) => (String id, dynamic q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
   _showCheckoutError(context) => (error) {

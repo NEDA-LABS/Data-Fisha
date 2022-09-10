@@ -10,7 +10,7 @@ import 'package:smartstock/sales/services/cart.dart';
 
 Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
   var currentUser = await getLocalCurrentUser();
-  var discount = int.tryParse('$dis') ?? 0;
+  var discount = doubleOrZero('$dis');
   String stringDate = toSqlDate(DateTime.now());
   String stringTime = DateTime.now().toIso8601String();
   String channel = wholesale ? 'whole' : 'retail';
