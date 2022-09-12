@@ -57,7 +57,7 @@ Future<Map> _carts2Invoice(
     List carts, dis, wholesale, customer, cartId, batchId) async {
   var discount = doubleOrZero('$dis');
   var totalAmount = doubleOrZero(
-          '${cartTotalAmount(carts, false, (product) => product['purchase'])}');
+          '${cartTotalAmount(carts, false, (product) => product['retailPrice'])}');
   String date = toSqlDate(DateTime.now());
   String due = toSqlDate(DateTime.now().add(const Duration(days: 14)));
   return {
