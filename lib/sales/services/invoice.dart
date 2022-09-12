@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -10,7 +12,7 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 import 'package:smartstock/sales/services/cart.dart';
 
-Future<List<dynamic>> getInvoiceFromCacheOrRemote({
+Future<List> getInvoiceFromCacheOrRemote({
   skipLocal = false,
   stringLike = '',
 }) async {
@@ -24,7 +26,7 @@ Future<List<dynamic>> getInvoiceFromCacheOrRemote({
   rInvoices = await compute(
       _filterAndSort, {"invoices": rInvoices, "query": stringLike});
   // await saveLocalInvoices(shopToApp(shop), rInvoices);
-  return rInvoices;
+  return rInvoices??[];
   // }
   // ,
   // (x) => compute(_filterAndSort, {"invoices": x, "query": stringLike}),
@@ -88,7 +90,7 @@ Future<Map> _carts2Invoice(
 }
 
 Future onSubmitInvoice(List carts, String customer, discount) async {
-  if (customer == null || customer.isEmpty) throw "Customer required";
+  if (customer.isEmpty) throw "Customer required";
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();

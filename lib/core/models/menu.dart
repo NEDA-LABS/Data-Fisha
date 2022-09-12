@@ -8,11 +8,11 @@ class MenuModel {
   final Icon icon;
 
   MenuModel({
-    @required this.name,
-    @required this.icon,
-    @required this.link,
-    @required this.roles,
-    @required this.pages,
+    required this.name,
+    required this.icon,
+    required this.link,
+    required this.roles,
+    required this.pages,
   });
 }
 
@@ -21,13 +21,13 @@ class SubMenuModule {
   final String link;
   final List<String> roles;
   final Function onClick;
-  String svgName = '';
+  String? svgName = '';
 
   SubMenuModule({
-    @required this.name,
-    @required this.link,
-    @required this.roles,
-    @required this.onClick,
+    required this.name,
+    required this.link,
+    required this.roles,
+    required this.onClick,
     this.svgName
   });
 }
@@ -35,5 +35,5 @@ class SubMenuModule {
 class ContextMenu{
   final String name;
   final Function pressed;
-  ContextMenu({@required this.name, @required this.pressed});
+  ContextMenu({required this.name, required this.pressed});
 }

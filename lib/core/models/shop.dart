@@ -13,16 +13,16 @@ class ShopModel {
   final String street;
 
   ShopModel({
-    @required this.applicationId,
-    @required this.businessName,
-    @required this.category,
-    @required this.country,
-    @required this.ecommerce,
-    @required this.masterKey,
-    @required this.projectId,
-    @required this.region,
-    @required this.settings,
-    @required this.street,
+    required this.applicationId,
+    required this.businessName,
+    required this.category,
+    required this.country,
+    required this.ecommerce,
+    required this.masterKey,
+    required this.projectId,
+    required this.region,
+    required this.settings,
+    required this.street,
   });
 
   ShopModel.fromMap(Map<String, dynamic> map)
@@ -39,16 +39,16 @@ class ShopModel {
 }
 
 class ShopSettingsModel {
-  final bool saleWithoutPrinter;
-  final String printerFooter;
-  final String printerHeader;
-  final String currency;
+  final bool? saleWithoutPrinter;
+  final String? printerFooter;
+  final String? printerHeader;
+  final String? currency;
 
   ShopSettingsModel({
-    @required this.currency,
-    @required this.printerFooter,
-    @required this.printerHeader,
-    @required this.saleWithoutPrinter,
+    required this.currency,
+    required this.printerFooter,
+    required this.printerHeader,
+    required this.saleWithoutPrinter,
   });
 
   ShopSettingsModel.fromMap(Map<String, dynamic> map)
@@ -59,16 +59,16 @@ class ShopSettingsModel {
 }
 
 class ShopEcommerceModel {
-  final String logo;
-  final String cover;
-  final String about;
+  final String? logo;
+  final String? cover;
+  final String? about;
   final Social social;
 
   ShopEcommerceModel(
-      {@required this.about,
-      @required this.cover,
-      @required this.logo,
-      @required this.social});
+      {required this.about,
+      required this.cover,
+      required this.logo,
+      required this.social});
 
   ShopEcommerceModel.fromMap(Map<String, dynamic> map)
       : logo = map['logo'],
@@ -78,16 +78,16 @@ class ShopEcommerceModel {
 }
 
 class Social {
-  final String instagram;
-  final String facebook;
-  final String twitter;
-  final String whatsapp;
+  final String? instagram;
+  final String? facebook;
+  final String? twitter;
+  final String? whatsapp;
 
   Social(
-      {@required this.facebook,
-      @required this.instagram,
-      @required this.twitter,
-      @required this.whatsapp});
+      {required this.facebook,
+      required this.instagram,
+      required this.twitter,
+      required this.whatsapp});
 
   Social.fromMap(Map<String, dynamic> map)
       : facebook = map['facebook'],

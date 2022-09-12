@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
-_iconContainer(String svg) => Padding(
+_iconContainer(String? svg) => Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       child: Builder(
         builder: (context) => Container(

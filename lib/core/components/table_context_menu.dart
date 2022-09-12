@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/models/menu.dart';
 
-_contextButton({@required String text, @required Function pressed}) => Padding(
+_contextButton({required String text, required Function? pressed}) => Padding(
     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-    child: OutlinedButton(onPressed: pressed, child: Text(text)));
+    child: OutlinedButton(onPressed: pressed as void Function()?, child: Text(text)));
 
 _items(items) => SizedBox(
     height: 62,

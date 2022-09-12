@@ -9,23 +9,23 @@ class DateInput extends StatefulWidget {
   final String initialText;
   final String label;
   final String placeholder;
-  final String error;
+  final String? error;
   final bool showBorder;
   final DateTime firstDate;
   final DateTime lastDate;
   final DateTime initialDate;
 
   const DateInput({
-    Key key,
-    @required this.onText,
+    Key? key,
+    required this.onText,
     this.initialText = '',
     this.label = '',
     this.placeholder = '',
     this.error = '',
     this.showBorder = true,
-    @required this.firstDate,
-    @required this.initialDate,
-    @required this.lastDate,
+    required this.firstDate,
+    required this.initialDate,
+    required this.lastDate,
   }) : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class _DateInputState extends State<DateInput> {
   final _states = {};
   final _getData = propertyOr('data', (_) => []);
   final _getIsLoading = propertyOr('loading', (_) => false);
-  TextEditingController textController;
+  TextEditingController? textController;
 
   @override
   void initState() {

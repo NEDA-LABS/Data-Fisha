@@ -13,7 +13,7 @@ import 'package:smartstock/stocks/services/puchase.dart';
 class PurchasesPage extends StatefulWidget {
   final args;
 
-  const PurchasesPage(this.args, {Key key}) : super(key: key);
+  const PurchasesPage(this.args, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PurchasesPage();
@@ -22,7 +22,7 @@ class PurchasesPage extends StatefulWidget {
 class _PurchasesPage extends State<PurchasesPage> {
   bool _loading = false;
   String _query = '';
-  List _purchases = [];
+  List? _purchases = [];
 
   _appBar(context) => StockAppBar(
       title: "Purchases",
@@ -136,7 +136,7 @@ class _PurchasesPage extends State<PurchasesPage> {
   _getInvPayment(b) {
     if (b is Map) {
       return b.values
-          .fold(0, (a, element) => a + doubleOrZero('$element'));
+          .fold(0, (dynamic a, element) => a + doubleOrZero('$element'));
     }
     return 0;
   }

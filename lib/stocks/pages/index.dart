@@ -9,7 +9,7 @@ import 'package:smartstock/stocks/components/index_summary.dart';
 import 'package:smartstock/stocks/services/navigation.dart';
 
 class IndexPage extends StatelessWidget {
-  const IndexPage({Key key}) : super(key: key);
+  const IndexPage({Key? key}) : super(key: key);
 
   @override
   Widget build(context) => responsiveBody(

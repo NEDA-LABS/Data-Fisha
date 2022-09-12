@@ -17,7 +17,7 @@ import 'package:smartstock/stocks/states/products_list.dart';
 class ProductsPage extends StatefulWidget {
   final args;
 
-  const ProductsPage(this.args, {Key key}) : super(key: key);
+  const ProductsPage(this.args, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ProductPage();
@@ -77,14 +77,14 @@ class _ProductPage extends State<ProductsPage> {
             children: [
               tableContextMenu(_contextItems()),
               Consumer<ProductLoadingState>(
-                builder: (_, state) => _loading(state.loading),
+                builder: (_, state) => _loading(state!.loading),
               ),
               _tableHeader(),
               Consumer<ProductsListState>(
                 builder: (_, state) => Expanded(
                   child: tableLikeList(
                       onFuture: () async => getStockFromCacheOrRemote(
-                            stringLike: state.query,
+                            stringLike: state!.query,
                             skipLocal: widget.args?.queryParams
                                     ?.containsKey('reload') ==
                                 true,

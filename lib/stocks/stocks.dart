@@ -47,6 +47,7 @@ class StockModule extends Module {
             },
             onAddToCartView: _onPrepareSalesAddToCartView(context, false),
             onCustomerLikeList: getSupplierFromCacheOrRemote,
+            checkoutCompleteMessage: 'Purchase complete.',
           ),
         ),
         ChildRoute('/items', child: (_, __) => ItemsPage(__)),
@@ -61,7 +62,7 @@ class StockModule extends Module {
           if (product is Map && product['id'] is String) {
             var productState = getState<ProductCreateState>();
             productState.setIsUpdate(true);
-            productState.updateFormState(product);
+            productState.updateFormState(product as Map<String, dynamic>);
             return ProductEditPage('${product['product']}');
           }
           return const ProductsPage(null);

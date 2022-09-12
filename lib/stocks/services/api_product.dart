@@ -51,7 +51,7 @@ prepareUpdateProductDetails(Map body) {
   ]);
 }
 
-prepareDeleteProduct(String id) {
+prepareDeleteProduct(String? id) {
   var deleteRequest = _prepareDeleteRequest();
   return composeAsync([
     (app) => executeHttp(

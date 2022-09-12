@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 Widget salesRefreshButton({
   bool loading = false,
-  @required List carts,
-  @required Function onPressed,
+  required List carts,
+  required Function onPressed,
 }) =>
     !loading ? _refreshStocks(carts, onPressed) : const SizedBox(width: 0, height: 0);
 

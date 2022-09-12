@@ -11,7 +11,7 @@ import 'package:smartstock/sales/services/customer.dart';
 class CustomersPage extends StatefulWidget {
   final args;
 
-  const CustomersPage(this.args, {Key key}) : super(key: key);
+  const CustomersPage(this.args, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -20,7 +20,7 @@ class CustomersPage extends StatefulWidget {
 class _CustomersPage extends State<CustomersPage> {
   bool _loading = false;
   String _query = '';
-  List _customers = [];
+  List? _customers = [];
 
   _appBar(context) => StockAppBar(
       title: "Customers",

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class ProductsListState extends ChangeNotifier {
-  Timer _debounce;
+  Timer? _debounce;
   String query = '';
 
   refresh() => notifyListeners();
 
   updateQuery(String q) {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       query = q;
       refresh();

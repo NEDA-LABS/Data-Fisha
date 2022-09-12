@@ -34,13 +34,13 @@ class ChooseShopState extends ChangeNotifier {
 
   Future setCurrentShop(var shop) async {
     try {
-      String projectId = shop["projectId"];
+      String? projectId = shop["projectId"];
       // updateCurrentShop(shop);
       shops = [];
       notifyListeners();
       await saveShopId(projectId);
       await saveActiveShop(shop);
-      navigateTo('/sales');
+      navigateTo('/sales/');
       getShops();
     } catch (e) {
       getShops();

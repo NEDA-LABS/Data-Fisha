@@ -11,10 +11,10 @@ class ChoiceInputDropdown extends StatefulWidget {
   final Function(String) onText;
 
   const ChoiceInputDropdown({
-    Key key,
-    @required this.items,
-    @required this.onTitle,
-    @required this.onText,
+    Key? key,
+    required this.items,
+    required this.onTitle,
+    required this.onText,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class ChoiceInputDropdown extends StatefulWidget {
 
 class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   String _query = '';
-  Timer _debounce;
+  Timer? _debounce;
 
   _getItems(String q) =>
       compute(_filterAndSort, {"items": widget.items, "q": q});
@@ -32,7 +32,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: TextInput(
           onText: (d) {
-            if (_debounce?.isActive ?? false) _debounce.cancel();
+            if (_debounce?.isActive ?? false) _debounce!.cancel();
             _debounce = Timer(const Duration(milliseconds: 500), () {
               setState(() {
                 _query = d;
@@ -55,7 +55,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       snapshot.hasData ? _listBuilder(snapshot.data) : Container();
 
   _itemsList() => Expanded(
-      child: FutureBuilder(
+      child: FutureBuilder<List>(
           builder: _itemsListBuilder,
           initialData: widget.items,
           future: _getItems(_query)));
@@ -88,9 +88,9 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
 
 Future<List> _filterAndSort(Map data) async {
   var items = data['items'];
-  String stringLike = data['q'];
+  String? stringLike = data['q'];
   _where(x) =>
-      x != null && '$x'.toLowerCase().contains(stringLike.toLowerCase());
+      x != null && '$x'.toLowerCase().contains(stringLike!.toLowerCase());
   items = items.where(_where).toList();
   items.sort((a, b) => '$a'.toLowerCase().compareTo('$b'.toLowerCase()));
   return items;

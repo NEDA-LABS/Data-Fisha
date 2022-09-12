@@ -9,7 +9,7 @@ import 'package:smartstock/core/services/util.dart';
 
 class SalesState extends ChangeNotifier {
   List<dynamic> _stocks = [];
-  Timer _debounce;
+  Timer? _debounce;
   bool addToCartIsActive = false;
 
   bool loadProductsProgress = false;
@@ -17,18 +17,17 @@ class SalesState extends ChangeNotifier {
 
   String searchKeyword = '';
 
-  List<dynamic> get stocks {
+  List<dynamic>? get stocks {
     return _stocks;
   }
 
-  Future<List<dynamic>> getStockFromCache({String productFilter}) async {
+  Future<List<dynamic>> getStockFromCache({required String productFilter}) async {
     try {
       loadProductsProgress = true;
       notifyListeners();
       var stocks = await getStockFromCacheOrRemote();
       if (productFilter.isNotEmpty) {
-        _stocks = stocks
-            .where((element) => element['product']
+        _stocks = stocks.where((element) => element['product']
                 .toString()
                 .toLowerCase()
                 .contains(productFilter.toLowerCase()))

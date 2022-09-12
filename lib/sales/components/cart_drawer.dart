@@ -3,23 +3,21 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/cart.dart';
-import 'package:smartstock/sales/services/customer.dart';
 
 Widget cartDrawer(
-        {@required List carts,
-        @required Function(dynamic) onCheckout,
-        @required Function(dynamic) onGetPrice,
-        @required Function(String) onRemoveItem,
-        @required onCustomerLikeList,
-        @required Function(String, dynamic) onAddItem,
-        @required bool wholesale,
+        {required List carts,
+        required Function(dynamic) onCheckout,
+        required Function(dynamic) onGetPrice,
+        required Function(String) onRemoveItem,
+        required onCustomerLikeList,
+        required Function(String, dynamic) onAddItem,
+        required bool wholesale,
         String customerLikeLabel = 'Choose customer',
         context,
-        @required customer,
-        @required onCustomer}) =>
+        required customer,
+        required onCustomer}) =>
     Scaffold(
       body: Column(children: [
         AppBar(title: const Text('Cart'), elevation: 0),
@@ -99,7 +97,7 @@ _formatPrice(price) =>
     NumberFormat.currency(name: 'TZS ').format(doubleOrZero('$price'));
 
 _getFinalTotal(List carts, dynamic discount, bool wholesale, onGetPrice) => carts
-    .fold(-discount, (t, c) => t + getProductPrice(c, wholesale, onGetPrice));
+    .fold(-discount, (dynamic t, c) => t + getProductPrice(c, wholesale, onGetPrice));
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
@@ -141,12 +139,12 @@ _discountRow(dynamic discount, Function(dynamic) onDiscount) => Padding(
     );
 
 Widget _checkoutCartItem(
-        {@required cart,
-        @required bool wholesale,
-        @required BuildContext context,
-        @required Function(String, dynamic) onAddItem,
-        @required Function(dynamic) onGetPrice,
-        @required Function(String) onRemoveItem}) =>
+        {required cart,
+        required bool wholesale,
+        required BuildContext context,
+        required Function(String, dynamic) onAddItem,
+        required Function(dynamic) onGetPrice,
+        required Function(String) onRemoveItem}) =>
     Column(
       children: [
         ListTile(

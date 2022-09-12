@@ -5,11 +5,11 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
 class OffsetQuantityContent extends StatefulWidget {
-  final String productId;
-  final String product;
+  final String? productId;
+  final String? product;
 
   const OffsetQuantityContent(
-      {@required this.productId, @required this.product, Key key})
+      {required this.productId, required this.product, Key? key})
       : super(key: key);
 
   @override

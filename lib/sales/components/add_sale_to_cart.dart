@@ -6,10 +6,10 @@ import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 void addSaleToCartView({
-  @required BuildContext context,
-  @required CartModel cart,
-  @required onAddToCart,
-  @required onGetPrice,
+  required BuildContext context,
+  required CartModel cart,
+  required onAddToCart,
+  required onGetPrice,
 }) =>
     showDialog(
       context: context,

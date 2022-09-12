@@ -16,12 +16,12 @@ createCustomerContent() => ActiveComponent(
             TextInput(
                 onText: (d) => updateState({'displayName': d}),
                 label: "Name",
-                error: states['error_d'],
+                error: states['error_d']??'',
                 placeholder: ''),
             TextInput(
                 onText: (d) => updateState({'phone': d}),
                 label: "Phone",
-                error: states['error_p'],
+                error: states['error_p']??'',
                 placeholder: '255XXXXXXXXX'),
             TextInput(
                 onText: (d) => updateState({'email': d}),
@@ -64,7 +64,7 @@ _validateName(data) => data is String && data.isNotEmpty;
 _validatePhone(data) => data is String && data.isNotEmpty;
 
 _createCustomer(
-    Map<dynamic, dynamic> states, Function([Map value]) updateState) {
+    Map<dynamic, dynamic> states, Function([Map? value]) updateState) {
   updateState({'error_d': '', 'error_p': ''});
   if (!_validateName(states['displayName'])) {
     updateState({'error_d': 'Name required'});

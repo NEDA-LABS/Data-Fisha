@@ -6,10 +6,10 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 void addPurchaseToCartView({
-  @required BuildContext context,
-  @required CartModel cart,
-  @required onAddToCart,
-  @required onGetPrice,
+  required BuildContext context,
+  required CartModel cart,
+  required onAddToCart,
+  required onGetPrice,
 }) =>
     showDialog(
       context: context,
@@ -89,12 +89,12 @@ _addToCartButton(context, states, onAddToCart) => Container(
 
 _getPurchaseCart(states) {
   Map product = states['p'] is Map
-      ? states['p'] as Map<String, dynamic>
+      ? (states['p'] as Map<String, dynamic>?)!
       : {"purchase": 0};
   product["purchase"] = states['purchase'];
   product["retailPrice"] = states['retailPrice'];
   product["wholesalePrice"] = states['wholesalePrice'];
-  return CartModel(product: product, quantity: states['q']);
+  return CartModel(product: product as Map<String, dynamic>?, quantity: states['q']);
 }
 
 _addToCartButtonStyle(context) => ButtonStyle(

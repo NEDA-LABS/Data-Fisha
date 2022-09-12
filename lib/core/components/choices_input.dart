@@ -16,16 +16,16 @@ class ChoicesInput extends StatefulWidget {
   final bool showBorder;
 
   const ChoicesInput({
-    Key key,
-    @required this.onText,
-    @required this.onLoad,
-    @required this.getAddWidget,
+    Key? key,
+    required this.onText,
+    required this.onLoad,
+    required this.getAddWidget,
     this.initialText = '',
     this.label = '',
     this.placeholder = '',
     this.error = '',
     this.showBorder = true,
-    @required this.onField,
+    required this.onField,
   }) : super(key: key);
 
   @override
@@ -37,7 +37,7 @@ class _ChoicesInputState extends State<ChoicesInput> {
   final _getData = propertyOr('data', (_) => []);
   final _getIsLoading = propertyOr('loading', (_) => false);
   final _getSkip = propertyOr('skip', (_) => false);
-  TextEditingController textController;
+  TextEditingController? textController;
 
   @override
   void initState() {

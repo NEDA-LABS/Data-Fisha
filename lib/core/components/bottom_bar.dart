@@ -3,7 +3,7 @@ import 'package:smartstock/core/components/drawer.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
-Widget bottomBar(
+Widget? bottomBar(
   int selected,
   List<MenuModel> menus,
   BuildContext context,
@@ -28,7 +28,7 @@ Widget bottomBar(
 _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
   switch (index) {
     case 1:
-      navigateTo('/sales');
+      navigateTo('/sales/');
       break;
     case 2:
       navigateTo('/stock');

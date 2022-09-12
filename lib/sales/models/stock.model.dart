@@ -1,8 +1,8 @@
 class Stock{
-  String productCategory;
-  String productName;
-  String retailPrice;
-  String wholesalePrice;
+  String? productCategory;
+  String? productName;
+  String? retailPrice;
+  String? wholesalePrice;
 
 
  Stock({

@@ -22,7 +22,7 @@ Widget _cartPreview(List carts, bool wholesale, context, onShowCheckout) =>
                         const TextStyle(color: Colors.white, fontSize: 20)))));
 
 _getTotalItems(List<dynamic> carts) =>
-    carts.fold(0, (a, element) => a + element.quantity);
+    carts.fold(0, (dynamic a, element) => a + element.quantity);
 
 // _format({bool wholesale}) => NumberFormat.currency(name: 'TZS ')
 //     .format(getState<CartState>().getFinalTotal(isWholesale: wholesale));

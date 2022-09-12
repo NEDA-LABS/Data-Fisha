@@ -26,7 +26,7 @@ var getAllRemotePurchases = (String startAt) => composeAsync([
       map(shopToApp),
     ]);
 
-preparePatchPurchasePayment(String id, Map payment) {
+preparePatchPurchasePayment(String? id, Map payment) {
   var patchInvoice = _preparePatchRequest(payment);
   f(app) => () => patchInvoice('${shopFunctionsURL(app)}/stock/purchase/$id');
   return composeAsync([(app) => executeHttp(f(app)), map(shopToApp)]);

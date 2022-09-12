@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/sales/components/product_card.dart';
 
 Widget listOfProducts({
-  @required List<dynamic> products,
-  @required onAddToCart,
-  @required dynamic Function(dynamic) onGetPrice,
-  @required
+  required List<dynamic> products,
+  required onAddToCart,
+  required dynamic Function(dynamic) onGetPrice,
+  required
       Function(dynamic product, Function(dynamic) onAddToCart) onAddToCartView,
 }) =>
     GridView.builder(

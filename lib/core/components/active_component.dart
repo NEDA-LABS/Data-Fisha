@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 
 class ActiveComponent extends StatefulWidget {
   final Widget Function(
-          BuildContext context, Map states, Function([Map value]) updateState)
+          BuildContext context, Map states, Function([Map? value]) updateState)
       builder;
   final Map initialState;
   static const _map = {};
 
   const ActiveComponent(
-      {Key key, this.initialState = _map, @required this.builder})
+      {Key? key, this.initialState = _map, required this.builder})
       : super(key: key);
 
   @override

@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/services/util.dart';
 
 Widget productCardItem({
-  String productCategory,
-  String productName,
+  String? productCategory,
+  String? productName,
   dynamic productPrice,
 }) =>
     Card(

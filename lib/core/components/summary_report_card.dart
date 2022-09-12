@@ -75,8 +75,8 @@ Widget Function(BuildContext context, AsyncSnapshot snapshot) _builder(
     };
 
 Widget numberSummaryReportCard({
-  @required String title,
-  @required Future Function() future,
+  required String title,
+  required Future Function() future,
 }) =>
     ActiveComponent(builder: (context,states, updateState) =>
         FutureBuilder(builder: _builder(title, updateState), future: future()));

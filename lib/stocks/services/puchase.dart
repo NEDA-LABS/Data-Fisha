@@ -58,8 +58,8 @@ Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
   var due = pDetail['due'];
   var type = pDetail['type'];
   var refNumber = pDetail['reference'];
-  String date = pDetail['date'];
-  String dueDate = date;
+  String? date = pDetail['date'];
+  String? dueDate = date;
   if (type == 'invoice' && ((due is String && due.isEmpty) || due == null)) {
     dueDate = toSqlDate(DateTime.now().add(const Duration(days: 30)));
   }
@@ -100,7 +100,7 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       String batchId = generateUUID();
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
-      Map pDetail;
+      late Map pDetail;
       await addPurchaseDetail(
           context: context,
           onSubmit: (state) {

@@ -10,9 +10,9 @@ createSupplierContent() => Consumer<SupplierCreateState>(
         child: SingleChildScrollView(
           child: ListBody(children: [
             TextInput(
-              onText: (d) => state.updateState({'name': d}),
+              onText: (d) => state!.updateState({'name': d}),
               label: "Name",
-              error: state.err['name'],
+              error: state!.err['name']??'',
             ),
             TextInput(
               onText: (d) => state.updateState({'number': d}),

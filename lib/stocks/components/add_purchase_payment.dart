@@ -5,7 +5,7 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
-addPurchasePaymentContent(String id) => Container(
+addPurchasePaymentContent(String? id) => Container(
       constraints: const BoxConstraints(maxWidth: 400),
       child: ActiveComponent(
           initialState: const {"loading": false},
@@ -17,7 +17,7 @@ addPurchasePaymentContent(String id) => Container(
                     onText: (d) => updateState({'amount': d}),
                     label: "Amount",
                     type: TextInputType.number,
-                    error: states['error_q'],
+                    error: states['error_q']??'',
                     placeholder: ''),
                 Container(
                     height: 64,
@@ -45,9 +45,9 @@ addPurchasePaymentContent(String id) => Container(
 _validateName(data) => data is String && data.isNotEmpty;
 
 _submitAddPurchasePayment(
-  String id,
+  String? id,
   Map<dynamic, dynamic> states,
-  Function([Map value]) updateState,
+  Function([Map? value]) updateState,
 ) {
   updateState({'error': '', 'error_q': ''});
   if (!_validateName(states['amount'])) {

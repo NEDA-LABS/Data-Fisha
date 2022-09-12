@@ -5,13 +5,13 @@ const _shopTable = 'shop';
 const _activeShopId = 'active';
 const _shopId = 'shop_id';
 
-Future saveShopId(String id) async {
-  var save = CacheFactory().prepareSetData(smartstockApp, _shopTable);
+Future saveShopId(String? id) async {
+  Future<dynamic> Function(String, dynamic) save = CacheFactory().prepareSetData(smartstockApp, _shopTable);
   return save(_shopId, id);
 }
 
 Future saveActiveShop(shop) async {
-  var save = CacheFactory().prepareSetData(smartstockApp, _shopTable);
+  Future<dynamic> Function(String, dynamic) save = CacheFactory().prepareSetData(smartstockApp, _shopTable);
   return save(_activeShopId, shop);
 }
 

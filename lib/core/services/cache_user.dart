@@ -10,7 +10,7 @@ getLocalCurrentUser() async {
 }
 
 setLocalCurrentUser(user)async{
-  var setData = CacheFactory().prepareSetData(smartstockApp, _userTable);
+  Future<dynamic> Function(String, dynamic) setData = CacheFactory().prepareSetData(smartstockApp, _userTable);
   return setData(_userId, user);
 }
 

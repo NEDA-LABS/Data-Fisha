@@ -49,7 +49,7 @@ prepareCreateInvoice(Map invoice) {
 }
 
 
-prepareAddPayment(String id, Map payment) {
+prepareAddPayment(String? id, Map payment) {
   var patchInvoice = _patchInvoice(payment);
   f(app) => () => patchInvoice('${shopFunctionsURL(app)}/sale/invoice/$id');
   return composeAsync([(app) => executeHttp(f(app)), map(shopToApp)]);

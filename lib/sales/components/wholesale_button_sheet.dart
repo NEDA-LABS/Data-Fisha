@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void wholesaleBottomSheet({BuildContext context, var stock}) {
+void wholesaleBottomSheet({required BuildContext context, var stock}) {
   Scaffold.of(context).showBottomSheet((context) => Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(

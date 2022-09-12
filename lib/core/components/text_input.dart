@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 
-
 const _b = SizedBox();
 
 class TextInput extends StatefulWidget {
@@ -17,10 +16,11 @@ class TextInput extends StatefulWidget {
   final TextInputType type;
   final int lines;
   final dynamic debounceTime;
+  final bool show;
 
   const TextInput({
-    Key key,
-    @required this.onText,
+    Key? key,
+    required this.onText,
     this.initialText = '',
     this.placeholder = '',
     this.label = '',
@@ -29,6 +29,7 @@ class TextInput extends StatefulWidget {
     this.error = '',
     this.lines = 1,
     this.debounceTime = 500,
+    this.show = true,
   }) : super(key: key);
 
   @override
@@ -36,8 +37,8 @@ class TextInput extends StatefulWidget {
 }
 
 class _TextInputState extends State<TextInput> {
-  TextEditingController controller;
-  Timer _debounce;
+  TextEditingController? controller;
+  Timer? _debounce;
 
   _labelStyle() => const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
 
@@ -50,33 +51,33 @@ class _TextInputState extends State<TextInput> {
 
   _inputDecoration(String hint) => InputDecoration(
       border: InputBorder.none,
-      hintText: hint ?? '',
+      hintText: hint,
       contentPadding: _inputPadding());
 
   _input(error, onText, type, placeholder, icon, lines,
-          TextEditingController controller, dynamic debounceTime) =>
+          TextEditingController? controller, debounceTime, show) =>
       Builder(
         builder: (context) => Container(
           decoration: inputBoxDecoration(context, error),
           child: Row(
             children: [
-              _fulWidthTextField(
-                  onText, type, placeholder, lines, controller, debounceTime),
-              icon
+              _fulWidthTextField(onText, type, placeholder, lines, controller,
+                  debounceTime, show),
+              Padding(padding: const EdgeInsets.all(5), child: icon)
             ],
           ),
         ),
       );
 
   _fulWidthTextField(onText, type, placeholder, lines,
-          TextEditingController controller, dynamic debounceTime) =>
+          TextEditingController? controller, debounceTime, show) =>
       Expanded(
           child: TextField(
         controller: controller,
         autofocus: false,
         maxLines: lines,
         onChanged: (text) {
-          if (_debounce?.isActive ?? false) _debounce.cancel();
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
           _debounce = Timer(
             Duration(milliseconds: debounceTime),
             () => onText(text),
@@ -84,6 +85,7 @@ class _TextInputState extends State<TextInput> {
         },
         keyboardType: type,
         decoration: _inputDecoration(placeholder),
+        obscureText: show == false,
       ));
 
   @override
@@ -96,11 +98,17 @@ class _TextInputState extends State<TextInput> {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          widget.label is String && widget.label.isEmpty
-              ? Container(height: 10)
-              : _label(widget.label),
-          _input(widget.error, widget.onText, widget.type, widget.placeholder,
-              widget.icon, widget.lines, controller, widget.debounceTime),
+          widget.label.isEmpty ? Container(height: 10) : _label(widget.label),
+          _input(
+              widget.error,
+              widget.onText,
+              widget.type,
+              widget.placeholder,
+              widget.icon,
+              widget.lines,
+              controller,
+              widget.debounceTime,
+              widget.show),
           inputErrorMessageOrEmpty(widget.error),
         ],
       );

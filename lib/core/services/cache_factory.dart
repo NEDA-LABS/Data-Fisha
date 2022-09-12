@@ -17,7 +17,7 @@ class CacheFactory {
 
   CacheFactory._internal();
 
-  Database _db;
+  Database? _db;
 
   _lazyInitialize(_) async {
     // Get the sembast database factory according to the current platform
@@ -34,9 +34,9 @@ class CacheFactory {
     return _db;
   }
 
-  Future Function(String a, dynamic b) prepareSetData(
+  Future Function(String? a, dynamic b) prepareSetData(
           App app, String collection) =>
-      (String key, dynamic data) async {
+      (String? key, dynamic data) async {
         var getSingleDb = _getDbIfNotExist(_lazyInitialize);
         var db = await getSingleDb(_db);
         var store = _getStore(cacheDatabaseName(app)(collection));

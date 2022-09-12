@@ -9,7 +9,7 @@ import 'package:smartstock/sales/services/navigation.dart';
 
 
 class SalesPage extends StatelessWidget {
-  const SalesPage({Key key}) : super(key: key);
+  const SalesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(context) => responsiveBody(

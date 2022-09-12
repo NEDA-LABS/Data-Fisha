@@ -11,8 +11,6 @@ import 'package:smartstock/stocks/services/item.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
 
-
-
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
     ChoicesInput(
@@ -23,9 +21,10 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Name",
       placeholder: 'Select product name',
       error: state.error['product'] ?? '',
-      initialText: state.product['product'],
+      initialText: state.product['product'] ?? '',
       getAddWidget: () => createItemContent(),
-      onField: (x)=>'${x['brand']} ${x['generic']??''} ${x['packaging']??''}',
+      onField: (x) =>
+          '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
       onLoad: getItemFromCacheOrRemote,
     ),
     TextInput(
@@ -33,7 +32,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         label: "Barcode / Qrcode",
         placeholder: "Optional",
         error: state.error['barcode'] ?? '',
-        initialText: state.product['barcode'],
+        initialText: state.product['barcode'] ?? '',
         icon: _mobileQrScan('')),
     ChoicesInput(
       onText: (d) {
@@ -43,9 +42,9 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Category",
       placeholder: 'Select category',
       error: state.error['category'] ?? '',
-      initialText: state.product['category'],
+      initialText: state.product['category'] ?? '',
       getAddWidget: () => createCategoryContent(),
-      onField: (x)=>'${x['name']}',
+      onField: (x) => '${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     ),
     ChoicesInput(
@@ -56,9 +55,9 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Supplier",
       placeholder: 'Select supplier',
       error: state.error['supplier'] ?? '',
-      initialText: state.product['supplier'],
+      initialText: state.product['supplier'] ?? '',
       getAddWidget: () => createSupplierContent(),
-      onField: (x)=>'${x['name']}',
+      onField: (x) => '${x['name']}',
       onLoad: getSupplierFromCacheOrRemote,
     ),
     TextInput(
@@ -66,7 +65,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Purchase Cost ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['purchase'] ?? '',
-      initialText: '${state.product['purchase']??''}',
+      initialText: '${state.product['purchase'] ?? ''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -74,7 +73,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Retail price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['retailPrice'] ?? '',
-      initialText: '${state.product['retailPrice']??''}',
+      initialText: '${state.product['retailPrice'] ?? ''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -82,7 +81,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Wholesale price ( Tsh ) / Unit price",
       placeholder: "",
       error: state.error['wholesalePrice'] ?? '',
-      initialText: '${state.product['wholesalePrice']??''}',
+      initialText: '${state.product['wholesalePrice'] ?? ''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -90,7 +89,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
       label: "Quantity",
       placeholder: "Current stock quantity",
       error: state.error['quantity'] ?? '',
-      initialText:'${state.product['quantity']??''}',
+      initialText: '${state.product['quantity'] ?? ''}',
       type: TextInputType.number,
     ),
     TextInput(
@@ -98,7 +97,7 @@ List<Widget> productCreateForm(ProductCreateState state, context) {
         label: "Expire",
         placeholder: "YYYY-MM-DD ( Optional )",
         error: state.error['expire'] ?? '',
-        initialText: state.product['expire'],
+        initialText: state.product['expire'] ?? '',
         type: TextInputType.datetime),
     Container(
       height: 80,

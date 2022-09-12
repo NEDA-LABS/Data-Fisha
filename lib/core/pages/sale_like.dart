@@ -20,19 +20,19 @@ class SaleLikePage extends StatelessWidget {
   final dynamic Function(dynamic) onGetPrice;
   final onCustomerLikeList;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
-  final Future Function(List, String, dynamic) onSubmitCart;
+  final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
 
   SaleLikePage({
-    @required this.title,
-    @required this.wholesale,
-    @required this.onSubmitCart,
-    @required this.backLink,
-    @required this.onGetPrice,
-    @required this.onAddToCartView,
-    @required this.onCustomerLikeList,
-    @required this.checkoutCompleteMessage,
-    this.customerLikeLabel,
-    Key key,
+    required this.title,
+    required this.wholesale,
+    required this.onSubmitCart,
+    required this.backLink,
+    required this.onGetPrice,
+    required this.onAddToCartView,
+    required this.onCustomerLikeList,
+    required this.checkoutCompleteMessage,
+    this.customerLikeLabel = 'Choose customer',
+    Key? key,
   }) : super(key: key);
 
   final _getSkip = propertyOr('skip', (p0) => false);
@@ -107,7 +107,7 @@ class SaleLikePage extends StatelessWidget {
           onBody: (drawer) => Scaffold(
               appBar: states['hab'] == true ? null : _appBar(updateState),
               floatingActionButton: _fab(states, updateState),
-              body: FutureBuilder(
+              body: FutureBuilder<List>(
                   initialData: _getCarts(states),
                   future: _future(states),
                   builder: _getView(
@@ -143,7 +143,7 @@ class SaleLikePage extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 16)),
                       content: Text(
-                          checkoutCompleteMessage ?? 'Checkout complete.')));
+                          checkoutCompleteMessage)));
             });
           }).catchError(_showCheckoutError(context));
           // onCheckout

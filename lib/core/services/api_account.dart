@@ -5,17 +5,13 @@ import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
 
-_loginHttp(App app, String username, String password) async {
-  var url = databaseURL(app);
+_loginHttp(String username, String password) async {
   var a = await http.post(
-    Uri.parse(url('')),
+    Uri.parse('https://smartstock-daas.bfast.fahamutech.com/v2'),
     headers: getInitialHeaders(),
     body: jsonEncode({
-      "applicationId": app.applicationId,
+      "applicationId": 'smartstock_lb',
       "auth": {
         "signIn": {"username": username, "password": password}
       }
@@ -43,17 +39,7 @@ var _loginUserOrError = ifDoElse(
   (x) => _extractUser(x),
 );
 
-Future Function(String u, String p) remoteLogin(App app) =>
-    (String username, String password) async {
-      var getUser = composeAsync([_loginUserOrError, executeRule]);
-      // var user = await executeRule(() => _loginHttp(app, username, password));
-      // print(user);
-      // return _loginUserOrError(user);
-      return getUser(() => _loginHttp(app, username, password));
-    };
-
-localLogOut() {
-  removeActiveShop();
-  removeLocalCurrentUser();
-  navigateTo('/');
+Future accountRemoteLogin(String u, String p) async {
+  var getUser = composeAsync([_loginUserOrError, executeRule]);
+  return getUser(() => _loginHttp(u, p));
 }

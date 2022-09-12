@@ -11,24 +11,24 @@ IModularNavigator navigator() => Modular.to;
 
 navigateToAndReplace(String route) => Modular.to.pushReplacementNamed(route);
 
-T getState<T>() => Modular.get<T>();
+T getState<T extends Object>() => Modular.get<T>();
 
 Widget consumerComponent<T extends ChangeNotifier>({
-  Widget Function(BuildContext context, T state) builder,
+  required Widget Function(BuildContext context, T? state) builder,
 }) =>
     Consumer<T>(builder: builder);
 
 selectorComponent<T extends ChangeNotifier, D>({
-  Function(T state) selector,
-  Widget Function(BuildContext context, D value) builder,
+  required Function(T state) selector,
+  required Widget Function(BuildContext context, D? value) builder,
 }) =>
-    Selector<T, D>(builder: builder, selector: selector);
+    Selector<T, D>(builder: builder, selector: selector as D Function(T?));
 
 String shopDatabaseURL(App app) =>
-    'https://smartstock-faas.bfast.fahamutech.com/shop/${app?.projectId}/${app?.applicationId}/v2';
+    'https://smartstock-faas.bfast.fahamutech.com/shop/${app.projectId}/${app.applicationId}/v2';
 
 String shopFunctionsURL(App app) =>
-    'https://smartstock-faas.bfast.fahamutech.com/shop/${app?.projectId}/${app?.applicationId}';
+    'https://smartstock-faas.bfast.fahamutech.com/shop/${app.projectId}/${app.applicationId}';
 
 shopToApp(x) =>
     App(applicationId: x['applicationId'], projectId: x['projectId']);
@@ -64,7 +64,7 @@ bool hasEnoughWidth(BuildContext context) {
   return width >= _maxMediumScreen;
 }
 
-and(List<Function> fns) => fns.fold(true, (a, b) => a && b() == true);
+and(List<Function> fns) => fns.fold(true, (dynamic a, b) => a && b() == true);
 
 propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
     (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);

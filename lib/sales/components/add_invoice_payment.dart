@@ -5,7 +5,7 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
-addInvoicePaymentContent(String id) => ActiveComponent(
+addInvoicePaymentContent(String? id) => ActiveComponent(
     initialState: const {"loading": false},
     builder: (context, states, updateState) => Container(
       constraints: const BoxConstraints(maxWidth: 400),
@@ -16,7 +16,7 @@ addInvoicePaymentContent(String id) => ActiveComponent(
               onText: (d) => updateState({'amount': d}),
               label: "Amount",
               type: TextInputType.number,
-              error: states['error'],
+              error: states['error']??'',
               placeholder: ''),
           Container(
               height: 64,
@@ -39,8 +39,8 @@ addInvoicePaymentContent(String id) => ActiveComponent(
 
 _validateName(data) => data is String && data.isNotEmpty;
 
-_submitAddInvoicePayment(String id, Map<dynamic, dynamic> states,
-    Function([Map value]) updateState) {
+_submitAddInvoicePayment(String? id, Map<dynamic, dynamic> states,
+    Function([Map? value]) updateState) {
   updateState({'error': ''});
   if (!_validateName(states['amount'])) {
     updateState({'error': 'Amount required'});

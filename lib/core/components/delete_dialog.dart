@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/services/util.dart';
 
 deleteDialog(
-    {@required String message, @required Future Function() onConfirm}) {
+    {required String message, required Future Function() onConfirm}) {
   bool loading = false;
   String error = '';
   return StatefulBuilder(

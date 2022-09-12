@@ -5,7 +5,7 @@ import 'package:smartstock/configurations.dart';
 const _salesTable = 'sales';
 
 Future<dynamic> saveSalesLocal(List batch) async {
-  var setData = CacheFactory().prepareSetData(smartstockApp, _salesTable);
+  Future<dynamic> Function(String, dynamic) setData = CacheFactory().prepareSetData(smartstockApp, _salesTable);
   return setData(generateUUID(), batch);
 }
 

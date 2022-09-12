@@ -31,7 +31,7 @@ class SalesModule extends Module {
         return _getPrice(product, true);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, true),
-      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
   final retail = ChildRoute(
@@ -47,7 +47,7 @@ class SalesModule extends Module {
         return _getPrice(product, false);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, false),
-      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
   final customer = ChildRoute(
@@ -73,7 +73,7 @@ class SalesModule extends Module {
         return _getPrice(product, false);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, true),
-      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
 

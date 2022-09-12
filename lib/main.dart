@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
@@ -10,17 +9,12 @@ import 'package:http/http.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/configurations.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
-import 'package:smartstock/core/services/http_overrider.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:workmanager/workmanager.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
-
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
   periodicLocalSyncs();
-
   Builders.systemInjector(Modular.get);
   runApp(ModularApp(module: AppModule(), child: mainWidget()));
 }
@@ -31,18 +25,15 @@ mainWidget() => MaterialApp.router(
     debugShowCheckedModeBanner: kDebugMode,
     theme: ThemeData(primarySwatch: getSmartStockMaterialColorSwatch()));
 
+@pragma('vm:entry-point')
 void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    if (kDebugMode) {
-      print(task);
-    }
+  Workmanager().executeTask((task, inputData) {
     if (task == 'bg-period' || task == 'bg-onetime') {
       try {
-        await syncLocal2Remote(1);
-        return Future.value(true);
+        syncLocal2Remote(1).then((value) => Future.value(true));
       } catch (e) {
         print(e);
-        return Future.value(false);
+        rethrow;
       }
     }
     return Future.value(true);
@@ -50,17 +41,11 @@ void callbackDispatcher() {
 }
 
 Future syncLocal2Remote(dynamic) async {
-  if (kDebugMode) {
-    print('------syncs routine run------');
-  }
-  List keys = [];//  await getLocalSyncsKeys();
-  // print(keys);
+  List keys = await getLocalSyncsKeys();
   for (var key in keys) {
-    var element = null; // await getLocalSync(key);
+    var element = await getLocalSync(key);
     var getUrl = propertyOr('url', (p0) => '');
     var getPayload = propertyOr('payload', (p0) => {});
-    // print(getUrl(element));
-    // print(getPayload(element).length);
     var response = await post(Uri.parse(getUrl(element)),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(getPayload(element)));
@@ -74,11 +59,11 @@ Future syncLocal2Remote(dynamic) async {
 }
 
 var shouldRun = true;
+
 periodicLocalSyncs() async {
   if (isNativeMobilePlatform()) {
-    if (kDebugMode) {
-      print("::::: native mobile");
-    }
+    print("::::: native mobile");
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
     Workmanager().registerPeriodicTask(
       'bg-period',
       'bg-period',
@@ -86,9 +71,7 @@ periodicLocalSyncs() async {
       constraints: Constraints(networkType: NetworkType.connected),
     );
   } else {
-    if (kDebugMode) {
-      print("::::: others");
-    }
+    print("::::: others");
     Timer.periodic(const Duration(seconds: 8), (_) async {
       if (shouldRun) {
         shouldRun = false;
@@ -97,9 +80,9 @@ periodicLocalSyncs() async {
             print(_);
           }
         }).then((value) {
-          if (kDebugMode) {
-            print('done sync local data --> $value');
-          }
+          // if (kDebugMode) {
+          //   print('done sync local data --> $value');
+          // }
         }).whenComplete(() {
           shouldRun = true;
         });

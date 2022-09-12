@@ -8,8 +8,8 @@ _errorAndRetry(String err) => Padding(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [Text(err)]));
 
-_tableRow(item, List<String> keys, Widget Function(String, dynamic, dynamic) onCell,
-        onItemPressed) =>
+_tableRow(item, List<String> keys,
+        Widget Function(String, dynamic, dynamic)? onCell, onItemPressed) =>
     Column(children: [
       Container(
           constraints: const BoxConstraints(minHeight: 48),
@@ -72,10 +72,10 @@ tableLikeListTextHeader(String name) => Padding(
 _a(dynamic) {}
 
 tableLikeList({
-  @required Future Function() onFuture,
-  @required List<String> keys,
+  required Future Function() onFuture,
+  required List<String> keys,
   onItemPressed = _a,
-  Widget Function(String key, dynamic, dynamic) onCell,
+  Widget Function(String key, dynamic, dynamic)? onCell,
 }) =>
     FutureBuilder(
         future: onFuture(), builder: _builder(keys, onCell, onItemPressed));

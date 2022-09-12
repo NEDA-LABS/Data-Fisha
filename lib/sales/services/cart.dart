@@ -30,13 +30,13 @@ updateCartQuantity(String id, dynamic quantity, List carts) => carts.map((e) {
     }).toList();
 
 cartTotalAmount(List carts, wholesale, onGetPrice) =>
-    carts.fold(0, (t, element) => t + getProductPrice(element, wholesale, onGetPrice));
+    carts.fold(0, (dynamic t, element) => t + getProductPrice(element, wholesale, onGetPrice));
 
 getProductPrice(cart, bool wholesale, onGetPrice) => wholesale
     ? onGetPrice(cart.product) * cart.quantity
     : onGetPrice(cart.product) * cart.quantity;
 
-double getCartItemSubAmount(
+double? getCartItemSubAmount(
     {dynamic quantity = 0.0,
     var product,
     dynamic totalDiscount = 0.0,
@@ -48,7 +48,7 @@ double getCartItemSubAmount(
   return amount - getCartItemDiscount(totalDiscount, totalItems);
 }
 
-double getCartItemDiscount(discount, items) => discount / items;
+double? getCartItemDiscount(discount, items) => discount / items;
 
 List cartItems(List carts, dis, wholesale, customer) => carts.map((value) {
       var discount = doubleOrZero('$dis');

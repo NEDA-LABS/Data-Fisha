@@ -9,16 +9,16 @@ createItemContent() => Consumer<ItemCreateState>(
         child: SingleChildScrollView(
           child: ListBody(children: [
             TextInput(
-                onText: (d) => state.updateState({'brand': d}),
+                onText: (d) => state!.updateState({'brand': d}),
                 label: "Brand name",
-                error: state.err['brand'],
+                error: state?.err['brand']??'',
                 placeholder: 'E.g Smartstock'),
             TextInput(
-                onText: (d) => state.updateState({'generic': d}),
+                onText: (d) => state?.updateState({'generic': d}),
                 label: "Generic name",
                 placeholder: 'E.g Stock management system'),
             TextInput(
-                onText: (d) => state.updateState({'packaging': d}),
+                onText: (d) => state?.updateState({'packaging': d}),
                 label: "Packaging",
                 placeholder: "E.g 10 Kg"),
             Container(
@@ -30,11 +30,11 @@ createItemContent() => Consumer<ItemCreateState>(
                     child: SizedBox(
                       height: 40,
                       child: OutlinedButton(
-                        onPressed: state.createProgress
+                        onPressed: state?.createProgress?? false
                             ? null
-                            : () => state.create(context),
+                            : () => state?.create(context),
                         child: Text(
-                          state.createProgress ? "Waiting..." : "Create item.",
+                          state?.createProgress == true ? "Waiting..." : "Create item.",
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -43,7 +43,7 @@ createItemContent() => Consumer<ItemCreateState>(
                 ],
               ),
             ),
-            Text(state.requestError)
+            Text(state?.requestError??'')
           ]),
         ),
       ),

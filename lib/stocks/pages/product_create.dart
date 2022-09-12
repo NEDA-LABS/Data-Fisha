@@ -7,7 +7,7 @@ import 'package:smartstock/stocks/components/product_create_form.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
 
 class ProductCreatePage extends StatelessWidget {
-  const ProductCreatePage({Key key}) : super(key: key);
+  const ProductCreatePage({Key? key}) : super(key: key);
 
   _appBar(context) {
     return StockAppBar(
@@ -32,5 +32,5 @@ class ProductCreatePage extends StatelessWidget {
                       child: Consumer<ProductCreateState>(
                           builder: (context, state) => Column(
                               children:
-                                  productCreateForm(state, context))))))));
+                                  productCreateForm(state!, context))))))));
 }

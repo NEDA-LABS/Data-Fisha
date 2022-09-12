@@ -8,9 +8,9 @@ responsiveBody({
   String office = '',
   String current = '/',
   bool showLeftDrawer = true,
-  Widget rightDrawer,
-  @required List<MenuModel> menus,
-  @required Widget Function(Drawer drawer) onBody,
+  Widget? rightDrawer,
+  required List<MenuModel> menus,
+  required Widget Function(Drawer? drawer) onBody,
 }) {
   var paneOrPlaneBody = ifDoElse(
     (context) => hasEnoughWidth(context),

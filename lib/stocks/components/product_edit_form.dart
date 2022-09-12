@@ -15,7 +15,7 @@ List<Widget> productUpdateForm(ProductCreateState state, context) {
         label: "Barcode / Qrcode",
         placeholder: "Optional",
         error: state.error['barcode'] ?? '',
-        initialText: state.product['barcode'],
+        initialText: state.product['barcode']??'',
         icon: _mobileQrScan('')),
     ChoicesInput(
       onText: (d) {
@@ -25,7 +25,7 @@ List<Widget> productUpdateForm(ProductCreateState state, context) {
       label: "Category",
       placeholder: 'Select category',
       error: state.error['category'] ?? '',
-      initialText: state.product['category'],
+      initialText: state.product['category']??'',
       getAddWidget: () => createCategoryContent(),
       onField: (x)=>'${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,

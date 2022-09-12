@@ -13,7 +13,7 @@ import 'package:smartstock/sales/services/invoice.dart';
 class InvoicesPage extends StatefulWidget {
   final args;
 
-  const InvoicesPage(this.args, {Key key}) : super(key: key);
+  const InvoicesPage(this.args, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();
@@ -125,7 +125,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   _getInvPayment(b) {
     if (b is Map) {
       return b.values
-          .fold(0, (a, element) => a + doubleOrZero('$element'));
+          .fold(0, (dynamic a, element) => a + doubleOrZero('$element'));
     }
     return 0;
   }

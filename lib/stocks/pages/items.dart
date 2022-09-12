@@ -15,7 +15,7 @@ import 'package:smartstock/stocks/states/items_loading.dart';
 class ItemsPage extends StatefulWidget {
   final args;
 
-  const ItemsPage(this.args, {Key key}) : super(key: key);
+  const ItemsPage(this.args, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ItemsPage();
@@ -72,14 +72,14 @@ class _ItemsPage extends State<ItemsPage> {
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             tableContextMenu(_contextItems(context)),
             Consumer<ItemsLoadingState>(
-              builder: (_, state) => _loading(state.loading),
+              builder: (_, state) => _loading(state!.loading),
             ),
             _tableHeader(),
             Consumer<ItemsListState>(
                 builder: (_, state) => Expanded(
                     child: tableLikeList(
                         onFuture: () async => getItemFromCacheOrRemote(
-                            stringLike: state.query,
+                            stringLike: state!.query,
                             skipLocal:
                                 widget.args.queryParams.containsKey('reload')),
                         keys: _fields())))

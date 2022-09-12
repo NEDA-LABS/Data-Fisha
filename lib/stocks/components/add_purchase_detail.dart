@@ -7,8 +7,8 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 Future addPurchaseDetail({
-  @required BuildContext context,
-  @required onSubmit,
+  required BuildContext context,
+  required onSubmit,
 }) =>
     showDialog(
       context: context,
@@ -32,15 +32,15 @@ Future addPurchaseDetail({
                   child: CheckboxListTile(
                       title: const Text("Is this invoice purchased?"),
                       value: states['type'] == 'invoice',
-                      onChanged: (b) => b
+                      onChanged: (b) => b!
                           ? updateState({'type': 'invoice'})
                           : updateState({'type': 'receipt'})),
                 ),
                 TextInput(
                     label: 'Purchase reference',
-                    initialText: '${states['reference']}',
+                    initialText: '${states['reference']??''}',
                     lines: 1,
-                    error: states['error_r'],
+                    error: states['error_r']??'',
                     type: TextInputType.text,
                     onText: (v) => updateState({'reference': v})),
                 DateInput(

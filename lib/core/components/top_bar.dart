@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock/account/services/user.dart';
+import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class StockAppBar extends PreferredSize with Disposable {
   final String title;
   final bool showSearch;
   final bool showBack;
-  final Widget searchInput;
+  final Widget? searchInput;
   final String backLink;
   final String searchHint;
-  final Function openDrawer;
-  final Function(String) onSearch;
+  final Function? openDrawer;
+  final Function(String)? onSearch;
   final dynamic debounceTime;
-  Timer _debounce;
+  Timer? _debounce;
 
   StockAppBar({
-    Key key,
+    Key? key,
     this.title = "",
     this.showSearch = false,
     this.searchInput,
@@ -31,14 +31,14 @@ class StockAppBar extends PreferredSize with Disposable {
   }) : super(
             key: key,
             preferredSize: Size.fromHeight(showSearch ? 104 : 56),
-            child: null);
+            child: Container());
 
   @override
   AppBar build(BuildContext context) => AppBar(
           elevation: 0,
           title: Text(title, overflow: TextOverflow.ellipsis),
           bottom: showSearch
-              ? searchInput ??
+              ? searchInput as PreferredSizeWidget? ??
                   _toolBarSearchInput(onSearch, searchHint, debounceTime)
               : null,
           leading: showBack
@@ -49,11 +49,11 @@ class StockAppBar extends PreferredSize with Disposable {
           actions: <Widget>[
             Builder(
                 builder: (context) => PopupMenuButton(
-                    onSelected: (value) {},
+                    onSelected: (dynamic value) {},
                     itemBuilder: (context) => [
                           PopupMenuItem(
-                              child: InkWell(
-                                  onTap: () => localLogOut(),
+                              child: GestureDetector(
+                                  onTap: () => logOut(),
                                   child: const Padding(
                                       padding: EdgeInsets.all(10),
                                       child: Text("Logout"))))
@@ -62,7 +62,7 @@ class StockAppBar extends PreferredSize with Disposable {
           ]);
 
   PreferredSizeWidget _toolBarSearchInput(
-    Function(String) onSearch,
+    Function(String)? onSearch,
     String placeholder,
     dynamic debounceTime,
   ) =>
@@ -78,9 +78,9 @@ class StockAppBar extends PreferredSize with Disposable {
                   maxLines: 1,
                   minLines: 1,
                   onChanged: (text) {
-                    if (_debounce?.isActive ?? false) _debounce.cancel();
+                    if (_debounce?.isActive ?? false) _debounce!.cancel();
                     _debounce = Timer(Duration(milliseconds: debounceTime),
-                        () => onSearch(text));
+                        () => onSearch!(text));
                   },
                   decoration: InputDecoration(
                       hintText: placeholder ?? "Search...",

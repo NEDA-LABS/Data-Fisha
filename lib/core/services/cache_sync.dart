@@ -6,7 +6,7 @@ const _tableName = 'cache_syncs';
 var _app = App(applicationId: 'smartstock', projectId: 'smartstock');
 
 Future saveLocalSync(id, url, payload) {
-  var setData = CacheFactory().prepareSetData(_app, _tableName);
+  Future<dynamic> Function(String, dynamic) setData = CacheFactory().prepareSetData(_app, _tableName);
   return setData(id, {"url": url, "payload": payload});
 }
 

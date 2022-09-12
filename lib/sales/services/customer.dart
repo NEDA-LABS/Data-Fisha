@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -18,7 +20,7 @@ Future<List<dynamic>> getCustomerFromCacheOrRemote({
       List rCustomers = await getAllRemoteCustomers(shop);
       rCustomers = await compute(
           _filterAndSort, {"customers": rCustomers, "query": stringLike});
-      await saveLocalCustomers(shopToApp(shop), rCustomers);
+      await saveLocalCustomers(shopToApp(shop), rCustomers!);
       return rCustomers;
     },
     (x) => compute(_filterAndSort, {"customers": x, "query": stringLike}),
@@ -28,9 +30,9 @@ Future<List<dynamic>> getCustomerFromCacheOrRemote({
 
 Future<List> _filterAndSort(Map data) async {
   var customers = data['customers'];
-  String stringLike = data['query'];
+  String? stringLike = data['query'];
   _where(x) =>
-      '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
+      '${x['displayName']}'.toLowerCase().contains(stringLike!.toLowerCase());
 
   customers = customers.where(_where).toList();
   customers.sort((a, b) => '${a['displayName']}'

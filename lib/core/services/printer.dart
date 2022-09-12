@@ -11,7 +11,7 @@ var _getPrinterHeader = compose(
 var _getPrinterFooter = compose(
     [propertyOr('printerFooter', (p0) => '\n'), _getShopSettings]);
 
-Future<String> posPrint({String data, String qr}) async {
+Future<String> posPrint({String? data, String? qr}) async {
   var currentShop = await getActiveShop();
   if (_getMustPrint(currentShop) == false) {
     var header = _getPrinterHeader(currentShop);
