@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/purchase_details.dart';
-import 'package:smartstock/stocks/services/puchase.dart';
+import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends StatefulWidget {
   final args;

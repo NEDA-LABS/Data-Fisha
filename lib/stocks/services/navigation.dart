@@ -44,13 +44,13 @@ List<SubMenuModule> _pagesMenu() => [
         svgName: 'store_icon.svg',
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Transfer',
-      //   link: '/stock/transfers',
-      //   roles: [],
-      //   svgName: 'transfer_icon.svg',
-      //   onClick: () {},
-      // ),
+      SubMenuModule(
+        name: 'Transfer',
+        link: '/stock/transfers',
+        roles: [],
+        svgName: 'transfer_icon.svg',
+        onClick: () {},
+      ),
     ];
 
 MenuModel stocksMenu() => MenuModel(

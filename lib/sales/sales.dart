@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/add_sale_to_cart.dart';
+import 'package:smartstock/core/components/add_sale_to_cart.dart';
+import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/pages/customers.dart';
@@ -31,7 +32,9 @@ class SalesModule extends Module {
         return _getPrice(product, true);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, true),
-      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeAddWidget: createCustomerContent,
+      checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
   final retail = ChildRoute(
@@ -47,7 +50,9 @@ class SalesModule extends Module {
         return _getPrice(product, false);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, false),
-      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeAddWidget: createCustomerContent,
+      checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
   final customer = ChildRoute(
@@ -73,7 +78,9 @@ class SalesModule extends Module {
         return _getPrice(product, false);
       },
       onAddToCartView: _onPrepareSalesAddToCartView(context, true),
-      onCustomerLikeList: getCustomerFromCacheOrRemote, checkoutCompleteMessage: 'Checkout complete.',
+      onCustomerLikeList: getCustomerFromCacheOrRemote,
+      onCustomerLikeAddWidget: createCustomerContent,
+      checkoutCompleteMessage: 'Checkout complete.',
     ),
   );
 

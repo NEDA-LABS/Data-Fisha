@@ -20,7 +20,7 @@ Future<List<dynamic>> getCustomerFromCacheOrRemote({
       List rCustomers = await getAllRemoteCustomers(shop);
       rCustomers = await compute(
           _filterAndSort, {"customers": rCustomers, "query": stringLike});
-      await saveLocalCustomers(shopToApp(shop), rCustomers!);
+      await saveLocalCustomers(shopToApp(shop), rCustomers);
       return rCustomers;
     },
     (x) => compute(_filterAndSort, {"customers": x, "query": stringLike}),

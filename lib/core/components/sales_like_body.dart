@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cart_preview.dart';
-import 'package:smartstock/sales/components/list_of_products.dart';
+import 'package:smartstock/core/components/cart_preview.dart';
+import 'package:smartstock/core/components/list_of_products_like.dart';
 
 Widget salesLikeBody(
         {required List products,

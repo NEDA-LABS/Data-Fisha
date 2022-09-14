@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/stocks/states/supplier_create.dart';
 
 
-createSupplierContent() => Consumer<SupplierCreateState>(
+Widget createSupplierContent() => Consumer<SupplierCreateState>(
       builder: (context, state) => Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
