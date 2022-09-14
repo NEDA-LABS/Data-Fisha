@@ -12,7 +12,7 @@ transferSendPage(BuildContext context) => SaleLikePage(
       title: 'Send transfer',
       backLink: '/stock/transfers',
       customerLikeLabel: 'Transfer to?',
-      onSubmitCart: prepareOnSubmitTransfer(context),
+      onSubmitCart: prepareOnSubmitTransfer(context, 'send'),
       onGetPrice: _onGetPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context, false),
       onCustomerLikeList: getOtherShopsNames,

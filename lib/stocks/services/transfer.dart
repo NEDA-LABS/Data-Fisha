@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -37,74 +39,72 @@ Future<List> _filterAndSort(Map data) async {
   return transfers;
 }
 
-// Future _printTransferItems(
-//     List carts, discount, customer, wholesale, batchId) async {
-//   var items = cartItems(carts, discount, wholesale, '$customer');
-//   var data = await cartItemsToPrinterData(items, '$customer', wholesale);
-//   await posPrint(data: data, qr: batchId);
-// }
+Future _printTransferItems(List carts, discount, customer, batchId) async {
+  var items = cartItems(carts, discount, false, '$customer');
+  var data = await cartItemsToPrinterData(
+      items, '$customer', (cart) => cart['stock']['purchase']);
+  await posPrint(data: data, qr: batchId);
+}
 
-Future<Map> _carts2Transfer(List carts, supplier, batchId) async {
-  // var currentUser = await getLocalCurrentUser();
-  // var t = '${cartTotalAmount(carts, false, (product) => product['transfer'])}';
-  // var totalAmount = doubleOrZero(t);
-  // var due = pDetail['due'];
-  // var type = pDetail['type'];
-  // var refNumber = pDetail['reference'];
-  // String? date = pDetail['date'];
-  // String? dueDate = date;
-  // if (type == 'invoice' && ((due is String && due.isEmpty) || due == null)) {
-  //   dueDate = toSqlDate(DateTime.now().add(const Duration(days: 30)));
-  // }
-  // if (type == 'invoice' && (due is String && due.isNotEmpty)) {
-  //   dueDate = due;
-  // }
+Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
+  var shop2 = await shopName2Shop(shop2Name);
+  var currentUser = await getLocalCurrentUser();
+  var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
+  var totalAmount = doubleOrZero(t);
   return {
-    // "date": date,
-    // "due": dueDate,
-    // "refNumber": refNumber,
-    // "batchId": batchId,
-    // "amount": totalAmount,
-    // "supplier": {"name": supplier},
-    // "user": {"username": currentUser['username'] ?? ''},
-    // "type": type ?? 'receipt',
+    "date": DateTime.now().toIso8601String(),
+    "transferred_by": {"username": currentUser['username']},
+    "note": ".",
+    "batchId": batchId,
+    "amount": totalAmount,
+    "to_shop": {
+      "name": type == 'send' ? shop2['businessName'] : shop1['businessName'],
+      "projectId": type == 'send' ? shop2['projectId'] : shop1['projectId'],
+      "applicationId":
+          type == 'send' ? shop2['applicationId'] : shop1['applicationId'],
+    },
+    "from_shop": {
+      "name": type == 'send' ? shop1['businessName'] : shop2['businessName'],
+      "projectId": type == 'send' ? shop1['projectId'] : shop2['projectId'],
+      "applicationId":
+          type == 'send' ? shop1['applicationId'] : shop2['applicationId'],
+    },
     "items": carts.map((e) {
       return {
-        "wholesalePrice": e.product['wholesalePrice'],
-        "retailPrice": e.product['retailPrice'],
-        "product": {
-          "product": e.product['product'],
-          "stockable": e.product['stockable'],
-          "transfer": e.product['transfer'],
-          "supplier": supplier
-        },
-        "amount":
-            doubleOrZero('${e.product['transfer']}') * doubleOrZero(e.quantity),
-        "transfer": e.product['transfer'],
-        "quantity": e.quantity
+        "from_id": e.product['id'],
+        "from_product": e.product['product'],
+        "to_product": e.product['product'],
+        "to_id": e.product['id'],
+        "to_purchase": e.product['purchase'],
+        "from_purchase": e.product['purchase'],
+        "to_retail": e.product['retailPrice'],
+        "to_whole": e.product['wholesalePrice'],
+        "product": e.product['product'],
+        "quantity": e.quantity,
       };
     }).toList()
   };
 }
 
-Future Function(List, String, dynamic) prepareOnSubmitTransfer(context) =>
-    (List carts, String customer, discount) async {
-      if (customer == null || customer.isEmpty) throw "Supplier required";
+Future Function(List, String, dynamic) prepareOnSubmitTransfer(
+        context, String type) =>
+    (List carts, String shopName, discount) async {
+      if (shopName.isEmpty) throw "Shop you transfer to/from required";
       String batchId = generateUUID();
       var shop = await getActiveShop();
-      // var url = '${shopFunctionsURL(shopToApp(shop))}/transfer';
-      late Map pDetail;
-      // await addTransferDetail(
-      //     context: context,
-      //     onSubmit: (state) {
-      //       pDetail = state;
-      //       navigator().maybePop();
-      //     });
-      // if (pDetail is! Map) {
-      //   throw 'Transfer details ( reference, date, due and type ) required';
-      // }
-      // await _printTransferItems(carts, discount, customer, true, cartId);
-      var transfer = await _carts2Transfer(carts, customer, batchId);
+      // var url = '${shopFunctionsURL(shopToApp(shop))}/transfer/$type';
+      if (type == 'send') {
+        await _printTransferItems(carts, discount, shopName, generateUUID());
+      }
+      var transfer =
+          await _carts2Transfer(carts, shopName, batchId, shop, type);
+      // print(transfer);
+      var saveTransfer = ifDoElse(
+        (_) => type == 'send',
+        composeAsync([prepareSendTransfer(transfer)]),
+        composeAsync([prepareReceiveTransfer(transfer)]),
+      );
+      return saveTransfer(shop);
       // var createTransfer = prepareCreateTransfer(transfer);
       // return createTransfer(shop);
       // await saveLocalSync(batchId, url, transfer);

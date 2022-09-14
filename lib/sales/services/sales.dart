@@ -1,3 +1,4 @@
+import 'package:bfast/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
@@ -54,25 +55,31 @@ Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
 Future _printSaleItems(
     List carts, discount, customer, wholesale, batchId) async {
   var items = cartItems(carts, discount, wholesale, '$customer');
-  var data = await cartItemsToPrinterData(items, '$customer', wholesale);
+  var data = await cartItemsToPrinterData(
+      items,
+      '$customer',
+      (cart) => wholesale == true
+          ? cart['stock']['wholesalePrice']
+          : cart['stock']['retailPrice']);
   await posPrint(data: data, qr: batchId);
 }
 
-_onSubmitSale(List carts, String customer, discount, wholesale)async{
+_onSubmitSale(List carts, String customer, discount, wholesale) async {
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
   await _printSaleItems(carts, discount, customer, wholesale, cartId);
   var sales = await _carts2Sales(carts, discount, wholesale, customer, cartId);
-  if(isWebMobilePlatform()){
+  if (isWebMobilePlatform()) {
     var saveSales = preparePostRequest(sales);
     return saveSales(url);
-  }else{
+  } else {
     await saveLocalSync(batchId, url, sales);
     oneTimeLocalSyncs();
   }
 }
+
 Future onSubmitRetailSale(List carts, String customer, discount) async {
   return _onSubmitSale(carts, customer, discount, false);
 }

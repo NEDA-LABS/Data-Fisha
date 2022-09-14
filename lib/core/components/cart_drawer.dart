@@ -160,7 +160,7 @@ Widget _checkoutCartItem(
           children: [
             wholesale
                 ? Text(
-                    '$quantity (x${quantity(cart.product)}) @ $price = TZS $subTotal')
+                    '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
                 : Text('$quantity @ $price = TZS $subTotal'),
             Row(
               children: [
