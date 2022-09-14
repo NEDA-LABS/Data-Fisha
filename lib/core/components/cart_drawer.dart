@@ -4,14 +4,15 @@ import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
-import 'package:smartstock/sales/services/cart.dart';
+import 'package:smartstock/core/services/cart.dart';
 
 Widget cartDrawer(
         {required List carts,
         required Function(dynamic) onCheckout,
         required Function(dynamic) onGetPrice,
         required Function(String) onRemoveItem,
-        required onCustomerLikeList,
+        required Future Function({bool skipLocal}) onCustomerLikeList,
+        required Widget Function() onCustomerLikeAddWidget,
         required Function(String, dynamic) onAddItem,
         required bool wholesale,
         String customerLikeLabel = 'Choose customer',
@@ -27,7 +28,7 @@ Widget cartDrawer(
             showBorder: false,
             onText: onCustomer,
             onLoad: onCustomerLikeList,
-            getAddWidget: () => createCustomerContent(),
+            getAddWidget: onCustomerLikeAddWidget,
             onField: (x) => x['name'] ?? x['displayName']),
         Expanded(
             child: ListView.builder(
@@ -96,8 +97,9 @@ _submitButton(List carts, discount, bool wholesale, onCheckout, updateState,
 _formatPrice(price) =>
     NumberFormat.currency(name: 'TZS ').format(doubleOrZero('$price'));
 
-_getFinalTotal(List carts, dynamic discount, bool wholesale, onGetPrice) => carts
-    .fold(-discount, (dynamic t, c) => t + getProductPrice(c, wholesale, onGetPrice));
+_getFinalTotal(List carts, dynamic discount, bool wholesale, onGetPrice) =>
+    carts.fold(-discount,
+        (dynamic t, c) => t + getProductPrice(c, wholesale, onGetPrice));
 
 _progressIndicator() => const Center(
     child: CircularProgressIndicator(backgroundColor: Colors.white));
@@ -139,53 +141,54 @@ _discountRow(dynamic discount, Function(dynamic) onDiscount) => Padding(
     );
 
 Widget _checkoutCartItem(
-        {required cart,
-        required bool wholesale,
-        required BuildContext context,
-        required Function(String, dynamic) onAddItem,
-        required Function(dynamic) onGetPrice,
-        required Function(String) onRemoveItem}) =>
-    Column(
-      children: [
-        ListTile(
-          title: Text(cart.product['product']),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              wholesale
-                  ? Text(
-                      '${cart.quantity} (x${cart.product['wholesaleQuantity']}) '
-                      '@ TZS ${onGetPrice(cart.product)}')
-                  : Text('${cart.quantity} '
-                      '@ TZS ${onGetPrice(cart.product)}'),
-              Row(
-                children: [
-                  IconButton(
+    {required cart,
+    required bool wholesale,
+    required BuildContext context,
+    required Function(String, dynamic) onAddItem,
+    required Function(dynamic) onGetPrice,
+    required Function(String) onRemoveItem}) {
+  var quantity = cart.quantity;
+  var price = onGetPrice(cart.product);
+  var wQuantity = propertyOr('wholesaleQuantity', (p0) => 1);
+  var subTotal = quantity * price;
+  return Column(
+    children: [
+      ListTile(
+        title: Text(cart.product['product']),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            wholesale
+                ? Text(
+                    '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
+                : Text('$quantity @ $price = TZS $subTotal'),
+            Row(
+              children: [
+                IconButton(
                     icon: Icon(Icons.remove_circle,
                         color: Theme.of(context).primaryColor),
-                    onPressed: () => onAddItem(cart.product['id'], -1),
-                  ),
-                  IconButton(
+                    onPressed: () => onAddItem(cart.product['id'], -1)),
+                IconButton(
                     icon: Icon(Icons.add_circle,
                         color: Theme.of(context).primaryColor),
-                    onPressed: () => onAddItem(cart.product['id'], 1),
-                  ),
-                ],
-              )
-            ],
-          ),
-          isThreeLine: false,
-          trailing: IconButton(
-            color: Colors.red,
-            icon: const Icon(Icons.delete),
-            onPressed: () => onRemoveItem(cart.product['id']),
-          ),
+                    onPressed: () => onAddItem(cart.product['id'], 1)),
+              ],
+            )
+          ],
         ),
-        const Padding(
-            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Divider(color: Colors.grey))
-      ],
-    );
+        isThreeLine: false,
+        trailing: IconButton(
+          color: Colors.red,
+          icon: const Icon(Icons.delete),
+          onPressed: () => onRemoveItem(cart.product['id']),
+        ),
+      ),
+      const Padding(
+          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: Divider(color: Colors.grey))
+    ],
+  );
+}
 
 _cartListItemBuilder(carts, wholesale, onAddItem, onRemoveItem, onGetPrice) =>
     (context, index) => _checkoutCartItem(

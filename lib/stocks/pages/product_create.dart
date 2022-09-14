@@ -11,7 +11,7 @@ class ProductCreatePage extends StatelessWidget {
 
   _appBar(context) {
     return StockAppBar(
-      title: "Create product",
+      title: "Add product",
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,

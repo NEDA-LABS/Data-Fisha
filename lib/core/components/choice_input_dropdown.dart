@@ -45,7 +45,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       itemCount: items.length,
       shrinkWrap: true,
       itemBuilder: (context, index) => ListTile(
-          title: Text('${widget.onTitle(items[index])}' ?? ''),
+          title: Text('${widget.onTitle(items[index])??''}'),
           onTap: () {
             widget.onText(widget.onTitle(items[index]));
             navigator().maybePop();

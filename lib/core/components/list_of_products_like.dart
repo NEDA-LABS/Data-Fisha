@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/sales/components/product_card.dart';
+import 'package:smartstock/core/components/product_like_card.dart';
+import 'package:smartstock/core/services/util.dart';
 
 Widget listOfProducts({
   required List<dynamic> products,
@@ -20,9 +21,9 @@ Widget listOfProducts({
                 productName: _getName(products[index]),
                 productPrice: onGetPrice(products[index]))));
 
-_getName(product) => '${product['product']}';
+var _getName = propertyOr('product', (p0) => '');
 
-_getCategory(product) => '${product['category']}';
+var _getCategory = propertyOr('category', (p0) => '');
 
 _delegate() =>
     const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180);

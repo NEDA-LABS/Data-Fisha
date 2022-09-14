@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cart.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 void addSaleToCartView({

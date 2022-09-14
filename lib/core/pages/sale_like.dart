@@ -6,10 +6,10 @@ import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cart_drawer.dart';
-import 'package:smartstock/sales/components/refresh_button.dart';
-import 'package:smartstock/sales/components/sales_body.dart';
-import 'package:smartstock/sales/services/cart.dart';
+import 'package:smartstock/core/components/cart_drawer.dart';
+import 'package:smartstock/core/components/refresh_button.dart';
+import 'package:smartstock/core/components/sales_like_body.dart';
+import 'package:smartstock/core/services/cart.dart';
 
 class SaleLikePage extends StatelessWidget {
   final String title;
@@ -18,7 +18,8 @@ class SaleLikePage extends StatelessWidget {
   final String customerLikeLabel;
   final String checkoutCompleteMessage;
   final dynamic Function(dynamic) onGetPrice;
-  final onCustomerLikeList;
+  final Future Function({bool skipLocal}) onCustomerLikeList;
+  final Widget Function() onCustomerLikeAddWidget;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
 
@@ -30,6 +31,7 @@ class SaleLikePage extends StatelessWidget {
     required this.onGetPrice,
     required this.onAddToCartView,
     required this.onCustomerLikeList,
+    required this.onCustomerLikeAddWidget,
     required this.checkoutCompleteMessage,
     this.customerLikeLabel = 'Choose customer',
     Key? key,
@@ -142,8 +144,7 @@ class SaleLikePage extends StatelessWidget {
                       title: const Text('Info',
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 16)),
-                      content: Text(
-                          checkoutCompleteMessage)));
+                      content: Text(checkoutCompleteMessage)));
             });
           }).catchError(_showCheckoutError(context));
           // onCheckout
@@ -153,6 +154,7 @@ class SaleLikePage extends StatelessWidget {
         context: context,
         customer: _getCustomer(states),
         onCustomerLikeList: onCustomerLikeList,
+        onCustomerLikeAddWidget: onCustomerLikeAddWidget,
         onCustomer: (d) => updateState({"customer": d}),
         onGetPrice: onGetPrice,
       );

@@ -83,7 +83,7 @@ class StockAppBar extends PreferredSize with Disposable {
                         () => onSearch!(text));
                   },
                   decoration: InputDecoration(
-                      hintText: placeholder ?? "Search...",
+                      hintText: placeholder,
                       border: InputBorder.none))));
 
   @override

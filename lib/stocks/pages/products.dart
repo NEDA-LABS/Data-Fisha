@@ -13,7 +13,6 @@ import 'package:smartstock/stocks/components/product_details.dart';
 import 'package:smartstock/stocks/states/product_loading.dart';
 import 'package:smartstock/stocks/states/products_list.dart';
 
-
 class ProductsPage extends StatefulWidget {
   final args;
 
@@ -37,7 +36,7 @@ class _ProductPage extends State<ProductsPage> {
   _contextItems() {
     return [
       ContextMenu(
-          name: 'Create', pressed: () => navigateTo('/stock/products/create')),
+          name: 'Add', pressed: () => navigateTo('/stock/products/create')),
       ContextMenu(
         name: 'Reload',
         pressed: () {

@@ -7,7 +7,7 @@ import 'package:smartstock/sales/services/api_customer.dart';
 import 'package:smartstock/sales/services/cache_customer.dart';
 
 
-createCustomerContent() => ActiveComponent(
+Widget createCustomerContent() => ActiveComponent(
       initialState: const {"loading": false},
       builder: (context, states, updateState) => Padding(
         padding: const EdgeInsets.all(16),

@@ -59,7 +59,7 @@ class _DateInputState extends State<DateInput> {
           minLines: 1,
           readOnly: true,
           decoration: InputDecoration(
-              hintText: hintText ?? '',
+              hintText: hintText,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(8))));
 

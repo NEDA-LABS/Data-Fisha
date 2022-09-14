@@ -29,8 +29,10 @@ updateCartQuantity(String id, dynamic quantity, List carts) => carts.map((e) {
       return e;
     }).toList();
 
-cartTotalAmount(List carts, wholesale, onGetPrice) =>
-    carts.fold(0, (dynamic t, element) => t + getProductPrice(element, wholesale, onGetPrice));
+cartTotalAmount(List carts, wholesale, onGetPrice) => carts.fold(
+    0,
+    (dynamic t, element) =>
+        t + getProductPrice(element, wholesale, onGetPrice));
 
 getProductPrice(cart, bool wholesale, onGetPrice) => wholesale
     ? onGetPrice(cart.product) * cart.quantity
@@ -69,44 +71,32 @@ List cartItems(List carts, dis, wholesale, customer) => carts.map((value) {
     }).toList();
 
 Future<String> cartItemsToPrinterData(
-    List<dynamic> carts, String customer, wholesale) async {
-  String data = '';
-  data = '$data\n-------------------------------\n';
-  data = data + (DateTime.now().toUtc().toString());
-  if (customer != null) {
-    data = '$data-------------------------------\nTo ---> $customer';
-  }
+    List<dynamic> carts, String customer, onGetPrice) async {
+  String data = '-------------------------------\n';
+  data = "$data${DateTime.now().toUtc()}\n";
+  data = '$data-------------------------------\n';
+  data = '$data To ---> $customer\n';
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in carts) {
-    totalBill += doubleOrZero(cart['amount']);
+    var price =  doubleOrZero(onGetPrice(cart));
+    var p = cart['product'];
+    var q = doubleOrZero(cart['quantity']);
+    var t = q * price;
+    totalBill += doubleOrZero(t);
     data = [
       data,
-      '\n-------------------------------\n',
-      sn.toString(),
-      '.  ',
-      cart['product'],
-      '\n',
-      'Quantity --> ',
-      cart['quantity'].toString(),
-      ' \t',
-      'Unit Price --> ',
-      (wholesale == true
-          ? cart['stock']['wholesalePrice'].toString()
-          : cart['stock']['retailPrice'].toString()),
-      '\t',
-      'Sub Amount  --> ',
-      cart['amount'].toString(),
-      ' \t'
+      '-------------------------------\n',
+      '$sn. $p\n',
+      '\t$q @ $price = TZS $t\n',
     ].join('');
     sn++;
   }
   data = [
-    data,
-    '\n--------------------------------\n',
-    'Total Bill : ',
-    totalBill.toString(),
-    '\n--------------------------------\n',
+    '$data\n',
+    '--------------------------------\n',
+    'Total Bill : $totalBill\n',
+    '--------------------------------\n',
   ].join('');
   return data;
 }
