@@ -15,8 +15,8 @@ Widget? bottomBar(
             unselectedItemColor: Colors.grey,
             onTap: (index) => _handleClick(index, context, menus),
             items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.home), label: 'Dashboard'),
+                // BottomNavigationBarItem(
+                //     icon: Icon(Icons.home), label: 'Dashboard'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.point_of_sale), label: 'Sales'),
                 BottomNavigationBarItem(
@@ -27,13 +27,13 @@ Widget? bottomBar(
 
 _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
   switch (index) {
-    case 1:
+    case 0:
       navigateTo('/sales/');
       break;
-    case 2:
-      navigateTo('/stock');
+    case 1:
+      navigateTo('/stock/');
       break;
-    case 3:
+    case 2:
       showModalBottomSheet(
           context: context,
           builder: (_) => modulesMenuContent('Menu', menus, ''));
