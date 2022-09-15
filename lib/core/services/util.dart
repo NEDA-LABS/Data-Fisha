@@ -37,7 +37,7 @@ var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (_) => []);
 
 getStockQuantity({stock}) {
   if (stock == null) return 0;
-  if (stock is Map && stock['quantity'] is Map ) {
+  if (stock is Map && stock['quantity'] is Map) {
     Map quantity = stock['quantity'] as Map;
     try {
       return quantity.values.map((e) => e['q']).reduce((a, b) => a + b);
@@ -76,7 +76,11 @@ isNativeMobilePlatform() =>
 
 isWebMobilePlatform() =>
     kIsWeb &&
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android);
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
 
-doubleOrZero(data) => double.tryParse('$data') ?? 0;
+var doubleOrZero = compose([
+  (x) => (double.tryParse('$x') ?? 0),
+  (x) => x.toStringAsFixed(5),
+  (x) => (double.tryParse('$x') ?? 0)
+]);

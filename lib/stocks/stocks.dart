@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
@@ -52,11 +53,13 @@ class StockModule extends Module {
             productState.updateFormState(product as Map<String, dynamic>);
             return ProductEditPage('${product['product']}');
           }
-          return const ProductsPage(null);
+          navigateToAndReplace('/stock/products');
+          return Container();
         }),
         ChildRoute('/transfers', child: (_, __) => TransfersPage(__)),
         ChildRoute('/transfers/send', child: (_, __) => transferSendPage(_)),
-        ChildRoute('/transfers/receive', child: (_, __) => transferReceivePage(_)),
+        ChildRoute('/transfers/receive',
+            child: (_, __) => transferReceivePage(_)),
       ];
 
   @override
