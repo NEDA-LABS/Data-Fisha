@@ -92,9 +92,11 @@ class _ProductPage extends State<ProductsPage> {
                       onItemPressed: (item) {
                         showDialogOrModalSheet(
                             productDetail(item, context), context);
-                      }
-                      // onCell: (key,data)=>Text('@$data')
-                      ),
+                      },
+                      onCell: (key, data, c) {
+                        if(key=='product') return Text('$data');
+                        return Text('${doubleOrZero(data)}');
+                      }),
                 ),
               ),
               // _tableFooter()
