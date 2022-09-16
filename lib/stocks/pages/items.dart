@@ -77,7 +77,7 @@ class _ItemsPage extends State<ItemsPage> {
             _tableHeader(),
             Consumer<ItemsListState>(
                 builder: (_, state) => Expanded(
-                    child: tableLikeList(
+                    child: TableLikeList(
                         onFuture: () async => getItemFromCacheOrRemote(
                             stringLike: state!.query,
                             skipLocal:

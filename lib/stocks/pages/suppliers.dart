@@ -86,7 +86,7 @@ class _SuppliersPage extends State<SuppliersPage> {
               _tableHeader(),
               Consumer<SuppliersListState>(
                 builder: (_, state) => Expanded(
-                  child: tableLikeList(
+                  child: TableLikeList(
                     onFuture: () async => getSupplierFromCacheOrRemote(
                       stringLike: state!.query,
                       skipLocal: widget.args.queryParams.containsKey('reload'),

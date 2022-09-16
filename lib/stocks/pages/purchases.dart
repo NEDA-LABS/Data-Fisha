@@ -84,7 +84,7 @@ class _PurchasesPage extends State<PurchasesPage> {
               _loadingView(_loading),
               _tableHeader(),
               Expanded(
-                child: tableLikeList(
+                child: TableLikeList(
                     onFuture: () async => _purchases,
                     keys: _fields(),
                     onCell: (a, b, c) {
