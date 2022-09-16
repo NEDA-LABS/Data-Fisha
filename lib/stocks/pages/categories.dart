@@ -85,7 +85,7 @@ class _CategoriesPage extends State<CategoriesPage> {
               _tableHeader(),
               Consumer<CategoriesListState>(
                 builder: (_, state) => Expanded(
-                  child: tableLikeList(
+                  child: TableLikeList(
                     onFuture: () async => getCategoryFromCacheOrRemote(
                       stringLike: state!.query,
                       skipLocal: widget.args.queryParams.containsKey('reload'),

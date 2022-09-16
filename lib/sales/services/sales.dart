@@ -1,14 +1,24 @@
-import 'package:bfast/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/sales/services/api_cash_sale.dart';
+
+Future<List> getCashSalesFromCacheOrRemote(startAt, size, product) async {
+  var shop = await getActiveShop();
+  var user = await getLocalCurrentUser();
+  var getUsername = propertyOr('username', (p0) => '');
+  var getSales =
+      prepareGetRemoteCashSales(startAt, size, product, getUsername(user));
+  List sales = await getSales(shop);
+  return sales;
+}
 
 Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
   var currentUser = await getLocalCurrentUser();
@@ -85,6 +95,6 @@ Future onSubmitRetailSale(List carts, String customer, discount) async {
 }
 
 Future onSubmitWholeSale(List carts, String customer, discount) async {
-  if (customer == null || customer.isEmpty) throw "Customer required";
+  if (customer.isEmpty) throw "Customer required";
   return _onSubmitSale(carts, customer, discount, true);
 }

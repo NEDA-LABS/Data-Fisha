@@ -3,19 +3,19 @@ import 'package:smartstock/core/models/menu.dart';
 
 List<SubMenuModule> _pagesMenu() => [
       SubMenuModule(
-        name: 'Retail',
-        link: '/sales/retail',
+        name: 'Cash sale',
+        link: '/sales/cash',
         svgName: 'product_icon.svg',
         roles: [],
         onClick: () {},
       ),
-      SubMenuModule(
-        name: 'Wholesale',
-        link: '/sales/whole',
-        svgName: 'supplier_icon.svg',
-        roles: [],
-        onClick: () {},
-      ),
+      // SubMenuModule(
+      //   name: 'Wholesale',
+      //   link: '/sales/whole',
+      //   svgName: 'supplier_icon.svg',
+      //   roles: [],
+      //   onClick: () {},
+      // ),
       SubMenuModule(
         name: 'Invoices',
         link: '/sales/invoice',

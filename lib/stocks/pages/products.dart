@@ -81,7 +81,7 @@ class _ProductPage extends State<ProductsPage> {
               _tableHeader(),
               Consumer<ProductsListState>(
                 builder: (_, state) => Expanded(
-                  child: tableLikeList(
+                  child: TableLikeList(
                       onFuture: () async => getStockFromCacheOrRemote(
                             stringLike: state!.query,
                             skipLocal: widget.args?.queryParams

@@ -87,7 +87,7 @@ class _TransfersPage extends State<TransfersPage> {
               _loadingView(_loading),
               _tableHeader(),
               Expanded(
-                child: tableLikeList(
+                child: TableLikeList(
                     onFuture: () async => _transfers,
                     keys: _fields(),
                     onCell: (a, b, c) {

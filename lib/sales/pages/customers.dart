@@ -84,7 +84,7 @@ class _CustomersPage extends State<CustomersPage> {
               _loadingView(_loading),
               _tableHeader(),
               Expanded(
-                child: tableLikeList(
+                child: TableLikeList(
                   onFuture: () async => _customers,
                   keys: _fields(),
                 ),

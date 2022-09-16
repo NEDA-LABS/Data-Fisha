@@ -79,7 +79,7 @@ class _InvoicesPage extends State<InvoicesPage> {
               _loadingView(_loading),
               _tableHeader(),
               Expanded(
-                child: tableLikeList(
+                child: TableLikeList(
                     onFuture: () async => _invoices,
                     keys: _fields(),
                     onCell: (a, b, c) {
