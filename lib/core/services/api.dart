@@ -5,27 +5,24 @@ import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart';
 
-preparePutRequest(body) => (url) => put(
-  Uri.parse(url),
-  headers: getInitialHeaders(),
-  body: jsonEncode(body),
-);
+_parse(x) => RawResponse(body: x.body, statusCode: x.statusCode);
 
-preparePostRequest(body) => (url) => post(
-  Uri.parse(url),
-  headers: getInitialHeaders(),
-  body: jsonEncode(body),
-);
+preparePutRequest(body) {
+  request(url) =>
+      put(Uri.parse(url), headers: getInitialHeaders(), body: jsonEncode(body));
+  return composeAsync([_parse, request]);
+}
 
-getRequest(url) => get(Uri.parse(url));
+preparePostRequest(body) {
+  request(url) => post(Uri.parse(url),
+      headers: getInitialHeaders(), body: jsonEncode(body));
+  return composeAsync([_parse, request]);
+}
 
-preparePatchRequest(body) => (url) => patch(
-  Uri.parse(url),
-  headers: getInitialHeaders(),
-  body: jsonEncode(body),
-);
+preparePatchRequest(body) {
+  request(url) => patch(Uri.parse(url),
+      headers: getInitialHeaders(), body: jsonEncode(body));
+  return composeAsync([_parse, request]);
+}
 
-var getHttpRequest = composeAsync([
-  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-  (path) => get(Uri.parse(path)),
-]);
+var getRequest = composeAsync([_parse, (path) => get(Uri.parse(path))]);
