@@ -5,41 +5,52 @@ import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartstock/core/services/util.dart';
 
 _loginHttp(String username, String password) async {
   var a = await http.post(
-    Uri.parse('https://smartstock-daas.bfast.fahamutech.com/v2'),
+    Uri.parse('$baseUrl/account/login'),
     headers: getInitialHeaders(),
-    body: jsonEncode({
-      "applicationId": 'smartstock_lb',
-      "auth": {
-        "signIn": {"username": username, "password": password}
-      }
-    }),
+    body: jsonEncode({"username": username, "password": password}),
   );
   return RawResponse(body: a.body, statusCode: a.statusCode);
 }
 
-var _userResponseHasAuth = ifThrow(
-  (x) => x is! Map && x['auth'] == null,
-  (x) => '$x',
-);
-var _userAuthHasSignIn = ifThrow(
-  (x) => x['auth']['signIn'] == null,
-  (x) => '$x',
-);
-var _extractUser = compose(
-  [(x) => x['auth']['signIn'], _userAuthHasSignIn, _userResponseHasAuth],
-);
-var _getAuthErrors = map((x) => x['errors']['auth.signIn']['message']);
+_registerHttp(data) async {
+  var a = await http.post(
+    Uri.parse('$baseUrl/account/register'),
+    headers: getInitialHeaders(),
+    body: jsonEncode(data is Map ? data : {}),
+  );
+  return RawResponse(body: a.body, statusCode: a.statusCode);
+}
 
-var _loginUserOrError = ifDoElse(
-  (f) => f is Map && f['errors'] != null && f['errors']['auth.signIn'] != null,
-  (x) => throw _getAuthErrors(x),
-  (x) => _extractUser(x),
+_resetHttp(username) async {
+  var a = await http.get(
+      Uri.parse('$baseUrl/account/reset?username=$username}'),
+      headers: getInitialHeaders());
+  return RawResponse(body: a.body, statusCode: a.statusCode);
+}
+
+var _getError = (x) => x['errors']['message'];
+
+var _dataOrError = ifDoElse(
+  (f) => f is Map && f['errors'] != null,
+  (x) => throw _getError(x),
+  (x) => x,
 );
 
 Future accountRemoteLogin(String u, String p) async {
-  var getUser = composeAsync([_loginUserOrError, executeRule]);
+  var getUser = composeAsync([_dataOrError, executeRule]);
   return getUser(() => _loginHttp(u, p));
+}
+
+Future accountRemoteRegister(data) async {
+  var getUser = composeAsync([_dataOrError, executeRule]);
+  return getUser(() => _registerHttp(data));
+}
+
+Future accountRemoteReset(username) async {
+  var getUser = composeAsync([_dataOrError, executeRule]);
+  return getUser(() => _resetHttp(username));
 }

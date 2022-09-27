@@ -52,11 +52,14 @@ class StockAppBar extends PreferredSize with Disposable {
                     onSelected: (dynamic value) {},
                     itemBuilder: (context) => [
                           PopupMenuItem(
-                              child: GestureDetector(
-                                  onTap: () => logOut(),
-                                  child: const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Text("Logout"))))
+                            child: GestureDetector(
+                              onTap: () => logOut(),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("Logout"),
+                              ),
+                            ),
+                          )
                         ],
                     icon: const Icon(Icons.more_vert)))
           ]);
@@ -83,8 +86,7 @@ class StockAppBar extends PreferredSize with Disposable {
                         () => onSearch!(text));
                   },
                   decoration: InputDecoration(
-                      hintText: placeholder,
-                      border: InputBorder.none))));
+                      hintText: placeholder, border: InputBorder.none))));
 
   @override
   void dispose() {

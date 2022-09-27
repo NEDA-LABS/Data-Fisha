@@ -7,9 +7,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(var context) {
     return Scaffold(
-        body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child:
-                SingleChildScrollView(child: loginForm())));
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(child: loginForm()),
+      ),
+    );
   }
 }

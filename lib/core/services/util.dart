@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
+
 navigateTo(String route) => Modular.to.navigate(route);
 
 IModularNavigator navigator() => Modular.to;
@@ -25,10 +27,10 @@ selectorComponent<T extends ChangeNotifier, D>({
     Selector<T, D>(builder: builder, selector: selector as D Function(T?));
 
 String shopDatabaseURL(App app) =>
-    'https://smartstock-faas.bfast.fahamutech.com/shop/${app.projectId}/${app.applicationId}/v2';
+    '$baseUrl/shop/${app.projectId}/${app.applicationId}/v2';
 
 String shopFunctionsURL(App app) =>
-    'https://smartstock-faas.bfast.fahamutech.com/shop/${app.projectId}/${app.applicationId}';
+    '$baseUrl/shop/${app.projectId}/${app.applicationId}';
 
 shopToApp(x) =>
     App(applicationId: x['applicationId'], projectId: x['projectId']);

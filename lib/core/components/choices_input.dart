@@ -7,7 +7,7 @@ import 'package:smartstock/core/services/util.dart';
 class ChoicesInput extends StatefulWidget {
   final Function(String) onText;
   final Future Function({bool skipLocal}) onLoad;
-  final Widget Function() getAddWidget;
+  final Widget Function()? getAddWidget;
   final String initialText;
   final String label;
   final String placeholder;
@@ -19,7 +19,7 @@ class ChoicesInput extends StatefulWidget {
     Key? key,
     required this.onText,
     required this.onLoad,
-    required this.getAddWidget,
+    this.getAddWidget,
     this.initialText = '',
     this.label = '',
     this.placeholder = '',
@@ -76,9 +76,9 @@ class _ChoicesInputState extends State<ChoicesInput> {
         IconButton(
             onPressed: _showOptions(data, onText, onField),
             icon: const Icon(Icons.arrow_drop_down)),
-        IconButton(
+        getAddWidget!=null?IconButton(
             onPressed: () => _showDialogForAdd(getAddWidget(), context),
-            icon: const Icon(Icons.add)),
+            icon: const Icon(Icons.add)): Container(),
         IconButton(onPressed: onRefresh, icon: const Icon(Icons.refresh))
       ]);
 
