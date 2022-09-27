@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
-Widget _loginButton(states, updateState, context) => Container(
+final _formInitialState = {
+  'loading': false,
+  'username': '',
+  'password': '',
+  'businessName': '',
+  'fullname': '',
+  'email': '',
+  'country': '',
+  'mobile': '',
+  'show': false,
+  'e_username': '',
+  'e_password': '',
+  'e_business': '',
+  'e_fullname': '',
+  'e_email': '',
+  'e_country': '',
+  'e_mobile': '',
+};
+
+Widget _registerButton(states, updateState, context) {
+  return Container(
     child: states['loading'] == true
         ? Container(
             alignment: Alignment.center,
@@ -16,56 +39,30 @@ Widget _loginButton(states, updateState, context) => Container(
             height: 48,
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
-                onPressed: () => _loginPressed(states, updateState, context),
-                child: const Text("Login",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18)))));
-
-Widget _registerButton(states, updateState, context) {
-  return Container(
-    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-    height: 48,
-    width: MediaQuery.of(context).size.width,
-    child: OutlinedButton(
-      onPressed: () {},
-      child: Text(
-        "Open account for free.",
-        style: TextStyle(
-            color: Theme.of(context).primaryColorDark,
-            fontWeight: FontWeight.w500,
-            fontSize: 16),
-      ),
-    ),
+              onPressed: () => _registerPressed(states, updateState, context),
+              child: const Text(
+                "Register",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
   );
 }
 
-_iconContainer(String? svg) => Padding(
-      padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-      child: Builder(
-        builder: (context) => SizedBox(
-          width: 70,
-          height: 70,
-          child: SvgPicture.asset(
-            'assets/svg/$svg',
-            width: 24,
-            fit: BoxFit.scaleDown,
-          ),
-        ),
-      ),
-    );
-
-_resetAccount(context) {
+_goToLogin(context) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 16),
     child: Row(
       children: [
         Expanded(flex: 2, child: Container()),
         InkWell(
-          onTap: () {},
+          onTap: () => navigateToAndReplace('/account/login'),
           child: Text(
-            'Reset account password.',
+            'Already have account? Go to login.',
             textAlign: TextAlign.end,
             style: TextStyle(
                 fontWeight: FontWeight.w200,
@@ -78,39 +75,30 @@ _resetAccount(context) {
   );
 }
 
-final _formInitialState = {
-  'loading': false,
-  'username': '',
-  'password': '',
-  'show': false,
-  'e_u': '',
-  'e_p': ''
-};
-
 Widget registerForm() {
   return ActiveComponent(
     initialState: _formInitialState,
     builder: (context, states, updateState) {
       return Align(
         alignment: Alignment.topCenter,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Container(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _iconContainer('icon-192.svg'),
-                _usernameInput(states, updateState),
-                _passwordInput(states, updateState),
-                _loginButton(states, updateState, context),
-                _resetAccount(context),
-                _orSeparatorView(),
-                _registerButton(states, updateState, context)
-              ],
-            ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _businessInput(states, updateState),
+              _fullnameInput(states, updateState),
+              _emailInput(states, updateState),
+              _countryInput(states, updateState),
+              _mobileInput(states, updateState),
+              _separatorView(),
+              _usernameInput(states, updateState),
+              _passwordInput(states, updateState),
+              _registerButton(states, updateState, context),
+              _goToLogin(context),
+            ],
           ),
         ),
       );
@@ -118,26 +106,58 @@ Widget registerForm() {
   );
 }
 
-_loginPressed(states, updateState, context) {
+bool _isFormValid(states, updateState) {
   var username = states['username'];
   var password = states['password'];
+  var businessName = states['businessName'];
+  var fullname = states['fullname'];
+  var email = states['email'];
+  var country = states['country'];
+  var mobile = states['mobile'];
+  var err = {};
   if ((username is String && username.isEmpty) || username is! String) {
-    updateState({'e_u': 'Username required'});
-    return;
+    err['e_username'] = 'Username required';
   }
   if ((password is String && password.isEmpty) || password is! String) {
-    updateState({'e_p': 'Password required'});
-    return;
+    err['e_password'] = 'Password required';
   }
-  updateState({'loading': true});
-  accountLogin(username, password)
-      .then((value) => navigateToAndReplace('/shop'))
-      .catchError((error) {
-    showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: const Text('Error'), content: Text('$error')));
-  }).whenComplete(() => updateState({'loading': false}));
+  if ((businessName is String && businessName.isEmpty) ||
+      businessName is! String) {
+    err['e_business'] = 'Business name required';
+  }
+  if ((businessName is String && businessName.isEmpty) ||
+      businessName is! String) {
+    err['e_business'] = 'Business name required';
+  }
+  if ((fullname is String && fullname.isEmpty) || businessName is! String) {
+    err['e_fullname'] = 'Fullname required';
+  }
+  if ((email is String && email.isEmpty) || email is! String) {
+    err['e_email'] = 'Email required';
+  }
+  if ((country is String && country.isEmpty) || country is! String) {
+    err['e_country'] = 'Country required';
+  }
+  if ((mobile is String && mobile.isEmpty) || mobile is! String) {
+    err['e_mobile'] = 'Mobile required';
+  }
+  updateState(err);
+  return err.isNotEmpty;
+}
+
+_registerPressed(states, updateState, context) {
+  var isValid = _isFormValid(states, updateState);
+  if(isValid == true){
+    // updateState({'loading': true});
+    // accountLogin(username, password)
+    //     .then((value) => navigateToAndReplace('/shop'))
+    //     .catchError((error) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) =>
+    //           AlertDialog(title: const Text('Error'), content: Text('$error')));
+    // }).whenComplete(() => updateState({'loading': false}));
+  }
 }
 
 _passwordInput(states, updateState) {
@@ -146,7 +166,7 @@ _passwordInput(states, updateState) {
     initialText: states['password'],
     onText: (x) => updateState(
         {'password': x, 'e_p': x.isNotEmpty ? '' : 'Password required'}),
-    error: states['e_p'] ?? '',
+    error: states['e_password'] ?? '',
     show: states['show'] == true,
     icon: IconButton(
       onPressed: () {
@@ -163,26 +183,71 @@ _usernameInput(states, updateState) {
     label: "Username",
     initialText: states['username'],
     onText: (x) => updateState(
-        {'username': x, 'e_u': x.isNotEmpty ? '' : 'Username required'}),
-    error: states['e_u'] ?? '',
+        {'username': x, 'e_username': x.isNotEmpty ? '' : 'Username required'}),
+    error: states['e_username'] ?? '',
   );
 }
 
-_orSeparatorView() {
-  Widget line = const Expanded(flex: 1, child: Divider());
-  Widget orText = const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 5),
-    child: Text(
-      'OR',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-        color: Colors.black,
-      ),
-    ),
+_fullnameInput(states, updateState) {
+  return TextInput(
+    label: "Your fullname",
+    initialText: states['fullname'],
+    onText: (x) => updateState(
+        {'fullname': x, 'e_fullname': x.isNotEmpty ? '' : 'Username required'}),
+    error: states['e_fullname'] ?? '',
   );
+}
+
+_businessInput(states, updateState) {
+  return TextInput(
+    label: "Business name",
+    initialText: states['businessName'],
+    onText: (x) => updateState({
+      'businessName': x,
+      'e_business': x.isNotEmpty ? '' : 'Business name required'
+    }),
+    error: states['e_business'] ?? '',
+  );
+}
+
+_emailInput(states, updateState) {
+  return TextInput(
+    label: "Email",
+    initialText: states['email'],
+    onText: (x) => updateState(
+        {'email': x, 'e_mail': x.isNotEmpty ? '' : 'Email required'}),
+    error: states['e_email'] ?? '',
+  );
+}
+
+_mobileInput(states, updateState) {
+  return MobileInput(
+    initialText: states['mobile'],
+    onText: (x) => updateState(
+        {'mobile': x, 'e_mobile': x.isNotEmpty ? '' : 'Email required'}),
+    error: states['e_mobile'] ?? '',
+  );
+}
+
+_countryInput(states, updateState) {
+  return ChoicesInput(
+    label: "Country",
+    initialText: states['country'],
+    onText: (x) => updateState(
+        {'country': x, 'e_country': x.isNotEmpty ? '' : 'Country required'}),
+    error: states['e_country'] ?? '',
+    onLoad: ({skipLocal = false}) async => getCountries(),
+    placeholder: "Choose country",
+    onField: (a) {
+      return '${a['name']} - ${a['code']}';
+    },
+  );
+}
+
+_separatorView() {
+  Widget line = const Expanded(flex: 1, child: Divider());
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Row(children: [line, orText, line]),
+    padding: const EdgeInsets.symmetric(vertical: 24),
+    child: Row(children: [line]),
   );
 }

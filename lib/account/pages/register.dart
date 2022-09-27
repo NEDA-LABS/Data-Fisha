@@ -9,13 +9,14 @@ class RegisterPage extends StatelessWidget {
   Widget build(var context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Open account'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              navigateToAndReplace('/account/login');
-            },
-          )),
+        title: const Text('Open account'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            navigateToAndReplace('/account/login');
+          },
+        ),
+      ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(child: registerForm()),
