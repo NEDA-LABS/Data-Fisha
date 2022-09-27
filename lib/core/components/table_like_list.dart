@@ -2,6 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 
 Widget tableLikeListRow(List<Widget> items) {
   _map(e) => Expanded(flex: items.indexOf(e) == 0 ? 2 : 1, child: e);
@@ -108,7 +109,7 @@ class _State extends State<TableLikeList> {
           child: tableLikeListRow(keys.map(keyToView).toList()),
         ),
       ),
-      const Divider(height: 2)
+      horizontalLine()
     ]);
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -203,7 +204,7 @@ _usernameInput(states, updateState) {
 }
 
 _orSeparatorView() {
-  Widget line = const Expanded(flex: 1, child: Divider());
+  Widget line = Expanded(flex: 1, child: horizontalLine());
   Widget orText = const Padding(
     padding: EdgeInsets.symmetric(horizontal: 5),
     child: Text(
