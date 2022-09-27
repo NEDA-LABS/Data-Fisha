@@ -12,7 +12,7 @@ class AlreadyAuthGuard extends RouteGuard {
     var user = await getLocalCurrentUser();
     var isLogin = ifDoElse((y) => y == null, (_) => true, (_) {
       removeActiveShop();
-      navigateTo('/shop');
+      navigateTo('/account/shop');
       return false;
     });
     return isLogin(user);

@@ -29,7 +29,7 @@ Widget _registerButton(states, updateState, context) {
     height: 48,
     width: MediaQuery.of(context).size.width,
     child: OutlinedButton(
-      onPressed: () => navigateTo('/account/register'),
+      onPressed: () {},
       child: Text(
         "Open account for free.",
         style: TextStyle(
@@ -87,13 +87,14 @@ final _formInitialState = {
   'e_p': ''
 };
 
-Widget loginForm() {
+Widget registerForm() {
   return ActiveComponent(
     initialState: _formInitialState,
     builder: (context, states, updateState) {
-      return SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Center(
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
           child: Container(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             constraints: const BoxConstraints(maxWidth: 400),
