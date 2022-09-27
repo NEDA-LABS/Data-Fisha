@@ -14,6 +14,16 @@ Future accountLogin(String username, String password) async {
   }
 }
 
+Future accountRegister(data) async {
+  var user = await accountRemoteRegister(data);
+  await setLocalCurrentUser(user);
+  if (user != null) {
+    return user;
+  } else {
+    throw "User is null";
+  }
+}
+
 logOut() {
   removeActiveShop();
   removeLocalCurrentUser();

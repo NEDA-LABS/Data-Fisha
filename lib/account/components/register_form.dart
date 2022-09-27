@@ -32,10 +32,10 @@ Widget _registerButton(states, updateState, context) {
     child: states['loading'] == true
         ? Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: const CircularProgressIndicator())
         : Container(
-            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            margin: const EdgeInsets.symmetric(vertical: 24),
             height: 48,
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
@@ -83,7 +83,7 @@ Widget registerForm() {
         alignment: Alignment.topCenter,
         child: Container(
           padding: const EdgeInsets.all(16),
-          constraints: const BoxConstraints(maxWidth: 400),
+          constraints: const BoxConstraints(maxWidth: 500),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,11 +119,7 @@ bool _isFormValid(states, updateState) {
     err['e_username'] = 'Username required';
   }
   if ((password is String && password.isEmpty) || password is! String) {
-    err['e_password'] = 'Password required';
-  }
-  if ((businessName is String && businessName.isEmpty) ||
-      businessName is! String) {
-    err['e_business'] = 'Business name required';
+    err['e_password'] = 'Password must be at least 8 characters';
   }
   if ((businessName is String && businessName.isEmpty) ||
       businessName is! String) {
@@ -139,24 +135,39 @@ bool _isFormValid(states, updateState) {
     err['e_country'] = 'Country required';
   }
   if ((mobile is String && mobile.isEmpty) || mobile is! String) {
-    err['e_mobile'] = 'Mobile required';
+    err['e_mobile'] = 'Complete 9 remaining digit';
   }
   updateState(err);
-  return err.isNotEmpty;
+  return err.keys.isEmpty;
 }
 
 _registerPressed(states, updateState, context) {
   var isValid = _isFormValid(states, updateState);
-  if(isValid == true){
-    // updateState({'loading': true});
-    // accountLogin(username, password)
-    //     .then((value) => navigateToAndReplace('/shop'))
-    //     .catchError((error) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) =>
-    //           AlertDialog(title: const Text('Error'), content: Text('$error')));
-    // }).whenComplete(() => updateState({'loading': false}));
+  if (isValid == true) {
+    lE(error) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              AlertDialog(title: const Text('Error'), content: Text('$error')));
+    }
+
+    var data = {
+      "username": states['username'],
+      'password': states['password'],
+      'email': states['email'],
+      'firstname': states['fullname'],
+      'lastname': '.',
+      'mobile': states['mobile'],
+      'businessName': states['businessName'],
+      'region': states['country'],
+      'country': states['country'],
+      'street': states['country'],
+    };
+    updateState({'loading': true});
+    accountRegister(data)
+        .then((value) => navigateToAndReplace('/account/shop'))
+        .catchError(lE)
+        .whenComplete(() => updateState({'loading': false}));
   }
 }
 
@@ -164,8 +175,12 @@ _passwordInput(states, updateState) {
   return TextInput(
     label: "Password",
     initialText: states['password'],
-    onText: (x) => updateState(
-        {'password': x, 'e_p': x.isNotEmpty ? '' : 'Password required'}),
+    onText: (x) => updateState({
+      'password': x,
+      'e_password': x.isNotEmpty && x.length >= 8
+          ? ''
+          : 'Password must be at least 8 characters'
+    }),
     error: states['e_password'] ?? '',
     show: states['show'] == true,
     icon: IconButton(
@@ -215,7 +230,7 @@ _emailInput(states, updateState) {
     label: "Email",
     initialText: states['email'],
     onText: (x) => updateState(
-        {'email': x, 'e_mail': x.isNotEmpty ? '' : 'Email required'}),
+        {'email': x, 'e_email': x.isNotEmpty ? '' : 'Email required'}),
     error: states['e_email'] ?? '',
   );
 }
@@ -223,8 +238,11 @@ _emailInput(states, updateState) {
 _mobileInput(states, updateState) {
   return MobileInput(
     initialText: states['mobile'],
-    onText: (x) => updateState(
-        {'mobile': x, 'e_mobile': x.isNotEmpty ? '' : 'Email required'}),
+    onText: (x) => updateState({
+      'mobile': x,
+      'e_mobile':
+          x.isNotEmpty && x.length >= 9 ? '' : 'Complete 9 remaining digit'
+    }),
     error: states['e_mobile'] ?? '',
   );
 }

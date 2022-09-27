@@ -28,7 +28,7 @@ class TextInput extends StatefulWidget {
     this.type = TextInputType.text,
     this.error = '',
     this.lines = 1,
-    this.debounceTime = 500,
+    this.debounceTime = 250,
     this.show = true,
   }) : super(key: key);
 
