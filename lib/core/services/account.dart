@@ -24,10 +24,22 @@ Future accountRegister(data) async {
   }
 }
 
+Future accountResetPassword(username) async {
+  var value = await accountRemoteReset(username);
+  // await setLocalCurrentUser(user);
+  if (value != null) {
+    return value;
+  } else {
+    throw "Unexpected response";
+  }
+}
+
 logOut() {
-  removeActiveShop();
-  removeLocalCurrentUser();
-  navigateToAndReplace('/');
+  removeActiveShop().then((value) {
+    return removeLocalCurrentUser();
+  }).then((value) {
+    navigateToAndReplace('/account/login');
+  });
 }
 
 Future<List> getUserShops() async {

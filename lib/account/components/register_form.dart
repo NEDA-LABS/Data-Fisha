@@ -157,7 +157,7 @@ _registerPressed(states, updateState, context) {
       'email': states['email'],
       'firstname': states['fullname'],
       'lastname': '.',
-      'mobile': states['mobile'],
+      'mobile': '255${states['mobile']}',
       'businessName': states['businessName'],
       'region': states['country'],
       'country': states['country'],

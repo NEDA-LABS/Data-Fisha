@@ -25,6 +25,13 @@ _registerHttp(data) async {
   return RawResponse(body: a.body, statusCode: a.statusCode);
 }
 
+_resetHttp(username) async {
+  var a = await http.get(
+      Uri.parse('$baseUrl/account/reset?username=$username}'),
+      headers: getInitialHeaders());
+  return RawResponse(body: a.body, statusCode: a.statusCode);
+}
+
 var _getError = (x) => x['errors']['message'];
 
 var _dataOrError = ifDoElse(
@@ -41,4 +48,9 @@ Future accountRemoteLogin(String u, String p) async {
 Future accountRemoteRegister(data) async {
   var getUser = composeAsync([_dataOrError, executeRule]);
   return getUser(() => _registerHttp(data));
+}
+
+Future accountRemoteReset(username) async {
+  var getUser = composeAsync([_dataOrError, executeRule]);
+  return getUser(() => _resetHttp(username));
 }

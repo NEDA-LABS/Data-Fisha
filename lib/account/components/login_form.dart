@@ -56,16 +56,20 @@ _iconContainer(String? svg) => Padding(
       ),
     );
 
-_resetAccount(context) {
+_resetAccount(context, states, updateState) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 16),
     child: Row(
       children: [
         Expanded(flex: 2, child: Container()),
         InkWell(
-          onTap: () {},
+          onTap: states['reset_loading'] == true
+              ? null
+              : _resetTapped(context, states, updateState),
           child: Text(
-            'Reset account password.',
+            states['reset_loading'] == true
+                ? 'Waiting...'
+                : 'Reset account password.',
             textAlign: TextAlign.end,
             style: TextStyle(
                 fontWeight: FontWeight.w200,
@@ -80,6 +84,7 @@ _resetAccount(context) {
 
 final _formInitialState = {
   'loading': false,
+  'reset_loading': false,
   'username': '',
   'password': '',
   'show': false,
@@ -105,7 +110,7 @@ Widget loginForm() {
                 _usernameInput(states, updateState),
                 _passwordInput(states, updateState),
                 _loginButton(states, updateState, context),
-                _resetAccount(context),
+                _resetAccount(context, states, updateState),
                 _orSeparatorView(),
                 _registerButton(states, updateState, context)
               ],
@@ -115,6 +120,36 @@ Widget loginForm() {
       );
     },
   );
+}
+
+_resetTapped(context, states, updateState) {
+  var username = states['username'];
+  return () {
+    if ((username is String && username.isEmpty) || username == null) {
+      updateState({'e_u': 'Username required to reset your account.'});
+      return;
+    }
+    updateState({'e_u': '', 'reset_loading': true});
+    accountResetPassword(username).then((value) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Info"),
+          content: Text('$value'),
+        ),
+      );
+    }).catchError((error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text('$error'),
+        ),
+      );
+    }).whenComplete(() {
+      updateState({'reset_loading': false});
+    });
+  };
 }
 
 _loginPressed(states, updateState, context) {
