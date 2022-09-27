@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -55,7 +56,7 @@ productMovementDetails(context, item) => ActiveComponent(
                             paddingText(item[1]),
                             paddingText(item[4] - item[1]),
                           ]),
-                          const Divider(height: 2)
+                          horizontalLine()
                         ],
                       ))
                   .toList(),

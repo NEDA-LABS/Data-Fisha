@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
@@ -263,7 +264,7 @@ _countryInput(states, updateState) {
 }
 
 _separatorView() {
-  Widget line = const Expanded(flex: 1, child: Divider());
+  Widget line = Expanded(flex: 1, child: horizontalLine());
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 24),
     child: Row(children: [line]),

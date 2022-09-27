@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -183,9 +184,9 @@ Widget _checkoutCartItem(
           onPressed: () => onRemoveItem(cart.product['id']),
         ),
       ),
-      const Padding(
-          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Divider(color: Colors.grey))
+      Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: horizontalLine())
     ],
   );
 }

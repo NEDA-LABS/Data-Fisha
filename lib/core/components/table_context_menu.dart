@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/models/menu.dart';
 
 _contextButton({required String text, required Function? pressed}) => Padding(
@@ -14,4 +15,4 @@ _items(items) => SizedBox(
         ])));
 
 tableContextMenu(List<ContextMenu> items) =>
-    Column(children: [_items(items), const Divider(height: 2)]);
+    Column(children: [_items(items), horizontalLine()]);
