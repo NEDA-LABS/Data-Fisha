@@ -39,14 +39,14 @@ productDetail(Map item, context) => Padding(
             outlineButton(
                 onPressed: () => navigator().maybePop().whenComplete(() =>
                     showDialogOrModalSheet(
-                        productMovementDetails(context, item), context)),
+                        ProductMovementDetails(item: item), context)),
                 title: 'Track movement'),
             outlineButton(
                 onPressed: () {
                   navigator().maybePop().whenComplete(() {
                     showDialog(
                         context: context,
-                        builder: (_) => deleteDialog(
+                        builder: (_) => DeleteDialog(
                             message:
                                 'Delete of "${item['product']}" is permanent, do you wish to continue ? ',
                             onConfirm: () => deleteProduct(item['id'])));

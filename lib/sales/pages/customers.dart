@@ -43,7 +43,7 @@ class _CustomersPage extends State<CustomersPage> {
             builder: (c) => Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 500),
-                child: Dialog(child: createCustomerContent()),
+                child: Dialog(child: CreateCustomerContent()),
               ),
             ),
           ),

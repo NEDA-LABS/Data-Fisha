@@ -51,17 +51,18 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-            storePassword '@Joshua&5715'
-            keyAlias 'newkey'
-            keyPassword '@Joshua&5715'
-        }
+//        debug {
+//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
+//            storePassword '@Joshua&5715'
+//            keyAlias 'newkey'
+//            keyPassword '@Joshua&5715'
+//        }
         release {
-            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-            storePassword '@Joshua&5715'
-            keyAlias 'newkey'
-            keyPassword '@Joshua&5715'
+            signingConfigs.debug
+//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
+//            storePassword '@Joshua&5715'
+//            keyAlias 'newkey'
+//            keyPassword '@Joshua&5715'
         }
     }
     buildTypes {

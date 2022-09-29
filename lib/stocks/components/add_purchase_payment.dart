@@ -5,72 +5,91 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
-addPurchasePaymentContent(String? id) {
-  Map states = {"loading": false};
-  return Container(
-    constraints: const BoxConstraints(maxWidth: 400),
-    child: StatefulBuilder(builder: (context, setState) {
-      // updateState(map) {
-      //   map is Map
-      //       ? setState(() {
-      //           states.addAll(map);
-      //         })
-      //       : null;
-      // }
-      var updateState = ifDoElse((x) => x is Map, (x) =>
-          setState(() => states.addAll(x)), (x) => null);
-      return Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-              child: ListBody(children: [
-            TextInput(
-                onText: (d) => updateState({'amount': d}),
-                label: "Amount",
-                type: TextInputType.number,
-                error: states['error_q'] ?? '',
-                placeholder: ''),
-            Container(
-                height: 64,
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Row(children: [
-                  Expanded(
-                      child: SizedBox(
-                          height: 40,
-                          child: OutlinedButton(
-                              onPressed: states['loading']
-                                  ? null
-                                  : () => _submitAddPurchasePayment(
-                                      id, states, updateState),
-                              child: Text(
-                                  states['loading'] ? "Waiting..." : "Submit.",
-                                  style: const TextStyle(fontSize: 16)))))
-                ])),
-            Text(states['error'] ?? '',
-                style: const TextStyle(color: Colors.red))
-          ])));
-    }),
-  );
+class AddPurchasePaymentContent extends StatefulWidget {
+  final String? id;
+
+  const AddPurchasePaymentContent(this.id, {Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _State();
 }
 
-_validateName(data) => data is String && data.isNotEmpty;
+class _State extends State<AddPurchasePaymentContent> {
+  Map states = {"loading": false};
+  var updateState;
 
-_submitAddPurchasePayment(
-  String? id,
-  Map<dynamic, dynamic> states,
-  updateState,
-) {
-  updateState({'error': '', 'error_q': ''});
-  if (!_validateName(states['amount'])) {
-    updateState({'error_q': 'Amount required'});
-    return;
+  @override
+  void initState() {
+    updateState = ifDoElse(
+        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+    super.initState();
   }
-  var payment = {'amount': doubleOrZero("${states['amount']}")};
-  var patchPurchase = preparePatchPurchasePayment(id, payment);
-  getActiveShop().then((shop) {
-    updateState({'loading': true});
-    patchPurchase(shop)
-        .then((value) => navigator().maybePop())
-        .catchError((onError) => updateState({'error': onError.toString()}))
-        .whenComplete(() => updateState({'loading': false}));
-  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              TextInput(
+                  onText: (d) => updateState({'amount': d}),
+                  label: "Amount",
+                  type: TextInputType.number,
+                  error: states['error_q'] ?? '',
+                  placeholder: ''),
+              Container(
+                height: 64,
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: SizedBox(
+                            height: 40,
+                            child: OutlinedButton(
+                                onPressed: states['loading']
+                                    ? null
+                                    : () => _submitAddPurchasePayment(
+                                        widget.id, states, updateState),
+                                child: Text(
+                                    states['loading']
+                                        ? "Waiting..."
+                                        : "Submit.",
+                                    style: const TextStyle(fontSize: 16)))))
+                  ],
+                ),
+              ),
+              Text(states['error'] ?? '',
+                  style: const TextStyle(color: Colors.red))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _validateName(data) => data is String && data.isNotEmpty;
+
+  _submitAddPurchasePayment(
+    String? id,
+    Map<dynamic, dynamic> states,
+    updateState,
+  ) {
+    updateState({'error': '', 'error_q': ''});
+    if (!_validateName(states['amount'])) {
+      updateState({'error_q': 'Amount required'});
+      return;
+    }
+    var payment = {'amount': doubleOrZero("${states['amount']}")};
+    var patchPurchase = preparePatchPurchasePayment(id, payment);
+    getActiveShop().then((shop) {
+      updateState({'loading': true});
+      patchPurchase(shop)
+          .then((value) => navigator().maybePop())
+          .catchError((onError) => updateState({'error': onError.toString()}))
+          .whenComplete(() => updateState({'loading': false}));
+    });
+  }
 }

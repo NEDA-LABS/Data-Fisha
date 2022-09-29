@@ -11,7 +11,7 @@ import 'package:smartstock/core/components/refresh_button.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/services/cart.dart';
 
-class SaleLikePage extends StatelessWidget {
+class SaleLikePage extends StatefulWidget{
   final String title;
   final bool wholesale;
   final String backLink;
@@ -23,7 +23,7 @@ class SaleLikePage extends StatelessWidget {
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
 
-  SaleLikePage({
+  const SaleLikePage({
     required this.title,
     required this.wholesale,
     required this.onSubmitCart,
@@ -37,10 +37,54 @@ class SaleLikePage extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState()=> _State();
+
+}
+
+class _State extends State<SaleLikePage> {
+  Map states = {'skip': false, 'query': ''};
+  var updateState;
   final _getSkip = propertyOr('skip', (p0) => false);
   final _getQuery = propertyOr('query', (p0) => '');
   final _getCarts = propertyOr('carts', (p0) => []);
   final _getCustomer = propertyOr('customer', (p0) => '');
+
+  @override
+  void initState() {
+    updateState = ifDoElse((x) => x is Map, (x) =>
+        setState(() => states.addAll(x)), (x) => null);
+    super.initState();
+  }
+  @override
+  Widget build(var context) {
+    return responsiveBody(
+      menus: moduleMenus(),
+      office: 'Menu',
+      current: widget.backLink,
+      rightDrawer: _hasCarts(states)
+          ? SizedBox(
+          width: 350,
+          child: _cartDrawer(
+              states, updateState, context, widget.wholesale, (a) {}))
+          : null,
+      onBody: (drawer) => Scaffold(
+        appBar: states['hab'] == true ? null : _appBar(updateState),
+        floatingActionButton: _fab(states, updateState),
+        body: FutureBuilder<List>(
+          initialData: _getCarts(states),
+          future: _future(states),
+          builder: _getView(
+            _getCarts(states),
+            _onAddToCart(states, updateState),
+            widget.onAddToCartView,
+            _onShowCheckoutSheet(states, updateState, context),
+            widget.onGetPrice,
+          ),
+        ),
+      ),
+    );
+  }
 
   _hasCarts(states) => _getCarts(states).length > 0;
 
@@ -48,19 +92,19 @@ class SaleLikePage extends StatelessWidget {
       skipLocal: _getSkip(states), stringLike: _getQuery(states));
 
   _onAddToCart(states, updateState) => (cart) {
-        var carts = appendToCarts(cart, _getCarts(states));
-        updateState({"carts": carts, 'query': ''});
-        navigator().maybePop();
-      };
+    var carts = appendToCarts(cart, _getCarts(states));
+    updateState({"carts": carts, 'query': ''});
+    navigator().maybePop();
+  };
 
   _onShowCheckoutSheet(states, updateState, context) => () => fullScreeDialog(
       context,
-      (refresh) =>
-          _cartDrawer(states, updateState, context, wholesale, refresh));
+          (refresh) =>
+          _cartDrawer(states, updateState, context, widget.wholesale, refresh));
 
   _appBar(updateState) => StockAppBar(
-      title: title,
-      backLink: backLink,
+      title: widget.title,
+      backLink: widget.backLink,
       showBack: true,
       showSearch: true,
       searchHint: "Search here...",
@@ -74,69 +118,27 @@ class SaleLikePage extends StatelessWidget {
 
   _isLoading(snapshot) =>
       snapshot is AsyncSnapshot &&
-      snapshot.connectionState == ConnectionState.waiting;
+          snapshot.connectionState == ConnectionState.waiting;
 
   _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) =>
-      (context, snapshot) => Column(children: [
-            _isLoading(snapshot)
-                ? const LinearProgressIndicator()
-                : const SizedBox(height: 0),
-            Expanded(
-                child: salesLikeBody(
-                    onAddToCart: onAddToCart,
-                    wholesale: wholesale,
-                    products: snapshot.data ?? [],
-                    onAddToCartView: onAddToCartView,
-                    onShowCheckout: onShowCheckout,
-                    onGetPrice: onGetPrice,
-                    carts: carts,
-                    context: context))
-          ]);
+          (context, snapshot) => Column(children: [
+        _isLoading(snapshot)
+            ? const LinearProgressIndicator()
+            : const SizedBox(height: 0),
+        Expanded(
+            child: salesLikeBody(
+                onAddToCart: onAddToCart,
+                wholesale: widget.wholesale,
+                products: snapshot.data ?? [],
+                onAddToCartView: onAddToCartView,
+                onShowCheckout: onShowCheckout,
+                onGetPrice: onGetPrice,
+                carts: carts,
+                context: context))
+      ]);
 
-  @override
-  Widget build(var context) {
-    Map states = {'skip': false, 'query': ''};
-    return StatefulBuilder(builder: (context, setState) {
-      // updateState(map) {
-      //   map is Map
-      //       ? setState(() {
-      //           states.addAll(map);
-      //         })
-      //       : null;
-      // }
-      var updateState = ifDoElse((x) => x is Map, (x) =>
-          setState(() => states.addAll(x)), (x) => null);
-      return responsiveBody(
-        menus: moduleMenus(),
-        office: 'Menu',
-        current: backLink,
-        rightDrawer: _hasCarts(states)
-            ? SizedBox(
-                width: 350,
-                child: _cartDrawer(
-                    states, updateState, context, wholesale, (a) {}))
-            : null,
-        onBody: (drawer) => Scaffold(
-          appBar: states['hab'] == true ? null : _appBar(updateState),
-          floatingActionButton: _fab(states, updateState),
-          body: FutureBuilder<List>(
-            initialData: _getCarts(states),
-            future: _future(states),
-            builder: _getView(
-              _getCarts(states),
-              _onAddToCart(states, updateState),
-              onAddToCartView,
-              _onShowCheckoutSheet(states, updateState, context),
-              onGetPrice,
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
-        customerLikeLabel: customerLikeLabel,
+  _cartDrawer(states, updateState, context, wholesale, refresh) => CartDrawer(
+        customerLikeLabel: widget.customerLikeLabel,
         onAddItem: (id, q) {
           var addCart = _prepareAddCartQuantity(states, updateState);
           addCart(id, q);
@@ -150,7 +152,7 @@ class SaleLikePage extends StatelessWidget {
         onCheckout: (discount) {
           var customer = '${states['customer'] ?? ''}';
           var carts = states['carts'];
-          return onSubmitCart(carts, customer, discount).then((value) {
+          return widget.onSubmitCart(carts, customer, discount).then((value) {
             updateState({'carts': [], 'customer': ''});
             navigator().maybePop().whenComplete(() {
               showDialog(
@@ -159,19 +161,18 @@ class SaleLikePage extends StatelessWidget {
                       title: const Text('Info',
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 16)),
-                      content: Text(checkoutCompleteMessage)));
+                      content: Text(widget.checkoutCompleteMessage)));
             });
           }).catchError(_showCheckoutError(context));
           // onCheckout
         },
         carts: _getCarts(states),
         wholesale: wholesale,
-        context: context,
         customer: _getCustomer(states),
-        onCustomerLikeList: onCustomerLikeList,
-        onCustomerLikeAddWidget: onCustomerLikeAddWidget,
+        onCustomerLikeList: widget.onCustomerLikeList,
+        onCustomerLikeAddWidget: widget.onCustomerLikeAddWidget,
         onCustomer: (d) => updateState({"customer": d}),
-        onGetPrice: onGetPrice,
+        onGetPrice: widget.onGetPrice,
       );
 
   _prepareRemoveCart(states, updateState) => (String id) =>
