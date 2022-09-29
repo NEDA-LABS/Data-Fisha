@@ -9,19 +9,19 @@ _title() => const Padding(
 
 _reports() => Wrap(
   children: [
-    numberSummaryReportCard(
+    DashboardSummaryReportCard(
       title: 'Sales',
       future: getTotalPositiveItems,
     ),
-    numberSummaryReportCard(
+    DashboardSummaryReportCard(
       title: 'Items purchase value ( Tsh )',
       future: getItemsValue,
     ),
-    numberSummaryReportCard(
+    DashboardSummaryReportCard(
       title: 'Items retail value ( Tsh )',
       future: getItemsRetailValue,
     ),
-    numberSummaryReportCard(
+    DashboardSummaryReportCard(
       title: 'Items wholesale value ( Tsh )',
       future: getItemsWholesaleValue,
     )

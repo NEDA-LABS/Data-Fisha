@@ -53,7 +53,7 @@ purchaseDetails(context, item) => ListView(
                         showDialog(
                             context: context,
                             builder: (_) => Dialog(
-                                child: addPurchasePaymentContent(item['id'])));
+                                child: AddPurchasePaymentContent(item['id'])));
                       });
                     },
                     child: const Text('Add payment',

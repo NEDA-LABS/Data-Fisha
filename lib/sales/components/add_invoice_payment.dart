@@ -5,64 +5,76 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
-addInvoicePaymentContent(String? id){
-  Map states = {"loading": false};
-  return  StatefulBuilder(
-      builder: (context, setState){
-        // updateState(map){
-        //   map is Map ? setState((){
-        //     states.addAll(map);
-        //   }): null;
-        // }
-        var updateState = ifDoElse((x) => x is Map, (x) =>
-            setState(() => states.addAll(x)), (x) => null);
-        return Container(
-            constraints: const BoxConstraints(maxWidth: 400),
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-                child: ListBody(children: [
-                  TextInput(
-                      onText: (d) => updateState({'amount': d}),
-                      label: "Amount",
-                      type: TextInputType.number,
-                      error: states['error']??'',
-                      placeholder: ''),
-                  Container(
-                      height: 64,
-                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Row(children: [
-                        Expanded(
-                            child: SizedBox(
-                                height: 40,
-                                child: OutlinedButton(
-                                    onPressed: states['loading']
-                                        ? null
-                                        : () => _submitAddInvoicePayment(
-                                        id, states, updateState),
-                                    child: Text(
-                                        states['loading'] ? "Waiting..." : "Submit.",
-                                        style: const TextStyle(fontSize: 16)))))
-                      ])),
-                  Text(states['error'] ?? '')
-                ])));
-      });
+class AddInvoicePaymentContent extends StatefulWidget {
+  final String? id;
+
+  const AddInvoicePaymentContent(this.id, {Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _State();
 }
 
-_validateName(data) => data is String && data.isNotEmpty;
+class _State extends State<AddInvoicePaymentContent> {
+  Map states = {"loading": false};
+  var updateState;
 
-_submitAddInvoicePayment(String? id, Map<dynamic, dynamic> states, updateState) {
-  updateState({'error': ''});
-  if (!_validateName(states['amount'])) {
-    updateState({'error': 'Amount required'});
-    return;
+  @override
+  void initState() {
+    updateState = ifDoElse(
+        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+    super.initState();
   }
-  var payment = {'amount': doubleOrZero("${states['amount']}")};
-  var patchInvoice = prepareAddPayment(id, payment);
-  getActiveShop().then((shop) {
-    updateState({'loading': true});
-    patchInvoice(shop)
-        .then((value) => navigator().maybePop())
-        .catchError((onError) => updateState({'error': onError.toString()}))
-        .whenComplete(() => updateState({'loading': false}));
-  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+            child: ListBody(children: [
+          TextInput(
+              onText: (d) => updateState({'amount': d}),
+              label: "Amount",
+              type: TextInputType.number,
+              error: states['error'] ?? '',
+              placeholder: ''),
+          Container(
+              height: 64,
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+              child: Row(children: [
+                Expanded(
+                    child: SizedBox(
+                        height: 40,
+                        child: OutlinedButton(
+                            onPressed: states['loading']
+                                ? null
+                                : () => _submitAddInvoicePayment(
+                                    widget.id, states, updateState),
+                            child: Text(
+                                states['loading'] ? "Waiting..." : "Submit.",
+                                style: const TextStyle(fontSize: 16)))))
+              ])),
+          Text(states['error'] ?? '')
+        ])));
+  }
+
+  _validateName(data) => data is String && data.isNotEmpty;
+
+  _submitAddInvoicePayment(
+      String? id, Map<dynamic, dynamic> states, updateState) {
+    updateState({'error': ''});
+    if (!_validateName(states['amount'])) {
+      updateState({'error': 'Amount required'});
+      return;
+    }
+    var payment = {'amount': doubleOrZero("${states['amount']}")};
+    var patchInvoice = prepareAddPayment(id, payment);
+    getActiveShop().then((shop) {
+      updateState({'loading': true});
+      patchInvoice(shop)
+          .then((value) => navigator().maybePop())
+          .catchError((onError) => updateState({'error': onError.toString()}))
+          .whenComplete(() => updateState({'loading': false}));
+    });
+  }
 }

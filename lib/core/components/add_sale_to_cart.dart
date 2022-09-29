@@ -13,36 +13,59 @@ void addSaleToCartView({
   showDialog(
     context: context,
     builder: (c) {
-      Map states = {'p': cart.product, 'q': cart.quantity};
       return Dialog(
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            // updateState(map) {
-            //   map is Map
-            //       ? setState(() {
-            //           states.addAll(map);
-            //         })
-            //       : null;
-            // }
-            var updateState = ifDoElse((x) => x is Map, (x) =>
-                setState(() => states.addAll(x)), (x) => null);
-            return Container(
-              decoration: _addToCartBoxDecoration(),
-              height: 230,
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                children: <Widget>[
-                  _productAndPrice(states['p'], onGetPrice),
-                  _cartQuantityInput(context, states, updateState),
-                  _addToCartButton(context, states, onAddToCart)
-                ],
-              ),
-            );
-          },
+        child: _Dialog(
+          cart: cart,
+          onAddToCart: onAddToCart,
+          onGetPrice: onGetPrice,
         ),
       );
     },
   );
+}
+
+class _Dialog extends StatefulWidget {
+  final CartModel cart;
+  final onAddToCart;
+  final onGetPrice;
+
+  const _Dialog({
+    required this.cart,
+    required this.onAddToCart,
+    required this.onGetPrice,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<_Dialog> {
+  Map states = {};
+  var updateState;
+
+  @override
+  void initState() {
+    states = {'p': widget.cart.product, 'q': widget.cart.quantity};
+    updateState = ifDoElse(
+        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: _addToCartBoxDecoration(),
+      height: 230,
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Column(
+        children: <Widget>[
+          _productAndPrice(states['p'], widget.onGetPrice),
+          _cartQuantityInput(context, states, updateState),
+          _addToCartButton(context, states, widget.onAddToCart)
+        ],
+      ),
+    );
+  }
 }
 
 _cartQuantityInput(context, states, updateState) => Container(

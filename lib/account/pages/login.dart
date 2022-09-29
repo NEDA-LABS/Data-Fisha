@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(child: loginForm()),
+        child: SingleChildScrollView(child: LoginForm()),
       ),
     );
   }

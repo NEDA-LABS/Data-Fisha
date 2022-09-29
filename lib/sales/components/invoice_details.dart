@@ -50,7 +50,7 @@ invoiceDetails(context, item) => ListView(
                 showDialog(
                     context: context,
                     builder: (_) =>
-                        Dialog(child: addInvoicePaymentContent(item['id'])));
+                        Dialog(child: AddInvoicePaymentContent(item['id'])));
               });
             },
             child: const Text('Add payment', style: TextStyle(fontSize: 16)),
