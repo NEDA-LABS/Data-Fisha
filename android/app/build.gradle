@@ -43,10 +43,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.fahamutech.smartstock"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 19 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -54,17 +51,18 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-            storePassword '@Joshua&5715'
-            keyAlias 'newkey'
-            keyPassword '@Joshua&5715'
-        }
+//        debug {
+//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
+//            storePassword '@Joshua&5715'
+//            keyAlias 'newkey'
+//            keyPassword '@Joshua&5715'
+//        }
         release {
-            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-            storePassword '@Joshua&5715'
-            keyAlias 'newkey'
-            keyPassword '@Joshua&5715'
+            signingConfigs.debug
+//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
+//            storePassword '@Joshua&5715'
+//            keyAlias 'newkey'
+//            keyPassword '@Joshua&5715'
         }
     }
     buildTypes {

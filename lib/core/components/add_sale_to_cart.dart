@@ -1,5 +1,5 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -9,27 +9,64 @@ void addSaleToCartView({
   required CartModel cart,
   required onAddToCart,
   required onGetPrice,
-}) =>
-    showDialog(
-      context: context,
-      builder: (c) => Dialog(
-        child: ActiveComponent(
-          initialState: {"p": cart.product, "q": cart.quantity},
-          builder: (context, states, updateState) => Container(
-            decoration: _addToCartBoxDecoration(),
-            height: 230,
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Column(
-              children: <Widget>[
-                _productAndPrice(states['p'], onGetPrice),
-                _cartQuantityInput(context, states, updateState),
-                _addToCartButton(context, states, onAddToCart)
-              ],
-            ),
-          ),
+}) {
+  showDialog(
+    context: context,
+    builder: (c) {
+      return Dialog(
+        child: _Dialog(
+          cart: cart,
+          onAddToCart: onAddToCart,
+          onGetPrice: onGetPrice,
         ),
+      );
+    },
+  );
+}
+
+class _Dialog extends StatefulWidget {
+  final CartModel cart;
+  final onAddToCart;
+  final onGetPrice;
+
+  const _Dialog({
+    required this.cart,
+    required this.onAddToCart,
+    required this.onGetPrice,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<_Dialog> {
+  Map states = {};
+  var updateState;
+
+  @override
+  void initState() {
+    states = {'p': widget.cart.product, 'q': widget.cart.quantity};
+    updateState = ifDoElse(
+        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: _addToCartBoxDecoration(),
+      height: 230,
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Column(
+        children: <Widget>[
+          _productAndPrice(states['p'], widget.onGetPrice),
+          _cartQuantityInput(context, states, updateState),
+          _addToCartButton(context, states, widget.onAddToCart)
+        ],
       ),
     );
+  }
+}
 
 _cartQuantityInput(context, states, updateState) => Container(
     constraints: const BoxConstraints(maxWidth: 200),
@@ -40,7 +77,7 @@ _cartQuantityInput(context, states, updateState) => Container(
         lines: 1,
         placeholder: 'Quantity',
         type: TextInputType.number,
-        onText: (v) => updateState({'q': doubleOrZero(v)})));
+        onText: (v) => updateState({'q': doubleOr(v, 1)})));
 
 _addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),
@@ -67,9 +104,10 @@ _productAndPrice(Map<String, dynamic> product, onGetPrice) => Padding(
       _amountWidget(product, onGetPrice)
     ]));
 
-_amountWidget(product,onGetPrice) => Container(
+_amountWidget(product, onGetPrice) => Container(
     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-    child: Text('TZS ${onGetPrice(product)}', //formattedAmount(product, wholesale),
+    child: Text(
+        'TZS ${onGetPrice(product)}', //formattedAmount(product, wholesale),
         style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17)));
 

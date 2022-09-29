@@ -47,7 +47,7 @@ _prepareRefundPressed(context, sale) {
 }
 
 _prepareRefundView(context, sale) {
-  Widget _builder(context) => Dialog(child: cashSaleRefundContent(sale));
+  Widget _builder(context) => Dialog(child: CashSaleRefundContent(sale));
   return () => showDialog(context: context, builder: _builder);
 }
 
