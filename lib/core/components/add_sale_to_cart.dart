@@ -1,5 +1,5 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -9,27 +9,41 @@ void addSaleToCartView({
   required CartModel cart,
   required onAddToCart,
   required onGetPrice,
-}) =>
-    showDialog(
-      context: context,
-      builder: (c) => Dialog(
-        child: ActiveComponent(
-          initialState: {"p": cart.product, "q": cart.quantity},
-          builder: (context, states, updateState) => Container(
-            decoration: _addToCartBoxDecoration(),
-            height: 230,
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Column(
-              children: <Widget>[
-                _productAndPrice(states['p'], onGetPrice),
-                _cartQuantityInput(context, states, updateState),
-                _addToCartButton(context, states, onAddToCart)
-              ],
-            ),
-          ),
+}) {
+  showDialog(
+    context: context,
+    builder: (c) {
+      Map states = {'p': cart.product, 'q': cart.quantity};
+      return Dialog(
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            // updateState(map) {
+            //   map is Map
+            //       ? setState(() {
+            //           states.addAll(map);
+            //         })
+            //       : null;
+            // }
+            var updateState = ifDoElse((x) => x is Map, (x) =>
+                setState(() => states.addAll(x)), (x) => null);
+            return Container(
+              decoration: _addToCartBoxDecoration(),
+              height: 230,
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                children: <Widget>[
+                  _productAndPrice(states['p'], onGetPrice),
+                  _cartQuantityInput(context, states, updateState),
+                  _addToCartButton(context, states, onAddToCart)
+                ],
+              ),
+            );
+          },
         ),
-      ),
-    );
+      );
+    },
+  );
+}
 
 _cartQuantityInput(context, states, updateState) => Container(
     constraints: const BoxConstraints(maxWidth: 200),
@@ -40,7 +54,7 @@ _cartQuantityInput(context, states, updateState) => Container(
         lines: 1,
         placeholder: 'Quantity',
         type: TextInputType.number,
-        onText: (v) => updateState({'q': doubleOrZero(v)})));
+        onText: (v) => updateState({'q': doubleOr(v, 1)})));
 
 _addToCartButton(context, states, onAddToCart) => Container(
     margin: const EdgeInsets.all(15),
@@ -67,9 +81,10 @@ _productAndPrice(Map<String, dynamic> product, onGetPrice) => Padding(
       _amountWidget(product, onGetPrice)
     ]));
 
-_amountWidget(product,onGetPrice) => Container(
+_amountWidget(product, onGetPrice) => Container(
     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-    child: Text('TZS ${onGetPrice(product)}', //formattedAmount(product, wholesale),
+    child: Text(
+        'TZS ${onGetPrice(product)}', //formattedAmount(product, wholesale),
         style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17)));
 

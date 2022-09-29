@@ -1,6 +1,6 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
@@ -94,31 +94,46 @@ class SaleLikePage extends StatelessWidget {
           ]);
 
   @override
-  Widget build(var context) => ActiveComponent(
-      initialState: const {'skip': false, 'query': ''},
-      builder: (context, states, updateState) => responsiveBody(
-          menus: moduleMenus(),
-          office: 'Menu',
-          current: backLink,
-          rightDrawer: _hasCarts(states)
-              ? SizedBox(
-                  width: 350,
-                  child: _cartDrawer(
-                      states, updateState, context, wholesale, (a) {}))
-              : null,
-          onBody: (drawer) => Scaffold(
-              appBar: states['hab'] == true ? null : _appBar(updateState),
-              floatingActionButton: _fab(states, updateState),
-              body: FutureBuilder<List>(
-                  initialData: _getCarts(states),
-                  future: _future(states),
-                  builder: _getView(
-                    _getCarts(states),
-                    _onAddToCart(states, updateState),
-                    onAddToCartView,
-                    _onShowCheckoutSheet(states, updateState, context),
-                    onGetPrice,
-                  )))));
+  Widget build(var context) {
+    Map states = {'skip': false, 'query': ''};
+    return StatefulBuilder(builder: (context, setState) {
+      // updateState(map) {
+      //   map is Map
+      //       ? setState(() {
+      //           states.addAll(map);
+      //         })
+      //       : null;
+      // }
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
+      return responsiveBody(
+        menus: moduleMenus(),
+        office: 'Menu',
+        current: backLink,
+        rightDrawer: _hasCarts(states)
+            ? SizedBox(
+                width: 350,
+                child: _cartDrawer(
+                    states, updateState, context, wholesale, (a) {}))
+            : null,
+        onBody: (drawer) => Scaffold(
+          appBar: states['hab'] == true ? null : _appBar(updateState),
+          floatingActionButton: _fab(states, updateState),
+          body: FutureBuilder<List>(
+            initialData: _getCarts(states),
+            future: _future(states),
+            builder: _getView(
+              _getCarts(states),
+              _onAddToCart(states, updateState),
+              onAddToCartView,
+              _onShowCheckoutSheet(states, updateState, context),
+              onGetPrice,
+            ),
+          ),
+        ),
+      );
+    });
+  }
 
   _cartDrawer(states, updateState, context, wholesale, refresh) => cartDrawer(
         customerLikeLabel: customerLikeLabel,

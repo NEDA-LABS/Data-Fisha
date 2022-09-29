@@ -1,6 +1,5 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -13,59 +12,70 @@ void addPurchaseToCartView({
 }) =>
     showDialog(
       context: context,
-      builder: (c) => Dialog(
-        child: ActiveComponent(
-          initialState: {
-            "p": cart.product,
-            "q": cart.quantity,
-            'purchase': _getFromCartProduct(cart, 'purchase'),
-            'retailPrice': _getFromCartProduct(cart, 'retailPrice'),
-            'wholesalePrice': _getFromCartProduct(cart, 'wholesalePrice'),
-          },
-          builder: (context, states, updateState) => Container(
-            decoration: _addToCartBoxDecoration(),
-            // height: 230,
-            constraints: const BoxConstraints(maxWidth: 400),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              shrinkWrap: true,
-              children: <Widget>[
-                _productAndPrice(states['p'], onGetPrice),
-                TextInput(
-                    label: 'Quantity',
-                    initialText: '${states['q'] ?? 1}',
-                    lines: 1,
-                    type: TextInputType.number,
-                    onText: (v) =>
-                        updateState({'q': doubleOrZero(v)})),
-                TextInput(
-                    label: 'Purchase price',
-                    initialText: '${states['purchase'] ?? ''}',
-                    lines: 1,
-                    type: TextInputType.number,
-                    onText: (v) =>
-                        updateState({'purchase': doubleOrZero(v)})),
-                TextInput(
-                    label: 'New retail price',
-                    initialText: '${states['retailPrice'] ?? ''}',
-                    lines: 1,
-                    type: TextInputType.number,
-                    onText: (v) =>
-                        updateState({'retailPrice': doubleOrZero(v)})),
-                TextInput(
-                    label: 'New wholesale price',
-                    initialText: '${states['wholesalePrice'] ?? ''}',
-                    lines: 1,
-                    type: TextInputType.number,
-                    onText: (v) => updateState(
-                        {'wholesalePrice': doubleOrZero(v)})),
-                _addToCartButton(context, states, onAddToCart)
-              ],
-            ),
+      builder: (c){
+        Map states = {
+          "p": cart.product,
+          "q": cart.quantity,
+          'purchase': _getFromCartProduct(cart, 'purchase'),
+          'retailPrice': _getFromCartProduct(cart, 'retailPrice'),
+          'wholesalePrice': _getFromCartProduct(cart, 'wholesalePrice'),
+        };
+        return Dialog(
+          child: StatefulBuilder(
+            builder: (context, setState){
+              // updateState(map){
+              //   map is Map? setState((){
+              //     states.addAll(map);
+              //   }): null;
+              // }
+              var updateState = ifDoElse((x) => x is Map, (x) =>
+                  setState(() => states.addAll(x)), (x) => null);
+              return Container(
+                decoration: _addToCartBoxDecoration(),
+                // height: 230,
+                constraints: const BoxConstraints(maxWidth: 400),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView(
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    _productAndPrice(states['p'], onGetPrice),
+                    TextInput(
+                        label: 'Quantity',
+                        initialText: '${states['q'] ?? 1}',
+                        lines: 1,
+                        type: TextInputType.number,
+                        onText: (v) =>
+                            updateState({'q': doubleOrZero(v)})),
+                    TextInput(
+                        label: 'Purchase price',
+                        initialText: '${states['purchase'] ?? ''}',
+                        lines: 1,
+                        type: TextInputType.number,
+                        onText: (v) =>
+                            updateState({'purchase': doubleOrZero(v)})),
+                    TextInput(
+                        label: 'New retail price',
+                        initialText: '${states['retailPrice'] ?? ''}',
+                        lines: 1,
+                        type: TextInputType.number,
+                        onText: (v) =>
+                            updateState({'retailPrice': doubleOrZero(v)})),
+                    TextInput(
+                        label: 'New wholesale price',
+                        initialText: '${states['wholesalePrice'] ?? ''}',
+                        lines: 1,
+                        type: TextInputType.number,
+                        onText: (v) => updateState(
+                            {'wholesalePrice': doubleOrZero(v)})),
+                    _addToCartButton(context, states, onAddToCart)
+                  ],
+                ),
+              );
+            },
           ),
-        ),
-      ),
+        );
+      },
     );
 
 _getFromCartProduct(CartModel cart, String property) {

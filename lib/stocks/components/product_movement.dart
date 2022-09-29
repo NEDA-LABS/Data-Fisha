@@ -1,14 +1,24 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
-productMovementDetails(context, item) => ActiveComponent(
-      builder: (context, states, updateState) => FutureBuilder<List>(
+productMovementDetails(context, item) {
+  Map states = {};
+  return StatefulBuilder(
+    builder: (context, setState){
+      // updateState(map){
+      //   map is Map ? setState((){
+      //     states.addAll(map);
+      //   }): null;
+      // }
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
+      return FutureBuilder<List>(
         future: _future(item),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,31 +51,33 @@ productMovementDetails(context, item) => ActiveComponent(
               ...?snapshot.data?.reversed
                   .toList()
                   .map<Widget>((item) => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          tableLikeListRow([
-                            Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 16),
-                                child: Text('${_getDate(item[0])}')),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('${item[5]}'),
-                            ),
-                            paddingText(item[4]),
-                            paddingText(item[1]),
-                            paddingText(item[4] - item[1]),
-                          ]),
-                          horizontalLine()
-                        ],
-                      ))
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  tableLikeListRow([
+                    Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 16),
+                        child: Text('${_getDate(item[0])}')),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('${item[5]}'),
+                    ),
+                    paddingText(item[4]),
+                    paddingText(item[1]),
+                    paddingText(item[4] - item[1]),
+                  ]),
+                  horizontalLine()
+                ],
+              ))
                   .toList(),
               const SizedBox(height: 24)
             ],
           );
         },
-      ),
-    );
+      );
+    },
+  );
+}
 
 paddingText(item) => Padding(
       padding: const EdgeInsets.all(8.0),

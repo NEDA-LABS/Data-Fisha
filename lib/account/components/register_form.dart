@@ -1,32 +1,12 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/services/register.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
-
-final _formInitialState = {
-  'loading': false,
-  'username': '',
-  'password': '',
-  'businessName': '',
-  'fullname': '',
-  'email': '',
-  'country': '',
-  'mobile': '',
-  'show': false,
-  'e_username': '',
-  'e_password': '',
-  'e_business': '',
-  'e_fullname': '',
-  'e_email': '',
-  'e_country': '',
-  'e_mobile': '',
-};
 
 Widget _registerButton(states, updateState, context) {
   return Container(
@@ -77,9 +57,28 @@ _goToLogin(context) {
 }
 
 Widget registerForm() {
-  return ActiveComponent(
-    initialState: _formInitialState,
-    builder: (context, states, updateState) {
+  Map states = {
+    'loading': false,
+    'username': '',
+    'password': '',
+    'businessName': '',
+    'fullname': '',
+    'email': '',
+    'country': '',
+    'mobile': '',
+    'show': false,
+    'e_username': '',
+    'e_password': '',
+    'e_business': '',
+    'e_fullname': '',
+    'e_email': '',
+    'e_country': '',
+    'e_mobile': '',
+  };
+  return StatefulBuilder(
+    builder: (context, setState) {
+      var updateState = ifDoElse((x) => x is Map,
+          (x) => setState(() => states.addAll(x)), (x) => null);
       return Align(
         alignment: Alignment.topCenter,
         child: Container(

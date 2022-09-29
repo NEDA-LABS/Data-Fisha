@@ -1,53 +1,63 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
-addPurchasePaymentContent(String? id) => Container(
-      constraints: const BoxConstraints(maxWidth: 400),
-      child: ActiveComponent(
-          initialState: const {"loading": false},
-          builder: (context, states, updateState) => Padding(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                  child: ListBody(children: [
-                TextInput(
-                    onText: (d) => updateState({'amount': d}),
-                    label: "Amount",
-                    type: TextInputType.number,
-                    error: states['error_q']??'',
-                    placeholder: ''),
-                Container(
-                    height: 64,
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: Row(children: [
-                      Expanded(
-                          child: SizedBox(
-                              height: 40,
-                              child: OutlinedButton(
-                                  onPressed: states['loading']
-                                      ? null
-                                      : () => _submitAddPurchasePayment(
-                                          id, states, updateState),
-                                  child: Text(
-                                      states['loading']
-                                          ? "Waiting..."
-                                          : "Submit.",
-                                      style: const TextStyle(fontSize: 16)))))
-                    ])),
-                Text(states['error'] ?? '',
-                    style: const TextStyle(color: Colors.red))
-              ])))),
-    );
+addPurchasePaymentContent(String? id) {
+  Map states = {"loading": false};
+  return Container(
+    constraints: const BoxConstraints(maxWidth: 400),
+    child: StatefulBuilder(builder: (context, setState) {
+      // updateState(map) {
+      //   map is Map
+      //       ? setState(() {
+      //           states.addAll(map);
+      //         })
+      //       : null;
+      // }
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
+      return Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+              child: ListBody(children: [
+            TextInput(
+                onText: (d) => updateState({'amount': d}),
+                label: "Amount",
+                type: TextInputType.number,
+                error: states['error_q'] ?? '',
+                placeholder: ''),
+            Container(
+                height: 64,
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: Row(children: [
+                  Expanded(
+                      child: SizedBox(
+                          height: 40,
+                          child: OutlinedButton(
+                              onPressed: states['loading']
+                                  ? null
+                                  : () => _submitAddPurchasePayment(
+                                      id, states, updateState),
+                              child: Text(
+                                  states['loading'] ? "Waiting..." : "Submit.",
+                                  style: const TextStyle(fontSize: 16)))))
+                ])),
+            Text(states['error'] ?? '',
+                style: const TextStyle(color: Colors.red))
+          ])));
+    }),
+  );
+}
 
 _validateName(data) => data is String && data.isNotEmpty;
 
 _submitAddPurchasePayment(
   String? id,
   Map<dynamic, dynamic> states,
-  Function([Map? value]) updateState,
+  updateState,
 ) {
   updateState({'error': '', 'error_q': ''});
   if (!_validateName(states['amount'])) {

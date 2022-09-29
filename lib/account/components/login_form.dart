@@ -1,21 +1,25 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
-Widget _loginButton(states, updateState, context) => Container(
-    child: states['loading'] == true
-        ? Container(
+Widget _loginButton(states, updateState, context) =>
+    Container(
+        child: states['loading'] == true
+            ? Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8),
             child: const CircularProgressIndicator())
-        : Container(
+            : Container(
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             height: 48,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: ElevatedButton(
                 onPressed: () => _loginPressed(states, updateState, context),
                 child: const Text("Login",
@@ -28,13 +32,18 @@ Widget _registerButton(states, updateState, context) {
   return Container(
     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
     height: 48,
-    width: MediaQuery.of(context).size.width,
+    width: MediaQuery
+        .of(context)
+        .size
+        .width,
     child: OutlinedButton(
       onPressed: () => navigateTo('/account/register'),
       child: Text(
         "Open account for free.",
         style: TextStyle(
-            color: Theme.of(context).primaryColorDark,
+            color: Theme
+                .of(context)
+                .primaryColorDark,
             fontWeight: FontWeight.w500,
             fontSize: 16),
       ),
@@ -42,18 +51,20 @@ Widget _registerButton(states, updateState, context) {
   );
 }
 
-_iconContainer(String? svg) => Padding(
+_iconContainer(String? svg) =>
+    Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       child: Builder(
-        builder: (context) => SizedBox(
-          width: 70,
-          height: 70,
-          child: SvgPicture.asset(
-            'assets/svg/$svg',
-            width: 24,
-            fit: BoxFit.scaleDown,
-          ),
-        ),
+        builder: (context) =>
+            SizedBox(
+              width: 70,
+              height: 70,
+              child: SvgPicture.asset(
+                'assets/svg/$svg',
+                width: 24,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
       ),
     );
 
@@ -75,7 +86,9 @@ _resetAccount(context, states, updateState) {
             style: TextStyle(
                 fontWeight: FontWeight.w200,
                 fontSize: 14,
-                color: Theme.of(context).primaryColorDark),
+                color: Theme
+                    .of(context)
+                    .primaryColorDark),
           ),
         ),
       ],
@@ -83,22 +96,25 @@ _resetAccount(context, states, updateState) {
   );
 }
 
-final _formInitialState = {
-  'loading': false,
-  'reset_loading': false,
-  'username': '',
-  'password': '',
-  'show': false,
-  'e_u': '',
-  'e_p': ''
-};
-
 Widget loginForm() {
-  return ActiveComponent(
-    initialState: _formInitialState,
-    builder: (context, states, updateState) {
+  Map states = {
+    'loading': false,
+    'reset_loading': false,
+    'username': '',
+    'password': '',
+    'show': false,
+    'e_u': '',
+    'e_p': ''
+  };
+  return StatefulBuilder(
+    builder: (context, setState) {
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
       return SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
         child: Center(
           child: Container(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -134,18 +150,20 @@ _resetTapped(context, states, updateState) {
     accountResetPassword(username).then((value) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Info"),
-          content: Text('$value'),
-        ),
+        builder: (context) =>
+            AlertDialog(
+              title: const Text("Info"),
+              content: Text('$value'),
+            ),
       );
     }).catchError((error) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Error"),
-          content: Text('$error'),
-        ),
+        builder: (context) =>
+            AlertDialog(
+              title: const Text("Error"),
+              content: Text('$error'),
+            ),
       );
     }).whenComplete(() {
       updateState({'reset_loading': false});
@@ -179,8 +197,9 @@ _passwordInput(states, updateState) {
   return TextInput(
     label: "Password",
     initialText: states['password'],
-    onText: (x) => updateState(
-        {'password': x, 'e_p': x.isNotEmpty ? '' : 'Password required'}),
+    onText: (x) =>
+        updateState(
+            {'password': x, 'e_p': x.isNotEmpty ? '' : 'Password required'}),
     error: states['e_p'] ?? '',
     show: states['show'] == true,
     icon: IconButton(
@@ -197,8 +216,9 @@ _usernameInput(states, updateState) {
   return TextInput(
     label: "Username",
     initialText: states['username'],
-    onText: (x) => updateState(
-        {'username': x, 'e_u': x.isNotEmpty ? '' : 'Username required'}),
+    onText: (x) =>
+        updateState(
+            {'username': x, 'e_u': x.isNotEmpty ? '' : 'Username required'}),
     error: states['e_u'] ?? '',
   );
 }

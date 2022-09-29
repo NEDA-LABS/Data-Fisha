@@ -1,3 +1,4 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/text_input.dart';
@@ -6,22 +7,32 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_customer.dart';
 import 'package:smartstock/sales/services/cache_customer.dart';
 
-
-Widget createCustomerContent() => ActiveComponent(
-      initialState: const {"loading": false},
-      builder: (context, states, updateState) => Padding(
+Widget createCustomerContent() {
+  Map states = {"loading": false};
+  return StatefulBuilder(
+    builder: (context, setState) {
+      // updateState(map) {
+      //   map is Map
+      //       ? setState(() {
+      //           states.addAll(map);
+      //         })
+      //       : null;
+      // }
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
+      return Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: ListBody(children: [
             TextInput(
                 onText: (d) => updateState({'displayName': d}),
                 label: "Name",
-                error: states['error_d']??'',
+                error: states['error_d'] ?? '',
                 placeholder: ''),
             TextInput(
                 onText: (d) => updateState({'phone': d}),
                 label: "Phone",
-                error: states['error_p']??'',
+                error: states['error_p'] ?? '',
                 placeholder: '255XXXXXXXXX'),
             TextInput(
                 onText: (d) => updateState({'email': d}),
@@ -56,15 +67,16 @@ Widget createCustomerContent() => ActiveComponent(
             Text(states['error'] ?? '')
           ]),
         ),
-      ),
-    );
+      );
+    },
+  );
+}
 
 _validateName(data) => data is String && data.isNotEmpty;
 
 _validatePhone(data) => data is String && data.isNotEmpty;
 
-_createCustomer(
-    Map<dynamic, dynamic> states, Function([Map? value]) updateState) {
+_createCustomer(Map<dynamic, dynamic> states, updateState) {
   updateState({'error_d': '', 'error_p': ''});
   if (!_validateName(states['displayName'])) {
     updateState({'error_d': 'Name required'});

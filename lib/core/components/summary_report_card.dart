@@ -1,7 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/services/util.dart';
 
 _loading() => const Center(
@@ -24,8 +23,8 @@ _errorAndRetry(String err, state) => Padding(
       ),
     );
 
-_dataAndRefresh(data, String title, updateState){
-  return  Padding(
+_dataAndRefresh(data, String title, updateState) {
+  return Padding(
     padding: const EdgeInsets.all(10),
     child: Center(
       child: Column(
@@ -37,8 +36,7 @@ _dataAndRefresh(data, String title, updateState){
             padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
             child: Text(
               NumberFormat().format(doubleOrZero('$data')),
-              style:
-              const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
             ),
           ),
           Padding(
@@ -77,6 +75,14 @@ Widget Function(BuildContext context, AsyncSnapshot snapshot) _builder(
 Widget numberSummaryReportCard({
   required String title,
   required Future Function() future,
-}) =>
-    ActiveComponent(builder: (context,states, updateState) =>
-        FutureBuilder(builder: _builder(title, updateState), future: future()));
+}) {
+  return StatefulBuilder(builder: (context, setState) {
+    // updateState(map){
+    //   setState((){});
+    // }
+    var updateState =
+        ifDoElse((x) => x is Map, (x) => setState(() {}), (x) => null);
+    return FutureBuilder(
+        builder: _builder(title, updateState), future: future());
+  });
+}

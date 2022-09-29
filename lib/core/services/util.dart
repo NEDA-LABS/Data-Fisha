@@ -86,3 +86,5 @@ var doubleOrZero = compose([
   (x) => x.toStringAsFixed(5),
   (x) => (double.tryParse('$x') ?? 0)
 ]);
+
+var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
