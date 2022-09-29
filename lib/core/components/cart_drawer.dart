@@ -1,10 +1,9 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/active_component.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/core/services/cart.dart';
 
 Widget cartDrawer(
@@ -41,16 +40,24 @@ Widget cartDrawer(
       ]),
     );
 
-Widget _cartSummary(List carts, wholesale, context, onCheckout, onGetPrice) =>
-    ActiveComponent(
-      initialState: const {'discount': 0, 'loading': false},
-      builder: (context, states, updateState) => Card(
+Widget _cartSummary(List carts, wholesale, context, onCheckout, onGetPrice){
+  Map states = {'discount': 0, 'loading': false};
+  return StatefulBuilder(
+    builder: (context, setState){
+      // updateState(map){
+      //   map is Map ? setState((){
+      //     states.addAll(map);
+      //   }): null;
+      // }
+      var updateState = ifDoElse((x) => x is Map, (x) =>
+          setState(() => states.addAll(x)), (x) => null);
+      return Card(
         elevation: 5,
         child: Column(
           children: [
             _totalAmountRow(carts, wholesale, onGetPrice),
             _discountRow(states['discount'],
-                (v) => updateState({'discount': doubleOrZero(v)})),
+                    (v) => updateState({'discount': doubleOrZero(v)})),
             Container(
               margin: const EdgeInsets.all(8),
               height: 54,
@@ -60,12 +67,14 @@ Widget _cartSummary(List carts, wholesale, context, onCheckout, onGetPrice) =>
               child: states['loading']
                   ? _progressIndicator()
                   : _submitButton(carts, states['discount'], wholesale,
-                      onCheckout, updateState, onGetPrice),
+                  onCheckout, updateState, onGetPrice),
             )
           ],
         ),
-      ),
-    );
+      );
+    },
+  );
+}
 
 _submitButton(List carts, discount, bool wholesale, onCheckout, updateState,
         onGetPrice) =>

@@ -1,6 +1,6 @@
 {
-    "name": "smartstock_edge",
-    "short_name": "smartstock_edge",
+    "name": "SmartStock",
+    "short_name": "SmartStock",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
