@@ -18,13 +18,13 @@ responsiveBody({
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         showLeftDrawer
-            ? drawer(office, menus, current)
+            ? drawer(menus, current)
             : const SizedBox(width: 0),
         Expanded(child: onBody(null)),
         rightDrawer ?? const SizedBox(width: 0)
       ],
     ),
-    (_) => onBody(drawer(office, menus, current)),
+    (_) => onBody(drawer(menus, current)),
   );
   return Builder(builder: (context) => paneOrPlaneBody(context));
 }

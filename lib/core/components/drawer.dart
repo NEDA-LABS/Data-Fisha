@@ -1,28 +1,49 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
-drawer(String office, List<MenuModel> menus, String current) => Drawer(
-    width: 250,
-    backgroundColor: Colors.white,
-    child: modulesMenuContent(office, menus, current));
+drawer(List<MenuModel> menus, String current) {
+    return Drawer(
+      width: 250,
+      backgroundColor: Colors.white,
+      child: modulesMenuContent(menus, current),
+    );
+}
 
-modulesMenuContent(String name, List<MenuModel> menus, String current) =>
-    ListView(controller: ScrollController(), children: [
-      _header(name),
-      ...menus.map(_moduleMenuItems(current)).toList()
-    ]);
+modulesMenuContent(List<MenuModel> menus, String current) {
+  var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
+  var getOfficeLogo = compose([
+      propertyOr('logo', (p0) => 'https://bafkreiaitdtnqgwdrwvtfg2scoehxkaca2nfazn5cnvvp2gza46y6yqgme.ipfs.cf-ipfs.com/'),
+      propertyOr('ecommerce', (p0) => {})
+  ]);
+  return FutureBuilder(
+    initialData: const {},
+    future: getActiveShop(),
+    builder: (context, snapshot) {
+      return ListView(controller: ScrollController(), children: [
+        _header(getOfficeName(snapshot.data), getOfficeLogo(snapshot.data)),
+        ...menus.map(_moduleMenuItems(current)).toList()
+      ]);
+    },
+  );
+}
 
-Widget _header(String currentOffice) => Padding(
+Widget _header(String currentOffice, logoUrl) {
+  return Padding(
     padding: const EdgeInsets.all(24),
     child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _officeName(currentOffice),
-          _officeLogo(''),
-          _changeOfficeTextButton()
-        ]));
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _officeName(currentOffice),
+        _officeLogo(logoUrl),
+        _changeOfficeTextButton()
+      ],
+    ),
+  );
+}
 
 Widget _officeName(String name) => Builder(
     builder: (context) => Padding(
@@ -33,30 +54,44 @@ Widget _officeName(String name) => Builder(
                 fontSize: 12,
                 color: Theme.of(context).primaryColor))));
 
-Widget _officeLogo(String url) => Padding(
+Widget _officeLogo(String url) {
+  return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Builder(
-        builder: (context) => Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).primaryColor))));
+      builder: (context) => Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(80),
+            color: Theme.of(context).primaryColor),
+        child: Image.network(url),
+      ),
+    ),
+  );
+}
 
-Widget _changeOfficeTextButton() => Builder(
+Widget _changeOfficeTextButton() {
+  return Builder(
     builder: (context) => Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: TextButton(
-            onPressed: () => navigateTo('/shop'),
-            child: Text(
-              'Change Office',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).primaryColor),
-            ))));
+      padding: const EdgeInsets.all(10.0),
+      child: TextButton(
+        onPressed: () => navigateTo('/account/shop'),
+        child: Text(
+          'Change Office',
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).primaryColor),
+        ),
+      ),
+    ),
+  );
+}
 
-_moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
+_moduleMenuItems(String current) {
+  return (MenuModel item) {
+    return ExpansionTile(
+        leading: item.icon,
         title: Text(
           item.name,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -70,16 +105,24 @@ _moduleMenuItems(String current) => (MenuModel item) => ExpansionTile(
               onClick: () {})),
           ...item.pages.map(_subMenuItem).toList()
         ]);
+  };
+}
 
-Widget _subMenuItem(SubMenuModule item) => InkWell(
+Widget _subMenuItem(SubMenuModule item) {
+  return InkWell(
     onTap: () => navigateTo(item.link),
     child: ListTile(
-        dense: true,
-        title: Text('        ${item.name}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-            ))));
+      dense: true,
+      title: Text(
+        '        ${item.name}',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.left,
+        style: const TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+        ),
+      ),
+    ),
+  );
+}

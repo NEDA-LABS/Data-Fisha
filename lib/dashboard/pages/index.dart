@@ -25,6 +25,6 @@ class DashboardIndexPage extends StatelessWidget {
                             children: [
                               // stocksSummary()
                             ])))),
-            bottomNavigationBar: bottomBar(1, moduleMenus(), context)),
+            bottomNavigationBar: bottomBar(0, moduleMenus(), context)),
       );
 }

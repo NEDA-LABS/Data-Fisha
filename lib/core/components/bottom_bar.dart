@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/drawer.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -16,7 +17,7 @@ Widget? bottomBar(
             onTap: (index) => _handleClick(index, context, menus),
             items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.home), label: 'Dashboard'),
+                    icon: Icon(Icons.dashboard), label: 'Dashboard'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.point_of_sale), label: 'Sales'),
                 BottomNavigationBarItem(
@@ -28,7 +29,7 @@ Widget? bottomBar(
 _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
   switch (index) {
     case 0:
-      // navigateTo('/sales/');
+      navigateTo('/dashboard/');
       break;
     case 1:
       navigateTo('/sales/');
@@ -37,8 +38,12 @@ _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
       navigateTo('/stock/');
       break;
     case 3:
-      showModalBottomSheet(
-          context: context,
-          builder: (_) => modulesMenuContent('Menu', menus, ''));
+      fullScreeDialog(context, (p0) => Scaffold(
+        appBar: AppBar(title: const Text('Navigation'),),
+        body: modulesMenuContent(menus, ''),
+      ));
+      // showModalBottomSheet(
+      //     context: context,
+      //     builder: (_) => modulesMenuContent(menus, ''));
   }
 }

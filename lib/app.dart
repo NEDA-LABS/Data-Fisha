@@ -3,6 +3,7 @@ import 'package:smartstock/account/account.dart';
 import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
+import 'package:smartstock/dashboard/services/navigation.dart';
 import 'package:smartstock/sales/sales.dart';
 import 'package:smartstock/sales/services/navigation.dart';
 import 'package:smartstock/stocks/services/navigation.dart';
@@ -23,4 +24,10 @@ class AppModule extends Module {
   List<Bind> get binds => [];
 }
 
-List<MenuModel> moduleMenus() => [salesMenu(), stocksMenu()];
+List<MenuModel> moduleMenus(){
+  return [
+    dashboardMenu(),
+    salesMenu(),
+    stocksMenu(),
+  ];
+}
