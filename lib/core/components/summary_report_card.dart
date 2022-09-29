@@ -1,6 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class DashboardSummaryReportCard extends StatefulWidget {
@@ -90,16 +91,26 @@ class _State extends State<DashboardSummaryReportCard> {
   Widget Function(BuildContext context, AsyncSnapshot snapshot) _builder(
     String title,
     updateState,
-  ) =>
-      (BuildContext context, AsyncSnapshot snapshot) {
-        var builder = ifDoElse(
-          (x) => snapshot.connectionState == ConnectionState.waiting,
-          (x) => _loading(),
-          _showErrorOrContent(title, updateState),
-        );
-        return Container(
-          constraints: const BoxConstraints(maxWidth: 390, minHeight: 150),
-          child: Card(child: builder(snapshot)),
-        );
-      };
+  ){
+    return (BuildContext context, AsyncSnapshot snapshot) {
+      var builder = ifDoElse(
+            (x) => snapshot.connectionState == ConnectionState.waiting,
+            (x) => _loading(),
+        _showErrorOrContent(title, updateState),
+      );
+      return Container(
+        constraints: const BoxConstraints(maxWidth: 390, minHeight: 150),
+        child: Column(
+          children: [
+            Card(child: builder(snapshot)),
+            horizontalLine(),
+            const SizedBox(
+              height: 48,
+              child: Text('Links'),
+            )
+          ],
+        ),
+      );
+    };
+  }
 }
