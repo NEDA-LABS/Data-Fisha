@@ -4,7 +4,6 @@ import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/summary_report_card.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/services/api_dashboard.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
@@ -19,9 +18,12 @@ class _State extends State<DashboardSummary> {
 
   // String stringDate = '';
   DateTime date = DateTime.now();
+  var data = {};
+  var error = '';
 
   @override
   void initState() {
+    _fetchData();
     // stringDate = _getToday(DateTime.now());
     super.initState();
   }
@@ -37,50 +39,97 @@ class _State extends State<DashboardSummary> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: horizontalLine(),
         ),
-        _reports()
+        loading
+            ? const SizedBox(
+                height: 100,
+                child: Center(
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              )
+            : error.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(error),
+                        OutlinedButton(
+                            onPressed: () => setState(()=>_fetchData()),
+                            child: const Text('Retry'))
+                      ],
+                    ),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _reportTitle('Profit & Loss'),
+                      _profitAndLoss(data),
+                      _reportTitle('Cash sales'),
+                      _sales(data),
+                      _reportTitle('Invoice sales'),
+                      _invoices(data),
+                      _reportTitle('Expenditure'),
+                      _expenditure(data),
+                    ],
+                  ),
+        // _reports()
       ],
     );
   }
 
-  _reports() {
-    return FutureBuilder(
-      // initialData: const {},
-      future: prepareGetDashboardData(date),
-      builder: (context, snapshot) {
-        // print(snapshot.data);
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            height: 100,
-            child: Center(
-              child: SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        }
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _reportTitle('Profit & Loss'),
-            _profitAndLoss(snapshot.data),
-            _reportTitle('Cash sales'),
-            _sales(snapshot.data),
-            _reportTitle('Invoice sales'),
-            _invoices(snapshot.data),
-            _reportTitle('Expenditure'),
-            _expenditure(snapshot.data),
-          ],
-        );
-      },
-    );
-  }
+  // _reports() {
+  //   return FutureBuilder(
+  //     // initialData: const {},
+  //     future: ,
+  //     builder: (context, snapshot) {
+  //       // print(snapshot.data);
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return ;
+  //       }
+  //       if (snapshot.hasError) {
+  //         Padding(
+  //           padding: const EdgeInsets.all(10),
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text('${snapshot.error}'),
+  //               OutlinedButton(
+  //                   onPressed: () => setState(() {}),
+  //                   child: const Text('Retry'))
+  //             ],
+  //           ),
+  //         );
+  //       }
+  //       return Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: [
+  //           _reportTitle('Profit & Loss'),
+  //           _profitAndLoss(snapshot.data),
+  //           _reportTitle('Cash sales'),
+  //           _sales(snapshot.data),
+  //           _reportTitle('Invoice sales'),
+  //           _invoices(snapshot.data),
+  //           _reportTitle('Expenditure'),
+  //           _expenditure(snapshot.data),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   _profitAndLoss(data) {
-    Future getSales() async => data is Map ? data['profit'] : 0;
-    Future getMargin() async => data is Map ? data['margin'] : 0;
+    Future getSales() async => data is Map ? doubleOrZero(data['profit']) : 0;
+    Future getMargin() async => data is Map ? doubleOrZero(data['margin']) : 0;
     return Wrap(
       children: [
         DashboardSummaryReportCard(
@@ -89,7 +138,7 @@ class _State extends State<DashboardSummary> {
           showRefresh: false,
         ),
         DashboardSummaryReportCard(
-          title: 'Gross margin',
+          title: 'Gross margin ( % )',
           future: getMargin,
           showRefresh: false,
         )
@@ -98,8 +147,9 @@ class _State extends State<DashboardSummary> {
   }
 
   _sales(data) {
-    Future getSales() async => data is Map ? data['sales_cash'] : 0;
-    Future items() async => data is Map ? data['items_cash'] : 0;
+    Future getSales() async =>
+        data is Map ? doubleOrZero(data['sales_cash']) : 0;
+    Future items() async => data is Map ? doubleOrZero(data['items_cash']) : 0;
     return Wrap(
       children: [
         DashboardSummaryReportCard(
@@ -117,8 +167,10 @@ class _State extends State<DashboardSummary> {
   }
 
   _invoices(data) {
-    Future getSales() async => data is Map ? data['sales_invoice'] : 0;
-    Future items() async => data is Map ? data['items_invoice'] : 0;
+    Future getSales() async =>
+        data is Map ? doubleOrZero(data['sales_invoice']) : 0;
+    Future items() async =>
+        data is Map ? doubleOrZero(data['items_invoice']) : 0;
     return Wrap(
       children: [
         DashboardSummaryReportCard(
@@ -137,9 +189,9 @@ class _State extends State<DashboardSummary> {
 
   _expenditure(data) {
     Future getSales() async => data is Map
-        ? doubleOrZero(data['cogs_cash']) + doubleOrZero(data['cogs_invoice'])
+        ? (doubleOrZero(data['cogs_cash']) + doubleOrZero(data['cogs_invoice']))
         : 0;
-    Future items() async => data is Map ? data['expense'] : 0;
+    Future items() async => data is Map ? doubleOrZero(data['expense']) : 0;
     return Wrap(
       children: [
         DashboardSummaryReportCard(
@@ -186,15 +238,19 @@ class _State extends State<DashboardSummary> {
               onPressed: () {
                 showDatePicker(
                   context: context,
-                  initialDate: DateTime.now(),
+                  initialDate: date,
                   firstDate: DateTime(2021),
                   lastDate: DateTime.now(),
                 ).then((value) {
-                  value != null
-                      ? setState(() {
-                          date = value;
-                        })
-                      : null;
+                  if (value != null) {
+                    date = value;
+                    _fetchData();
+                  }
+                  // value != null
+                  //     ? setState(() {
+                  //
+                  //       })
+                  //     : null;
                 });
               },
               title: 'Change'),
@@ -206,5 +262,25 @@ class _State extends State<DashboardSummary> {
   String _getToday(DateTime date) {
     var dateFormat = DateFormat(DateFormat.YEAR_MONTH_WEEKDAY_DAY);
     return dateFormat.format(date);
+  }
+
+  void _fetchData() {
+    setState(() {
+      loading = true;
+      error = '';
+    });
+    prepareGetDashboardData(date).then((value) {
+      setState(() {
+        data = value;
+      });
+    }).catchError((onError) {
+      setState(() {
+        error = '$onError';
+      });
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 }

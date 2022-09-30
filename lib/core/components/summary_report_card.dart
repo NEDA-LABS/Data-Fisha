@@ -58,7 +58,7 @@ class _State extends State<DashboardSummaryReportCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(err),
-            OutlinedButton(onPressed: () => state(), child: const Text('Retry'))
+            OutlinedButton(onPressed: () => state({}), child: const Text('Retry'))
           ],
         ),
       );
