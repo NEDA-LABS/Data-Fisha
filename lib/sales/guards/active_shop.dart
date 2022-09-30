@@ -4,7 +4,7 @@ import 'package:smartstock/core/services/cache_user.dart';
 
 class ActiveShopGuard extends RouteGuard {
   @override
-  String get redirectTo => '/';
+  String get redirectTo => '/account/shop';
 
   @override
   Future<bool> canActivate(String path, ParallelRoute route) async {

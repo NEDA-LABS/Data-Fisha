@@ -96,7 +96,7 @@ class _State extends State<LoginForm> {
     }
     updateState({'loading': true});
     accountLogin(username, password)
-        .then((value) => navigateToAndReplace('/shop'))
+        .then((value) => navigateToAndReplace('/account/shop'))
         .catchError((error) {
       showDialog(
           context: context,
