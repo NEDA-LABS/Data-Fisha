@@ -4,6 +4,7 @@ import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/summary_report_card.dart';
 import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/dashboard/components/dashboard_summary.dart';
 import 'package:smartstock/stocks/services/stocks_report.dart';
 
 class DashboardIndexPage extends StatelessWidget {
@@ -23,20 +24,7 @@ class DashboardIndexPage extends StatelessWidget {
           child: Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 790),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Profit & Loss'),
-                  _profitAndLoss(),
-                  const Text('Cash sales'),
-                  _cashSales(),
-                  const Text('Invoices sales'),
-                  _invoiceSales(),
-                  const Text('Expenditure'),
-                  _expenditures(),
-                ],
-              ),
+              child: const DashboardSummary(),
             ),
           ),
         ),
@@ -44,37 +32,4 @@ class DashboardIndexPage extends StatelessWidget {
       ),
     );
   }
-
-_profitAndLoss() {
-  return Wrap(
-    children: const [
-      DashboardSummaryReportCard(
-        title: 'Items',
-        future: getTotalPositiveItems,
-      ),
-      DashboardSummaryReportCard(
-        title: 'Items purchase value ( Tsh )',
-        future: getItemsValue,
-      )
-    ],
-  );
-}
-
-_cashSales() {
-  return Wrap(
-    children: const [],
-  );
-}
-
-_invoiceSales() {
-  return Wrap(
-    children: const [],
-  );
-}
-
-_expenditures() {
-  return Wrap(
-    children: const [],
-  );
-}
 }

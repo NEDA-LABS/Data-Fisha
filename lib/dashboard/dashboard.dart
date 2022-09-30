@@ -6,7 +6,6 @@ import 'package:smartstock/sales/guards/active_shop.dart';
 class DashboardModule extends Module {
   final home = ChildRoute(
     '/',
-    guards: [AuthGuard(),ActiveShopGuard()],
     child: (_, __) => const DashboardIndexPage(),
   );
 

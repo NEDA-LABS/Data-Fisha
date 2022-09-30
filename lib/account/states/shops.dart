@@ -40,7 +40,7 @@ class ChooseShopState extends ChangeNotifier {
       notifyListeners();
       await saveShopId(projectId);
       await saveActiveShop(shop);
-      navigateTo('/sales/');
+      navigateTo('/dashboard/');
       getShops();
     } catch (e) {
       getShops();
