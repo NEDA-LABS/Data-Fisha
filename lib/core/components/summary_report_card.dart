@@ -14,7 +14,7 @@ class DashboardSummaryReportCard extends StatefulWidget {
     required this.title,
     required this.future,
     this.link,
-    this.showRefresh = false,
+    this.showRefresh = true,
     Key? key,
   }) : super(key: key);
 
@@ -58,7 +58,7 @@ class _State extends State<DashboardSummaryReportCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(err),
-            OutlinedButton(onPressed: () => state(), child: const Text('Retry'))
+            OutlinedButton(onPressed: () => state({}), child: const Text('Retry'))
           ],
         ),
       );
@@ -84,7 +84,7 @@ class _State extends State<DashboardSummaryReportCard> {
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                     child: OutlinedButton(
-                        onPressed: () => updateState(),
+                        onPressed: () => updateState({}),
                         child: const Text('Refresh')),
                   )
                 : Container()

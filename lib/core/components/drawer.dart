@@ -7,7 +7,7 @@ import 'package:smartstock/core/services/util.dart';
 drawer(List<MenuModel> menus, String current) {
     return Drawer(
       width: 250,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       child: modulesMenuContent(menus, current),
     );
 }
@@ -114,7 +114,7 @@ Widget _subMenuItem(SubMenuModule item) {
     child: ListTile(
       dense: true,
       title: Text(
-        '        ${item.name}',
+        '               ${item.name}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.left,

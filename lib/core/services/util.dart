@@ -71,15 +71,15 @@ and(List<Function> fns) => fns.fold(true, (dynamic a, b) => a && b() == true);
 propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
     (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);
 
-isNativeMobilePlatform() =>
-    !kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);
+isNativeMobilePlatform() => false;
+    // !kIsWeb &&
+    // (defaultTargetPlatform == TargetPlatform.iOS ||
+    //     defaultTargetPlatform == TargetPlatform.android);
 
-isWebMobilePlatform() =>
-    kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);
+isWebMobilePlatform() => true;
+    // kIsWeb &&
+    // (defaultTargetPlatform == TargetPlatform.iOS ||
+    //     defaultTargetPlatform == TargetPlatform.android);
 
 var doubleOrZero = compose([
   (x) => (double.tryParse('$x') ?? 0),

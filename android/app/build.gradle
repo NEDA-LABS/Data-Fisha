@@ -58,11 +58,11 @@ android {
 //            keyPassword '@Joshua&5715'
 //        }
         release {
-            signingConfigs.debug
-//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-//            storePassword '@Joshua&5715'
-//            keyAlias 'newkey'
-//            keyPassword '@Joshua&5715'
+//            signingConfigs.debug
+            storeFile file("/Users/josh/Desktop/fahamutech.jks")
+            storePassword '@Joshua&5715'
+            keyAlias 'newkey'
+            keyPassword '@Joshua&5715'
         }
     }
     buildTypes {
