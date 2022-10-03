@@ -15,8 +15,6 @@ class DashboardSummary extends StatefulWidget {
 
 class _State extends State<DashboardSummary> {
   bool loading = false;
-
-  // String stringDate = '';
   DateTime date = DateTime.now();
   var data = {};
   var error = '';
@@ -24,7 +22,6 @@ class _State extends State<DashboardSummary> {
   @override
   void initState() {
     _fetchData();
-    // stringDate = _getToday(DateTime.now());
     super.initState();
   }
 
@@ -60,7 +57,7 @@ class _State extends State<DashboardSummary> {
                       children: [
                         Text(error),
                         OutlinedButton(
-                            onPressed: () => setState(()=>_fetchData()),
+                            onPressed: () => setState(() => _fetchData()),
                             child: const Text('Retry'))
                       ],
                     ),
@@ -83,49 +80,6 @@ class _State extends State<DashboardSummary> {
       ],
     );
   }
-
-  // _reports() {
-  //   return FutureBuilder(
-  //     // initialData: const {},
-  //     future: ,
-  //     builder: (context, snapshot) {
-  //       // print(snapshot.data);
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return ;
-  //       }
-  //       if (snapshot.hasError) {
-  //         Padding(
-  //           padding: const EdgeInsets.all(10),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Text('${snapshot.error}'),
-  //               OutlinedButton(
-  //                   onPressed: () => setState(() {}),
-  //                   child: const Text('Retry'))
-  //             ],
-  //           ),
-  //         );
-  //       }
-  //       return Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         crossAxisAlignment: CrossAxisAlignment.stretch,
-  //         children: [
-  //           _reportTitle('Profit & Loss'),
-  //           _profitAndLoss(snapshot.data),
-  //           _reportTitle('Cash sales'),
-  //           _sales(snapshot.data),
-  //           _reportTitle('Invoice sales'),
-  //           _invoices(snapshot.data),
-  //           _reportTitle('Expenditure'),
-  //           _expenditure(snapshot.data),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   _profitAndLoss(data) {
     Future getSales() async => data is Map ? doubleOrZero(data['profit']) : 0;
@@ -228,32 +182,29 @@ class _State extends State<DashboardSummary> {
             child: Text(
               _getToday(date),
               style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+              ),
             ),
           ),
           // outlineButton(title: "Date", onPressed: () {}),
           outlineButton(
-              onPressed: () {
-                showDatePicker(
-                  context: context,
-                  initialDate: date,
-                  firstDate: DateTime(2021),
-                  lastDate: DateTime.now(),
-                ).then((value) {
-                  if (value != null) {
-                    date = value;
-                    _fetchData();
-                  }
-                  // value != null
-                  //     ? setState(() {
-                  //
-                  //       })
-                  //     : null;
-                });
-              },
-              title: 'Change'),
+            onPressed: () {
+              showDatePicker(
+                context: context,
+                initialDate: date,
+                firstDate: DateTime(2021),
+                lastDate: DateTime.now(),
+              ).then((value) {
+                if (value != null) {
+                  date = value;
+                  _fetchData();
+                }
+              });
+            },
+            title: 'Change',
+          ),
         ],
       ),
     );

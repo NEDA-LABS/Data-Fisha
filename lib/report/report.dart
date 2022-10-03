@@ -3,7 +3,7 @@ import 'package:smartstock/report/pages/daily_cash_sales.dart';
 import 'package:smartstock/report/pages/index.dart';
 
 class ReportModule extends Module {
-  final home = ChildRoute('/', child: (_, __) => const DailyCashSales());
+  final home = ChildRoute('/', child: (_, __) => const ReportIndexPage());
   final dailyCashSales = ChildRoute('/sales/overview/cash/day',
       child: (_, __) => const DailyCashSales());
   final monthlyCashSales = ChildRoute('/sales/overview/cash/month',

@@ -3,9 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/button.dart';
 
 class ReportDateRange extends StatefulWidget {
-  final Function(DateTimeRange) onRange;
-  final Function(DateTimeRange) onExport;
-  const ReportDateRange({Key? key, required this.onRange, required this.onExport}) : super(key: key);
+  final Function(DateTimeRange?) onRange;
+  final Function(DateTimeRange?) onExport;
+  final DateTimeRange dateRange;
+
+  const ReportDateRange({
+    Key? key,
+    required this.onRange,
+    required this.onExport,
+    required this.dateRange,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -14,7 +21,13 @@ class ReportDateRange extends StatefulWidget {
 class _State extends State<ReportDateRange> {
   var error = '';
   var loading = false;
-  var date = DateTimeRange(start: DateTime.now().subtract(const Duration(days: 7)), end: DateTime.now());
+  DateTimeRange? date;
+
+  @override
+  void initState() {
+    date = widget.dateRange;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +46,7 @@ class _State extends State<ReportDateRange> {
             ),
           ),
           outlineButton(onPressed: _chooseDateRange, title: 'Change'),
-          outlineButton(onPressed: _exportData, title: 'Export'),
+          // outlineButton(onPressed: _exportData, title: 'Export'),
         ],
       ),
     );
@@ -55,7 +68,8 @@ class _State extends State<ReportDateRange> {
     });
   }
 
-  String _getToday(DateTimeRange date) {
+  String _getToday(DateTimeRange? date) {
+    if(date == null) return '';
     var startDate = date.start;
     var endDate = date.end;
     var dateFormat = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
