@@ -59,7 +59,7 @@ class _State extends State<ReportDateRange> {
       // initialDate: date,
       initialDateRange: date,
       initialEntryMode: DatePickerEntryMode.calendarOnly,
-      firstDate: DateTime(2021),
+      firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     ).then((value) {
       if (value != null) {
