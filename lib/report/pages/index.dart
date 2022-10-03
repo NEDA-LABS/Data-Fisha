@@ -14,7 +14,7 @@ class ReportIndexPage extends StatelessWidget {
   @override
   Widget build(context) => responsiveBody(
       office: 'Menu',
-      current: '/sales/',
+      current: '/report/',
       menus: moduleMenus(),
       onBody: (x) => Scaffold(
         appBar: StockAppBar(title: "Report", showBack: false),

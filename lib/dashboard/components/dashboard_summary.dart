@@ -260,7 +260,7 @@ class _State extends State<DashboardSummary> {
   }
 
   String _getToday(DateTime date) {
-    var dateFormat = DateFormat(DateFormat.YEAR_MONTH_WEEKDAY_DAY);
+    var dateFormat = DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY);
     return dateFormat.format(date);
   }
 

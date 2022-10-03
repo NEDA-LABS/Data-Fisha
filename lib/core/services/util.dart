@@ -1,7 +1,6 @@
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:builders/builders.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -88,3 +87,5 @@ var doubleOrZero = compose([
 ]);
 
 var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
+
+var maximumBodyWidth = 790.0;
