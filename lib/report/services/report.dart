@@ -38,3 +38,21 @@ Future getYearlyInvoiceSalesOverview(DateTimeRange range) async {
   var getDailySales = prepareGetOverviewInvoiceSales(shop, 'year');
   return getDailySales(range);
 }
+
+Future getCategoryPerformance(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetPerformanceReport(shop, 'category');
+  return getDailySales(range);
+}
+
+Future getSellerPerformance(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetPerformanceReport(shop, 'seller');
+  return getDailySales(range);
+}
+
+Future getProductPerformance(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetPerformanceReport(shop, 'product');
+  return getDailySales(range);
+}

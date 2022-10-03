@@ -1,9 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/report/pages/category_performance.dart';
 import 'package:smartstock/report/pages/daily_cash_sales.dart';
 import 'package:smartstock/report/pages/daily_invoice_sales.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/report/pages/monthly_cash_sales.dart';
 import 'package:smartstock/report/pages/monthly_invoice_sales.dart';
+import 'package:smartstock/report/pages/product_performance.dart';
+import 'package:smartstock/report/pages/seller_performance.dart';
 import 'package:smartstock/report/pages/yearly_cash_sales.dart';
 import 'package:smartstock/report/pages/yearly_invoice_sales.dart';
 
@@ -21,14 +24,14 @@ class ReportModule extends Module {
       child: (_, __) => const MonthlyInvoiceSales());
   final yearlyInvoiceSales = ChildRoute('/sales/overview/invoice/year',
       child: (_, __) => const YearlyInvoiceSales());
-  final cashSaleTracking = ChildRoute('/sales/track/cash',
-      child: (_, __) => const ReportIndexPage());
+  // final cashSaleTracking = ChildRoute('/sales/track/cash',
+  //     child: (_, __) => const ReportIndexPage());
   final productPerformance = ChildRoute('/sales/performance/product',
-      child: (_, __) => const ReportIndexPage());
+      child: (_, __) => const ProductPerformance());
   final categoryPerformance = ChildRoute('/sales/performance/category',
-      child: (_, __) => const ReportIndexPage());
+      child: (_, __) => const CategoryPerformance());
   final sellerPerformance = ChildRoute('/sales/performance/seller',
-      child: (_, __) => const ReportIndexPage());
+      child: (_, __) => const SellerPerformance());
 
   @override
   List<ChildRoute> get routes => [
@@ -39,7 +42,7 @@ class ReportModule extends Module {
         dailyInvoiceSales,
         monthlyInvoiceSales,
         yearlyInvoiceSales,
-        cashSaleTracking,
+        // cashSaleTracking,
         productPerformance,
         categoryPerformance,
         sellerPerformance

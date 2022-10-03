@@ -36,3 +36,18 @@ prepareGetOverviewInvoiceSales(shop, type) {
     return await execute(shop);
   };
 }
+
+prepareGetPerformanceReport(shop, type) {
+  return (DateTimeRange range) async {
+    var from = toSqlDate(range.start);
+    var to = toSqlDate(range.end);
+    var execute = composeAsync([
+      itOrEmptyArray,
+          (RawResponse items) => jsonDecode(items.body),
+          (app) => getRequest(
+          '${shopFunctionsURL(app)}/report/sales/performance/$type?from=$from&to=$to'),
+      shopToApp,
+    ]);
+    return await execute(shop);
+  };
+}
