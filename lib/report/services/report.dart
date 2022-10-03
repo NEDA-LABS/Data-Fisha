@@ -20,3 +20,21 @@ Future getYearlySalesOverview(DateTimeRange range) async {
   var getMonthlySales = prepareGetOverviewCashSales(shop, 'year');
   return getMonthlySales(range);
 }
+
+Future getDailyInvoiceSalesOverview(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'day');
+  return getDailySales(range);
+}
+
+Future getMonthlyInvoiceSalesOverview(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'month');
+  return getDailySales(range);
+}
+
+Future getYearlyInvoiceSalesOverview(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'year');
+  return getDailySales(range);
+}
