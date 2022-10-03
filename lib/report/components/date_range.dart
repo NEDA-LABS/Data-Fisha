@@ -40,9 +40,10 @@ class _State extends State<ReportDateRange> {
             child: Text(
               _getToday(date),
               style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+              ),
             ),
           ),
           outlineButton(onPressed: _chooseDateRange, title: 'Change'),
@@ -56,6 +57,8 @@ class _State extends State<ReportDateRange> {
     showDateRangePicker(
       context: context,
       // initialDate: date,
+      initialDateRange: date,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       firstDate: DateTime(2021),
       lastDate: DateTime.now(),
     ).then((value) {
@@ -69,7 +72,7 @@ class _State extends State<ReportDateRange> {
   }
 
   String _getToday(DateTimeRange? date) {
-    if(date == null) return '';
+    if (date == null) return '';
     var startDate = date.start;
     var endDate = date.end;
     var dateFormat = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);

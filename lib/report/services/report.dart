@@ -8,3 +8,9 @@ Future getDailySalesOverview(DateTimeRange range) async {
   var getDailySales = prepareGetDailyCashSales(shop);
   return getDailySales(range);
 }
+
+Future getMonthlySalesOverview(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getMonthlySales = prepareGetMonthlyCashSales(shop);
+  return getMonthlySales(range);
+}
