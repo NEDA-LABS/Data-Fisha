@@ -35,6 +35,9 @@ class StockAppBar extends PreferredSize with Disposable {
 
   @override
   AppBar build(BuildContext context) => AppBar(
+          // centerTitle: false,
+          // foregroundColor: Colors.black,
+          // backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(title, overflow: TextOverflow.ellipsis),
           bottom: showSearch

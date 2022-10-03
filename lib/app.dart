@@ -4,6 +4,8 @@ import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/services/navigation.dart';
+import 'package:smartstock/report/report.dart';
+import 'package:smartstock/report/services/navigation.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 import 'package:smartstock/sales/sales.dart';
 import 'package:smartstock/sales/services/navigation.dart';
@@ -24,6 +26,11 @@ class AppModule extends Module {
           guards: [AuthGuard(), ActiveShopGuard()],
           module: DashboardModule(),
         ),
+        ModuleRoute(
+          '/report/',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          module: ReportModule(),
+        ),
         ModuleRoute('/sales/', guards: [AuthGuard()], module: SalesModule()),
         ModuleRoute('/stock/', guards: [AuthGuard()], module: StockModule()),
       ];
@@ -35,6 +42,7 @@ class AppModule extends Module {
 List<MenuModel> moduleMenus() {
   return [
     dashboardMenu(),
+    reportMenu(),
     salesMenu(),
     stocksMenu(),
   ];

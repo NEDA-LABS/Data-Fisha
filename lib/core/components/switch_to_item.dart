@@ -21,18 +21,21 @@ _iconContainer(String? svg) => Padding(
       ),
     );
 
-_name(String name) => Padding(
-    padding: const EdgeInsets.all(5),
-    child: Text(
-      name,
-      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-    ));
+_name(String name) => Container(
+      padding: const EdgeInsets.all(5),
+      width: 75,
+      child: Text(
+        name,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+      ),
+    );
 
 Widget _switchToItem(SubMenuModule menu) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
       child: GestureDetector(
         onTap: () => navigateTo(menu.link),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [_iconContainer(menu.svgName), _name(menu.name)],
         ),
       ),
