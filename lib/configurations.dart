@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 // const primaryColor = Color(0xffffd200);
 
 // blue 0xff0049a9
-
+var primaryBaseColorValue = const Color(0xff061563);
+var primaryBaseLightColor = const Color(0x1a367ce5);
 MaterialColor getSmartStockMaterialColorSwatch() {
-  Color color = const Color(0xff0049a9);
+  Color color = primaryBaseColorValue;
   List strengths = <double>[.05];
   Map<int, Color> swatch = <int, Color>{};
   final int r = color.red, g = color.green, b = color.blue;

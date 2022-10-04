@@ -57,7 +57,7 @@ class _State extends State<ProductPerformance> {
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );
       },
     );

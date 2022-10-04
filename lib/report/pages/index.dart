@@ -36,6 +36,6 @@ class ReportIndexPage extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+        bottomNavigationBar: bottomBar(3, moduleMenus(), context),
       ));
 }

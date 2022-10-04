@@ -19,12 +19,12 @@ productDetail(Map item, context) => Padding(
       SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: [
-            outlineButton(
+            outlineActionButton(
                 onPressed: () => navigator().maybePop().whenComplete(() =>
                     navigator()
                         .pushNamed('/stock/products/edit', arguments: item)),
                 title: 'Edit details'),
-            outlineButton(
+            outlineActionButton(
                 onPressed: () {
                   navigator().maybePop().whenComplete(() => showDialog(
                       context: context,
@@ -36,12 +36,12 @@ productDetail(Map item, context) => Padding(
                                   product: item['product'])))));
                 },
                 title: 'Offset quantity'),
-            outlineButton(
+            outlineActionButton(
                 onPressed: () => navigator().maybePop().whenComplete(() =>
                     showDialogOrModalSheet(
                         ProductMovementDetails(item: item), context)),
                 title: 'Track movement'),
-            outlineButton(
+            outlineActionButton(
                 onPressed: () {
                   navigator().maybePop().whenComplete(() {
                     showDialog(

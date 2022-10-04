@@ -4,7 +4,7 @@ import 'package:smartstock/configurations.dart';
 const _userTable = 'user';
 const _userId = 'current';
 
-getLocalCurrentUser() async {
+Future getLocalCurrentUser() async {
   var getUser = CacheFactory().prepareGetData(smartstockApp, _userTable);
   return getUser(_userId);
 }

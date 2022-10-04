@@ -5,7 +5,10 @@ import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart';
 
-_parse(x) => RawResponse(body: x.body, statusCode: x.statusCode);
+_parse(x){
+  // print(x.statusCode);
+  return RawResponse(body: x.body, statusCode: x.statusCode);
+}
 
 preparePutRequest(body) {
   request(url) =>
