@@ -36,36 +36,30 @@ class _State extends State<UsersPage> {
         current: '/account/',
         onBody: (d) => Scaffold(
           appBar: _appBar(context),
-          body: Container(
-            // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            // constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _loading(loading),
-                tableContextMenu(_contextItems()),
-                _tableHeader(),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TableLikeList(
-                      onFuture: () async => users,
-                      keys: _fields(),
-                      onItemPressed: (item) {
-                        showDialogOrModalSheet(
-                            shopUserDetail(item, context), context);
-                      },
-                      // onCell: (key, data, c) {
-                      //   if (key == 'product') return Text('$data');
-                      //   return Text('${doubleOrZero(data)}');
-                      // },
-                    ),
-                  ),
-                )
-                // _tableFooter()
-              ],
-            ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _loading(loading),
+              tableContextMenu(_contextItems()),
+              _tableHeader(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TableLikeList(
+                  onFuture: () async => users,
+                  keys: _fields(),
+                  onItemPressed: (item) {
+                    showDialogOrModalSheet(
+                        shopUserDetail(item, context), context);
+                  },
+                  // onCell: (key, data, c) {
+                  //   if (key == 'product') return Text('$data');
+                  //   return Text('${doubleOrZero(data)}');
+                  // },
+                ),
+              )
+              // _tableFooter()
+            ],
           ),
         ),
       );

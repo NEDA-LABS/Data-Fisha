@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/account/components/update_user_password_content.dart';
+import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -21,17 +23,28 @@ shopUserDetail(Map item, context) => Padding(
             //             .pushNamed('/account/products/edit', arguments: item)),
             //     title: 'Edit details'),
             outlineActionButton(
-                onPressed: () {
-                  // navigator().maybePop().whenComplete(() => showDialog(
-                  //     context: context,
-                  //     builder: (_) => Dialog(
-                  //         child: Container(
-                  //             constraints: const BoxConstraints(maxWidth: 400),
-                  //             child: OffsetQuantityContent(
-                  //                 productId: item['id'],
-                  //                 product: item['product'])))));
-                },
-                title: 'Update password'),
+              onPressed: () {
+                navigator().maybePop().whenComplete(
+                  () {
+                    return showDialog(
+                      context: context,
+                      builder: (_) {
+                        return Dialog(
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: UpdateUserPasswordContent(
+                              userId: item['id'],
+                              password: '',
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              title: 'Update password',
+            ),
             // outlineActionButton(
             //     onPressed: () => navigator().maybePop().whenComplete(() =>
             //         showDialogOrModalSheet(
@@ -39,14 +52,14 @@ shopUserDetail(Map item, context) => Padding(
             //     title: 'Track movement'),
             outlineActionButton(
                 onPressed: () {
-                  // navigator().maybePop().whenComplete(() {
-                  //   showDialog(
-                  //       context: context,
-                  //       builder: (_) => DeleteDialog(
-                  //           message:
-                  //               'Delete of "${item['username']}" is permanent, do you wish to continue ? ',
-                  //           onConfirm: () => deleteProduct(item['id'])));
-                  // });
+                  navigator().maybePop().whenComplete(() {
+                    showDialog(
+                        context: context,
+                        builder: (_) => DeleteDialog(
+                            message:
+                                'Delete of "${item['username']}" is permanent, do you wish to continue ? ',
+                            onConfirm: () => deleteUser(item['id'])));
+                  });
                 },
                 title: 'Delete',
                 textColor: Colors.red)

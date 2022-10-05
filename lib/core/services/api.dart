@@ -10,6 +10,12 @@ _parse(x){
   return RawResponse(body: x.body, statusCode: x.statusCode);
 }
 
+prepareDeleteRequest(body) {
+  request(url) =>
+      delete(Uri.parse(url), headers: getInitialHeaders(), body: jsonEncode(body));
+  return composeAsync([_parse, request]);
+}
+
 preparePutRequest(body) {
   request(url) =>
       put(Uri.parse(url), headers: getInitialHeaders(), body: jsonEncode(body));

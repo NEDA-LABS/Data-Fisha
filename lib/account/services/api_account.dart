@@ -20,3 +20,17 @@ Future addShopUserRemote(shop, data) async {
   var postRequest = preparePostRequest(data);
   return executeHttp(() => postRequest(url));
 }
+
+Future updateShopUserPasswordRemote(shop, userId, password) async {
+  var getProjectId = propertyOr('projectId', (p0) => null);
+  var url = '$baseUrl/account/shops/${getProjectId(shop)}/users/$userId';
+  var putRequest = preparePutRequest({'password': password});
+  return executeHttp(() => putRequest(url));
+}
+
+Future deleteShopUserRemote(shop, userId) async {
+  var getProjectId = propertyOr('projectId', (p0) => null);
+  var url = '$baseUrl/account/shops/${getProjectId(shop)}/users/$userId';
+  var deleteRequest = prepareDeleteRequest({});
+  return executeHttp(() => deleteRequest(url));
+}
