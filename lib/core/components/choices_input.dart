@@ -5,7 +5,7 @@ import 'package:smartstock/core/components/input_error_message.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChoicesInput extends StatefulWidget {
-  final Function(String) onText;
+  final Function(dynamic) onText;
   final Future Function({bool skipLocal}) onLoad;
   final Widget Function()? getAddWidget;
   final String initialText;
@@ -14,6 +14,7 @@ class ChoicesInput extends StatefulWidget {
   final String error;
   final Function(dynamic) onField;
   final bool showBorder;
+  final bool multiple;
 
   const ChoicesInput({
     Key? key,
@@ -25,14 +26,15 @@ class ChoicesInput extends StatefulWidget {
     this.placeholder = '',
     this.error = '',
     this.showBorder = true,
+    this.multiple = false,
     required this.onField,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ChoicesInputState();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _ChoicesInputState extends State<ChoicesInput> {
+class _State extends State<ChoicesInput> {
   final _states = {};
   final _getData = propertyOr('data', (_) => []);
   final _getIsLoading = propertyOr('loading', (_) => false);
@@ -52,35 +54,49 @@ class _ChoicesInputState extends State<ChoicesInput> {
     });
   }
 
-  _fullWidthText(onText, String hintText, initialText) => Expanded(
+  _fullWidthText() {
+    // _showOptions(_getData(_states), widget.onText, widget.onField)
+    return Expanded(
       child: TextField(
-          controller: textController,
-          onChanged: onText,
-          autofocus: false,
-          maxLines: 1,
-          minLines: 1,
-          readOnly: true,
-          decoration: InputDecoration(
-              hintText: hintText,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(8))));
+        controller: textController,
+        onChanged: widget.multiple ? null : widget.onText,
+        autofocus: false,
+        maxLines: 1,
+        minLines: 1,
+        readOnly: true,
+        decoration: InputDecoration(
+          hintText: widget.placeholder,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(8),
+        ),
+      ),
+    );
+  }
 
-  _label(label) => Padding(
+  _label(label) {
+    return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Text(label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)));
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
+      ),
+    );
+  }
 
-  _actionsItems(data, onRefresh, onText, getAddWidget, onField,
-          BuildContext context) =>
-      Row(children: [
-        IconButton(
-            onPressed: _showOptions(data, onText, onField),
-            icon: const Icon(Icons.arrow_drop_down)),
-        getAddWidget!=null?IconButton(
-            onPressed: () => _showDialogForAdd(getAddWidget(), context),
-            icon: const Icon(Icons.add)): Container(),
-        IconButton(onPressed: onRefresh, icon: const Icon(Icons.refresh))
-      ]);
+  _actionsItems(
+      data, onRefresh, onText, getAddWidget, onField, BuildContext context) {
+    return Row(children: [
+      IconButton(
+          onPressed: _showOptions(data, onText, onField),
+          icon: const Icon(Icons.arrow_drop_down)),
+      getAddWidget != null
+          ? IconButton(
+              onPressed: () => _showDialogForAdd(getAddWidget(), context),
+              icon: const Icon(Icons.add))
+          : Container(),
+      IconButton(onPressed: onRefresh, icon: const Icon(Icons.refresh))
+    ]);
+  }
 
   _actions(Function onRefresh, onText, onAdd, onField) => _getIsLoading(_states)
       ? const Padding(
@@ -90,24 +106,40 @@ class _ChoicesInputState extends State<ChoicesInput> {
       : _actionsItems(
           _getData(_states), onRefresh, onText, onAdd, onField, context);
 
-  _showDialogOrModalSheetForChoose(context, List items, onText, onField) =>
-      hasEnoughWidth(context)
-          ? showDialog(
-              context: context,
-              builder: (_) => Dialog(
-                  child: Container(
-                      constraints:
-                          const BoxConstraints(maxWidth: 500, minHeight: 300, maxHeight: 600),
-                      child: ChoiceInputDropdown(
-                          items: items, onTitle: onField, onText: onText))))
-          : showModalBottomSheet(
-              isScrollControlled: true,
-              enableDrag: true,
-              context: context,
-              builder: (context) => FractionallySizedBox(
-                  heightFactor: 0.7,
+  _showDialogOrModalSheetForChoose(context, List items, onText, onField) {
+    return !isSmallScreen(context)
+        ? showDialog(
+            context: context,
+            builder: (_) {
+              return Dialog(
+                child: Container(
+                  constraints: const BoxConstraints(
+                      maxWidth: 500, minHeight: 300, maxHeight: 600),
                   child: ChoiceInputDropdown(
-                      items: items, onTitle: onField, onText: onText)));
+                    items: items,
+                    onTitle: onField,
+                    onText: onText,
+                    multiple: widget.multiple,
+                  ),
+                ),
+              );
+            },
+          )
+        : showModalBottomSheet(
+            isScrollControlled: true,
+            enableDrag: true,
+            context: context,
+            builder: (context) => FractionallySizedBox(
+              heightFactor: 0.7,
+              child: ChoiceInputDropdown(
+                items: items,
+                onTitle: onField,
+                onText: onText,
+                multiple: widget.multiple,
+              ),
+            ),
+          );
+  }
 
   _showDialogForAdd(Widget content, context) => showDialog(
       context: context,
@@ -140,13 +172,21 @@ class _ChoicesInputState extends State<ChoicesInput> {
                 ? inputBoxDecoration(context, widget.error)
                 : null,
             child: Row(children: [
-              _fullWidthText(
-                  widget.onText, widget.placeholder, widget.initialText),
-              _actions(_onRefresh, (text) {
-                textController = TextEditingController(text: text);
-                _updateState({});
-                widget.onText(text);
-              }, widget.getAddWidget, widget.onField)
+              _fullWidthText(),
+              _actions(
+                _onRefresh,
+                (text) {
+                  textController = TextEditingController(
+                    text: text is List
+                        ? text.map((e) => widget.onField(e)).join(',')
+                        : '$text',
+                  );
+                  _updateState({});
+                  widget.onText(text);
+                },
+                widget.getAddWidget,
+                widget.onField,
+              )
             ])),
         inputErrorMessageOrEmpty(widget.error)
       ]);

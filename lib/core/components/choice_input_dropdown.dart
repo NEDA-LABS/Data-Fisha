@@ -2,20 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
   final List items;
   final Function(dynamic) onTitle;
-  final Function(String) onText;
+  final Function(dynamic) onText;
+  final bool multiple;
 
-  const ChoiceInputDropdown({
-    Key? key,
-    required this.items,
-    required this.onTitle,
-    required this.onText,
-  }) : super(key: key);
+  const ChoiceInputDropdown(
+      {Key? key,
+      required this.items,
+      required this.onTitle,
+      required this.onText,
+      required this.multiple})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ChoiceInputDropdown();
@@ -24,60 +27,90 @@ class ChoiceInputDropdown extends StatefulWidget {
 class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   String _query = '';
   Timer? _debounce;
+  Map checked = {};
+  Set selected = {};
 
   _getItems(String q) =>
       compute(_filterAndSort, {"items": widget.items, "q": q});
 
-  _searchInput() => Padding(
+  _searchInput() {
+    return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: TextInput(
-          onText: (d) {
-            if (_debounce?.isActive ?? false) _debounce!.cancel();
-            _debounce = Timer(const Duration(milliseconds: 500), () {
-              setState(() {
-                _query = d;
-              });
+        onText: (d) {
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
+          _debounce = Timer(const Duration(milliseconds: 500), () {
+            setState(() {
+              _query = d;
             });
-          },
-          placeholder: 'Search...'));
+          });
+        },
+        placeholder: 'Search...',
+      ),
+    );
+  }
 
-  _listBuilder(items) => ListView.builder(
+  _listBuilder(items) {
+    return ListView.builder(
       itemCount: items.length,
       shrinkWrap: true,
-      itemBuilder: (context, index) => ListTile(
-          title: Text('${widget.onTitle(items[index])??''}'),
-          onTap: () {
-            widget.onText(widget.onTitle(items[index]));
-            navigator().maybePop();
-          }));
+      itemBuilder: (context, index) {
+        return widget.multiple
+            ? CheckboxListTile(
+                title: Text('${widget.onTitle(items[index]) ?? ''}'),
+                value: checked[index] ?? false,
+                onChanged: (v) {
+                  setState(() {
+                    checked[index] = v;
+                    if (v == false) {
+                      selected.remove(items[index]);
+                    } else {
+                      selected.add(items[index]);
+                    }
+                    widget.onText(selected.toList());
+                  });
+                },
+              )
+            : ListTile(
+                title: Text('${widget.onTitle(items[index]) ?? ''}'),
+                onTap: () {
+                  widget.onText(widget.onTitle(items[index]));
+                  navigator().maybePop();
+                },
+              );
+      },
+    );
+  }
 
   Widget _itemsListBuilder(context, snapshot) =>
       snapshot.hasData ? _listBuilder(snapshot.data) : Container();
 
-  _itemsList() => Expanded(
+  _itemsList() {
+    return Expanded(
       child: FutureBuilder<List>(
-          builder: _itemsListBuilder,
-          initialData: widget.items,
-          future: _getItems(_query)));
+        builder: _itemsListBuilder,
+        initialData: widget.items,
+        future: _getItems(_query),
+      ),
+    );
+  }
 
   @override
-  Widget build(BuildContext context) =>
-      Column(mainAxisSize: MainAxisSize.min, children: [
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-        //   child: Center(
-        //     child: Container(
-        //       height: 8,
-        //       width: 80,
-        //       decoration: BoxDecoration(
-        //           color: Theme.of(context).primaryColorDark,
-        //           borderRadius: const BorderRadius.all(Radius.circular(50))),
-        //     ),
-        //   ),
-        // ),
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
         _searchInput(),
         _itemsList(),
-      ]);
+        outlineActionButton(
+            title: 'Close',
+            onPressed: () {
+              navigator().maybePop();
+            })
+      ],
+    );
+  }
 
   @override
   void dispose() {

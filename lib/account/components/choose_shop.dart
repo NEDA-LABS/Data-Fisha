@@ -10,7 +10,7 @@ Widget get chooseShop {
     builder: (context, state) => Container(
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
-      color: Theme.of(context).primaryColorDark,
+      // color: Theme.of(context).primaryColorDark,
       child: ListView(
         shrinkWrap: true,
         children: [
@@ -20,13 +20,13 @@ Widget get chooseShop {
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                child: const Text(
-                  "Select shop.",
+                child: Text(
+                  "Select shop",
                   softWrap: true,
                   style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      // fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).primaryColor),
                 ),
               ),
               state!.shops.isNotEmpty
@@ -35,8 +35,8 @@ Widget get chooseShop {
                     )
                   : Container(
                       alignment: Alignment.center,
-                      child: const CircularProgressIndicator(
-                        backgroundColor: Colors.white,
+                      child:  CircularProgressIndicator(
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
             ],
@@ -61,23 +61,18 @@ Widget _shop(var shop) {
                 if (kDebugMode) {
                   print(e);
                 }
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   const SnackBar(
-                //     content: Text('Fails to set a current shop'),
-                //   ),
-                // );
               });
             },
             child: Container(
               height: 80,
               width: 80,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Theme.of(context).primaryColor),
               child: imgSrc is String
                   ? Image.network(imgSrc)
-                  : Icon(
+                  : const Icon(
                       Icons.storefront,
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.white,
                       size: 40,
                     ),
             ),
@@ -90,10 +85,10 @@ Widget _shop(var shop) {
           child: Text(
             shop['businessName'],
             softWrap: true,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         )

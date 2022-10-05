@@ -1,6 +1,5 @@
 import 'package:bfast/controller/function.dart';
 import 'package:smartstock/core/services/api.dart';
-import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 
 Future updateUserDetailsRemote(user, data) async {
@@ -13,4 +12,11 @@ Future getShopUsersRemote(shop) async {
   var getProjectId = propertyOr('projectId', (p0) => null);
   var url = '$baseUrl/account/shops/${getProjectId(shop)}/users';
   return executeHttp(() => getRequest(url));
+}
+
+Future addShopUserRemote(shop, data) async {
+  var getProjectId = propertyOr('projectId', (p0) => null);
+  var url = '$baseUrl/account/shops/${getProjectId(shop)}/users';
+  var postRequest = preparePostRequest(data);
+  return executeHttp(() => postRequest(url));
 }

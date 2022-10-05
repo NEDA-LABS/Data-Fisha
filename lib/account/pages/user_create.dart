@@ -1,13 +1,14 @@
-import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/components/top_bar.dart';
-import 'package:smartstock/stocks/components/product_create_form.dart';
-import 'package:smartstock/stocks/states/product_create.dart';
+import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ShopUserCreatePage extends StatefulWidget {
   const ShopUserCreatePage({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class ShopUserCreatePage extends StatefulWidget {
 class _State extends State<ShopUserCreatePage> {
   var state = {};
   var loading = false;
+  var shops = [];
 
   updateState(map) {
     map is Map
@@ -82,8 +84,7 @@ class _State extends State<ShopUserCreatePage> {
       ),
       ChoicesInput(
         onText: (d) {
-          updateState({"role": d});
-
+          updateState({"role": d, 'role_e': ''});
         },
         label: "Role",
         placeholder: 'Select',
@@ -98,26 +99,79 @@ class _State extends State<ShopUserCreatePage> {
       ),
       ChoicesInput(
         onText: (d) {
-          updateState({"shops": d, 'shops_e': ''});
-
+          // print(d);
+          // print(d.runtimeType);
+          shops = d;
+          updateState({"shops": '', 'shops_e': ''});
         },
         label: "Shops",
         placeholder: 'Select',
         error: state['shops_e'] ?? '',
         initialText: state['shops'] ?? '',
+        multiple: true,
         // getAddWidget: () => createCategoryContent(),
-        onField: (x) => '${x['name']}',
-        onLoad: ({skipLocal = false})async => [],
+        onField: (x) {
+          // print(x);
+          return '${x['businessName']}';
+        },
+        onLoad: ({skipLocal = false}) async => await getUserShops(),
       ),
       Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
         child: raisedButton(
+            height: 40,
             onPressed: loading ? null : _onPressed,
             title: loading ? "Waiting..." : "Create"),
       )
     ];
   }
 
-  _onPressed() {}
+  _onPressed() {
+    var username = state['username'];
+    var fullname = state['fullname'];
+    var password = state['password'];
+    var role = state['role'];
+    if (!(username is String && username.isNotEmpty)) {
+      updateState({'username_e': 'Username required'});
+    }
+    if (!(fullname is String && fullname.isNotEmpty)) {
+      updateState({'fullname_e': 'Fullname required'});
+    }
+    if (!(password is String && password.isNotEmpty)) {
+      updateState({'password_e': 'Password required'});
+    }
+    if (!(role is String && role.isNotEmpty)) {
+      updateState({'role_e': 'Role required'});
+    }
+    if (!(shops is List && shops.isNotEmpty)) {
+      updateState({'shops_e': 'Shops required'});
+      return;
+    }
+    setState(() {
+      loading = true;
+    });
+    var firstShop = shops.first;
+    addShopUser({
+      "username": username,
+      "firstname": '$fullname'.replaceAll('.', ''),
+      "lastname": ".",
+      "password": password,
+      "applicationId": firstShop['applicationId'],
+      "projectId": firstShop['projectId'],
+      "businessName": firstShop['businessName'],
+      "role": role,
+      "acl": [],
+      "shops": shops.sublist(1)
+    }).then((value) {
+      // print(value);
+      navigateTo('/account/users');
+    }).catchError((onError) {
+      showInfoDialog(context, '$onError}', title: "Error!");
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
 }
