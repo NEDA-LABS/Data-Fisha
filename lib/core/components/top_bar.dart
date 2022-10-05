@@ -35,9 +35,9 @@ class StockAppBar extends PreferredSize with Disposable {
 
   @override
   AppBar build(BuildContext context) => AppBar(
-          // centerTitle: false,
-          // foregroundColor: Colors.black,
-          // backgroundColor: Colors.transparent,
+          centerTitle: true,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(title, overflow: TextOverflow.ellipsis),
           bottom: showSearch
@@ -75,7 +75,12 @@ class StockAppBar extends PreferredSize with Disposable {
       PreferredSize(
           preferredSize: const Size.fromHeight(49),
           child: Container(
-              decoration: const BoxDecoration(color: Colors.white),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               alignment: Alignment.centerLeft,
               child: TextField(
