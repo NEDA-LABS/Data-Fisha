@@ -16,6 +16,13 @@ List<SubMenuModule> _pagesMenu() {
       svgName: 'item_icon.svg',
       roles: [],
       onClick: () {},
+    ),
+    SubMenuModule(
+      name: 'Payment',
+      link: '/account/bill',
+      svgName: 'item_icon.svg',
+      roles: [],
+      onClick: () {},
     )
   ];
 }

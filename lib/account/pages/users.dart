@@ -67,8 +67,8 @@ class _State extends State<UsersPage> {
   _appBar(context) {
     return StockAppBar(
       title: "Users",
-      showBack: true,
-      backLink: '/account/',
+      showBack: false,
+      // backLink: '/account/',
       showSearch: false,
       // onSearch: (p0) {},
       // searchHint: 'Search...',

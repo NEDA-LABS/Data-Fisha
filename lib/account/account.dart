@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/account/pages/choose_shop.dart';
 import 'package:smartstock/account/pages/login.dart';
+import 'package:smartstock/account/pages/payment.dart';
 import 'package:smartstock/account/pages/profile.dart';
 import 'package:smartstock/account/pages/register.dart';
 import 'package:smartstock/account/pages/user_create.dart';
@@ -30,6 +31,11 @@ class AccountModule extends Module {
           '/users/create',
           guards: [AuthGuard()],
           child: (_, __) => const ShopUserCreatePage(),
+        ),
+        ChildRoute(
+          '/bill',
+          guards: [],
+          child: (_, __) => const PaymentPage(),
         ),
         ChildRoute(
           '/login',
