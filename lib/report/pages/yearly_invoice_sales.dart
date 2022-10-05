@@ -22,7 +22,7 @@ class _State extends State<YearlyInvoiceSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 1080)),
+    start: DateTime.now().subtract(const Duration(days: 720)),
     end: DateTime.now(),
   );
   var dailySales = [];
@@ -59,7 +59,7 @@ class _State extends State<YearlyInvoiceSales> {
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );
       },
     );
@@ -128,7 +128,7 @@ class _State extends State<YearlyInvoiceSales> {
       children: [
         Card(
           child: Container(
-            height: 350,
+            height: isSmallScreen(context)?chartCardMobileHeight:chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],

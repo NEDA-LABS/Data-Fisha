@@ -46,7 +46,7 @@ class _State extends State<ReportDateRange> {
               ),
             ),
           ),
-          outlineButton(onPressed: _chooseDateRange, title: 'Change'),
+          outlineActionButton(onPressed: _chooseDateRange, title: 'Change'),
           // outlineButton(onPressed: _exportData, title: 'Export'),
         ],
       ),

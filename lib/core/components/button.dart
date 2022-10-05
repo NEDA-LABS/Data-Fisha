@@ -1,17 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/configurations.dart';
 
-outlineButton(
-        {Function? onPressed,
-        required String title,
-        Color textColor = const Color(0xff061563)}) =>
-    Container(
-        height: 34,
-        margin: const EdgeInsets.all(8),
-        child: OutlinedButton(
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(const Color(0x1a367ce5))),
-            onPressed: onPressed as void Function()?,
-            child: Text(title,
-                style:
-                    TextStyle(fontWeight: FontWeight.w500, color: textColor, fontSize: 16))));
+raisedButton({
+  Function? onPressed,
+  required String title,
+  double height = 34,
+  Color textColor = const Color(0xffffffff),
+}) {
+  return Container(
+    height: height,
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    child: Builder(builder: (context) {
+      return OutlinedButton(
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+          overlayColor: MaterialStateProperty.all<Color>(primaryBaseLightColor),
+        ),
+        onPressed: onPressed as void Function()?,
+        child: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: textColor,
+            fontSize: 16,
+          ),
+        ),
+      );
+    }),
+  );
+}
+
+outlineActionButton(
+    {Function? onPressed, required String title, Color? textColor}) {
+  return Container(
+    height: 34,
+    margin: const EdgeInsets.all(8),
+    child: OutlinedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          primaryBaseLightColor,
+        ),
+      ),
+      onPressed: onPressed as void Function()?,
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: textColor ?? primaryBaseColorValue,
+          fontSize: 16,
+        ),
+      ),
+    ),
+  );
+}

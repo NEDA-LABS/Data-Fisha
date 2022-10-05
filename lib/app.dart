@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/account/account.dart';
+import 'package:smartstock/account/services/navigation.dart';
 import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
@@ -45,5 +46,6 @@ List<MenuModel> moduleMenus() {
     reportMenu(),
     salesMenu(),
     stocksMenu(),
+    accountMenu(),
   ];
 }

@@ -59,7 +59,7 @@ class _State extends State<DailyCashSales> {
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );
       },
     );
@@ -128,7 +128,7 @@ class _State extends State<DailyCashSales> {
       children: [
         Card(
           child: Container(
-            height: 350,
+            height: isSmallScreen(context)?chartCardMobileHeight:chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -183,7 +183,7 @@ class _State extends State<DailyCashSales> {
   _appBar() {
     return StockAppBar(
       title: "Daily cash sales",
-      showBack: true,
+      showBack: false,
       backLink: '/report/',
     );
   }

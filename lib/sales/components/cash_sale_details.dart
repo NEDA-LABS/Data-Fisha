@@ -34,7 +34,7 @@ List _saleFields(sale) {
 _actionButtons(context, sale) {
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
-    child: outlineButton(
+    child: outlineActionButton(
       onPressed: _prepareRefundPressed(context, sale),
       title: 'Refund',
     ),

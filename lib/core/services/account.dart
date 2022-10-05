@@ -55,6 +55,25 @@ Future<List> getUserShops() async {
   return getShops(user);
 }
 
+// Future getAllCurrentUserShops() async {
+//   var user = await getLocalCurrentUser();
+//   var shops = _getUserShops(user);
+//   // user['shops'].forEach((element) {
+//   //   shops.add(element);
+//   // });
+//   shops.add({
+//     "businessName": user['businessName'],
+//     "projectId": user['projectId'],
+//     "applicationId": user['applicationId'],
+//     "projectUrlId": user['projectUrlId'],
+//     "settings": user['settings'],
+//     "street": user['street'],
+//     "country": user['country'],
+//     "region": user['region']
+//   });
+//   return shops;
+// }
+
 Future shopName2Shop(name) async {
   var shops = await getUserShops();
   return shops.firstWhere((e) => e['businessName'] == name,

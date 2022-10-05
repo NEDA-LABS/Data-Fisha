@@ -1,14 +1,19 @@
 import 'package:bfast/options.dart';
 import 'package:flutter/material.dart';
 
-// 0xFF0b2e13
+// GREEN : 0xFF0b2e13
 // class Config{
 // const primaryColor = Color(0xffffd200);
 
-// blue 0xff0049a9
+// NMB BLUE : #005aa9
+// NMB ORANGE : #e27739
 
+
+// blue 0xff0049a9
+var primaryBaseColorValue = const Color(0xff005aa9);
+var primaryBaseLightColor = const Color(0x1a005aa9);
 MaterialColor getSmartStockMaterialColorSwatch() {
-  Color color = const Color(0xff0049a9);
+  Color color = primaryBaseColorValue;
   List strengths = <double>[.05];
   Map<int, Color> swatch = <int, Color>{};
   final int r = color.red, g = color.green, b = color.blue;

@@ -17,6 +17,7 @@ class TextInput extends StatefulWidget {
   final int lines;
   final dynamic debounceTime;
   final bool show;
+  final bool readOnly;
 
   const TextInput({
     Key? key,
@@ -30,6 +31,7 @@ class TextInput extends StatefulWidget {
     this.lines = 1,
     this.debounceTime = 250,
     this.show = true,
+    this.readOnly = false
   }) : super(key: key);
 
   @override
@@ -76,6 +78,7 @@ class _TextInputState extends State<TextInput> {
         controller: controller,
         autofocus: false,
         maxLines: lines,
+        readOnly:  widget.readOnly,
         onChanged: (text) {
           if (_debounce?.isActive ?? false) _debounce!.cancel();
           _debounce = Timer(

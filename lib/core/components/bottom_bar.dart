@@ -22,7 +22,7 @@ Widget? bottomBar(
                     icon: Icon(Icons.point_of_sale), label: 'Sales'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.inventory), label: 'Stocks'),
-                BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'Menu')
+                BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'More')
               ])
         : null;
 

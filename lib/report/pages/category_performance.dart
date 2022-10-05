@@ -59,7 +59,7 @@ class _State extends State<CategoryPerformance> {
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );
       },
     );

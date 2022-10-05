@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/summary_report_card.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/dashboard/components/dashboard_summary.dart';
-import 'package:smartstock/stocks/services/stocks_report.dart';
 
 class DashboardIndexPage extends StatelessWidget {
   const DashboardIndexPage({Key? key}) : super(key: key);
