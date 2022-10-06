@@ -5,27 +5,47 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
 drawer(List<MenuModel> menus, String current) {
-    return Drawer(
-      width: 250,
-      // backgroundColor: Colors.white,
-      child: modulesMenuContent(menus, current),
-    );
+  return Drawer(
+    width: 250,
+    backgroundColor: Colors.white,
+    child: modulesMenuContent(menus, current),
+  );
 }
 
 modulesMenuContent(List<MenuModel> menus, String current) {
   var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
   var getOfficeLogo = compose([
-      propertyOr('logo', (p0) => 'https://bafkreiaitdtnqgwdrwvtfg2scoehxkaca2nfazn5cnvvp2gza46y6yqgme.ipfs.cf-ipfs.com/'),
-      propertyOr('ecommerce', (p0) => {})
+    propertyOr(
+        'logo',
+        (p0) =>
+            '' /*'https://bafkreiaitdtnqgwdrwvtfg2scoehxkaca2nfazn5cnvvp2gza46y6yqgme.ipfs.cf-ipfs.com/'*/),
+    propertyOr('ecommerce', (p0) => {})
   ]);
   return FutureBuilder(
     initialData: const {},
     future: getActiveShop(),
     builder: (context, snapshot) {
-      return ListView(controller: ScrollController(), children: [
-        _header(getOfficeName(snapshot.data), getOfficeLogo(snapshot.data)),
-        ...menus.map(_moduleMenuItems(current)).toList()
-      ]);
+      return Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _header(getOfficeName(snapshot.data), getOfficeLogo(snapshot.data)),
+            Expanded(
+              child: ListView(
+                controller: ScrollController(),
+                shrinkWrap: true,
+                children: menus.map<Widget>(_moduleMenuItems(current)).toList(),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(child: Text('Version: ')),
+            )
+          ],
+        ),
+      );
     },
   );
 }
@@ -64,7 +84,7 @@ Widget _officeLogo(String url) {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(80),
             color: Theme.of(context).primaryColor),
-        child: Image.network(url),
+        child: url.isEmpty ? Container() : Image.network(url),
       ),
     ),
   );
@@ -90,7 +110,9 @@ Widget _changeOfficeTextButton() {
 
 _moduleMenuItems(String current) {
   return (MenuModel item) {
-    return ExpansionTile(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ExpansionTile(
         leading: item.icon,
         title: Text(
           item.name,
@@ -104,7 +126,9 @@ _moduleMenuItems(String current) {
               roles: item.roles,
               onClick: () {})),
           ...item.pages.map(_subMenuItem).toList()
-        ]);
+        ],
+      ),
+    );
   };
 }
 

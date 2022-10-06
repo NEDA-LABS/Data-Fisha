@@ -42,7 +42,7 @@ class _State extends State<ProductPerformance> {
           appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
             child: Center(
               child: Container(
                 constraints: BoxConstraints(maxWidth: maximumBodyWidth),
@@ -143,8 +143,8 @@ class _State extends State<ProductPerformance> {
             child: TableLikeList(
               onFuture: () async => dailySales,
               keys: _fields(),
-              onCell: (a,b,c){
-                if(a!='id'){
+              onCell: (a, b, c) {
+                if (a != 'id') {
                   return Text('${doubleOrZero(b)}');
                 }
                 return Text('$b');
@@ -187,7 +187,7 @@ class _State extends State<ProductPerformance> {
   _appBar() {
     return StockAppBar(
       title: "Product performance",
-      showBack: true,
+      showBack: false,
       backLink: '/report/',
     );
   }

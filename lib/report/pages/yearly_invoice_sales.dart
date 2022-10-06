@@ -44,7 +44,7 @@ class _State extends State<YearlyInvoiceSales> {
           appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
             child: Center(
               child: Container(
                 constraints: BoxConstraints(maxWidth: maximumBodyWidth),
@@ -181,7 +181,7 @@ class _State extends State<YearlyInvoiceSales> {
   _appBar() {
     return StockAppBar(
       title: "Yearly invoice sales",
-      showBack: true,
+      showBack: false,
       backLink: '/report/',
     );
   }

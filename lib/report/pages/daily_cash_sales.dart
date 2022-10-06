@@ -44,7 +44,7 @@ class _State extends State<DailyCashSales> {
           appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
             child: Center(
               child: Container(
                 constraints: BoxConstraints(maxWidth: maximumBodyWidth),

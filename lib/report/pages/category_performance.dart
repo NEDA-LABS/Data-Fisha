@@ -1,8 +1,6 @@
 import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -44,7 +42,7 @@ class _State extends State<CategoryPerformance> {
           appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
             child: Center(
               child: Container(
                 constraints: BoxConstraints(maxWidth: maximumBodyWidth),
@@ -183,7 +181,7 @@ class _State extends State<CategoryPerformance> {
   _appBar() {
     return StockAppBar(
       title: "Category performance",
-      showBack: true,
+      showBack: false,
       backLink: '/report/',
     );
   }

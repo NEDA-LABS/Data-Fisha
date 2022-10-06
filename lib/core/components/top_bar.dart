@@ -73,28 +73,33 @@ class StockAppBar extends PreferredSize with Disposable {
     dynamic debounceTime,
   ) =>
       PreferredSize(
-          preferredSize: const Size.fromHeight(49),
+        preferredSize: const Size.fromHeight(49),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          alignment: Alignment.centerLeft,
           child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
               ),
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              alignment: Alignment.centerLeft,
-              child: TextField(
-                  autofocus: false,
-                  autocorrect: false,
-                  maxLines: 1,
-                  minLines: 1,
-                  onChanged: (text) {
-                    if (_debounce?.isActive ?? false) _debounce!.cancel();
-                    _debounce = Timer(Duration(milliseconds: debounceTime),
-                        () => onSearch!(text));
-                  },
-                  decoration: InputDecoration(
-                      hintText: placeholder, border: InputBorder.none))));
+            ),
+            child: TextField(
+                autofocus: false,
+                autocorrect: false,
+                maxLines: 1,
+                minLines: 1,
+                onChanged: (text) {
+                  if (_debounce?.isActive ?? false) _debounce!.cancel();
+                  _debounce = Timer(Duration(milliseconds: debounceTime),
+                      () => onSearch!(text));
+                },
+                decoration: InputDecoration(
+                    hintText: placeholder, border: InputBorder.none)),
+          ),
+        ),
+      );
 
   @override
   void dispose() {
