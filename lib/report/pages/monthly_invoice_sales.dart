@@ -44,7 +44,7 @@ class _State extends State<MonthlyInvoiceSales> {
           appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
             child: Center(
               child: Container(
                 constraints: BoxConstraints(maxWidth: maximumBodyWidth),
@@ -128,7 +128,9 @@ class _State extends State<MonthlyInvoiceSales> {
       children: [
         Card(
           child: Container(
-            height: isSmallScreen(context)?chartCardMobileHeight:chartCardDesktopHeight,
+            height: isSmallScreen(context)
+                ? chartCardMobileHeight
+                : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -183,7 +185,7 @@ class _State extends State<MonthlyInvoiceSales> {
   _appBar() {
     return StockAppBar(
       title: "Monthly invoice sales",
-      showBack: true,
+      showBack: false,
       backLink: '/report/',
     );
   }

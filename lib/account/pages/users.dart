@@ -35,6 +35,7 @@ class _State extends State<UsersPage> {
         menus: moduleMenus(),
         current: '/account/',
         onBody: (d) => Scaffold(
+          drawer: d,
           appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,7 +69,7 @@ class _State extends State<UsersPage> {
     return StockAppBar(
       title: "Users",
       showBack: false,
-      // backLink: '/account/',
+      backLink: '/account/',
       showSearch: false,
       // onSearch: (p0) {},
       // searchHint: 'Search...',
