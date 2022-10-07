@@ -1,4 +1,7 @@
 import 'package:bfast/util.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -11,13 +14,36 @@ var _getPrinterHeader =
 var _getPrinterFooter =
     compose([propertyOr('printerFooter', (p0) => '\n'), _getShopSettings]);
 
-Future<String> posPrint({String? data, String? qr}) async {
+Future<String> posPrint({
+  String data ='',
+  String qr = '',
+  appendHeaderFooter = true,
+}) async {
   // print(data);
   var currentShop = await getActiveShop();
   if (_getMustPrint(currentShop) == false) {
     var header = _getPrinterHeader(currentShop);
     var footer = _getPrinterFooter(currentShop);
-    data = '$header \n $data \n $footer';
+    data = appendHeaderFooter ? '$header \n $data \n $footer' : data;
+
+    final doc = pw.Document();
+    doc.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.roll57,
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Column(
+              children: [
+                pw.Text(data, style: pw.TextStyle(fontSize: 8))
+              ]
+            ),
+          ); // Center
+        },
+      ),
+    ); // Page
+    await Printing.layoutPdf(
+      onLayout: (format) async => doc.save(),
+    );
 // await Future.delayed(const Duration(seconds: 3));
     // return await const MethodChannel('com.smartstock/printer').invokeMethod(
     //     'print', {"data": data, "printer": 'printer', "id": 'id', "qr": ''});

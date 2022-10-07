@@ -70,6 +70,8 @@ and(List<Function> fns) => fns.fold(true, (dynamic a, b) => a && b() == true);
 propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
     (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);
 
+propertyOrNull(String property) => propertyOr(property, (p0) => null);
+
 isNativeMobilePlatform() => false;
     // !kIsWeb &&
     // (defaultTargetPlatform == TargetPlatform.iOS ||
