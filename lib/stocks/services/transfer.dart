@@ -38,6 +38,76 @@ Future<List> _filterAndSort(Map data) async {
   return transfers;
 }
 
+Future printPreviousReceiveTransfer(transfer) async {
+  // print(transfer);
+  var getShopName = compose([propertyOrNull('name'),propertyOrNull('to_shop')]);
+  // var getBatchId = propertyOrNull('batchId');
+  var getCarts = compose([itOrEmptyArray,propertyOrNull('items')]);
+  String data = '-------------------------------\n';
+  data = "$data${DateTime.now().toUtc()}\n";
+  data = '$data-------------------------------\n';
+  data = '${data}TRANSFER RECEIVED\n';
+  data = '$data-------------------------------\n';
+  data = '$data To ---> ${getShopName(transfer)}\n';
+  double totalBill = 0.0;
+  int sn = 1;
+  for (var cart in getCarts(transfer)) {
+    var price =  propertyOr('from_purchase', (x)=>0)(cart);
+    var p = cart['product'];
+    var q = doubleOrZero(cart['quantity']);
+    var t = q * price;
+    totalBill += doubleOrZero(t);
+    data = [
+      data,
+      '-------------------------------\n',
+      '$sn. $p\n',
+      '\t$q @ $price = TZS $t\n',
+    ].join('');
+    sn++;
+  }
+  data = [
+    '$data\n',
+    '--------------------------------\n',
+    'Total Bill : $totalBill\n',
+    '--------------------------------\n',
+  ].join('');
+ await posPrint(data: data);
+}
+
+Future printPreviousSendTransfer(transfer) async {
+  var getShopName = compose([propertyOrNull('name'),propertyOrNull('to_shop')]);
+  var getCarts = compose([itOrEmptyArray,propertyOrNull('items')]);
+  String data = '-------------------------------\n';
+  data = "$data${DateTime.now().toUtc()}\n";
+  data = '$data-------------------------------\n';
+  data = '${data}TRANSFER SENT\n';
+  data = '$data-------------------------------\n';
+  data = '$data To ---> ${getShopName(transfer)}\n';
+  double totalBill = 0.0;
+  int sn = 1;
+  for (var cart in getCarts(transfer)) {
+    var price =  propertyOr('from_purchase', (x)=>0)(cart);
+    var p = cart['product'];
+    var q = doubleOrZero(cart['quantity']);
+    var t = q * price;
+    totalBill += doubleOrZero(t);
+    data = [
+      data,
+      '-------------------------------\n',
+      '$sn. $p\n',
+      '\t$q @ $price = TZS $t\n',
+    ].join('');
+    sn++;
+  }
+  data = [
+    '$data\n',
+    '--------------------------------\n',
+    'Total Bill : $totalBill\n',
+    '--------------------------------\n',
+  ].join('');
+  await posPrint(data: data);
+}
+
 Future _printTransferItems(List carts, discount, customer, batchId) async {
   var items = cartItems(carts, discount, false, '$customer');
   var data = await cartItemsToPrinterData(

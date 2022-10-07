@@ -27,13 +27,16 @@ Future<String> posPrint({
     data = appendHeaderFooter ? '$header \n $data \n $footer' : data;
 
     final doc = pw.Document();
-
     doc.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.roll57,
         build: (pw.Context context) {
           return pw.Center(
-            child: pw.Text('Hello World'),
+            child: pw.Column(
+              children: [
+                pw.Text(data, style: pw.TextStyle(fontSize: 8))
+              ]
+            ),
           ); // Center
         },
       ),
