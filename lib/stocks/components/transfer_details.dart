@@ -1,6 +1,9 @@
+import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/transfer.dart';
 
 transferDetails(context, item) => ListView(
       shrinkWrap: true,
@@ -26,6 +29,13 @@ transferDetails(context, item) => ListView(
             padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
             child: OutlinedButton(
                 onPressed: () {
+                  var getIsReceive =
+                      compose([(x) => x == 'receive', propertyOrNull('type')]);
+                  if (getIsReceive(item)) {
+                    printPreviousReceiveTransfer(item);
+                  }else{
+                    printPreviousSendTransfer(item);
+                  }
                   // navigator().maybePop().whenComplete(() {
                   //   showDialog(
                   //       context: context,
@@ -33,8 +43,7 @@ transferDetails(context, item) => ListView(
                   //           child: addPurchasePaymentContent(item['id'])));
                   // });
                 },
-                child: const Text('Print.',
-                    style: TextStyle(fontSize: 16)))),
+                child: const Text('Print.', style: TextStyle(fontSize: 16)))),
         const SizedBox(height: 24)
       ],
     );

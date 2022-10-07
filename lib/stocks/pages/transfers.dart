@@ -104,7 +104,8 @@ class _TransfersPage extends State<TransfersPage> {
                                     const EdgeInsets.symmetric(vertical: 3),
                                 child: Text(
                                   date,
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                               Padding(
@@ -121,13 +122,15 @@ class _TransfersPage extends State<TransfersPage> {
                           ),
                         );
                       }
-                      if(a=='type'){
-                        return Text('$b'.isNotEmpty?b:'Send');
+                      if (a == 'type') {
+                        return Text('$b'.isNotEmpty ? b : 'Send');
                       }
                       return Text('$b');
                     },
-                    onItemPressed: (item) => showDialogOrModalSheet(
-                        transferDetails(context, item), context)),
+                    onItemPressed: (item) {
+                      return showDialogOrModalSheet(
+                          transferDetails(context, item), context);
+                    }),
               ), // _tableFooter()
             ],
           ),
