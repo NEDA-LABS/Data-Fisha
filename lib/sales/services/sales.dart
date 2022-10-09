@@ -81,12 +81,13 @@ _onSubmitSale(List carts, String customer, discount, wholesale) async {
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
   await _printSaleItems(carts, discount, customer, wholesale, cartId);
   var sales = await _carts2Sales(carts, discount, wholesale, customer, cartId);
-  if (isWebMobilePlatform()) {
-    var saveSales = preparePostRequest(sales);
-    return saveSales(url);
-  } else {
+  var offlineFirst = await isOfflineFirstEnv();
+  if (offlineFirst == true) {
     await saveLocalSync(batchId, url, sales);
     oneTimeLocalSyncs();
+  } else {
+    var saveSales = preparePostRequest(sales);
+    return saveSales(url);
   }
 }
 

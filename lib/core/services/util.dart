@@ -1,8 +1,10 @@
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:builders/builders.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
@@ -72,15 +74,18 @@ propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
 
 propertyOrNull(String property) => propertyOr(property, (p0) => null);
 
-isNativeMobilePlatform() => false;
-    // !kIsWeb &&
-    // (defaultTargetPlatform == TargetPlatform.iOS ||
-    //     defaultTargetPlatform == TargetPlatform.android);
+isNativeMobilePlatform() =>
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
 
-isWebMobilePlatform() => true;
-    // kIsWeb &&
-    // (defaultTargetPlatform == TargetPlatform.iOS ||
-    //     defaultTargetPlatform == TargetPlatform.android);
+isWebMobilePlatform() =>
+    kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
+
+Future<bool> isOfflineFirstEnv() async =>
+    JSHelper().callHasDirectPosPrinterAPI();
 
 var doubleOrZero = compose([
   (x) => (double.tryParse('$x') ?? 0),
