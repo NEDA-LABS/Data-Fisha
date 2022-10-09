@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+#  flutter_web_plugins:
+#    sdk: flutter
   uuid: ^3.0.6
   crypto: ^3.0.2
   bfast: ^5.0.0-beta.1
@@ -28,6 +30,7 @@ dependencies:
   charts_flutter: ^0.12.0
   printing: ^5.9.3
   pdf: ^3.8.3
+  js: ^0.6.4
 
 dev_dependencies:
  flutter_test:
@@ -39,6 +42,11 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+#  plugin:
+#    platforms:
+#      web:
+#        pluginClass: SmartStockPrinterPlugin
+#        fileName: smartstock_printer.dart
   # fonts:
   #   - family: Schyler
   #     fonts:

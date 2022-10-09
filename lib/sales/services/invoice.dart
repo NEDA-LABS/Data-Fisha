@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
+import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
-import 'package:smartstock/core/services/cart.dart';
 
 Future<List> getInvoiceFromCacheOrRemote({
   skipLocal = false,
@@ -104,11 +103,12 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
   await _printInvoiceItems(carts, discount, customer, true, cartId);
   var invoice =
       await _carts2Invoice(carts, discount, true, customer, cartId, batchId);
-  if (isWebMobilePlatform()) {
-    var saveInvoice = preparePutRequest(invoice);
-    return saveInvoice(url);
-  } else {
+  var offlineFirst = await isOfflineFirstEnv();
+  if (offlineFirst == true) {
     await saveLocalSync(batchId, url, invoice);
     oneTimeLocalSyncs();
+  } else {
+    var saveInvoice = preparePutRequest(invoice);
+    return saveInvoice(url);
   }
 }
