@@ -78,6 +78,6 @@ MenuModel reportMenu() => MenuModel(
   name: 'Reports',
   icon: const Icon(Icons.trending_up),
   link: '/report/',
-  roles: [],
+  roles: ['admin'],
   pages: _pagesMenu(),
 );

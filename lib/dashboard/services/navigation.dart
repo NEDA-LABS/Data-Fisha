@@ -15,6 +15,6 @@ MenuModel dashboardMenu() => MenuModel(
   name: 'Dashboard',
   icon: const Icon(Icons.dashboard),
   link: '/dashboard/',
-  roles: [],
+  roles: ['admin'],
   pages: _pagesMenu(),
 );

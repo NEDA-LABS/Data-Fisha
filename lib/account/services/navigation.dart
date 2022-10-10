@@ -32,7 +32,7 @@ MenuModel accountMenu() {
     name: 'Account',
     icon: const Icon(Icons.supervised_user_circle),
     link: '/account/',
-    roles: [],
+    roles: ['*'],
     pages: _pagesMenu(),
   );
 }

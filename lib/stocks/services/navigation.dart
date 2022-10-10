@@ -57,6 +57,6 @@ MenuModel stocksMenu() => MenuModel(
       name: 'Stocks',
       icon: const Icon(Icons.inventory),
       link: '/stock/',
-      roles: [],
+      roles: ['admin','manager'],
       pages: _pagesMenu(),
     );

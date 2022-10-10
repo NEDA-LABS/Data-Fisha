@@ -1,7 +1,10 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/configurations.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
 drawer(List<MenuModel> menus, String current) {
@@ -12,7 +15,7 @@ drawer(List<MenuModel> menus, String current) {
   );
 }
 
-modulesMenuContent(List<MenuModel> menus, String current) {
+modulesMenuContent(List<MenuModel> allMenus, String current) {
   var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
   var getOfficeLogo = compose([
     propertyOr(
@@ -22,32 +25,49 @@ modulesMenuContent(List<MenuModel> menus, String current) {
     propertyOr('ecommerce', (p0) => {})
   ]);
   return FutureBuilder(
-    initialData: const {},
-    future: getActiveShop(),
+    initialData: const {"shop": {}, "menus": []},
+    future: _future(allMenus),
     builder: (context, snapshot) {
-      return Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _header(getOfficeName(snapshot.data), getOfficeLogo(snapshot.data)),
-            Expanded(
-              child: ListView(
-                controller: ScrollController(),
-                shrinkWrap: true,
-                children: menus.map<Widget>(_moduleMenuItems(current)).toList(),
+      if (snapshot.hasData) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _header(
+                  getOfficeName(propertyOr('shop', (p0) => {})(snapshot.data)),
+                  getOfficeLogo(propertyOr('shop', (p0) => {})(snapshot.data))),
+              Expanded(
+                child: ListView(
+                  controller: ScrollController(),
+                  shrinkWrap: true,
+                  children: propertyOr('menus', (p0) => [])(snapshot.data)
+                      .map<Widget>(_moduleMenuItems(current))
+                      .toList(),
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(child: Text('Version: ')),
-            )
-          ],
-        ),
-      );
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(child: Text('v$version')),
+              )
+            ],
+          ),
+        );
+      } else {
+        return Container();
+      }
     },
   );
+}
+
+Future _future(List<MenuModel> menus) async {
+  var shop = await getActiveShop();
+  var user = await getLocalCurrentUser();
+  var m = menus
+      .where((element) => hasRbaAccess(user, element.roles, null))
+      .toList();
+  return {"shop": shop, "menus": m};
 }
 
 Widget _header(String currentOffice, logoUrl) {
@@ -109,7 +129,8 @@ Widget _changeOfficeTextButton() {
 }
 
 _moduleMenuItems(String current) {
-  return (MenuModel item) {
+  return (dynamic item) {
+    item as MenuModel;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ExpansionTile(
