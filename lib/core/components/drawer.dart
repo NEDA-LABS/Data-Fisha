@@ -35,16 +35,20 @@ modulesMenuContent(List<MenuModel> allMenus, String current) {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _header(
-                  getOfficeName(propertyOr('shop', (p0) => {})(snapshot.data)),
-                  getOfficeLogo(propertyOr('shop', (p0) => {})(snapshot.data))),
               Expanded(
                 child: ListView(
                   controller: ScrollController(),
                   shrinkWrap: true,
-                  children: propertyOr('menus', (p0) => [])(snapshot.data)
-                      .map<Widget>(_moduleMenuItems(current))
-                      .toList(),
+                  children: [
+                    _header(
+                        getOfficeName(
+                            propertyOr('shop', (p0) => {})(snapshot.data)),
+                        getOfficeLogo(
+                            propertyOr('shop', (p0) => {})(snapshot.data))),
+                    ...propertyOr('menus', (p0) => [])(snapshot.data)
+                        .map<Widget>(_moduleMenuItems(current))
+                        .toList()
+                  ],
                 ),
               ),
               Padding(

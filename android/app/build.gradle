@@ -11,10 +11,10 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+//def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+//if (flutterVersionCode == null) {
+//    flutterVersionCode = '1'
+//}
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
@@ -46,7 +46,7 @@ android {
         applicationId "com.fahamutech.smartstock"
         minSdkVersion 19 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode 29 //flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
@@ -58,21 +58,17 @@ android {
 //            keyPassword '@Joshua&5715'
 //        }
         release {
-//            signingConfigs.debug
-            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-            storePassword '@Joshua&5715'
-            keyAlias 'newkey'
-            keyPassword '@Joshua&5715'
+            signingConfigs.debug
         }
     }
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
-
-        }
-    }
+//    buildTypes {
+//        release {
+//            // TODO: Add your own signing config for the release build.
+//            // Signing with the debug keys for now, so `flutter run --release` works.
+//            signingConfig signingConfigs.release
+//
+//        }
+//    }
 }
 
 flutter {
@@ -81,6 +77,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.play:app-update:2.0.0'
 
-    implementation 'com.github.fahamutech:posprinter:v0.1.2'
+    // For Kotlin users also add the Kotlin extensions library for Play In-App Update:
+    implementation 'com.google.android.play:app-update-ktx:2.0.0'
+
+//    implementation 'com.github.fahamutech:posprinter:v0.1.2'
 }
