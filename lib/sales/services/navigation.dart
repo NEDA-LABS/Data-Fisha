@@ -43,6 +43,6 @@ MenuModel salesMenu() => MenuModel(
       name: 'Sales',
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
-      roles: [],
+      roles: ['*'],
       pages: _pagesMenu(),
     );
