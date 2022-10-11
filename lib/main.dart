@@ -63,7 +63,7 @@ var shouldRun = true;
 periodicLocalSyncs() async {
   if (isNativeMobilePlatform()) {
     print("::::: native mobile");
-    Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
     Workmanager().registerPeriodicTask(
       'bg-period',
       'bg-period',

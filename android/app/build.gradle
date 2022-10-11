@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdk 32
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -44,31 +44,20 @@ android {
 
     defaultConfig {
         applicationId "com.fahamutech.smartstock"
-        minSdkVersion 19 //flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode 29 //flutterVersionCode.toInteger()
+        minSdkVersion 19
+        targetSdk 32//flutter.minSdkVersion
+        versionCode 30 //flutterVersionCode.toInteger()
         versionName flutterVersionName
+        signingConfig signingConfigs.debug
     }
 
-    signingConfigs {
-//        debug {
-//            storeFile file("/Users/josh/Desktop/fahamutech.jks")
-//            storePassword '@Joshua&5715'
-//            keyAlias 'newkey'
-//            keyPassword '@Joshua&5715'
-//        }
+    buildTypes {
         release {
-            signingConfigs.debug
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
         }
     }
-//    buildTypes {
-//        release {
-//            // TODO: Add your own signing config for the release build.
-//            // Signing with the debug keys for now, so `flutter run --release` works.
-//            signingConfig signingConfigs.release
-//
-//        }
-//    }
 }
 
 flutter {
