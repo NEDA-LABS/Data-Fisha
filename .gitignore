@@ -37,4 +37,4 @@
 
 release/*.apk
 release/*.aab
-
+.firebase
