@@ -52,34 +52,37 @@ double? getCartItemSubAmount(
 
 double? getCartItemDiscount(discount, items) => discount / items;
 
-List cartItems(List carts, dis, wholesale, customer) => carts.map((value) {
-      var discount = doubleOrZero('$dis');
-      return {
-        "amount": getCartItemSubAmount(
-            totalItems: carts.length,
-            totalDiscount: discount,
-            product: value.product,
-            quantity: value.quantity ?? 0,
-            wholesale: wholesale),
-        "product": value.product['product'],
-        'customer': customer,
-        'customerObject': {'displayName': customer},
-        "quantity": value.quantity,
-        "stock": value.product,
-        "discount": getCartItemDiscount(discount, carts.length)
-      };
-    }).toList();
+List cartItems(List carts, dis, wholesale, customer) {
+  return carts.map((value) {
+    var discount = doubleOrZero('$dis');
+    return {
+      "amount": getCartItemSubAmount(
+          totalItems: carts.length,
+          totalDiscount: discount,
+          product: value.product,
+          quantity: value.quantity ?? 0,
+          wholesale: wholesale),
+      "product": value.product['product'],
+      'customer': customer,
+      'customerObject': {'displayName': customer},
+      "quantity": value.quantity,
+      "stock": value.product,
+      "discount": getCartItemDiscount(discount, carts.length)
+    };
+  }).toList();
+}
 
 Future<String> cartItemsToPrinterData(
-    List<dynamic> carts, String customer, onGetPrice) async {
+    List<dynamic> carts, String customer, onGetPrice,
+    {date}) async {
   String data = '-------------------------------\n';
-  data = "$data${DateTime.now().toUtc()}\n";
+  data = "$data${date ?? DateTime.now()}\n";
   data = '$data-------------------------------\n';
   data = '$data To ---> $customer\n';
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in carts) {
-    var price =  doubleOrZero(onGetPrice(cart));
+    var price = doubleOrZero(onGetPrice(cart));
     var p = cart['product'];
     var q = doubleOrZero(cart['quantity']);
     var t = q * price;
