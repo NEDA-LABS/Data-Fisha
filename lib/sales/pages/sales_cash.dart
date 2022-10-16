@@ -13,31 +13,58 @@ import 'package:smartstock/sales/components/cash_sale_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CashSalesPage extends StatefulWidget {
-  const CashSalesPage({Key? key}) : super(key: key);
+class SalesCashPage extends StatefulWidget {
+  const SalesCashPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CashSalesPage();
 }
 
-class _CashSalesPage extends State<CashSalesPage> {
+class _CashSalesPage extends State<SalesCashPage> {
   bool _loading = false;
   String _query = '';
   int size = 20;
   List _sales = [];
 
   _onItemPressed(item) {
-    showDialogOrModalSheet(cashSaleDetail(context, item), context);
+    showDialogOrModalSheet(
+        CashSaleDetail(sale: item, pageContext: context), context);
   }
 
   Widget _onCell(a, b, c) {
     if (a == 'product') {
-      return _productView(b, c);
+      return _productView(c);
     }
     if (a == 'amount') {
-      return Text('${doubleOrZero(b)}');
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text('${doubleOrZero(b)}'),
+      );
+    }
+    if (a == 'quantity') {
+      return Text('${doubleOrZero(_itemsSize(c))}');
     }
     return Text('$b');
+  }
+
+  _itemsSize(c) {
+    var getItems =
+        compose([(x) => x.length, itOrEmptyArray, propertyOrNull('items')]);
+    return getItems(c);
+  }
+
+  _getSomeProducts(c) {
+    var getItems = propertyOr('items', (p0) => []);
+    var items = itOrEmptyArray(getItems(c)) as List;
+    var productsName = [];
+    for (var item in items) {
+      var getProduct =
+          compose([propertyOrNull('product'), propertyOrNull('stock')]);
+      productsName.add(getProduct(item));
+    }
+    return productsName.length > 2
+        ? '${productsName.sublist(1, 3).join(', ')} & more'
+        : productsName.join(',');
   }
 
   _appBar(context) {
@@ -45,7 +72,7 @@ class _CashSalesPage extends State<CashSalesPage> {
       title: "Cash Sales",
       showBack: true,
       backLink: '/sales/',
-      showSearch: true,
+      showSearch: false,
       onSearch: (d) {
         setState(() {
           _query = d;
@@ -71,18 +98,33 @@ class _CashSalesPage extends State<CashSalesPage> {
   }
 
   _tableHeader() {
-    return SizedBox(
-      height: 38,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Product'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Quantity'),
-        tableLikeListTextHeader('Customer'),
-      ]),
-    );
+    var height = 38.0;
+    return isSmallScreen(context)
+        ? SizedBox(
+            height: height,
+            child: tableLikeListRow([
+              tableLikeListTextHeader('Products'),
+              tableLikeListTextHeader('Amount ( TZS )'),
+            ]),
+          )
+        : SizedBox(
+            height: height,
+            child: tableLikeListRow([
+              tableLikeListTextHeader('Products'),
+              tableLikeListTextHeader('Amount ( TZS )'),
+              isSmallScreen(context)
+                  ? tableLikeListTextHeader('')
+                  : tableLikeListTextHeader('Items'),
+              isSmallScreen(context)
+                  ? tableLikeListTextHeader('')
+                  : tableLikeListTextHeader('Customer'),
+            ]),
+          );
   }
 
-  _fields() => ['product', 'amount', 'quantity', 'customer'];
+  _fields() => isSmallScreen(context)
+      ? ['product', 'amount']
+      : ['product', 'amount', 'quantity', 'customer'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -150,7 +192,7 @@ class _CashSalesPage extends State<CashSalesPage> {
     );
   }
 
-  Widget _productView(b, c) {
+  Widget _productView(c) {
     var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
     var textStyle = const TextStyle(
         fontWeight: FontWeight.w300,
@@ -166,7 +208,7 @@ class _CashSalesPage extends State<CashSalesPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('$b', style: mainTextStyle),
+        Text(_getSomeProducts(c), style: mainTextStyle),
         Text(subText, style: textStyle)
       ]),
     );
@@ -175,13 +217,12 @@ class _CashSalesPage extends State<CashSalesPage> {
   _salesList() {
     return Expanded(
       child: TableLikeList(
-        onFuture: () async => _sales,
-        keys: _fields(),
-        onCell: _onCell,
-        onItemPressed: _onItemPressed,
-        onLoadMore: () async => _loadMore(),
-        loading: _loading
-      ),
+          onFuture: () async => _sales,
+          keys: _fields(),
+          onCell: _onCell,
+          onItemPressed: _onItemPressed,
+          onLoadMore: () async => _loadMore(),
+          loading: _loading),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:bfast/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
@@ -98,4 +99,32 @@ Future onSubmitRetailSale(List carts, String customer, discount) async {
 Future onSubmitWholeSale(List carts, String customer, discount) async {
   if (customer.isEmpty) throw "Customer required";
   return _onSubmitSale(carts, customer, discount, true);
+}
+
+Future rePrintASale(sale) async {
+  mapItem(item) {
+    item['product'] =
+        compose([propertyOrNull('product'), propertyOrNull('stock')])(item);
+    return item;
+  }
+
+  var getItems = compose([
+    (x) => x.map(mapItem).toList(),
+    itOrEmptyArray,
+    propertyOrNull('items')
+  ]);
+  var getDate = propertyOrNull('timer');
+  var getCustomer = propertyOr('customer', (_) => '');
+  var getAmount = propertyOr('amount', (p0) => 0);
+  var getQuantity = propertyOr('quantity', (p0) => 0);
+  onGetPrice(item) {
+    var amount = getAmount(item);
+    var quantity = getQuantity(item);
+    return amount / quantity;
+  }
+
+  var getId = propertyOr('id', (p0) => 0);
+  var data = await cartItemsToPrinterData(
+      getItems(sale), getCustomer(sale), onGetPrice, date: getDate(sale));
+  await posPrint(data: data, force: true, qr: getId(sale));
 }

@@ -20,9 +20,10 @@ Future<String> posPrint({
   String data = '',
   String qr = '',
   appendHeaderFooter = true,
+  force = false,
 }) async {
   var currentShop = await getActiveShop();
-  if (_getMustPrint(currentShop) == false) {
+  if (_getMustPrint(currentShop) == false || force) {
     var header = _getPrinterHeader(currentShop);
     var footer = _getPrinterFooter(currentShop);
     data = appendHeaderFooter ? '$header \n $data \n $footer' : data;

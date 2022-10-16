@@ -58,39 +58,52 @@ const _maxMediumScreen = 1000;
 // const MAX_LARGE_SCREEN = > 1008
 
 bool isSmallScreen(BuildContext context) {
-  var width = MediaQuery.of(context).size.width;
+  var width = MediaQuery
+      .of(context)
+      .size
+      .width;
   return width <= _maxSmallScreen;
 }
 
 bool hasEnoughWidth(BuildContext context) {
-  var width = MediaQuery.of(context).size.width;
+  var width = MediaQuery
+      .of(context)
+      .size
+      .width;
   return width >= _maxMediumScreen;
 }
 
 and(List<Function> fns) => fns.fold(true, (dynamic a, b) => a && b() == true);
 
-propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
-    (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);
+propertyOr(String property, Function(dynamic) onOr) =>
+    ifDoElse(
+            (x) => x is Map && x.containsKey(property), (x) => x[property],
+        onOr);
 
 propertyOrNull(String property) => propertyOr(property, (p0) => null);
 
 isNativeMobilePlatform() =>
     !kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);
+        (defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.android);
 
 isWebMobilePlatform() =>
     kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);
+        (defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.android);
 
-Future<bool> isOfflineFirstEnv() async =>
-    JSHelper().callHasDirectPosPrinterAPI();
+Future<bool> isOfflineFirstEnv() async {
+  var a = await JSHelper().callHasDirectPosPrinterAPI();
+  if (a == true) {
+    return true;
+  }
+  return kIsWeb == true && isWebMobilePlatform() == false;
+}
 
 var doubleOrZero = compose([
-  (x) => (double.tryParse('$x') ?? 0),
-  (x) => x.toStringAsFixed(5),
-  (x) => (double.tryParse('$x') ?? 0)
+      (x) => (double.tryParse('$x') ?? 0),
+      (x) => x.toStringAsFixed(5),
+      (x) => (double.tryParse('$x') ?? 0)
 ]);
 
 var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
