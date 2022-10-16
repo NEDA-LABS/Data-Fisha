@@ -13,14 +13,14 @@ import 'package:smartstock/sales/components/cash_sale_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CashSalesPage extends StatefulWidget {
-  const CashSalesPage({Key? key}) : super(key: key);
+class SalesCashPage extends StatefulWidget {
+  const SalesCashPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CashSalesPage();
 }
 
-class _CashSalesPage extends State<CashSalesPage> {
+class _CashSalesPage extends State<SalesCashPage> {
   bool _loading = false;
   String _query = '';
   int size = 20;

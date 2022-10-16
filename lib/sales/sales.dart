@@ -1,12 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
-import 'package:smartstock/sales/pages/cash_sales.dart';
+import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/customers.dart';
 import 'package:smartstock/sales/pages/index.dart';
-import 'package:smartstock/sales/pages/invoice_sale.dart';
-import 'package:smartstock/sales/pages/invoices.dart';
-import 'package:smartstock/sales/pages/retail_sale.dart';
-import 'package:smartstock/sales/pages/whole_sale.dart';
+import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/pages/sales_invoice.dart';
+import 'package:smartstock/sales/pages/sales_cash_retail.dart';
+import 'package:smartstock/sales/pages/sales_cach_whole.dart';
 import 'package:smartstock/sales/states/sales.dart';
 
 class SalesModule extends Module {
@@ -18,7 +18,7 @@ class SalesModule extends Module {
   final cash = ChildRoute(
     '/cash',
     guards: [ActiveShopGuard()],
-    child: (context, args) => const CashSalesPage(),
+    child: (context, args) => const SalesCashPage(),
   );
   final wholeSale = ChildRoute(
     '/cash/whole',
