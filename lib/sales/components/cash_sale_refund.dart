@@ -6,9 +6,11 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_cash_sale.dart';
 
 class CashSaleRefundContent extends StatefulWidget {
-  final sale;
+  final saleId;
+  final item;
 
-  const CashSaleRefundContent(this.sale, {Key? key}) : super(key: key);
+  const CashSaleRefundContent(this.saleId, this.item, {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -22,9 +24,10 @@ class _State extends State<CashSaleRefundContent> {
   void initState() {
     states = {
       "loading": false,
-      'amount': '0',
-      'quantity': '0',
-      'product': widget.sale['product'] ?? ''
+      'amount': '${propertyOr('amount_refund', (p0) => 0)(widget.item)}',
+      'quantity': '${propertyOr('quantity_refund', (p0) => 0)(widget.item)}',
+      'product': compose([propertyOr('product', (p0) => ''),propertyOrNull('stock')])(widget.item),
+      'batch': propertyOr('batch', (p0) => '')(widget.item),
     };
     updateState = ifDoElse(
         (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
@@ -53,8 +56,7 @@ class _State extends State<CashSaleRefundContent> {
                 initialText: states['quantity'] ?? '0',
                 error: states['e_q'] ?? '',
                 placeholder: ''),
-            _submitButton(
-                context, widget.sale['id'] ?? '', states, updateState),
+            _submitButton(context, states, updateState),
             Text(states['error'] ?? '')
           ],
         ),
@@ -64,7 +66,7 @@ class _State extends State<CashSaleRefundContent> {
 
   _validateName(data) => data is String && data.isNotEmpty;
 
-  _submitButton(context, id, states, updateState) {
+  _submitButton(context, states, updateState) {
     return Container(
       height: 40,
       width: MediaQuery.of(context).size.width,
@@ -72,7 +74,7 @@ class _State extends State<CashSaleRefundContent> {
       child: OutlinedButton(
         onPressed: states['loading'] == true
             ? null
-            : () => _submitRefund(id, states, updateState),
+            : () => _submitRefund(states, updateState),
         child: Text(
           states['loading'] ? "Waiting..." : "Submit.",
           style: const TextStyle(fontSize: 16),
@@ -81,7 +83,7 @@ class _State extends State<CashSaleRefundContent> {
     );
   }
 
-  _submitRefund(String id, states, updateState) {
+  _submitRefund(states, updateState) {
     if (!_validateName(states['amount'])) {
       updateState({'e_a': 'Amount required'});
     }
@@ -93,8 +95,9 @@ class _State extends State<CashSaleRefundContent> {
       'amount': doubleOrZero(states['amount']),
       'quantity': doubleOrZero(states['quantity']),
       'product': states['product'] ?? '',
+      'batch': states['batch'] ?? '',
     };
-    var cashRefund = prepareCashRefund(id, refund);
+    var cashRefund = prepareCashRefund(widget.saleId, refund);
     updateState({'loading': true});
     getActiveShop()
         .then((shop) => cashRefund(shop))

@@ -27,7 +27,8 @@ class _CashSalesPage extends State<CashSalesPage> {
   List _sales = [];
 
   _onItemPressed(item) {
-    showDialogOrModalSheet(cashSaleDetail(context, item), context);
+    showDialogOrModalSheet(
+        CashSaleDetail(sale: item, pageContext: context), context);
   }
 
   Widget _onCell(a, b, c) {
