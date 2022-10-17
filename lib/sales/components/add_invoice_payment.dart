@@ -28,34 +28,45 @@ class _State extends State<AddInvoicePaymentContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: const BoxConstraints(maxWidth: 400),
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-            child: ListBody(children: [
-          TextInput(
-              onText: (d) => updateState({'amount': d}),
-              label: "Amount",
-              type: TextInputType.number,
-              error: states['error'] ?? '',
-              placeholder: ''),
-          Container(
+      constraints: const BoxConstraints(maxWidth: 400),
+      padding: const EdgeInsets.all(16),
+      child: SingleChildScrollView(
+        child: ListBody(
+          children: [
+            TextInput(
+                onText: (d) => updateState({'amount': d}),
+                label: "Amount",
+                type: TextInputType.number,
+                error: states['error'] ?? '',
+                placeholder: ''),
+            Container(
               height: 64,
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: Row(children: [
-                Expanded(
+              child: Row(
+                children: [
+                  Expanded(
                     child: SizedBox(
-                        height: 40,
-                        child: OutlinedButton(
-                            onPressed: states['loading']
-                                ? null
-                                : () => _submitAddInvoicePayment(
-                                    widget.id, states, updateState),
-                            child: Text(
-                                states['loading'] ? "Waiting..." : "Submit.",
-                                style: const TextStyle(fontSize: 16)))))
-              ])),
-          Text(states['error'] ?? '')
-        ])));
+                      height: 40,
+                      child: OutlinedButton(
+                        onPressed: states['loading']
+                            ? null
+                            : () => _submitAddInvoicePayment(
+                                widget.id, states, updateState),
+                        child: Text(
+                          states['loading'] ? "Waiting..." : "Submit.",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Text(states['error'] ?? '')
+          ],
+        ),
+      ),
+    );
   }
 
   _validateName(data) => data is String && data.isNotEmpty;
@@ -68,7 +79,7 @@ class _State extends State<AddInvoicePaymentContent> {
       return;
     }
     var payment = {'amount': doubleOrZero("${states['amount']}")};
-    var patchInvoice = prepareAddPayment(id, payment);
+    var patchInvoice = prepareAddInvoicePayment(id, payment);
     getActiveShop().then((shop) {
       updateState({'loading': true});
       patchInvoice(shop)

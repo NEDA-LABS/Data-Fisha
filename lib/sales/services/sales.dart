@@ -114,7 +114,16 @@ Future rePrintASale(sale) async {
     propertyOrNull('items')
   ]);
   var getDate = propertyOrNull('timer');
-  var getCustomer = propertyOr('customer', (_) => '');
+  var getCustomer = ifDoElse(
+    (f) => f is Map && f['customer'] is Map,
+    compose(
+      [
+        propertyOr('displayName', (_) => ''),
+        propertyOrNull('customer'),
+      ],
+    ),
+    propertyOr('customer', (_) => ''),
+  );
   var getAmount = propertyOr('amount', (p0) => 0);
   var getQuantity = propertyOr('quantity', (p0) => 0);
   onGetPrice(item) {
@@ -125,6 +134,10 @@ Future rePrintASale(sale) async {
 
   var getId = propertyOr('id', (p0) => 0);
   var data = await cartItemsToPrinterData(
-      getItems(sale), getCustomer(sale), onGetPrice, date: getDate(sale));
+    getItems(sale),
+    getCustomer(sale),
+    onGetPrice,
+    date: getDate(sale),
+  );
   await posPrint(data: data, force: true, qr: getId(sale));
 }

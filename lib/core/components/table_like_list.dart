@@ -1,7 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 
 Widget tableLikeListRow(List<Widget> items) {

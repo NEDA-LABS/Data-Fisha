@@ -9,7 +9,7 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cash_sale_details.dart';
+import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -99,27 +99,23 @@ class _CashSalesPage extends State<SalesCashPage> {
 
   _tableHeader() {
     var height = 38.0;
-    return isSmallScreen(context)
-        ? SizedBox(
-            height: height,
-            child: tableLikeListRow([
-              tableLikeListTextHeader('Products'),
-              tableLikeListTextHeader('Amount ( TZS )'),
-            ]),
-          )
-        : SizedBox(
-            height: height,
-            child: tableLikeListRow([
-              tableLikeListTextHeader('Products'),
-              tableLikeListTextHeader('Amount ( TZS )'),
-              isSmallScreen(context)
-                  ? tableLikeListTextHeader('')
-                  : tableLikeListTextHeader('Items'),
-              isSmallScreen(context)
-                  ? tableLikeListTextHeader('')
-                  : tableLikeListTextHeader('Customer'),
-            ]),
-          );
+    var smallView = SizedBox(
+      height: height,
+      child: tableLikeListRow([
+        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Amount ( TZS )'),
+      ]),
+    );
+    var bigView = SizedBox(
+      height: height,
+      child: tableLikeListRow([
+        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Amount ( TZS )'),
+        tableLikeListTextHeader('Items'),
+        tableLikeListTextHeader('Customer'),
+      ]),
+    );
+    return isSmallScreen(context) ? smallView : bigView;
   }
 
   _fields() => isSmallScreen(context)
@@ -217,12 +213,13 @@ class _CashSalesPage extends State<SalesCashPage> {
   _salesList() {
     return Expanded(
       child: TableLikeList(
-          onFuture: () async => _sales,
-          keys: _fields(),
-          onCell: _onCell,
-          onItemPressed: _onItemPressed,
-          onLoadMore: () async => _loadMore(),
-          loading: _loading),
+        onFuture: () async => _sales,
+        keys: _fields(),
+        onCell: _onCell,
+        onItemPressed: _onItemPressed,
+        onLoadMore: () async => _loadMore(),
+        loading: _loading,
+      ),
     );
   }
 

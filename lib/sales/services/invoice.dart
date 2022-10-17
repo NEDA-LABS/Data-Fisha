@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
@@ -12,38 +12,47 @@ import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
-Future<List> getInvoiceFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+// Future<List> getInvoiceFromCacheOrRemote({
+//   skipLocal = false,
+//   stringLike = '',
+// }) async {
+//   var shop = await getActiveShop();
+//   // var invoices = [];
+//   //skipLocal ? [] : await getLocalInvoices(shopToApp(shop));
+//   // var getItOrRemoteAndSave = ifDoElse(
+//   //   (x) => x == null || (x is List && x.isEmpty),
+//   //   inv(_) async {
+//   List rInvoices = await getAllRemoteInvoices(stringLike)(shop);
+//   rInvoices = await compute(
+//       _filterAndSort, {"invoices": rInvoices, "query": stringLike});
+//   // await saveLocalInvoices(shopToApp(shop), rInvoices);
+//   return rInvoices;
+//   // }
+//   // ,
+//   // (x) => compute(_filterAndSort, {"invoices": x, "query": stringLike}),
+//   // );
+//   // return inv(invoices);
+// }
+//
+// Future<List> _filterAndSort(Map data) async {
+//   var invoices = data['invoices'] ?? [];
+//   // String stringLike = data['query'];
+//   // _where(x) =>
+//   //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
+//
+//   // invoices = invoices.where(_where).toList();
+//   // invoices.sort((a, b) =>
+//   //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
+//   return invoices;
+// }
+
+Future<List> getInvoiceSalesFromCacheOrRemote(startAt, size, product) async {
   var shop = await getActiveShop();
-  // var invoices = [];
-  //skipLocal ? [] : await getLocalInvoices(shopToApp(shop));
-  // var getItOrRemoteAndSave = ifDoElse(
-  //   (x) => x == null || (x is List && x.isEmpty),
-  //   inv(_) async {
-  List rInvoices = await getAllRemoteInvoices(stringLike)(shop);
-  rInvoices = await compute(
-      _filterAndSort, {"invoices": rInvoices, "query": stringLike});
-  // await saveLocalInvoices(shopToApp(shop), rInvoices);
-  return rInvoices;
-  // }
-  // ,
-  // (x) => compute(_filterAndSort, {"invoices": x, "query": stringLike}),
-  // );
-  // return inv(invoices);
-}
-
-Future<List> _filterAndSort(Map data) async {
-  var invoices = data['invoices'] ?? [];
-  // String stringLike = data['query'];
-  // _where(x) =>
-  //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
-
-  // invoices = invoices.where(_where).toList();
-  // invoices.sort((a, b) =>
-  //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
-  return invoices;
+  var user = await getLocalCurrentUser();
+  var getUsername = propertyOr('username', (p0) => '');
+  var getInvoices =
+      prepareGetRemoteInvoiceSales(startAt, size, product, getUsername(user));
+  return await getInvoices(shop);
 }
 
 Future _printInvoiceItems(
@@ -112,3 +121,4 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
     return saveInvoice(url);
   }
 }
+
