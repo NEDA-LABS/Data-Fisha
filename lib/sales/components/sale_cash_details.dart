@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/components/cash_sale_refund.dart';
+import 'package:smartstock/sales/components/sale_cash_refund.dart';
 import 'package:smartstock/sales/components/sale_items_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
@@ -75,12 +75,6 @@ class _State extends State<CashSaleDetail> {
   }
 
   _prepareRefundPressed(item) {
-    // print(saleId);
-    // print(item);
-    // var view = _prepareRefundView(context, saleId, item);
-    // return () => navigator().maybePop().whenComplete(view);
-    // _prepareRefundView('', item)();
-    // Builder(builder: (context) {
     showDialog(
       context: widget.pageContext,
       builder: (context) {
@@ -92,24 +86,6 @@ class _State extends State<CashSaleDetail> {
         );
       },
     );
-    //   return const SizedBox(height: 0);
-    // });
-  }
-
-  _prepareRefundView(saleId, item) {
-    // Builder(builder: (context) {
-    //   showDialog(context: context, builder: (context) {
-    //     return Dialog(child: Container());
-    //     // CashSaleRefundContent(saleId,item)
-    //     // );
-    //   });
-    //   return const SizedBox(height: 0);
-    // });
-
-    // Widget builder(context) => Dialog(child: CashSaleRefundContent(saleId, item));
-    // return () => Builder(builder: (context) {
-    //   return showDialog(context: context, builder: builder);
-    // },);
   }
 
   _listItem(e, item) {
