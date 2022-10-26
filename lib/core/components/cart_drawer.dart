@@ -40,6 +40,7 @@ class CartDrawer extends StatefulWidget {
 
 class _State extends State<CartDrawer> {
   Map states = {'discount': 0, 'loading': false};
+  TextEditingController controller = TextEditingController();
 
   _prepareUpdateState() => ifDoElse(
       (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
@@ -58,17 +59,25 @@ class _State extends State<CartDrawer> {
             getAddWidget: widget.onCustomerLikeAddWidget,
             onField: (x) => x['name'] ?? x['displayName']),
         Expanded(
-            child: ListView.builder(
-                controller: ScrollController(),
-                itemCount: widget.carts.length,
-                itemBuilder: _cartListItemBuilder(
-                    widget.carts,
-                    widget.wholesale,
-                    widget.onAddItem,
-                    widget.onRemoveItem,
-                    widget.onGetPrice))),
-        _cartSummary(widget.carts, widget.wholesale, context, widget.onCheckout,
-            widget.onGetPrice)
+          child: ListView.builder(
+            controller: ScrollController(),
+            itemCount: widget.carts.length,
+            itemBuilder: _cartListItemBuilder(
+              widget.carts,
+              widget.wholesale,
+              widget.onAddItem,
+              widget.onRemoveItem,
+              widget.onGetPrice,
+            ),
+          ),
+        ),
+        _cartSummary(
+          widget.carts,
+          widget.wholesale,
+          context,
+          widget.onCheckout,
+          widget.onGetPrice,
+        )
       ]),
     );
   }
@@ -79,14 +88,19 @@ class _State extends State<CartDrawer> {
       child: Column(
         children: [
           _totalAmountRow(carts, wholesale, onGetPrice),
-          _discountRow(states['discount'],
-              (v) => _prepareUpdateState()({'discount': doubleOrZero(v)})),
+          _discountRow(
+            states['discount'],
+            (v) {
+              _prepareUpdateState()({'discount': doubleOrZero(v)});
+            },
+          ),
           Container(
             margin: const EdgeInsets.all(8),
             height: 54,
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                borderRadius: const BorderRadius.all(Radius.circular(4))),
+              color: Theme.of(context).primaryColorDark,
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+            ),
             child: states['loading']
                 ? _progressIndicator()
                 : _submitButton(carts, states['discount'], wholesale,
@@ -161,13 +175,17 @@ class _State extends State<CartDrawer> {
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               width: 150,
               child: TextField(
-                  autofocus: false,
-                  maxLines: 1,
-                  minLines: 1,
-                  keyboardType: TextInputType.number,
-                  onChanged: onDiscount,
-                  decoration: const InputDecoration(
-                      hintText: "Discount", border: InputBorder.none)),
+                autofocus: false,
+                maxLines: 1,
+                minLines: 1,
+                controller: controller,
+                keyboardType: TextInputType.number,
+                onChanged: onDiscount,
+                decoration: const InputDecoration(
+                  hintText: "Discount",
+                  border: InputBorder.none,
+                ),
+              ),
             ),
           ],
         ),

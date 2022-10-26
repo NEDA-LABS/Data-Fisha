@@ -23,12 +23,12 @@ class SalesModule extends Module {
   final wholeSale = ChildRoute(
     '/cash/whole',
     guards: [ActiveShopGuard()],
-    child: (context, args) => wholeSalePage(context),
+    child: (context, args) => SalesCashWhole(),
   );
   final retail = ChildRoute(
     '/cash/retail',
     guards: [ActiveShopGuard()],
-    child: (context, args) => retailSalePage(context),
+    child: (context, args) => SalesCashRetail(),
   );
   final customer = ChildRoute(
     '/customers',

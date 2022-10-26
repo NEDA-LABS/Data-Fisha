@@ -60,7 +60,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       height: height,
       child: tableLikeListRow([
         tableLikeListTextHeader('Products'),
-        tableLikeListTextHeader('Amount ( TZS )'),
+        tableLikeListTextHeader('Customer'),
       ]),
     );
     var largeView = SizedBox(
@@ -76,7 +76,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   }
 
   _fields() => isSmallScreen(context)
-      ? ['product', 'amount']
+      ? ['product', 'customer']
       : ['product', 'amount', 'payment', 'customer'];
 
   _loadingView(bool show) =>

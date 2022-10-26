@@ -23,10 +23,10 @@ _iconContainer(String? svg) => Padding(
 
 _name(String name) => Container(
       padding: const EdgeInsets.all(5),
-      width: 75,
+      width: 80,
       child: Text(
         name,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),
       ),
     );
 

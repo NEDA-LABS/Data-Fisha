@@ -16,6 +16,7 @@ class StockAppBar extends PreferredSize with Disposable {
   final Function(String)? onSearch;
   final dynamic debounceTime;
   Timer? _debounce;
+  TextEditingController? searchTextController;
 
   StockAppBar({
     Key? key,
@@ -28,6 +29,7 @@ class StockAppBar extends PreferredSize with Disposable {
     this.backLink = "/",
     this.searchHint = "",
     this.debounceTime = 500,
+    this.searchTextController
   }) : super(
             key: key,
             preferredSize: Size.fromHeight(showSearch ? 104 : 56),
@@ -86,17 +88,21 @@ class StockAppBar extends PreferredSize with Disposable {
               ),
             ),
             child: TextField(
-                autofocus: false,
-                autocorrect: false,
-                maxLines: 1,
-                minLines: 1,
-                onChanged: (text) {
-                  if (_debounce?.isActive ?? false) _debounce!.cancel();
-                  _debounce = Timer(Duration(milliseconds: debounceTime),
-                      () => onSearch!(text));
-                },
-                decoration: InputDecoration(
-                    hintText: placeholder, border: InputBorder.none)),
+              controller: searchTextController,
+              autofocus: false,
+              autocorrect: false,
+              maxLines: 1,
+              minLines: 1,
+              onChanged: (text) {
+                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                _debounce = Timer(Duration(milliseconds: debounceTime),
+                    () => onSearch!(text));
+              },
+              decoration: InputDecoration(
+                hintText: placeholder,
+                border: InputBorder.none,
+              ),
+            ),
           ),
         ),
       );

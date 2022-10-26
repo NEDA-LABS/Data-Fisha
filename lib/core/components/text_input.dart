@@ -18,8 +18,9 @@ class TextInput extends StatefulWidget {
   final dynamic debounceTime;
   final bool show;
   final bool readOnly;
+  TextEditingController? controller;
 
-  const TextInput({
+  TextInput({
     Key? key,
     required this.onText,
     this.initialText = '',
@@ -31,90 +32,89 @@ class TextInput extends StatefulWidget {
     this.lines = 1,
     this.debounceTime = 250,
     this.show = true,
-    this.readOnly = false
+    this.readOnly = false,
+    this.controller,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TextInputState();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _TextInputState extends State<TextInput> {
-  TextEditingController? controller;
+class _State extends State<TextInput> {
   Timer? _debounce;
-
-  _labelStyle() => const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
-
-  _labelPadding() => const EdgeInsets.fromLTRB(0, 8, 0, 8);
-
-  _label(label) => Padding(
-      padding: _labelPadding(), child: Text(label ?? '', style: _labelStyle()));
-
-  _inputPadding() => const EdgeInsets.all(8);
-
-  _inputDecoration(String hint) => InputDecoration(
-      border: InputBorder.none,
-      hintText: hint,
-      contentPadding: _inputPadding());
-
-  _input(error, onText, type, placeholder, icon, lines,
-          TextEditingController? controller, debounceTime, show) =>
-      Builder(
-        builder: (context) => Container(
-          decoration: inputBoxDecoration(context, error),
-          child: Row(
-            children: [
-              _fulWidthTextField(onText, type, placeholder, lines, controller,
-                  debounceTime, show),
-              Padding(padding: const EdgeInsets.all(5), child: icon)
-            ],
-          ),
-        ),
-      );
-
-  _fulWidthTextField(onText, type, placeholder, lines,
-          TextEditingController? controller, debounceTime, show) =>
-      Expanded(
-          child: TextField(
-        controller: controller,
-        autofocus: false,
-        maxLines: lines,
-        readOnly:  widget.readOnly,
-        onChanged: (text) {
-          if (_debounce?.isActive ?? false) _debounce!.cancel();
-          _debounce = Timer(
-            Duration(milliseconds: debounceTime),
-            () => onText(text),
-          );
-        },
-        keyboardType: type,
-        decoration: _inputDecoration(placeholder),
-        obscureText: show == false,
-      ));
 
   @override
   void initState() {
-    controller = TextEditingController(text: widget.initialText);
+    widget.controller = TextEditingController(text: widget.initialText);
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _label(),
+        _input(context),
+        inputErrorMessageOrEmpty(widget.error),
+      ],
+    );
+  }
+
+  _label() {
+    var labelPadding = const EdgeInsets.fromLTRB(0, 8, 0, 8);
+    var labelStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
+    var empty = Container(height: 10);
+    var label = Padding(
+      padding: labelPadding,
+      child: Text(
+        widget.label ?? '',
+        style: labelStyle,
+      ),
+    );
+    return widget.label.isEmpty ? empty : label;
+  }
+
+  _input(context) {
+    return Container(
+      decoration: inputBoxDecoration(context, widget.error),
+      child: Row(
         children: [
-          widget.label.isEmpty ? Container(height: 10) : _label(widget.label),
-          _input(
-              widget.error,
-              widget.onText,
-              widget.type,
-              widget.placeholder,
-              widget.icon,
-              widget.lines,
-              controller,
-              widget.debounceTime,
-              widget.show),
-          inputErrorMessageOrEmpty(widget.error),
+          _fulWidthTextField(),
+          Padding(padding: const EdgeInsets.all(5), child: widget.icon)
         ],
-      );
+      ),
+    );
+  }
+
+  _fulWidthTextField() {
+    var inputPadding = const EdgeInsets.all(8);
+    var inputDecoration = InputDecoration(
+      border: InputBorder.none,
+      hintText: widget.placeholder,
+      contentPadding: inputPadding,
+    );
+
+    return Expanded(
+      child: TextField(
+        controller: widget.controller,
+        autofocus: false,
+        maxLines: widget.lines,
+        readOnly: widget.readOnly,
+        onChanged: (text) {
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
+          _debounce = Timer(
+            Duration(milliseconds: widget.debounceTime),
+            () => widget.onText(text),
+          );
+        },
+        keyboardType: widget.type,
+        decoration: inputDecoration,
+        obscureText: widget.show == false,
+      ),
+    );
+  }
 
   @override
   void dispose() {
