@@ -11,7 +11,7 @@ import 'package:smartstock/core/components/refresh_button.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/services/cart.dart';
 
-class SaleLikePage extends StatefulWidget{
+class SaleLikePage extends StatefulWidget {
   final String title;
   final bool wholesale;
   final String backLink;
@@ -22,8 +22,9 @@ class SaleLikePage extends StatefulWidget{
   final Widget Function() onCustomerLikeAddWidget;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
+  TextEditingController? searchTextController;
 
-  const SaleLikePage({
+  SaleLikePage({
     required this.title,
     required this.wholesale,
     required this.onSubmitCart,
@@ -34,12 +35,12 @@ class SaleLikePage extends StatefulWidget{
     required this.onCustomerLikeAddWidget,
     required this.checkoutCompleteMessage,
     this.customerLikeLabel = 'Choose customer',
+    this.searchTextController,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState()=> _State();
-
+  State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<SaleLikePage> {
@@ -52,10 +53,11 @@ class _State extends State<SaleLikePage> {
 
   @override
   void initState() {
-    updateState = ifDoElse((x) => x is Map, (x) =>
-        setState(() => states.addAll(x)), (x) => null);
+    updateState = ifDoElse(
+        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
     super.initState();
   }
+
   @override
   Widget build(var context) {
     return responsiveBody(
@@ -64,15 +66,15 @@ class _State extends State<SaleLikePage> {
       current: widget.backLink,
       rightDrawer: _hasCarts(states)
           ? SizedBox(
-          width: 350,
-          child: _cartDrawer(
-              states, updateState, context, widget.wholesale, (a) {}))
+              width: 350,
+              child: _cartDrawer(
+                  states, updateState, context, widget.wholesale, (a) {}))
           : null,
       onBody: (drawer) => Scaffold(
         appBar: states['hab'] == true ? null : _appBar(updateState),
         floatingActionButton: _fab(states, updateState),
         body: FutureBuilder<List>(
-          initialData: _getCarts(states),
+          // initialData: _getCarts(states),
           future: _future(states),
           builder: _getView(
             _getCarts(states),
@@ -92,41 +94,42 @@ class _State extends State<SaleLikePage> {
       skipLocal: _getSkip(states), stringLike: _getQuery(states));
 
   _onAddToCart(states, updateState) => (cart) {
-    var carts = appendToCarts(cart, _getCarts(states));
-    updateState({"carts": carts, 'query': ''});
-    navigator().maybePop();
-  };
+        var carts = appendToCarts(cart, _getCarts(states));
+        updateState({"carts": carts, 'query': ''});
+        navigator().maybePop();
+      };
 
   _onShowCheckoutSheet(states, updateState, context) => () => fullScreeDialog(
       context,
-          (refresh) =>
+      (refresh) =>
           _cartDrawer(states, updateState, context, widget.wholesale, refresh));
 
   _appBar(updateState) => StockAppBar(
       title: widget.title,
       backLink: widget.backLink,
+      searchTextController: widget.searchTextController,
       showBack: true,
       showSearch: true,
       searchHint: "Search here...",
       onSearch: (text) {
-        updateState({"query": text, 'skip': false});
+        updateState({"query": text ?? '', 'skip': false});
       });
 
   _fab(states, updateState) => salesRefreshButton(
-      onPressed: () => updateState({"skip": true}),
+      onPressed: () => updateState({"skip": true, 'query': ''}),
       carts: states['carts'] ?? []);
 
   _isLoading(snapshot) =>
       snapshot is AsyncSnapshot &&
-          snapshot.connectionState == ConnectionState.waiting;
+      snapshot.connectionState == ConnectionState.waiting;
 
   _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) =>
-          (context, snapshot) => Column(children: [
-        _isLoading(snapshot)
-            ? const LinearProgressIndicator()
-            : const SizedBox(height: 0),
-        Expanded(
-            child: salesLikeBody(
+      (context, snapshot) => Column(children: [
+            _isLoading(snapshot)
+                ? const LinearProgressIndicator()
+                : const SizedBox(height: 0),
+            Expanded(
+              child: salesLikeBody(
                 onAddToCart: onAddToCart,
                 wholesale: widget.wholesale,
                 products: snapshot.data ?? [],
@@ -134,8 +137,10 @@ class _State extends State<SaleLikePage> {
                 onShowCheckout: onShowCheckout,
                 onGetPrice: onGetPrice,
                 carts: carts,
-                context: context))
-      ]);
+                context: context,
+              ),
+            )
+          ]);
 
   _cartDrawer(states, updateState, context, wholesale, refresh) => CartDrawer(
         customerLikeLabel: widget.customerLikeLabel,

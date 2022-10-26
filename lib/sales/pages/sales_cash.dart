@@ -17,10 +17,10 @@ class SalesCashPage extends StatefulWidget {
   const SalesCashPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CashSalesPage();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _CashSalesPage extends State<SalesCashPage> {
+class _State extends State<SalesCashPage> {
   bool _loading = false;
   String _query = '';
   int size = 20;
@@ -103,7 +103,7 @@ class _CashSalesPage extends State<SalesCashPage> {
       height: height,
       child: tableLikeListRow([
         tableLikeListTextHeader('Products'),
-        tableLikeListTextHeader('Amount ( TZS )'),
+        tableLikeListTextHeader('Customer'),
       ]),
     );
     var bigView = SizedBox(
@@ -119,7 +119,7 @@ class _CashSalesPage extends State<SalesCashPage> {
   }
 
   _fields() => isSmallScreen(context)
-      ? ['product', 'amount']
+      ? ['product', 'customer']
       : ['product', 'amount', 'quantity', 'customer'];
 
   _loadingView(bool show) =>

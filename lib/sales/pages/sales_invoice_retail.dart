@@ -20,7 +20,7 @@ invoiceSalePage(context)=> SaleLikePage(
 );
 
 _onPrepareSalesAddToCartView(context) => (product, onAddToCart) {
-  addSaleToCartView(
+  salesAddToCart(
       onGetPrice: _getPrice,
       cart: CartModel(product: product, quantity: 1),
       onAddToCart: onAddToCart,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -6,8 +7,15 @@ import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
-retailSalePage(context) => SaleLikePage(
+class SalesCashRetail extends StatelessWidget {
+  TextEditingController searchTextController = TextEditingController();
+  SalesCashRetail({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SaleLikePage(
       wholesale: false,
+      searchTextController: searchTextController,
       title: 'Retail',
       backLink: '/sales/cash',
       onSubmitCart: onSubmitRetailSale,
@@ -15,16 +23,21 @@ retailSalePage(context) => SaleLikePage(
       onGetPrice: _getPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context),
       onCustomerLikeList: getCustomerFromCacheOrRemote,
-      onCustomerLikeAddWidget: ()=>const CreateCustomerContent(),
+      onCustomerLikeAddWidget: () => const CreateCustomerContent(),
       checkoutCompleteMessage: 'Checkout complete.',
     );
+  }
 
-_onPrepareSalesAddToCartView(context) => (product, onAddToCart) {
-      addSaleToCartView(
-          onGetPrice: _getPrice,
-          cart: CartModel(product: product, quantity: 1),
-          onAddToCart: onAddToCart,
-          context: context);
+  _onPrepareSalesAddToCartView(context) {
+    return (product, onAddToCart) {
+      return salesAddToCart(
+        onGetPrice: _getPrice,
+        cart: CartModel(product: product, quantity: 1),
+        onAddToCart: onAddToCart,
+        context: context,
+      );
     };
+  }
 
-dynamic _getPrice(product) => doubleOrZero(product['retailPrice']);
+  dynamic _getPrice(product) => doubleOrZero(product['retailPrice']);
+}
