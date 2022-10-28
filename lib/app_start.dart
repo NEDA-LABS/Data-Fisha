@@ -23,7 +23,7 @@ startSmartStock({
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(
-      module: SmartStockCoreModule(saleServices: externalSaleServices),
+      module: SmartStockCoreModule(),
       child: _mainWidget(),
     ),
   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/states/sales_external_services.dart';
 
 List<SubMenuModule> _pagesMenu() => [
       SubMenuModule(
@@ -9,13 +10,6 @@ List<SubMenuModule> _pagesMenu() => [
         roles: [],
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Wholesale',
-      //   link: '/sales/whole',
-      //   svgName: 'supplier_icon.svg',
-      //   roles: [],
-      //   onClick: () {},
-      // ),
       SubMenuModule(
         name: 'Invoices',
         link: '/sales/invoice',
@@ -30,13 +24,6 @@ List<SubMenuModule> _pagesMenu() => [
         roles: [],
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Refunds',
-      //   link: '/sales/refund',
-      //   svgName: 'transfer_icon.svg',
-      //   roles: [],
-      //   onClick: () {},
-      // )
     ];
 
 MenuModel salesMenu() => MenuModel(
@@ -44,5 +31,17 @@ MenuModel salesMenu() => MenuModel(
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
       roles: ['*'],
-      pages: _pagesMenu(),
+      pages: [
+        ..._pagesMenu(),
+        ...SalesExternalServiceState().salesExternalServices.map<SubMenuModule>((e){
+          return   SubMenuModule(
+            name: e.name,
+            link: '/sales${e.pageLink}',
+            svgName: null, // 'transfer_icon.svg',
+            icon: e.icon,
+            roles: [],
+            onClick: () {},
+          );
+        })
+      ],
     );

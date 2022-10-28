@@ -17,11 +17,6 @@ import 'package:smartstock/stocks/services/navigation.dart';
 import 'package:smartstock/stocks/stocks.dart';
 
 class SmartStockCoreModule extends Module {
-  final List<ExternalService> saleServices;
-
-  SmartStockCoreModule({
-    required this.saleServices,
-  });
 
   @override
   List<ModularRoute> get routes => [
@@ -42,8 +37,7 @@ class SmartStockCoreModule extends Module {
           module: ReportModule([]),
         ),
         ModuleRoute('/sales/',
-            guards: [AuthGuard(), ActiveShopGuard()],
-            module: SalesModule()),
+            guards: [AuthGuard(), ActiveShopGuard()], module: SalesModule()),
         ModuleRoute('/stock/',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
             module: StockModule([])),

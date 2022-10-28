@@ -21,6 +21,7 @@ class SubMenuModule {
   final String link;
   final List<String> roles;
   final Function onClick;
+  Icon? icon;
   String? svgName = '';
 
   SubMenuModule({
@@ -28,7 +29,8 @@ class SubMenuModule {
     required this.link,
     required this.roles,
     required this.onClick,
-    this.svgName
+    this.svgName,
+    this.icon
   });
 }
 

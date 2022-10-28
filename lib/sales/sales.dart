@@ -54,10 +54,7 @@ class SalesModule extends Module {
       ];
 
   @override
-  List<Bind> get binds => [
-        Bind.lazySingleton((i) => SalesState()),
-        Bind.lazySingleton((i) => SalesExternalServiceState())
-      ];
+  List<Bind> get binds => [Bind.lazySingleton((i) => SalesState())];
 
   _getExternalServices() {
     return SalesExternalServiceState()

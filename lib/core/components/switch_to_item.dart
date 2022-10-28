@@ -62,7 +62,12 @@ Widget _switchToItem(SubMenuModule menu) => Padding(
         onTap: () => navigateTo(menu.link),
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [_iconContainer(menu.svgName), _name(menu.name)],
+          children: [
+            menu.icon != null
+                ? _externalIconContainer(menu.icon!)
+                : _iconContainer(menu.svgName),
+            _name(menu.name)
+          ],
         ),
       ),
     );
@@ -86,5 +91,5 @@ Widget Function(ExternalService service) _switchToExternalItem(
 switchToItems(List<SubMenuModule> menus) =>
     menus.map<Widget>(_switchToItem).toList();
 
-switchToExternalService(List<ExternalService> services, String rootPath) =>
-    services.map<Widget>(_switchToExternalItem(rootPath)).toList();
+// switchToExternalService(List<ExternalService> services, String rootPath) =>
+//     services.map<Widget>(_switchToExternalItem(rootPath)).toList();

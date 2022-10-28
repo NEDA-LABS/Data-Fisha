@@ -33,7 +33,7 @@ class SalesPage extends StatelessWidget {
                   switchToTitle(),
                   Wrap(children: [
                     ...switchToItems(salesMenu().pages),
-                    ...switchToExternalService(services, '/sales')
+                    // ...switchToExternalService(services, '/sales')
                   ]),
                   // Text('${services.length}')
                   // salesSummary(),
