@@ -1,7 +1,7 @@
 name: smartstock
 description: SmartStock mobile application
 version: 1.0.2-d.2022.10.26-b.3
-publish_to: none
+publish_to: smartstock
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -9,8 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-#  flutter_web_plugins:
-#    sdk: flutter
   uuid: ^3.0.6
   crypto: ^3.0.2
   bfast: ^5.0.0-beta.1
@@ -42,11 +40,6 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
-#  plugin:
-#    platforms:
-#      web:
-#        pluginClass: SmartStockPrinterPlugin
-#        fileName: smartstock_printer.dart
   # fonts:
   #   - family: Schyler
   #     fonts:
@@ -58,6 +51,3 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
@@ -27,6 +28,8 @@ import 'package:smartstock/stocks/states/suppliers_list.dart';
 import 'package:smartstock/stocks/states/suppliers_loading.dart';
 
 class StockModule extends Module {
+  StockModule(List<ExternalService> services);
+
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (_, __) => const IndexPage()),

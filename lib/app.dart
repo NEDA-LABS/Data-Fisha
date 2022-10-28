@@ -4,6 +4,7 @@ import 'package:smartstock/account/services/navigation.dart';
 import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/guards/manager.dart';
 import 'package:smartstock/core/guards/owner.dart';
+import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/services/navigation.dart';
@@ -15,27 +16,37 @@ import 'package:smartstock/sales/services/navigation.dart';
 import 'package:smartstock/stocks/services/navigation.dart';
 import 'package:smartstock/stocks/stocks.dart';
 
-class AppModule extends Module {
+class SmartStockCoreModule extends Module {
+  final List<ExternalService> saleServices;
+
+  SmartStockCoreModule({
+    required this.saleServices,
+  });
+
   @override
   List<ModularRoute> get routes => [
         ModuleRoute(
           '/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-          module: DashboardModule(),
+          module: DashboardModule([]),
         ),
-        ModuleRoute('/account/', guards: [], module: AccountModule()),
+        ModuleRoute('/account/', guards: [], module: AccountModule([])),
         ModuleRoute(
           '/dashboard/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-          module: DashboardModule(),
+          module: DashboardModule([]),
         ),
         ModuleRoute(
           '/report/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-          module: ReportModule(),
+          module: ReportModule([]),
         ),
-        ModuleRoute('/sales/', guards: [AuthGuard(), ActiveShopGuard()], module: SalesModule()),
-        ModuleRoute('/stock/', guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()], module: StockModule()),
+        ModuleRoute('/sales/',
+            guards: [AuthGuard(), ActiveShopGuard()],
+            module: SalesModule()),
+        ModuleRoute('/stock/',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            module: StockModule([])),
       ];
 
   @override

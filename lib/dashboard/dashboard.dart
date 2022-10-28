@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 
 class DashboardModule extends Module {
@@ -6,6 +7,8 @@ class DashboardModule extends Module {
     '/',
     child: (_, __) => const DashboardIndexPage(),
   );
+
+  DashboardModule(List<ExternalService> services);
 
   @override
   List<ChildRoute> get routes => [home];

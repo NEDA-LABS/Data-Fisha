@@ -8,8 +8,11 @@ import 'package:smartstock/account/pages/user_create.dart';
 import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/core/models/external_service.dart';
 
 class AccountModule extends Module {
+  AccountModule(List<ExternalService> services);
+
   @override
   List<ModularRoute> get routes => [
         ChildRoute(

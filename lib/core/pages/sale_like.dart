@@ -54,7 +54,10 @@ class _State extends State<SaleLikePage> {
   @override
   void initState() {
     updateState = ifDoElse(
-        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+      (x) => x is Map,
+      (x) => setState(() => states.addAll(x)),
+      (x) => null,
+    );
     super.initState();
   }
 
@@ -99,12 +102,21 @@ class _State extends State<SaleLikePage> {
         navigator().maybePop();
       };
 
-  _onShowCheckoutSheet(states, updateState, context) => () => fullScreeDialog(
-      context,
-      (refresh) =>
-          _cartDrawer(states, updateState, context, widget.wholesale, refresh));
+  _onShowCheckoutSheet(states, updateState, context) {
+    return () => fullScreeDialog(
+          context,
+          (refresh) => _cartDrawer(
+            states,
+            updateState,
+            context,
+            widget.wholesale,
+            refresh,
+          ),
+        );
+  }
 
-  _appBar(updateState) => StockAppBar(
+  _appBar(updateState) {
+    return StockAppBar(
       title: widget.title,
       backLink: widget.backLink,
       searchTextController: widget.searchTextController,
@@ -113,75 +125,85 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onSearch: (text) {
         updateState({"query": text ?? '', 'skip': false});
-      });
+      },
+    );
+  }
 
-  _fab(states, updateState) => salesRefreshButton(
+  _fab(states, updateState) {
+    return salesRefreshButton(
       onPressed: () => updateState({"skip": true, 'query': ''}),
-      carts: states['carts'] ?? []);
+      carts: states['carts'] ?? [],
+    );
+  }
 
   _isLoading(snapshot) =>
       snapshot is AsyncSnapshot &&
       snapshot.connectionState == ConnectionState.waiting;
 
-  _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) =>
-      (context, snapshot) => Column(children: [
-            _isLoading(snapshot)
-                ? const LinearProgressIndicator()
-                : const SizedBox(height: 0),
-            Expanded(
-              child: salesLikeBody(
-                onAddToCart: onAddToCart,
-                wholesale: widget.wholesale,
-                products: snapshot.data ?? [],
-                onAddToCartView: onAddToCartView,
-                onShowCheckout: onShowCheckout,
-                onGetPrice: onGetPrice,
-                carts: carts,
+  _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) {
+    return (context, snapshot) => Column(children: [
+          _isLoading(snapshot)
+              ? const LinearProgressIndicator()
+              : const SizedBox(height: 0),
+          Expanded(
+            child: salesLikeBody(
+              onAddToCart: onAddToCart,
+              wholesale: widget.wholesale,
+              products: snapshot.data ?? [],
+              onAddToCartView: onAddToCartView,
+              onShowCheckout: onShowCheckout,
+              onGetPrice: onGetPrice,
+              carts: carts,
+              context: context,
+            ),
+          )
+        ]);
+  }
+
+  _cartDrawer(states, updateState, context, wholesale, refresh){
+    return CartDrawer(
+      customerLikeLabel: widget.customerLikeLabel,
+      onAddItem: (id, q) {
+        var addCart = _prepareAddCartQuantity(states, updateState);
+        addCart(id, q);
+        refresh(() {});
+      },
+      onRemoveItem: (id) {
+        var remove = _prepareRemoveCart(states, updateState);
+        remove(id);
+        refresh(() {});
+      },
+      onCheckout: (discount) {
+        var customer = '${states['customer'] ?? ''}';
+        var carts = states['carts'];
+        return widget.onSubmitCart(carts, customer, discount).then((value) {
+          updateState({'carts': [], 'customer': ''});
+          navigator().maybePop().whenComplete(() {
+            showDialog(
                 context: context,
-              ),
-            )
-          ]);
+                builder: (c) => AlertDialog(
+                    title: const Text('Info',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16)),
+                    content: Text(widget.checkoutCompleteMessage)));
+          });
+        }).catchError(_showCheckoutError(context));
+        // onCheckout
+      },
+      carts: _getCarts(states),
+      wholesale: wholesale,
+      customer: _getCustomer(states),
+      onCustomerLikeList: widget.onCustomerLikeList,
+      onCustomerLikeAddWidget: widget.onCustomerLikeAddWidget,
+      onCustomer: (d) => updateState({"customer": d}),
+      onGetPrice: widget.onGetPrice,
+    );
+  }
 
-  _cartDrawer(states, updateState, context, wholesale, refresh) => CartDrawer(
-        customerLikeLabel: widget.customerLikeLabel,
-        onAddItem: (id, q) {
-          var addCart = _prepareAddCartQuantity(states, updateState);
-          addCart(id, q);
-          refresh(() {});
-        },
-        onRemoveItem: (id) {
-          var remove = _prepareRemoveCart(states, updateState);
-          remove(id);
-          refresh(() {});
-        },
-        onCheckout: (discount) {
-          var customer = '${states['customer'] ?? ''}';
-          var carts = states['carts'];
-          return widget.onSubmitCart(carts, customer, discount).then((value) {
-            updateState({'carts': [], 'customer': ''});
-            navigator().maybePop().whenComplete(() {
-              showDialog(
-                  context: context,
-                  builder: (c) => AlertDialog(
-                      title: const Text('Info',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
-                      content: Text(widget.checkoutCompleteMessage)));
-            });
-          }).catchError(_showCheckoutError(context));
-          // onCheckout
-        },
-        carts: _getCarts(states),
-        wholesale: wholesale,
-        customer: _getCustomer(states),
-        onCustomerLikeList: widget.onCustomerLikeList,
-        onCustomerLikeAddWidget: widget.onCustomerLikeAddWidget,
-        onCustomer: (d) => updateState({"customer": d}),
-        onGetPrice: widget.onGetPrice,
-      );
-
-  _prepareRemoveCart(states, updateState) => (String id) =>
-      updateState({'carts': removeCart(id, states['carts'] ?? [])});
+  _prepareRemoveCart(states, updateState){
+    return (String id) =>
+        updateState({'carts': removeCart(id, states['carts'] ?? [])});
+  }
 
   _prepareAddCartQuantity(states, updateState) => (String id, dynamic q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});

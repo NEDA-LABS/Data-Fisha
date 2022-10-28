@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/report/pages/category_performance.dart';
 import 'package:smartstock/report/pages/daily_cash_sales.dart';
 import 'package:smartstock/report/pages/daily_invoice_sales.dart';
@@ -31,6 +32,8 @@ class ReportModule extends Module {
       child: (_, __) => const CategoryPerformance());
   final sellerPerformance = ChildRoute('/sales/performance/seller',
       child: (_, __) => const SellerPerformance());
+
+  ReportModule(List<ExternalService> services);
 
   @override
   List<ChildRoute> get routes => [
