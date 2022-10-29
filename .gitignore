@@ -35,6 +35,6 @@
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
-release/*.apk
-release/*.aab
+android/release/*.apk
+android/release/*.aab
 .firebase
