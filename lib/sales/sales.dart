@@ -16,9 +16,7 @@ class SalesModule extends Module {
         ChildRoute(
           '/',
           guards: [ActiveShopGuard()],
-          child: (_, __) => SalesPage(
-            services: SalesExternalServiceState().salesExternalServices,
-          ),
+          child: (_, __) => const SalesPage(),
         ),
         ChildRoute(
           '/cash',

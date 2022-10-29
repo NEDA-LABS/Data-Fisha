@@ -35,11 +35,6 @@ _externalIconContainer(Icon icon) => Padding(
               width: 24,
               child: icon,
             )
-            // SvgPicture.asset(
-            //   'assets/svg/$svg',
-            //   width: 24,
-            //   fit: BoxFit.scaleDown,
-            // ),
             ),
       ),
     );
@@ -59,9 +54,10 @@ _name(String name) => Container(
 Widget _switchToItem(SubMenuModule menu) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
       child: GestureDetector(
-        onTap: () => navigateTo(menu.link),
+        onTap: () => navigator().pushNamed(menu.link),
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             menu.icon != null
                 ? _externalIconContainer(menu.icon!)
@@ -72,21 +68,21 @@ Widget _switchToItem(SubMenuModule menu) => Padding(
       ),
     );
 
-Widget Function(ExternalService service) _switchToExternalItem(
-        String rootPath) =>
-    (ExternalService service) => Padding(
-          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
-          child: GestureDetector(
-            onTap: () => navigateTo('$rootPath${service.pageLink}'),
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _externalIconContainer(service.icon),
-                _name(service.name)
-              ],
-            ),
-          ),
-        );
+// Widget Function(ExternalService service) _switchToExternalItem(
+//         String rootPath) =>
+//     (ExternalService service) => Padding(
+//           padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+//           child: GestureDetector(
+//             onTap: () => navigator().pushNamed('$rootPath${service.pageLink}'),
+//             child: Column(
+//               // crossAxisAlignment: CrossAxisAlignment.stretch,
+//               children: [
+//                 _externalIconContainer(service.icon),
+//                 _name(service.name)
+//               ],
+//             ),
+//           ),
+//         );
 
 switchToItems(List<SubMenuModule> menus) =>
     menus.map<Widget>(_switchToItem).toList();

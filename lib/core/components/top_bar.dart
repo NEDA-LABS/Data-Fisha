@@ -9,6 +9,7 @@ class StockAppBar extends PreferredSize with Disposable {
   final String title;
   final bool showSearch;
   final bool showBack;
+  final Function()? onBack;
   final Widget? searchInput;
   final String backLink;
   final String searchHint;
@@ -29,7 +30,8 @@ class StockAppBar extends PreferredSize with Disposable {
     this.backLink = "/",
     this.searchHint = "",
     this.debounceTime = 500,
-    this.searchTextController
+    this.searchTextController,
+    this.onBack,
   }) : super(
             key: key,
             preferredSize: Size.fromHeight(showSearch ? 104 : 56),
@@ -49,7 +51,8 @@ class StockAppBar extends PreferredSize with Disposable {
           leading: showBack
               ? IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () => navigateTo(backLink))
+                  onPressed: () =>
+                      onBack != null ? onBack!() : navigateTo(backLink))
               : null,
           actions: <Widget>[
             Builder(

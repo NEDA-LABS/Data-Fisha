@@ -1,7 +1,7 @@
 name: smartstock
 description: SmartStock mobile application
 version: 1.0.2-d.2022.10.26-b.3
-publish_to: smartstock
+#publish_to: smartstock
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
