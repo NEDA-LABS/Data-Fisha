@@ -32,8 +32,8 @@ class _State extends State<SalesCashPage> {
   }
 
   Widget _onCell(a, b, c) {
-    if (a == 'product') {
-      return _productView(c);
+    if (a == 'date') {
+      return _dateView(c);
     }
     if (a == 'amount') {
       return Padding(
@@ -41,7 +41,7 @@ class _State extends State<SalesCashPage> {
         child: Text('${doubleOrZero(b)}'),
       );
     }
-    if (a == 'quantity') {
+    if (a == 'items') {
       return Text('${doubleOrZero(_itemsSize(c))}');
     }
     return Text('$b');
@@ -53,19 +53,13 @@ class _State extends State<SalesCashPage> {
     return getItems(c);
   }
 
-  _getSomeProducts(c) {
-    var getItems = propertyOr('items', (p0) => []);
-    var items = itOrEmptyArray(getItems(c)) as List;
-    var productsName = [];
-    for (var item in items) {
-      var getProduct =
-          compose([propertyOrNull('product'), propertyOrNull('stock')]);
-      productsName.add(getProduct(item));
-    }
-    return productsName.length > 2
-        ? '${productsName.sublist(1, 3).join(', ')} & more'
-        : productsName.join(',');
+  _getTimer(c) {
+    var getTimer = propertyOr('timer', (p0) => '');
+    var date = DateTime.tryParse(getTimer(c)) ?? DateTime.now();
+    var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    return dateFormat.format(date);
   }
+
 
   _appBar(context) {
     return StockAppBar(
@@ -102,14 +96,15 @@ class _State extends State<SalesCashPage> {
     var smallView = SizedBox(
       height: height,
       child: tableLikeListRow([
-        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Date'),
+        tableLikeListTextHeader('Amount ( TZS )'),
         tableLikeListTextHeader('Customer'),
       ]),
     );
     var bigView = SizedBox(
       height: height,
       child: tableLikeListRow([
-        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Date'),
         tableLikeListTextHeader('Amount ( TZS )'),
         tableLikeListTextHeader('Items'),
         tableLikeListTextHeader('Customer'),
@@ -119,8 +114,8 @@ class _State extends State<SalesCashPage> {
   }
 
   _fields() => isSmallScreen(context)
-      ? ['product', 'customer']
-      : ['product', 'amount', 'quantity', 'customer'];
+      ? ['date', 'amount', 'customer']
+      : ['date', 'amount', 'items', 'customer'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -188,8 +183,8 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-  Widget _productView(c) {
-    var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
+  Widget _dateView(c) {
+    // var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
     var textStyle = const TextStyle(
         fontWeight: FontWeight.w300,
         color: Colors.grey,
@@ -199,12 +194,11 @@ class _State extends State<SalesCashPage> {
         fontSize: 16,
         fontWeight: FontWeight.w500,
         overflow: TextOverflow.ellipsis);
-    var subText = '${timeago.format(date)}   '
-        '${c['channel'] == 'whole' ? '| Wholesale' : '| Retail'}';
+    var subText = c['channel'] == 'whole' ? 'Wholesale' : 'Retail';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_getSomeProducts(c), style: mainTextStyle),
+        Text(_getTimer(c), style: mainTextStyle),
         Text(subText, style: textStyle)
       ]),
     );

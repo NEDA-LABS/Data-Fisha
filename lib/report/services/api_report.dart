@@ -51,3 +51,18 @@ prepareGetPerformanceReport(shop, type) {
     return await execute(shop);
   };
 }
+
+prepareGetSalesCashTracking(shop) {
+  return (DateTimeRange range) async {
+    var from = toSqlDate(range.start);
+    var to = toSqlDate(range.end);
+    var execute = composeAsync([
+      itOrEmptyArray,
+          (RawResponse items) => jsonDecode(items.body),
+          (app) => getRequest(
+          '${shopFunctionsURL(app)}/report/sales/track/cash?from=$from&to=$to'),
+      shopToApp,
+    ]);
+    return await execute(shop);
+  };
+}

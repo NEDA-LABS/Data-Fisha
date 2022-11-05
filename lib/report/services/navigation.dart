@@ -44,13 +44,13 @@ List<SubMenuModule> _pagesMenu() => [
     roles: [],
     onClick: () {},
   ),
-  // SubMenuModule(
-  //   name: 'Cash sales tracking',
-  //   link: '/report/sales/track/cash',
-  //   svgName: 'product_icon.svg',
-  //   roles: [],
-  //   onClick: () {},
-  // ),
+  SubMenuModule(
+    name: 'Cash sales tracking',
+    link: '/report/sales/track/cash',
+    svgName: 'product_icon.svg',
+    roles: [],
+    onClick: () {},
+  ),
   SubMenuModule(
     name: 'Product performance',
     link: '/report/sales/performance/product',

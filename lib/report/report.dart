@@ -6,6 +6,7 @@ import 'package:smartstock/report/pages/daily_invoice_sales.dart';
 import 'package:smartstock/report/pages/monthly_cash_sales.dart';
 import 'package:smartstock/report/pages/monthly_invoice_sales.dart';
 import 'package:smartstock/report/pages/product_performance.dart';
+import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/report/pages/seller_performance.dart';
 import 'package:smartstock/report/pages/yearly_cash_sales.dart';
 import 'package:smartstock/report/pages/yearly_invoice_sales.dart';
@@ -24,8 +25,8 @@ class ReportModule extends Module {
       child: (_, __) => const MonthlyInvoiceSales());
   final yearlyInvoiceSales = ChildRoute('/sales/overview/invoice/year',
       child: (_, __) => const YearlyInvoiceSales());
-  // final cashSaleTracking = ChildRoute('/sales/track/cash',
-  //     child: (_, __) => const ReportIndexPage());
+  final cashSaleTracking = ChildRoute('/sales/track/cash',
+      child: (_, __) => const SalesCashTrackingPage());
   final productPerformance = ChildRoute('/sales/performance/product',
       child: (_, __) => const ProductPerformance());
   final categoryPerformance = ChildRoute('/sales/performance/category',
@@ -44,7 +45,7 @@ class ReportModule extends Module {
         dailyInvoiceSales,
         monthlyInvoiceSales,
         yearlyInvoiceSales,
-        // cashSaleTracking,
+        cashSaleTracking,
         productPerformance,
         categoryPerformance,
         sellerPerformance

@@ -59,14 +59,15 @@ class _InvoicesPage extends State<InvoicesPage> {
     var smallView = SizedBox(
       height: height,
       child: tableLikeListRow([
-        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Date'),
+        tableLikeListTextHeader('Amount ( TZS )'),
         tableLikeListTextHeader('Customer'),
       ]),
     );
     var largeView = SizedBox(
       height: height,
       child: tableLikeListRow([
-        tableLikeListTextHeader('Products'),
+        tableLikeListTextHeader('Date'),
         tableLikeListTextHeader('Amount ( TZS )'),
         tableLikeListTextHeader('Paid ( TZS )'),
         tableLikeListTextHeader('Customer'),
@@ -76,8 +77,8 @@ class _InvoicesPage extends State<InvoicesPage> {
   }
 
   _fields() => isSmallScreen(context)
-      ? ['product', 'customer']
-      : ['product', 'amount', 'payment', 'customer'];
+      ? ['date', 'amount', 'customer']
+      : ['date', 'amount', 'payment', 'customer'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -110,8 +111,8 @@ class _InvoicesPage extends State<InvoicesPage> {
                   onLoadMore: () async => _loadMore(),
                   loading: _loading,
                   onCell: (a, b, c) {
-                    if (a == 'product') {
-                      return _productView(c);
+                    if (a == 'date') {
+                      return _dateView(c);
                     }
                     if (a == 'customer') {
                       return Text('${b['displayName']}');
@@ -140,40 +141,33 @@ class _InvoicesPage extends State<InvoicesPage> {
     );
   }
 
-  Widget _productView(c) {
-    var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
-    var textStyle = const TextStyle(
-        fontWeight: FontWeight.w300,
-        color: Colors.grey,
-        height: 2.0,
-        overflow: TextOverflow.ellipsis);
+  Widget _dateView(c) {
+    // var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
+    // var textStyle = const TextStyle(
+    //     fontWeight: FontWeight.w300,
+    //     color: Colors.grey,
+    //     height: 2.0,
+    //     overflow: TextOverflow.ellipsis);
     var mainTextStyle = const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
         overflow: TextOverflow.ellipsis);
-    var subText = timeago.format(date);
+    // var subText = timeago.format(date);
     //'${c['channel'] == 'whole' ? '| Wholesale' : '| Retail'}';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_getSomeProducts(c), style: mainTextStyle),
-        Text(subText, style: textStyle)
+        Text(_getTimer(c), style: mainTextStyle),
+        // Text(subText, style: textStyle)
       ]),
     );
   }
 
-  _getSomeProducts(c) {
-    var getItems = propertyOr('items', (p0) => []);
-    var items = itOrEmptyArray(getItems(c)) as List;
-    var productsName = [];
-    for (var item in items) {
-      var getProduct =
-          compose([propertyOrNull('product'), propertyOrNull('stock')]);
-      productsName.add(getProduct(item));
-    }
-    return productsName.length > 2
-        ? '${productsName.sublist(1, 3).join(', ')} & more'
-        : productsName.join(',');
+  _getTimer(c) {
+    var getTimer = propertyOr('timer', (p0) => '');
+    var date = DateTime.tryParse(getTimer(c)) ?? DateTime.now();
+    var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    return dateFormat.format(date);
   }
 
   // _refresh({skip = false}) {

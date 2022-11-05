@@ -56,3 +56,9 @@ Future getProductPerformance(DateTimeRange range) async {
   var getDailySales = prepareGetPerformanceReport(shop, 'product');
   return getDailySales(range);
 }
+
+Future getSalesCashTracking(DateTimeRange range) async {
+  var shop = await getActiveShop();
+  var getDailySales = prepareGetSalesCashTracking(shop);
+  return getDailySales(range);
+}
