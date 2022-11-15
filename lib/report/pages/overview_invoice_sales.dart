@@ -11,21 +11,22 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class MonthlyInvoiceSales extends StatefulWidget {
-  const MonthlyInvoiceSales({Key? key}) : super(key: key);
+class OverviewInvoiceSales extends StatefulWidget {
+  const OverviewInvoiceSales({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MonthlyInvoiceSales> {
+class _State extends State<OverviewInvoiceSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 90)),
+    start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
   var dailySales = [];
+  String period = 'day';
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _State extends State<MonthlyInvoiceSales> {
     setState(() {
       loading = true;
     });
-    getMonthlyInvoiceSalesOverview(dateRange).then((value) {
+    getInvoiceSalesOverview(dateRange,period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -170,11 +171,12 @@ class _State extends State<MonthlyInvoiceSales> {
   _rangePicker() {
     return ReportDateRange(
       onExport: (range) {},
-      onRange: (range) {
+      onRange: (range,p) {
         if (range != null) {
-          setState(() {
+          // setState(() {
             dateRange = range;
-          });
+            period = p??'day';
+          // });
           _fetchData();
         }
       },
@@ -184,7 +186,7 @@ class _State extends State<MonthlyInvoiceSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Monthly invoice sales",
+      title: "Invoice sales overview",
       showBack: false,
       backLink: '/report/',
     );

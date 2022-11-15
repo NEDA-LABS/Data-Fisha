@@ -11,20 +11,21 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class YearlyInvoiceSales extends StatefulWidget {
-  const YearlyInvoiceSales({Key? key}) : super(key: key);
+class OverviewCashSales extends StatefulWidget {
+  const OverviewCashSales({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<YearlyInvoiceSales> {
+class _State extends State<OverviewCashSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 720)),
+    start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
+  String period = 'day';
   var dailySales = [];
 
   @override
@@ -70,8 +71,8 @@ class _State extends State<YearlyInvoiceSales> {
       id: 'Sales',
       colorFn: (_, __) =>
           charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => '${sales['date']}',
-      measureFn: (dynamic sales, _) => doubleOrZero(sales['amount']),
+      domainFn: (dynamic sales, _) => sales['date'],
+      measureFn: (dynamic sales, _) => sales['amount'],
       data: dailySales,
     );
   }
@@ -80,7 +81,7 @@ class _State extends State<YearlyInvoiceSales> {
     setState(() {
       loading = true;
     });
-    getYearlyInvoiceSalesOverview(dateRange).then((value) {
+    getCashSalesOverview(dateRange,period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -155,22 +156,25 @@ class _State extends State<YearlyInvoiceSales> {
   _tableHeader() {
     return tableLikeListRow([
       tableLikeListTextHeader('Date'),
+      tableLikeListTextHeader('Retail ( Tsh )'),
+      tableLikeListTextHeader('Wholesale ( Tsh )'),
       tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }
 
   _fields() {
-    return ['date', 'amount'];
+    return ['date', 'amount_retail', 'amount_whole', 'amount'];
   }
 
   _rangePicker() {
     return ReportDateRange(
       onExport: (range) {},
-      onRange: (range) {
+      onRange: (range,p) {
         if (range != null) {
-          setState(() {
+          // setState(() {
             dateRange = range;
-          });
+            period = p??'day';
+          // });
           _fetchData();
         }
       },
@@ -180,7 +184,7 @@ class _State extends State<YearlyInvoiceSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Yearly invoice sales",
+      title: "Cash sales overview",
       showBack: false,
       backLink: '/report/',
     );

@@ -172,7 +172,7 @@ class _State extends State<ProductPerformance> {
   _rangePicker() {
     return ReportDateRange(
       onExport: (range) {},
-      onRange: (range) {
+      onRange: (range,period) {
         if (range != null) {
           setState(() {
             dateRange = range;
