@@ -10,6 +10,8 @@ import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
@@ -158,7 +160,25 @@ class _State extends State<SalesCashTrackingPage> {
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        var title = "Sales cash tracking $startD -> $endD";
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF(title, _sales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv(title, _sales);
+              Navigator.maybePop(context);
+            },
+          ),
+          context,
+        );
+      },
       onRange: (range,period) {
         if (range != null) {
           setState(() {

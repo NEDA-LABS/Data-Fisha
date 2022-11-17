@@ -1,32 +1,36 @@
 import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class OverviewInvoiceSales extends StatefulWidget {
-  const OverviewInvoiceSales({Key? key}) : super(key: key);
+class OverviewCashSales extends StatefulWidget {
+  const OverviewCashSales({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<OverviewInvoiceSales> {
+class _State extends State<OverviewCashSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
-  var dailySales = [];
   String period = 'day';
+  var dailySales = [];
 
   @override
   void initState() {
@@ -81,7 +85,7 @@ class _State extends State<OverviewInvoiceSales> {
     setState(() {
       loading = true;
     });
-    getInvoiceSalesOverview(dateRange,period).then((value) {
+    getCashSalesOverview(dateRange, period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -158,24 +162,41 @@ class _State extends State<OverviewInvoiceSales> {
   _tableHeader() {
     return tableLikeListRow([
       tableLikeListTextHeader('Date'),
-      // tableLikeListTextHeader('Retail ( Tsh )'),
-      // tableLikeListTextHeader('Wholesale ( Tsh )'),
+      tableLikeListTextHeader('Retail ( Tsh )'),
+      tableLikeListTextHeader('Wholesale ( Tsh )'),
       tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }
 
   _fields() {
-    return ['date', 'amount'];
+    return ['date', 'amount_retail', 'amount_whole', 'amount'];
   }
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
-      onRange: (range,p) {
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            },
+          ),
+          context,
+        );
+      },
+      onRange: (range, p) {
         if (range != null) {
           // setState(() {
-            dateRange = range;
-            period = p??'day';
+          dateRange = range;
+          period = p ?? 'day';
           // });
           _fetchData();
         }
@@ -186,7 +207,7 @@ class _State extends State<OverviewInvoiceSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Invoice sales overview",
+      title: "Cash sales overview",
       showBack: false,
       backLink: '/report/',
     );

@@ -6,7 +6,6 @@ import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/switch_to_item.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/report/services/navigation.dart';
-import 'package:smartstock/sales/services/navigation.dart';
 
 
 class ReportIndexPage extends StatelessWidget {
