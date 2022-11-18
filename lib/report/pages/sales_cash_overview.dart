@@ -188,6 +188,10 @@ class _State extends State<OverviewCashSales> {
               exportToCsv("Cash sales $startD -> $endD", dailySales);
               Navigator.maybePop(context);
             },
+            onExcel: () {
+              exportToExcel("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            }
           ),
           context,
         );
