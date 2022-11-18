@@ -35,7 +35,7 @@ Widget get chooseShop {
                     )
                   : Container(
                       alignment: Alignment.center,
-                      child:  CircularProgressIndicator(
+                      child: CircularProgressIndicator(
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
@@ -67,7 +67,8 @@ Widget _shop(var shop) {
               height: 80,
               width: 80,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Theme.of(context).primaryColor),
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColor),
               child: imgSrc is String
                   ? Image.network(imgSrc)
                   : const Icon(
@@ -79,7 +80,7 @@ Widget _shop(var shop) {
           ),
         ),
         Container(
-          // width: 85,
+          width: 90,
           // decoration: const BoxDecoration(shape: BoxShape.circle),
           padding: const EdgeInsets.all(8),
           child: Text(
@@ -87,8 +88,9 @@ Widget _shop(var shop) {
             softWrap: true,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
-              fontSize: 16,
+              // fontSize: 14,
               fontWeight: FontWeight.w500,
+              // overflow: TextOverflow.ellipsis,
             ),
           ),
         )
