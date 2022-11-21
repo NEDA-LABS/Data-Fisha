@@ -18,6 +18,7 @@ class CartDrawer extends StatefulWidget {
   final customer;
   final onCustomer;
   final List carts;
+  final bool showCustomerLike;
 
   const CartDrawer({
     required this.carts,
@@ -31,6 +32,7 @@ class CartDrawer extends StatefulWidget {
     this.customerLikeLabel = 'Choose customer',
     required this.customer,
     required this.onCustomer,
+    required this.showCustomerLike,
     Key? key,
   }) : super(key: key);
 
@@ -50,14 +52,14 @@ class _State extends State<CartDrawer> {
     return Scaffold(
       body: Column(children: [
         AppBar(title: const Text('Cart'), elevation: 0),
-        ChoicesInput(
+       widget.showCustomerLike? ChoicesInput(
             initialText: widget.customer,
             placeholder: widget.customerLikeLabel,
             showBorder: false,
             onText: widget.onCustomer,
             onLoad: widget.onCustomerLikeList,
             getAddWidget: widget.onCustomerLikeAddWidget,
-            onField: (x) => x['name'] ?? x['displayName']),
+            onField: (x) => x['name'] ?? x['displayName']):Container(),
         Expanded(
           child: ListView.builder(
             controller: ScrollController(),

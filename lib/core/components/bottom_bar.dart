@@ -42,8 +42,5 @@ _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
       appBar: AppBar(title: const Text('Navigation'),backgroundColor: Colors.transparent,),
       body: modulesMenuContent(menus, ''),
     ));
-    // showModalBottomSheet(
-    //     context: context,
-    //     builder: (_) => modulesMenuContent(menus, ''));
   }
 }
