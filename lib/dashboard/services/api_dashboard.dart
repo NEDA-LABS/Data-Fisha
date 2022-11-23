@@ -14,7 +14,7 @@ import 'package:smartstock/core/services/util.dart';
 
 getDashboardSummary(shop, date) {
   var request = composeAsync([
-    (app) => executeHttp(() => getRequest(
+    (app) => executeHttp(() => httpGetRequest(
         '${shopFunctionsURL(app)}/report/dashboard?date=$date')),
     shopToApp,
   ]);

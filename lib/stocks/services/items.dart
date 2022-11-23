@@ -6,7 +6,7 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_items.dart';
 
-import 'item_cache.dart';
+import 'items_cache.dart';
 
 Future<List<dynamic>> getItemFromCacheOrRemote({
   skipLocal = false,

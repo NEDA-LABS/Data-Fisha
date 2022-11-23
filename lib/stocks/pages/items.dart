@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_item_content.dart';
-import 'package:smartstock/stocks/services/item.dart';
+import 'package:smartstock/stocks/services/items.dart';
 import 'package:smartstock/stocks/states/items_list.dart';
 import 'package:smartstock/stocks/states/items_loading.dart';
 

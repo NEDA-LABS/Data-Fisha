@@ -50,37 +50,42 @@ class _State extends State<CartDrawer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        AppBar(title: const Text('Cart'), elevation: 0),
-       widget.showCustomerLike? ChoicesInput(
-            initialText: widget.customer,
-            placeholder: widget.customerLikeLabel,
-            showBorder: false,
-            onText: widget.onCustomer,
-            onLoad: widget.onCustomerLikeList,
-            getAddWidget: widget.onCustomerLikeAddWidget,
-            onField: (x) => x['name'] ?? x['displayName']):Container(),
-        Expanded(
-          child: ListView.builder(
-            controller: ScrollController(),
-            itemCount: widget.carts.length,
-            itemBuilder: _cartListItemBuilder(
-              widget.carts,
-              widget.wholesale,
-              widget.onAddItem,
-              widget.onRemoveItem,
-              widget.onGetPrice,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppBar(title: const Text('Cart'), elevation: 0),
+          widget.showCustomerLike
+              ? ChoicesInput(
+                  initialText: widget.customer,
+                  placeholder: widget.customerLikeLabel,
+                  showBorder: false,
+                  onText: widget.onCustomer,
+                  onLoad: widget.onCustomerLikeList,
+                  getAddWidget: widget.onCustomerLikeAddWidget,
+                  onField: (x) => x['name'] ?? x['displayName'])
+              : Container(),
+          Expanded(
+            child: ListView.builder(
+              controller: ScrollController(),
+              itemCount: widget.carts.length,
+              itemBuilder: _cartListItemBuilder(
+                widget.carts,
+                widget.wholesale,
+                widget.onAddItem,
+                widget.onRemoveItem,
+                widget.onGetPrice,
+              ),
             ),
           ),
-        ),
-        _cartSummary(
-          widget.carts,
-          widget.wholesale,
-          context,
-          widget.onCheckout,
-          widget.onGetPrice,
-        )
-      ]),
+          _cartSummary(
+            widget.carts,
+            widget.wholesale,
+            context,
+            widget.onCheckout,
+            widget.onGetPrice,
+          )
+        ],
+      ),
     );
   }
 
@@ -89,13 +94,17 @@ class _State extends State<CartDrawer> {
       elevation: 5,
       child: Column(
         children: [
-          _totalAmountRow(carts, wholesale, onGetPrice),
-          _discountRow(
-            states['discount'],
-            (v) {
-              _prepareUpdateState()({'discount': doubleOrZero(v)});
-            },
-          ),
+          carts.isNotEmpty && onGetPrice(carts[0].product) != null
+              ? _totalAmountRow(carts, wholesale, onGetPrice)
+              : Container(),
+          carts.isNotEmpty && onGetPrice(carts[0].product) != null
+              ? _discountRow(
+                  states['discount'],
+                  (v) {
+                    _prepareUpdateState()({'discount': doubleOrZero(v)});
+                  },
+                )
+              : Container(),
           Container(
             margin: const EdgeInsets.all(8),
             height: 54,
@@ -201,13 +210,14 @@ class _State extends State<CartDrawer> {
       required Function(dynamic) onGetPrice,
       required Function(String) onRemoveItem}) {
     var quantity = cart.quantity;
-    var price = onGetPrice(cart.product);
+    var price = onGetPrice(cart.product) ??
+        propertyOr('amount', (p0) => 0)(cart.product);
     var wQuantity = propertyOr('wholesaleQuantity', (p0) => 1);
     var subTotal = quantity * price;
     return Column(
       children: [
         ListTile(
-          title: Text(cart.product['product']),
+          title: Text('${cart.product['product'] ?? cart.product['name']}'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

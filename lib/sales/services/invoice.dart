@@ -117,7 +117,7 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
     await saveLocalSync(batchId, url, invoice);
     oneTimeLocalSyncs();
   } else {
-    var saveInvoice = preparePutRequest(invoice);
+    var saveInvoice = prepareHttpPutRequest(invoice);
     return saveInvoice(url);
   }
 }

@@ -35,8 +35,8 @@ cartTotalAmount(List carts, wholesale, onGetPrice) => carts.fold(
         t + getProductPrice(element, wholesale, onGetPrice));
 
 getProductPrice(cart, bool wholesale, onGetPrice) => wholesale
-    ? onGetPrice(cart.product) * cart.quantity
-    : onGetPrice(cart.product) * cart.quantity;
+    ? (onGetPrice(cart.product)??propertyOr('amount', (p0) => 0)(cart.product)) * cart.quantity
+    : (onGetPrice(cart.product)??propertyOr('amount', (p0) => 0)(cart.product)) * cart.quantity;
 
 double? getCartItemSubAmount(
     {dynamic quantity = 0.0,

@@ -47,11 +47,7 @@ class _State extends State<_AddExpense2CartDialog> {
 
   @override
   void initState() {
-    states = {
-      "p": widget.cart.product,
-      "amount": widget.cart.quantity,
-      // 'amount': _getFromCartProduct(widget.cart, 'amount'),
-    };
+    states = {"p": widget.cart.product, "amount": 0};
     super.initState();
   }
 
@@ -65,13 +61,14 @@ class _State extends State<_AddExpense2CartDialog> {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         shrinkWrap: true,
         children: <Widget>[
-          _productAndPrice(states['p']),
+          _item(states['p']),
           TextInput(
               label: 'Amount',
               initialText: '${states['amount'] ?? 0}',
               lines: 1,
               type: TextInputType.number,
-              onText: (v) => _prepareUpdateState()({'amount': doubleOrZero(v)})),
+              onText: (v) =>
+                  _prepareUpdateState()({'amount': doubleOrZero(v)})),
           _addToCartButton(context, states, widget.onAddToCart)
         ],
       ),
@@ -89,31 +86,31 @@ class _State extends State<_AddExpense2CartDialog> {
               style: TextStyle(color: Colors.white))));
 
   _getPurchaseCart(states) {
-    Map product = states['p'] is Map
-        ? (states['p'] as Map<String, dynamic>?)!
-        : {};
+    Map product =
+        states['p'] is Map ? (states['p'] as Map<String, dynamic>?)! : {};
+    product['amount'] = states['amount'];
     return CartModel(
-        product: product as Map<String, dynamic>?, quantity: states['amount']);
+        product: product as Map<String, dynamic>?, quantity: 1);
   }
 
   _addToCartButtonStyle(context) => ButtonStyle(
       backgroundColor:
           MaterialStateProperty.all(Theme.of(context).primaryColorDark));
 
-  _productAndPrice(Map<String, dynamic> product) => Padding(
-        padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
-        child: Text(
-          product["product"],
-          softWrap: true,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-      );
+  _item(Map<String, dynamic> product) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        product["name"],
+        softWrap: true,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
 
   _addToCartBoxDecoration() => const BoxDecoration(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       );
 }

@@ -26,7 +26,7 @@ class SalesCashWhole extends StatelessWidget {
       onCustomerLikeList: getCustomerFromCacheOrRemote,
       onCustomerLikeAddWidget: () => const CreateCustomerContent(),
       checkoutCompleteMessage: 'Checkout complete.',
-      onProductLike: getStockFromCacheOrRemote,
+      onGetProductsLike: getStockFromCacheOrRemote,
     );
   }
 

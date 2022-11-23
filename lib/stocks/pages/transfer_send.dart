@@ -19,7 +19,7 @@ transferSendPage(BuildContext context) => SaleLikePage(
       onCustomerLikeList: getOtherShopsNames,
       onCustomerLikeAddWidget: transferAddShopContent,
       checkoutCompleteMessage: 'Transfer complete.',
-      onProductLike: getStockFromCacheOrRemote,
+      onGetProductsLike: getStockFromCacheOrRemote,
     );
 
 var _onGetPrice = compose([doubleOrZero, propertyOr('purchase', (p0) => 0)]);

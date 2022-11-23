@@ -6,7 +6,7 @@ import 'package:smartstock/core/services/util.dart';
 var prepareGetRemoteCashSales = (startAt, size, product, username) {
   url(app) => '${shopFunctionsURL(app)}/sale/cash?'
       'size=$size&startAt=$startAt&product=$product&username=$username';
-  rFactory(app) => () => getRequest(url(app));
+  rFactory(app) => () => httpGetRequest(url(app));
   request(app) => executeHttp(rFactory(app));
   beList(invoices) => itOrEmptyArray(invoices);
   return composeAsync([beList, request, shopToApp]);

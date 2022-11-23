@@ -34,7 +34,7 @@ class ItemCreateState extends ChangeNotifier {
     var shop = await getActiveShop();
     var createIFValid = ifDoElse(
       (_) => _validItem(),
-      createItem(item),
+      prepareCreateItem(item),
       (_) async => 'nope',
     );
     createIFValid(shop).then((r) {

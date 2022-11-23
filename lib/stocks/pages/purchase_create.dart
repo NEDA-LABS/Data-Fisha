@@ -21,7 +21,7 @@ purchaseCreatePage(BuildContext context) => SaleLikePage(
   onCustomerLikeList: getSupplierFromCacheOrRemote,
   onCustomerLikeAddWidget: createSupplierContent,
   checkoutCompleteMessage: 'Purchase complete.',
-  onProductLike: getStockFromCacheOrRemote,
+  onGetProductsLike: getStockFromCacheOrRemote,
 );
 
 _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {

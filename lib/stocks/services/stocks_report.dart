@@ -6,16 +6,16 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
 _getItemsRequest(App app) =>
-    () => getRequest('${shopFunctionsURL(app)}/stock/value/items');
+    () => httpGetRequest('${shopFunctionsURL(app)}/stock/value/items');
 
 _getItemsValueRequest(App app) =>
-    () => getRequest('${shopFunctionsURL(app)}/stock/value/purchase');
+    () => httpGetRequest('${shopFunctionsURL(app)}/stock/value/purchase');
 
 _getItemsRetailValueRequest(App app) =>
-    () => getRequest('${shopFunctionsURL(app)}/stock/value/retail');
+    () => httpGetRequest('${shopFunctionsURL(app)}/stock/value/retail');
 
 _getItemsWholesaleRequest(App app) =>
-    () => getRequest('${shopFunctionsURL(app)}/stock/value/whole');
+    () => httpGetRequest('${shopFunctionsURL(app)}/stock/value/whole');
 
 _getShop(x) => getActiveShop();
 

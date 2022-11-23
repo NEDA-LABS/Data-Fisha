@@ -18,7 +18,7 @@ invoiceSalePage(context)=> SaleLikePage(
   onCustomerLikeList: getCustomerFromCacheOrRemote,
   onCustomerLikeAddWidget: ()=>const CreateCustomerContent(),
   checkoutCompleteMessage: 'Checkout complete.',
-  onProductLike: getStockFromCacheOrRemote,
+  onGetProductsLike: getStockFromCacheOrRemote,
 );
 
 _onPrepareSalesAddToCartView(context) => (product, onAddToCart) {

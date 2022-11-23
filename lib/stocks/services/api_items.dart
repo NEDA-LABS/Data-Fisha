@@ -32,7 +32,7 @@ var getAllRemoteItems = composeAsync([
   map(shopToApp),
 ]);
 
-createItem(Map item) {
+prepareCreateItem(Map item) {
   var createRequest = _createItem(item);
   return composeAsync([
     (app) => executeHttp(
