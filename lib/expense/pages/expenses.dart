@@ -2,14 +2,17 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/expense/components/create_expense_content.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../core/components/bottom_bar.dart';
 import '../services/expenses.dart';
 
 class ExpenseExpensesPage extends StatefulWidget {
@@ -21,7 +24,6 @@ class ExpenseExpensesPage extends StatefulWidget {
 
 class _State extends State<ExpenseExpensesPage> {
   bool _loading = false;
-  String _query = '';
   int size = 20;
   List _expenses = [];
 
@@ -31,13 +33,14 @@ class _State extends State<ExpenseExpensesPage> {
   }
 
   Widget _onCell(a, b, c) {
-    if (a == 'date') {
-      return _dateView(c);
+    if (a == 'name') {
+      return _itemView(c);
     }
     if (a == 'amount') {
+      var numberFormat = NumberFormat.simpleCurrency(name: '');
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text('${doubleOrZero(b)}'),
+        child: Text(numberFormat.format(doubleOrZero(b))),
       );
     }
     // if (a == 'name') {
@@ -46,40 +49,32 @@ class _State extends State<ExpenseExpensesPage> {
     return Text('$b');
   }
 
-  _itemsSize(c) {
-    var getItems =
-        compose([(x) => x.length, itOrEmptyArray, propertyOrNull('items')]);
-    return getItems(c);
-  }
-
-  _getTimer(c) {
-    var getTimer = propertyOr('timer', (p0) => '');
-    var date = DateTime.tryParse(getTimer(c)) ?? DateTime.now();
-    var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-    return dateFormat.format(date);
-  }
-
-  _appBar(context) {
-    return StockAppBar(
-      title: "Expenses",
-      showBack: true,
-      backLink: '/expense/',
-      showSearch: false,
-      onSearch: (d) {
-        setState(() {
-          _query = d;
-        });
-        _refresh();
-      },
-      searchHint: 'Search expense...',
-    );
-  }
-
   _contextSales(context) {
     return [
       ContextMenu(
         name: 'Add',
-        pressed: () => navigateTo('/expense/expenses/create'),
+        pressed: () {
+          isSmallScreen(context)
+              ? fullScreeDialog(
+                  context,
+                  (p0) => Scaffold(
+                        appBar: AppBar(
+                          title: const Text("New expense"),
+                        ),
+                        body: const CreateExpenseContent(),
+                      )).whenComplete(() => _refresh())
+              : showDialog(
+                  context: context,
+                  builder: (c) => Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 500),
+                      child: const Dialog(
+                        child: CreateExpenseContent(),
+                      ),
+                    ),
+                  ),
+                ).whenComplete(() => _refresh());
+        },
       ),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
@@ -90,26 +85,24 @@ class _State extends State<ExpenseExpensesPage> {
     var smallView = SizedBox(
       height: height,
       child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
         tableLikeListTextHeader('Item'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-      ]),
-    );
-    var bigView = SizedBox(
-      height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Item'),
-        tableLikeListTextHeader('Amount ( TZS )'),
         tableLikeListTextHeader('Category'),
+        tableLikeListTextHeader('Amount ( TZS )'),
       ]),
     );
-    return isSmallScreen(context) ? smallView : bigView;
+    // var bigView = SizedBox(
+    //   height: height,
+    //   child: tableLikeListRow([
+    //     tableLikeListTextHeader('Item'),
+    //     tableLikeListTextHeader('Categ'),
+    //     tableLikeListTextHeader('Amount ( TZS )'),
+    //     tableLikeListTextHeader('Category'),
+    //   ]),
+    // );
+    return smallView;
   }
 
-  _fields() => isSmallScreen(context)
-      ? ['date', 'name', 'amount']
-      : ['date', 'name', 'amount', 'category'];
+  _fields() => ['name', 'category', 'amount'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -121,16 +114,26 @@ class _State extends State<ExpenseExpensesPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) {
+    return responsiveBody(
       menus: moduleMenus(),
       current: '/expense/',
-      onBody: (d) => Scaffold(appBar: _appBar(context), body: _body()));
+      onBody: (d) {
+        return Scaffold(
+          drawer: d,
+          appBar: StockAppBar(title: "Expenses", showBack: false),
+          body: _body(),
+          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
+        );
+      },
+    );
+  }
 
   _loadMore() {
     setState(() {
       _loading = true;
     });
-    var getExp = _prepareGetExpenses(_query, size, true);
+    var getExp = _prepareGetExpenses(size, true);
     getExp(_expenses).then((value) {
       if (value is List) {
         _expenses.addAll(value);
@@ -148,7 +151,7 @@ class _State extends State<ExpenseExpensesPage> {
     setState(() {
       _loading = true;
     });
-    var getExp = _prepareGetExpenses(_query, size, false);
+    var getExp = _prepareGetExpenses(size, false);
     getExp(_expenses).then((value) {
       if (value is List) {
         _expenses = value;
@@ -166,7 +169,7 @@ class _State extends State<ExpenseExpensesPage> {
     return dF.format(date);
   }
 
-  _prepareGetExpenses(String product, size, bool more) {
+  _prepareGetExpenses(size, bool more) {
     return ifDoElse(
       (x) => x is List && x.isNotEmpty,
       (x) {
@@ -177,7 +180,7 @@ class _State extends State<ExpenseExpensesPage> {
     );
   }
 
-  Widget _dateView(c) {
+  Widget _itemView(item) {
     var textStyle = const TextStyle(
         fontWeight: FontWeight.w300,
         color: Colors.grey,
@@ -187,14 +190,17 @@ class _State extends State<ExpenseExpensesPage> {
         fontSize: 16,
         fontWeight: FontWeight.w500,
         overflow: TextOverflow.ellipsis);
-    var subText = timeago.format(DateTime.parse(c['timer']));
+    var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    var dateTime = DateTime.parse(item['timer']);
+    var subText =
+        "${dateFormat.format(dateTime)} | ${timeago.format(dateTime)}";
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(_getTimer(c), style: mainTextStyle),
+          Text(item['name'], style: mainTextStyle),
           Text(subText, style: textStyle)
         ],
       ),
@@ -208,22 +214,26 @@ class _State extends State<ExpenseExpensesPage> {
         keys: _fields(),
         onCell: _onCell,
         onItemPressed: _onItemPressed,
-        onLoadMore: () async => _loadMore(),
+        onLoadMore: _expenses.length >= size ? () async => _loadMore() : null,
         loading: _loading,
       ),
     );
   }
 
   _body() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _loadingView(_loading),
-        tableContextMenu(_contextSales(context)),
-        _tableHeader(),
-        _salesList(),
-      ],
+    return Container(
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _loadingView(_loading),
+          tableContextMenu(_contextSales(context)),
+          _tableHeader(),
+          _salesList(),
+        ],
+      ),
     );
   }
 }

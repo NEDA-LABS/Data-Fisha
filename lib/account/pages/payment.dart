@@ -16,7 +16,7 @@ class PaymentPage extends StatelessWidget {
       menus: moduleMenus(),
       onBody: (d) => Scaffold(
         drawer: d,
-        appBar: StockAppBar(title: "Payment", showBack: false),
+        appBar: StockAppBar(title: "Payment", showBack: true, backLink: '/account/',),
         body: const PaymentBody(),
         bottomNavigationBar: bottomBar(3, moduleMenus(), context),
       ),

@@ -7,23 +7,23 @@ List<SubMenuModule> _pagesMenu() {
       name: 'Profile',
       link: '/account/profile',
       svgName: 'item_icon.svg',
-      roles: [],
+      roles: ["*"],
       onClick: () {},
     ),
     SubMenuModule(
       name: 'Users',
       link: '/account/users',
       svgName: 'item_icon.svg',
-      roles: [],
+      roles: ["*"],
       onClick: () {},
     ),
-    SubMenuModule(
-      name: 'Payment',
-      link: '/account/bill',
-      svgName: 'item_icon.svg',
-      roles: [],
-      onClick: () {},
-    )
+    // SubMenuModule(
+    //   name: 'Payment',
+    //   link: '/account/bill',
+    //   svgName: 'item_icon.svg',
+    //   roles: [],
+    //   onClick: () {},
+    // )
   ];
 }
 

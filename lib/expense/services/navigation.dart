@@ -16,13 +16,13 @@ List<SubMenuModule> _pagesMenu() => [
         roles: ['admin', 'manager'],
         onClick: () {},
       ),
-      SubMenuModule(
-        name: 'Expenses',
-        link: '/expense/expenses',
-        svgName: 'product_icon.svg',
-        roles: ['admin', 'manager'],
-        onClick: () {},
-      ),
+      // SubMenuModule(
+      //   name: 'Expenses',
+      //   link: '/expense/expenses',
+      //   svgName: 'product_icon.svg',
+      //   roles: ['admin', 'manager'],
+      //   onClick: () {},
+      // ),
     ];
 
 MenuModel expenseMenu() => MenuModel(

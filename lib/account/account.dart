@@ -35,11 +35,11 @@ class AccountModule extends Module {
           guards: [AuthGuard()],
           child: (_, __) => const ShopUserCreatePage(),
         ),
-        ChildRoute(
-          '/bill',
-          guards: [],
-          child: (_, __) => const PaymentPage(),
-        ),
+        // ChildRoute(
+        //   '/bill',
+        //   guards: [],
+        //   child: (_, __) => const PaymentPage(),
+        // ),
         ChildRoute(
           '/login',
           child: (_, __) => const LoginPage(),

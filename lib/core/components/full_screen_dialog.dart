@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-fullScreeDialog(context, Widget Function(dynamic) setContent) {
-  Navigator.of(context).push(MaterialPageRoute<void>(
+Future fullScreeDialog(context, Widget Function(dynamic) setContent) {
+  return Navigator.of(context).push(MaterialPageRoute<void>(
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (context, setState) => Dialog(

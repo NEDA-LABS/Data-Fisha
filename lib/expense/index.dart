@@ -3,13 +3,12 @@ import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/expense/pages/categories.dart';
 import 'package:smartstock/expense/pages/expense_create.dart';
 import 'package:smartstock/expense/pages/expenses.dart';
-import 'package:smartstock/expense/pages/index.dart';
 import 'package:smartstock/expense/pages/items.dart';
 
 class ExpenseModule extends Module {
   final home = ChildRoute(
     '/',
-    child: (_, __) => const ExpenseIndexPage(),
+    child: (_, __) => const ExpenseExpensesPage(),
   );
   final items = ChildRoute(
     '/categories',
@@ -23,16 +22,16 @@ class ExpenseModule extends Module {
     '/expenses',
     child: (_, __) => const ExpenseExpensesPage(),
   );
-  final expenseCreate = ChildRoute(
-    '/expenses/create',
-    child: (_, __) => expenseCreatePage(_),
-  );
+  // final expenseCreate = ChildRoute(
+  //   '/expenses/create',
+  //   child: (_, __) => expenseCreatePage(_),
+  // );
 
   ExpenseModule(List<ExternalService> services);
 
   @override
   List<ChildRoute> get routes =>
-      [home, items, categories, expenses, expenseCreate];
+      [home, items, categories, expenses];
 
   @override
   List<Bind> get binds => [];

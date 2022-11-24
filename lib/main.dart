@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:smartstock/app_start.dart';
-import 'package:smartstock/core/models/external_service.dart';
 
 void main() {
   startSmartStock(

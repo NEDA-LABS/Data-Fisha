@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget {
         drawer: d,
         appBar: StockAppBar(title: "Profile", showBack: false, backLink: '/account/'),
         body: const ProfileForm(),
-        bottomNavigationBar: bottomBar(3, moduleMenus(), context),
+        bottomNavigationBar: bottomBar(2, moduleMenus(), context),
       ),
     );
   }

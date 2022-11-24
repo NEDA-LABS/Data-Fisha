@@ -9,9 +9,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/stocks/states/products_list.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -68,7 +66,7 @@ class _State extends State<UsersPage> {
   _appBar(context) {
     return StockAppBar(
       title: "Users",
-      showBack: false,
+      showBack: true,
       backLink: '/account/',
       showSearch: false,
       // onSearch: (p0) {},
