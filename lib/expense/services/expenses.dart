@@ -34,6 +34,6 @@ Future submitExpenses(
     "amount": amount
   };
   var shop = await getActiveShop();
-  var createExpenses = prepareCreateExpensesRemote([expense]);
+  var createExpenses = prepareCreateExpensesRemote(expense);
   return createExpenses(shop);
 }

@@ -80,7 +80,7 @@ Widget _shop(var shop) {
           ),
         ),
         Container(
-          width: 90,
+          width: 110,
           // decoration: const BoxDecoration(shape: BoxShape.circle),
           padding: const EdgeInsets.all(8),
           child: Text(
