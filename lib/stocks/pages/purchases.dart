@@ -55,12 +55,7 @@ class _PurchasesPage extends State<PurchasesPage> {
         ]),
       );
 
-  _fields() => [
-        'refNumber',
-        'type',
-        'amount',
-        'payment',
-      ];
+  _fields() => ['refNumber', 'type', 'amount', 'payments'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -91,13 +86,13 @@ class _PurchasesPage extends State<PurchasesPage> {
                       // if (a == 'refNumber') {
                       //   return Text('${c['type']} : ${c['refNumber']}');
                       // }
-                      if (a == 'payment' && c['type'] == 'cash') {
+                      if (a == 'payments' && c['type'] == 'cash') {
                         return Text('${c['amount']}');
                       }
-                      if (a == 'payment' && c['type'] == 'receipt') {
+                      if (a == 'payments' && c['type'] == 'receipt') {
                         return Text('${c['amount']}');
                       }
-                      if (a == 'payment' && c['type'] == 'invoice') {
+                      if (a == 'payments' && c['type'] == 'invoice') {
                         return Text('${_getInvPayment(b)}');
                       }
                       return Text('$b');
@@ -134,9 +129,9 @@ class _PurchasesPage extends State<PurchasesPage> {
   }
 
   _getInvPayment(b) {
-    if (b is Map) {
-      return b.values
-          .fold(0, (dynamic a, element) => a + doubleOrZero('$element'));
+    if (b is List) {
+      return b.fold(
+          0, (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
     }
     return 0;
   }

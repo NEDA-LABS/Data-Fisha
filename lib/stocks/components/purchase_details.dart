@@ -18,12 +18,12 @@ purchaseDetails(context, item) => ListView(
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
-                      child: Text('${item['product']['product']}')),
+                      child: Text('${item['product']}')),
                   Text('${item['quantity']}'),
                   Text('${item['amount']}'),
                 ]))
             .toList() as List<Widget>,
-        _getPayments(item['payment']).isNotEmpty
+        _getPayments(item['payments']).isNotEmpty
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: Text('Payments',
@@ -31,7 +31,7 @@ purchaseDetails(context, item) => ListView(
                         TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
               )
             : Container(),
-        ..._getPayments(item['payment'])
+        ..._getPayments(item['payments'])
             .map<Widget>((item) => tableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
@@ -62,11 +62,13 @@ purchaseDetails(context, item) => ListView(
       ],
     );
 
-List<Map<String, dynamic>> _getPayments(item) {
-  if (item is Map) {
-    return item.keys.map((e) => ({"date": e, "amount": item[e]})).toList();
-  }
-  return [];
+List _getPayments(item) {
+  return item;
+  // if (item is List<Map<String, dynamic>>) {
+  //   return item;
+  //   // return item.map((e) => ({"date": e, "amount": item[e]})).toList();
+  // }
+  // return [];
 }
 
 _tableHeader() => Padding(
