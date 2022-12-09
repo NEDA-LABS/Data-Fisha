@@ -4,14 +4,14 @@ import 'package:smartstock/core/services/util.dart';
 
 Future updateUserDetailsRemote(user, data) async {
   var url = '$baseUrl/account/${user['id']}/details';
-  var putRequest = preparePutRequest(data);
+  var putRequest = prepareHttpPutRequest(data);
   return executeHttp(() => putRequest(url));
 }
 
 Future getShopUsersRemote(shop) async {
   var getProjectId = propertyOr('projectId', (p0) => null);
   var url = '$baseUrl/account/shops/${getProjectId(shop)}/users';
-  return executeHttp(() => getRequest(url));
+  return executeHttp(() => httpGetRequest(url));
 }
 
 Future addShopUserRemote(shop, data) async {
@@ -24,7 +24,7 @@ Future addShopUserRemote(shop, data) async {
 Future updateShopUserPasswordRemote(shop, userId, password) async {
   var getProjectId = propertyOr('projectId', (p0) => null);
   var url = '$baseUrl/account/shops/${getProjectId(shop)}/users/$userId';
-  var putRequest = preparePutRequest({'password': password});
+  var putRequest = prepareHttpPutRequest({'password': password});
   return executeHttp(() => putRequest(url));
 }
 

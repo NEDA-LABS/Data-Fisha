@@ -12,7 +12,7 @@ import 'package:smartstock/core/services/util.dart';
 
 var _getPurchases = composeAsync([
   (x) => RawResponse(body: x.body, statusCode: x.statusCode),
-  getRequest,
+  httpGetRequest,
 ]);
 
 var getAllRemotePurchases = (String startAt) => composeAsync([
@@ -29,7 +29,7 @@ preparePatchPurchasePayment(String? id, Map payment) {
 }
 
 prepareCreatePurchase(Map purchase) {
-  var createRequest = preparePutRequest(purchase);
+  var createRequest = prepareHttpPutRequest(purchase);
   f(app) => () => createRequest('${shopFunctionsURL(app)}/stock/purchase');
   return composeAsync([(app) => executeHttp(f(app)), map(shopToApp)]);
 }

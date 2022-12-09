@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/stocks/services/item.dart';
+import 'package:smartstock/stocks/services/items.dart';
 import 'package:smartstock/stocks/states/items_list.dart';
 
 

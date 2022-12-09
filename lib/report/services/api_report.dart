@@ -14,7 +14,7 @@ prepareGetOverviewCashSales(shop, type) {
     var execute = composeAsync([
       itOrEmptyArray,
       (RawResponse items) => jsonDecode(items.body),
-      (app) => getRequest(
+      (app) => httpGetRequest(
           '${shopFunctionsURL(app)}/report/sales/overview/cash/$type?from=$from&to=$to'),
       shopToApp,
     ]);
@@ -29,7 +29,7 @@ prepareGetOverviewInvoiceSales(shop, type) {
     var execute = composeAsync([
       itOrEmptyArray,
           (RawResponse items) => jsonDecode(items.body),
-          (app) => getRequest(
+          (app) => httpGetRequest(
           '${shopFunctionsURL(app)}/report/sales/overview/invoice/$type?from=$from&to=$to'),
       shopToApp,
     ]);
@@ -44,7 +44,7 @@ prepareGetPerformanceReport(shop, type) {
     var execute = composeAsync([
       itOrEmptyArray,
           (RawResponse items) => jsonDecode(items.body),
-          (app) => getRequest(
+          (app) => httpGetRequest(
           '${shopFunctionsURL(app)}/report/sales/performance/$type?from=$from&to=$to'),
       shopToApp,
     ]);
@@ -59,7 +59,7 @@ prepareGetSalesCashTracking(shop) {
     var execute = composeAsync([
       itOrEmptyArray,
           (RawResponse items) => jsonDecode(items.body),
-          (app) => getRequest(
+          (app) => httpGetRequest(
           '${shopFunctionsURL(app)}/report/sales/track/cash?from=$from&to=$to'),
       shopToApp,
     ]);

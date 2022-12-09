@@ -11,7 +11,6 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class SalesCashPage extends StatefulWidget {
   const SalesCashPage({Key? key}) : super(key: key);

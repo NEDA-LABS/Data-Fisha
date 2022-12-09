@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
+import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
@@ -20,6 +21,7 @@ purchaseCreatePage(BuildContext context) => SaleLikePage(
   onCustomerLikeList: getSupplierFromCacheOrRemote,
   onCustomerLikeAddWidget: createSupplierContent,
   checkoutCompleteMessage: 'Purchase complete.',
+  onGetProductsLike: getStockFromCacheOrRemote,
 );
 
 _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {

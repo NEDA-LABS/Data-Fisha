@@ -39,3 +39,4 @@ android/release/*.apk
 android/release/*.aab
 .firebase
 lib/generated_plugin_registrant.dart
+android/app/release/

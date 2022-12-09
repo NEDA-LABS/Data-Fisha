@@ -1,4 +1,5 @@
-import 'package:builders/builders.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
@@ -11,25 +12,63 @@ import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
 import 'package:smartstock/stocks/states/product_loading.dart';
-import 'package:smartstock/stocks/states/products_list.dart';
 
 class ProductsPage extends StatefulWidget {
-  final args;
-
-  const ProductsPage(this.args, {Key? key}) : super(key: key);
+  const ProductsPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ProductPage();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _ProductPage extends State<ProductsPage> {
+class _State extends State<ProductsPage> {
+  String _query = '';
+  bool _isLoading = false;
+  bool _skipLocal = false;
+  List _products = [];
+
+  @override
+  void initState() {
+    _getProducts();
+    super.initState();
+  }
+
+  @override
+  Widget build(context) {
+    return responsiveBody(
+      menus: moduleMenus(),
+      current: '/stock/',
+      onBody: (d) {
+        return Scaffold(
+          appBar: _appBar(context),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              tableContextMenu(_contextItems()),
+              _loading(_isLoading),
+              _tableHeader(),
+              Expanded(
+                child: TableLikeList(
+                  onFuture: () async => _products,
+                  keys: _fields,
+                  onItemPressed: _productItemClicked,
+                  onCell: _onRenderCellView,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   _appBar(context) {
     return StockAppBar(
         title: "Products",
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
-        onSearch: getState<ProductsListState>().updateQuery,
+        onSearch: _updateQuery,
         searchHint: 'Search...');
   }
 
@@ -41,7 +80,6 @@ class _ProductPage extends State<ProductsPage> {
         name: 'Reload',
         pressed: () {
           getState<ProductLoadingState>().update(true);
-          // getState<ProductsListState>().refresh();
         },
       ),
       // ContextMenu(name: 'Import', pressed: () => {}),
@@ -59,54 +97,38 @@ class _ProductPage extends State<ProductsPage> {
     ]);
   }
 
-  _fields() =>
+  get _fields =>
       ['product', 'quantity', 'purchase', 'retailPrice', 'wholesalePrice'];
 
-  _loading(bool show) =>
-      show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  _loading(bool show) {
+    return show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  }
 
-  @override
-  Widget build(context) => responsiveBody(
-        menus: moduleMenus(),
-        current: '/stock/',
-        onBody: (d) => Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              tableContextMenu(_contextItems()),
-              Consumer<ProductLoadingState>(
-                builder: (_, state) => _loading(state!.loading),
-              ),
-              _tableHeader(),
-              Consumer<ProductsListState>(
-                builder: (_, state) => Expanded(
-                  child: TableLikeList(
-                      onFuture: () async => getStockFromCacheOrRemote(
-                            stringLike: state!.query,
-                            skipLocal: widget.args?.queryParams
-                                    ?.containsKey('reload') ==
-                                true,
-                          ),
-                      keys: _fields(),
-                      onItemPressed: (item) {
-                        showDialogOrModalSheet(
-                            productDetail(item, context), context);
-                      },
-                      onCell: (key, data, c) {
-                        if(key=='product') return Text('$data');
-                        return Text('${doubleOrZero(data)}');
-                      }),
-                ),
-              ),
-              // _tableFooter()
-            ],
-          ),
-        ),
-      );
+  _updateQuery(String q) {
+    _query = q;
+    _getProducts();
+  }
 
-  @override
-  void dispose() {
-    super.dispose();
+  _getProducts() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var data = await getStockFromCacheOrRemote(
+      stringLike: _query,
+      skipLocal: _skipLocal,
+    );
+    setState(() {
+      _products = data;
+      _isLoading = false;
+    });
+  }
+
+  _productItemClicked(item) {
+    showDialogOrModalSheet(productDetail(item, context), context);
+  }
+
+  Widget _onRenderCellView(key, data, c) {
+    if (key == 'product') return Text('$data');
+    return Text('${doubleOrZero(data)}');
   }
 }

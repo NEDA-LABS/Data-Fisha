@@ -5,18 +5,17 @@ import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
 import 'package:http/http.dart';
 
-_parse(x){
-  // print(x.statusCode);
-  return RawResponse(body: x.body, statusCode: x.statusCode);
-}
+_parse(x) => RawResponse(body: x.body, statusCode: x.statusCode);
 
+/// prepare DELETE http request. [Map body] => [String url] => http_response
 prepareDeleteRequest(body) {
-  request(url) =>
-      delete(Uri.parse(url), headers: getInitialHeaders(), body: jsonEncode(body));
+  request(url) => delete(Uri.parse(url),
+      headers: getInitialHeaders(), body: jsonEncode(body));
   return composeAsync([_parse, request]);
 }
 
-preparePutRequest(body) {
+/// prepare PUT http request. [Map body] => [String url] => http_response
+prepareHttpPutRequest(body) {
   request(url) =>
       put(Uri.parse(url), headers: getInitialHeaders(), body: jsonEncode(body));
   return composeAsync([_parse, request]);
@@ -34,4 +33,5 @@ preparePatchRequest(body) {
   return composeAsync([_parse, request]);
 }
 
-var getRequest = composeAsync([_parse, (path) => get(Uri.parse(path))]);
+/// perform GET http request to given path. [String path] => http_response
+var httpGetRequest = composeAsync([_parse, get, Uri.parse]);

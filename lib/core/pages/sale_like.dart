@@ -22,9 +22,11 @@ class SaleLikePage extends StatefulWidget {
   final Widget Function() onCustomerLikeAddWidget;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
   final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
-  TextEditingController? searchTextController;
+  final bool showCustomerLike;
+  final TextEditingController? searchTextController;
+  final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
 
-  SaleLikePage({
+  const SaleLikePage({
     required this.title,
     required this.wholesale,
     required this.onSubmitCart,
@@ -36,6 +38,8 @@ class SaleLikePage extends StatefulWidget {
     required this.checkoutCompleteMessage,
     this.customerLikeLabel = 'Choose customer',
     this.searchTextController,
+    this.showCustomerLike = true,
+    required this.onGetProductsLike,
     Key? key,
   }) : super(key: key);
 
@@ -45,7 +49,7 @@ class SaleLikePage extends StatefulWidget {
 
 class _State extends State<SaleLikePage> {
   Map states = {'skip': false, 'query': ''};
-  var updateState;
+  dynamic updateState;
   final _getSkip = propertyOr('skip', (p0) => false);
   final _getQuery = propertyOr('query', (p0) => '');
   final _getCarts = propertyOr('carts', (p0) => []);
@@ -76,24 +80,14 @@ class _State extends State<SaleLikePage> {
       onBody: (drawer) => Scaffold(
         appBar: states['hab'] == true ? null : _appBar(updateState),
         floatingActionButton: _fab(states, updateState),
-        body: FutureBuilder<List>(
-          // initialData: _getCarts(states),
-          future: _future(states),
-          builder: _getView(
-            _getCarts(states),
-            _onAddToCart(states, updateState),
-            widget.onAddToCartView,
-            _onShowCheckoutSheet(states, updateState, context),
-            widget.onGetPrice,
-          ),
-        ),
+        body: FutureBuilder<List>(future: _future(), builder: _getView),
       ),
     );
   }
 
   _hasCarts(states) => _getCarts(states).length > 0;
 
-  _future(states) => getStockFromCacheOrRemote(
+  _future() => widget.onGetProductsLike(
       skipLocal: _getSkip(states), stringLike: _getQuery(states));
 
   _onAddToCart(states, updateState) => (cart) {
@@ -140,28 +134,35 @@ class _State extends State<SaleLikePage> {
       snapshot is AsyncSnapshot &&
       snapshot.connectionState == ConnectionState.waiting;
 
-  _getView(carts, onAddToCart, onAddToCartView, onShowCheckout, onGetPrice) {
-    return (context, snapshot) => Column(children: [
-          _isLoading(snapshot)
-              ? const LinearProgressIndicator()
-              : const SizedBox(height: 0),
-          Expanded(
-            child: salesLikeBody(
-              onAddToCart: onAddToCart,
-              wholesale: widget.wholesale,
-              products: snapshot.data ?? [],
-              onAddToCartView: onAddToCartView,
-              onShowCheckout: onShowCheckout,
-              onGetPrice: onGetPrice,
-              carts: carts,
-              context: context,
-            ),
-          )
-        ]);
+  Widget _getView(context, snapshot) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _isLoading(snapshot)
+            ? const LinearProgressIndicator()
+            : const SizedBox(height: 0),
+        snapshot is AsyncSnapshot && snapshot.hasError
+            ? Text("${snapshot.error}")
+            : Container(),
+        Expanded(
+          child: salesLikeBody(
+            onAddToCart: _onAddToCart(states, updateState),
+            wholesale: widget.wholesale,
+            products: snapshot.data ?? [],
+            onAddToCartView: widget.onAddToCartView,
+            onShowCheckout: _onShowCheckoutSheet(states, updateState, context),
+            onGetPrice: widget.onGetPrice,
+            carts: _getCarts(states),
+            context: context,
+          ),
+        )
+      ],
+    );
   }
 
-  _cartDrawer(states, updateState, context, wholesale, refresh){
+  _cartDrawer(states, updateState, context, wholesale, refresh) {
     return CartDrawer(
+      showCustomerLike: widget.showCustomerLike,
       customerLikeLabel: widget.customerLikeLabel,
       onAddItem: (id, q) {
         var addCart = _prepareAddCartQuantity(states, updateState);
@@ -200,7 +201,7 @@ class _State extends State<SaleLikePage> {
     );
   }
 
-  _prepareRemoveCart(states, updateState){
+  _prepareRemoveCart(states, updateState) {
     return (String id) =>
         updateState({'carts': removeCart(id, states['carts'] ?? [])});
   }

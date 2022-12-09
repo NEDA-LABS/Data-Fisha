@@ -8,6 +8,8 @@ import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/services/navigation.dart';
+import 'package:smartstock/expense/index.dart';
+import 'package:smartstock/expense/services/navigation.dart';
 import 'package:smartstock/report/report.dart';
 import 'package:smartstock/report/services/navigation.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
@@ -17,7 +19,6 @@ import 'package:smartstock/stocks/services/navigation.dart';
 import 'package:smartstock/stocks/stocks.dart';
 
 class SmartStockCoreModule extends Module {
-
   @override
   List<ModularRoute> get routes => [
         ModuleRoute(
@@ -25,7 +26,11 @@ class SmartStockCoreModule extends Module {
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
           module: DashboardModule([]),
         ),
-        ModuleRoute('/account/', guards: [], module: AccountModule([])),
+        ModuleRoute(
+          '/account/',
+          guards: [],
+          module: AccountModule([]),
+        ),
         ModuleRoute(
           '/dashboard/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
@@ -36,11 +41,21 @@ class SmartStockCoreModule extends Module {
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
           module: ReportModule([]),
         ),
-        ModuleRoute('/sales/',
-            guards: [AuthGuard(), ActiveShopGuard()], module: SalesModule()),
-        ModuleRoute('/stock/',
-            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            module: StockModule([])),
+        ModuleRoute(
+          '/sales/',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          module: SalesModule(),
+        ),
+        ModuleRoute(
+          '/stock/',
+          guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+          module: StockModule([]),
+        ),
+        ModuleRoute(
+          '/expense/',
+          guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+          module: ExpenseModule([]),
+        ),
       ];
 
   @override
@@ -53,6 +68,7 @@ List<MenuModel> moduleMenus() {
     reportMenu(),
     salesMenu(),
     stocksMenu(),
+    expenseMenu(),
     accountMenu(),
   ];
 }
