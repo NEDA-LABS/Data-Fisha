@@ -3,39 +3,15 @@ import 'package:smartstock/core/services/cache_shop.dart';
 
 import 'api_report.dart';
 
-Future getDailySalesOverview(DateTimeRange range) async {
+Future getCashSalesOverview(DateTimeRange range, String period) async {
   var shop = await getActiveShop();
-  var getDailySales = prepareGetOverviewCashSales(shop, 'day');
-  return getDailySales(range);
+  var getOverviewSales = prepareGetOverviewCashSales(shop, period);
+  return getOverviewSales(range);
 }
 
-Future getMonthlySalesOverview(DateTimeRange range) async {
+Future getInvoiceSalesOverview(DateTimeRange range, String period) async {
   var shop = await getActiveShop();
-  var getMonthlySales = prepareGetOverviewCashSales(shop, 'month');
-  return getMonthlySales(range);
-}
-
-Future getYearlySalesOverview(DateTimeRange range) async {
-  var shop = await getActiveShop();
-  var getMonthlySales = prepareGetOverviewCashSales(shop, 'year');
-  return getMonthlySales(range);
-}
-
-Future getDailyInvoiceSalesOverview(DateTimeRange range) async {
-  var shop = await getActiveShop();
-  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'day');
-  return getDailySales(range);
-}
-
-Future getMonthlyInvoiceSalesOverview(DateTimeRange range) async {
-  var shop = await getActiveShop();
-  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'month');
-  return getDailySales(range);
-}
-
-Future getYearlyInvoiceSalesOverview(DateTimeRange range) async {
-  var shop = await getActiveShop();
-  var getDailySales = prepareGetOverviewInvoiceSales(shop, 'year');
+  var getDailySales = prepareGetOverviewInvoiceSales(shop, period);
   return getDailySales(range);
 }
 

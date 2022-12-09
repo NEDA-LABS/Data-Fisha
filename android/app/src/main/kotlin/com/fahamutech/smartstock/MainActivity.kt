@@ -1,6 +1,5 @@
 package com.fahamutech.smartstock
 
-import androidx.annotation.NonNull
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
@@ -10,7 +9,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterActivity() {
     private val myRequestCode = 7478
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
 //        JZV3Printer.getInstance().init(this)
 //        flutterEngine.plugins.add(JZV3PrinterPlugin())

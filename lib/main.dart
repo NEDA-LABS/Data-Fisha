@@ -5,7 +5,7 @@ import 'package:smartstock/core/models/external_service.dart';
 void main() {
   startSmartStock(
     externalSaleServices: [
-      // ExternalService(
+      // ExternalService(a
       //     name: 'Kata tiketi',
       //     icon: const Icon(
       //       Icons.add,

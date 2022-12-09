@@ -1,28 +1,30 @@
 import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class MonthlyInvoiceSales extends StatefulWidget {
-  const MonthlyInvoiceSales({Key? key}) : super(key: key);
+class ProductPerformance extends StatefulWidget {
+  const ProductPerformance({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MonthlyInvoiceSales> {
+class _State extends State<ProductPerformance> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 90)),
+    start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
   var dailySales = [];
@@ -65,22 +67,22 @@ class _State extends State<MonthlyInvoiceSales> {
     );
   }
 
-  charts.Series<dynamic, String> _sales2Series(List sales) {
-    return charts.Series<dynamic, String>(
-      id: 'Sales',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => sales['date'],
-      measureFn: (dynamic sales, _) => sales['amount'],
-      data: dailySales,
-    );
-  }
+  // charts.Series<dynamic, String> _sales2Series(List sales) {
+  //   return charts.Series<dynamic, String>(
+  //     id: 'Sales',
+  //     colorFn: (_, __) =>
+  //         charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+  //     domainFn: (dynamic sales, _) => sales['date'],
+  //     measureFn: (dynamic sales, _) => sales['amount'],
+  //     data: dailySales,
+  //   );
+  // }
 
   _fetchData() {
     setState(() {
       loading = true;
     });
-    getMonthlyInvoiceSalesOverview(dateRange).then((value) {
+    getProductPerformance(dateRange).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -126,19 +128,17 @@ class _State extends State<MonthlyInvoiceSales> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
-          child: Container(
-            height: isSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: BarChart(
-              [_sales2Series(dailySales)],
-              animate: true,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
+        // Card(
+        //   child: Container(
+        //     height: 350,
+        //     padding: const EdgeInsets.all(8),
+        //     child: BarChart(
+        //       [_sales2Series(dailySales)],
+        //       animate: true,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 16),
         _tableHeader(),
         Card(
           child: Container(
@@ -147,6 +147,12 @@ class _State extends State<MonthlyInvoiceSales> {
             child: TableLikeList(
               onFuture: () async => dailySales,
               keys: _fields(),
+              onCell: (a, b, c) {
+                if (a != 'id') {
+                  return Text('${doubleOrZero(b)}');
+                }
+                return Text('$b');
+              },
             ),
           ),
         )
@@ -156,21 +162,39 @@ class _State extends State<MonthlyInvoiceSales> {
 
   _tableHeader() {
     return tableLikeListRow([
-      tableLikeListTextHeader('Date'),
-      // tableLikeListTextHeader('Retail ( Tsh )'),
-      // tableLikeListTextHeader('Wholesale ( Tsh )'),
-      tableLikeListTextHeader('Total ( Tsh )'),
+      tableLikeListTextHeader('Product'),
+      tableLikeListTextHeader('Quantity'),
+      tableLikeListTextHeader('Amount ( Tsh )'),
+      tableLikeListTextHeader('Margin ( % )'),
     ]);
   }
 
   _fields() {
-    return ['date', 'amount'];
+    return ['id', 'quantity', 'amount', 'margin'];
   }
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
-      onRange: (range) {
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        var title = "Sales product performance $startD -> $endD";
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF(title, dailySales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv(title, dailySales);
+              Navigator.maybePop(context);
+            },
+          ),
+          context,
+        );
+      },
+      onRange: (range,period) {
         if (range != null) {
           setState(() {
             dateRange = range;
@@ -184,7 +208,7 @@ class _State extends State<MonthlyInvoiceSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Monthly invoice sales",
+      title: "Product performance",
       showBack: false,
       backLink: '/report/',
     );

@@ -1,30 +1,35 @@
 import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class MonthlyCashSales extends StatefulWidget {
-  const MonthlyCashSales({Key? key}) : super(key: key);
+class OverviewCashSales extends StatefulWidget {
+  const OverviewCashSales({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MonthlyCashSales> {
+class _State extends State<OverviewCashSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 90)),
+    start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
+  String period = 'day';
   var dailySales = [];
 
   @override
@@ -80,7 +85,7 @@ class _State extends State<MonthlyCashSales> {
     setState(() {
       loading = true;
     });
-    getMonthlySalesOverview(dateRange).then((value) {
+    getCashSalesOverview(dateRange, period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -128,7 +133,9 @@ class _State extends State<MonthlyCashSales> {
       children: [
         Card(
           child: Container(
-            height: isSmallScreen(context)?chartCardMobileHeight:chartCardDesktopHeight,
+            height: isSmallScreen(context)
+                ? chartCardMobileHeight
+                : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -167,12 +174,34 @@ class _State extends State<MonthlyCashSales> {
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
-      onRange: (range) {
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            },
+            onExcel: () {
+              exportToExcel("Cash sales $startD -> $endD", dailySales);
+              Navigator.maybePop(context);
+            }
+          ),
+          context,
+        );
+      },
+      onRange: (range, p) {
         if (range != null) {
-          setState(() {
-            dateRange = range;
-          });
+          // setState(() {
+          dateRange = range;
+          period = p ?? 'day';
+          // });
           _fetchData();
         }
       },
@@ -182,7 +211,7 @@ class _State extends State<MonthlyCashSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Monthly cash sales",
+      title: "Cash sales overview",
       showBack: false,
       backLink: '/report/',
     );

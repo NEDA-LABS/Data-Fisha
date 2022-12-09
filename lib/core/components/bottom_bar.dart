@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/drawer.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -11,7 +9,7 @@ Widget? bottomBar(
 ) =>
     isSmallScreen(context)
         ? BottomNavigationBar(
-            currentIndex: selected,
+            currentIndex: selected > 2 ? 2 : selected,
             selectedItemColor: Theme.of(context).primaryColorDark,
             unselectedItemColor: Colors.grey,
             onTap: (index) => _handleClick(index, context, menus),
@@ -21,8 +19,8 @@ Widget? bottomBar(
                 BottomNavigationBarItem(
                     icon: Icon(Icons.point_of_sale), label: 'Sales'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.inventory), label: 'Stocks'),
-                BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'More')
+                    icon: Icon(Icons.person), label: 'Account'),
+                // BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'More')
               ])
         : null;
 
@@ -35,15 +33,15 @@ _handleClick(dynamic index, BuildContext context, List<MenuModel> menus) {
       navigateTo('/sales/');
       break;
     case 2:
-      navigateTo('/stock/');
+      navigateTo('/account/');
       break;
-    case 3:
-      fullScreeDialog(context, (p0) => Scaffold(
-        appBar: AppBar(title: const Text('Navigation'),),
-        body: modulesMenuContent(menus, ''),
-      ));
-      // showModalBottomSheet(
-      //     context: context,
-      //     builder: (_) => modulesMenuContent(menus, ''));
+    // case 3:
+    // fullScreeDialog(context, (p0) => Scaffold(
+    //   appBar: AppBar(title: const Text('Navigation'),),
+    //   body: modulesMenuContent(menus, ''),
+    // ));
+    // showModalBottomSheet(
+    //     context: context,
+    //     builder: (_) => modulesMenuContent(menus, ''));
   }
 }

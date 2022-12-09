@@ -10,20 +10,23 @@ class ChooseShopState extends ChangeNotifier {
   Future getShops() async {
     try {
       var user = await getLocalCurrentUser();
-      shops = [];
-      user['shops'].forEach((element) {
-        shops.add(element);
-      });
-      shops.add({
-        "businessName": user['businessName'],
-        "projectId": user['projectId'],
-        "applicationId": user['applicationId'],
-        "projectUrlId": user['projectUrlId'],
-        "settings": user['settings'],
-        "street": user['street'],
-        "country": user['country'],
-        "region": user['region']
-      });
+      // shops = [];
+      // user['shops'].forEach((element) {
+      //   shops.add(element);
+      // });
+      // shops.add({
+      //   "businessName": user['businessName'],
+      //   "projectId": user['projectId'],
+      //   "applicationId": user['applicationId'],
+      //   "projectUrlId": user['projectUrlId'],
+      //   "settings": user['settings'],
+      //   "street": user['street'],
+      //   "country": user['country'],
+      //   "region": user['region']
+      // });
+      if (user['shops'] is List) {
+        shops = user['shops'];
+      }
       return shops;
     } catch (e) {
       rethrow;
@@ -36,7 +39,7 @@ class ChooseShopState extends ChangeNotifier {
     try {
       String? projectId = shop["projectId"];
       // updateCurrentShop(shop);
-      shops = [];
+      // shops = [];
       notifyListeners();
       await saveShopId(projectId);
       await saveActiveShop(shop);

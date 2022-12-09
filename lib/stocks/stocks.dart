@@ -41,7 +41,7 @@ class StockModule extends Module {
           '/purchases/create',
           child: (context, _) => purchaseCreatePage(context),
         ),
-        ChildRoute('/items', child: (_, __) => ItemsPage(__)),
+        // ChildRoute('/items', child: (_, __) => ItemsPage(__)),
         ChildRoute('/products/create', child: (_, __) {
           var productState = getState<ProductCreateState>();
           productState.setIsUpdate(false);

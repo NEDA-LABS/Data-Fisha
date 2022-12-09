@@ -1,12 +1,16 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class CategoryPerformance extends StatefulWidget {
@@ -165,8 +169,26 @@ class _State extends State<CategoryPerformance> {
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
-      onRange: (range) {
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        var title = "Sales category performance $startD -> $endD";
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF(title, dailySales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv(title, dailySales);
+              Navigator.maybePop(context);
+            },
+          ),
+          context,
+        );
+      },
+      onRange: (range,period) {
         if (range != null) {
           setState(() {
             dateRange = range;

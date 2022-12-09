@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/button.dart';
 
 class ReportDateRange extends StatefulWidget {
-  final Function(DateTimeRange?) onRange;
+  final Function(DateTimeRange?, String? period) onRange;
   final Function(DateTimeRange?) onExport;
   final DateTimeRange dateRange;
 
@@ -22,6 +22,7 @@ class _State extends State<ReportDateRange> {
   var error = '';
   var loading = false;
   DateTimeRange? date;
+  String period = 'day';
 
   @override
   void initState() {
@@ -33,10 +34,12 @@ class _State extends State<ReportDateRange> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               _getToday(date),
               style: const TextStyle(
@@ -46,8 +49,44 @@ class _State extends State<ReportDateRange> {
               ),
             ),
           ),
-          outlineActionButton(onPressed: _chooseDateRange, title: 'Change'),
-          // outlineButton(onPressed: _exportData, title: 'Export'),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              outlineActionButton(onPressed: _chooseDateRange, title: 'Change'),
+              outlineActionButton(onPressed: _exportData, title: 'Export'),
+              Container(
+                width: 120,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButtonFormField<String>(
+                  isDense: true,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      label: Text('Period'),
+                      hoverColor: Colors.transparent,
+                      focusColor: Colors.transparent),
+                  value: period,
+                  items: const [
+                    DropdownMenuItem<String>(
+                      value: 'day',
+                      child: Text('Day'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'month',
+                      child: Text('Month'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'year',
+                      child: Text('Year'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    period = value ?? 'day';
+                    widget.onRange(date, period);
+                  },
+                ),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -63,10 +102,8 @@ class _State extends State<ReportDateRange> {
       lastDate: DateTime.now(),
     ).then((value) {
       if (value != null) {
-        setState(() {
-          date = value;
-        });
-        widget.onRange(date);
+        date = value;
+        widget.onRange(date, period);
       }
     });
   }

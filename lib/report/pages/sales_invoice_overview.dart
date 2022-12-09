@@ -1,31 +1,36 @@
 import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class YearlyInvoiceSales extends StatefulWidget {
-  const YearlyInvoiceSales({Key? key}) : super(key: key);
+class OverviewInvoiceSales extends StatefulWidget {
+  const OverviewInvoiceSales({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<YearlyInvoiceSales> {
+class _State extends State<OverviewInvoiceSales> {
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 720)),
+    start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
   var dailySales = [];
+  String period = 'day';
 
   @override
   void initState() {
@@ -70,8 +75,8 @@ class _State extends State<YearlyInvoiceSales> {
       id: 'Sales',
       colorFn: (_, __) =>
           charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => '${sales['date']}',
-      measureFn: (dynamic sales, _) => doubleOrZero(sales['amount']),
+      domainFn: (dynamic sales, _) => sales['date'],
+      measureFn: (dynamic sales, _) => sales['amount'],
       data: dailySales,
     );
   }
@@ -80,7 +85,7 @@ class _State extends State<YearlyInvoiceSales> {
     setState(() {
       loading = true;
     });
-    getYearlyInvoiceSalesOverview(dateRange).then((value) {
+    getInvoiceSalesOverview(dateRange,period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -128,7 +133,9 @@ class _State extends State<YearlyInvoiceSales> {
       children: [
         Card(
           child: Container(
-            height: isSmallScreen(context)?chartCardMobileHeight:chartCardDesktopHeight,
+            height: isSmallScreen(context)
+                ? chartCardMobileHeight
+                : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -155,6 +162,8 @@ class _State extends State<YearlyInvoiceSales> {
   _tableHeader() {
     return tableLikeListRow([
       tableLikeListTextHeader('Date'),
+      // tableLikeListTextHeader('Retail ( Tsh )'),
+      // tableLikeListTextHeader('Wholesale ( Tsh )'),
       tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }
@@ -165,12 +174,31 @@ class _State extends State<YearlyInvoiceSales> {
 
   _rangePicker() {
     return ReportDateRange(
-      onExport: (range) {},
-      onRange: (range) {
+      onExport: (range) {
+        var dateF = DateFormat('yyyy-MM-dd');
+        var startD = dateF.format(range?.start ?? DateTime.now());
+        var endD = dateF.format(range?.end ?? DateTime.now());
+        var title = "Invoice sales $startD -> $endD";
+        showDialogOrModalSheet(
+          dataExportOptions(
+            onPdf: () {
+              exportPDF(title, dailySales);
+              Navigator.maybePop(context);
+            },
+            onCsv: () {
+              exportToCsv(title, dailySales);
+              Navigator.maybePop(context);
+            },
+          ),
+          context,
+        );
+      },
+      onRange: (range,p) {
         if (range != null) {
-          setState(() {
+          // setState(() {
             dateRange = range;
-          });
+            period = p??'day';
+          // });
           _fetchData();
         }
       },
@@ -180,7 +208,7 @@ class _State extends State<YearlyInvoiceSales> {
 
   _appBar() {
     return StockAppBar(
-      title: "Yearly invoice sales",
+      title: "Invoice sales overview",
       showBack: false,
       backLink: '/report/',
     );
