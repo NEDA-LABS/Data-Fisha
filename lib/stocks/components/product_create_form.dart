@@ -13,19 +13,19 @@ import 'package:smartstock/stocks/states/product_create.dart';
 
 List<Widget> productCreateForm(ProductCreateState state, context) {
   return [
-    ChoicesInput(
+    TextInput(
       onText: (d) {
         state.updateFormState({"product": d});
-        state.refresh();
+        // state.refresh();
       },
       label: "Name",
-      placeholder: 'Select product name',
+      placeholder: 'Brand + generic name',
       error: state.error['product'] ?? '',
       initialText: state.product['product'] ?? '',
-      getAddWidget: () => createItemContent(),
-      onField: (x) =>
-          '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
-      onLoad: getItemFromCacheOrRemote,
+      // getAddWidget: () => createItemContent(),
+      // onField: (x) =>
+      //     '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
+      // onLoad: getItemFromCacheOrRemote,
     ),
     TextInput(
         onText: (d) => state.updateFormState({"barcode": d}),

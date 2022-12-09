@@ -9,13 +9,13 @@ List<SubMenuModule> _pagesMenu() => [
         svgName: 'product_icon.svg',
         onClick: () {},
       ),
-      SubMenuModule(
-        name: 'Item',
-        link: '/stock/items',
-        roles: [],
-        svgName: 'item_icon.svg',
-        onClick: () {},
-      ),
+      // SubMenuModule(
+      //   name: 'Item',
+      //   link: '/stock/items',
+      //   roles: [],
+      //   svgName: 'item_icon.svg',
+      //   onClick: () {},
+      // ),
       SubMenuModule(
         name: 'Categories',
         link: '/stock/categories',
