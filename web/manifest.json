@@ -6,7 +6,7 @@
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
     "description": "Business management tool.",
-    "orientation": "portrait-primary",
+    "orientation": "natural",
     "prefer_related_applications": false,
     "icons": [
         {

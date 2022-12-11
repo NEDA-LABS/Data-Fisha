@@ -7,7 +7,7 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
-drawer(List<MenuModel> menus, String current) {
+drawer(List<MenuModel> menus, String? current) {
   return Drawer(
     width: 250,
     backgroundColor: Colors.white,
@@ -15,7 +15,7 @@ drawer(List<MenuModel> menus, String current) {
   );
 }
 
-modulesMenuContent(List<MenuModel> allMenus, String current) {
+modulesMenuContent(List<MenuModel> allMenus, String? current) {
   var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
   var getOfficeLogo = compose([
     propertyOr(
@@ -74,14 +74,14 @@ Future _future(List<MenuModel> menus) async {
   return {"shop": shop, "menus": m};
 }
 
-Widget _header(String currentOffice, logoUrl) {
+Widget _header(String? currentOffice, logoUrl) {
   return Padding(
     padding: const EdgeInsets.all(24),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _officeName(currentOffice),
+        _officeName('$currentOffice'),
         _officeLogo(logoUrl),
         _changeOfficeTextButton()
       ],
@@ -89,16 +89,16 @@ Widget _header(String currentOffice, logoUrl) {
   );
 }
 
-Widget _officeName(String name) => Builder(
+Widget _officeName(String? name) => Builder(
     builder: (context) => Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(name,
+        child: Text('$name',
             style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 12,
                 color: Theme.of(context).primaryColor))));
 
-Widget _officeLogo(String url) {
+Widget _officeLogo(String? url) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Builder(
@@ -108,7 +108,7 @@ Widget _officeLogo(String url) {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(80),
             color: Theme.of(context).primaryColor),
-        child: url.isEmpty ? Container() : Image.network(url),
+        child: url == null ? Container() : url.isEmpty?Container():Image.network(url),
       ),
     ),
   );
@@ -132,7 +132,7 @@ Widget _changeOfficeTextButton() {
   );
 }
 
-_moduleMenuItems(String current) {
+_moduleMenuItems(String? current) {
   return (dynamic item) {
     item as MenuModel;
     return Padding(
