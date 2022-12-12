@@ -36,6 +36,7 @@ _mainWidget() {
     debugShowCheckedModeBanner: kDebugMode,
     theme: ThemeData(
       primarySwatch: getSmartStockMaterialColorSwatch(),
+      fontFamily: 'Inter'
     ),
   );
 }
