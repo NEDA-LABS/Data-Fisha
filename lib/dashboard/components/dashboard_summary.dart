@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/summary_report_card.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
@@ -130,7 +129,7 @@ class _State extends State<DashboardSummary> {
           children: [
             Expanded(
               child: _numberPercentageCard(
-                  "Sales", doubleOrZero(_getIt('sales_cash', data)), null),
+                  "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
               flex: 1,
             ),
             Expanded(
@@ -197,97 +196,6 @@ class _State extends State<DashboardSummary> {
               onPressed: () => setState(() => _fetchData()),
               child: const Text('Retry'))
         ],
-      ),
-    );
-  }
-
-  _profitAndLoss(data) {
-    Future getSales() async => data is Map ? doubleOrZero(data['profit']) : 0;
-    Future getMargin() async => data is Map ? doubleOrZero(data['margin']) : 0;
-    return Wrap(
-      children: [
-        DashboardSummaryReportCard(
-          title: 'Gross profit',
-          future: getSales,
-          showRefresh: false,
-        ),
-        DashboardSummaryReportCard(
-          title: 'Gross margin ( % )',
-          future: getMargin,
-          showRefresh: false,
-        )
-      ],
-    );
-  }
-
-  _sales(data) {
-    Future getSales() async =>
-        data is Map ? doubleOrZero(data['sales_cash']) : 0;
-    Future items() async => data is Map ? doubleOrZero(data['items_cash']) : 0;
-    return Wrap(
-      children: [
-        DashboardSummaryReportCard(
-          title: 'Sales',
-          future: getSales,
-          showRefresh: false,
-        ),
-        DashboardSummaryReportCard(
-          title: 'Items',
-          future: items,
-          showRefresh: false,
-        )
-      ],
-    );
-  }
-
-  _invoices(data) {
-    Future getSales() async =>
-        data is Map ? doubleOrZero(data['sales_invoice']) : 0;
-    Future items() async =>
-        data is Map ? doubleOrZero(data['items_invoice']) : 0;
-    return Wrap(
-      children: [
-        DashboardSummaryReportCard(
-          title: 'Invoices',
-          future: getSales,
-          showRefresh: false,
-        ),
-        DashboardSummaryReportCard(
-          title: 'Items',
-          future: items,
-          showRefresh: false,
-        )
-      ],
-    );
-  }
-
-  _expenditure(data) {
-    Future getSales() async => data is Map
-        ? (doubleOrZero(data['cogs_cash']) + doubleOrZero(data['cogs_invoice']))
-        : 0;
-    Future items() async => data is Map ? doubleOrZero(data['expense']) : 0;
-    return Wrap(
-      children: [
-        DashboardSummaryReportCard(
-          title: 'Cost of good sold',
-          future: getSales,
-          showRefresh: false,
-        ),
-        DashboardSummaryReportCard(
-          title: 'Expenses',
-          future: items,
-          showRefresh: false,
-        )
-      ],
-    );
-  }
-
-  _reportTitle(title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        '$title',
-        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
       ),
     );
   }
