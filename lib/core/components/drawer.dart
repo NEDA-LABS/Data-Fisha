@@ -108,7 +108,7 @@ Widget _officeLogo(String? url) {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(80),
             color: Theme.of(context).primaryColor),
-        child: url == null ? Container() : url.isEmpty?Container():Image.network(url),
+        child: url == null || true ? Container() : url.isEmpty?Container():Image.network(url),
       ),
     ),
   );

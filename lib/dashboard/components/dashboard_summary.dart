@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
+import 'package:smartstock/dashboard/components/past_expenses.dart';
+import 'package:smartstock/dashboard/components/past_sales.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
@@ -151,14 +155,20 @@ class _State extends State<DashboardSummary> {
             ),
           ],
         ),
-        // _reportTitle('Profit & Loss'),
-        // _profitAndLoss(data),
-        // _reportTitle('Cash sales'),
-        // _sales(data),
-        // _reportTitle('Invoice sales'),
-        // _invoices(data),
-        // _reportTitle('Expenditure'),
-        // _expenditure(data),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(flex: 3, child: PastSalesOverview(date: date)),
+            Expanded(flex: 1, child: Text('sales by customers'))
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(flex: 2, child: PastExpensesOverview(date: date)),
+            Expanded(flex: 2, child: PastExpensesByItemOverview(date: date))
+          ],
+        )
       ],
     );
   }

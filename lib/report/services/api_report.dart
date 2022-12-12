@@ -66,3 +66,33 @@ prepareGetSalesCashTracking(shop) {
     return await execute(shop);
   };
 }
+
+prepareGetOverviewExpenses(shop, type) {
+  return (DateTimeRange range) async {
+    var from = toSqlDate(range.start);
+    var to = toSqlDate(range.end);
+    var execute = composeAsync([
+      itOrEmptyArray,
+          (RawResponse items) => jsonDecode(items.body),
+          (app) => httpGetRequest(
+          '${shopFunctionsURL(app)}/report/expenses/overview/$type?from=$from&to=$to'),
+      shopToApp,
+    ]);
+    return await execute(shop);
+  };
+}
+
+prepareGetDistributionExpenses(shop, type) {
+  return (DateTimeRange range) async {
+    var from = toSqlDate(range.start);
+    var to = toSqlDate(range.end);
+    var execute = composeAsync([
+      itOrEmptyArray,
+          (RawResponse items) => jsonDecode(items.body),
+          (app) => httpGetRequest(
+          '${shopFunctionsURL(app)}/report/expenses/distribution/$type?from=$from&to=$to'),
+      shopToApp,
+    ]);
+    return await execute(shop);
+  };
+}

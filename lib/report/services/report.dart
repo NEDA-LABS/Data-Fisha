@@ -38,3 +38,15 @@ Future getSalesCashTracking(DateTimeRange range) async {
   var getDailySales = prepareGetSalesCashTracking(shop);
   return getDailySales(range);
 }
+
+Future getExpensesOverview(DateTimeRange range, String period) async {
+  var shop = await getActiveShop();
+  var getOverviewSales = prepareGetOverviewExpenses(shop, period);
+  return getOverviewSales(range);
+}
+
+Future getExpensesDistribution(DateTimeRange range, String type) async {
+  var shop = await getActiveShop();
+  var getOverviewSales = prepareGetDistributionExpenses(shop, type);
+  return getOverviewSales(range);
+}
