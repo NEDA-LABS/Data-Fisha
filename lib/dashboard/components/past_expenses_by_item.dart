@@ -38,15 +38,16 @@ class _State extends State<PastExpensesByItemOverview> {
     return _whatToShow();
   }
 
-  charts.Series<dynamic, String> _data2Series() {
-    return charts.Series<dynamic, String>(
+  charts.Series<dynamic, int> _data2Series() {
+    return charts.Series<dynamic, int>(
       id: 'Expense distribution',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic row, _) => '${row['name']}',
+      // displayName: 'Expense distribution',
+      // colorFn: (_, __) =>
+      //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+      domainFn: (dynamic row, _) => expenseByItem.indexOf(row),
       measureFn: (dynamic row, _) => row['total'],
       data: expenseByItem,
-      labelAccessorFn: (dynamic row, _) => '${row.year}: ${row.sales}',
+      labelAccessorFn: (dynamic row, _) => '${row['name']}',
     );
   }
 
