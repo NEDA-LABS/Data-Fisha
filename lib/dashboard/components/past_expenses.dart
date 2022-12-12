@@ -2,6 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
@@ -37,12 +38,12 @@ class _State extends State<PastExpensesOverview> {
     return _whatToShow();
   }
 
-  charts.Series<dynamic, DateTime> _sales2Series() {
-    return charts.Series<dynamic, DateTime>(
+  charts.Series<dynamic, String> _sales2Series() {
+    return charts.Series<dynamic, String>(
       id: 'Past 7 days expenses',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
+      // colorFn: (_, __) =>
+      //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+      domainFn: (dynamic sales, _) => sales['date'],
       measureFn: (dynamic sales, _) => sales['total'],
       data: dailyExpenses,
       // displayName: 'Past seven days from ${dateRange?.end?.toLocal()}',
@@ -99,21 +100,15 @@ class _State extends State<PastExpensesOverview> {
   }
 
   _chartAndTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Card(
-          elevation: 1,
-          child: Container(
-            height: isSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: TimeSeriesChart([_sales2Series()], animate: true),
-          ),
-        ),
-      ],
+    return Card(
+      elevation: 1,
+      child: Container(
+        height: isSmallScreen(context)
+            ? chartCardMobileHeight
+            : chartCardDesktopHeight,
+        padding: const EdgeInsets.all(8),
+        child: BarChart([_sales2Series()], animate: false),
+      ),
     );
   }
 

@@ -42,8 +42,8 @@ class _State extends State<PastSalesOverview> {
     return charts.Series<dynamic, DateTime>(
       id: 'Past 7 days cash sales from '
           '${DateFormat('yyyy-MM-dd').format(dateRange?.end ?? DateTime.now())}',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+      // colorFn: (_, __) =>
+      //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
       domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
       measureFn: (dynamic sales, _) => sales['amount'],
       data: dailySales,
@@ -116,24 +116,18 @@ class _State extends State<PastSalesOverview> {
   }
 
   _chartAndTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Card(
-          elevation: 1,
-          child: Container(
-            height: isSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: TimeSeriesChart(
-              [_sales2Series(), _invoiceSeries()],
-              animate: true,
-            ),
-          ),
+    return Card(
+      elevation: 1,
+      child: Container(
+        height: isSmallScreen(context)
+            ? chartCardMobileHeight
+            : chartCardDesktopHeight,
+        padding: const EdgeInsets.all(8),
+        child: TimeSeriesChart(
+          [_sales2Series(), _invoiceSeries()],
+          animate: false,
         ),
-      ],
+      ),
     );
   }
 
