@@ -4,6 +4,7 @@ import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
@@ -111,3 +112,7 @@ var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
 var maximumBodyWidth = 790.0;
 var chartCardMobileHeight = 220.0;
 var chartCardDesktopHeight = 350.0;
+
+compactNumber(value) =>
+NumberFormat.compactCurrency(decimalDigits: 3, symbol: '')
+    .format(value ?? 0);

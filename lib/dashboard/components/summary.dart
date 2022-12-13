@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/dashboard/components/numberCard.dart';
 import 'package:smartstock/dashboard/components/past_expenses.dart';
 import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
 import 'package:smartstock/dashboard/components/past_sales.dart';
+import 'package:smartstock/dashboard/components/past_sales_by_categories.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
@@ -57,68 +59,7 @@ class _State extends State<DashboardSummary> {
     );
   }
 
-  _numberPercentageCard(String? title, value, percentage) {
-    var formattedNumber = NumberFormat.compactCurrency(
-      decimalDigits: 3,
-      symbol:
-          '', // if you want to add currency symbol then pass that in this else leave it empty.
-    ).format(value ?? 0);
-    return SizedBox(
-      height: 112,
-      child: Card(
-        elevation: 1,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 0, 8),
-              child: Text(
-                "$title",
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Color(0xFF1C1C1C)),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 26, 24),
-                  child: Text(
-                    formattedNumber,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24,
-                        color: Color(0xFF1C1C1C)),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 24, 24),
-                  child: Text(
-                    percentage == null
-                        ? ''
-                        : percentage > 0
-                            ? "+$percentage%"
-                            : "$percentage%",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: Color(0xFF1C1C1C)),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
+
 
   _getIt(String p, data) => data is Map ? data[p] : null;
 
@@ -131,22 +72,22 @@ class _State extends State<DashboardSummary> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: _numberPercentageCard(
+              child: numberPercentageCard(
                   "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
               flex: 1,
             ),
             Expanded(
-              child: _numberPercentageCard("Invoices",
+              child: numberPercentageCard("Invoices",
                   doubleOrZero(_getIt('sales_invoice', data)), null),
               flex: 1,
             ),
             Expanded(
-              child: _numberPercentageCard(
+              child: numberPercentageCard(
                   "Expenses", doubleOrZero(_getIt('expense', data)), null),
               flex: 1,
             ),
             Expanded(
-              child: _numberPercentageCard(
+              child: numberPercentageCard(
                   "Gross profit",
                   doubleOrZero(_getIt('profit', data)),
                   doubleOrZero(_getIt('margin', data))),
@@ -158,7 +99,7 @@ class _State extends State<DashboardSummary> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(flex: 3, child: PastSalesOverview(date: date)),
-            Expanded(flex: 1, child: Text('sales by customers'))
+            Expanded(flex: 1, child: PastSalesByCategory(date: date))
           ],
         ),
         Row(

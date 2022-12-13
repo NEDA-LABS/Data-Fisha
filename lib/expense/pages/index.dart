@@ -3,7 +3,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
-import 'package:smartstock/dashboard/components/dashboard_summary.dart';
+import 'package:smartstock/dashboard/components/summary.dart';
 
 class ExpenseIndexPage extends StatelessWidget {
   const ExpenseIndexPage({Key? key}) : super(key: key);
