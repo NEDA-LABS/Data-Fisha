@@ -1,9 +1,5 @@
 import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
@@ -46,9 +42,10 @@ class _State extends State<PastSalesByCategory> {
     );
     getCategoryPerformance(dateRange ?? defaultRange).then((value) {
       salesByCategory = itOrEmptyArray(value);
-      salesByCategory.sort((a,b)=>a['amount']-b['amount']);
+      salesByCategory.sort((a, b) => a['amount'] - b['amount']);
       salesByCategory = salesByCategory.reversed.toList();
-      totalAmount = salesByCategory.fold(0, (a, element) => doubleOrZero(a+element['amount']??0));
+      totalAmount = salesByCategory.fold(
+          0, (a, element) => doubleOrZero(a + element['amount'] ?? 0));
     }).catchError((err) {
       error = '$err';
     }).whenComplete(() {
@@ -115,36 +112,38 @@ class _State extends State<PastSalesByCategory> {
                   children: [
                     const SizedBox(height: 24),
                     ...salesByCategory.map((e) => Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            // mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                '${e['id']??''}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Color(0xFF1C1C1C)),
+                              Row(
+                                // mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '${e['id'] ?? ''}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                        color: Color(0xFF1C1C1C)),
+                                  ),
+                                  Text(
+                                    '${compactNumber(e['amount'] ?? 0)}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                        color: Color(0xFF1C1C1C)),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                '${compactNumber(e['amount']??0)}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Color(0xFF1C1C1C)),
-                              ),
+                              const SizedBox(height: 16),
+                              LinearProgressIndicator(
+                                  value: (e['amount'] ?? 0) / totalAmount,
+                                  backgroundColor: const Color(0x370049a9)),
+                              const SizedBox(height: 16),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          LinearProgressIndicator(value: (e['amount']??0)/totalAmount, backgroundColor: const Color(
-                              0x370049a9)),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
-                    ))
+                        ))
                   ],
                 ),
               ),

@@ -40,8 +40,7 @@ class _State extends State<PastSalesOverview> {
 
   charts.Series<dynamic, DateTime> _sales2Series() {
     return charts.Series<dynamic, DateTime>(
-      id: 'Past 7 days cash sales from '
-          '${DateFormat('yyyy-MM-dd').format(dateRange?.end ?? DateTime.now())}',
+      id: 'Cash',
       // colorFn: (_, __) =>
       //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
       domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
@@ -53,7 +52,7 @@ class _State extends State<PastSalesOverview> {
 
   charts.Series<dynamic, DateTime> _invoiceSeries() {
     return charts.Series<dynamic, DateTime>(
-      id: '',
+      id: 'Invoices',
       colorFn: (_, __) =>
           charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
       domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),

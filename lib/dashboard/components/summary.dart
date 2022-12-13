@@ -59,8 +59,6 @@ class _State extends State<DashboardSummary> {
     );
   }
 
-
-
   _getIt(String p, data) => data is Map ? data[p] : null;
 
   _mainView() {
@@ -95,12 +93,32 @@ class _State extends State<DashboardSummary> {
             ),
           ],
         ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          child: Text(
+            'Past 7 days revenue.',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(flex: 3, child: PastSalesOverview(date: date)),
             Expanded(flex: 1, child: PastSalesByCategory(date: date))
           ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          child: Text(
+            '',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
