@@ -90,9 +90,11 @@ class _State extends State<PastTopProducts> {
     return Card(
       elevation: 1,
       child: Container(
-        height: isSmallScreen(context)
-            ? chartCardMobileHeight
-            : chartCardDesktopHeight,
+        // height: isSmallScreen(context)
+        //     ? chartCardMobileHeight
+        //     :
+      // height: chartCardDesktopHeight,
+        constraints: BoxConstraints(maxHeight: 350, minHeight: 200),
         padding: const EdgeInsets.all(8),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -183,7 +185,10 @@ class _State extends State<PastTopProducts> {
         (x) => x,
         (_) => _loading(),
         ifDoElse(
-            (_) => error.isNotEmpty, (_) => _retry(), (_) => _productsTable()));
+          (_) => error.isNotEmpty,
+          (_) => _retry(),
+          (_) => _productsTable(),
+        ));
     return getView(loading);
   }
 }

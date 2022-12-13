@@ -10,7 +10,7 @@ numberPercentageCard(String? title, value, percentage) {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
+          Container(
             padding: const EdgeInsets.fromLTRB(24, 24, 0, 8),
             child: Text(
               "$title",
@@ -19,21 +19,24 @@ numberPercentageCard(String? title, value, percentage) {
                   fontSize: 14,
                   color: Color(0xFF1C1C1C)),
               textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 26, 24),
+              Container(
+                padding: const EdgeInsets.fromLTRB(24, 0, 8, 24),
                 child: Text(
                   compactNumber(value),
                   style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                      color: Color(0xFF1C1C1C)),
-                  textAlign: TextAlign.left,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                    color: Color(0xFF1C1C1C),
+                    // overflow: TextOverflow.fade,
+                  ),
+                  textAlign: TextAlign.left
                 ),
               ),
               Padding(
@@ -45,9 +48,11 @@ numberPercentageCard(String? title, value, percentage) {
                           ? "+$percentage%"
                           : "$percentage%",
                   style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      color: Color(0xFF1C1C1C)),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Color(0xFF1C1C1C),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   textAlign: TextAlign.left,
                 ),
               ),

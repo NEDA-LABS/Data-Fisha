@@ -53,12 +53,12 @@ class _State extends State<DashboardSummary> {
     return getView(loading);
   }
 
-  _withPaddingView(view) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: view,
-    );
-  }
+  // _withPaddingView(view) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(5),
+  //     child: view,
+  //   );
+  // }
 
   _getIt(String p, data) => data is Map ? data[p] : null;
 
@@ -67,33 +67,7 @@ class _State extends State<DashboardSummary> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: numberPercentageCard(
-                  "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
-              flex: 1,
-            ),
-            Expanded(
-              child: numberPercentageCard("Invoices",
-                  doubleOrZero(_getIt('sales_invoice', data)), null),
-              flex: 1,
-            ),
-            Expanded(
-              child: numberPercentageCard(
-                  "Expenses", doubleOrZero(_getIt('expense', data)), null),
-              flex: 1,
-            ),
-            Expanded(
-              child: numberPercentageCard(
-                  "Gross profit",
-                  doubleOrZero(_getIt('profit', data)),
-                  doubleOrZero(_getIt('margin', data))),
-              flex: 1,
-            ),
-          ],
-        ),
+        _getTotalSalesView(),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           child: Text(
@@ -104,29 +78,9 @@ class _State extends State<DashboardSummary> {
             ),
           ),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(flex: 3, child: PastSalesOverview(date: date)),
-            Expanded(flex: 1, child: PastSalesByCategory(date: date))
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          child: Text(
-            '',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(flex: 3, child: PastTopProducts(date: date))
-          ],
-        ),
+        _getHistorySales(),
+        const SizedBox(height: 8),
+        PastTopProducts(date: date),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           child: Text(
@@ -137,13 +91,7 @@ class _State extends State<DashboardSummary> {
             ),
           ),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(flex: 3, child: PastExpensesOverview(date: date)),
-            Expanded(flex: 1, child: PastExpensesByItemOverview(date: date))
-          ],
-        )
+        _getHistoryExpenses()
       ],
     );
   }
@@ -246,5 +194,94 @@ class _State extends State<DashboardSummary> {
         loading = false;
       });
     });
+  }
+
+  _getTotalSalesView() {
+    var cashSale = Expanded(
+      child: numberPercentageCard(
+          "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
+      flex: 1,
+    );
+    var invoiceSale = Expanded(
+      child: numberPercentageCard(
+          "Invoices", doubleOrZero(_getIt('sales_invoice', data)), null),
+      flex: 1,
+    );
+    var expenses = Expanded(
+      child: numberPercentageCard(
+          "Expenses", doubleOrZero(_getIt('expense', data)), null),
+      flex: 1,
+    );
+    var profit = Expanded(
+      child: numberPercentageCard(
+          "Gross profit",
+          doubleOrZero(_getIt('profit', data)),
+          doubleOrZero(_getIt('margin', data))),
+      flex: 1,
+    );
+    var getView = ifDoElse(
+      (context) => isSmallScreen(context),
+      (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [cashSale, invoiceSale],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [expenses, profit],
+          )
+        ],
+      ),
+      (context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [cashSale, invoiceSale, expenses, profit],
+      ),
+    );
+    return getView(context);
+  }
+
+  _getHistorySales() {
+    var getView = ifDoElse(
+        (context) => isSmallScreen(context),
+        (context) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PastSalesOverview(date: date),
+                PastSalesByCategory(date: date)
+              ],
+            ),
+        (context) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(flex: 2, child: PastSalesOverview(date: date)),
+                Expanded(flex: 1, child: PastSalesByCategory(date: date))
+              ],
+            ));
+    return getView(context);
+  }
+
+  _getHistoryExpenses() {
+    var getView = ifDoElse(
+        (context) => isSmallScreen(context),
+        (context) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PastExpensesOverview(date: date),
+                PastExpensesByItemOverview(date: date)
+              ],
+            ),
+        (context) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(flex: 2, child: PastExpensesOverview(date: date)),
+                Expanded(flex: 1, child: PastExpensesByItemOverview(date: date))
+              ],
+            ));
+    return getView(context);
   }
 }

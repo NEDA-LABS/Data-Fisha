@@ -114,12 +114,6 @@ class _State extends State<TableLikeList> {
   }
 
   _tableRows(List data, context, List<String> keys, onCell, onPress) {
-    // return NotificationListener<UserScrollNotification>(
-    //     onNotification: (notification) {
-    //       // scrollDirection = notification.direction;
-    //       return true;
-    //     },
-    //     child:
     return ListView.builder(
         controller: controller,
         shrinkWrap: true,
@@ -132,9 +126,6 @@ class _State extends State<TableLikeList> {
           );
           return getRow(index);
         });
-    // ,
-    // ));
-    // return ;
   }
 
   _showErrorOrContent(context, List<String> keys, onCell, onPress) {
@@ -152,12 +143,7 @@ class _State extends State<TableLikeList> {
   ) {
     return (context, snapshot) {
       var builder =
-          // ifDoElse(
-          // (x) => snapshot.connectionState == ConnectionState.waiting,
-          // (x) => const Text('Loading...'),
           _showErrorOrContent(context, keys, onCell, onPress);
-      // ,
-      // );
       return builder(snapshot);
     };
   }
