@@ -123,30 +123,52 @@ class _State extends State<PastTopProducts> {
                 child: TableLikeList(
                   onFuture: () async => salesByProducts,
                   onCell: (key, p1, p2) {
-                    if(key=='amount'){
+                    var style = const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF1C1C1C));
+                    if (key == 'amount') {
                       return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text('${compactNumber(doubleOrZero(p1))}'),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
+                        child: Text(
+                          '${compactNumber(doubleOrZero(p1))}',
+                          style: style,
+                        ),
                       );
                     }
-                    if(key=='profit'){
+                    if (key == 'profit') {
                       return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text('${compactNumber(doubleOrZero(p1))}'),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
+                        child: Text(
+                          '${compactNumber(doubleOrZero(p1))}',
+                          style: style,
+                        ),
                       );
                     }
-                    if(key=='margin'){
+                    if (key == 'margin') {
                       return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text('${doubleOrZero(p1)}%'),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
+                        child: Text(
+                          '${doubleOrZero(p1)}%',
+                          style: style,
+                        ),
                       );
                     }
                     return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text('$p1'),
+                      padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
+                      child: Text(
+                        '$p1',
+                        style: style,
+                      ),
                     );
                   },
-                  keys: const ['product', 'quantity', 'amount', 'profit', 'margin'],
+                  keys: const [
+                    'product',
+                    'quantity',
+                    'amount',
+                    'profit',
+                    'margin'
+                  ],
                 ),
               )
             ],
