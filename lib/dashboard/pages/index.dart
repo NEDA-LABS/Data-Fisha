@@ -3,6 +3,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/summary.dart';
 
 class DashboardIndexPage extends StatelessWidget {
@@ -27,7 +28,17 @@ class DashboardIndexPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: bottomBar(0, moduleMenus(), context),
+        floatingActionButton: isSmallScreen(context)
+            ? FloatingActionButton(onPressed: () {
+
+        },child: const Icon(Icons.add),)
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
+  }
+
+  _getQuickActions(){
+
   }
 }
