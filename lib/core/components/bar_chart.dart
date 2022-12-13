@@ -31,7 +31,7 @@ class BarChart extends StatelessWidget {
         //       charts.LinePointHighlighterFollowLineType.nearest,
         // ),
         charts.SelectNearest(eventTrigger: charts.SelectionTrigger.tapAndDrag),
-        charts.SeriesLegend()
+        // charts.SeriesLegend()
       ],
       // barRendererDecorator: charts.BarLabelDecorator<String>(),
     );

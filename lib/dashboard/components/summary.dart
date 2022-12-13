@@ -9,6 +9,7 @@ import 'package:smartstock/dashboard/components/past_expenses.dart';
 import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
 import 'package:smartstock/dashboard/components/past_sales.dart';
 import 'package:smartstock/dashboard/components/past_sales_by_categories.dart';
+import 'package:smartstock/dashboard/components/past_top_products.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
@@ -123,8 +124,24 @@ class _State extends State<DashboardSummary> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(flex: 2, child: PastExpensesOverview(date: date)),
-            Expanded(flex: 2, child: PastExpensesByItemOverview(date: date))
+            Expanded(flex: 3, child: PastTopProducts(date: date))
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          child: Text(
+            'Past 7 days expenses.',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(flex: 3, child: PastExpensesOverview(date: date)),
+            Expanded(flex: 1, child: PastExpensesByItemOverview(date: date))
           ],
         )
       ],

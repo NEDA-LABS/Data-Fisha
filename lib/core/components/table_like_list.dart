@@ -13,7 +13,8 @@ Widget tableLikeListRow(List<Widget> items) {
 
 tableLikeListTextHeader(String name) {
   var style = const TextStyle(
-      fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis);
+      fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis, color: Color(
+      0x66000000));
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
     child: Text(name, style: style),

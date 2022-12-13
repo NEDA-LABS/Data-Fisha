@@ -114,5 +114,5 @@ var chartCardMobileHeight = 220.0;
 var chartCardDesktopHeight = 350.0;
 
 compactNumber(value) =>
-NumberFormat.compactCurrency(decimalDigits: 3, symbol: '')
+NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
     .format(value ?? 0);

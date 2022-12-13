@@ -17,7 +17,7 @@ class _State extends State<PastSalesByCategory> {
   String error = '';
   DateTimeRange? dateRange;
   var salesByCategory = [];
-  var totalAmount = 0;
+  dynamic totalAmount = 0.0;
 
   @override
   void initState() {
@@ -42,10 +42,12 @@ class _State extends State<PastSalesByCategory> {
     );
     getCategoryPerformance(dateRange ?? defaultRange).then((value) {
       salesByCategory = itOrEmptyArray(value);
-      salesByCategory.sort((a, b) => a['amount'] - b['amount']);
+      salesByCategory.sort((a, b) =>
+          int.tryParse('${a['amount'] - b['amount']}'.split('.')[0]) ?? 0);
       salesByCategory = salesByCategory.reversed.toList();
-      totalAmount = salesByCategory.fold(
-          0, (a, element) => doubleOrZero(a + element['amount'] ?? 0));
+      for (var element in salesByCategory) {
+        totalAmount += doubleOrZero(element['amount']);
+      }
     }).catchError((err) {
       error = '$err';
     }).whenComplete(() {
@@ -111,38 +113,36 @@ class _State extends State<PastSalesByCategory> {
                   // mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 24),
-                    ...salesByCategory.map((e) => Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                // mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${e['id'] ?? ''}',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        color: Color(0xFF1C1C1C)),
-                                  ),
-                                  Text(
-                                    '${compactNumber(e['amount'] ?? 0)}',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        color: Color(0xFF1C1C1C)),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              LinearProgressIndicator(
-                                  value: (e['amount'] ?? 0) / totalAmount,
-                                  backgroundColor: const Color(0x370049a9)),
-                              const SizedBox(height: 16),
-                            ],
-                          ),
+                    ...salesByCategory.map((e) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              // mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${e['id'] ?? ''}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Color(0xFF1C1C1C)),
+                                ),
+                                Text(
+                                  '${compactNumber(e['amount'] ?? 0)}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Color(0xFF1C1C1C)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            LinearProgressIndicator(
+                                value: _getProgValue(e['amount']),
+                                backgroundColor: const Color(0x370049a9)),
+                            const SizedBox(height: 16),
+                          ],
                         ))
                   ],
                 ),
@@ -161,5 +161,9 @@ class _State extends State<PastSalesByCategory> {
         ifDoElse(
             (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
     return getView(loading);
+  }
+
+  _getProgValue(amount) {
+    return doubleOrZero(amount) / totalAmount;
   }
 }

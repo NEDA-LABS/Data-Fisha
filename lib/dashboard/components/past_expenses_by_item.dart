@@ -1,9 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/pie_chart.dart';
-import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
@@ -22,6 +20,7 @@ class _State extends State<PastExpensesByItemOverview> {
   String error = '';
   DateTimeRange? dateRange;
   var expenseByItem = [];
+  var totalAmount = 0.0;
 
   @override
   void initState() {
@@ -38,19 +37,6 @@ class _State extends State<PastExpensesByItemOverview> {
     return _whatToShow();
   }
 
-  charts.Series<dynamic, int> _data2Series() {
-    return charts.Series<dynamic, int>(
-      id: 'Expense distribution',
-      // displayName: 'Expense distribution',
-      // colorFn: (_, __) =>
-      //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic row, _) => expenseByItem.indexOf(row),
-      measureFn: (dynamic row, _) => row['total'],
-      data: expenseByItem,
-      labelAccessorFn: (dynamic row, _) => '${row['name']}',
-    );
-  }
-
   _fetchData() {
     setState(() {
       loading = true;
@@ -61,6 +47,12 @@ class _State extends State<PastExpensesByItemOverview> {
     );
     getExpensesDistribution(dateRange ?? defaultRange, 'name').then((value) {
       expenseByItem = itOrEmptyArray(value);
+      expenseByItem.sort((a, b) =>
+      int.tryParse('${a['total'] - b['total']}'.split('.')[0]) ?? 0);
+      expenseByItem = expenseByItem.reversed.toList();
+      for (var element in expenseByItem) {
+        totalAmount += doubleOrZero(element['total']);
+      }
     }).catchError((err) {
       error = '$err';
     }).whenComplete(() {
@@ -101,25 +93,74 @@ class _State extends State<PastExpensesByItemOverview> {
   }
 
   _chartAndTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Card(
-          elevation: 1,
-          child: Container(
-            height: isSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: PieChart(
-              [_data2Series()],
-              animate: true,
-            ),
+    return Card(
+      elevation: 1,
+      child: Container(
+        height: isSmallScreen(context)
+            ? chartCardMobileHeight
+            : chartCardDesktopHeight,
+        padding: const EdgeInsets.all(8),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Expenses by item',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: Color(0xFF1C1C1C),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 24),
+                    ...expenseByItem.map((e) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${e['name'] ?? ''}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Color(0xFF1C1C1C)),
+                            ),
+                            Text(
+                              '${compactNumber(e['total'] ?? 0)}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Color(0xFF1C1C1C)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        LinearProgressIndicator(
+                            value: _getProgValue(e['total']),
+                            backgroundColor: const Color(0x370049a9)),
+                        const SizedBox(height: 16),
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
+  }
+
+  _getProgValue(amount) {
+    return doubleOrZero(amount) / totalAmount;
   }
 
   _whatToShow() {
