@@ -1,15 +1,14 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/top_bar.dart';
-import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/core/components/cart_drawer.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
+import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class SaleLikePage extends StatefulWidget {
   final String title;
@@ -67,7 +66,7 @@ class _State extends State<SaleLikePage> {
 
   @override
   Widget build(var context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       office: 'Menu',
       current: widget.backLink,
@@ -77,8 +76,8 @@ class _State extends State<SaleLikePage> {
               child: _cartDrawer(
                   states, updateState, context, widget.wholesale, (a) {}))
           : null,
+      sliverAppBar: states['hab'] == true ? null : _appBar(updateState),
       onBody: (drawer) => Scaffold(
-        appBar: states['hab'] == true ? null : _appBar(updateState),
         floatingActionButton: _fab(states, updateState),
         body: FutureBuilder<List>(future: _future(), builder: _getView),
       ),
@@ -119,7 +118,7 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onSearch: (text) {
         updateState({"query": text ?? '', 'skip': false});
-      },
+      }, context: context,
     );
   }
 

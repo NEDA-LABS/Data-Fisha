@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/index_page.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/switch_to_item.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/report/services/navigation.dart';
 
 
@@ -12,12 +12,12 @@ class ReportIndexPage extends StatelessWidget {
   const ReportIndexPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
       office: 'Menu',
       current: '/report/',
       menus: moduleMenus(),
+      sliverAppBar: StockAppBar(title: "Report", showBack: false, context: context),
       onBody: (x) => Scaffold(
-        appBar: StockAppBar(title: "Report", showBack: false),
         drawer: x,
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),

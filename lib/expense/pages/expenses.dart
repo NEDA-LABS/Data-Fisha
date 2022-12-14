@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_expense_content.dart';
@@ -115,13 +115,13 @@ class _State extends State<ExpenseExpensesPage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/expense/',
+      sliverAppBar: StockAppBar(title: "Expenses", showBack: false, context: context),
       onBody: (d) {
         return Scaffold(
           drawer: d,
-          appBar: StockAppBar(title: "Expenses", showBack: false),
           body: _body(),
           bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );

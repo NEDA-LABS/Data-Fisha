@@ -4,9 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/table_context_menu.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -14,8 +13,6 @@ import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
-import 'package:smartstock/sales/services/sales.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class SalesCashTrackingPage extends StatefulWidget {
   const SalesCashTrackingPage({Key? key}) : super(key: key);
@@ -41,11 +38,12 @@ class _State extends State<SalesCashTrackingPage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/report/',
+      sliverAppBar: _appBar(context),
       onBody: (d) {
-        return Scaffold(appBar: _appBar(context), body: _body());
+        return Scaffold(body: _body());
       },
     );
   }
@@ -102,13 +100,7 @@ class _State extends State<SalesCashTrackingPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      // onSearch: (d) {
-      //   setState(() {
-      //     _query = d;
-      //   });
-      //   _refresh();
-      // },
-      searchHint: 'Search product...',
+      searchHint: 'Search product...', context: context,
     );
   }
 
@@ -179,7 +171,7 @@ class _State extends State<SalesCashTrackingPage> {
           context,
         );
       },
-      onRange: (range,period) {
+      onRange: (range, period) {
         if (range != null) {
           setState(() {
             dateRange = range;

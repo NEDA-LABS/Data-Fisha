@@ -3,6 +3,13 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/states/sales_external_services.dart';
 
 List<SubMenuModule> _pagesMenu() => [
+      // SubMenuModule(
+      //   name: 'Home',
+      //   link: '/sales/',
+      //   svgName: 'product_icon.svg',
+      //   roles: [],
+      //   onClick: () {},
+      // ),
       SubMenuModule(
         name: 'Cash sale',
         link: '/sales/cash',
@@ -33,11 +40,14 @@ MenuModel salesMenu() => MenuModel(
       roles: ['*'],
       pages: [
         ..._pagesMenu(),
-        ...SalesExternalServiceState().salesExternalServices.map<SubMenuModule>((e){
-          return   SubMenuModule(
+        ...SalesExternalServiceState()
+            .salesExternalServices
+            .map<SubMenuModule>((e) {
+          return SubMenuModule(
             name: e.name,
             link: '/sales${e.pageLink}',
-            svgName: null, // 'transfer_icon.svg',
+            svgName: null,
+            // 'transfer_icon.svg',
             icon: e.icon,
             roles: [],
             onClick: () {},

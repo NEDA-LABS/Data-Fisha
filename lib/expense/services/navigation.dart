@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/models/menu.dart';
 
 List<SubMenuModule> _pagesMenu() => [
-      SubMenuModule(
-        name: 'Categories',
-        link: '/expense/categories',
-        svgName: 'product_icon.svg',
-        roles: ['admin', 'manager'],
-        onClick: () {},
-      ),
-      SubMenuModule(
-        name: 'Items',
-        link: '/expense/items',
-        svgName: 'product_icon.svg',
-        roles: ['admin', 'manager'],
-        onClick: () {},
-      ),
+      // SubMenuModule(
+      //   name: 'Categories',
+      //   link: '/expense/categories',
+      //   svgName: 'product_icon.svg',
+      //   roles: ['admin', 'manager'],
+      //   onClick: () {},
+      // ),
+      // SubMenuModule(
+      //   name: 'Items',
+      //   link: '/expense/items',
+      //   svgName: 'product_icon.svg',
+      //   roles: ['admin', 'manager'],
+      //   onClick: () {},
+      // ),
       // SubMenuModule(
       //   name: 'Expenses',
       //   link: '/expense/expenses',
@@ -26,9 +26,9 @@ List<SubMenuModule> _pagesMenu() => [
     ];
 
 MenuModel expenseMenu() => MenuModel(
-      name: 'Expense',
+      name: 'Expenses',
       icon: const Icon(Icons.receipt_long_rounded),
       link: '/expense/',
-      roles: ['admin', 'manager'],
+      roles: ['*'],
       pages: _pagesMenu(),
     );

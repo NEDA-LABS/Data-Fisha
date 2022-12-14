@@ -4,7 +4,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
@@ -30,7 +30,7 @@ class _CategoriesPage extends State<CategoriesPage> {
       backLink: '/stock/',
       showSearch: true,
       onSearch: getState<CategoriesListState>().updateQuery,
-      searchHint: 'Search...',
+      searchHint: 'Search...', context: context,
     );
   }
 
@@ -70,9 +70,10 @@ class _CategoriesPage extends State<CategoriesPage> {
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
+        sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
           appBar: _appBar(context),
           body: Column(

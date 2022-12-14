@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -37,10 +37,11 @@ class _State extends State<SellerPerformance> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       office: 'Menu',
       current: '/report/',
       menus: moduleMenus(),
+      sliverAppBar: _appBar(),
       onBody: (x) {
         return Scaffold(
           appBar: _appBar(),
@@ -204,7 +205,7 @@ class _State extends State<SellerPerformance> {
     return StockAppBar(
       title: "Seller performance",
       showBack: false,
-      backLink: '/report/',
+      backLink: '/report/', context: context,
     );
   }
 

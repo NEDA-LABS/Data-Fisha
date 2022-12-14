@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -40,13 +40,13 @@ class _State extends State<OverviewCashSales> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       office: 'Menu',
       current: '/report/',
       menus: moduleMenus(),
+      sliverAppBar: _appBar(),
       onBody: (x) {
         return Scaffold(
-          appBar: _appBar(),
           drawer: x,
           body: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
@@ -56,10 +56,7 @@ class _State extends State<OverviewCashSales> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _rangePicker(),
-                    _whatToShow(),
-                  ],
+                  children: [_rangePicker(), _whatToShow()],
                 ),
               ),
             ),
@@ -179,20 +176,16 @@ class _State extends State<OverviewCashSales> {
         var startD = dateF.format(range?.start ?? DateTime.now());
         var endD = dateF.format(range?.end ?? DateTime.now());
         showDialogOrModalSheet(
-          dataExportOptions(
-            onPdf: () {
-              exportPDF("Cash sales $startD -> $endD", dailySales);
-              Navigator.maybePop(context);
-            },
-            onCsv: () {
-              exportToCsv("Cash sales $startD -> $endD", dailySales);
-              Navigator.maybePop(context);
-            },
-            onExcel: () {
-              exportToExcel("Cash sales $startD -> $endD", dailySales);
-              Navigator.maybePop(context);
-            }
-          ),
+          dataExportOptions(onPdf: () {
+            exportPDF("Cash sales $startD -> $endD", dailySales);
+            Navigator.maybePop(context);
+          }, onCsv: () {
+            exportToCsv("Cash sales $startD -> $endD", dailySales);
+            Navigator.maybePop(context);
+          }, onExcel: () {
+            exportToExcel("Cash sales $startD -> $endD", dailySales);
+            Navigator.maybePop(context);
+          }),
           context,
         );
       },
@@ -213,7 +206,7 @@ class _State extends State<OverviewCashSales> {
     return StockAppBar(
       title: "Cash sales overview",
       showBack: false,
-      backLink: '/report/',
+      backLink: '/report/', context: context,
     );
   }
 

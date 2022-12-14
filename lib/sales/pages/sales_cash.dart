@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
@@ -72,7 +72,7 @@ class _State extends State<SalesCashPage> {
         });
         _refresh();
       },
-      searchHint: 'Search product...',
+      searchHint: 'Search product...', context: context,
     );
   }
 
@@ -126,10 +126,11 @@ class _State extends State<SalesCashPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
       menus: moduleMenus(),
       current: '/sales/',
-      onBody: (d) => Scaffold(appBar: _appBar(context), body: _body()));
+      sliverAppBar: _appBar(context),
+      onBody: (d) => Scaffold(body: _body()));
 
   _loadMore() {
     setState(() {

@@ -1,8 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/button.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/numberCard.dart';
 import 'package:smartstock/dashboard/components/past_expenses.dart';
@@ -36,7 +34,7 @@ class _State extends State<DashboardSummary> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
-      children: [_header(), _lineView(), _loadingErrorOrMain()],
+      children: [_header(), _loadingErrorOrMain()],
     );
   }
 
@@ -96,12 +94,12 @@ class _State extends State<DashboardSummary> {
     );
   }
 
-  _lineView() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: horizontalLine(),
-    );
-  }
+  // _lineView() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8),
+  //     child: horizontalLine(),
+  //   );
+  // }
 
   _loadingView() {
     return const SizedBox(
@@ -135,38 +133,22 @@ class _State extends State<DashboardSummary> {
 
   _header() {
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
+      padding: const EdgeInsets.only(top: 24, left: 6, bottom: 16),
+      child: GestureDetector(
+        onTap: _showDatePicker,
+        child: Row(
+          children: [
+            Text(
               _getToday(date),
               style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-              ),
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: Color(0xFF1C1C1C)),
             ),
-          ),
-          // outlineButton(title: "Date", onPressed: () {}),
-          outlineActionButton(
-            onPressed: () {
-              showDatePicker(
-                context: context,
-                initialDate: date,
-                firstDate: DateTime(2021),
-                lastDate: DateTime.now(),
-              ).then((value) {
-                if (value != null) {
-                  date = value;
-                  _fetchData();
-                }
-              });
-            },
-            title: 'Change',
-          ),
-        ],
+            const Icon(Icons.keyboard_arrow_down, color: Color(0x33000000)),
+          ],
+        ),
       ),
     );
   }
@@ -283,5 +265,19 @@ class _State extends State<DashboardSummary> {
               ],
             ));
     return getView(context);
+  }
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2021),
+      lastDate: DateTime.now(),
+    ).then((value) {
+      if (value != null) {
+        date = value;
+        _fetchData();
+      }
+    });
   }
 }

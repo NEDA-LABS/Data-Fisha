@@ -4,10 +4,8 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
-import 'package:smartstock/stocks/components/create_item_content.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
-import 'package:smartstock/stocks/services/items.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
 

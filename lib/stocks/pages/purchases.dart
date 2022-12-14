@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/purchase_details.dart';
@@ -35,7 +35,7 @@ class _PurchasesPage extends State<PurchasesPage> {
         });
         _refresh(skip: false);
       },
-      searchHint: 'Search...');
+      searchHint: 'Search...', context: context);
 
   _contextPurchases(context) => [
         ContextMenu(
@@ -67,11 +67,11 @@ class _PurchasesPage extends State<PurchasesPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
+        sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
-          appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

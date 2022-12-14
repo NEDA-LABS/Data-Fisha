@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -29,12 +29,12 @@ class _State extends State<UsersPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/account/',
+        sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
           drawer: d,
-          appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
@@ -68,7 +68,7 @@ class _State extends State<UsersPage> {
       title: "Users",
       showBack: true,
       backLink: '/account/',
-      showSearch: false,
+      showSearch: false, context: context,
       // onSearch: (p0) {},
       // searchHint: 'Search...',
     );

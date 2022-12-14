@@ -4,7 +4,6 @@ import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/pages/items.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/pages/product_edit.dart';
 import 'package:smartstock/stocks/pages/products.dart';
@@ -17,9 +16,6 @@ import 'package:smartstock/stocks/pages/transfers.dart';
 import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
 import 'package:smartstock/stocks/states/category_create.dart';
-import 'package:smartstock/stocks/states/item_create.dart';
-import 'package:smartstock/stocks/states/items_list.dart';
-import 'package:smartstock/stocks/states/items_loading.dart';
 import 'package:smartstock/stocks/states/product_create.dart';
 import 'package:smartstock/stocks/states/product_loading.dart';
 import 'package:smartstock/stocks/states/products_list.dart';
@@ -76,8 +72,5 @@ class StockModule extends Module {
         Bind.lazySingleton((i) => CategoriesListState()),
         Bind.lazySingleton((i) => SuppliersListState()),
         Bind.lazySingleton((i) => SuppliersLoadingState()),
-        Bind.lazySingleton((i) => ItemCreateState()),
-        Bind.lazySingleton((i) => ItemsListState()),
-        Bind.lazySingleton((i) => ItemsLoadingState()),
       ];
 }

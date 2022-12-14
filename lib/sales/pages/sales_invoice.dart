@@ -4,14 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_invoice_details.dart';
 import 'package:smartstock/sales/services/invoice.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class InvoicesPage extends StatefulWidget {
   final args;
@@ -40,7 +39,7 @@ class _InvoicesPage extends State<InvoicesPage> {
         });
         _refresh();
       },
-      searchHint: 'Search by date...',
+      searchHint: 'Search by date...', context: context,
     );
   }
 
@@ -91,12 +90,12 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/sales/',
+      sliverAppBar: _appBar(context),
       onBody: (d) {
         return Scaffold(
-          appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,

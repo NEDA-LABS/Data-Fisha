@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -34,9 +34,10 @@ class _State extends State<ProductsPage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/stock/',
+      sliverAppBar: _appBar(context),
       onBody: (d) {
         return Scaffold(
           appBar: _appBar(context),
@@ -69,7 +70,7 @@ class _State extends State<ProductsPage> {
         backLink: '/stock/',
         showSearch: true,
         onSearch: _updateQuery,
-        searchHint: 'Search...');
+        searchHint: 'Search...', context: context);
   }
 
   _contextItems() {
