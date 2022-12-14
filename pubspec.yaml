@@ -30,6 +30,7 @@ dependencies:
   pdf: ^3.8.3
   js: ^0.6.4
   syncfusion_flutter_xlsio: ^20.3.57-beta
+#  fl_chart: ^0.55.2
 
 dev_dependencies:
  flutter_test:
@@ -41,6 +42,19 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-VariableFont_slnt,wght.ttf
+#        - asset: assets/fonts/static/Inter-Black.ttf
+#        - asset: assets/fonts/static/Inter-Bold.ttf
+#        - asset: assets/fonts/static/Inter-ExtraBold.ttf
+#        - asset: assets/fonts/static/Inter-ExtraLight.ttf
+#        - asset: assets/fonts/static/Inter-Light.ttf
+#        - asset: assets/fonts/static/Inter-Medium.ttf
+#        - asset: assets/fonts/static/Inter-Regular.ttf
+#        - asset: assets/fonts/static/Inter-SemiBold.ttf
+#        - asset: assets/fonts/static/Inter-Thin.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

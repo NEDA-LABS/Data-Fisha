@@ -4,6 +4,7 @@ import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
@@ -53,44 +54,36 @@ getStockQuantity({stock}) {
   return 0;
 }
 
-const _maxSmallScreen = 640;
+const _maxSmallScreen = 680;
 const _maxMediumScreen = 1000;
 // const MAX_LARGE_SCREEN = > 1008
 
 bool isSmallScreen(BuildContext context) {
-  var width = MediaQuery
-      .of(context)
-      .size
-      .width;
+  var width = MediaQuery.of(context).size.width;
   return width <= _maxSmallScreen;
 }
 
 bool hasEnoughWidth(BuildContext context) {
-  var width = MediaQuery
-      .of(context)
-      .size
-      .width;
+  var width = MediaQuery.of(context).size.width;
   return width >= _maxMediumScreen;
 }
 
 and(List<Function> fns) => fns.fold(true, (dynamic a, b) => a && b() == true);
 
-propertyOr(String property, Function(dynamic) onOr) =>
-    ifDoElse(
-            (x) => x is Map && x.containsKey(property), (x) => x[property],
-        onOr);
+propertyOr(String property, Function(dynamic) onOr) => ifDoElse(
+    (x) => x is Map && x.containsKey(property), (x) => x[property], onOr);
 
 propertyOrNull(String property) => propertyOr(property, (p0) => null);
 
 isNativeMobilePlatform() =>
     !kIsWeb &&
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android);
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
 
 isWebMobilePlatform() =>
     kIsWeb &&
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android);
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
 
 Future<bool> isOfflineFirstEnv() async {
   var a = await JSHelper().callHasDirectPosPrinterAPI();
@@ -101,9 +94,9 @@ Future<bool> isOfflineFirstEnv() async {
 }
 
 var doubleOrZero = compose([
-      (x) => (double.tryParse('$x') ?? 0),
-      (x) => x.toStringAsFixed(5),
-      (x) => (double.tryParse('$x') ?? 0)
+  (x) => (double.tryParse('$x') ?? 0),
+  (x) => x.toStringAsFixed(5),
+  (x) => (double.tryParse('$x') ?? 0)
 ]);
 
 var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
@@ -111,3 +104,7 @@ var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
 var maximumBodyWidth = 790.0;
 var chartCardMobileHeight = 220.0;
 var chartCardDesktopHeight = 350.0;
+
+compactNumber(value) =>
+    NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
+        .format(value ?? 0);

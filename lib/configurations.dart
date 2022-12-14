@@ -32,7 +32,6 @@ MaterialColor getSmartStockMaterialColorSwatch() {
   }
   return MaterialColor(color.value, swatch);
 }
-// }
 
 
 App smartstockApp =

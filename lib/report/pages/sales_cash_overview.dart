@@ -70,7 +70,7 @@ class _State extends State<OverviewCashSales> {
     );
   }
 
-  charts.Series<dynamic, String> _sales2Series(List sales) {
+  charts.Series<dynamic, String> _sales2Series() {
     return charts.Series<dynamic, String>(
       id: 'Sales',
       colorFn: (_, __) =>
@@ -138,7 +138,7 @@ class _State extends State<OverviewCashSales> {
                 : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
-              [_sales2Series(dailySales)],
+              [_sales2Series()],
               animate: true,
             ),
           ),
