@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -39,25 +37,22 @@ class _State extends State<ProductsPage> {
       current: '/stock/',
       sliverAppBar: _appBar(context),
       onBody: (d) {
-        return Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              tableContextMenu(_contextItems()),
-              _loading(_isLoading),
-              _tableHeader(),
-              Expanded(
-                child: TableLikeList(
-                  onFuture: () async => _products,
-                  keys: _fields,
-                  onItemPressed: _productItemClicked,
-                  onCell: _onRenderCellView,
-                ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tableContextMenu(_contextItems()),
+            _loading(_isLoading),
+            _tableHeader(),
+            Expanded(
+              child: TableLikeList(
+                onFuture: () async => _products,
+                keys: _fields,
+                onItemPressed: _productItemClicked,
+                onCell: _onRenderCellView,
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -65,12 +60,14 @@ class _State extends State<ProductsPage> {
 
   _appBar(context) {
     return StockAppBar(
-        title: "Products",
-        showBack: true,
-        backLink: '/stock/',
-        showSearch: true,
-        onSearch: _updateQuery,
-        searchHint: 'Search...', context: context);
+      title: "Products",
+      showBack: true,
+      backLink: '/stock/',
+      // showSearch: false,
+      // onSearch: _updateQuery,
+      // searchHint: 'Search...',
+      context: context,
+    );
   }
 
   _contextItems() {

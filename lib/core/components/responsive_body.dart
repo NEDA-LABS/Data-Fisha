@@ -12,6 +12,7 @@ class ResponsivePage extends StatelessWidget {
   final List<MenuModel> menus;
   final Widget? Function(Drawer? drawer) onBody;
   final SliverAppBar? sliverAppBar;
+  final FloatingActionButton? fab;
 
   const ResponsivePage({
     this.office = '',
@@ -21,6 +22,7 @@ class ResponsivePage extends StatelessWidget {
     required this.menus,
     required this.onBody,
     required this.sliverAppBar,
+    this.fab,
     Key? key,
   }) : super(key: key);
 
@@ -40,23 +42,40 @@ class ResponsivePage extends StatelessWidget {
           getDrawerView(showLeftDrawer),
           getVLView(showLeftDrawer),
           Expanded(
-            child: CustomScrollView(
-              slivers: [
-                sliverAppBar ?? SliverToBoxAdapter(child: Container()),
-                SliverToBoxAdapter(child: onBody(null) ?? Container())
-              ],
+            child: Scaffold(
+              body: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    sliverAppBar ?? SliverToBoxAdapter(child: Container()),
+                  ];
+                },
+                body: onBody(null) ?? Container(),
+                // slivers: [
+                //
+                //   SliverToBoxAdapter(child: )
+                // ],
+              ),
             ),
           ),
-          // Container(width: 0.5,color: Color(0xFFDADADA),),
           rightDrawer ?? const SizedBox(width: 0)
         ],
       ),
-      (_) => CustomScrollView(
-        slivers: [
-          sliverAppBar ?? SliverToBoxAdapter(child: Container()),
-          SliverToBoxAdapter(
-              child: onBody(StockDrawer(menus, current)) ?? Container())
-        ],
+      (_) => Scaffold(
+        drawer: StockDrawer(menus, current),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: fab,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              sliverAppBar ?? SliverToBoxAdapter(child: Container()),
+            ];
+          },
+          body: onBody(null) ?? Container(),
+          // slivers: [
+          //   sliverAppBar ?? SliverToBoxAdapter(child: Container()),
+          //   SliverToBoxAdapter(child: )
+          // ],
+        ),
       ),
     );
     return paneOrPlaneBody(context);

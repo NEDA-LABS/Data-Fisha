@@ -17,35 +17,31 @@ class IndexPage extends StatelessWidget {
         current: '/stock/',
         menus: moduleMenus(),
         sliverAppBar: StockAppBar(title: "Stocks", showBack: false, context: context),
-        onBody: (drawer) => Scaffold(
-          drawer: drawer,
-          body: Padding(
+        onBody: (_) => SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
             child: Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 790),
-                child: Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      switchToTitle(),
-                      Wrap(
-                        children: switchToItems(
-                          stocksMenu()
-                              .pages
-                              .where((element) => element.name != 'Summary')
-                              .toList(),
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    switchToTitle(),
+                    Wrap(
+                      children: switchToItems(
+                        stocksMenu()
+                            .pages
+                            .where((element) => element.name != 'Summary')
+                            .toList(),
                       ),
-                      stocksSummary()
-                    ],
-                  ),
+                    ),
+                    stocksSummary()
+                  ],
                 ),
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(2, moduleMenus(), context),
         ),
       );
 }

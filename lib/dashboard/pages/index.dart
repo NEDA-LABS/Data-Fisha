@@ -16,31 +16,19 @@ class DashboardIndexPage extends StatelessWidget {
         office: 'Menu',
         current: '/dashboard/',
         menus: moduleMenus(),
-        sliverAppBar: StockAppBar(
-          title: "Dashboard",
-          showBack: false,
-          context: context,
+        sliverAppBar:
+            StockAppBar(title: "Dashboard", showBack: false, context: context),
+        onBody: (_) => const Padding(
+          padding: EdgeInsets.fromLTRB(12, 0, 12, 20),
+          child: SingleChildScrollView(child: DashboardSummary()),
         ),
-        onBody: (drawer) => Scaffold(
-          drawer: drawer,
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 20),
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 790),
-                child: const DashboardSummary(),
-              ),
-            ),
-          ),
-          bottomNavigationBar: bottomBar(0, moduleMenus(), context),
-          floatingActionButton: !hasEnoughWidth(context)
-              ? FloatingActionButton(
-                  onPressed: () => _getQuickActions(context),
-                  child: const Icon(Icons.add))
-              : null,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-        ),
+        // bottomNavigationBar: bottomBar(0, moduleMenus(), context),
+        fab: !hasEnoughWidth(context)
+            ? FloatingActionButton(
+                onPressed: () => _getQuickActions(context),
+                child: const Icon(Icons.add))
+            : null,
+        // ),
       );
 
   _getQuickActions(context) {

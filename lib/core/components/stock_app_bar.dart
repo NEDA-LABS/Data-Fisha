@@ -16,7 +16,7 @@ SliverAppBar StockAppBar({
   required BuildContext context,
 }) {
   return SliverAppBar(
-    expandedHeight: searchInput != null ? 170 : 120,
+    expandedHeight: searchInput != null ? 150 : 100,
     centerTitle: true,
     foregroundColor: const Color(0xFF1C1C1C),
     backgroundColor: Colors.white,
@@ -31,6 +31,9 @@ SliverAppBar StockAppBar({
             onPressed: () => onBack != null ? onBack!() : navigateTo(backLink))
         : null,
     actions: getAppBarActions(context),
+    pinned: true,
+    snap: false,
+    floating: false,
     flexibleSpace: FlexibleSpaceBar(
       title: Text(title,
           overflow: TextOverflow.ellipsis,
