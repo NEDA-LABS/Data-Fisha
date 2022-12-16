@@ -43,26 +43,21 @@ class _State extends State<SellerPerformance> {
       menus: moduleMenus(),
       sliverAppBar: _appBar(),
       onBody: (x) {
-        return Scaffold(
-          appBar: _appBar(),
-          drawer: x,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _rangePicker(),
-                    _whatToShow(),
-                  ],
-                ),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: maximumBodyWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _rangePicker(),
+                  _whatToShow(),
+                ],
               ),
             ),
           ),
-          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
         );
       },
     );

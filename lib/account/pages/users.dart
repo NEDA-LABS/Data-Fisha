@@ -33,33 +33,29 @@ class _State extends State<UsersPage> {
         menus: moduleMenus(),
         current: '/account/',
         sliverAppBar: _appBar(context),
-        onBody: (d) => Scaffold(
-          drawer: d,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _loading(loading),
-              tableContextMenu(_contextItems()),
-              _tableHeader(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TableLikeList(
-                  onFuture: () async => users,
-                  keys: _fields(),
-                  onItemPressed: (item) {
-                    showDialogOrModalSheet(
-                        shopUserDetail(item, context), context);
-                  },
-                  // onCell: (key, data, c) {
-                  //   if (key == 'product') return Text('$data');
-                  //   return Text('${doubleOrZero(data)}');
-                  // },
-                ),
-              )
-              // _tableFooter()
-            ],
-          ),
+        onBody: (d) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _loading(loading),
+            tableContextMenu(_contextItems()),
+            _tableHeader(),
+            Expanded(
+              child: TableLikeList(
+                onFuture: () async => users,
+                keys: _fields(),
+                onItemPressed: (item) {
+                  showDialogOrModalSheet(
+                      shopUserDetail(item, context), context);
+                },
+                // onCell: (key, data, c) {
+                //   if (key == 'product') return Text('$data');
+                //   return Text('${doubleOrZero(data)}');
+                // },
+              ),
+            )
+            // _tableFooter()
+          ],
         ),
       );
 
