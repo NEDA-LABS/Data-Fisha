@@ -1,16 +1,12 @@
-import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
-import 'package:smartstock/stocks/states/categories_list.dart';
-import 'package:smartstock/stocks/states/categories_loading.dart';
 
 class CategoriesPage extends StatefulWidget {
   final args;
@@ -18,17 +14,32 @@ class CategoriesPage extends StatefulWidget {
   const CategoriesPage(this.args, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CategoriesPage();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _CategoriesPage extends State<CategoriesPage> {
+class _State extends State<CategoriesPage> {
+  bool _isLoading = false;
+  String _query = '';
+  List _categories = [];
+
   _appBar(context) {
     return StockAppBar(
       title: "Categories",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
-      onSearch: getState<CategoriesListState>().updateQuery,
+      onSearch: (p0) {
+        setState(() {
+          _query = p0;
+          getCategoryFromCacheOrRemote(skipLocal: false).then((value) {
+            _categories = value
+                .where((element) => '${element['name']}'
+                    .toLowerCase()
+                    .contains(_query.toLowerCase()))
+                .toList();
+          }).whenComplete(() => setState(() {}));
+        });
+      },
       searchHint: 'Search...',
       context: context,
     );
@@ -44,7 +55,7 @@ class _CategoriesPage extends State<CategoriesPage> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 500),
               child: Dialog(
-                child: createCategoryContent(),
+                child: CreateCategoryContent(),
               ),
             ),
           ),
@@ -53,7 +64,7 @@ class _CategoriesPage extends State<CategoriesPage> {
       ContextMenu(
         name: 'Reload',
         pressed: () {
-          getState<CategoriesLoadingState>().update(true);
+          _fetchCategories();
         },
       ),
     ];
@@ -70,6 +81,12 @@ class _CategoriesPage extends State<CategoriesPage> {
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
   @override
+  void initState() {
+    _fetchCategories();
+    super.initState();
+  }
+
+  @override
   Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
@@ -79,20 +96,13 @@ class _CategoriesPage extends State<CategoriesPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             tableContextMenu(_contextItems(context)),
-            Consumer<CategoriesLoadingState>(
-              builder: (_, state) => _loading(state!.loading),
-            ),
+            _loading(_isLoading),
             _tableHeader(),
-            Consumer<CategoriesListState>(
-              builder: (_, state) => Expanded(
-                child: TableLikeList(
-                  onFuture: () async => getCategoryFromCacheOrRemote(
-                    stringLike: state!.query,
-                    skipLocal: widget.args.queryParams.containsKey('reload'),
-                  ),
-                  keys: _fields(),
-                  // onCell: (key,data)=>Text('@$data')
-                ),
+            Expanded(
+              child: TableLikeList(
+                onFuture: () async => _categories,
+                keys: _fields(),
+                // onCell: (key,data)=>Text('@$data')
               ),
             ),
             // _tableFooter()
@@ -100,9 +110,14 @@ class _CategoriesPage extends State<CategoriesPage> {
         ),
       );
 
-  @override
-  void dispose() {
-    getState<CategoriesListState>().updateQuery('');
-    super.dispose();
+  _fetchCategories() {
+    setState(() {
+      _isLoading = true;
+    });
+    getCategoryFromCacheOrRemote(skipLocal: true).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 }

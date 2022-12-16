@@ -13,15 +13,6 @@ import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfer_receive.dart';
 import 'package:smartstock/stocks/pages/transfer_send.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
-import 'package:smartstock/stocks/states/categories_list.dart';
-import 'package:smartstock/stocks/states/categories_loading.dart';
-import 'package:smartstock/stocks/states/category_create.dart';
-import 'package:smartstock/stocks/states/product_create.dart';
-import 'package:smartstock/stocks/states/product_loading.dart';
-import 'package:smartstock/stocks/states/products_list.dart';
-import 'package:smartstock/stocks/states/supplier_create.dart';
-import 'package:smartstock/stocks/states/suppliers_list.dart';
-import 'package:smartstock/stocks/states/suppliers_loading.dart';
 
 class StockModule extends Module {
   StockModule(List<ExternalService> services);
@@ -37,19 +28,18 @@ class StockModule extends Module {
           '/purchases/create',
           child: (context, _) => purchaseCreatePage(context),
         ),
-        // ChildRoute('/items', child: (_, __) => ItemsPage(__)),
         ChildRoute('/products/create', child: (_, __) {
-          var productState = getState<ProductCreateState>();
-          productState.setIsUpdate(false);
-          productState.clearFormState();
+          // var productState = getState<ProductCreateState>();
+          // productState.setIsUpdate(false);
+          // productState.clearFormState();
           return const ProductCreatePage();
         }),
         ChildRoute('/products/edit', child: (_, __) {
           var product = __.data;
           if (product is Map && product['id'] is String) {
-            var productState = getState<ProductCreateState>();
-            productState.setIsUpdate(true);
-            productState.updateFormState(product as Map<String, dynamic>);
+            // var productState = getState<ProductCreateState>();
+            // productState.setIsUpdate(true);
+            // productState.updateFormState(product as Map<String, dynamic>);
             return ProductEditPage('${product['product']}');
           }
           navigateToAndReplace('/stock/products');
@@ -62,15 +52,5 @@ class StockModule extends Module {
       ];
 
   @override
-  List<Bind<Object>> get binds => [
-        Bind.lazySingleton((i) => ProductLoadingState()),
-        Bind.lazySingleton((i) => CategoriesLoadingState()),
-        Bind.lazySingleton((i) => ProductsListState()),
-        Bind.lazySingleton((i) => ProductCreateState()),
-        Bind.lazySingleton((i) => CategoryCreateState()),
-        Bind.lazySingleton((i) => SupplierCreateState()),
-        Bind.lazySingleton((i) => CategoriesListState()),
-        Bind.lazySingleton((i) => SuppliersListState()),
-        Bind.lazySingleton((i) => SuppliersLoadingState()),
-      ];
+  List<Bind<Object>> get binds => [];
 }

@@ -9,27 +9,27 @@ import 'package:smartstock/stocks/services/purchase.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 purchaseCreatePage(BuildContext context) => SaleLikePage(
-  wholesale: false,
-  title: 'Create purchase',
-  backLink: '/stock/purchases',
-  customerLikeLabel: 'Choose supplier',
-  onSubmitCart: prepareOnSubmitPurchase(context),
-  onGetPrice: (product) {
-    return doubleOrZero('${product['purchase']}');
-  },
-  onAddToCartView: _onPrepareSalesAddToCartView(context, false),
-  onCustomerLikeList: getSupplierFromCacheOrRemote,
-  onCustomerLikeAddWidget: createSupplierContent,
-  checkoutCompleteMessage: 'Purchase complete.',
-  onGetProductsLike: getStockFromCacheOrRemote,
-);
-
-_onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
-  addPurchaseToCartView(
+      wholesale: false,
+      title: 'Create purchase',
+      backLink: '/stock/purchases',
+      customerLikeLabel: 'Choose supplier',
+      onSubmitCart: prepareOnSubmitPurchase(context),
       onGetPrice: (product) {
         return doubleOrZero('${product['purchase']}');
       },
-      cart: CartModel(product: product, quantity: 1),
-      onAddToCart: onAddToCart,
-      context: context);
-};
+      onAddToCartView: _onPrepareSalesAddToCartView(context, false),
+      onCustomerLikeList: getSupplierFromCacheOrRemote,
+      onCustomerLikeAddWidget: () => const CreateSupplierContent(),
+      checkoutCompleteMessage: 'Purchase complete.',
+      onGetProductsLike: getStockFromCacheOrRemote,
+    );
+
+_onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
+      addPurchaseToCartView(
+          onGetPrice: (product) {
+            return doubleOrZero('${product['purchase']}');
+          },
+          cart: CartModel(product: product, quantity: 1),
+          onAddToCart: onAddToCart,
+          context: context);
+    };

@@ -9,7 +9,6 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
-import 'package:smartstock/stocks/states/product_loading.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -77,7 +76,8 @@ class _State extends State<ProductsPage> {
       ContextMenu(
         name: 'Reload',
         pressed: () {
-          getState<ProductLoadingState>().update(true);
+          _skipLocal = true;
+          _getProducts();
         },
       ),
       // ContextMenu(name: 'Import', pressed: () => {}),
@@ -118,6 +118,7 @@ class _State extends State<ProductsPage> {
     setState(() {
       _products = data;
       _isLoading = false;
+      _skipLocal = false;
     });
   }
 
