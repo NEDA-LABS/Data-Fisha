@@ -63,9 +63,9 @@ class _State extends State<ProductsPage> {
       title: "Products",
       showBack: true,
       backLink: '/stock/',
-      // showSearch: false,
-      // onSearch: _updateQuery,
-      // searchHint: 'Search...',
+      showSearch: true,
+      onSearch: _updateQuery,
+      searchHint: 'Search...',
       context: context,
     );
   }

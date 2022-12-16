@@ -20,7 +20,7 @@ SliverAppBar StockAppBar({
     centerTitle: true,
     foregroundColor: const Color(0xFF1C1C1C),
     backgroundColor: Colors.white,
-    // title: Text(title, overflow: TextOverflow.ellipsis),
+    title: Text(title, overflow: TextOverflow.ellipsis),
     bottom: showSearch
         ? searchInput as PreferredSizeWidget? ??
             _toolBarSearchInput(onSearch, searchHint, searchTextController)
@@ -32,14 +32,14 @@ SliverAppBar StockAppBar({
         : null,
     actions: getAppBarActions(context),
     pinned: true,
-    snap: false,
-    floating: false,
-    flexibleSpace: FlexibleSpaceBar(
-      title: Text(title,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Color(0xFF1C1C1C))),
-      centerTitle: true,
-    ),
+    snap: true,
+    floating: true,
+    // flexibleSpace: FlexibleSpaceBar(
+    //   title: Text(title,
+    //       overflow: TextOverflow.ellipsis,
+    //       style: const TextStyle(color: Color(0xFF1C1C1C))),
+    //   centerTitle: true,
+    // ),
   );
 }
 

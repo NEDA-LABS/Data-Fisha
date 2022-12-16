@@ -174,18 +174,15 @@ class StockDrawer extends Drawer {
                   onTap: () => navigateTo(item.link),
                 ),
               )
-            : Container(
-                decoration: item.link == current ? _selectedDecoration : null,
-                child: ExpansionTile(
-                  leading: current?.contains(item.link) ?? false
-                      ? _selectedIcon
-                      : item.icon,
-                  title: Text(item.name, style: _itemStyle),
-                  initiallyExpanded: current?.contains(item.link) ?? false,
-                  children:
-                      item.pages.map(_prepareSubMenuItem(current)).toList(),
-                ),
-              ),
+            : ExpansionTile(
+              leading: current?.contains(item.link) ?? false
+                  ? _selectedIcon
+                  : item.icon,
+              title: Text(item.name, style: _itemStyle),
+              initiallyExpanded: current?.contains(item.link) ?? false,
+              children:
+                  item.pages.map(_prepareSubMenuItem(current)).toList(),
+            ),
       );
     };
   }

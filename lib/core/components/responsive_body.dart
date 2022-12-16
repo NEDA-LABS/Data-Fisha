@@ -46,7 +46,7 @@ class ResponsivePage extends StatelessWidget {
               body: NestedScrollView(
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
-                    sliverAppBar ?? SliverToBoxAdapter(child: Container()),
+                    sliverAppBar ?? Container(),
                   ];
                 },
                 body: onBody(null) ?? Container(),

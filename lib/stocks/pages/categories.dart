@@ -12,7 +12,6 @@ import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/states/categories_list.dart';
 import 'package:smartstock/stocks/states/categories_loading.dart';
 
-
 class CategoriesPage extends StatefulWidget {
   final args;
 
@@ -30,7 +29,8 @@ class _CategoriesPage extends State<CategoriesPage> {
       backLink: '/stock/',
       showSearch: true,
       onSearch: getState<CategoriesListState>().updateQuery,
-      searchHint: 'Search...', context: context,
+      searchHint: 'Search...',
+      context: context,
     );
   }
 
@@ -74,31 +74,29 @@ class _CategoriesPage extends State<CategoriesPage> {
         menus: moduleMenus(),
         current: '/stock/',
         sliverAppBar: _appBar(context),
-        onBody: (d) => Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              tableContextMenu(_contextItems(context)),
-              Consumer<CategoriesLoadingState>(
-                builder: (_, state) => _loading(state!.loading),
-              ),
-              _tableHeader(),
-              Consumer<CategoriesListState>(
-                builder: (_, state) => Expanded(
-                  child: TableLikeList(
-                    onFuture: () async => getCategoryFromCacheOrRemote(
-                      stringLike: state!.query,
-                      skipLocal: widget.args.queryParams.containsKey('reload'),
-                    ),
-                    keys: _fields(),
-                    // onCell: (key,data)=>Text('@$data')
+        onBody: (d) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tableContextMenu(_contextItems(context)),
+            Consumer<CategoriesLoadingState>(
+              builder: (_, state) => _loading(state!.loading),
+            ),
+            _tableHeader(),
+            Consumer<CategoriesListState>(
+              builder: (_, state) => Expanded(
+                child: TableLikeList(
+                  onFuture: () async => getCategoryFromCacheOrRemote(
+                    stringLike: state!.query,
+                    skipLocal: widget.args.queryParams.containsKey('reload'),
                   ),
+                  keys: _fields(),
+                  // onCell: (key,data)=>Text('@$data')
                 ),
               ),
-              // _tableFooter()
-            ],
-          ),
+            ),
+            // _tableFooter()
+          ],
         ),
       );
 
