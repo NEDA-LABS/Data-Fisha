@@ -25,15 +25,12 @@ class ProductEditPage extends StatelessWidget {
       menus: moduleMenus(),
       current: '/stock/',
       sliverAppBar: _appBar(context),
-      onBody: (d) => Scaffold(
-        appBar: _appBar(context),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-                constraints: const BoxConstraints(maxWidth: 600),
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: const ProductUpdateForm()),
-          ),
+      onBody: (d) => SingleChildScrollView(
+        child: Center(
+          child: Container(
+              constraints: const BoxConstraints(maxWidth: 600),
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+              child: const ProductUpdateForm()),
         ),
       ),
     );
