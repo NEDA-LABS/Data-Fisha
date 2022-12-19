@@ -114,9 +114,11 @@ class _State extends State<CategoriesPage> {
     setState(() {
       _isLoading = true;
     });
-    getCategoryFromCacheOrRemote(skipLocal: true).then((value) {
-      _categories = value;
-    },).whenComplete(() {
+    getCategoryFromCacheOrRemote(skipLocal: true).then(
+      (value) {
+        _categories = value;
+      },
+    ).whenComplete(() {
       setState(() {
         _isLoading = false;
       });
