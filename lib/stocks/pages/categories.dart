@@ -54,7 +54,7 @@ class _State extends State<CategoriesPage> {
           builder: (c) => Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 500),
-              child: Dialog(
+              child: const Dialog(
                 child: CreateCategoryContent(),
               ),
             ),
@@ -114,7 +114,9 @@ class _State extends State<CategoriesPage> {
     setState(() {
       _isLoading = true;
     });
-    getCategoryFromCacheOrRemote(skipLocal: true).whenComplete(() {
+    getCategoryFromCacheOrRemote(skipLocal: true).then((value) {
+      _categories = value;
+    },).whenComplete(() {
       setState(() {
         _isLoading = false;
       });
