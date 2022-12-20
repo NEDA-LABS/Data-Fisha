@@ -37,7 +37,7 @@ _mainWidget() {
     theme: ThemeData(
       primarySwatch: getSmartStockMaterialColorSwatch(),
       fontFamily: 'Inter',
-      scaffoldBackgroundColor: Color(0xFFF5F5F5)
+      scaffoldBackgroundColor: const Color(0xFFFFFFFF)
     ),
   );
 }

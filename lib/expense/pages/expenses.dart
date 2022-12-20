@@ -84,10 +84,10 @@ class _State extends State<ExpenseExpensesPage> {
     var height = 38.0;
     var smallView = SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Item'),
-        tableLikeListTextHeader('Category'),
-        tableLikeListTextHeader('Amount ( TZS )'),
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Item'),
+        TableLikeListTextHeaderCell('Category'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
       ]),
     );
     // var bigView = SizedBox(

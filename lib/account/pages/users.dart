@@ -84,9 +84,9 @@ class _State extends State<UsersPage> {
   }
 
   _tableHeader() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Name'),
-      tableLikeListTextHeader('Role'),
+    return TableLikeListRow([
+      TableLikeListTextHeaderCell('Name'),
+      TableLikeListTextHeaderCell('Role'),
     ]);
   }
 

@@ -155,10 +155,10 @@ class _State extends State<CategoryPerformance> {
   }
 
   _tableHeader() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Category'),
-      tableLikeListTextHeader('Quantity'),
-      tableLikeListTextHeader('Amount ( Tsh )'),
+    return TableLikeListRow([
+      TableLikeListTextHeaderCell('Category'),
+      TableLikeListTextHeaderCell('Quantity'),
+      TableLikeListTextHeaderCell('Amount ( Tsh )'),
       // tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }

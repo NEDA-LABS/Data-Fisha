@@ -122,19 +122,19 @@ class _State extends State<SalesCashTrackingPage> {
     var height = 38.0;
     var smallView = SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Customer'),
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
+        TableLikeListTextHeaderCell('Customer'),
       ]),
     );
     var bigView = SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Items'),
-        tableLikeListTextHeader('Customer'),
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
+        TableLikeListTextHeaderCell('Items'),
+        TableLikeListTextHeaderCell('Customer'),
       ]),
     );
     return isSmallScreen(context) ? smallView : bigView;

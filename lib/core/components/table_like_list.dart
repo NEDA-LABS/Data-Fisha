@@ -3,26 +3,60 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 
-Widget tableLikeListRow(List<Widget> items) {
-  _map(e) => Expanded(flex: items.indexOf(e) == 0 ? 2 : 1, child: e);
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-    child: Row(children: items.map(_map).toList()),
-  );
+class TableLikeListRow extends StatelessWidget {
+  final List<Widget> items;
+
+  const TableLikeListRow(this.items, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    mapFn(e) => Expanded(flex: items.indexOf(e) == 0 ? 2 : 1, child: e);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      child: Row(children: items.map(mapFn).toList()),
+    );
+  }
 }
 
-tableLikeListTextHeader(String name) {
-  var style = const TextStyle(
-      fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis, color: Color(
-      0x66000000));
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
-    child: Text(name, style: style),
-  );
+class TableLikeListTextHeaderCell extends StatelessWidget {
+  final String name;
+
+  const TableLikeListTextHeaderCell(this.name, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var style = const TextStyle(
+        fontWeight: FontWeight.w400,
+        overflow: TextOverflow.ellipsis,
+        fontSize: 14,
+        color: Color(0x40000000));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(name, style: style),
+    );
+  }
+}
+
+class TableLikeListTextDataCell extends StatelessWidget {
+  final String name;
+
+  const TableLikeListTextDataCell(this.name, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var style = const TextStyle(
+      fontWeight: FontWeight.w300,
+      overflow: TextOverflow.ellipsis,
+      color: Color(0xFF1C1C1C),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      child: Text(name, style: style),
+    );
+  }
 }
 
 _a(dynamic) {}
-// Future _m() async {}
 
 class TableLikeList extends StatefulWidget {
   final Future Function() onFuture;
@@ -106,7 +140,7 @@ class _State extends State<TableLikeList> {
         constraints: const BoxConstraints(minHeight: 48),
         child: InkWell(
           onTap: () => onItemPressed(item),
-          child: tableLikeListRow(keys.map(keyToView).toList()),
+          child: TableLikeListRow(keys.map(keyToView).toList()),
         ),
       ),
       horizontalLine()
@@ -142,8 +176,7 @@ class _State extends State<TableLikeList> {
     onPress,
   ) {
     return (context, snapshot) {
-      var builder =
-          _showErrorOrContent(context, keys, onCell, onPress);
+      var builder = _showErrorOrContent(context, keys, onCell, onPress);
       return builder(snapshot);
     };
   }

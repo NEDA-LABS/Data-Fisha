@@ -18,11 +18,12 @@ class DashboardIndexPage extends StatelessWidget {
         menus: moduleMenus(),
         sliverAppBar:
             StockAppBar(title: "Dashboard", showBack: false, context: context),
-        onBody: (_) => const Padding(
-          padding: EdgeInsets.fromLTRB(12, 0, 12, 20),
-          child: SingleChildScrollView(child: DashboardSummary()),
-        ),
-        // bottomNavigationBar: bottomBar(0, moduleMenus(), context),
+        staticChildren: const [
+          Padding(
+            padding: EdgeInsets.fromLTRB(12, 0, 12, 20),
+            child: DashboardSummary(),
+          )
+        ] ,
         fab: !hasEnoughWidth(context)
             ? FloatingActionButton(
                 onPressed: () => _getQuickActions(context),

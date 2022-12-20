@@ -57,19 +57,19 @@ class _InvoicesPage extends State<InvoicesPage> {
     var height = 38.0;
     var smallView = SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Customer'),
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
+        TableLikeListTextHeaderCell('Customer'),
       ]),
     );
     var largeView = SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Paid ( TZS )'),
-        tableLikeListTextHeader('Customer'),
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
+        TableLikeListTextHeaderCell('Paid ( TZS )'),
+        TableLikeListTextHeaderCell('Customer'),
       ]),
     );
     return isSmallScreen(context) ? smallView : largeView;

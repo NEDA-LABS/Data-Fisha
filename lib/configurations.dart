@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 
 // blue 0xff0049a9
+var criticalColor = const Color(0xFFFF0000);
+var healthColor = const Color(0xFF4AA785);
 var primaryBaseColorValue = const Color(0xff005aa9);
 var primaryBaseLightColor = const Color(0x1a005aa9);
 MaterialColor getSmartStockMaterialColorSwatch() {

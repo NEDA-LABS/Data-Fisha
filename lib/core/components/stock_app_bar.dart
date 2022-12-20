@@ -22,13 +22,13 @@ SliverAppBar StockAppBar({
     backgroundColor: Colors.white,
     title: Text(title, overflow: TextOverflow.ellipsis),
     bottom: showSearch
-        ? searchInput as PreferredSizeWidget? ??
+        ? (searchInput as PreferredSizeWidget?) ??
             _toolBarSearchInput(onSearch, searchHint, searchTextController)
         : null,
     leading: showBack
         ? IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => onBack != null ? onBack!() : navigateTo(backLink))
+            onPressed: () => onBack != null ? onBack() : navigateTo(backLink))
         : null,
     actions: getAppBarActions(context),
     pinned: true,
@@ -49,18 +49,12 @@ PreferredSizeWidget _toolBarSearchInput(
   TextEditingController? searchTextController,
 ) {
   return PreferredSize(
-    preferredSize: const Size.fromHeight(49),
+    preferredSize: const Size.fromHeight(50),
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       alignment: Alignment.centerLeft,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
         child: TextField(
           controller: searchTextController,
           autofocus: false,
@@ -75,6 +69,7 @@ PreferredSizeWidget _toolBarSearchInput(
           decoration: InputDecoration(
             hintText: placeholder,
             border: InputBorder.none,
+            prefixIcon: const Icon(Icons.search_sharp)
           ),
         ),
       ),

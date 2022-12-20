@@ -17,8 +17,8 @@ class IndexPage extends StatelessWidget {
         menus: moduleMenus(),
         sliverAppBar:
             StockAppBar(title: "Stocks", showBack: false, context: context),
-        onBody: (_) => SingleChildScrollView(
-          child: Padding(
+        staticChildren: [
+          Padding(
             padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
             child: Center(
               child: Container(
@@ -41,7 +41,7 @@ class IndexPage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ),
+          )
+        ],
       );
 }

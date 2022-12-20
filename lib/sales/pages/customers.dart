@@ -53,10 +53,10 @@ class _CustomersPage extends State<CustomersPage> {
 
   _tableHeader() => SizedBox(
     height: 38,
-    child: tableLikeListRow([
-          tableLikeListTextHeader('Name'),
-          tableLikeListTextHeader('Phone'),
-          tableLikeListTextHeader('Email'),
+    child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Name'),
+          TableLikeListTextHeaderCell('Phone'),
+          TableLikeListTextHeaderCell('Email'),
         ]),
   );
 

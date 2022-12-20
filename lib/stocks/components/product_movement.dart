@@ -67,7 +67,7 @@ class _State extends State<ProductMovementDetails> {
                 .map<Widget>((item) => Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        tableLikeListRow([
+                        TableLikeListRow([
                           Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 16),
@@ -112,12 +112,12 @@ class _State extends State<ProductMovementDetails> {
         padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
         child: SizedBox(
           height: 38,
-          child: tableLikeListRow([
-            tableLikeListTextHeader('Date'),
-            tableLikeListTextHeader('Source'),
-            tableLikeListTextHeader('Close'),
-            tableLikeListTextHeader('Open'),
-            tableLikeListTextHeader('Move'),
+          child: TableLikeListRow([
+            TableLikeListTextHeaderCell('Date'),
+            TableLikeListTextHeaderCell('Source'),
+            TableLikeListTextHeaderCell('Close'),
+            TableLikeListTextHeaderCell('Open'),
+            TableLikeListTextHeaderCell('Move'),
           ]),
         ),
       );

@@ -52,10 +52,10 @@ class _TransfersPage extends State<TransfersPage> {
 
   _tableHeader() => SizedBox(
         height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Date'),
-          tableLikeListTextHeader('Type'),
-          tableLikeListTextHeader('Amount')
+        child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Date'),
+          TableLikeListTextHeaderCell('Type'),
+          TableLikeListTextHeaderCell('Amount')
         ]),
       );
 

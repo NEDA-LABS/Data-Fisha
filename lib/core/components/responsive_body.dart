@@ -4,6 +4,12 @@ import 'package:smartstock/core/components/drawer.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
+const _emptyList = <Widget>[];
+
+Widget _emptyBuilder(_, __) => Container();
+
+Widget _emptyBody(_) => Container();
+
 class ResponsivePage extends StatelessWidget {
   final String office;
   final String current;
@@ -13,6 +19,12 @@ class ResponsivePage extends StatelessWidget {
   final Widget? Function(Drawer? drawer) onBody;
   final SliverAppBar? sliverAppBar;
   final FloatingActionButton? fab;
+  final List<Widget> staticChildren;
+  final int totalDynamicChildren;
+  final Widget Function(BuildContext context, dynamic index)
+      dynamicChildBuilder;
+
+  final horizontalPadding = const EdgeInsets.symmetric(horizontal: 16.0);
 
   const ResponsivePage({
     this.office = '',
@@ -20,64 +32,57 @@ class ResponsivePage extends StatelessWidget {
     this.showLeftDrawer = true,
     this.rightDrawer,
     required this.menus,
-    required this.onBody,
+    this.onBody = _emptyBody,
     required this.sliverAppBar,
+    this.staticChildren = _emptyList,
+    this.totalDynamicChildren = 0,
+    this.dynamicChildBuilder = _emptyBuilder,
     this.fab,
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final getDrawerView = ifDoElse((f) => f == true,
-        (_) => StockDrawer(menus, current), (_) => const SizedBox());
-    final getVLView = ifDoElse(
-        (f) => f == true,
-        (_) => Container(width: 0.5, color: const Color(0xFFDADADA)),
-        (_) => const SizedBox());
-    var paneOrPlaneBody = ifDoElse(
-      (context) => hasEnoughWidth(context),
-      (_) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          getDrawerView(showLeftDrawer),
-          getVLView(showLeftDrawer),
-          Expanded(
-            child: Scaffold(
-              body: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    sliverAppBar ?? Container(),
-                  ];
-                },
-                body: onBody(null) ?? Container(),
-                // slivers: [
-                //
-                //   SliverToBoxAdapter(child: )
-                // ],
+  Widget build(BuildContext context) => ifDoElse(
+      _screenCheck, _getLargerScreenView, _getSmallScreenView)(context);
+
+  _getBody({bottomMargin= 0}) => CustomScrollView(
+        slivers: [
+          sliverAppBar ?? SliverToBoxAdapter(child: Container()),
+          ...staticChildren
+              .map((e) => SliverToBoxAdapter(
+                      child: Padding(
+                    padding: horizontalPadding,
+                    child: e,
+                  )))
+              .toList(),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Padding(
+                padding: horizontalPadding,
+                child: dynamicChildBuilder(context, index),
               ),
+              childCount: totalDynamicChildren,
             ),
           ),
+          SliverPadding(padding: EdgeInsets.only(bottom: bottomMargin))
+        ],
+      );
+
+  _screenCheck(context) => hasEnoughWidth(context);
+
+  _getLargerScreenView(_) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StockDrawer(menus, current),
+          Container(width: 0.5, color: const Color(0xFFDADADA)),
+          Expanded(child: Scaffold(body: _getBody(bottomMargin: 24))),
           rightDrawer ?? const SizedBox(width: 0)
         ],
-      ),
-      (_) => Scaffold(
-        drawer: StockDrawer(menus, current),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: fab,
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              sliverAppBar ?? SliverToBoxAdapter(child: Container()),
-            ];
-          },
-          body: onBody(null) ?? Container(),
-          // slivers: [
-          //   sliverAppBar ?? SliverToBoxAdapter(child: Container()),
-          //   SliverToBoxAdapter(child: )
-          // ],
-        ),
-      ),
-    );
-    return paneOrPlaneBody(context);
-  }
+      );
+
+  _getSmallScreenView(_) => Scaffold(
+      drawer: StockDrawer(menus, current),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: isSmallScreen(_)?fab:null,
+      body: _getBody(bottomMargin: 100));
 }

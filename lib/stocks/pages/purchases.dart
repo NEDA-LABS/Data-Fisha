@@ -47,11 +47,11 @@ class _PurchasesPage extends State<PurchasesPage> {
 
   _tableHeader() => SizedBox(
         height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Reference'),
-          tableLikeListTextHeader('Type'),
-          tableLikeListTextHeader('Cost ( TZS )'),
-          tableLikeListTextHeader('Paid ( TZS )'),
+        child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Reference'),
+          TableLikeListTextHeaderCell('Type'),
+          TableLikeListTextHeaderCell('Cost ( TZS )'),
+          TableLikeListTextHeaderCell('Paid ( TZS )'),
         ]),
       );
 

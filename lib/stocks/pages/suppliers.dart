@@ -70,11 +70,11 @@ class _State extends State<SuppliersPage> {
     ];
   }
 
-  _tableHeader() => tableLikeListRow([
-        tableLikeListTextHeader('Name'),
-        tableLikeListTextHeader('Mobile'),
-        tableLikeListTextHeader('Email'),
-        tableLikeListTextHeader('Address'),
+  _tableHeader() => TableLikeListRow([
+        TableLikeListTextHeaderCell('Name'),
+        TableLikeListTextHeaderCell('Mobile'),
+        TableLikeListTextHeaderCell('Email'),
+        TableLikeListTextHeaderCell('Address'),
       ]);
 
   _fields() => ['name', 'number', 'email', 'address'];

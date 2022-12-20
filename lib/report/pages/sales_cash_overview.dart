@@ -157,11 +157,11 @@ class _State extends State<OverviewCashSales> {
   }
 
   _tableHeader() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Date'),
-      tableLikeListTextHeader('Retail ( Tsh )'),
-      tableLikeListTextHeader('Wholesale ( Tsh )'),
-      tableLikeListTextHeader('Total ( Tsh )'),
+    return TableLikeListRow([
+      TableLikeListTextHeaderCell('Date'),
+      TableLikeListTextHeaderCell('Retail ( Tsh )'),
+      TableLikeListTextHeaderCell('Wholesale ( Tsh )'),
+      TableLikeListTextHeaderCell('Total ( Tsh )'),
     ]);
   }
 

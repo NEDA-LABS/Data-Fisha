@@ -107,4 +107,8 @@ var chartCardDesktopHeight = 350.0;
 
 compactNumber(value) =>
     NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
-        .format(value ?? 0);
+        .format(doubleOrZero(value));
+
+formatNumber(value, {decimals = 0}) =>
+    NumberFormat.currency(decimalDigits: decimals, symbol: '')
+        .format(doubleOrZero(value));

@@ -70,9 +70,9 @@ class _State extends State<CategoriesPage> {
     ];
   }
 
-  _tableHeader() => tableLikeListRow([
-        tableLikeListTextHeader('Name'),
-        tableLikeListTextHeader('Description'),
+  _tableHeader() => TableLikeListRow([
+        TableLikeListTextHeaderCell('Name'),
+        TableLikeListTextHeaderCell('Description'),
       ]);
 
   _fields() => ['name', 'description'];

@@ -29,17 +29,11 @@ class StockModule extends Module {
           child: (context, _) => purchaseCreatePage(context),
         ),
         ChildRoute('/products/create', child: (_, __) {
-          // var productState = getState<ProductCreateState>();
-          // productState.setIsUpdate(false);
-          // productState.clearFormState();
           return const ProductCreatePage();
         }),
         ChildRoute('/products/edit', child: (_, __) {
           var product = __.data;
           if (product is Map && product['id'] is String) {
-            // var productState = getState<ProductCreateState>();
-            // productState.setIsUpdate(true);
-            // productState.updateFormState(product as Map<String, dynamic>);
             return ProductEditPage('${product['product']}');
           }
           navigateToAndReplace('/stock/products');

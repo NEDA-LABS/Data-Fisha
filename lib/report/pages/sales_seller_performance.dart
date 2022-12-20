@@ -151,10 +151,10 @@ class _State extends State<SellerPerformance> {
   }
 
   _tableHeader() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Seller'),
-      tableLikeListTextHeader('Quantity'),
-      tableLikeListTextHeader('Amount ( Tsh )'),
+    return TableLikeListRow([
+      TableLikeListTextHeaderCell('Seller'),
+      TableLikeListTextHeaderCell('Quantity'),
+      TableLikeListTextHeaderCell('Amount ( Tsh )'),
       // tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }

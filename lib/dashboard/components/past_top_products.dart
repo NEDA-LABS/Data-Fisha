@@ -113,12 +113,12 @@ class _State extends State<PastTopProducts> {
                   ),
                 ),
               ),
-              tableLikeListRow([
-                tableLikeListTextHeader('Name'),
-                tableLikeListTextHeader('Qty'),
-                tableLikeListTextHeader('Amount'),
-                tableLikeListTextHeader('Profit'),
-                tableLikeListTextHeader('Margin'),
+              TableLikeListRow([
+                TableLikeListTextHeaderCell('Name'),
+                TableLikeListTextHeaderCell('Qty'),
+                TableLikeListTextHeaderCell('Amount'),
+                TableLikeListTextHeaderCell('Profit'),
+                TableLikeListTextHeaderCell('Margin'),
               ]),
               horizontalLine(),
               Expanded(

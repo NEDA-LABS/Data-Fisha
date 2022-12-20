@@ -93,9 +93,9 @@ class _State extends State<ExpenseItemsPage> {
     ];
   }
 
-  _tableHeader() => tableLikeListRow([
-        tableLikeListTextHeader('Name'),
-        tableLikeListTextHeader('Category'),
+  _tableHeader() => TableLikeListRow([
+        TableLikeListTextHeaderCell('Name'),
+        TableLikeListTextHeaderCell('Category'),
       ]);
 
   _fields() => ['name', 'category'];
