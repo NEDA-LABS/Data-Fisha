@@ -63,13 +63,6 @@ class _State extends State<CategoriesPage> {
     ];
   }
 
-  _tableHeader() => TableLikeListRow([
-        TableLikeListTextHeaderCell('Name'),
-        TableLikeListTextHeaderCell('Description'),
-      ]);
-
-  _fields() => ['name', 'description'];
-
   _loading(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
@@ -101,7 +94,7 @@ class _State extends State<CategoriesPage> {
                       '${_categories[index]['name']}'),
                   subtitle: Text(
                     '${_categories[index]['description']}',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
                   )),
               const SizedBox(height: 5),
               horizontalLine(),
@@ -140,7 +133,7 @@ class _State extends State<CategoriesPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create a product'),
+                title: const Text('Create category'),
                 onTap: () {
                   Navigator.of(context)
                       .maybePop()
@@ -150,7 +143,7 @@ class _State extends State<CategoriesPage> {
               horizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload products'),
+                title: const Text('Reload categories'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetchCategories();

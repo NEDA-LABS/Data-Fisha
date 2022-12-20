@@ -165,7 +165,7 @@ class _State extends State<ProductsPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create a product'),
+                title: const Text('Create product'),
                 onTap: () => navigateTo('/stock/products/create'),
               ),
               horizontalLine(),
