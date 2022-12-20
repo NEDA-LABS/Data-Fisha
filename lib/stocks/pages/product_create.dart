@@ -22,14 +22,17 @@ class ProductCreatePage extends StatelessWidget {
         menus: moduleMenus(),
         current: '/stock/',
         sliverAppBar: _appBar(context),
-        onBody: (d) => SingleChildScrollView(
-          child: Center(
+        staticChildren: [
+          Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 600),
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: const ProductCreateForm(),
             ),
-          ),
-        ),
+          )
+        ],
+        // onBody: (d) => SingleChildScrollView(
+        //   child: ,
+        // ),
       );
 }
