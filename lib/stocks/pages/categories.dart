@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
@@ -49,17 +52,7 @@ class _State extends State<CategoriesPage> {
     return [
       ContextMenu(
         name: 'Create',
-        pressed: () => showDialog(
-          context: context,
-          builder: (c) => Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: const Dialog(
-                child: CreateCategoryContent(),
-              ),
-            ),
-          ),
-        ),
+        pressed: () => _createCategory(),
       ),
       ContextMenu(
         name: 'Reload',
@@ -91,23 +84,35 @@ class _State extends State<CategoriesPage> {
         menus: moduleMenus(),
         current: '/stock/',
         sliverAppBar: _appBar(context),
-        onBody: (d) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            tableContextMenu(_contextItems(context)),
-            _loading(_isLoading),
-            _tableHeader(),
-            Expanded(
-              child: TableLikeList(
-                onFuture: () async => _categories,
-                keys: _fields(),
-                // onCell: (key,data)=>Text('@$data')
-              ),
-            ),
-            // _tableFooter()
-          ],
+        staticChildren: [
+          isSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextItems(context)),
+          _loading(_isLoading),
+          // _tableHeader(),
+        ],
+        dynamicChildBuilder: (context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                  title: TableLikeListTextDataCell(
+                      '${_categories[index]['name']}'),
+                  subtitle: Text(
+                    '${_categories[index]['description']}',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                  )),
+              const SizedBox(height: 5),
+              horizontalLine(),
+            ],
+          );
+        },
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
         ),
+        totalDynamicChildren: _categories.length,
       );
 
   _fetchCategories() {
@@ -123,5 +128,51 @@ class _State extends State<CategoriesPage> {
         _isLoading = false;
       });
     });
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Create a product'),
+                onTap: () {
+                  Navigator.of(context)
+                      .maybePop()
+                      .whenComplete(() => _createCategory());
+                },
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload products'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _fetchCategories();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
+  }
+
+  _createCategory() {
+    showDialog(
+      context: context,
+      builder: (c) => Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: const Dialog(
+            child: CreateCategoryContent(),
+          ),
+        ),
+      ),
+    );
   }
 }

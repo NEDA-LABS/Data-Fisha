@@ -197,7 +197,8 @@ class _State extends State<ProductsPage> {
           onTap: () => _productItemClicked(_products[index]),
           title: TableLikeListTextDataCell('${_products[index]['product']}'),
           subtitle: _renderStockStatus(_products[index], appendQuantity: true),
-          trailing: TableLikeListTextDataCell(compactNumber('${_products[index]['retailPrice']}')),
+          trailing: TableLikeListTextDataCell(
+              compactNumber('${_products[index]['retailPrice']}')),
         ),
         const SizedBox(height: 5),
         horizontalLine(),
