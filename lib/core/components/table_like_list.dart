@@ -81,15 +81,11 @@ class TableLikeList extends StatefulWidget {
 }
 
 class _State extends State<TableLikeList> {
-  late ScrollController controller;
-
-  // bool isLoadMore = false;
-
-  // ScrollDirection scrollDirection = ScrollDirection.forward;
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
-    controller = ScrollController()..addListener(_scrollListener);
+    controller.addListener(_scrollListener);
     super.initState();
   }
 

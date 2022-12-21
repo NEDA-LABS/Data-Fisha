@@ -197,30 +197,13 @@ class _State extends State<SuppliersPage> {
           subtitle: mobile.isEmpty
               ? null
               : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Text('$mobile - $email', style: sub_style),
-              ),
-          // isThreeLine: mobile.isNotEmpty,
-          // trailing: TableLikeListTextDataCell(
-          //     compactNumber('${_products[index]['retailPrice']}')),
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text('$mobile - $email', style: sub_style),
+                ),
         ),
         const SizedBox(height: 5),
         horizontalLine(),
       ],
     );
-
-    // return Column(
-    //   mainAxisSize: MainAxisSize.min,
-    //   crossAxisAlignment: CrossAxisAlignment.stretch,
-    //   children: [
-    //     TableLikeListRow([
-    //       TableLikeListTextDataCell('${_suppliers[index]['name']}'),
-    //       TableLikeListTextDataCell('${_suppliers[index]['number']}'),
-    //       TableLikeListTextDataCell('${_suppliers[index]['email']}'),
-    //       TableLikeListTextDataCell('${_suppliers[index]['address']}'),
-    //     ]),
-    //     horizontalLine()
-    //   ],
-    // );
   }
 }

@@ -15,10 +15,10 @@ var _getPurchases = composeAsync([
   httpGetRequest,
 ]);
 
-var getAllRemotePurchases = (String startAt) => composeAsync([
+var prepareGetAllRemotePurchases = (String startAt) => composeAsync([
       (purchases) => itOrEmptyArray(purchases),
       (app) => executeHttp(() => _getPurchases(
-          '${shopFunctionsURL(app)}/stock/purchase?skip=0&size=50')),
+          '${shopFunctionsURL(app)}/stock/purchase?size=20&start=$startAt}')),
       map(shopToApp),
     ]);
 
