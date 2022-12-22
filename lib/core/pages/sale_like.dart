@@ -77,10 +77,23 @@ class _State extends State<SaleLikePage> {
                   states, updateState, context, widget.wholesale, (a) {}))
           : null,
       sliverAppBar: states['hab'] == true ? null : _appBar(updateState),
-      onBody: (drawer) => Scaffold(
-        floatingActionButton: _fab(states, updateState),
-        body: FutureBuilder<List>(future: _future(), builder: _getView),
-      ),
+      onBody: (drawer) => NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              StockAppBar(
+                title: widget.title,
+                context: context,
+                showSearch: true,
+                onSearch: (p0) {
+                  updateState({'query': p0});
+                },
+              )
+            ];
+          },
+          body: Scaffold(
+            floatingActionButton: _fab(states, updateState),
+            body: FutureBuilder<List>(future: _future(), builder: _getView),
+          )),
     );
   }
 
@@ -118,7 +131,8 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onSearch: (text) {
         updateState({"query": text ?? '', 'skip': false});
-      }, context: context,
+      },
+      context: context,
     );
   }
 
@@ -144,7 +158,7 @@ class _State extends State<SaleLikePage> {
             ? Text("${snapshot.error}")
             : Container(),
         Expanded(
-          child: salesLikeBody(
+          child: SalesLikeBody(
             onAddToCart: _onAddToCart(states, updateState),
             wholesale: widget.wholesale,
             products: snapshot.data ?? [],
@@ -152,7 +166,6 @@ class _State extends State<SaleLikePage> {
             onShowCheckout: _onShowCheckoutSheet(states, updateState, context),
             onGetPrice: widget.onGetPrice,
             carts: _getCarts(states),
-            context: context,
           ),
         )
       ],
@@ -180,17 +193,32 @@ class _State extends State<SaleLikePage> {
           updateState({'carts': [], 'customer': ''});
           navigator().maybePop().whenComplete(() {
             showDialog(
-                context: context,
-                builder: (c) => AlertDialog(
-                    title: const Text('Info',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16)),
-                    content: Text(widget.checkoutCompleteMessage)));
+              context: context,
+              builder: (c) => AlertDialog(
+                title: const Text(
+                  'Info',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+                content: Text(widget.checkoutCompleteMessage),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      child: Text(
+                        'Close',
+                        style: TextStyle(fontSize: 12),
+                      ))
+                ],
+              ),
+            );
           });
         }).catchError(_showCheckoutError(context));
         // onCheckout
       },
       carts: _getCarts(states),
+      showDiscountView:  false,
       wholesale: wholesale,
       customer: _getCustomer(states),
       onCustomerLikeList: widget.onCustomerLikeList,

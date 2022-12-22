@@ -9,15 +9,13 @@ const _emptyList = <Widget>[];
 
 Widget _emptyBuilder(_, __) => Container();
 
-Widget _emptyBody(_) => Container();
-
 class ResponsivePage extends StatefulWidget {
   final String office;
   final String current;
   final bool showLeftDrawer;
   final Widget? rightDrawer;
   final List<MenuModel> menus;
-  final Widget? Function(Drawer? drawer) onBody;
+  final Widget Function(Drawer? drawer)? onBody;
   final SliverAppBar? sliverAppBar;
   final FloatingActionButton? fab;
   final List<Widget> staticChildren;
@@ -35,7 +33,7 @@ class ResponsivePage extends StatefulWidget {
     this.showLeftDrawer = true,
     this.rightDrawer,
     required this.menus,
-    this.onBody = _emptyBody,
+    this.onBody,
     required this.sliverAppBar,
     this.staticChildren = _emptyList,
     this.totalDynamicChildren = 0,
@@ -69,7 +67,7 @@ class _State extends State<ResponsivePage> {
   Widget build(BuildContext context) => ifDoElse(
       _screenCheck, _getLargerScreenView, _getSmallScreenView)(context);
 
-  _getBody({bottomMargin = 0}) => CustomScrollView(
+  _customScrollView(bottomMargin) => CustomScrollView(
         controller: _controller,
         slivers: [
           widget.sliverAppBar ?? SliverToBoxAdapter(child: Container()),
@@ -98,6 +96,14 @@ class _State extends State<ResponsivePage> {
           SliverPadding(padding: EdgeInsets.only(bottom: bottomMargin))
         ],
       );
+
+  // _nestedScrollView(bottomMargin, drawer) => NestedScrollView(
+  //     headerSliverBuilder: (context, innerBoxIsScrolled) {
+  //       return widget.sliverAppBar != null ? [widget.sliverAppBar!] : [];
+  //     },
+  //     body: widget.onBody!(drawer));
+
+  _getBody({bottomMargin = 0}) => _customScrollView(bottomMargin);
 
   _scrollListener() {
     if (_controller.position.extentAfter < 50
@@ -130,14 +136,21 @@ class _State extends State<ResponsivePage> {
         children: [
           StockDrawer(widget.menus, widget.current),
           Container(width: 0.5, color: const Color(0xFFDADADA)),
-          Expanded(child: Scaffold(body: _getBody(bottomMargin: 24))),
+          Expanded(
+              child: widget.onBody != null
+                  ? widget.onBody!(null)
+                  : Scaffold(body: _getBody(bottomMargin: 24))),
+          Container(width: 0.5, color: const Color(0xFFDADADA)),
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
 
-  _getSmallScreenView(_) => Scaffold(
-      drawer: StockDrawer(widget.menus, widget.current),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: isSmallScreen(_) ? widget.fab : null,
-      body: _getBody(bottomMargin: 100));
+  _getSmallScreenView(_) => widget.onBody != null
+      ? widget.onBody!(StockDrawer(widget.menus, widget.current))
+      : Scaffold(
+          drawer: StockDrawer(widget.menus, widget.current),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: isSmallScreen(_) ? widget.fab : null,
+          body: _getBody(bottomMargin: 100));
 }

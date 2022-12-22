@@ -174,7 +174,7 @@ class _PurchasesPage extends State<PurchasesPage> {
               purchaseDetails(context, _purchases[index]), context),
           child: TableLikeListRow([
             TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
-            TableLikeListTextDataCell('${_purchases[index]['date']}'),
+            TableLikeListTextDataCell('${toSqlDate(DateTime.tryParse(_purchases[index]['date'])??DateTime.now())}'),
             TableLikeListTextDataCell(
                 '${formatNumber(_purchases[index]['amount'])}'),
             TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),

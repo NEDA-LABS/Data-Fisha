@@ -26,7 +26,7 @@ class StockModule extends Module {
         ChildRoute('/purchases', child: (_, __) => PurchasesPage(__)),
         ChildRoute(
           '/purchases/create',
-          child: (context, _) => purchaseCreatePage(context),
+          child: (_, __) => const PurchaseCreatePage(),
         ),
         ChildRoute('/products/create', child: (_, __) {
           return const ProductCreatePage();

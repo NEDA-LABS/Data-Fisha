@@ -15,10 +15,11 @@ class CartDrawer extends StatefulWidget {
   final Function(String, dynamic) onAddItem;
   final bool wholesale;
   final String customerLikeLabel;
-  final customer;
-  final onCustomer;
+  final dynamic customer;
+  final dynamic onCustomer;
   final List carts;
   final bool showCustomerLike;
+  final bool showDiscountView;
 
   const CartDrawer({
     required this.carts,
@@ -33,6 +34,7 @@ class CartDrawer extends StatefulWidget {
     required this.customer,
     required this.onCustomer,
     required this.showCustomerLike,
+    this.showDiscountView = true,
     Key? key,
   }) : super(key: key);
 
@@ -97,7 +99,9 @@ class _State extends State<CartDrawer> {
           carts.isNotEmpty && onGetPrice(carts[0].product) != null
               ? _totalAmountRow(carts, wholesale, onGetPrice)
               : Container(),
-          carts.isNotEmpty && onGetPrice(carts[0].product) != null
+          carts.isNotEmpty &&
+                  onGetPrice(carts[0].product) != null &&
+                  widget.showDiscountView
               ? _discountRow(
                   states['discount'],
                   (v) {
