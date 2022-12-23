@@ -24,6 +24,7 @@ class SaleLikePage extends StatefulWidget {
   final bool showCustomerLike;
   final TextEditingController? searchTextController;
   final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
+  final bool showDiscountView;
 
   const SaleLikePage({
     required this.title,
@@ -38,6 +39,7 @@ class SaleLikePage extends StatefulWidget {
     this.customerLikeLabel = 'Choose customer',
     this.searchTextController,
     this.showCustomerLike = true,
+    this.showDiscountView = true,
     required this.onGetProductsLike,
     Key? key,
   }) : super(key: key);
@@ -76,18 +78,11 @@ class _State extends State<SaleLikePage> {
               child: _cartDrawer(
                   states, updateState, context, widget.wholesale, (a) {}))
           : null,
-      sliverAppBar: states['hab'] == true ? null : _appBar(updateState),
+      sliverAppBar: null,//states['hab'] == true ? null : _appBar(updateState),
       onBody: (drawer) => NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
-              StockAppBar(
-                title: widget.title,
-                context: context,
-                showSearch: true,
-                onSearch: (p0) {
-                  updateState({'query': p0});
-                },
-              )
+              states['hab'] == true ? Container() : _appBar(updateState)
             ];
           },
           body: Scaffold(
@@ -206,7 +201,7 @@ class _State extends State<SaleLikePage> {
                 actions: [
                   TextButton(
                       onPressed: () => Navigator.of(context).maybePop(),
-                      child: Text(
+                      child: const Text(
                         'Close',
                         style: TextStyle(fontSize: 12),
                       ))
@@ -218,7 +213,7 @@ class _State extends State<SaleLikePage> {
         // onCheckout
       },
       carts: _getCarts(states),
-      showDiscountView:  false,
+      showDiscountView: widget.showDiscountView,
       wholesale: wholesale,
       customer: _getCustomer(states),
       onCustomerLikeList: widget.onCustomerLikeList,

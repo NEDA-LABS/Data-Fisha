@@ -10,6 +10,7 @@ import 'package:smartstock/stocks/services/transfer.dart';
 
 transferReceivePage(BuildContext context) => SaleLikePage(
       wholesale: false,
+      showDiscountView: false,
       title: 'Receive transfer',
       backLink: '/stock/transfers',
       customerLikeLabel: 'Transferred from?',

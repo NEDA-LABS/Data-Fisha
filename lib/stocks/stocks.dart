@@ -39,7 +39,7 @@ class StockModule extends Module {
           navigateToAndReplace('/stock/products');
           return Container();
         }),
-        ChildRoute('/transfers', child: (_, __) => TransfersPage(__)),
+        ChildRoute('/transfers', child: (_, __) => const TransfersPage()),
         ChildRoute('/transfers/send', child: (_, __) => transferSendPage(_)),
         ChildRoute('/transfers/receive',
             child: (_, __) => transferReceivePage(_)),

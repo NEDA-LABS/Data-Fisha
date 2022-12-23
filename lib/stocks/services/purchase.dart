@@ -9,7 +9,7 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_detail.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
-Future<List<dynamic>> getPurchasesRemote(startAt) async {
+Future<List<dynamic>> getPurchasesRemote(String? startAt) async {
   var shop = await getActiveShop();
   // var purchases = [];
   //skipLocal ? [] : await getLocalPurchases(shopToApp(shop));

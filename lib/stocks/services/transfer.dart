@@ -1,48 +1,30 @@
 import 'dart:async';
 
 import 'package:bfast/util.dart';
-import 'package:flutter/foundation.dart';
-import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_transfer.dart';
 
-Future<List<dynamic>> getTransferFromCacheOrRemote(
-    {skipLocal = false, stringLike = ''}) async {
+Future<List<dynamic>> getTransfersRemote(String? date) async {
   var shop = await getActiveShop();
-  List rTransfers = await prepareGetTransfers(stringLike)(shop);
-  rTransfers = await compute(
-      _filterAndSort, {"transfers": rTransfers, "query": stringLike});
-  // await saveLocalTransfers(shopToApp(shop), rTransfers);
+  var getTransfers = prepareGetTransfers(date ?? toSqlDate(DateTime.now()));
+  List rTransfers = await getTransfers(shop);
+  // rTransfers = await compute(
+  //     _filterAndSort, {"transfers": rTransfers, "query": stringLike});
   return rTransfers;
-  // }
-  // ,
-  // (x) => compute(_filterAndSort, {"transfers": x, "query": stringLike}),
-  // );
-  // return inv(transfers);
-}
-
-Future<List> _filterAndSort(Map data) async {
-  var transfers = data['transfers'];
-  // String stringLike = data['query'];
-  // _where(x) =>
-  //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
-
-  // transfers = transfers.where(_where).toList();
-  // transfers.sort((a, b) =>
-  //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
-  return transfers;
 }
 
 Future printPreviousReceiveTransfer(transfer) async {
   // print(transfer);
-  var getShopName = compose([propertyOrNull('name'),propertyOrNull('to_shop')]);
+  var getShopName =
+      compose([propertyOrNull('name'), propertyOrNull('to_shop')]);
   // var getBatchId = propertyOrNull('batchId');
-  var getCarts = compose([itOrEmptyArray,propertyOrNull('items')]);
+  var getCarts = compose([itOrEmptyArray, propertyOrNull('items')]);
   String data = '-------------------------------\n';
   data = "$data${DateTime.now().toUtc()}\n";
   data = '$data-------------------------------\n';
@@ -52,7 +34,7 @@ Future printPreviousReceiveTransfer(transfer) async {
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in getCarts(transfer)) {
-    var price =  propertyOr('from_purchase', (x)=>0)(cart);
+    var price = propertyOr('from_purchase', (x) => 0)(cart);
     var p = cart['product'];
     var q = doubleOrZero(cart['quantity']);
     var t = q * price;
@@ -71,12 +53,13 @@ Future printPreviousReceiveTransfer(transfer) async {
     'Total Bill : $totalBill\n',
     '--------------------------------\n',
   ].join('');
- await posPrint(data: data);
+  await posPrint(data: data);
 }
 
 Future printPreviousSendTransfer(transfer) async {
-  var getShopName = compose([propertyOrNull('name'),propertyOrNull('to_shop')]);
-  var getCarts = compose([itOrEmptyArray,propertyOrNull('items')]);
+  var getShopName =
+      compose([propertyOrNull('name'), propertyOrNull('to_shop')]);
+  var getCarts = compose([itOrEmptyArray, propertyOrNull('items')]);
   String data = '-------------------------------\n';
   data = "$data${DateTime.now().toUtc()}\n";
   data = '$data-------------------------------\n';
@@ -86,7 +69,7 @@ Future printPreviousSendTransfer(transfer) async {
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in getCarts(transfer)) {
-    var price =  propertyOr('from_purchase', (x)=>0)(cart);
+    var price = propertyOr('from_purchase', (x) => 0)(cart);
     var p = cart['product'];
     var q = doubleOrZero(cart['quantity']);
     var t = q * price;
@@ -116,40 +99,41 @@ Future _printTransferItems(List carts, discount, customer, batchId) async {
 }
 
 Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
-  var shop2 = await shopName2Shop(shop2Name);
+  // var shop2 = await shopName2Shop(shop2Name);
   var currentUser = await getLocalCurrentUser();
   var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
   var totalAmount = doubleOrZero(t);
   return {
     "date": DateTime.now().toIso8601String(),
     "transferred_by": {"username": currentUser['username']},
-    "note": ".",
-    "batchId": batchId,
+    // "note": ".",
+    // "batchId": batchId,
     "amount": totalAmount,
-    "to_shop": {
-      "name": type == 'send' ? shop2['businessName'] : shop1['businessName'],
-      "projectId": type == 'send' ? shop2['projectId'] : shop1['projectId'],
-      "applicationId":
-          type == 'send' ? shop2['applicationId'] : shop1['applicationId'],
-    },
-    "from_shop": {
-      "name": type == 'send' ? shop1['businessName'] : shop2['businessName'],
-      "projectId": type == 'send' ? shop1['projectId'] : shop2['projectId'],
-      "applicationId":
-          type == 'send' ? shop1['applicationId'] : shop2['applicationId'],
-    },
+    "other_shop": shop2Name,
+    // "to_shop": {
+    //   "name": type == 'send' ? shop2['businessName'] : shop1['businessName'],
+    //   "projectId": type == 'send' ? shop2['projectId'] : shop1['projectId'],
+    //   "applicationId":
+    //       type == 'send' ? shop2['applicationId'] : shop1['applicationId'],
+    // },
+    // "from_shop": {
+    //   "name": type == 'send' ? shop1['businessName'] : shop2['businessName'],
+    //   "projectId": type == 'send' ? shop1['projectId'] : shop2['projectId'],
+    //   "applicationId":
+    //       type == 'send' ? shop1['applicationId'] : shop2['applicationId'],
+    // },
     "items": carts.map((e) {
       return {
         "from_id": e.product['id'],
-        "from_product": e.product['product'],
-        "to_product": e.product['product'],
-        "to_id": e.product['id'],
-        "to_purchase": e.product['purchase'],
-        "from_purchase": e.product['purchase'],
-        "to_retail": e.product['retailPrice'],
-        "to_whole": e.product['wholesalePrice'],
+        // "from_product": e.product['product'],
+        // "to_product": e.product['product'],
+        // "to_id": e.product['id'],
+        // "to_purchase": e.product['purchase'],
+        // "from_purchase": e.product['purchase'],
+        // "to_retail": e.product['retailPrice'],
+        // "to_whole": e.product['wholesalePrice'],
         "product": e.product['product'],
-        "quantity": e.quantity,
+        "quantity": doubleOrZero(e?.quantity),
       };
     }).toList()
   };
@@ -188,10 +172,10 @@ Future getOtherShopsNames({skipLocal = false, stringLike = ''}) async {
     (shops) => shops
         .where((element) => element['name'] != getBusinessName(shop))
         .toList(),
-    (shops) {
-      shops.add({'name': user['businessName'] ?? ''});
-      return shops;
-    },
+    // (shops) {
+    //   shops.add({'name': user['businessName'] ?? ''});
+    //   return shops;
+    // },
     (shops) => shops.map((e) => {'name': e}).toList(),
     (shops) => shops.map(getBusinessName).toList(),
     propertyOr('shops', (p0) => []),

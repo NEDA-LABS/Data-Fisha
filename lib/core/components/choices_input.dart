@@ -55,9 +55,22 @@ class _State extends State<ChoicesInput> {
   }
 
   _fullWidthText() {
-    // _showOptions(_getData(_states), widget.onText, widget.onField)
     return Expanded(
       child: TextField(
+        onTap: (){
+          print("FFFFFF");
+          _showDialogOrModalSheetForChoose(
+              context, (text) {
+            textController = TextEditingController(
+              text: text is List
+                  ? text.map((e) => widget.onField(e)).join(',')
+                  : '$text',
+            );
+            _updateState({});
+            widget.onText(text);
+          }, widget.onField);
+          // _showOptions(widget.onText, widget.onField);
+        },
         controller: textController,
         onChanged: widget.multiple ? null : widget.onText,
         autofocus: false,
@@ -66,6 +79,8 @@ class _State extends State<ChoicesInput> {
         readOnly: true,
         decoration: InputDecoration(
           hintText: widget.placeholder,
+          hintStyle: const TextStyle(
+              color: Color(0xffb0b0b0), fontSize: 14, fontWeight: FontWeight.w300),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(8),
         ),
@@ -83,11 +98,10 @@ class _State extends State<ChoicesInput> {
     );
   }
 
-  _actionsItems(
-      data, onRefresh, onText, getAddWidget, onField, BuildContext context) {
+  _actionsItems(onRefresh, onText, getAddWidget, onField, BuildContext context) {
     return Row(children: [
       IconButton(
-          onPressed: _showOptions(data, onText, onField),
+          onPressed: _showOptions(onText, onField),
           icon: const Icon(Icons.arrow_drop_down)),
       getAddWidget != null
           ? IconButton(
@@ -103,10 +117,9 @@ class _State extends State<ChoicesInput> {
           padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
           child: SizedBox(
               height: 16, width: 16, child: CircularProgressIndicator()))
-      : _actionsItems(
-          _getData(_states), onRefresh, onText, onAdd, onField, context);
+      : _actionsItems(onRefresh, onText, onAdd, onField, context);
 
-  _showDialogOrModalSheetForChoose(context, List items, onText, onField) {
+  _showDialogOrModalSheetForChoose(context, onText, onField) {
     return !isSmallScreen(context)
         ? showDialog(
             context: context,
@@ -116,7 +129,7 @@ class _State extends State<ChoicesInput> {
                   constraints: const BoxConstraints(
                       maxWidth: 500, minHeight: 300, maxHeight: 600),
                   child: ChoiceInputDropdown(
-                    items: items,
+                    items: itOrEmptyArray(_getData(_states)),
                     onTitle: onField,
                     onText: onText,
                     multiple: widget.multiple,
@@ -132,7 +145,7 @@ class _State extends State<ChoicesInput> {
             builder: (context) => FractionallySizedBox(
               heightFactor: 0.7,
               child: ChoiceInputDropdown(
-                items: items,
+                items: itOrEmptyArray(_getData(_states)),
                 onTitle: onField,
                 onText: onText,
                 multiple: widget.multiple,
@@ -158,8 +171,8 @@ class _State extends State<ChoicesInput> {
         .whenComplete(() => _updateState({'skip': false, 'loading': false}));
   }
 
-  _showOptions(data, onText, onField) => () => _showDialogOrModalSheetForChoose(
-      context, itOrEmptyArray(data), onText, onField);
+  _showOptions(onText, onField) => () => _showDialogOrModalSheetForChoose(
+      context, onText, onField);
 
   @override
   Widget build(BuildContext context) =>

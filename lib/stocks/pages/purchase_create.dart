@@ -14,6 +14,7 @@ class PurchaseCreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SaleLikePage(
         wholesale: false,
+        showDiscountView: false,
         title: 'Create purchase',
         backLink: '/stock/purchases',
         customerLikeLabel: 'Choose supplier',

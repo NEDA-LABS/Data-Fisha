@@ -6,7 +6,7 @@ import 'package:smartstock/core/services/util.dart';
 
 class DashboardSummaryReportCard extends StatefulWidget {
   final String title;
-  final future;
+  final dynamic future;
   final bool showRefresh;
   final String? link;
 
@@ -23,7 +23,7 @@ class DashboardSummaryReportCard extends StatefulWidget {
 }
 
 class _State extends State<DashboardSummaryReportCard> {
-  var updateState;
+  dynamic updateState;
 
   @override
   void initState() {
@@ -58,7 +58,8 @@ class _State extends State<DashboardSummaryReportCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(err),
-            OutlinedButton(onPressed: () => state({}), child: const Text('Retry'))
+            OutlinedButton(
+                onPressed: () => state({}), child: const Text('Retry'))
           ],
         ),
       );
@@ -116,11 +117,17 @@ class _State extends State<DashboardSummaryReportCard> {
       );
       return Container(
         constraints: BoxConstraints(
-            maxWidth: isSmallScreen(context)
-                ? MediaQuery.of(context).size.width
-                : 790/2,
-            minHeight: 150),
-        child: Card(
+          maxWidth: isSmallScreen(context)
+              ? MediaQuery.of(context).size.width
+              : 790 / 2,
+          minHeight: 150,
+        ),
+        child: Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xffe1e1e1), width: 0.8)
+          ),
           child: Column(
             children: [
               SizedBox(

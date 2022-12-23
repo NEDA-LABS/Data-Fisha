@@ -57,7 +57,7 @@ class ListOfProductsLike extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFABABAB), width: .8)),
+          border: Border.all(color: const Color(0xffe1e1e1), width: .8)),
       child: InkWell(
         onTap: () => onAddToCartView(product, onAddToCart),
         child: Padding(

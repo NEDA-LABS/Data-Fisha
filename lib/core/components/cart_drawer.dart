@@ -101,7 +101,7 @@ class _State extends State<CartDrawer> {
               : Container(),
           carts.isNotEmpty &&
                   onGetPrice(carts[0].product) != null &&
-                  widget.showDiscountView
+                  widget.showDiscountView == true
               ? _discountRow(
                   states['discount'],
                   (v) {
