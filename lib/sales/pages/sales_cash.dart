@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -30,25 +31,15 @@ class _State extends State<SalesCashPage> {
         CashSaleDetail(sale: item, pageContext: context), context);
   }
 
-  Widget _onCell(a, b, c) {
-    if (a == 'date') {
-      return _dateView(c);
-    }
-    if (a == 'amount') {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text('${doubleOrZero(b)}'),
-      );
-    }
-    if (a == 'items') {
-      return Text('${doubleOrZero(_itemsSize(c))}');
-    }
-    return Text('$b');
-  }
-
   _itemsSize(c) {
-    var getItems =
-        compose([(x) => x.length, itOrEmptyArray, propertyOrNull('items')]);
+    var getItems = compose([
+      (x) => x.fold(
+            0,
+            (a, element) => doubleOrZero(a) + doubleOrZero(element['quantity']),
+          ),
+      itOrEmptyArray,
+      propertyOrNull('items')
+    ]);
     return getItems(c);
   }
 
@@ -59,20 +50,20 @@ class _State extends State<SalesCashPage> {
     return dateFormat.format(date);
   }
 
-
   _appBar(context) {
     return StockAppBar(
-      title: "Cash Sales",
+      title: "Cash sales",
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onSearch: (d) {
-        setState(() {
-          _query = d;
-        });
-        _refresh();
-      },
-      searchHint: 'Search product...', context: context,
+      // onSearch: (d) {
+      //   setState(() {
+      //     _query = d;
+      //   });
+      //   _refresh();
+      // },
+      // searchHint: 'Search product...',
+      context: context,
     );
   }
 
@@ -91,30 +82,20 @@ class _State extends State<SalesCashPage> {
   }
 
   _tableHeader() {
-    var height = 38.0;
-    var smallView = SizedBox(
-      height: height,
+    return const SizedBox(
+      height: 38,
       child: TableLikeListRow([
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
         TableLikeListTextHeaderCell('Customer'),
-      ]),
-    );
-    var bigView = SizedBox(
-      height: height,
-      child: TableLikeListRow([
-        TableLikeListTextHeaderCell('Date'),
         TableLikeListTextHeaderCell('Amount ( TZS )'),
         TableLikeListTextHeaderCell('Items'),
-        TableLikeListTextHeaderCell('Customer'),
+        TableLikeListTextHeaderCell('Date'),
       ]),
     );
-    return isSmallScreen(context) ? smallView : bigView;
   }
 
-  _fields() => isSmallScreen(context)
-      ? ['date', 'amount', 'customer']
-      : ['date', 'amount', 'items', 'customer'];
+  // _fields() => isSmallScreen(context)
+  //     ? ['date', 'amount', 'customer']
+  //     : ['date', 'amount', 'items', 'customer'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -127,10 +108,27 @@ class _State extends State<SalesCashPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-      menus: moduleMenus(),
-      current: '/sales/',
-      sliverAppBar: _appBar(context),
-      onBody: (d) => Scaffold(body: _body()));
+        menus: moduleMenus(),
+        current: '/sales/',
+        sliverAppBar: _appBar(context),
+        staticChildren: [
+          _loadingView(_loading),
+          isSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextSales(context)),
+          isSmallScreen(context) ? Container() : _tableHeader(),
+        ],
+        loading: _loading,
+        onLoadMore: () async => _loadMore(),
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
+        ),
+        totalDynamicChildren: _sales.length,
+        dynamicChildBuilder: isSmallScreen(context)
+            ? _smallScreenChildBuilder
+            : _largerScreenChildBuilder,
+      );
 
   _loadMore() {
     setState(() {
@@ -141,7 +139,6 @@ class _State extends State<SalesCashPage> {
       if (value is List) {
         _sales.addAll(value);
         _sales = _sales.toSet().toList();
-        setState(() {});
       }
     }).whenComplete(() {
       setState(() {
@@ -183,50 +180,123 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-  Widget _dateView(c) {
-    // var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
+  Widget _customerView(c) {
     var textStyle = const TextStyle(
         fontWeight: FontWeight.w300,
-        color: Colors.grey,
+        color: Color(0xffababab),
         height: 2.0,
+        fontSize: 12,
         overflow: TextOverflow.ellipsis);
     var mainTextStyle = const TextStyle(
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: FontWeight.w500,
         overflow: TextOverflow.ellipsis);
     var subText = c['channel'] == 'whole' ? 'Wholesale' : 'Retail';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_getTimer(c), style: mainTextStyle),
+        Text('${c['customer'] ?? ''}'.isEmpty ? 'Walk in' : c['customer'],
+            style: mainTextStyle),
         Text(subText, style: textStyle)
       ]),
     );
   }
 
-  _salesList() {
-    return Expanded(
-      child: TableLikeList(
-        onFuture: () async => _sales,
-        keys: _fields(),
-        onCell: _onCell,
-        onItemPressed: _onItemPressed,
-        onLoadMore: () async => _loadMore(),
-        loading: _loading,
-      ),
+  Widget _smallScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // ListTile(
+        //   onTap: () => showDialogOrModalSheet(
+        //       purchaseDetails(context, _purchases[index]), context),
+        //   title: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
+        //       _getStatusView(_purchases[index])
+        //     ],
+        //   ),
+        //   subtitle: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     crossAxisAlignment: CrossAxisAlignment.stretch,
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           Text('${_purchases[index]['date']}'),
+        //           Text(
+        //               'total ${compactNumber('${_purchases[index]['amount']}')}'),
+        //         ],
+        //       ),
+        //       Padding(
+        //         padding: const EdgeInsets.symmetric(vertical: 4.0),
+        //         child: Text(
+        //           '${_purchases[index]['supplier']}',
+        //           style: const TextStyle(fontSize: 13),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // const SizedBox(height: 5),
+        // horizontalLine(),
+      ],
     );
   }
 
-  _body() {
+  Widget _largerScreenChildBuilder(context, index) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _loadingView(_loading),
-        tableContextMenu(_contextSales(context)),
-        _tableHeader(),
-        _salesList(),
+        InkWell(
+          onTap: () => _onItemPressed(_sales[index]),
+          child: TableLikeListRow([
+            _customerView(_sales[index]),
+            TableLikeListTextDataCell(
+                '${formatNumber(_sales[index]['amount'])}'),
+            TableLikeListTextDataCell(
+                '${doubleOrZero(_itemsSize(_sales[index]))}'),
+            TableLikeListTextDataCell('${_getTimer(_sales[index])}'),
+          ]),
+        ),
+        horizontalLine()
       ],
     );
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add retail'),
+                onTap: () => navigateTo('/sales/cash/retail'),
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.business),
+                title: const Text('Add wholesale'),
+                onTap: () => navigateTo('/sales/cash/whole'),
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload sales'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _refresh();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
   }
 }
