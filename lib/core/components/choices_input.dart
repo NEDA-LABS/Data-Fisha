@@ -57,10 +57,8 @@ class _State extends State<ChoicesInput> {
   _fullWidthText() {
     return Expanded(
       child: TextField(
-        onTap: (){
-          print("FFFFFF");
-          _showDialogOrModalSheetForChoose(
-              context, (text) {
+        onTap: () {
+          _showDialogOrModalSheetForChoose(context, (text) {
             textController = TextEditingController(
               text: text is List
                   ? text.map((e) => widget.onField(e)).join(',')
@@ -80,7 +78,9 @@ class _State extends State<ChoicesInput> {
         decoration: InputDecoration(
           hintText: widget.placeholder,
           hintStyle: const TextStyle(
-              color: Color(0xffb0b0b0), fontSize: 14, fontWeight: FontWeight.w300),
+              color: Color(0xffb0b0b0),
+              fontSize: 14,
+              fontWeight: FontWeight.w300),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(8),
         ),
@@ -98,7 +98,8 @@ class _State extends State<ChoicesInput> {
     );
   }
 
-  _actionsItems(onRefresh, onText, getAddWidget, onField, BuildContext context) {
+  _actionsItems(
+      onRefresh, onText, getAddWidget, onField, BuildContext context) {
     return Row(children: [
       IconButton(
           onPressed: _showOptions(onText, onField),
@@ -171,8 +172,8 @@ class _State extends State<ChoicesInput> {
         .whenComplete(() => _updateState({'skip': false, 'loading': false}));
   }
 
-  _showOptions(onText, onField) => () => _showDialogOrModalSheetForChoose(
-      context, onText, onField);
+  _showOptions(onText, onField) =>
+      () => _showDialogOrModalSheetForChoose(context, onText, onField);
 
   @override
   Widget build(BuildContext context) =>
