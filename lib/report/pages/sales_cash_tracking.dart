@@ -25,7 +25,7 @@ class _State extends State<SalesCashTrackingPage> {
   bool _loading = false;
   int size = 20;
   var dateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 0)),
+    start: DateTime.now().subtract(const Duration(days: 1)),
     end: DateTime.now(),
   );
   List _sales = [];
@@ -43,7 +43,10 @@ class _State extends State<SalesCashTrackingPage> {
       current: '/report/',
       sliverAppBar: _appBar(context),
       onBody: (d) {
-        return Scaffold(body: _body());
+        return NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                [_appBar(context)],
+            body: Scaffold(drawer: d, body: _body()));
       },
     );
   }
@@ -100,7 +103,8 @@ class _State extends State<SalesCashTrackingPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      searchHint: 'Search product...', context: context,
+      searchHint: 'Search product...',
+      context: context,
     );
   }
 

@@ -1,12 +1,11 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -42,28 +41,13 @@ class _State extends State<CategoryPerformance> {
       current: '/report/',
       menus: moduleMenus(),
       sliverAppBar: _appBar(),
-      onBody: (x) {
-        return Scaffold(
-          drawer: x,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _rangePicker(),
-                    _whatToShow(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
-        );
-      },
+      staticChildren: [
+        _rangePicker(),
+        _showLoading(),
+        _tableHeader(),
+      ],
+      totalDynamicChildren: dailySales.length,
+      dynamicChildBuilder: _largerScreenChildBuilder,
     );
   }
 
@@ -93,69 +77,71 @@ class _State extends State<CategoryPerformance> {
     });
   }
 
-  _loading() {
-    return const SizedBox(
-      height: 100,
-      child: Center(
-        child: SizedBox(
-          height: 30,
-          width: 30,
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
+  // _loading() {
+  //   return const SizedBox(
+  //     height: 100,
+  //     child: Center(
+  //       child: SizedBox(
+  //         height: 30,
+  //         width: 30,
+  //         child: CircularProgressIndicator(),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  _retry() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(error),
-          OutlinedButton(
-              onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
-        ],
-      ),
-    );
-  }
+  _showLoading() => loading ? const LinearProgressIndicator() : Container();
 
-  _chartAndTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Card(
-        //   child: Container(
-        //     height: 350,
-        //     padding: const EdgeInsets.all(8),
-        //     child: BarChart(
-        //       [_sales2Series(dailySales)],
-        //       animate: true,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 16),
-        _tableHeader(),
-        Card(
-          child: Container(
-            constraints: const BoxConstraints(maxHeight: 500),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            child: TableLikeList(
-              onFuture: () async => dailySales,
-              keys: _fields(),
-            ),
-          ),
-        )
-      ],
-    );
-  }
+  // _retry() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(10),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Text(error),
+  //         OutlinedButton(
+  //             onPressed: () => setState(() => _fetchData()),
+  //             child: const Text('Retry'))
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // _chartAndTable() {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //     children: [
+  //       // Card(
+  //       //   child: Container(
+  //       //     height: 350,
+  //       //     padding: const EdgeInsets.all(8),
+  //       //     child: BarChart(
+  //       //       [_sales2Series(dailySales)],
+  //       //       animate: true,
+  //       //     ),
+  //       //   ),
+  //       // ),
+  //       // const SizedBox(height: 16),
+  //       _tableHeader(),
+  //       Card(
+  //         child: Container(
+  //           constraints: const BoxConstraints(maxHeight: 500),
+  //           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+  //           child: TableLikeList(
+  //             onFuture: () async => dailySales,
+  //             keys: _fields(),
+  //           ),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
   _tableHeader() {
-    return TableLikeListRow([
+    return const TableLikeListRow([
       TableLikeListTextHeaderCell('Category'),
       TableLikeListTextHeaderCell('Quantity'),
       TableLikeListTextHeaderCell('Amount ( Tsh )'),
@@ -163,9 +149,36 @@ class _State extends State<CategoryPerformance> {
     ]);
   }
 
-  _fields() {
-    return ['id', 'quantity', 'amount'];
+  Widget _largerScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          // onTap: () => showDialogOrModalSheet(
+          //     purchaseDetails(context, _purchases[index]), context),
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${dailySales[index]['id']}'),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['quantity'])}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['amount'])}'),
+            ),
+          ]),
+        ),
+        horizontalLine()
+      ],
+    );
   }
+
+  // _fields() {
+  //   return ['id', 'quantity', 'amount'];
+  // }
 
   _rangePicker() {
     return ReportDateRange(
@@ -188,7 +201,7 @@ class _State extends State<CategoryPerformance> {
           context,
         );
       },
-      onRange: (range,period) {
+      onRange: (range, period) {
         if (range != null) {
           setState(() {
             dateRange = range;
@@ -204,16 +217,17 @@ class _State extends State<CategoryPerformance> {
     return StockAppBar(
       title: "Category performance",
       showBack: false,
-      backLink: '/report/', context: context,
+      backLink: '/report/',
+      context: context,
     );
   }
 
-  _whatToShow() {
-    var getView = ifDoElse(
-        (x) => x,
-        (_) => _loading(),
-        ifDoElse(
-            (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
-    return getView(loading);
-  }
+// _whatToShow() {
+//   var getView = ifDoElse(
+//       (x) => x,
+//       (_) => _loading(),
+//       ifDoElse(
+//           (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
+//   return getView(loading);
+// }
 }

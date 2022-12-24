@@ -1,14 +1,14 @@
-import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -30,7 +30,7 @@ class _State extends State<OverviewCashSales> {
     end: DateTime.now(),
   );
   String period = 'day';
-  var dailySales = [];
+  List dailySales = [];
 
   @override
   void initState() {
@@ -45,25 +45,30 @@ class _State extends State<OverviewCashSales> {
       current: '/report/',
       menus: moduleMenus(),
       sliverAppBar: _appBar(),
-      onBody: (x) {
-        return Scaffold(
-          drawer: x,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [_rangePicker(), _whatToShow()],
-                ),
-              ),
+      staticChildren: [
+        _rangePicker(),
+        _showLoading(),
+        Container(
+          margin: const EdgeInsets.all(5),
+          decoration: solidRadiusBoxDecoration(),
+          child: Container(
+            height: isSmallScreen(context)
+                ? chartCardMobileHeight
+                : chartCardDesktopHeight,
+            padding: const EdgeInsets.all(8),
+            child: BarChart(
+              [_sales2Series()],
+              animate: true,
             ),
           ),
-          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
-        );
-      },
+        ),
+        const SizedBox(height: 16),
+        _tableHeader(),
+      ],
+      totalDynamicChildren: dailySales.length,
+      dynamicChildBuilder: isSmallScreen(context)
+          ? _smallScreenChildBuilder
+          : _largerScreenChildBuilder,
     );
   }
 
@@ -106,67 +111,111 @@ class _State extends State<OverviewCashSales> {
     );
   }
 
-  _retry() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(error),
-          OutlinedButton(
-              onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
-        ],
-      ),
-    );
+  // _retry() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(10),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Text(error),
+  //         OutlinedButton(
+  //             onPressed: () => setState(() => _fetchData()),
+  //             child: const Text('Retry'))
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // _chartAndTable() {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //     children: [
+  //       Card(
+  //         child: Container(
+  //           constraints: const BoxConstraints(maxHeight: 500),
+  //           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+  //           child: TableLikeList(
+  //             onFuture: () async => dailySales,
+  //             keys: _fields(),
+  //           ),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
+
+  _tableHeader() {
+    if (isSmallScreen(context)) {
+      return const TableLikeListRow([
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Total'),
+      ]);
+    }
+    return const TableLikeListRow([
+      TableLikeListTextHeaderCell('Date'),
+      TableLikeListTextHeaderCell('Retail'),
+      TableLikeListTextHeaderCell('Wholesale'),
+      TableLikeListTextHeaderCell('Total'),
+    ]);
   }
 
-  _chartAndTable() {
+  // _fields() {
+  //   return ['date', 'amount_retail', 'amount_whole', 'amount'];
+  // }
+
+  Widget _largerScreenChildBuilder(context, index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
-          child: Container(
-            height: isSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: BarChart(
-              [_sales2Series()],
-              animate: true,
+        InkWell(
+          // onTap: () => showDialogOrModalSheet(
+          //     purchaseDetails(context, _purchases[index]), context),
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${dailySales[index]['date']}'),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['amount_retail'])}'),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['amount_whole'])}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['amount'])}'),
+            ),
+          ]),
         ),
-        const SizedBox(height: 16),
-        _tableHeader(),
-        Card(
-          child: Container(
-            constraints: const BoxConstraints(maxHeight: 500),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            child: TableLikeList(
-              onFuture: () async => dailySales,
-              keys: _fields(),
-            ),
-          ),
-        )
+        horizontalLine()
       ],
     );
   }
 
-  _tableHeader() {
-    return TableLikeListRow([
-      TableLikeListTextHeaderCell('Date'),
-      TableLikeListTextHeaderCell('Retail ( Tsh )'),
-      TableLikeListTextHeaderCell('Wholesale ( Tsh )'),
-      TableLikeListTextHeaderCell('Total ( Tsh )'),
-    ]);
-  }
-
-  _fields() {
-    return ['date', 'amount_retail', 'amount_whole', 'amount'];
+  Widget _smallScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${dailySales[index]['date']}'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TableLikeListTextDataCell(
+                  '${formatNumber(dailySales[index]['amount'])}'),
+            ),
+          ]),
+        ),
+        horizontalLine()
+      ],
+    );
   }
 
   _rangePicker() {
@@ -206,16 +255,19 @@ class _State extends State<OverviewCashSales> {
     return StockAppBar(
       title: "Cash sales overview",
       showBack: false,
-      backLink: '/report/', context: context,
+      backLink: '/report/',
+      context: context,
     );
   }
 
-  _whatToShow() {
-    var getView = ifDoElse(
-        (x) => x,
-        (_) => _loading(),
-        ifDoElse(
-            (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
-    return getView(loading);
-  }
+  // _whatToShow() {
+  //   var getView = ifDoElse(
+  //       (x) => x,
+  //       (_) => _loading(),
+  //       ifDoElse(
+  //           (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
+  //   return getView(loading);
+  // }
+
+  _showLoading() => loading ? const LinearProgressIndicator() : Container();
 }
