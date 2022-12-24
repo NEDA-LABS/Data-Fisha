@@ -3,6 +3,7 @@ import 'package:smartstock/account/components/shop_user_details.dart';
 import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
@@ -33,38 +34,44 @@ class _State extends State<UsersPage> {
         menus: moduleMenus(),
         current: '/account/',
         sliverAppBar: _appBar(context),
-        onBody: (d) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _loading(loading),
-            tableContextMenu(_contextItems()),
-            _tableHeader(),
-            Expanded(
-              child: TableLikeList(
-                onFuture: () async => users,
-                keys: _fields(),
-                onItemPressed: (item) {
-                  showDialogOrModalSheet(
-                      shopUserDetail(item, context), context);
-                },
-                // onCell: (key, data, c) {
-                //   if (key == 'product') return Text('$data');
-                //   return Text('${doubleOrZero(data)}');
-                // },
-              ),
-            )
-            // _tableFooter()
-          ],
+        staticChildren: [
+          _loading(loading),
+          isSmallScreen(context)?Container():tableContextMenu(_contextItems()),
+          _tableHeader(),
+        ],
+        totalDynamicChildren: users.length,
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
         ),
+        dynamicChildBuilder: (context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              InkWell(
+                onTap: () {
+                  showDialogOrModalSheet(
+                      shopUserDetail(users[index], context), context);
+                },
+                child: TableLikeListRow([
+                  TableLikeListTextDataCell('${users[index]['username']}'),
+                  TableLikeListTextDataCell('${users[index]['role']}'),
+                ]),
+              ),
+              horizontalLine()
+            ],
+          );
+        },
       );
 
   _appBar(context) {
     return StockAppBar(
       title: "Users",
-      showBack: true,
+      showBack: false,
       backLink: '/account/',
-      showSearch: false, context: context,
+      showSearch: false,
+      context: context,
       // onSearch: (p0) {},
       // searchHint: 'Search...',
     );
@@ -84,13 +91,11 @@ class _State extends State<UsersPage> {
   }
 
   _tableHeader() {
-    return TableLikeListRow([
+    return const TableLikeListRow([
       TableLikeListTextHeaderCell('Name'),
       TableLikeListTextHeaderCell('Role'),
     ]);
   }
-
-  _fields() => ['username', 'role'];
 
   _loading(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -108,5 +113,37 @@ class _State extends State<UsersPage> {
         loading = false;
       });
     });
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add expense'),
+                onTap: () {
+                  Navigator.of(context)
+                      .maybePop()
+                      .whenComplete(() => navigateTo('/account/users/create'));
+                },
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload users'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _fetch();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
   }
 }

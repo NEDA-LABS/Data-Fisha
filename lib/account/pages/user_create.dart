@@ -36,19 +36,22 @@ class _State extends State<ShopUserCreatePage> {
       menus: moduleMenus(),
       current: '/account/',
       sliverAppBar: _appBar(context),
-      onBody: (d) {
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 600),
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: Column(children: _shopUserCreateForm()),
-              ),
-            ),
+      staticChildren: [
+        Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            child: Column(children: _shopUserCreateForm()),
           ),
-        );
-      },
+        )
+      ],
+      // onBody: (d) {
+      //   return Scaffold(
+      //     body: SingleChildScrollView(
+      //       child: ,
+      //     ),
+      //   );
+      // },
     );
   }
 
@@ -57,7 +60,8 @@ class _State extends State<ShopUserCreatePage> {
       title: "Add user",
       showBack: true,
       backLink: '/account/users',
-      showSearch: false, context: context,
+      showSearch: false,
+      context: context,
     );
   }
 

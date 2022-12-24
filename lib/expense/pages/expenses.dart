@@ -114,27 +114,6 @@ class _State extends State<ExpenseExpensesPage> {
             ],
           ),
           subtitle: Text('${_expenses[index]['date']}'),
-          // Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   crossAxisAlignment: CrossAxisAlignment.stretch,
-          //   children: [
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Text('${_expenses[index]['date']}'),
-          //         Text(
-          //             'total ${compactNumber('${_purchases[index]['amount']}')}'),
-          //       ],
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.symmetric(vertical: 4.0),
-          //       child: Text(
-          //         '${_purchases[index]['supplier']}',
-          //         style: const TextStyle(fontSize: 13),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ),
         const SizedBox(height: 5),
         horizontalLine(),
