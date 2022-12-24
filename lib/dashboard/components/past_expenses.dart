@@ -3,6 +3,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
@@ -100,8 +101,9 @@ class _State extends State<PastExpensesOverview> {
   }
 
   _chartAndTable() {
-    return Card(
-      elevation: 1,
+    return Container(
+      margin: const EdgeInsets.all(5),
+      decoration: solidRadiusBoxDecoration(),
       child: Container(
         height: isSmallScreen(context)
             ? chartCardMobileHeight

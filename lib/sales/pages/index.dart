@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/index_page.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/switch_to_item.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/sales/services/navigation.dart';
 
 class SalesPage extends StatelessWidget {
@@ -13,14 +13,12 @@ class SalesPage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       office: 'Menu',
       current: '/sales/',
       menus: moduleMenus(),
-      onBody: (x) => Scaffold(
-        appBar: StockAppBar(title: "Sales", showBack: false),
-        drawer: x,
-        body: SingleChildScrollView(
+      staticChildren: [
+        Container(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
           child: Center(
             child: Container(
@@ -35,9 +33,14 @@ class SalesPage extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: bottomBar(1, moduleMenus(), context),
-      ),
+        )
+      ],
+      sliverAppBar: StockAppBar(title: "Sales", showBack: false, context: context),
+      // onBody: (x) => Scaffold(
+      //   drawer: x,
+      //   body: ,
+      //   bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+      // ),
     );
   }
 }

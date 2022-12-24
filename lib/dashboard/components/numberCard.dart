@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/services/util.dart';
 
 numberPercentageCard(String? title, value, percentage) {
-  return SizedBox(
+  return Container(
     height: 112,
-    child: Card(
-      elevation: 1,
+    margin: const EdgeInsets.all(5),
+    child: Container(
+      decoration: solidRadiusBoxDecoration(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

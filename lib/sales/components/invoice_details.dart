@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/add_invoice_payment.dart';
@@ -14,7 +15,7 @@ invoiceDetails(context, item) => ListView(
         ),
         _tableHeader(),
         ...item['items']
-            .map<Widget>((item) => tableLikeListRow([
+            .map<Widget>((item) => TableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
@@ -23,7 +24,7 @@ invoiceDetails(context, item) => ListView(
                   Text('${item['amount']}'),
                 ]))
             .toList() as List<Widget>,
-        _getPayments(item['payment']).isNotEmpty
+        _getPayments(item['payments']).isNotEmpty
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: Text('Payments',
@@ -31,14 +32,14 @@ invoiceDetails(context, item) => ListView(
                         TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
               )
             : Container(),
-        ..._getPayments(item['payment'])
-            .map<Widget>((item) => tableLikeListRow([
+        ..._getPayments(item['payments'])
+            .map<Widget>((item) => TableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
-                      child: Text('${item['date']}')),
+                      child: Text('${_formatDate(item['date'] ?? '')}')),
                   const Text(''),
-                  Text('${item['amount']}'),
+                  Text('${formatNumber(item['amount'])}'),
                 ]))
             .toList(),
         Container(
@@ -55,25 +56,29 @@ invoiceDetails(context, item) => ListView(
             },
             child: const Text('Add payment', style: TextStyle(fontSize: 16)),
           ),
-        )
+        ),
+        const SizedBox(height: 24,)
       ],
     );
 
-List<Map<String, dynamic>> _getPayments(item) {
-  if (item is Map) {
-    return item.keys.map((e) => ({"date": e, "amount": item[e]})).toList();
+_formatDate(d) => DateFormat('yyyy-MM-dd HH:mm')
+    .format((DateTime.tryParse(d) ?? DateTime.now()).toLocal());
+
+List _getPayments(item) {
+  if (item is List) {
+    return item;
   }
   return [];
 }
 
-_tableHeader() => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
+_tableHeader() => const Padding(
+      padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
       child: SizedBox(
         height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Product'),
-          tableLikeListTextHeader('Quantity'),
-          tableLikeListTextHeader('Amount ( TZS )')
+        child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Product'),
+          TableLikeListTextHeaderCell('Quantity'),
+          TableLikeListTextHeaderCell('Amount ( TZS )')
         ]),
       ),
     );

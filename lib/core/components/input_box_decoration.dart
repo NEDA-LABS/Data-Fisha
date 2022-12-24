@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-_boxBorder(error, context) => Border.fromBorderSide(BorderSide(
-    color: error is String && error.isNotEmpty
-        ? Colors.red
-        : Theme.of(context).primaryColorDark));
+_boxBorder(error, context) => Border.all(
+      color: error is String && error.isNotEmpty
+          ? Colors.red
+          : const Color(0xffe1e1e1),
+      width: .8,
+    );
 
 _boxRadius() => const BorderRadius.all(Radius.circular(3));
 

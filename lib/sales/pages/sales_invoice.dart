@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/components/sale_invoice_details.dart';
 import 'package:smartstock/sales/services/invoice.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class InvoicesPage extends StatefulWidget {
-  final args;
+  final dynamic args;
 
   const InvoicesPage(this.args, {Key? key}) : super(key: key);
 
@@ -24,7 +26,8 @@ class InvoicesPage extends StatefulWidget {
 
 class _InvoicesPage extends State<InvoicesPage> {
   bool _loading = false;
-  String _query = '';
+
+  // String _query = '';
   int size = 20;
   List _invoices = [];
 
@@ -34,13 +37,14 @@ class _InvoicesPage extends State<InvoicesPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onSearch: (d) {
-        setState(() {
-          _query = d;
-        });
-        _refresh();
-      },
-      searchHint: 'Search by date...',
+      // onSearch: (d) {
+      //   setState(() {
+      //     _query = d;
+      //   });
+      //   _refresh();
+      // },
+      // searchHint: 'Search by date...',
+      context: context,
     );
   }
 
@@ -56,29 +60,21 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   _tableHeader() {
     var height = 38.0;
-    var smallView = SizedBox(
+    return SizedBox(
       height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Customer'),
+      child: const TableLikeListRow([
+        TableLikeListTextHeaderCell('Customer'),
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Amount ( TZS )'),
+        TableLikeListTextHeaderCell('Paid ( TZS )'),
+        TableLikeListTextHeaderCell('Status'),
       ]),
     );
-    var largeView = SizedBox(
-      height: height,
-      child: tableLikeListRow([
-        tableLikeListTextHeader('Date'),
-        tableLikeListTextHeader('Amount ( TZS )'),
-        tableLikeListTextHeader('Paid ( TZS )'),
-        tableLikeListTextHeader('Customer'),
-      ]),
-    );
-    return isSmallScreen(context) ? smallView : largeView;
   }
 
-  _fields() => isSmallScreen(context)
-      ? ['date', 'amount', 'customer']
-      : ['date', 'amount', 'payment', 'customer'];
+  // _fields() => isSmallScreen(context)
+  //     ? ['date', 'amount', 'customer']
+  //     : ['date', 'amount', 'payment', 'customer'];
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -91,121 +87,82 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/sales/',
-      onBody: (d) {
-        return Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              tableContextMenu(_contextInvoices(context)),
-              _loadingView(_loading),
-              _tableHeader(),
-              Expanded(
-                child: TableLikeList(
-                  onFuture: () async => _invoices,
-                  keys: _fields(),
-                  onLoadMore: () async => _loadMore(),
-                  loading: _loading,
-                  onCell: (a, b, c) {
-                    if (a == 'date') {
-                      return _dateView(c);
-                    }
-                    if (a == 'customer') {
-                      return Text('${b['displayName']}');
-                    }
-                    if (a == 'payment') {
-                      return Text('${_getInvPayment(b)}');
-                    }
-                    return Text('$b');
-                  },
-                  onItemPressed: (item) {
-                    showDialogOrModalSheet(
-                      SaleInvoiceDetail(sale: item, pageContext: context),
-                      context,
-                    );
-                    // showDialogOrModalSheet(
-                    //   invoiceDetails(context, item),
-                    //   context,
-                    // );
-                  },
-                ),
-              ), // _tableFooter()
-            ],
-          ),
-        );
-      },
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        isSmallScreen(context)
+            ? Container()
+            : tableContextMenu(_contextInvoices(context)),
+        _loadingView(_loading),
+        isSmallScreen(context) ? Container() : _tableHeader(),
+      ],
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined),
+      ),
+      totalDynamicChildren: _invoices.length,
+      dynamicChildBuilder: isSmallScreen(context)
+          ? _smallScreenChildBuilder
+          : _largerScreenChildBuilder,
+      loading: _loading,
+      onLoadMore: () async => _loadMore(),
+      // onBody: (d) {
+      //   return Scaffold(
+      //     body: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.stretch,
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         tableContextMenu(_contextInvoices(context)),
+      //         _loadingView(_loading),
+      //         _tableHeader(),
+      //         Expanded(
+      //           child: TableLikeList(
+      //             onFuture: () async => _invoices,
+      //             keys: _fields(),
+      //             onLoadMore: () async => _loadMore(),
+      //             loading: _loading,
+      //             onCell: (a, b, c) {
+      //               if (a == 'date') {
+      //                 return _dateView(c);
+      //               }
+      //               if (a == 'customer') {
+      //                 return Text('${b['displayName']}');
+      //               }
+      //               if (a == 'payment') {
+      //                 return Text('${_getInvPayment(b)}');
+      //               }
+      //               return Text('$b');
+      //             },
+      //             onItemPressed: (item) {
+      //               showDialogOrModalSheet(
+      //                 SaleInvoiceDetail(sale: item, pageContext: context),
+      //                 context,
+      //               );
+      //               // showDialogOrModalSheet(
+      //               //   invoiceDetails(context, item),
+      //               //   context,
+      //               // );
+      //             },
+      //           ),
+      //         ), // _tableFooter()
+      //       ],
+      //     ),
+      //   );
+      // },
     );
-  }
-
-  Widget _dateView(c) {
-    // var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
-    // var textStyle = const TextStyle(
-    //     fontWeight: FontWeight.w300,
-    //     color: Colors.grey,
-    //     height: 2.0,
-    //     overflow: TextOverflow.ellipsis);
-    var mainTextStyle = const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        overflow: TextOverflow.ellipsis);
-    // var subText = timeago.format(date);
-    //'${c['channel'] == 'whole' ? '| Wholesale' : '| Retail'}';
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_getTimer(c), style: mainTextStyle),
-        // Text(subText, style: textStyle)
-      ]),
-    );
-  }
-
-  _getTimer(c) {
-    var getTimer = propertyOr('timer', (p0) => '');
-    var date = DateTime.tryParse(getTimer(c)) ?? DateTime.now();
-    var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-    return dateFormat.format(date);
-  }
-
-  // _refresh({skip = false}) {
-  //   setState(() {
-  //     _loading = true;
-  //   });
-  //   getInvoiceFromCacheOrRemote(
-  //     stringLike: _query,
-  //     skipLocal: widget.args.queryParams.containsKey('reload') || skip,
-  //   ).then((value) {
-  //     setState(() {
-  //       _invoices = value;
-  //     });
-  //   }).whenComplete(() {
-  //     setState(() {
-  //       _loading = false;
-  //     });
-  //   });
-  // }
-
-  _getInvPayment(b) {
-    if (b is Map) {
-      return b.values
-          .fold(0, (dynamic a, element) => a + doubleOrZero('$element'));
-    }
-    return 0;
   }
 
   _loadMore() {
     setState(() {
       _loading = true;
     });
-    var getInvoices = _prepareGetInvoices(_query, size, true);
+    var getInvoices = _prepareGetInvoices('', size, true);
     getInvoices(_invoices).then((value) {
       if (value is List) {
         _invoices.addAll(value);
         _invoices = _invoices.toSet().toList();
-        setState(() {});
       }
     }).whenComplete(() {
       setState(() {
@@ -216,12 +173,12 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   _prepareGetInvoices(String product, size, bool more) {
     return ifDoElse(
-      (sales) => sales is List && sales.isNotEmpty,
-      (sales) {
+          (sales) => sales is List && sales.isNotEmpty,
+          (sales) {
         var last = more ? sales.last['timer'] : _defaultLast();
         return getInvoiceSalesFromCacheOrRemote(last, size, product);
       },
-      (sales) =>
+          (sales) =>
           getInvoiceSalesFromCacheOrRemote(_defaultLast(), size, product),
     );
   }
@@ -230,7 +187,7 @@ class _InvoicesPage extends State<InvoicesPage> {
     setState(() {
       _loading = true;
     });
-    var getInvoices = _prepareGetInvoices(_query, size, false);
+    var getInvoices = _prepareGetInvoices('', size, false);
     getInvoices(_invoices).then((value) {
       if (value is List) {
         _invoices = value;
@@ -246,5 +203,152 @@ class _InvoicesPage extends State<InvoicesPage> {
     var dF = DateFormat('yyyy-MM-ddTHH:mm');
     var date = DateTime.now().add(const Duration(days: 1));
     return dF.format(date);
+  }
+
+  final _getCustomer=compose([
+      propertyOr('displayName', (p0) => 'Walk in customer'),
+      propertyOrNull('customer')
+    ]);
+
+  Widget _smallScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ListTile(
+          onTap: () => showDialogOrModalSheet(
+              invoiceDetails(context, _invoices[index]), context),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TableLikeListTextDataCell('${_getCustomer(_invoices[index])}'),
+              _getStatusView(_invoices[index])
+            ],
+          ),
+          subtitle: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${_invoices[index]['date']}'),
+                  Text(
+                      'total ${compactNumber(
+                          '${_invoices[index]['amount']}')}'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 5),
+        horizontalLine(),
+      ],
+    );
+  }
+
+  Widget _largerScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          onTap: () => showDialogOrModalSheet(
+              invoiceDetails(context, _invoices[index]), context),
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${_getCustomer(_invoices[index])}'),
+            TableLikeListTextDataCell(
+                '${toSqlDate(DateTime.tryParse(_invoices[index]['date']) ??
+                    DateTime.now())}'),
+            TableLikeListTextDataCell(
+                '${formatNumber(_invoices[index]['amount'])}'),
+            TableLikeListTextDataCell('${_getInvPayment(_invoices[index])}'),
+            Center(child: _getStatusView(_invoices[index]))
+          ]),
+        ),
+        horizontalLine()
+      ],
+    );
+  }
+
+  _getInvPayment(invoice) {
+    if (invoice is Map) {
+      var payments = invoice['payments'];
+      if (payments is List) {
+        var a = payments.fold(0,
+                (dynamic a, element) =>
+            a + doubleOrZero('${element['amount']}'));
+        return formatNumber(a);
+      }
+    }
+    return 0;
+  }
+
+  _getStatusView(invoice) {
+    var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
+    var amount = invoice['amount'];
+    var paidView = Container(
+      height: 24,
+      width: 76,
+      decoration: BoxDecoration(
+        color: const Color(0xFFadf0cc),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      alignment: Alignment.center,
+      child: Text("Paid", style: tStyle),
+    );
+    getPayment() {
+      var payments = invoice['payments'];
+      if (payments is List) {
+        return payments.fold(0,
+                (dynamic a, element) =>
+            a + doubleOrZero('${element['amount']}'));
+      }
+      return 0;
+    }
+
+    var paid = getPayment();
+    if (paid >= amount) {
+      return paidView;
+    } else {
+      return Container(
+        height: 24,
+        width: 76,
+        decoration: BoxDecoration(
+          color: const Color(0xFFffed8a),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        alignment: Alignment.center,
+        child: Text("Partial", style: tStyle),
+      );
+    }
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add invoice'),
+                onTap: () => navigateTo('/sales/invoice/create'),
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload invoices'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _refresh();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
   }
 }

@@ -8,7 +8,7 @@ _title() => const Padding(
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)));
 
 _reports() => Wrap(
-      children: [
+      children: const [
         DashboardSummaryReportCard(
           title: 'Items',
           future: getTotalPositiveItems,

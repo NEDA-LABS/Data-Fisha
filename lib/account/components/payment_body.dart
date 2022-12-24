@@ -61,22 +61,22 @@ class _State extends State<PaymentBody> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              tableLikeListRow([
-                tableLikeListTextHeader("Lipa namba"),
-                tableLikeListTextHeader("Status")
+              TableLikeListRow([
+                TableLikeListTextHeaderCell("Lipa namba"),
+                TableLikeListTextHeaderCell("Status")
               ]),
-              tableLikeListRow([
-                tableLikeListTextHeader("6829508"),
-                tableLikeListTextHeader("$status")
+              TableLikeListRow([
+                TableLikeListTextHeaderCell("6829508"),
+                TableLikeListTextHeaderCell("$status")
               ]),
-              tableLikeListRow([
-                tableLikeListTextHeader("Cost ( TZS ) / Month"),
-                tableLikeListTextHeader("Balance ( TZS )")
+              TableLikeListRow([
+                TableLikeListTextHeaderCell("Cost ( TZS ) / Month"),
+                TableLikeListTextHeaderCell("Balance ( TZS )")
               ]),
               horizontalLine(),
-              tableLikeListRow([
-                tableLikeListTextHeader("$cost"),
-                tableLikeListTextHeader("$balance")
+              TableLikeListRow([
+                TableLikeListTextHeaderCell("$cost"),
+                TableLikeListTextHeaderCell("$balance")
               ]),
               const Text(
                   'Ukimaliza weka kumbukumbu namba apo chini. Kisha bofya thibitisha malipo.'),

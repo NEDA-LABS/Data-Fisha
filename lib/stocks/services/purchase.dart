@@ -1,30 +1,29 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/stocks/components/add_purchase_detail.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
-Future<List<dynamic>> getPurchaseFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+Future<List<dynamic>> getPurchasesRemote(String? startAt) async {
   var shop = await getActiveShop();
   // var purchases = [];
   //skipLocal ? [] : await getLocalPurchases(shopToApp(shop));
   // var getItOrRemoteAndSave = ifDoElse(
   //   (x) => x == null || (x is List && x.isEmpty),
   //   inv(_) async {
-  List rPurchases = await getAllRemotePurchases(stringLike)(shop);
-  rPurchases = await compute(
-      _filterAndSort, {"purchases": rPurchases, "query": stringLike});
-  // await saveLocalPurchases(shopToApp(shop), rPurchases);
-  return rPurchases;
+  var start = startAt ?? toSqlDate(DateTime.now());
+  var remoteRequest = prepareGetAllRemotePurchases(start);
+  List purchases = await remoteRequest(shop);
+  return purchases;
+  // rPurchases = await compute(
+  //     _filterAndSort, {"purchases": rPurchases, "query": stringLike});
+  // // await saveLocalPurchases(shopToApp(shop), rPurchases);
+  // return rPurchases;
   // }
   // ,
   // (x) => compute(_filterAndSort, {"purchases": x, "query": stringLike}),
@@ -32,17 +31,17 @@ Future<List<dynamic>> getPurchaseFromCacheOrRemote({
   // return inv(purchases);
 }
 
-Future<List> _filterAndSort(Map data) async {
-  var purchases = data['purchases'];
-  // String stringLike = data['query'];
-  // _where(x) =>
-  //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
-
-  // purchases = purchases.where(_where).toList();
-  // purchases.sort((a, b) =>
-  //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
-  return purchases;
-}
+// Future<List> _filterAndSort(Map data) async {
+//   var purchases = data['purchases'];
+//   // String stringLike = data['query'];
+//   // _where(x) =>
+//   //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
+//
+//   // purchases = purchases.where(_where).toList();
+//   // purchases.sort((a, b) =>
+//   //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
+//   return purchases;
+// }
 
 // Future _printPurchaseItems(
 //     List carts, discount, customer, wholesale, batchId) async {
@@ -82,7 +81,7 @@ Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
         "product": {
           "id": e.product['id'],
           "product": e.product['product'],
-          "stockable": e.product['stockable']==true,
+          "stockable": e.product['stockable'] == true,
           "purchase": e.product['purchase'],
           "supplier": supplier
         },

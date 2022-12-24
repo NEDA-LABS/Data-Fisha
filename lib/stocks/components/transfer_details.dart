@@ -16,7 +16,7 @@ transferDetails(context, item) => ListView(
         ),
         _tableHeader(),
         ...item['items']
-            .map<Widget>((item) => tableLikeListRow([
+            .map<Widget>((item) => TableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
@@ -52,9 +52,9 @@ _tableHeader() => Padding(
     padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
     child: SizedBox(
         height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Product'),
-          tableLikeListTextHeader('Quantity')
+        child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Product'),
+          TableLikeListTextHeaderCell('Quantity')
         ])));
 
 _header(context, item) => Container(

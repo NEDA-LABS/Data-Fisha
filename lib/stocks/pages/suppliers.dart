@@ -1,110 +1,209 @@
-import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
-import 'package:smartstock/stocks/states/suppliers_list.dart';
-import 'package:smartstock/stocks/states/suppliers_loading.dart';
 
 class SuppliersPage extends StatefulWidget {
-  final args;
+  final dynamic args;
 
   const SuppliersPage(this.args, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SuppliersPage();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _SuppliersPage extends State<SuppliersPage> {
+class _State extends State<SuppliersPage> {
+  bool _isLoading = false;
+  String _query = '';
+  List _suppliers = [];
+
   _appBar(context) {
     return StockAppBar(
       title: "Suppliers",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
-      onSearch: getState<SuppliersListState>().updateQuery,
+      onSearch: (p0) {
+        setState(() {
+          _query = p0;
+          getSupplierFromCacheOrRemote(skipLocal: false).then((value) {
+            _suppliers = value
+                .where((element) => '${element['name']}'
+                    .toLowerCase()
+                    .contains(_query.toLowerCase()))
+                .toList();
+          }).whenComplete(() => setState(() {}));
+        });
+      },
       searchHint: 'Search...',
+      context: context,
     );
   }
 
   _contextItems(context) {
     return [
-      ContextMenu(
-        name: 'Create',
-        pressed: () => showDialog(
-          context: context,
-          builder: (c) => Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: Dialog(
-                child: createSupplierContent(),
-              ),
-            ),
-          ),
-        ),
-      ),
+      ContextMenu(name: 'Create', pressed: _createSupplier),
       ContextMenu(
         name: 'Reload',
         pressed: () {
-          getState<SuppliersLoadingState>().update(true);
+          _fetchSuppliers();
         },
       ),
     ];
   }
 
-  _tableHeader() => tableLikeListRow([
-        tableLikeListTextHeader('Name'),
-        tableLikeListTextHeader('Mobile'),
-        tableLikeListTextHeader('Email'),
-        tableLikeListTextHeader('Address'),
+  _tableHeader() => const TableLikeListRow([
+        TableLikeListTextHeaderCell('Name'),
+        TableLikeListTextHeaderCell('Mobile'),
+        TableLikeListTextHeaderCell('Email'),
+        TableLikeListTextHeaderCell('Address'),
       ]);
-
-  _fields() => ['name', 'number', 'email', 'address'];
 
   _loading(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
+  _fetchSuppliers() {
+    setState(() {
+      _isLoading = true;
+    });
+    getSupplierFromCacheOrRemote(skipLocal: true).then((value) {
+      _suppliers = value;
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
-  Widget build(context) => responsiveBody(
+  void initState() {
+    _fetchSuppliers();
+    super.initState();
+  }
+
+  @override
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
-        onBody: (d) => Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              tableContextMenu(_contextItems(context)),
-              Consumer<SuppliersLoadingState>(
-                builder: (_, state) => _loading(state!.loading),
-              ),
-              _tableHeader(),
-              Consumer<SuppliersListState>(
-                builder: (_, state) => Expanded(
-                  child: TableLikeList(
-                    onFuture: () async => getSupplierFromCacheOrRemote(
-                      stringLike: state!.query,
-                      skipLocal: widget.args.queryParams.containsKey('reload'),
-                    ),
-                    keys: _fields(),
-                    // onCell: (key,data)=>Text('@$data')
-                  ),
-                ),
-              ),
-              // _tableFooter()
-            ],
-          ),
+        sliverAppBar: _appBar(context),
+        staticChildren: [
+          isSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextItems(context)),
+          _loading(_isLoading),
+          isSmallScreen(context) ? Container() : _tableHeader(),
+        ],
+        totalDynamicChildren: _suppliers.length,
+        dynamicChildBuilder:
+            isSmallScreen(context) ? _smallScreen : _largerScreen,
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
         ),
       );
 
-  @override
-  void dispose() {
-    getState<SuppliersListState>().updateQuery('');
-    super.dispose();
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Create supplier'),
+                onTap: () {
+                  Navigator.of(context)
+                      .maybePop()
+                      .whenComplete(() => _createSupplier());
+                },
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload suppliers'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _fetchSuppliers();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
+  }
+
+  _createSupplier() {
+    showDialog(
+      context: context,
+      builder: (c) => Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: const Dialog(
+            child: CreateSupplierContent(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _largerScreen(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TableLikeListRow([
+          TableLikeListTextDataCell('${_suppliers[index]['name']}'),
+          TableLikeListTextDataCell('${_suppliers[index]['number']}'),
+          TableLikeListTextDataCell('${_suppliers[index]['email']}'),
+          TableLikeListTextDataCell('${_suppliers[index]['address']}'),
+        ]),
+        horizontalLine()
+      ],
+    );
+  }
+
+  Widget _smallScreen(context, index) {
+    String mobile = _suppliers[index]['number'] ?? '';
+    String email = _suppliers[index]['email'] ?? '';
+    String name = _suppliers[index]['name'] ?? '';
+    var style = const TextStyle(
+      fontWeight: FontWeight.w300,
+      overflow: TextOverflow.ellipsis,
+      fontSize: 16,
+      color: Color(0xFF1C1C1C),
+    );
+    var sub_style = const TextStyle(
+      fontWeight: FontWeight.w200,
+      overflow: TextOverflow.ellipsis,
+      fontSize: 14,
+      color: Color(0xFF626262),
+    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ListTile(
+          title: Text(name, style: style),
+          subtitle: mobile.isEmpty
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text('$mobile - $email', style: sub_style),
+                ),
+        ),
+        const SizedBox(height: 5),
+        horizontalLine(),
+      ],
+    );
   }
 }

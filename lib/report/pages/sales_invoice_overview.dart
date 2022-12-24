@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -40,35 +41,77 @@ class _State extends State<OverviewInvoiceSales> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       office: 'Menu',
       current: '/report/',
       menus: moduleMenus(),
-      onBody: (x) {
-        return Scaffold(
-          appBar: _appBar(),
-          drawer: x,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _rangePicker(),
-                    _whatToShow(),
-                  ],
-                ),
-              ),
+      sliverAppBar: _appBar(),
+      staticChildren: [
+        _rangePicker(),
+        _showLoading(),
+        Container(
+          margin: const EdgeInsets.all(5),
+          decoration: solidRadiusBoxDecoration(),
+          child: Container(
+            height: isSmallScreen(context)
+                ? chartCardMobileHeight
+                : chartCardDesktopHeight,
+            padding: const EdgeInsets.all(8),
+            child: BarChart(
+              [_sales2Series(dailySales)],
+              animate: true,
             ),
           ),
-          bottomNavigationBar: bottomBar(3, moduleMenus(), context),
+        ),
+        const SizedBox(height: 16),
+        _tableHeader(),
+      ],
+      totalDynamicChildren: dailySales.length,
+      dynamicChildBuilder: (context, index) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            InkWell(
+              child: TableLikeListRow([
+                TableLikeListTextDataCell('${dailySales[index]['date']}'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TableLikeListTextDataCell(
+                      '${formatNumber(dailySales[index]['amount'])}'),
+                ),
+              ]),
+            ),
+            horizontalLine()
+          ],
         );
       },
+      // onBody: (x) {
+      //   return Scaffold(
+      //     drawer: x,
+      //     body: SingleChildScrollView(
+      //       padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+      //       child: Center(
+      //         child: Container(
+      //           constraints: BoxConstraints(maxWidth: maximumBodyWidth),
+      //           child: Column(
+      //             crossAxisAlignment: CrossAxisAlignment.stretch,
+      //             mainAxisSize: MainAxisSize.min,
+      //             children: [
+      //               _rangePicker(),
+      //               _whatToShow(),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     bottomNavigationBar: bottomBar(3, moduleMenus(), context),
+      //   );
+      // },
     );
   }
+
+  _showLoading() => loading ? const LinearProgressIndicator() : Container();
 
   charts.Series<dynamic, String> _sales2Series(List sales) {
     return charts.Series<dynamic, String>(
@@ -85,7 +128,7 @@ class _State extends State<OverviewInvoiceSales> {
     setState(() {
       loading = true;
     });
-    getInvoiceSalesOverview(dateRange,period).then((value) {
+    getInvoiceSalesOverview(dateRange, period).then((value) {
       dailySales = itOrEmptyArray(value);
     }).catchError((err) {
       error = '$err';
@@ -160,11 +203,11 @@ class _State extends State<OverviewInvoiceSales> {
   }
 
   _tableHeader() {
-    return tableLikeListRow([
-      tableLikeListTextHeader('Date'),
+    return TableLikeListRow([
+      TableLikeListTextHeaderCell('Date'),
       // tableLikeListTextHeader('Retail ( Tsh )'),
       // tableLikeListTextHeader('Wholesale ( Tsh )'),
-      tableLikeListTextHeader('Total ( Tsh )'),
+      TableLikeListTextHeaderCell('Total ( Tsh )'),
     ]);
   }
 
@@ -193,11 +236,11 @@ class _State extends State<OverviewInvoiceSales> {
           context,
         );
       },
-      onRange: (range,p) {
+      onRange: (range, p) {
         if (range != null) {
           // setState(() {
-            dateRange = range;
-            period = p??'day';
+          dateRange = range;
+          period = p ?? 'day';
           // });
           _fetchData();
         }
@@ -211,6 +254,7 @@ class _State extends State<OverviewInvoiceSales> {
       title: "Invoice sales overview",
       showBack: false,
       backLink: '/report/',
+      context: context,
     );
   }
 

@@ -36,10 +36,10 @@ class _State extends State<SaleItemsDetails> {
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
       child: SizedBox(
         height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Product'),
-          tableLikeListTextHeader('Quantity'),
-          tableLikeListTextHeader('Amount ( TZS )')
+        child: TableLikeListRow([
+          TableLikeListTextHeaderCell('Product'),
+          TableLikeListTextHeaderCell('Quantity'),
+          TableLikeListTextHeaderCell('Amount ( TZS )')
         ]),
       ),
     );
@@ -76,7 +76,7 @@ class _State extends State<SaleItemsDetails> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          tableLikeListRow(
+          TableLikeListRow(
             [
               Column(
                 mainAxisSize: MainAxisSize.min,

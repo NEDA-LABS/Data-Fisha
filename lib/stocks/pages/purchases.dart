@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/purchase_details.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends StatefulWidget {
-  final args;
+  final dynamic args;
 
   const PurchasesPage(this.args, {Key? key}) : super(key: key);
 
@@ -21,41 +23,38 @@ class PurchasesPage extends StatefulWidget {
 
 class _PurchasesPage extends State<PurchasesPage> {
   bool _loading = false;
-  String _query = '';
-  List? _purchases = [];
+  List _purchases = [];
+  final String _startAt = toSqlDate(DateTime.now());
 
   _appBar(context) => StockAppBar(
       title: "Purchases",
       showBack: true,
       backLink: '/stock/',
-      showSearch: true,
-      onSearch: (d) {
-        setState(() {
-          _query = d;
-        });
-        _refresh(skip: false);
-      },
-      searchHint: 'Search...');
+      showSearch: false,
+      // onSearch: (d) {
+      //   setState(() {
+      //     _query = d;
+      //   });
+      //   _refresh(skip: false);
+      // },
+      searchHint: 'Search...',
+      context: context);
 
   _contextPurchases(context) => [
         ContextMenu(
           name: 'Create',
           pressed: () => navigateTo('/stock/purchases/create'),
         ),
-        ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
+        ContextMenu(name: 'Reload', pressed: () => _refresh())
       ];
 
-  _tableHeader() => SizedBox(
-        height: 38,
-        child: tableLikeListRow([
-          tableLikeListTextHeader('Reference'),
-          tableLikeListTextHeader('Type'),
-          tableLikeListTextHeader('Cost ( TZS )'),
-          tableLikeListTextHeader('Paid ( TZS )'),
-        ]),
-      );
-
-  _fields() => ['refNumber', 'type', 'amount', 'payments'];
+  _tableHeader() => const TableLikeListRow([
+        TableLikeListTextHeaderCell('Reference'),
+        TableLikeListTextHeaderCell('Date'),
+        TableLikeListTextHeaderCell('Cost ( TZS )'),
+        TableLikeListTextHeaderCell('Paid ( TZS )'),
+        Center(child: TableLikeListTextHeaderCell('Status')),
+      ]);
 
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
@@ -67,55 +66,37 @@ class _PurchasesPage extends State<PurchasesPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
-        onBody: (d) => Scaffold(
-          appBar: _appBar(context),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              tableContextMenu(_contextPurchases(context)),
-              _loadingView(_loading),
-              _tableHeader(),
-              Expanded(
-                child: TableLikeList(
-                    onFuture: () async => _purchases,
-                    keys: _fields(),
-                    onCell: (a, b, c) {
-                      // if (a == 'refNumber') {
-                      //   return Text('${c['type']} : ${c['refNumber']}');
-                      // }
-                      if (a == 'payments' && c['type'] == 'cash') {
-                        return Text('${c['amount']}');
-                      }
-                      if (a == 'payments' && c['type'] == 'receipt') {
-                        return Text('${c['amount']}');
-                      }
-                      if (a == 'payments' && c['type'] == 'invoice') {
-                        return Text('${_getInvPayment(b)}');
-                      }
-                      return Text('$b');
-                    },
-                    onItemPressed: (item) => showDialogOrModalSheet(
-                        purchaseDetails(context, item), context)),
-              ), // _tableFooter()
-            ],
-          ),
+        sliverAppBar: _appBar(context),
+        staticChildren: [
+          isSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextPurchases(context)),
+          _loadingView(_loading),
+          isSmallScreen(context) ? Container() : _tableHeader(),
+        ],
+        loading: _loading,
+        onLoadMore: () async {
+          _loadMore();
+        },
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
         ),
+        totalDynamicChildren: _purchases.length,
+        dynamicChildBuilder: isSmallScreen(context)
+            ? _smallScreenChildBuilder
+            : _largerScreenChildBuilder,
       );
 
-  _refresh({skip = false}) {
+  _refresh() {
     setState(() {
       _loading = true;
     });
-    getPurchaseFromCacheOrRemote(
-      stringLike: _query,
-      skipLocal: widget.args.queryParams.containsKey('reload') || skip,
-    ).then((value) {
-      setState(() {
-        _purchases = value;
-      });
+    getPurchasesRemote(_startAt).then((value) {
+      _purchases = value;
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -123,16 +104,173 @@ class _PurchasesPage extends State<PurchasesPage> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  _loadMore() {
+    if (_purchases.isNotEmpty) {
+      var last = _purchases.last;
+      setState(() {
+        _loading = true;
+      });
+      var updatedAt = last['updatedAt'] ?? toSqlDate(DateTime.now());
+      getPurchasesRemote(updatedAt).then((value) {
+        _purchases.addAll(value);
+      }).whenComplete(() {
+        setState(() {
+          _loading = false;
+        });
+      });
+    }
   }
 
-  _getInvPayment(b) {
-    if (b is List) {
-      return b.fold(
-          0, (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+  Widget _smallScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ListTile(
+          onTap: () => showDialogOrModalSheet(
+              purchaseDetails(context, _purchases[index]), context),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
+              _getStatusView(_purchases[index])
+            ],
+          ),
+          subtitle: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${_purchases[index]['date']}'),
+                  Text(
+                      'total ${compactNumber('${_purchases[index]['amount']}')}'),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(
+                  '${_purchases[index]['supplier']}',
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 5),
+        horizontalLine(),
+      ],
+    );
+  }
+
+  Widget _largerScreenChildBuilder(context, index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          onTap: () => showDialogOrModalSheet(
+              purchaseDetails(context, _purchases[index]), context),
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
+            TableLikeListTextDataCell('${toSqlDate(DateTime.tryParse(_purchases[index]['date'])??DateTime.now())}'),
+            TableLikeListTextDataCell(
+                '${formatNumber(_purchases[index]['amount'])}'),
+            TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),
+            Center(child: _getStatusView(_purchases[index]))
+          ]),
+        ),
+        horizontalLine()
+      ],
+    );
+  }
+
+  _getInvPayment(purchase) {
+    if (purchase is Map) {
+      var type = purchase['type'];
+      if (type == 'invoice') {
+        var payments = purchase['payments'];
+        if (payments is List) {
+          var a = payments.fold(0,
+              (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+          return formatNumber(a);
+        }
+      } else {
+        return formatNumber(purchase['amount'] ?? 0);
+      }
     }
     return 0;
+  }
+
+  _getStatusView(purchase) {
+    var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
+    var type = purchase['type'];
+    var amount = purchase['amount'];
+    var paidView = Container(
+      height: 24,
+      width: 76,
+      decoration: BoxDecoration(
+        color: const Color(0xFFadf0cc),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      alignment: Alignment.center,
+      child: Text("Paid", style: tStyle),
+    );
+    getPayment() {
+      var payments = purchase['payments'];
+      if (payments is List) {
+        return payments.fold(0,
+            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+      }
+      return 0;
+    }
+
+    if (type == 'invoice') {
+      var paid = getPayment();
+      if (paid >= amount) {
+        return paidView;
+      } else {
+        return Container(
+          height: 24,
+          width: 76,
+          decoration: BoxDecoration(
+            color: const Color(0xFFffed8a),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          alignment: Alignment.center,
+          child: Text("Partial", style: tStyle),
+        );
+      }
+    }
+    return paidView;
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Record purchase'),
+                onTap: () => navigateTo('/stock/purchases/create'),
+              ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload purchases'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _refresh();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
   }
 }

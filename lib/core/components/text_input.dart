@@ -93,6 +93,8 @@ class _State extends State<TextInput> {
     var inputDecoration = InputDecoration(
       border: InputBorder.none,
       hintText: widget.placeholder,
+      hintStyle: const TextStyle(
+          color: Color(0xffb0b0b0), fontSize: 14, fontWeight: FontWeight.w300),
       contentPadding: inputPadding,
     );
 

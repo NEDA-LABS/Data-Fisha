@@ -6,8 +6,8 @@ import 'package:smartstock/core/services/util.dart';
 prepareGetTransfers(String startAt) {
   return composeAsync([
     (transfers) => itOrEmptyArray(transfers),
-    (app) => executeHttp(() =>
-        httpGetRequest('${shopFunctionsURL(app)}/stock/transfer?skip=0&size=50')),
+    (app) => executeHttp(() => httpGetRequest(
+        '${shopFunctionsURL(app)}/stock/transfer?size=50&start=$startAt')),
     shopToApp,
   ]);
 }

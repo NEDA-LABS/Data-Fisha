@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/text_input.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -32,23 +32,19 @@ class _State extends State<ShopUserCreatePage> {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       menus: moduleMenus(),
       current: '/account/',
-      onBody: (d) {
-        return Scaffold(
-          appBar: _appBar(context),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 600),
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: Column(children: _shopUserCreateForm()),
-              ),
-            ),
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            child: Column(children: _shopUserCreateForm()),
           ),
-        );
-      },
+        )
+      ],
     );
   }
 
@@ -58,6 +54,7 @@ class _State extends State<ShopUserCreatePage> {
       showBack: true,
       backLink: '/account/users',
       showSearch: false,
+      context: context,
     );
   }
 

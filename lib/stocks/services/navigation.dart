@@ -3,19 +3,19 @@ import 'package:smartstock/core/models/menu.dart';
 
 List<SubMenuModule> _pagesMenu() => [
       SubMenuModule(
+        name: 'Summary',
+        link: '/stock/',
+        roles: [],
+        svgName: 'product_icon.svg',
+        onClick: () {},
+      ),
+      SubMenuModule(
         name: 'Products',
         link: '/stock/products',
         roles: [],
         svgName: 'product_icon.svg',
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Item',
-      //   link: '/stock/items',
-      //   roles: [],
-      //   svgName: 'item_icon.svg',
-      //   onClick: () {},
-      // ),
       SubMenuModule(
         name: 'Categories',
         link: '/stock/categories',
@@ -23,13 +23,6 @@ List<SubMenuModule> _pagesMenu() => [
         svgName: 'category_icon.svg',
         onClick: () {},
       ),
-      // SubMenuModule(
-      //   name: 'Units',
-      //   link: '/stock/units',
-      //   roles: [],
-      //   svgName: 'unit_icon.svg',
-      //   onClick: () {},
-      // ),
       SubMenuModule(
         name: 'Suppliers',
         link: '/stock/suppliers',
@@ -57,6 +50,6 @@ MenuModel stocksMenu() => MenuModel(
       name: 'Stocks',
       icon: const Icon(Icons.inventory),
       link: '/stock/',
-      roles: ['admin','manager'],
+      roles: ['admin', 'manager'],
       pages: _pagesMenu(),
     );

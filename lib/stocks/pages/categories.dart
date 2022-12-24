@@ -1,17 +1,15 @@
-import 'package:builders/builders.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
-import 'package:smartstock/stocks/states/categories_list.dart';
-import 'package:smartstock/stocks/states/categories_loading.dart';
-
 
 class CategoriesPage extends StatefulWidget {
   final args;
@@ -19,18 +17,34 @@ class CategoriesPage extends StatefulWidget {
   const CategoriesPage(this.args, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CategoriesPage();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _CategoriesPage extends State<CategoriesPage> {
+class _State extends State<CategoriesPage> {
+  bool _isLoading = false;
+  String _query = '';
+  List _categories = [];
+
   _appBar(context) {
     return StockAppBar(
       title: "Categories",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
-      onSearch: getState<CategoriesListState>().updateQuery,
+      onSearch: (p0) {
+        setState(() {
+          _query = p0;
+          getCategoryFromCacheOrRemote(skipLocal: false).then((value) {
+            _categories = value
+                .where((element) => '${element['name']}'
+                    .toLowerCase()
+                    .contains(_query.toLowerCase()))
+                .toList();
+          }).whenComplete(() => setState(() {}));
+        });
+      },
       searchHint: 'Search...',
+      context: context,
     );
   }
 
@@ -38,72 +52,120 @@ class _CategoriesPage extends State<CategoriesPage> {
     return [
       ContextMenu(
         name: 'Create',
-        pressed: () => showDialog(
-          context: context,
-          builder: (c) => Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: Dialog(
-                child: createCategoryContent(),
-              ),
-            ),
-          ),
-        ),
+        pressed: () => _createCategory(),
       ),
       ContextMenu(
         name: 'Reload',
         pressed: () {
-          getState<CategoriesLoadingState>().update(true);
+          _fetchCategories();
         },
       ),
     ];
   }
 
-  _tableHeader() => tableLikeListRow([
-        tableLikeListTextHeader('Name'),
-        tableLikeListTextHeader('Description'),
-      ]);
-
-  _fields() => ['name', 'description'];
-
   _loading(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
   @override
-  Widget build(context) => responsiveBody(
+  void initState() {
+    _fetchCategories();
+    super.initState();
+  }
+
+  @override
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/stock/',
-        onBody: (d) => Scaffold(
-          appBar: _appBar(context),
-          body: Column(
+        sliverAppBar: _appBar(context),
+        staticChildren: [
+          isSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextItems(context)),
+          _loading(_isLoading),
+          // _tableHeader(),
+        ],
+        dynamicChildBuilder: (context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              tableContextMenu(_contextItems(context)),
-              Consumer<CategoriesLoadingState>(
-                builder: (_, state) => _loading(state!.loading),
+              ListTile(
+                  title: TableLikeListTextDataCell(
+                      '${_categories[index]['name']}'),
+                  subtitle: Text(
+                    '${_categories[index]['description']}',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                  )),
+              const SizedBox(height: 5),
+              horizontalLine(),
+            ],
+          );
+        },
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
+        ),
+        totalDynamicChildren: _categories.length,
+      );
+
+  _fetchCategories() {
+    setState(() {
+      _isLoading = true;
+    });
+    getCategoryFromCacheOrRemote(skipLocal: true).then(
+      (value) {
+        _categories = value;
+      },
+    ).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Create category'),
+                onTap: () {
+                  Navigator.of(context)
+                      .maybePop()
+                      .whenComplete(() => _createCategory());
+                },
               ),
-              _tableHeader(),
-              Consumer<CategoriesListState>(
-                builder: (_, state) => Expanded(
-                  child: TableLikeList(
-                    onFuture: () async => getCategoryFromCacheOrRemote(
-                      stringLike: state!.query,
-                      skipLocal: widget.args.queryParams.containsKey('reload'),
-                    ),
-                    keys: _fields(),
-                    // onCell: (key,data)=>Text('@$data')
-                  ),
-                ),
+              horizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload categories'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _fetchCategories();
+                },
               ),
-              // _tableFooter()
             ],
           ),
         ),
-      );
+        context);
+  }
 
-  @override
-  void dispose() {
-    getState<CategoriesListState>().updateQuery('');
-    super.dispose();
+  _createCategory() {
+    showDialog(
+      context: context,
+      builder: (c) => Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: const Dialog(
+            child: CreateCategoryContent(),
+          ),
+        ),
+      ),
+    );
   }
 }

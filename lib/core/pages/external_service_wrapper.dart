@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
-import 'package:smartstock/core/components/index_page.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/switch_to_item.dart';
-import 'package:smartstock/core/components/top_bar.dart';
-import 'package:smartstock/sales/services/navigation.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 
 class ExternalServiceWrapperPage extends StatelessWidget {
   final String currentRoute;
@@ -31,24 +27,21 @@ class ExternalServiceWrapperPage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return responsiveBody(
+    return ResponsivePage(
       office: 'Menu',
       current: currentRoute,
       menus: moduleMenus(),
-      onBody: (x) => Scaffold(
-        appBar: StockAppBar(
-          title: title,
-          showBack: backLink.isNotEmpty,
-          backLink: backLink,
-          showSearch: showSearch,
-          onSearch: onSearch,
-          onBack: onBack,
-          searchHint: 'Type to search...',
-        ),
-        drawer: x,
-        body: child,
-        // bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+      sliverAppBar: StockAppBar(
+        title: title,
+        showBack: backLink.isNotEmpty,
+        backLink: backLink,
+        showSearch: showSearch,
+        onSearch: onSearch,
+        onBack: onBack,
+        searchHint: 'Type to search...',
+        context: context,
       ),
+      onBody: (x) => Scaffold(drawer: x, body: child),
     );
   }
 }

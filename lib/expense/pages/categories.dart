@@ -5,7 +5,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/top_bar.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
@@ -29,11 +29,11 @@ class _State extends State<ExpenseCategoriesPage> {
   }
 
   @override
-  Widget build(context) => responsiveBody(
+  Widget build(context) => ResponsivePage(
         menus: moduleMenus(),
         current: '/expense/',
+        sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
-          appBar: _appBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -64,7 +64,7 @@ class _State extends State<ExpenseCategoriesPage> {
           _query = p0;
         });
       },
-      searchHint: 'Search...',
+      searchHint: 'Search...', context: context,
     );
   }
 
@@ -95,7 +95,7 @@ class _State extends State<ExpenseCategoriesPage> {
     ];
   }
 
-  _tableHeader() => tableLikeListRow([tableLikeListTextHeader('Name')]);
+  _tableHeader() => TableLikeListRow([TableLikeListTextHeaderCell('Name')]);
 
   _fields() => ['name'];
 
