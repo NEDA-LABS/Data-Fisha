@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/services/util.dart';
 
 typedef OnAddToCart = Function(dynamic);
@@ -54,10 +55,7 @@ class ListOfProductsLike extends StatelessWidget {
   Widget _productCardItem({String? category, String? name, dynamic price, required product}) {
     return Container(
       margin: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xffe1e1e1), width: .8)),
+      decoration: solidRadiusBoxDecoration(),
       child: InkWell(
         onTap: () => onAddToCartView(product, onAddToCart),
         child: Padding(

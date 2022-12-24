@@ -45,13 +45,6 @@ class _State extends State<ShopUserCreatePage> {
           ),
         )
       ],
-      // onBody: (d) {
-      //   return Scaffold(
-      //     body: SingleChildScrollView(
-      //       child: ,
-      //     ),
-      //   );
-      // },
     );
   }
 

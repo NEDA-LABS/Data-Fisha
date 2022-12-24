@@ -1,6 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
@@ -43,6 +44,8 @@ class _State extends State<PastTopProducts> {
     );
     getProductPerformance(dateRange ?? defaultRange).then((value) {
       salesByProducts = itOrEmptyArray(value);
+      salesByProducts = salesByProducts.sublist(
+          0, salesByProducts.length > 5 ? 5 : salesByProducts.length);
       // salesByCategory.sort((a, b) => a['amount'] - b['amount']);
       // salesByCategory = salesByCategory.reversed.toList();
       // totalAmount = salesByCategory.fold(
@@ -87,14 +90,11 @@ class _State extends State<PastTopProducts> {
   }
 
   _productsTable() {
-    return Card(
-      elevation: 1,
+    return Container(
+      margin: const EdgeInsets.all(5),
+      decoration: solidRadiusBoxDecoration(),
       child: Container(
-        // height: isSmallScreen(context)
-        //     ? chartCardMobileHeight
-        //     :
-      // height: chartCardDesktopHeight,
-        constraints: BoxConstraints(maxHeight: 350, minHeight: 200),
+        constraints: const BoxConstraints(maxHeight: 360, minHeight: 200),
         padding: const EdgeInsets.all(8),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -113,7 +113,7 @@ class _State extends State<PastTopProducts> {
                   ),
                 ),
               ),
-              TableLikeListRow([
+              const TableLikeListRow([
                 TableLikeListTextHeaderCell('Name'),
                 TableLikeListTextHeaderCell('Qty'),
                 TableLikeListTextHeaderCell('Amount'),
