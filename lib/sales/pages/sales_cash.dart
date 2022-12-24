@@ -195,7 +195,10 @@ class _State extends State<SalesCashPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('${c['customer'] ?? ''}'.isEmpty ? 'Walk in' : c['customer'],
+        Text(
+            '${c['customer'] ?? ''}'.isEmpty
+                ? 'Walk in customer'
+                : c['customer'],
             style: mainTextStyle),
         Text(subText, style: textStyle)
       ]),
@@ -207,40 +210,31 @@ class _State extends State<SalesCashPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // ListTile(
-        //   onTap: () => showDialogOrModalSheet(
-        //       purchaseDetails(context, _purchases[index]), context),
-        //   title: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
-        //       _getStatusView(_purchases[index])
-        //     ],
-        //   ),
-        //   subtitle: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     crossAxisAlignment: CrossAxisAlignment.stretch,
-        //     children: [
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Text('${_purchases[index]['date']}'),
-        //           Text(
-        //               'total ${compactNumber('${_purchases[index]['amount']}')}'),
-        //         ],
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.symmetric(vertical: 4.0),
-        //         child: Text(
-        //           '${_purchases[index]['supplier']}',
-        //           style: const TextStyle(fontSize: 13),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // const SizedBox(height: 5),
-        // horizontalLine(),
+        ListTile(
+          onTap: () => _onItemPressed(_sales[index]),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _customerView(_sales[index]),
+              Text('${compactNumber(_sales[index]['amount'])}')
+            ],
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${_getTimer(_sales[index])}',
+                style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 14),
+              ),
+              Text(
+                'Items ${doubleOrZero(_itemsSize(_sales[index]))}',
+                style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 5),
+        horizontalLine(),
       ],
     );
   }

@@ -17,10 +17,8 @@ class SalesPage extends StatelessWidget {
       office: 'Menu',
       current: '/sales/',
       menus: moduleMenus(),
-      sliverAppBar: StockAppBar(title: "Sales", showBack: false, context: context),
-      onBody: (x) => Scaffold(
-        drawer: x,
-        body: SingleChildScrollView(
+      staticChildren: [
+        Container(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
           child: Center(
             child: Container(
@@ -35,9 +33,14 @@ class SalesPage extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: bottomBar(1, moduleMenus(), context),
-      ),
+        )
+      ],
+      sliverAppBar: StockAppBar(title: "Sales", showBack: false, context: context),
+      // onBody: (x) => Scaffold(
+      //   drawer: x,
+      //   body: ,
+      //   bottomNavigationBar: bottomBar(1, moduleMenus(), context),
+      // ),
     );
   }
 }
