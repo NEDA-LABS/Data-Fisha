@@ -12,7 +12,7 @@ import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class SuppliersPage extends StatefulWidget {
-  final args;
+  final dynamic args;
 
   const SuppliersPage(this.args, {Key? key}) : super(key: key);
 
