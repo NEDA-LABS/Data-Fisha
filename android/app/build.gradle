@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdk 32
+    compileSdk 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -45,8 +45,8 @@ android {
     defaultConfig {
         applicationId "com.fahamutech.smartstock"
         minSdkVersion 19
-        targetSdk 32//flutter.minSdkVersion
-        versionCode 34 //flutterVersionCode.toInteger()
+        targetSdk 33//flutter.minSdkVersion
+        versionCode 36 //flutterVersionCode.toInteger()
         versionName flutterVersionName
         signingConfig signingConfigs.debug
     }

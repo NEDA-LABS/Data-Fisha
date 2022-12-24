@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 import 'dart:html' as webFile;
 
