@@ -45,7 +45,9 @@ class _State extends State<PastSalesByCategory> {
       salesByCategory = itOrEmptyArray(value);
       salesByCategory.sort((a, b) =>
           int.tryParse('${a['amount'] - b['amount']}'.split('.')[0]) ?? 0);
-      salesByCategory = salesByCategory.reversed.toList();
+      salesByCategory = salesByCategory.reversed
+          .toList()
+          .sublist(0, salesByCategory.length > 5 ? 5 : salesByCategory.length);
       for (var element in salesByCategory) {
         totalAmount += doubleOrZero(element['amount']);
       }
@@ -93,14 +95,13 @@ class _State extends State<PastSalesByCategory> {
       margin: const EdgeInsets.all(5),
       decoration: solidRadiusBoxDecoration(),
       child: Container(
-        height: isSmallScreen(context)
-            ? chartCardMobileHeight
-            : chartCardDesktopHeight,
+        height: chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
                 'Sales by categories',
@@ -110,45 +111,38 @@ class _State extends State<PastSalesByCategory> {
                   color: Color(0xFF1C1C1C),
                 ),
               ),
-              Expanded(
-                child: ListView(
-                  // mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 24),
-                    ...salesByCategory.map((e) => Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              // mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${e['id'] ?? ''}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Color(0xFF1C1C1C)),
-                                ),
-                                Text(
-                                  '${compactNumber(e['amount'] ?? 0)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Color(0xFF1C1C1C)),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            LinearProgressIndicator(
-                                value: _getProgValue(e['amount']),
-                                backgroundColor: const Color(0x370049a9)),
-                            const SizedBox(height: 16),
-                          ],
-                        ))
-                  ],
-                ),
-              ),
+              const SizedBox(height: 24),
+              ...salesByCategory.map((e) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        // mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${e['id'] ?? ''}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                overflow: TextOverflow.ellipsis,
+                                color: Color(0xFF1C1C1C)),
+                          ),
+                          Text(
+                            '${compactNumber(e['amount'] ?? 0)}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                color: Color(0xFF1C1C1C)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      LinearProgressIndicator(
+                          value: _getProgValue(e['amount']),
+                          backgroundColor: const Color(0x370049a9)),
+                      const SizedBox(height: 16),
+                    ],
+                  ))
             ],
           ),
         ),

@@ -94,7 +94,7 @@ class _State extends State<PastTopProducts> {
       margin: const EdgeInsets.all(5),
       decoration: solidRadiusBoxDecoration(),
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 360, minHeight: 200),
+        constraints: const BoxConstraints(maxHeight: 410, minHeight: 200),
         padding: const EdgeInsets.all(8),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

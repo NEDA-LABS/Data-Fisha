@@ -26,7 +26,7 @@ class ProductCreatePage extends StatelessWidget {
           Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 600),
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              // padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: const ProductCreateForm(),
             ),
           )

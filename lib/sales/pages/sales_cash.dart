@@ -212,6 +212,7 @@ class _State extends State<SalesCashPage> {
       children: [
         ListTile(
           onTap: () => _onItemPressed(_sales[index]),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

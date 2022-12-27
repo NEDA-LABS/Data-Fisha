@@ -220,6 +220,7 @@ class _TransfersPage extends State<TransfersPage> {
         ListTile(
           onTap: () => showDialogOrModalSheet(
               transferDetails(context, _transfers[index]), context),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -13,7 +13,7 @@ numberPercentageCard(String? title, value, percentage) {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(24, 24, 0, 8),
+            padding: const EdgeInsets.fromLTRB(20, 24, 0, 8),
             child: Text(
               "$title",
               style: const TextStyle(
@@ -29,7 +29,7 @@ numberPercentageCard(String? title, value, percentage) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(24, 0, 8, 24),
+                padding: const EdgeInsets.fromLTRB(20, 0, 8, 24),
                 child: Text(
                   compactNumber(value),
                   style: const TextStyle(
@@ -41,23 +41,23 @@ numberPercentageCard(String? title, value, percentage) {
                   textAlign: TextAlign.left
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 24, 24),
-                child: Text(
-                  percentage == null
-                      ? ''
-                      : percentage > 0
-                          ? "+$percentage%"
-                          : "$percentage%",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    color: Color(0xFF1C1C1C),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(0, 0, 24, 24),
+              //   child: Text(
+              //     percentage == null
+              //         ? ''
+              //         : percentage > 0
+              //             ? "+$percentage%"
+              //             : "$percentage%",
+              //     style: const TextStyle(
+              //       fontWeight: FontWeight.w400,
+              //       fontSize: 12,
+              //       color: Color(0xFF1C1C1C),
+              //       overflow: TextOverflow.ellipsis,
+              //     ),
+              //     textAlign: TextAlign.left,
+              //   ),
+              // ),
             ],
           )
         ],

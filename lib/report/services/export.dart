@@ -5,9 +5,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:smartstock/core/services/util.dart';
 
-// import 'dart:html' as webFile;
+import 'dart:html' as webFile;
 
-// import 'package:syncfusion_flutter_xlsio/xlsio.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 exportToCsv(String fileName, x) {
   // var getData = compose(
@@ -22,43 +22,43 @@ exportToCsv(String fileName, x) {
     csv = '$title\n$body'.trim();
   }
   if (kIsWeb) {
-    // var blob = webFile.Blob([csv], 'text/plain', 'native');
-    // var anchorElement = webFile.AnchorElement(
-    //   href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
-    // )
-    //   ..setAttribute("download", "$fileName.csv")
-    //   ..click();
+    var blob = webFile.Blob([csv], 'text/plain', 'native');
+    var anchorElement = webFile.AnchorElement(
+      href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
+    )
+      ..setAttribute("download", "$fileName.csv")
+      ..click();
   }
 }
 
 exportToExcel(String filename, x) {
-  // List data = itOrEmptyArray(x);
-  // List<int> excel = [];
-  // if (data.isNotEmpty) {
-  //   var getHeader = ifDoElse((f) => f is Map, (x) => x, (_) => {});
-  //   List headersKey = getHeader(data[0]).keys.toList();
-  //   final Workbook workbook = Workbook();
-  //   var sheet = workbook.worksheets[0];
-  //   for (var i = 1; i <= headersKey.length; i++) {
-  //     sheet.getRangeByIndex(1, i).setValue(headersKey[i - 1]);
-  //   }
-  //   for (var r = 1; r <= data.length; r++) {
-  //     for (var c = 1; c <= data[r - 1].values.toList().length; c++) {
-  //       sheet
-  //           .getRangeByIndex(r + 1, c)
-  //           .setValue(data[r - 1].values.toList()[c - 1]);
-  //     }
-  //   }
-  //   excel = workbook.saveAsStream();
-  //   workbook.dispose();
-  // }
-  // if (kIsWeb) {
-  //   var blob = webFile.Blob([excel], 'application/xlsx', 'native');
-  //   webFile.AnchorElement(
-  //       href: webFile.Url.createObjectUrlFromBlob(blob).toString())
-  //     ..setAttribute("download", "$filename.xlsx")
-  //     ..click();
-  // }
+  List data = itOrEmptyArray(x);
+  List<int> excel = [];
+  if (data.isNotEmpty) {
+    var getHeader = ifDoElse((f) => f is Map, (x) => x, (_) => {});
+    List headersKey = getHeader(data[0]).keys.toList();
+    final Workbook workbook = Workbook();
+    var sheet = workbook.worksheets[0];
+    for (var i = 1; i <= headersKey.length; i++) {
+      sheet.getRangeByIndex(1, i).setValue(headersKey[i - 1]);
+    }
+    for (var r = 1; r <= data.length; r++) {
+      for (var c = 1; c <= data[r - 1].values.toList().length; c++) {
+        sheet
+            .getRangeByIndex(r + 1, c)
+            .setValue(data[r - 1].values.toList()[c - 1]);
+      }
+    }
+    excel = workbook.saveAsStream();
+    workbook.dispose();
+  }
+  if (kIsWeb) {
+    var blob = webFile.Blob([excel], 'application/xlsx', 'native');
+    webFile.AnchorElement(
+        href: webFile.Url.createObjectUrlFromBlob(blob).toString())
+      ..setAttribute("download", "$filename.xlsx")
+      ..click();
+  }
 }
 
 exportPDF(String title, x) async {
