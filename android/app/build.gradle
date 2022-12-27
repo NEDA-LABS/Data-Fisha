@@ -46,7 +46,7 @@ android {
         applicationId "com.fahamutech.smartstock"
         minSdkVersion 19
         targetSdk 33//flutter.minSdkVersion
-        versionCode 36 //flutterVersionCode.toInteger()
+        versionCode 37 //flutterVersionCode.toInteger()
         versionName flutterVersionName
         signingConfig signingConfigs.debug
     }
@@ -66,10 +66,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.play:app-update:2.0.0'
+    implementation 'com.google.android.play:app-update:2.0.1'
 
     // For Kotlin users also add the Kotlin extensions library for Play In-App Update:
-    implementation 'com.google.android.play:app-update-ktx:2.0.0'
+    implementation 'com.google.android.play:app-update-ktx:2.0.1'
 
 //    implementation 'com.github.fahamutech:posprinter:v0.1.2'
 }

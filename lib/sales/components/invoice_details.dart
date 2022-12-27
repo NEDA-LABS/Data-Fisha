@@ -89,11 +89,11 @@ _header(context, item) => Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          const Expanded(
+           Expanded(
               child: Text(
-            'Invoice details',
+            '#${item['id']}',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           )),
           Text(
             '${item['date']}',

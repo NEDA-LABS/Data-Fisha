@@ -34,7 +34,7 @@ Future printPreviousReceiveTransfer(transfer) async {
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in getCarts(transfer)) {
-    var price = propertyOr('from_purchase', (x) => 0)(cart);
+    var price = propertyOr('purchase', (x) => 0)(cart);
     var p = cart['product'];
     var q = doubleOrZero(cart['quantity']);
     var t = q * price;
@@ -57,6 +57,7 @@ Future printPreviousReceiveTransfer(transfer) async {
 }
 
 Future printPreviousSendTransfer(transfer) async {
+  // print(transfer);
   var getShopName =
       compose([propertyOrNull('name'), propertyOrNull('to_shop')]);
   var getCarts = compose([itOrEmptyArray, propertyOrNull('items')]);
@@ -69,7 +70,7 @@ Future printPreviousSendTransfer(transfer) async {
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in getCarts(transfer)) {
-    var price = propertyOr('from_purchase', (x) => 0)(cart);
+    var price = propertyOr('purchase', (x) => 0)(cart);
     var p = cart['product'];
     var q = doubleOrZero(cart['quantity']);
     var t = q * price;
@@ -129,7 +130,7 @@ Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
         // "to_product": e.product['product'],
         // "to_id": e.product['id'],
         // "to_purchase": e.product['purchase'],
-        // "from_purchase": e.product['purchase'],
+        "purchase": doubleOrZero(e.product['purchase']),
         // "to_retail": e.product['retailPrice'],
         // "to_whole": e.product['wholesalePrice'],
         "product": e.product['product'],

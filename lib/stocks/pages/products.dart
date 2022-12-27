@@ -47,10 +47,11 @@ class _State extends State<ProductsPage> {
         context: context,
       ),
       staticChildren: [
-        _ifLargerScreen(context, tableContextMenu(_contextItems())),
+        _ifLargerScreen(tableContextMenu(_contextItems())),
         _loading(_isLoading),
-        _ifLargerScreen(context, _tableHeader())
+        _ifLargerScreen(_tableHeader())
       ],
+      // horizontalPadding: EdgeInsets.all(0),
       dynamicChildBuilder: isSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
@@ -62,15 +63,12 @@ class _State extends State<ProductsPage> {
     );
   }
 
-  _ifLargerScreen(context, view) => isSmallScreen(context) ? Container() : view;
+  _ifLargerScreen(view) => isSmallScreen(context) ? Container() : view;
 
   _contextItems() => [
         ContextMenu(
             name: 'Add', pressed: () => navigateTo('/stock/products/create')),
-        ContextMenu(
-          name: 'Reload',
-          pressed: _reload,
-        ),
+        ContextMenu(name: 'Reload', pressed: _reload),
         // ContextMenu(name: 'Import', pressed: () => {}),
         // ContextMenu(name: 'Export', pressed: () => {}),
       ];
@@ -194,11 +192,12 @@ class _State extends State<ProductsPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           onTap: () => _productItemClicked(_products[index]),
           title: TableLikeListTextDataCell('${_products[index]['product']}'),
           subtitle: _renderStockStatus(_products[index], appendQuantity: true),
           trailing: TableLikeListTextDataCell(
-              compactNumber('${_products[index]['retailPrice']}')),
+              compactNumber('${_products[index]['purchase']}')),
         ),
         const SizedBox(height: 5),
         horizontalLine(),

@@ -18,30 +18,16 @@ class IndexPage extends StatelessWidget {
         sliverAppBar:
             StockAppBar(title: "Stocks", showBack: false, context: context),
         staticChildren: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 790),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    switchToTitle(),
-                    Wrap(
-                      children: switchToItems(
-                        stocksMenu()
-                            .pages
-                            .where((element) => element.name != 'Summary')
-                            .toList(),
-                      ),
-                    ),
-                    stocksSummary()
-                  ],
-                ),
-              ),
+          switchToTitle(),
+          Wrap(
+            children: switchToItems(
+              stocksMenu()
+                  .pages
+                  .where((element) => element.name != 'Summary')
+                  .toList(),
             ),
-          )
+          ),
+          stocksSummary()
         ],
       );
 }

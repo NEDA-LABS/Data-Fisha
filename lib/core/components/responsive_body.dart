@@ -25,7 +25,7 @@ class ResponsivePage extends StatefulWidget {
   final bool loading;
   final Future Function()? onLoadMore;
 
-  final horizontalPadding = const EdgeInsets.symmetric(horizontal: 16.0);
+  final EdgeInsets horizontalPadding;
 
   const ResponsivePage({
     this.office = '',
@@ -41,6 +41,7 @@ class ResponsivePage extends StatefulWidget {
     this.fab,
     this.loading = false,
     this.onLoadMore,
+    this.horizontalPadding = const EdgeInsets.symmetric(horizontal: 16.0),
     Key? key,
   }) : super(key: key);
 
@@ -87,21 +88,16 @@ class _State extends State<ResponsivePage> {
               childCount: widget.totalDynamicChildren,
             ),
           ),
-          widget.loading
+          widget.loading && widget.totalDynamicChildren > 0
               ? const SliverToBoxAdapter(
                   child: SizedBox(
                       height: 60,
                       child: Center(child: CircularProgressIndicator())))
               : const SliverToBoxAdapter(),
-          SliverPadding(padding: EdgeInsets.only(bottom: bottomMargin))
+          SliverPadding(
+              padding: EdgeInsets.only(bottom: doubleOrZero(bottomMargin)))
         ],
       );
-
-  // _nestedScrollView(bottomMargin, drawer) => NestedScrollView(
-  //     headerSliverBuilder: (context, innerBoxIsScrolled) {
-  //       return widget.sliverAppBar != null ? [widget.sliverAppBar!] : [];
-  //     },
-  //     body: widget.onBody!(drawer));
 
   _getBody({bottomMargin = 0}) => _customScrollView(bottomMargin);
 
@@ -144,6 +140,10 @@ class _State extends State<ResponsivePage> {
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
+
+  _centeredContainer(view) => Center(
+      child: Container(
+          constraints: const BoxConstraints(maxWidth: 790), child: view));
 
   _getSmallScreenView(_) => widget.onBody != null
       ? widget.onBody!(StockDrawer(widget.menus, widget.current))

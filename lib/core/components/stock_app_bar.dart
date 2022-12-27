@@ -16,7 +16,7 @@ SliverAppBar StockAppBar({
   required BuildContext context,
 }) {
   return SliverAppBar(
-    expandedHeight: searchInput != null ? 150 : 100,
+    expandedHeight: showSearch ? 100 : 65,
     centerTitle: true,
     foregroundColor: const Color(0xFF1C1C1C),
     backgroundColor: Colors.white,
@@ -67,10 +67,9 @@ PreferredSizeWidget _toolBarSearchInput(
             }
           },
           decoration: InputDecoration(
-            hintText: placeholder,
-            border: InputBorder.none,
-            prefixIcon: const Icon(Icons.search_sharp)
-          ),
+              hintText: placeholder,
+              border: InputBorder.none,
+              prefixIcon: const Icon(Icons.search_sharp)),
         ),
       ),
     ),

@@ -129,6 +129,7 @@ class _PurchasesPage extends State<PurchasesPage> {
         ListTile(
           onTap: () => showDialogOrModalSheet(
               purchaseDetails(context, _purchases[index]), context),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

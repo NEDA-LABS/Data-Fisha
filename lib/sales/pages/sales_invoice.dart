@@ -286,7 +286,7 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   _getStatusView(invoice) {
     var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
-    var amount = invoice['amount'];
+    var amount = doubleOrZero(invoice['amount']);
     var paidView = Container(
       height: 24,
       width: 76,
@@ -319,7 +319,7 @@ class _InvoicesPage extends State<InvoicesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,
-        child: Text("Partial", style: tStyle),
+        child: Text("${formatNumber((paid * 100)/amount,decimals: 0)}%", style: tStyle),
       );
     }
   }

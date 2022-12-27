@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/app_bar_actions.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
@@ -18,12 +16,7 @@ class DashboardIndexPage extends StatelessWidget {
         menus: moduleMenus(),
         sliverAppBar:
             StockAppBar(title: "Dashboard", showBack: false, context: context),
-        staticChildren: const [
-          Padding(
-            padding: EdgeInsets.fromLTRB(12, 0, 12, 20),
-            child: DashboardSummary(),
-          )
-        ] ,
+        staticChildren: const [DashboardSummary()],
         fab: !hasEnoughWidth(context)
             ? FloatingActionButton(
                 onPressed: () => _getQuickActions(context),

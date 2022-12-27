@@ -1,6 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -39,11 +40,13 @@ exportToExcel(String filename, x) {
     final Workbook workbook = Workbook();
     var sheet = workbook.worksheets[0];
     for (var i = 1; i <= headersKey.length; i++) {
-      sheet.getRangeByIndex(1, i).setValue(headersKey[i-1]);
+      sheet.getRangeByIndex(1, i).setValue(headersKey[i - 1]);
     }
     for (var r = 1; r <= data.length; r++) {
-      for (var c = 1; c <= data[r-1].values.toList().length; c++) {
-        sheet.getRangeByIndex(r+1, c).setValue(data[r-1].values.toList()[c-1]);
+      for (var c = 1; c <= data[r - 1].values.toList().length; c++) {
+        sheet
+            .getRangeByIndex(r + 1, c)
+            .setValue(data[r - 1].values.toList()[c - 1]);
       }
     }
     excel = workbook.saveAsStream();
