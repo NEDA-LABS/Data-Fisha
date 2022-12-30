@@ -12,40 +12,6 @@ import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
-// Future<List> getInvoiceFromCacheOrRemote({
-//   skipLocal = false,
-//   stringLike = '',
-// }) async {
-//   var shop = await getActiveShop();
-//   // var invoices = [];
-//   //skipLocal ? [] : await getLocalInvoices(shopToApp(shop));
-//   // var getItOrRemoteAndSave = ifDoElse(
-//   //   (x) => x == null || (x is List && x.isEmpty),
-//   //   inv(_) async {
-//   List rInvoices = await getAllRemoteInvoices(stringLike)(shop);
-//   rInvoices = await compute(
-//       _filterAndSort, {"invoices": rInvoices, "query": stringLike});
-//   // await saveLocalInvoices(shopToApp(shop), rInvoices);
-//   return rInvoices;
-//   // }
-//   // ,
-//   // (x) => compute(_filterAndSort, {"invoices": x, "query": stringLike}),
-//   // );
-//   // return inv(invoices);
-// }
-//
-// Future<List> _filterAndSort(Map data) async {
-//   var invoices = data['invoices'] ?? [];
-//   // String stringLike = data['query'];
-//   // _where(x) =>
-//   //     '${x['displayName']}'.toLowerCase().contains(stringLike.toLowerCase());
-//
-//   // invoices = invoices.where(_where).toList();
-//   // invoices.sort((a, b) =>
-//   //     '${a['date']}'.toLowerCase().compareTo('${b['date']}'.toLowerCase()));
-//   return invoices;
-// }
-
 Future<List> getInvoiceSalesFromCacheOrRemote(startAt, size, product) async {
   var shop = await getActiveShop();
   var user = await getLocalCurrentUser();
@@ -56,19 +22,17 @@ Future<List> getInvoiceSalesFromCacheOrRemote(startAt, size, product) async {
 }
 
 Future _printInvoiceItems(
-    List carts, discount, customer, wholesale, batchId) async {
-  var items = cartItems(carts, discount, wholesale, '$customer');
+    List carts, discount, customer, batchId) async {
+  var items = cartItems(carts, discount,false, '$customer');
   var data = await cartItemsToPrinterData(
       items,
       '$customer',
-      (cart) => wholesale == true
-          ? cart['stock']['wholesalePrice']
-          : cart['stock']['retailPrice']);
+      (cart) => cart['stock']['retailPrice']);
   await posPrint(data: data, qr: batchId);
 }
 
 Future<Map> _carts2Invoice(
-    List carts, dis, wholesale, customer, cartId, batchId) async {
+    List carts, dis, customer, cartId, batchId) async {
   var discount = doubleOrZero('$dis');
   var totalAmount = doubleOrZero(
       '${cartTotalAmount(carts, false, (product) => product['retailPrice'])}');
@@ -88,8 +52,7 @@ Future<Map> _carts2Invoice(
             totalItems: carts.length,
             totalDiscount: discount,
             product: cart.product,
-            quantity: cart.quantity ?? 0,
-            wholesale: wholesale),
+            quantity: cart.quantity ?? 0),
         "quantity": cart.quantity ?? 0,
         "stock": {
           "product": cart.product['product'],
@@ -109,9 +72,9 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/invoice';
-  await _printInvoiceItems(carts, discount, customer, true, cartId);
+  await _printInvoiceItems(carts, discount, customer, cartId);
   var invoice =
-      await _carts2Invoice(carts, discount, true, customer, cartId, batchId);
+      await _carts2Invoice(carts, discount, customer, cartId, batchId);
   var offlineFirst = await isOfflineFirstEnv();
   if (offlineFirst == true) {
     await saveLocalSync(batchId, url, invoice);

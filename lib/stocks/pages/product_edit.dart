@@ -5,13 +5,13 @@ import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/stocks/components/product_edit_form.dart';
 
 class ProductEditPage extends StatelessWidget {
-  final String productName;
+  final Map product;
 
-  const ProductEditPage(this.productName, {Key? key}) : super(key: key);
+  const ProductEditPage(this.product, {Key? key}) : super(key: key);
 
   _appBar(context) {
     return StockAppBar(
-      title: "Update $productName detail",
+      title: "Update ${product['product']} detail",
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,
@@ -30,7 +30,7 @@ class ProductEditPage extends StatelessWidget {
           child: Container(
               constraints: const BoxConstraints(maxWidth: 600),
               // padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: const ProductUpdateForm()),
+              child: ProductUpdateForm(product)),
         )
       ],
     );

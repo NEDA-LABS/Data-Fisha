@@ -8,7 +8,8 @@ import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
 
 class ProductUpdateForm extends StatefulWidget {
-  const ProductUpdateForm({Key? key}) : super(key: key);
+  final Map product;
+  const ProductUpdateForm(this.product, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -28,6 +29,19 @@ class _State extends State<ProductUpdateForm> {
   }
 
   refresh() => setState(() {});
+
+  @override
+  void initState() {
+    product.addAll({
+      "barcode": widget.product['barcode'],
+      "category": widget.product['category'],
+      "purchase": widget.product['purchase'],
+      "retailPrice": widget.product['retailPrice'],
+      "wholesalePrice": widget.product['wholesalePrice'],
+      "id": widget.product['id'],
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

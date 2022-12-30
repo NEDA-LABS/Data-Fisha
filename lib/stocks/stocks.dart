@@ -33,8 +33,8 @@ class StockModule extends Module {
         }),
         ChildRoute('/products/edit', child: (_, __) {
           var product = __.data;
-          if (product is Map && product['id'] is String) {
-            return ProductEditPage('${product['product']}');
+          if (product is Map && product['id'] != null) {
+            return ProductEditPage(product);
           }
           navigateToAndReplace('/stock/products');
           return Container();
