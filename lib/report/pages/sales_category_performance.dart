@@ -39,7 +39,7 @@ class _State extends State<CategoryPerformance> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),
@@ -171,7 +171,7 @@ class _State extends State<CategoryPerformance> {
             ),
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -214,7 +214,7 @@ class _State extends State<CategoryPerformance> {
   }
 
   _appBar() {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Category performance",
       showBack: false,
       backLink: '/report/',

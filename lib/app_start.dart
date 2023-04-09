@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/color_schemes.dart';
 import 'package:smartstock/configurations.dart';
 import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
@@ -19,7 +20,7 @@ startSmartStock({
 }) {
   WidgetsFlutterBinding.ensureInitialized();
   _periodicLocalSyncs();
-  SalesExternalServiceState().setSalesExternalServices(externalSaleServices);
+  // SalesExternalServiceState().setSalesExternalServices(externalSaleServices);
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(
@@ -35,9 +36,14 @@ _mainWidget() {
     routerDelegate: Modular.routerDelegate,
     debugShowCheckedModeBanner: kDebugMode,
     theme: ThemeData(
-      primarySwatch: getSmartStockMaterialColorSwatch(),
+      colorScheme: lightColorScheme,
       fontFamily: 'Inter',
-      scaffoldBackgroundColor: const Color(0xFFFFFFFF)
+      useMaterial3: true
+    ),
+    darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
+        fontFamily: 'Inter',
+        useMaterial3: true,
     ),
   );
 }

@@ -8,6 +8,7 @@ import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/services/navigation.dart';
 import 'package:smartstock/sales/states/sales.dart';
 
 class SalesModule extends Module {
@@ -16,7 +17,7 @@ class SalesModule extends Module {
         ChildRoute(
           '/',
           guards: [ActiveShopGuard()],
-          child: (_, __) => const SalesPage(),
+          child: (_, __) =>  SalesPage(pages: getSalesModuleMenu(_).pages,),
         ),
         ChildRoute(
           '/cash',
@@ -36,12 +37,12 @@ class SalesModule extends Module {
         ChildRoute(
           '/customers',
           guards: [ActiveShopGuard()],
-          child: (context, args) => CustomersPage(args),
+          child: (context, args) => const CustomersPage(),
         ),
         ChildRoute(
           '/invoice',
           guards: [ActiveShopGuard()],
-          child: (context, args) => InvoicesPage(args),
+          child: (context, args) => const InvoicesPage(),
         ),
         ChildRoute(
           '/invoice/create',

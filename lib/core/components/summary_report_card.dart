@@ -1,20 +1,13 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/dashboard/components/numberCard.dart';
 
 class DashboardSummaryReportCard extends StatefulWidget {
   final String title;
   final dynamic future;
-  final bool showRefresh;
-  final String? link;
 
   const DashboardSummaryReportCard({
     required this.title,
     required this.future,
-    this.link,
-    this.showRefresh = true,
     Key? key,
   }) : super(key: key);
 
@@ -23,152 +16,36 @@ class DashboardSummaryReportCard extends StatefulWidget {
 }
 
 class _State extends State<DashboardSummaryReportCard> {
-  dynamic updateState;
-
   @override
   void initState() {
-    updateState =
-        ifDoElse((x) => x is Map, (x) => setState(() {}), (x) => null);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        builder: _builder(widget.title, updateState), future: widget.future());
-  }
-
-  _loading() {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 120),
-      child: const Center(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: CircularProgressIndicator(),
-        ),
-      ),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _loading(context);
+        }
+        return NumberPercentageCard(
+          widget.title,
+          snapshot.hasData ? snapshot.data : 0,
+          0,
+        );
+      },
+      future: widget.future(),
     );
   }
 
-  _errorAndRetry(String err, state) => Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(err),
-            OutlinedButton(
-                onPressed: () => state({}), child: const Text('Retry'))
-          ],
-        ),
-      );
-
-  _dataAndRefresh(data, String title, updateState) {
+  _loading(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(5),
       constraints: const BoxConstraints(minHeight: 120),
-      padding: const EdgeInsets.all(10),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
-              child: Text(
-                NumberFormat().format(doubleOrZero('$data')),
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-            ),
-            widget.showRefresh
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: OutlinedButton(
-                        onPressed: () => updateState({}),
-                        child: const Text('Refresh')),
-                  )
-                : Container()
-          ],
-        ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: Theme.of(context).colorScheme.surfaceVariant,
       ),
     );
-  }
-
-  _showErrorOrContent(String title, updateState) => ifDoElse(
-        (x) => x.hasError,
-        (x) => _errorAndRetry('${x.error}', updateState),
-        (x) => _dataAndRefresh(x.data, title, updateState),
-      );
-
-  Widget Function(BuildContext context, AsyncSnapshot snapshot) _builder(
-    String title,
-    updateState,
-  ) {
-    return (BuildContext context, AsyncSnapshot snapshot) {
-      var builder = ifDoElse(
-        (x) => snapshot.connectionState == ConnectionState.waiting,
-        (x) => _loading(),
-        _showErrorOrContent(title, updateState),
-      );
-      var line = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: horizontalLine(),
-      );
-      return Container(
-        constraints: BoxConstraints(
-          maxWidth: isSmallScreen(context)
-              ? MediaQuery.of(context).size.width
-              : 790 / 2,
-          minHeight: 150,
-        ),
-        child: Container(
-          margin: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xffe1e1e1), width: 0.8)
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 38,
-                child: Center(
-                    child: Text(
-                  title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w200,
-                      fontSize: 14,
-                      color: Color(0xff525252)),
-                )),
-              ),
-              line,
-              builder(snapshot),
-              line,
-              SizedBox(
-                height: 38,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: widget.link != null
-                      ? TextButton(
-                          onPressed: () {
-                            navigateTo(widget.link ?? '/');
-                          },
-                          child: Text(
-                            'Explore more',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Theme.of(context).primaryColorDark),
-                          ),
-                        )
-                      : Container(),
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    };
   }
 }

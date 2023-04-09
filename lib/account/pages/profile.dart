@@ -12,12 +12,12 @@ class ProfilePage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
-      sliverAppBar: StockAppBar(
+      sliverAppBar: getSliverSmartStockAppBar(
           title: "Profile",
           showBack: false,
           backLink: '/account/',
           context: context),
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       staticChildren: const [ProfileForm()],
     );
   }

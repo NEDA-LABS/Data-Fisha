@@ -29,7 +29,7 @@ class _State extends State<ExpenseItemsPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/expense/',
         sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
@@ -52,7 +52,7 @@ class _State extends State<ExpenseItemsPage> {
       );
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Expense items",
       showBack: true,
       backLink: '/expense/',

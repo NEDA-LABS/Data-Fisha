@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/app_bar_actions.dart';
 import 'package:smartstock/core/services/util.dart';
 
-SliverAppBar StockAppBar({
+SliverAppBar getSliverSmartStockAppBar({
   required String title,
   bool showSearch = false,
   bool showBack = false,
@@ -18,8 +18,8 @@ SliverAppBar StockAppBar({
   return SliverAppBar(
     expandedHeight: showSearch ? 100 : 65,
     centerTitle: true,
-    foregroundColor: const Color(0xFF1C1C1C),
-    backgroundColor: Colors.white,
+    // foregroundColor: const Color(0xFF1C1C1C),
+    // backgroundColor: Colors.white,
     title: Text(title, overflow: TextOverflow.ellipsis),
     bottom: showSearch
         ? (searchInput as PreferredSizeWidget?) ??
@@ -34,12 +34,6 @@ SliverAppBar StockAppBar({
     pinned: true,
     snap: true,
     floating: true,
-    // flexibleSpace: FlexibleSpaceBar(
-    //   title: Text(title,
-    //       overflow: TextOverflow.ellipsis,
-    //       style: const TextStyle(color: Color(0xFF1C1C1C))),
-    //   centerTitle: true,
-    // ),
   );
 }
 

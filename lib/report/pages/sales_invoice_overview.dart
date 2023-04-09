@@ -44,7 +44,7 @@ class _State extends State<OverviewInvoiceSales> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),
@@ -53,7 +53,7 @@ class _State extends State<OverviewInvoiceSales> {
           margin: const EdgeInsets.all(5),
           decoration: solidRadiusBoxDecoration(),
           child: Container(
-            height: isSmallScreen(context)
+            height: getIsSmallScreen(context)
                 ? chartCardMobileHeight
                 : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
@@ -82,7 +82,7 @@ class _State extends State<OverviewInvoiceSales> {
                 ),
               ]),
             ),
-            horizontalLine()
+            HorizontalLine()
           ],
         );
       },
@@ -176,7 +176,7 @@ class _State extends State<OverviewInvoiceSales> {
       children: [
         Card(
           child: Container(
-            height: isSmallScreen(context)
+            height: getIsSmallScreen(context)
                 ? chartCardMobileHeight
                 : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
@@ -250,7 +250,7 @@ class _State extends State<OverviewInvoiceSales> {
   }
 
   _appBar() {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Invoice sales overview",
       showBack: false,
       backLink: '/report/',

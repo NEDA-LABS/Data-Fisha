@@ -10,7 +10,7 @@ class ProductEditPage extends StatelessWidget {
   const ProductEditPage(this.product, {Key? key}) : super(key: key);
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Update ${product['product']} detail",
       showBack: true,
       backLink: '/stock/products',
@@ -22,7 +22,7 @@ class ProductEditPage extends StatelessWidget {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/stock/',
       sliverAppBar: _appBar(context),
       staticChildren: [

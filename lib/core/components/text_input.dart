@@ -94,7 +94,8 @@ class _State extends State<TextInput> {
       border: InputBorder.none,
       hintText: widget.placeholder,
       hintStyle: const TextStyle(
-          color: Color(0xffb0b0b0), fontSize: 14, fontWeight: FontWeight.w300),
+          // color: Color(0xffb0b0b0),
+          fontSize: 14, fontWeight: FontWeight.w300),
       contentPadding: inputPadding,
     );
 

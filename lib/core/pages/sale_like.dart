@@ -69,7 +69,7 @@ class _State extends State<SaleLikePage> {
   @override
   Widget build(var context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       office: 'Menu',
       current: widget.backLink,
       rightDrawer: _hasCarts(states)
@@ -117,7 +117,7 @@ class _State extends State<SaleLikePage> {
   }
 
   _appBar(updateState) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: widget.title,
       backLink: widget.backLink,
       searchTextController: widget.searchTextController,

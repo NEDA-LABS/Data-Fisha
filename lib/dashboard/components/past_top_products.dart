@@ -120,7 +120,7 @@ class _State extends State<PastTopProducts> {
                 TableLikeListTextHeaderCell('Profit'),
                 TableLikeListTextHeaderCell('Margin'),
               ]),
-              horizontalLine(),
+              HorizontalLine(),
               Expanded(
                 child: TableLikeList(
                   onFuture: () async => salesByProducts,

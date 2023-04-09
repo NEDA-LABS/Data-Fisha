@@ -11,9 +11,9 @@ class ExpenseIndexPage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/expense/',
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       sliverAppBar:
-          StockAppBar(title: "Expense", showBack: false, context: context),
+          getSliverSmartStockAppBar(title: "Expense", showBack: false, context: context),
       staticChildren: [
         Container(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),

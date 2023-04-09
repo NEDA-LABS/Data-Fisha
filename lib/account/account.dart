@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock/account/pages/choose_shop.dart';
-import 'package:smartstock/account/pages/login.dart';
+import 'package:smartstock/account/pages/ChooseShopPage.dart';
+import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/pages/payment.dart';
 import 'package:smartstock/account/pages/profile.dart';
 import 'package:smartstock/account/pages/register.dart';

@@ -1,3 +1,11 @@
 import 'package:flutter/material.dart';
 
-horizontalLine()=>Container(height: 1.1, color: const Color(0xffe5e5e5));
+class HorizontalLine extends StatelessWidget{
+  const HorizontalLine({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+   return Container(height: 0.8, color: Theme.of(context).colorScheme.surfaceVariant);
+  }
+
+}

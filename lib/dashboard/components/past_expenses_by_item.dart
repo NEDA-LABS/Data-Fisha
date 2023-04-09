@@ -98,7 +98,7 @@ class _State extends State<PastExpensesByItemOverview> {
       margin: const EdgeInsets.all(5),
       decoration: solidRadiusBoxDecoration(),
       child: Container(
-        height: isSmallScreen(context)
+        height: getIsSmallScreen(context)
             ? chartCardMobileHeight
             : chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),

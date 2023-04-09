@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/account/account.dart';
 import 'package:smartstock/account/services/navigation.dart';
 import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/guards/manager.dart';
 import 'package:smartstock/core/guards/owner.dart';
-import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/services/navigation.dart';
@@ -53,7 +53,7 @@ class SmartStockCoreModule extends Module {
         ),
         ModuleRoute(
           '/expense/',
-          guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+          guards: [AuthGuard(), ActiveShopGuard()],
           module: ExpenseModule([]),
         ),
       ];
@@ -62,12 +62,12 @@ class SmartStockCoreModule extends Module {
   List<Bind> get binds => [];
 }
 
-List<MenuModel> moduleMenus() {
+List<MenuModel> getAppModuleMenus(BuildContext context) {
   return [
     dashboardMenu(),
     reportMenu(),
-    salesMenu(),
-    stocksMenu(),
+    getSalesModuleMenu(context),
+    getStocksModuleMenu(context),
     expenseMenu(),
     accountMenu(),
   ];

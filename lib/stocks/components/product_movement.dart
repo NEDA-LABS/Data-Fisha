@@ -80,7 +80,7 @@ class _State extends State<ProductMovementDetails> {
                           paddingText(item[1]),
                           paddingText(item[4] - item[1]),
                         ]),
-                        horizontalLine()
+                        HorizontalLine()
                       ],
                     ))
                 .toList(),

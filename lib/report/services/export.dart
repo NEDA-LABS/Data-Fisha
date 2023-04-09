@@ -5,7 +5,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:smartstock/core/services/util.dart';
 
-import 'dart:html' as webFile;
+// import 'dart:html' as webFile;
 
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
@@ -21,14 +21,14 @@ exportToCsv(String fileName, x) {
     var body = data.map((e) => e.values.join(',')).join('\n');
     csv = '$title\n$body'.trim();
   }
-  if (kIsWeb) {
-    var blob = webFile.Blob([csv], 'text/plain', 'native');
-    var anchorElement = webFile.AnchorElement(
-      href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
-    )
-      ..setAttribute("download", "$fileName.csv")
-      ..click();
-  }
+  // if (kIsWeb) {
+  //   var blob = webFile.Blob([csv], 'text/plain', 'native');
+  //   var anchorElement = webFile.AnchorElement(
+  //     href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
+  //   )
+  //     ..setAttribute("download", "$fileName.csv")
+  //     ..click();
+  // }
 }
 
 exportToExcel(String filename, x) {
@@ -52,13 +52,13 @@ exportToExcel(String filename, x) {
     excel = workbook.saveAsStream();
     workbook.dispose();
   }
-  if (kIsWeb) {
-    var blob = webFile.Blob([excel], 'application/xlsx', 'native');
-    webFile.AnchorElement(
-        href: webFile.Url.createObjectUrlFromBlob(blob).toString())
-      ..setAttribute("download", "$filename.xlsx")
-      ..click();
-  }
+  // if (kIsWeb) {
+  //   var blob = webFile.Blob([excel], 'application/xlsx', 'native');
+  //   webFile.AnchorElement(
+  //       href: webFile.Url.createObjectUrlFromBlob(blob).toString())
+  //     ..setAttribute("download", "$filename.xlsx")
+  //     ..click();
+  // }
 }
 
 exportPDF(String title, x) async {

@@ -16,9 +16,8 @@ import 'package:smartstock/sales/components/sale_invoice_details.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
 class InvoicesPage extends StatefulWidget {
-  final dynamic args;
 
-  const InvoicesPage(this.args, {Key? key}) : super(key: key);
+  const InvoicesPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();
@@ -32,11 +31,14 @@ class _InvoicesPage extends State<InvoicesPage> {
   List _invoices = [];
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Invoices",
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;
@@ -88,22 +90,22 @@ class _InvoicesPage extends State<InvoicesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/sales/',
       sliverAppBar: _appBar(context),
       staticChildren: [
-        isSmallScreen(context)
+        getIsSmallScreen(context)
             ? Container()
             : tableContextMenu(_contextInvoices(context)),
         _loadingView(_loading),
-        isSmallScreen(context) ? Container() : _tableHeader(),
+        getIsSmallScreen(context) ? Container() : _tableHeader(),
       ],
       fab: FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
         child: const Icon(Icons.unfold_more_outlined),
       ),
       totalDynamicChildren: _invoices.length,
-      dynamicChildBuilder: isSmallScreen(context)
+      dynamicChildBuilder: getIsSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
       loading: _loading,
@@ -242,7 +244,7 @@ class _InvoicesPage extends State<InvoicesPage> {
           ),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }
@@ -266,7 +268,7 @@ class _InvoicesPage extends State<InvoicesPage> {
             Center(child: _getStatusView(_invoices[index]))
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -337,7 +339,7 @@ class _InvoicesPage extends State<InvoicesPage> {
                 title: const Text('Add invoice'),
                 onTap: () => navigateTo('/sales/invoice/create'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload invoices'),

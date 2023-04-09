@@ -43,7 +43,7 @@ class _State extends State<OverviewCashSales> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),
@@ -52,7 +52,7 @@ class _State extends State<OverviewCashSales> {
           margin: const EdgeInsets.all(5),
           decoration: solidRadiusBoxDecoration(),
           child: Container(
-            height: isSmallScreen(context)
+            height: getIsSmallScreen(context)
                 ? chartCardMobileHeight
                 : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
@@ -66,7 +66,7 @@ class _State extends State<OverviewCashSales> {
         _tableHeader(),
       ],
       totalDynamicChildren: dailySales.length,
-      dynamicChildBuilder: isSmallScreen(context)
+      dynamicChildBuilder: getIsSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
     );
@@ -148,7 +148,7 @@ class _State extends State<OverviewCashSales> {
   // }
 
   _tableHeader() {
-    if (isSmallScreen(context)) {
+    if (getIsSmallScreen(context)) {
       return const TableLikeListRow([
         TableLikeListTextHeaderCell('Date'),
         TableLikeListTextHeaderCell('Total'),
@@ -193,7 +193,7 @@ class _State extends State<OverviewCashSales> {
             ),
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -213,7 +213,7 @@ class _State extends State<OverviewCashSales> {
             ),
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -252,7 +252,7 @@ class _State extends State<OverviewCashSales> {
   }
 
   _appBar() {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Cash sales overview",
       showBack: false,
       backLink: '/report/',

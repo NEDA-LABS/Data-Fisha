@@ -30,8 +30,8 @@ class ExternalServiceWrapperPage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: currentRoute,
-      menus: moduleMenus(),
-      sliverAppBar: StockAppBar(
+      menus: getAppModuleMenus(context),
+      sliverAppBar: getSliverSmartStockAppBar(
         title: title,
         showBack: backLink.isNotEmpty,
         backLink: backLink,

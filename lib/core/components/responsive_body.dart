@@ -1,13 +1,17 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/drawer.dart';
+import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/bottom_bar.dart';
+import 'package:smartstock/core/components/StockDrawer.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 const _emptyList = <Widget>[];
 
 Widget _emptyBuilder(_, __) => Container();
+
+typedef ChildBuilder = Widget Function(BuildContext context, dynamic index);
 
 class ResponsivePage extends StatefulWidget {
   final String office;
@@ -20,10 +24,10 @@ class ResponsivePage extends StatefulWidget {
   final FloatingActionButton? fab;
   final List<Widget> staticChildren;
   final int totalDynamicChildren;
-  final Widget Function(BuildContext context, dynamic index)
-      dynamicChildBuilder;
+  final ChildBuilder dynamicChildBuilder;
   final bool loading;
   final Future Function()? onLoadMore;
+  // final double currentBottomNavItemIndex;
 
   final EdgeInsets horizontalPadding;
 
@@ -65,8 +69,11 @@ class _State extends State<ResponsivePage> {
   }
 
   @override
-  Widget build(BuildContext context) => ifDoElse(
-      _screenCheck, _getLargerScreenView, _getSmallScreenView)(context);
+  Widget build(BuildContext context) {
+    var getView =
+        ifDoElse(_screenCheck, _getLargerScreenView, _getSmallScreenView);
+    return getView(context);
+  }
 
   _customScrollView(bottomMargin) => CustomScrollView(
         controller: _controller,
@@ -99,13 +106,8 @@ class _State extends State<ResponsivePage> {
         ],
       );
 
-  _getBody({bottomMargin = 0}) => _customScrollView(bottomMargin);
-
   _scrollListener() {
-    if (_controller.position.extentAfter < 50
-        // &&
-        // _controller. == ScrollDirection.reverse
-        ) {
+    if (_controller.position.extentAfter < 50) {
       _loadMore();
     }
   }
@@ -130,27 +132,42 @@ class _State extends State<ResponsivePage> {
   _getLargerScreenView(_) => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StockDrawer(widget.menus, widget.current),
-          Container(width: 0.5, color: const Color(0xFFDADADA)),
+          widget.showLeftDrawer
+              ? StockDrawer(widget.menus, widget.current)
+              : Container(),
+          // widget.showLeftDrawer
+          //     ? Container(
+          //         width: 0.5,
+          //         // color: const Color(0xFFDADADA),
+          //       )
+          //     : Container(),
           Expanded(
               child: widget.onBody != null
                   ? widget.onBody!(null)
-                  : Scaffold(body: _getBody(bottomMargin: 24))),
-          Container(width: 0.5, color: const Color(0xFFDADADA)),
+                  : Scaffold(body: _customScrollView(24))),
+          // Container(
+          //   width: 0.5,
+          //   // color: const Color(0xFFDADADA),
+          // ),
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
 
-  _centeredContainer(view) => Center(
-      child: Container(
-          constraints: const BoxConstraints(maxWidth: 790), child: view));
+  // _centeredContainer(view) => Center(
+  //     child: Container(
+  //         constraints: const BoxConstraints(maxWidth: 790), child: view));
 
-  _getSmallScreenView(_) => widget.onBody != null
-      ? widget.onBody!(StockDrawer(widget.menus, widget.current))
-      : Scaffold(
-          drawer: StockDrawer(widget.menus, widget.current),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: isSmallScreen(_) ? widget.fab : null,
-          body: _getBody(bottomMargin: 100));
+  _getSmallScreenView(_) {
+    var drawer = StockDrawer(widget.menus, widget.current);
+    var scaffold = Scaffold(
+      drawer: drawer,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
+      body: _customScrollView(100),
+    );
+    var view = widget.onBody != null
+        ? widget.onBody!(StockDrawer(widget.menus, widget.current))
+        : scaffold;
+    return view;
+  }
 }

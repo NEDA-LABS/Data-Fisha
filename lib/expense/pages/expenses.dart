@@ -59,20 +59,20 @@ class _State extends State<ExpenseExpensesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/expense/',
       sliverAppBar:
-          StockAppBar(title: "Expenses", showBack: false, context: context),
+          getSliverSmartStockAppBar(title: "Expenses", showBack: false, context: context),
       staticChildren: [
         _loadingView(_loading),
-        isSmallScreen(context)
+        getIsSmallScreen(context)
             ? Container()
             : tableContextMenu(_contextSales(context)),
-        isSmallScreen(context) ? Container() : _tableHeader(),
+        getIsSmallScreen(context) ? Container() : _tableHeader(),
       ],
       totalDynamicChildren: _expenses.length,
       dynamicChildBuilder:
-          isSmallScreen(context) ? _smallScreen : _largerScreen,
+          getIsSmallScreen(context) ? _smallScreen : _largerScreen,
       loading: _loading,
       onLoadMore: () async => _loadMore(),
       fab: FloatingActionButton(
@@ -94,7 +94,7 @@ class _State extends State<ExpenseExpensesPage> {
               '${formatNumber(_expenses[index]['amount'])}'),
           TableLikeListTextDataCell('${_expenses[index]['date']}'),
         ]),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -116,7 +116,7 @@ class _State extends State<ExpenseExpensesPage> {
           subtitle: Text('${_expenses[index]['date']}'),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }
@@ -188,7 +188,7 @@ class _State extends State<ExpenseExpensesPage> {
                       .whenComplete(() => _addExpenseView());
                 },
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload expenses'),
@@ -204,7 +204,7 @@ class _State extends State<ExpenseExpensesPage> {
   }
 
   _addExpenseView() {
-    isSmallScreen(context)
+    getIsSmallScreen(context)
         ? fullScreeDialog(
             context,
             (p0) => Scaffold(

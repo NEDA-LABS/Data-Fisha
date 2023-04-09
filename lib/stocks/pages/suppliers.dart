@@ -12,9 +12,8 @@ import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class SuppliersPage extends StatefulWidget {
-  final dynamic args;
 
-  const SuppliersPage(this.args, {Key? key}) : super(key: key);
+  const SuppliersPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -26,11 +25,14 @@ class _State extends State<SuppliersPage> {
   List _suppliers = [];
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Suppliers",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       onSearch: (p0) {
         setState(() {
           _query = p0;
@@ -91,19 +93,19 @@ class _State extends State<SuppliersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextItems(context)),
           _loading(_isLoading),
-          isSmallScreen(context) ? Container() : _tableHeader(),
+          getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         totalDynamicChildren: _suppliers.length,
         dynamicChildBuilder:
-            isSmallScreen(context) ? _smallScreen : _largerScreen,
+            getIsSmallScreen(context) ? _smallScreen : _largerScreen,
         fab: FloatingActionButton(
           onPressed: () => _showMobileContextMenu(context),
           child: const Icon(Icons.unfold_more_outlined),
@@ -127,7 +129,7 @@ class _State extends State<SuppliersPage> {
                       .whenComplete(() => _createSupplier());
                 },
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload suppliers'),
@@ -167,7 +169,7 @@ class _State extends State<SuppliersPage> {
           TableLikeListTextDataCell('${_suppliers[index]['email']}'),
           TableLikeListTextDataCell('${_suppliers[index]['address']}'),
         ]),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -202,7 +204,7 @@ class _State extends State<SuppliersPage> {
                 ),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }

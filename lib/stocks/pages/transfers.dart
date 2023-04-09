@@ -25,11 +25,14 @@ class _TransfersPage extends State<TransfersPage> {
   final String _date = toSqlDate(DateTime.now());
   List _transfers = [];
 
-  _appBar(context) => StockAppBar(
+  _appBar(context) => getSliverSmartStockAppBar(
       title: "Transfers",
       showBack: true,
       backLink: '/stock/',
       showSearch: false,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;
@@ -71,21 +74,21 @@ class _TransfersPage extends State<TransfersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         loading: _loading,
         onLoadMore: () async => _loadMore(),
         staticChildren: [
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextTransfers(context)),
           _loadingView(_loading),
-          isSmallScreen(context) ? Container() : _tableHeader(),
+          getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         totalDynamicChildren: _transfers.length,
         dynamicChildBuilder:
-            isSmallScreen(context) ? _smallScreenView : _largerScreenView,
+            getIsSmallScreen(context) ? _smallScreenView : _largerScreenView,
         fab: FloatingActionButton(
           onPressed: () => _showMobileContextMenu(context),
           child: const Icon(Icons.unfold_more_outlined),
@@ -150,13 +153,13 @@ class _TransfersPage extends State<TransfersPage> {
                 title: const Text('Send'),
                 onTap: () => navigateTo('/stock/transfers/send'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.call_received),
                 title: const Text('Receive'),
                 onTap: () => navigateTo('/stock/transfers/receive'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload transfers'),
@@ -207,7 +210,7 @@ class _TransfersPage extends State<TransfersPage> {
             // Center(child: _getStatusView(_purchases[index]))
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -244,7 +247,7 @@ class _TransfersPage extends State<TransfersPage> {
           ),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }

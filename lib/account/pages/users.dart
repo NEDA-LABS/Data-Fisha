@@ -31,12 +31,12 @@ class _State extends State<UsersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/account/',
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loading(loading),
-          isSmallScreen(context)?Container():tableContextMenu(_contextItems()),
+          getIsSmallScreen(context)?Container():tableContextMenu(_contextItems()),
           _tableHeader(),
         ],
         totalDynamicChildren: users.length,
@@ -59,14 +59,14 @@ class _State extends State<UsersPage> {
                   TableLikeListTextDataCell('${users[index]['role']}'),
                 ]),
               ),
-              horizontalLine()
+              HorizontalLine()
             ],
           );
         },
       );
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Users",
       showBack: false,
       backLink: '/account/',
@@ -132,7 +132,7 @@ class _State extends State<UsersPage> {
                       .whenComplete(() => navigateTo('/account/users/create'));
                 },
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload users'),

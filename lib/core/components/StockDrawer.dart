@@ -10,27 +10,27 @@ import 'package:smartstock/core/services/util.dart';
 class StockDrawer extends Drawer {
   final List<MenuModel> menus;
   final String? current;
+  final double cWidth;
 
-  StockDrawer(this.menus, this.current, {Key? key}) : super(key: key);
+  const StockDrawer(
+    this.menus,
+    this.current, {
+    Key? key,
+    this.cWidth = 250,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: 250,
-      backgroundColor: Colors.white,
+      width: cWidth,
       child: _modulesMenuContent(menus, current),
     );
   }
 
   _modulesMenuContent(List<MenuModel> allMenus, String? current) {
     var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
-    var getOfficeLogo = compose([
-      propertyOr(
-          'logo',
-          (p0) =>
-              '' /*'https://bafkreiaitdtnqgwdrwvtfg2scoehxkaca2nfazn5cnvvp2gza46y6yqgme.ipfs.cf-ipfs.com/'*/),
-      propertyOr('ecommerce', (p0) => {})
-    ]);
+    var getOfficeLogo = compose(
+        [propertyOr('logo', (p0) => ''), propertyOr('ecommerce', (p0) => {})]);
     return FutureBuilder(
       initialData: const {"shop": {}, "menus": []},
       future: _future(allMenus),
@@ -45,7 +45,6 @@ class StockDrawer extends Drawer {
                 Expanded(
                   child: ListView(
                     controller: ScrollController(),
-                    shrinkWrap: true,
                     children: [
                       _header(
                           getOfficeName(
@@ -53,7 +52,7 @@ class StockDrawer extends Drawer {
                           getOfficeLogo(
                               propertyOr('shop', (p0) => {})(snapshot.data))),
                       ...propertyOr('menus', (p0) => [])(snapshot.data)
-                          .map<Widget>(_moduleMenuItems(current))
+                          .map<Widget>(_moduleMenuItems(current, context))
                           .toList()
                     ],
                   ),
@@ -98,12 +97,16 @@ class StockDrawer extends Drawer {
 
   Widget _officeName(String? name) => Builder(
       builder: (context) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('$name',
-              style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 12,
-                  color: Theme.of(context).primaryColor))));
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '$name',
+              style: const TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 12,
+                // color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ));
 
   Widget _officeLogo(String? url) {
     return Padding(
@@ -113,8 +116,9 @@ class StockDrawer extends Drawer {
           width: 80,
           height: 80,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(80),
-              color: Theme.of(context).primaryColor),
+            borderRadius: BorderRadius.circular(80),
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
           child: url == null || true
               ? Container()
               : url.isEmpty
@@ -131,67 +135,73 @@ class StockDrawer extends Drawer {
         padding: const EdgeInsets.all(10.0),
         child: TextButton(
           onPressed: () => navigateTo('/account/shop'),
-          child: Text(
+          child: const Text(
             'Change Office',
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).primaryColor),
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              // color: Theme.of(context).primaryColor,
+            ),
           ),
         ),
       ),
     );
   }
 
-  final _selectedDecoration = const BoxDecoration(
-      color: Color(0x0d000000),
-      borderRadius: BorderRadius.all(Radius.circular(8)));
-  final _selectedIcon = Container(
-    width: 5,
-    margin: const EdgeInsets.symmetric(vertical: 13),
-    decoration: const BoxDecoration(
-      color: Color(0xff1C1C1C),
-      borderRadius: BorderRadius.all(Radius.circular(30)),
-    ),
-  );
+  BoxDecoration _getSelectedDecoration(BuildContext context) {
+    return BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(8)));
+  }
+
+  Widget _getSelectedIcon(BuildContext context) {
+    return Container(
+      width: 6,
+      margin: const EdgeInsets.symmetric(vertical: 13),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
+      ),
+    );
+  }
+
   final _itemStyle = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: Color(0xFF1C1C1C),
+    // color: Color(0xFF1C1C1C),
   );
 
-  _moduleMenuItems(String? current) {
+  _moduleMenuItems(String? current, BuildContext context) {
     return (dynamic item) {
       item as MenuModel;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: item.pages.isEmpty
-            ? Container(
-                decoration: item.link == current ? _selectedDecoration : null,
-                child: ListTile(
-                  leading: item.link == current ? _selectedIcon : item.icon,
-                  title: Text(item.name, style: _itemStyle),
-                  onTap: () => navigateTo(item.link),
-                ),
-              )
-            : ExpansionTile(
-              leading: current?.contains(item.link) ?? false
-                  ? _selectedIcon
-                  : item.icon,
-              title: Text(item.name, style: _itemStyle),
-              initiallyExpanded: current?.contains(item.link) ?? false,
-              children:
-                  item.pages.map(_prepareSubMenuItem(current)).toList(),
-            ),
+        child: Container(
+          decoration: item.link == current ? _getSelectedDecoration(context) : null,
+          child: ListTile(
+            leading:
+                item.link == current ? _getSelectedIcon(context) : item.icon,
+            title: Text(item.name, style: _itemStyle),
+            onTap: () => navigateTo(item.link),
+          ),
+        ),
+        // : ExpansionTile(
+        //     leading: current?.contains(item.link) ?? false
+        //         ? _selectedIcon
+        //         : item.icon,
+        //     title: Text(item.name, style: _itemStyle),
+        //     initiallyExpanded: current?.contains(item.link) ?? false,
+        //     children: item.pages.map(_prepareSubMenuItem(current)).toList(),
+        //   ),
       );
     };
   }
 
-  Widget Function(SubMenuModule item) _prepareSubMenuItem(String? current) {
-    return (SubMenuModule item) {
-      return ListTile(
-          title: Text('             ${item.name}', style: _itemStyle),
-          onTap: () => navigateTo(item.link));
-    };
-  }
+// Widget Function(SubMenuModule item) _prepareSubMenuItem(String? current) {
+//   return (SubMenuModule item) {
+//     return ListTile(
+//         title: Text('             ${item.name}', style: _itemStyle),
+//         onTap: () => navigateTo(item.link));
+//   };
+// }
 }

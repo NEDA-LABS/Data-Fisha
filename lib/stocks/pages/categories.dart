@@ -12,9 +12,8 @@ import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
 class CategoriesPage extends StatefulWidget {
-  final args;
 
-  const CategoriesPage(this.args, {Key? key}) : super(key: key);
+  const CategoriesPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -26,11 +25,13 @@ class _State extends State<CategoriesPage> {
   List _categories = [];
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Categories",
       showBack: true,
-      backLink: '/stock/',
       showSearch: true,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       onSearch: (p0) {
         setState(() {
           _query = p0;
@@ -74,11 +75,11 @@ class _State extends State<CategoriesPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextItems(context)),
           _loading(_isLoading),
@@ -97,7 +98,7 @@ class _State extends State<CategoriesPage> {
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
                   )),
               const SizedBox(height: 5),
-              horizontalLine(),
+              HorizontalLine(),
             ],
           );
         },
@@ -140,7 +141,7 @@ class _State extends State<CategoriesPage> {
                       .whenComplete(() => _createCategory());
                 },
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload categories'),

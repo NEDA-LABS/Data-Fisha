@@ -33,7 +33,7 @@ class _State extends State<ShopUserCreatePage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/account/',
       sliverAppBar: _appBar(context),
       staticChildren: [
@@ -49,7 +49,7 @@ class _State extends State<ShopUserCreatePage> {
   }
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Add user",
       showBack: true,
       backLink: '/account/users',

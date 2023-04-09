@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.fahamutech.smartstock"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdk 33//flutter.minSdkVersion
         versionCode 38 //flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -129,7 +129,7 @@ class _State extends State<SaleItemsDetails> {
               ),
             ],
           ),
-          horizontalLine()
+          HorizontalLine()
         ],
       );
     }

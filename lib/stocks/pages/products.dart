@@ -35,13 +35,16 @@ class _State extends State<ProductsPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/stock/',
-      sliverAppBar: StockAppBar(
+      sliverAppBar: getSliverSmartStockAppBar(
         title: "Products",
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
+        onBack: (){
+          Navigator.of(context).maybePop();
+        },
         onSearch: _updateQuery,
         searchHint: 'Search...',
         context: context,
@@ -52,7 +55,7 @@ class _State extends State<ProductsPage> {
         _ifLargerScreen(_tableHeader())
       ],
       // horizontalPadding: EdgeInsets.all(0),
-      dynamicChildBuilder: isSmallScreen(context)
+      dynamicChildBuilder: getIsSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
       totalDynamicChildren: _products.length,
@@ -63,7 +66,7 @@ class _State extends State<ProductsPage> {
     );
   }
 
-  _ifLargerScreen(view) => isSmallScreen(context) ? Container() : view;
+  _ifLargerScreen(view) => getIsSmallScreen(context) ? Container() : view;
 
   _contextItems() => [
         ContextMenu(
@@ -166,7 +169,7 @@ class _State extends State<ProductsPage> {
                 title: const Text('Create product'),
                 onTap: () => navigateTo('/stock/products/create'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload products'),
@@ -200,7 +203,7 @@ class _State extends State<ProductsPage> {
               compactNumber('${_products[index]['purchase']}')),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }
@@ -225,7 +228,7 @@ class _State extends State<ProductsPage> {
             _renderStockStatus(_products[index]),
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }

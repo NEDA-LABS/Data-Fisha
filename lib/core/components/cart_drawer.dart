@@ -252,7 +252,7 @@ class _State extends State<CartDrawer> {
         ),
         Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: horizontalLine())
+            child: HorizontalLine())
       ],
     );
   }

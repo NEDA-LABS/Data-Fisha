@@ -66,40 +66,33 @@ class _State extends State<DashboardSummary> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _getTotalSalesView(),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-          child: Text(
-            'Past 7 days revenue.',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        _getHistorySales(),
-        const SizedBox(height: 8),
-        PastTopProducts(date: date),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-          child: Text(
-            'Past 7 days expenses.',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        _getHistoryExpenses()
+        // const Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+        //   child: Text(
+        //     'Past 7 days revenue.',
+        //     style: TextStyle(
+        //       fontSize: 14,
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        // ),
+        // _getHistorySales(),
+        // const SizedBox(height: 8),
+        // PastTopProducts(date: date),
+        // const Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+        //   child: Text(
+        //     'Past 7 days expenses.',
+        //     style: TextStyle(
+        //       fontSize: 14,
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        // ),
+        // _getHistoryExpenses()
       ],
     );
   }
-
-  // _lineView() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 8),
-  //     child: horizontalLine(),
-  //   );
-  // }
 
   _loadingView() {
     return const SizedBox(
@@ -141,12 +134,16 @@ class _State extends State<DashboardSummary> {
             Text(
               _getToday(date),
               style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Color(0xFF1C1C1C)),
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                // color: Color(0xFF1C1C1C),
+              ),
             ),
-            const Icon(Icons.keyboard_arrow_down, color: Color(0x33000000)),
+            const Icon(
+              Icons.keyboard_arrow_down,
+              // color: Color(0x33000000),
+            ),
           ],
         ),
       ),
@@ -180,29 +177,29 @@ class _State extends State<DashboardSummary> {
 
   _getTotalSalesView() {
     var cashSale = Expanded(
-      child: numberPercentageCard(
-          "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
       flex: 1,
+      child: NumberPercentageCard(
+          "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
     );
     var invoiceSale = Expanded(
-      child: numberPercentageCard(
-          "Invoices", doubleOrZero(_getIt('sales_invoice', data)), null),
       flex: 1,
+      child: NumberPercentageCard(
+          "Invoices", doubleOrZero(_getIt('sales_invoice', data)), null),
     );
     var expenses = Expanded(
-      child: numberPercentageCard(
-          "Expenses", doubleOrZero(_getIt('expense', data)), null),
       flex: 1,
+      child: NumberPercentageCard(
+          "Expenses", doubleOrZero(_getIt('expense', data)), null),
     );
     var profit = Expanded(
-      child: numberPercentageCard(
+      flex: 1,
+      child: NumberPercentageCard(
           "Gross profit",
           doubleOrZero(_getIt('profit', data)),
           doubleOrZero(_getIt('margin', data))),
-      flex: 1,
     );
     var getView = ifDoElse(
-      (context) => isSmallScreen(context),
+      (context) => getIsSmallScreen(context),
       (context) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +224,7 @@ class _State extends State<DashboardSummary> {
 
   _getHistorySales() {
     var getView = ifDoElse(
-        (context) => isSmallScreen(context),
+        (context) => getIsSmallScreen(context),
         (context) => Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +245,7 @@ class _State extends State<DashboardSummary> {
 
   _getHistoryExpenses() {
     var getView = ifDoElse(
-        (context) => isSmallScreen(context),
+        (context) => getIsSmallScreen(context),
         (context) => Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

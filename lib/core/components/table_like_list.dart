@@ -139,7 +139,7 @@ class _State extends State<TableLikeList> {
           child: TableLikeListRow(keys.map(keyToView).toList()),
         ),
       ),
-      horizontalLine()
+      HorizontalLine()
     ]);
   }
 

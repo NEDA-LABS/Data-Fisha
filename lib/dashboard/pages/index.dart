@@ -13,9 +13,9 @@ class DashboardIndexPage extends StatelessWidget {
   Widget build(context) => ResponsivePage(
         office: 'Menu',
         current: '/dashboard/',
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         sliverAppBar:
-            StockAppBar(title: "Dashboard", showBack: false, context: context),
+            getSliverSmartStockAppBar(title: "Dashboard", showBack: false, context: context),
         staticChildren: const [DashboardSummary()],
         fab: !hasEnoughWidth(context)
             ? FloatingActionButton(

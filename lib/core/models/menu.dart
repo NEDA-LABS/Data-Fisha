@@ -4,6 +4,7 @@ class MenuModel {
   final String name;
   final List<SubMenuModule> pages;
   final String link;
+  final Function()? onClick;
   final List<String> roles;
   final Icon icon;
 
@@ -13,6 +14,7 @@ class MenuModel {
     required this.link,
     required this.roles,
     required this.pages,
+    this.onClick
   });
 }
 
@@ -20,16 +22,16 @@ class SubMenuModule {
   final String name;
   final String link;
   final List<String> roles;
-  final Function onClick;
-  Icon? icon;
-  String? svgName = '';
+  final Function() onClick;
+  final IconData? icon;
+  final String? svgName;
 
   SubMenuModule({
     required this.name,
     required this.link,
     required this.roles,
     required this.onClick,
-    this.svgName,
+    this.svgName = '',
     this.icon
   });
 }

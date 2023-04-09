@@ -121,7 +121,7 @@ class _State extends State<ChoicesInput> {
       : _actionsItems(onRefresh, onText, onAdd, onField, context);
 
   _showDialogOrModalSheetForChoose(context, onText, onField) {
-    return !isSmallScreen(context)
+    return !getIsSmallScreen(context)
         ? showDialog(
             context: context,
             builder: (_) {

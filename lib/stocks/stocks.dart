@@ -13,17 +13,19 @@ import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfer_receive.dart';
 import 'package:smartstock/stocks/pages/transfer_send.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
+import 'package:smartstock/stocks/services/navigation.dart';
 
 class StockModule extends Module {
   StockModule(List<ExternalService> services);
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, __) => const IndexPage()),
+        ChildRoute('/',
+            child: (_, __) => StocksIndexPage(pages: getStocksModuleMenu(_).pages)),
         ChildRoute('/products', child: (_, __) => const ProductsPage()),
-        ChildRoute('/categories', child: (_, __) => CategoriesPage(__)),
-        ChildRoute('/suppliers', child: (_, __) => SuppliersPage(__)),
-        ChildRoute('/purchases', child: (_, __) => PurchasesPage(__)),
+        ChildRoute('/categories', child: (_, __) => const CategoriesPage()),
+        ChildRoute('/suppliers', child: (_, __) => const SuppliersPage()),
+        ChildRoute('/purchases', child: (_, __) => const PurchasesPage()),
         ChildRoute(
           '/purchases/create',
           child: (_, __) => const PurchaseCreatePage(),

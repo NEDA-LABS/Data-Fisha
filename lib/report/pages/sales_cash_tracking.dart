@@ -39,7 +39,7 @@ class _State extends State<SalesCashTrackingPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: moduleMenus(),
+      menus: getAppModuleMenus(context),
       current: '/report/',
       sliverAppBar: _appBar(context),
       onBody: (d) {
@@ -98,7 +98,7 @@ class _State extends State<SalesCashTrackingPage> {
   }
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Cash sales tracking",
       showBack: true,
       backLink: '/sales/',
@@ -141,11 +141,11 @@ class _State extends State<SalesCashTrackingPage> {
         TableLikeListTextHeaderCell('Customer'),
       ]),
     );
-    return isSmallScreen(context) ? smallView : bigView;
+    return getIsSmallScreen(context) ? smallView : bigView;
   }
 
   _fields() {
-    return isSmallScreen(context)
+    return getIsSmallScreen(context)
         ? ['date', 'amount', 'customer']
         : ['date', 'amount', 'quantity', 'customer'];
   }

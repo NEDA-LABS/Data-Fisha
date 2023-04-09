@@ -73,7 +73,7 @@ class _State extends State<PaymentBody> {
                 TableLikeListTextHeaderCell("Cost ( TZS ) / Month"),
                 TableLikeListTextHeaderCell("Balance ( TZS )")
               ]),
-              horizontalLine(),
+              HorizontalLine(),
               TableLikeListRow([
                 TableLikeListTextHeaderCell("$cost"),
                 TableLikeListTextHeaderCell("$balance")
@@ -95,7 +95,7 @@ class _State extends State<PaymentBody> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('TIGO-PESA'),
-                    horizontalLine(),
+                    HorizontalLine(),
                     Text('''
                     
                     ''')
@@ -109,7 +109,7 @@ class _State extends State<PaymentBody> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('MITANDAO MINGINE'),
-                    horizontalLine(),
+                    HorizontalLine(),
                     Text('''
                     
                     ''')
@@ -123,7 +123,7 @@ class _State extends State<PaymentBody> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('BENKI'),
-                    horizontalLine(),
+                    HorizontalLine(),
                     Text('''
                     
                     ''')

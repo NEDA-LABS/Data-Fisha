@@ -51,11 +51,14 @@ class _State extends State<SalesCashPage> {
   }
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Cash sales",
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;
@@ -108,15 +111,15 @@ class _State extends State<SalesCashPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/sales/',
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loadingView(_loading),
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextSales(context)),
-          isSmallScreen(context) ? Container() : _tableHeader(),
+          getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         loading: _loading,
         onLoadMore: () async => _loadMore(),
@@ -125,7 +128,7 @@ class _State extends State<SalesCashPage> {
           child: const Icon(Icons.unfold_more_outlined),
         ),
         totalDynamicChildren: _sales.length,
-        dynamicChildBuilder: isSmallScreen(context)
+        dynamicChildBuilder: getIsSmallScreen(context)
             ? _smallScreenChildBuilder
             : _largerScreenChildBuilder,
       );
@@ -235,7 +238,7 @@ class _State extends State<SalesCashPage> {
           ),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }
@@ -256,7 +259,7 @@ class _State extends State<SalesCashPage> {
             TableLikeListTextDataCell('${_getTimer(_sales[index])}'),
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -274,13 +277,13 @@ class _State extends State<SalesCashPage> {
                 title: const Text('Add retail'),
                 onTap: () => navigateTo('/sales/cash/retail'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.business),
                 title: const Text('Add wholesale'),
                 onTap: () => navigateTo('/sales/cash/whole'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload sales'),

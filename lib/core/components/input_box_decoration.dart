@@ -10,6 +10,6 @@ _boxBorder(error, context) => Border.all(
 _boxRadius() => const BorderRadius.all(Radius.circular(3));
 
 inputBoxDecoration(BuildContext context, String? error) => BoxDecoration(
-    color: Colors.white,
+    // color: Colors.white,
     border: _boxBorder(error, context),
     borderRadius: _boxRadius());

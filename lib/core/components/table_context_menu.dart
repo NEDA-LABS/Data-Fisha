@@ -16,4 +16,4 @@ _items(items) => SizedBox(
         ])));
 
 tableContextMenu(List<ContextMenu> items) =>
-    Column(children: [_items(items), horizontalLine()]);
+    Column(children: [_items(items), HorizontalLine()]);

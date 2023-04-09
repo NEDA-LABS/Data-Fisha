@@ -13,9 +13,8 @@ import 'package:smartstock/stocks/components/purchase_details.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends StatefulWidget {
-  final dynamic args;
 
-  const PurchasesPage(this.args, {Key? key}) : super(key: key);
+  const PurchasesPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PurchasesPage();
@@ -26,11 +25,14 @@ class _PurchasesPage extends State<PurchasesPage> {
   List _purchases = [];
   final String _startAt = toSqlDate(DateTime.now());
 
-  _appBar(context) => StockAppBar(
+  _appBar(context) => getSliverSmartStockAppBar(
       title: "Purchases",
       showBack: true,
       backLink: '/stock/',
       showSearch: false,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;
@@ -67,15 +69,15 @@ class _PurchasesPage extends State<PurchasesPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextPurchases(context)),
           _loadingView(_loading),
-          isSmallScreen(context) ? Container() : _tableHeader(),
+          getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         loading: _loading,
         onLoadMore: () async {
@@ -86,7 +88,7 @@ class _PurchasesPage extends State<PurchasesPage> {
           child: const Icon(Icons.unfold_more_outlined),
         ),
         totalDynamicChildren: _purchases.length,
-        dynamicChildBuilder: isSmallScreen(context)
+        dynamicChildBuilder: getIsSmallScreen(context)
             ? _smallScreenChildBuilder
             : _largerScreenChildBuilder,
       );
@@ -160,7 +162,7 @@ class _PurchasesPage extends State<PurchasesPage> {
           ),
         ),
         const SizedBox(height: 5),
-        horizontalLine(),
+        HorizontalLine(),
       ],
     );
   }
@@ -182,7 +184,7 @@ class _PurchasesPage extends State<PurchasesPage> {
             Center(child: _getStatusView(_purchases[index]))
           ]),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -260,7 +262,7 @@ class _PurchasesPage extends State<PurchasesPage> {
                 title: const Text('Record purchase'),
                 onTap: () => navigateTo('/stock/purchases/create'),
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload purchases'),

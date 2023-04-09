@@ -226,7 +226,7 @@ class _State extends State<RegisterForm> {
   }
 
   _separatorView() {
-    Widget line = Expanded(flex: 1, child: horizontalLine());
+    Widget line = Expanded(flex: 1, child: HorizontalLine());
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Row(children: [line]),

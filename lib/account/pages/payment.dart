@@ -13,12 +13,12 @@ class PaymentPage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
-      menus: moduleMenus(),
-      sliverAppBar: StockAppBar(title: "Payment", showBack: true, backLink: '/account/', context: context,),
+      menus: getAppModuleMenus(context),
+      sliverAppBar: getSliverSmartStockAppBar(title: "Payment", showBack: true, backLink: '/account/', context: context,),
       onBody: (d) => Scaffold(
         drawer: d,
         body: const PaymentBody(),
-        bottomNavigationBar: bottomBar(3, moduleMenus(), context),
+        bottomNavigationBar: bottomBar(3, getAppModuleMenus(context), context),
       ),
     );
   }

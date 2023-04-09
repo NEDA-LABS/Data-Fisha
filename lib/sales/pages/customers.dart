@@ -12,9 +12,8 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
 class CustomersPage extends StatefulWidget {
-  final args;
 
-  const CustomersPage(this.args, {Key? key}) : super(key: key);
+  const CustomersPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -25,11 +24,14 @@ class _CustomersPage extends State<CustomersPage> {
   String _query = '';
   List _customers = [];
 
-  _appBar(context) => StockAppBar(
+  _appBar(context) => getSliverSmartStockAppBar(
       title: "Customers",
       showBack: true,
       backLink: '/sales/',
       showSearch: true,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       onSearch: (d) {
         setState(() {
           _query = d;
@@ -67,19 +69,19 @@ class _CustomersPage extends State<CustomersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/sales/',
         sliverAppBar: _appBar(context),
         staticChildren: [
-          isSmallScreen(context)
+          getIsSmallScreen(context)
               ? Container()
               : tableContextMenu(_contextCustomers(context)),
           _loadingView(_loading),
-          isSmallScreen(context) ? Container() : _tableHeader(),
+          getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         totalDynamicChildren: _customers.length,
         dynamicChildBuilder:
-            isSmallScreen(context) ? _smallScreen : _largerScreen,
+            getIsSmallScreen(context) ? _smallScreen : _largerScreen,
         fab: FloatingActionButton(
           onPressed: () => _showMobileContextMenu(context),
           child: const Icon(Icons.unfold_more_outlined),
@@ -92,7 +94,7 @@ class _CustomersPage extends State<CustomersPage> {
     });
     getCustomerFromCacheOrRemote(
       stringLike: _query,
-      skipLocal: widget.args.queryParams.containsKey('reload') || skip,
+      skipLocal: skip,
     ).then((value) {
       setState(() {
         _customers = value;
@@ -114,7 +116,7 @@ class _CustomersPage extends State<CustomersPage> {
           TableLikeListTextDataCell('${_customers[index]['phone']}'),
           TableLikeListTextDataCell('${_customers[index]['email']}'),
         ]),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -144,7 +146,7 @@ class _CustomersPage extends State<CustomersPage> {
             ],
           ),
         ),
-        horizontalLine()
+        HorizontalLine()
       ],
     );
   }
@@ -162,7 +164,7 @@ class _CustomersPage extends State<CustomersPage> {
                 title: const Text('Create customer'),
                 onTap: _createDialog,
               ),
-              horizontalLine(),
+              HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload customers'),

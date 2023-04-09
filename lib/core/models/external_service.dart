@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ExternalService {
   String name;
-  Icon icon;
+  IconData icon;
   String pageLink;
   Widget Function(BuildContext context,dynamic args) onBuild;
 

@@ -8,7 +8,7 @@ class ProductCreatePage extends StatelessWidget {
   const ProductCreatePage({Key? key}) : super(key: key);
 
   _appBar(context) {
-    return StockAppBar(
+    return getSliverSmartStockAppBar(
       title: "Add product",
       showBack: true,
       backLink: '/stock/products',
@@ -19,7 +19,7 @@ class ProductCreatePage extends StatelessWidget {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: moduleMenus(),
+        menus: getAppModuleMenus(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

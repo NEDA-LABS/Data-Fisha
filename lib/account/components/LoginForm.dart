@@ -134,7 +134,7 @@ class _State extends State<LoginForm> {
   }
 
   _orSeparatorView() {
-    Widget line = Expanded(flex: 1, child: horizontalLine());
+    Widget line = Expanded(flex: 1, child: HorizontalLine());
     Widget orText = const Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Text(
@@ -142,7 +142,7 @@ class _State extends State<LoginForm> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 14,
-          color: Colors.black,
+          // color: Colors.black,
         ),
       ),
     );
@@ -153,36 +153,53 @@ class _State extends State<LoginForm> {
   }
 
   Widget _loginButton(states, updateState, context) => Container(
-      child: states['loading'] == true
-          ? Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              child: const CircularProgressIndicator())
-          : Container(
-              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              height: 48,
-              width: MediaQuery.of(context).size.width,
-              child: ElevatedButton(
+        child: states['loading'] == true
+            ? Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8),
+                child: const CircularProgressIndicator())
+            : Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                height: 48,
+                width: MediaQuery.of(context).size.width,
+                child: TextButton(
                   onPressed: () => _loginPressed(states, updateState, context),
-                  child: const Text("Login",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18)))));
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary),
+                    overlayColor: MaterialStateProperty.resolveWith(
+                          (states) {
+                        return states.contains(MaterialState.pressed)
+                            ? Theme.of(context).colorScheme.onTertiaryContainer
+                            : null;
+                      },
+                    ),
+                  ),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+      );
 
   Widget _registerButton(states, updateState, context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       height: 48,
       width: MediaQuery.of(context).size.width,
-      child: OutlinedButton(
+      child: TextButton(
         onPressed: () => navigateTo('/account/register'),
-        child: Text(
+        child: const Text(
           "Open account for free.",
           style: TextStyle(
-              color: Theme.of(context).primaryColorDark,
-              fontWeight: FontWeight.w500,
-              fontSize: 16),
+            // color: Theme.of(context).primaryColorDark,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+          ),
         ),
       ),
     );
@@ -218,10 +235,11 @@ class _State extends State<LoginForm> {
                   ? 'Waiting...'
                   : 'Reset account password.',
               textAlign: TextAlign.end,
-              style: TextStyle(
-                  fontWeight: FontWeight.w200,
-                  fontSize: 14,
-                  color: Theme.of(context).primaryColorDark),
+              style: const TextStyle(
+                fontWeight: FontWeight.w200,
+                fontSize: 14,
+                // color: Theme.of(context).primaryColorDark,
+              ),
             ),
           ),
         ],

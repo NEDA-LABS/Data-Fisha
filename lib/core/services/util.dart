@@ -58,7 +58,7 @@ const _maxSmallScreen = 680;
 const _maxMediumScreen = 1000;
 // const MAX_LARGE_SCREEN = > 1008
 
-bool isSmallScreen(BuildContext context) {
+bool getIsSmallScreen(BuildContext context) {
   var width = MediaQuery.of(context).size.width;
   return width <= _maxSmallScreen;
 }
@@ -112,3 +112,14 @@ compactNumber(value) =>
 formatNumber(value, {decimals = 0}) =>
     NumberFormat.currency(decimalDigits: decimals, symbol: '')
         .format(doubleOrZero(value));
+
+List<List<T>> divideList<T>(List<T> list, int length) {
+  var len = list.length;
+  var size = length;
+  List<List<T>> chunks = [];
+  for (var i = 0; i < len; i += size) {
+    var end = (i + size < len) ? i + size : len;
+    chunks.add(list.sublist(i, end));
+  }
+  return chunks;
+}
