@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -30,11 +31,11 @@ class ListOfProductsLike extends StatelessWidget {
       gridDelegate: _delegate(),
       itemBuilder: (context, index) {
         return _productCardItem(
-          product: products[index],
-          category: _getCategory(products[index]),
-          name: _getName(products[index]),
-          price: onGetPrice(products[index]),
-        );
+            product: products[index],
+            category: _getCategory(products[index]),
+            name: _getName(products[index]),
+            price: onGetPrice(products[index]),
+            context: context);
       },
     );
   }
@@ -52,23 +53,24 @@ class ListOfProductsLike extends StatelessWidget {
   _delegate() =>
       const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180);
 
-  Widget _productCardItem({String? category, String? name, dynamic price, required product}) {
+  Widget _productCardItem(
+      {String? category,
+      String? name,
+      dynamic price,
+      required product,
+      required BuildContext context}) {
     return Container(
       margin: const EdgeInsets.all(6),
-      decoration: solidRadiusBoxDecoration(),
+      decoration: solidRadiusBoxDecoration(context),
       child: InkWell(
         onTap: () => onAddToCartView(product, onAddToCart),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 5),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Expanded(
-                child: Text(
-                  category ?? '',
-                  style: const TextStyle(
-                      color: Colors.grey, overflow: TextOverflow.ellipsis),
-                ),
+                child: BodySmall(text: category ?? ''),
               ),
               Expanded(
                 flex: 2,
@@ -80,7 +82,6 @@ class ListOfProductsLike extends StatelessWidget {
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -95,7 +96,6 @@ class ListOfProductsLike extends StatelessWidget {
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                       // fontSize: 14
                     ),

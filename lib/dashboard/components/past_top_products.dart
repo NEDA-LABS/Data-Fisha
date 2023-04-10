@@ -92,7 +92,7 @@ class _State extends State<PastTopProducts> {
   _productsTable() {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: solidRadiusBoxDecoration(),
+      decoration: solidRadiusBoxDecoration(context),
       child: Container(
         constraints: const BoxConstraints(maxHeight: 410, minHeight: 200),
         padding: const EdgeInsets.all(8),

@@ -103,7 +103,7 @@ var doubleOr = (x, double or) => doubleOrZero(x) > 0 ? doubleOrZero(x) : or;
 
 var maximumBodyWidth = 790.0;
 var chartCardMobileHeight = 220.0;
-var chartCardDesktopHeight = 350.0;
+var chartCardDesktopHeight = 365.0;
 
 compactNumber(value) =>
     NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')

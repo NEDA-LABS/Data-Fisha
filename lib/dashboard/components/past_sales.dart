@@ -42,8 +42,6 @@ class _State extends State<PastSalesOverview> {
   charts.Series<dynamic, DateTime> _sales2Series() {
     return charts.Series<dynamic, DateTime>(
       id: 'Cash',
-      // colorFn: (_, __) =>
-      //     charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
       domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
       measureFn: (dynamic sales, _) => sales['amount'],
       data: dailySales,
@@ -55,7 +53,7 @@ class _State extends State<PastSalesOverview> {
     return charts.Series<dynamic, DateTime>(
       id: 'Invoices',
       colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+          charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.secondary),
       domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
       measureFn: (dynamic sales, _) => sales['amount'],
       data: dailyInvoices,
@@ -118,7 +116,7 @@ class _State extends State<PastSalesOverview> {
   _chartAndTable() {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: solidRadiusBoxDecoration(),
+      decoration: solidRadiusBoxDecoration(context),
       child: Container(
         height: getIsSmallScreen(context)
             ? chartCardMobileHeight

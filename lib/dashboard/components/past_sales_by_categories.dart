@@ -93,7 +93,7 @@ class _State extends State<PastSalesByCategory> {
   _chartAndTable() {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: solidRadiusBoxDecoration(),
+      decoration: solidRadiusBoxDecoration(context),
       child: Container(
         height: chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),
@@ -108,7 +108,7 @@ class _State extends State<PastSalesByCategory> {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
-                  color: Color(0xFF1C1C1C),
+                  // color: Color(0xFF1C1C1C),
                 ),
               ),
               const SizedBox(height: 24),
@@ -125,21 +125,24 @@ class _State extends State<PastSalesByCategory> {
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
                                 overflow: TextOverflow.ellipsis,
-                                color: Color(0xFF1C1C1C)),
+                                // color: Color(0xFF1C1C1C),
+                            ),
                           ),
                           Text(
                             '${compactNumber(e['amount'] ?? 0)}',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
-                                color: Color(0xFF1C1C1C)),
+                                // color: Color(0xFF1C1C1C),
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       LinearProgressIndicator(
                           value: _getProgValue(e['amount']),
-                          backgroundColor: const Color(0x370049a9)),
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                      ),
                       const SizedBox(height: 16),
                     ],
                   ))

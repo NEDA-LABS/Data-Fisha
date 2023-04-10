@@ -18,7 +18,7 @@ Future<List<dynamic>> getStockFromCacheOrRemote({
     (_) async {
       List rStocks = await getAllRemoteStocks(shop);
       rStocks = await compute(
-          _pruneAndSortStocks, {'stocks': rStocks, 'query': stringLike});
+          _pruneAndSortStocks, {'stocks': rStocks, 'query': ''});
       await saveLocalStocks(shopToApp(shop), rStocks);
       return rStocks;
     },

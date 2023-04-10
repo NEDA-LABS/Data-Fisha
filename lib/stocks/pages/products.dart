@@ -12,6 +12,7 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
+import 'package:smartstock/stocks/pages/product_create.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class _State extends State<ProductsPage> {
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
-        onBack: (){
+        onBack: () {
           Navigator.of(context).maybePop();
         },
         onSearch: _updateQuery,
@@ -70,7 +71,12 @@ class _State extends State<ProductsPage> {
 
   _contextItems() => [
         ContextMenu(
-            name: 'Add', pressed: () => navigateTo('/stock/products/create')),
+            name: 'Add',
+            pressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProductCreatePage(),
+              ));
+            }),
         ContextMenu(name: 'Reload', pressed: _reload),
         // ContextMenu(name: 'Import', pressed: () => {}),
         // ContextMenu(name: 'Export', pressed: () => {}),
@@ -167,9 +173,13 @@ class _State extends State<ProductsPage> {
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Create product'),
-                onTap: () => navigateTo('/stock/products/create'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ProductCreatePage(),
+                  ));
+                },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload products'),
@@ -185,6 +195,9 @@ class _State extends State<ProductsPage> {
   }
 
   _reload() {
+    // setState(() {
+    //   _query = '';
+    // });
     _skipLocal = true;
     _getProducts();
   }
@@ -203,7 +216,7 @@ class _State extends State<ProductsPage> {
               compactNumber('${_products[index]['purchase']}')),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }
@@ -228,7 +241,7 @@ class _State extends State<ProductsPage> {
             _renderStockStatus(_products[index]),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }

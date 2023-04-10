@@ -10,10 +10,10 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/purchase_details.dart';
+import 'package:smartstock/stocks/pages/purchase_create.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends StatefulWidget {
-
   const PurchasesPage({Key? key}) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class _PurchasesPage extends State<PurchasesPage> {
       showBack: true,
       backLink: '/stock/',
       showSearch: false,
-      onBack: (){
+      onBack: () {
         Navigator.of(context).maybePop();
       },
       // onSearch: (d) {
@@ -45,7 +45,11 @@ class _PurchasesPage extends State<PurchasesPage> {
   _contextPurchases(context) => [
         ContextMenu(
           name: 'Create',
-          pressed: () => navigateTo('/stock/purchases/create'),
+          pressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const PurchaseCreatePage(),
+            ));
+          },
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh())
       ];
@@ -162,7 +166,7 @@ class _PurchasesPage extends State<PurchasesPage> {
           ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }
@@ -177,14 +181,15 @@ class _PurchasesPage extends State<PurchasesPage> {
               purchaseDetails(context, _purchases[index]), context),
           child: TableLikeListRow([
             TableLikeListTextDataCell('${_purchases[index]['refNumber']}'),
-            TableLikeListTextDataCell('${toSqlDate(DateTime.tryParse(_purchases[index]['date'])??DateTime.now())}'),
+            TableLikeListTextDataCell(
+                '${toSqlDate(DateTime.tryParse(_purchases[index]['date']) ?? DateTime.now())}'),
             TableLikeListTextDataCell(
                 '${formatNumber(_purchases[index]['amount'])}'),
             TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),
             Center(child: _getStatusView(_purchases[index]))
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -260,9 +265,13 @@ class _PurchasesPage extends State<PurchasesPage> {
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Record purchase'),
-                onTap: () => navigateTo('/stock/purchases/create'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const PurchaseCreatePage(),
+                  ));
+                },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload purchases'),

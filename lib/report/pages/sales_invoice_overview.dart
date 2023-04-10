@@ -51,7 +51,7 @@ class _State extends State<OverviewInvoiceSales> {
         _showLoading(),
         Container(
           margin: const EdgeInsets.all(5),
-          decoration: solidRadiusBoxDecoration(),
+          decoration: solidRadiusBoxDecoration(context),
           child: Container(
             height: getIsSmallScreen(context)
                 ? chartCardMobileHeight

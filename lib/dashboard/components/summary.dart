@@ -66,18 +66,18 @@ class _State extends State<DashboardSummary> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _getTotalSalesView(),
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        //   child: Text(
-        //     'Past 7 days revenue.',
-        //     style: TextStyle(
-        //       fontSize: 14,
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //   ),
-        // ),
-        // _getHistorySales(),
-        // const SizedBox(height: 8),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          child: Text(
+            'Past 7 days revenue.',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        _getHistorySales(),
+        const SizedBox(height: 8),
         // PastTopProducts(date: date),
         // const Padding(
         //   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),

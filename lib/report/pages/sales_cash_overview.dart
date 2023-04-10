@@ -2,6 +2,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/Histogram.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -9,6 +10,7 @@ import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -48,20 +50,28 @@ class _State extends State<OverviewCashSales> {
       staticChildren: [
         _rangePicker(),
         _showLoading(),
-        Container(
-          margin: const EdgeInsets.all(5),
-          decoration: solidRadiusBoxDecoration(),
-          child: Container(
-            height: getIsSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: BarChart(
-              [_sales2Series()],
-              animate: true,
-            ),
-          ),
-        ),
+        dailySales.isNotEmpty
+            ? Histogram(
+                height: 200,
+                data: dailySales.map((e) {
+                  return HistogramData(
+                      x: e['date'], y: '${e['amount']}', name: e['date']);
+                }).toList())
+            : Container(),
+        // Container(
+        //   margin: const EdgeInsets.all(5),
+        //   decoration: solidRadiusBoxDecoration(context),
+        //   child: Container(
+        //     height: getIsSmallScreen(context)
+        //         ? chartCardMobileHeight
+        //         : chartCardDesktopHeight,
+        //     padding: const EdgeInsets.all(8),
+        //     child: BarChart(
+        //       [_sales2Series()],
+        //       animate: true,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 16),
         _tableHeader(),
       ],
@@ -72,16 +82,16 @@ class _State extends State<OverviewCashSales> {
     );
   }
 
-  charts.Series<dynamic, String> _sales2Series() {
-    return charts.Series<dynamic, String>(
-      id: 'Sales',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => sales['date'],
-      measureFn: (dynamic sales, _) => sales['amount'],
-      data: dailySales,
-    );
-  }
+  // charts.Series<dynamic, String> _sales2Series() {
+  //   return charts.Series<dynamic, String>(
+  //     id: 'Sales',
+  //     colorFn: (_, __) =>
+  //         charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.tertiary),
+  //     domainFn: (dynamic sales, _) => sales['date'],
+  //     measureFn: (dynamic sales, _) => sales['amount'],
+  //     data: dailySales,
+  //   );
+  // }
 
   _fetchData() {
     setState(() {
@@ -98,18 +108,18 @@ class _State extends State<OverviewCashSales> {
     });
   }
 
-  _loading() {
-    return const SizedBox(
-      height: 100,
-      child: Center(
-        child: SizedBox(
-          height: 30,
-          width: 30,
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
+  // _loading() {
+  //   return const SizedBox(
+  //     height: 100,
+  //     child: Center(
+  //       child: SizedBox(
+  //         height: 30,
+  //         width: 30,
+  //         child: CircularProgressIndicator(),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // _retry() {
   //   return Padding(
@@ -193,7 +203,7 @@ class _State extends State<OverviewCashSales> {
             ),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -213,7 +223,7 @@ class _State extends State<OverviewCashSales> {
             ),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }

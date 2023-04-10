@@ -15,6 +15,9 @@ class ProductEditPage extends StatelessWidget {
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       context: context,
     );
   }

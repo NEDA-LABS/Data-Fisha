@@ -4,6 +4,7 @@ import 'package:bfast/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/api_report.dart';
 
 _getItemsRequest(App app) =>
     () => httpGetRequest('${shopFunctionsURL(app)}/stock/value/items');
@@ -43,4 +44,10 @@ Future getItemsWholesaleValue() {
   request(app) => executeHttp(_getItemsWholesaleRequest(app));
   var itemsWhole = composeAsync([_total, request, shopToApp, _getShop]);
   return itemsWhole('');
+}
+
+Future<Map> getStockIndexReport() async {
+  var shop = await getActiveShop();
+  var data = await requestStockReportSummary(shop);
+  return data as Map;
 }

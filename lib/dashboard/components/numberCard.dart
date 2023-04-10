@@ -6,20 +6,31 @@ class NumberPercentageCard extends StatelessWidget {
   final String? title;
   final dynamic value;
   final dynamic percentage;
+  final bool isWarning;
+  final bool isDanger;
 
-  const NumberPercentageCard(this.title, this.value, this.percentage,
-      {Key? key})
-      : super(key: key);
+  const NumberPercentageCard(
+    this.title,
+    this.value,
+    this.percentage, {
+    Key? key,
+    this.isWarning = false,
+    this.isDanger = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var normalColor=Theme.of(context).colorScheme.surfaceVariant;
+    var dangerColor=Theme.of(context).colorScheme.errorContainer;
+    var warningColor=Theme.of(context).colorScheme.secondaryContainer;
+    var color = isWarning?warningColor:isDanger?dangerColor:normalColor;
     return Card(
       // height: 112,
       elevation: 0,
       margin: const EdgeInsets.all(5),
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: color,
       child: Container(
-        decoration: solidRadiusBoxDecoration(),
+        decoration: solidRadiusBoxDecoration(context),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

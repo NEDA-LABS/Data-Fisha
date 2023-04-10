@@ -25,6 +25,7 @@ class SaleLikePage extends StatefulWidget {
   final TextEditingController? searchTextController;
   final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
   final bool showDiscountView;
+  final Function()? onBack;
 
   const SaleLikePage({
     required this.title,
@@ -36,6 +37,7 @@ class SaleLikePage extends StatefulWidget {
     required this.onCustomerLikeList,
     required this.onCustomerLikeAddWidget,
     required this.checkoutCompleteMessage,
+    this.onBack,
     this.customerLikeLabel = 'Choose customer',
     this.searchTextController,
     this.showCustomerLike = true,
@@ -124,6 +126,7 @@ class _State extends State<SaleLikePage> {
       showBack: true,
       showSearch: true,
       searchHint: "Search here...",
+      onBack: widget.onBack,
       onSearch: (text) {
         updateState({"query": text ?? '', 'skip': false});
       },

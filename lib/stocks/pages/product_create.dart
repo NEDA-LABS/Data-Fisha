@@ -12,6 +12,9 @@ class ProductCreatePage extends StatelessWidget {
       title: "Add product",
       showBack: true,
       backLink: '/stock/products',
+      onBack: (){
+        Navigator.of(context).maybePop();
+      },
       showSearch: false,
       context: context,
     );

@@ -118,8 +118,10 @@ class _State extends State<_AddPurchase2CartDialog> {
       child: TextButton(
           onPressed: () => onAddToCart(_getPurchaseCart(states)),
           style: _addToCartButtonStyle(context),
-          child: const Text("ADD TO CART",
-              style: TextStyle(color: Colors.white))));
+          child: const Text(
+            "ADD TO CART",
+            // style: TextStyle(color: Colors.white),
+          )));
 
   _getPurchaseCart(states) {
     Map product = states['p'] is Map
@@ -142,7 +144,7 @@ class _State extends State<_AddPurchase2CartDialog> {
         Text(product["product"],
             softWrap: true,
             style: const TextStyle(
-                color: Colors.black,
+                // color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500)),
         _amountWidget(product, onGetPrice)
@@ -153,7 +155,9 @@ class _State extends State<_AddPurchase2CartDialog> {
       child: Text('TZS ${onGetPrice(product)}',
           //formattedAmount(product, wholesale),
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17)));
+              // color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 17)));
 
   _addToCartBoxDecoration() => const BoxDecoration(
         borderRadius: BorderRadius.only(

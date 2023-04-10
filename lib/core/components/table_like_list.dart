@@ -26,10 +26,11 @@ class TableLikeListTextHeaderCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var style = const TextStyle(
-        fontWeight: FontWeight.w400,
-        overflow: TextOverflow.ellipsis,
-        fontSize: 14,
-        color: Color(0x40000000));
+      fontWeight: FontWeight.w400,
+      overflow: TextOverflow.ellipsis,
+      fontSize: 14,
+      // color: Color(0x40000000),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(name, style: style),
@@ -47,7 +48,7 @@ class TableLikeListTextDataCell extends StatelessWidget {
     var style = const TextStyle(
       fontWeight: FontWeight.w300,
       overflow: TextOverflow.ellipsis,
-      color: Color(0xFF1C1C1C),
+      // color: Color(0xFF1C1C1C),
     );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 14),

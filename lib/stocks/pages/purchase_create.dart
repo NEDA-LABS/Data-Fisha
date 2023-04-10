@@ -17,6 +17,9 @@ class PurchaseCreatePage extends StatelessWidget {
         showDiscountView: false,
         title: 'Create purchase',
         backLink: '/stock/purchases',
+        onBack: (){
+          Navigator.of(context).maybePop();
+        },
         customerLikeLabel: 'Choose supplier',
         onSubmitCart: prepareOnSubmitPurchase(context),
         onGetPrice: (product) {

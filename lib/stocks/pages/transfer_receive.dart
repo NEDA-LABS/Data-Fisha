@@ -16,6 +16,9 @@ transferReceivePage(BuildContext context) => SaleLikePage(
       customerLikeLabel: 'Transferred from?',
       onSubmitCart: prepareOnSubmitTransfer(context, 'receive'),
       onGetPrice: _onGetPrice,
+      onBack: () {
+        Navigator.of(context).maybePop();
+      },
       onAddToCartView: _onPrepareSalesAddToCartView(context, false),
       onCustomerLikeList: getOtherShopsNames,
       onCustomerLikeAddWidget: transferAddShopContent,
