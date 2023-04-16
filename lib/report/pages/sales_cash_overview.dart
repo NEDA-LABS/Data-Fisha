@@ -1,13 +1,10 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/Histogram.dart';
-import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
@@ -58,20 +55,6 @@ class _State extends State<OverviewCashSales> {
                       x: e['date'], y: '${e['amount']}', name: e['date']);
                 }).toList())
             : Container(),
-        // Container(
-        //   margin: const EdgeInsets.all(5),
-        //   decoration: solidRadiusBoxDecoration(context),
-        //   child: Container(
-        //     height: getIsSmallScreen(context)
-        //         ? chartCardMobileHeight
-        //         : chartCardDesktopHeight,
-        //     padding: const EdgeInsets.all(8),
-        //     child: BarChart(
-        //       [_sales2Series()],
-        //       animate: true,
-        //     ),
-        //   ),
-        // ),
         const SizedBox(height: 16),
         _tableHeader(),
       ],
@@ -81,17 +64,6 @@ class _State extends State<OverviewCashSales> {
           : _largerScreenChildBuilder,
     );
   }
-
-  // charts.Series<dynamic, String> _sales2Series() {
-  //   return charts.Series<dynamic, String>(
-  //     id: 'Sales',
-  //     colorFn: (_, __) =>
-  //         charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.tertiary),
-  //     domainFn: (dynamic sales, _) => sales['date'],
-  //     measureFn: (dynamic sales, _) => sales['amount'],
-  //     data: dailySales,
-  //   );
-  // }
 
   _fetchData() {
     setState(() {
@@ -108,55 +80,6 @@ class _State extends State<OverviewCashSales> {
     });
   }
 
-  // _loading() {
-  //   return const SizedBox(
-  //     height: 100,
-  //     child: Center(
-  //       child: SizedBox(
-  //         height: 30,
-  //         width: 30,
-  //         child: CircularProgressIndicator(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // _retry() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(10),
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Text(error),
-  //         OutlinedButton(
-  //             onPressed: () => setState(() => _fetchData()),
-  //             child: const Text('Retry'))
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // _chartAndTable() {
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       Card(
-  //         child: Container(
-  //           constraints: const BoxConstraints(maxHeight: 500),
-  //           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-  //           child: TableLikeList(
-  //             onFuture: () async => dailySales,
-  //             keys: _fields(),
-  //           ),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
   _tableHeader() {
     if (getIsSmallScreen(context)) {
       return const TableLikeListRow([
@@ -171,10 +94,6 @@ class _State extends State<OverviewCashSales> {
       TableLikeListTextHeaderCell('Total'),
     ]);
   }
-
-  // _fields() {
-  //   return ['date', 'amount_retail', 'amount_whole', 'amount'];
-  // }
 
   Widget _largerScreenChildBuilder(context, index) {
     return Column(

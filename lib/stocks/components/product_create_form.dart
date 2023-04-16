@@ -1,6 +1,9 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/ReadBarcodeView.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
@@ -34,115 +37,135 @@ class _State extends State<ProductCreateForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextInput(
-            onText: (d) {
-              updateFormState({"product": d});
-              // state.refresh();
-            },
-            label: "Name",
-            placeholder: 'Brand + generic name',
-            error: error['product'] ?? '',
-            initialText: product['product'] ?? '',
-            // getAddWidget: () => createItemContent(),
-            // onField: (x) =>
-            //     '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
-            // onLoad: getItemFromCacheOrRemote,
-          ),
-          TextInput(
-              onText: (d) => updateFormState({"barcode": d}),
-              label: "Barcode / Qrcode",
-              placeholder: "Optional",
-              error: error['barcode'] ?? '',
-              initialText: product['barcode'] ?? '',
-              icon: _mobileQrScan('')),
-          ChoicesInput(
-            onText: (d) {
-              updateFormState({"category": d});
-              refresh();
-            },
-            label: "Category",
-            placeholder: 'Select category',
-            error: error['category'] ?? '',
-            initialText: product['category'] ?? '',
-            getAddWidget: () => const CreateCategoryContent(),
-            onField: (x) => '${x['name']}',
-            onLoad: getCategoryFromCacheOrRemote,
-          ),
-          ChoicesInput(
-            onText: (d) {
-              updateFormState({"supplier": d});
-              refresh();
-            },
-            label: "Supplier",
-            placeholder: 'Select supplier',
-            error: error['supplier'] ?? '',
-            initialText: product['supplier'] ?? '',
-            getAddWidget: () => const CreateSupplierContent(),
-            onField: (x) => '${x['name']}',
-            onLoad: getSupplierFromCacheOrRemote,
-          ),
-          TextInput(
-            onText: (d) => updateFormState({"purchase": d}),
-            label: "Purchase Cost ( Tsh ) / Unit price",
-            placeholder: "",
-            error: error['purchase'] ?? '',
-            initialText: '${product['purchase'] ?? ''}',
-            type: TextInputType.number,
-          ),
-          TextInput(
-            onText: (d) => updateFormState({"retailPrice": d}),
-            label: "Retail price ( Tsh ) / Unit price",
-            placeholder: "",
-            error: error['retailPrice'] ?? '',
-            initialText: '${product['retailPrice'] ?? ''}',
-            type: TextInputType.number,
-          ),
-          TextInput(
-            onText: (d) => updateFormState({"wholesalePrice": d}),
-            label: "Wholesale price ( Tsh ) / Unit price",
-            placeholder: "",
-            error: error['wholesalePrice'] ?? '',
-            initialText: '${product['wholesalePrice'] ?? ''}',
-            type: TextInputType.number,
-          ),
-          TextInput(
-            onText: (d) => updateFormState({"quantity": d}),
-            label: "Quantity",
-            placeholder: "Current stock quantity",
-            error: error['quantity'] ?? '',
-            initialText: '${product['quantity'] ?? ''}',
-            type: TextInputType.number,
-          ),
-          TextInput(
-              onText: (d) => updateFormState({"expire": d}),
-              label: "Expire",
-              placeholder: "YYYY-MM-DD ( Optional )",
-              error: error['expire'] ?? '',
-              initialText: product['expire'] ?? '',
-              type: TextInputType.datetime),
-          Container(
-            height: 80,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-            child: OutlinedButton(
-                onPressed: loading ? null : _createProduct,
-                child: Text(
-                  loading ? "Waiting..." : "Continue.",
-                  style: const TextStyle(fontSize: 16),
-                )),
-          )
-        ]);
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextInput(
+          onText: (d) {
+            updateFormState({"product": d});
+            // state.refresh();
+          },
+          label: "Name",
+          placeholder: 'Brand + generic name',
+          error: error['product'] ?? '',
+          initialText: product['product'] ?? '',
+          // getAddWidget: () => createItemContent(),
+          // onField: (x) =>
+          //     '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
+          // onLoad: getItemFromCacheOrRemote,
+        ),
+        TextInput(
+            onText: (d) => updateFormState({"barcode": d}),
+            label: "Barcode / Qrcode",
+            placeholder: "Optional",
+            error: error['barcode'] ?? '',
+            initialText: '${product['barcode'] ?? ''}',
+            icon: _mobileQrScan('')),
+        ChoicesInput(
+          onText: (d) {
+            updateFormState({"category": d});
+            refresh();
+          },
+          label: "Category",
+          placeholder: 'Select category',
+          error: error['category'] ?? '',
+          initialText: product['category'] ?? '',
+          getAddWidget: () => const CreateCategoryContent(),
+          onField: (x) => '${x['name']}',
+          onLoad: getCategoryFromCacheOrRemote,
+        ),
+        ChoicesInput(
+          onText: (d) {
+            updateFormState({"supplier": d});
+            refresh();
+          },
+          label: "Supplier",
+          placeholder: 'Select supplier',
+          error: error['supplier'] ?? '',
+          initialText: product['supplier'] ?? '',
+          getAddWidget: () => const CreateSupplierContent(),
+          onField: (x) => '${x['name']}',
+          onLoad: getSupplierFromCacheOrRemote,
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"purchase": d}),
+          label: "Purchase Cost ( Tsh ) / Unit price",
+          placeholder: "",
+          error: error['purchase'] ?? '',
+          initialText: '${product['purchase'] ?? ''}',
+          type: TextInputType.number,
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"retailPrice": d}),
+          label: "Retail price ( Tsh ) / Unit price",
+          placeholder: "",
+          error: error['retailPrice'] ?? '',
+          initialText: '${product['retailPrice'] ?? ''}',
+          type: TextInputType.number,
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"wholesalePrice": d}),
+          label: "Wholesale price ( Tsh ) / Unit price",
+          placeholder: "",
+          error: error['wholesalePrice'] ?? '',
+          initialText: '${product['wholesalePrice'] ?? ''}',
+          type: TextInputType.number,
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"quantity": d}),
+          label: "Quantity",
+          placeholder: "Current stock quantity",
+          error: error['quantity'] ?? '',
+          initialText: '${product['quantity'] ?? ''}',
+          type: TextInputType.number,
+        ),
+        TextInput(
+            onText: (d) => updateFormState({"expire": d}),
+            label: "Expire",
+            placeholder: "YYYY-MM-DD ( Optional )",
+            error: error['expire'] ?? '',
+            initialText: product['expire'] ?? '',
+            type: TextInputType.datetime),
+        Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+          child: OutlinedButton(
+              onPressed: loading ? null : _createProduct,
+              child: Text(
+                loading ? "Waiting..." : "Continue.",
+                style: const TextStyle(fontSize: 16),
+              )),
+        )
+      ],
+    );
   }
 
-  final _mobileQrScan = ifDoElse(
-    (_) => isNativeMobilePlatform(),
-    (_) =>
-        IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
-    (_) => const SizedBox(),
-  );
+  _mobileQrScan(v) {
+    var a = ifDoElse(
+      (_) => isNativeMobilePlatform(),
+      (_) => IconButton(
+        onPressed: () {
+          fullScreeDialog(context, (p0) {
+            return const ReadBarcodeView();
+          }).then((value) {
+            if (kDebugMode) {
+              print('BARCODE:::: $value');
+            }
+            updateFormState({"barcode": value});
+            refresh();
+          }).catchError((error) {
+            if (kDebugMode) {
+              print(error);
+            }
+          });
+        },
+        icon: const Icon(Icons.qr_code_scanner),
+      ),
+      (_) => const SizedBox(),
+    );
+    return a(v);
+  }
 
   _createProduct() {
     setState(() {

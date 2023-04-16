@@ -45,7 +45,7 @@ class _State extends State<TextInput> {
 
   @override
   void initState() {
-    widget.controller = TextEditingController(text: widget.initialText);
+    // widget.controller = TextEditingController(text: widget.initialText);
     super.initState();
   }
 
@@ -95,13 +95,16 @@ class _State extends State<TextInput> {
       hintText: widget.placeholder,
       hintStyle: const TextStyle(
           // color: Color(0xffb0b0b0),
-          fontSize: 14, fontWeight: FontWeight.w300),
+          fontSize: 14,
+          fontWeight: FontWeight.w300),
       contentPadding: inputPadding,
     );
 
     return Expanded(
       child: TextField(
-        controller: widget.controller,
+        controller: widget.controller is TextEditingController
+            ? widget.controller
+            : TextEditingController(text: widget.initialText),
         autofocus: false,
         maxLines: widget.lines,
         readOnly: widget.readOnly,

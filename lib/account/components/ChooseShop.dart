@@ -61,7 +61,7 @@ class ChooseShop extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
                 child: Image.network(
-                  imgSrc,
+                  imgSrc is String?imgSrc:'',
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(
                       Icons.storefront,
