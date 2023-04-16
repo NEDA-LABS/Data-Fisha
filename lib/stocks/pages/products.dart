@@ -1,9 +1,11 @@
+import 'package:bfast/controller/database.dart';
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/configurations.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
@@ -103,19 +105,23 @@ class _State extends State<ProductsPage> {
     setState(() {
       _isLoading = true;
     });
-    var data = await getStockFromCacheOrRemote(
+    getStockFromCacheOrRemote(
       stringLike: _query,
       skipLocal: _skipLocal,
-    );
-    setState(() {
+    ).then((data) {
       _products = data;
-      _isLoading = false;
-      _skipLocal = false;
+    }).catchError((error) {
+      showInfoDialog(context, error);
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+        _skipLocal = false;
+      });
     });
   }
 
   _productItemClicked(item) =>
-      showDialogOrModalSheet(productDetail(item, context), context);
+      showDialogOrModalSheet(ProductDetail(item: item), context);
 
   _outStyle() => TextStyle(
       color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);

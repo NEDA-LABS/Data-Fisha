@@ -18,6 +18,7 @@ class TextInput extends StatefulWidget {
   final dynamic debounceTime;
   final bool show;
   final bool readOnly;
+  final String? value;
   TextEditingController? controller;
 
   TextInput({
@@ -34,6 +35,7 @@ class TextInput extends StatefulWidget {
     this.show = true,
     this.readOnly = false,
     this.controller,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -45,7 +47,8 @@ class _State extends State<TextInput> {
 
   @override
   void initState() {
-    // widget.controller = TextEditingController(text: widget.initialText);
+    widget.controller =
+        widget.controller ?? TextEditingController(text: widget.initialText);
     super.initState();
   }
 
@@ -102,9 +105,9 @@ class _State extends State<TextInput> {
 
     return Expanded(
       child: TextField(
-        controller: widget.controller is TextEditingController
-            ? widget.controller
-            : TextEditingController(text: widget.initialText),
+        controller: widget.value != null
+            ? TextEditingController(text: widget.value)
+            : widget.controller,
         autofocus: false,
         maxLines: widget.lines,
         readOnly: widget.readOnly,

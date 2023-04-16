@@ -1,6 +1,9 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/ReadBarcodeView.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
@@ -9,6 +12,7 @@ import 'package:smartstock/stocks/services/product.dart';
 
 class ProductUpdateForm extends StatefulWidget {
   final Map product;
+
   const ProductUpdateForm(this.product, {Key? key}) : super(key: key);
 
   @override
@@ -33,11 +37,13 @@ class _State extends State<ProductUpdateForm> {
   @override
   void initState() {
     product.addAll({
-      "barcode": widget.product['barcode'],
+      "product": widget.product['product'],
+      "barcode": widget.product['barcode'] ?? '',
       "category": widget.product['category'],
       "purchase": widget.product['purchase'],
       "retailPrice": widget.product['retailPrice'],
       "wholesalePrice": widget.product['wholesalePrice'],
+      "expire": widget.product['expire'] ?? '',
       "id": widget.product['id'],
     });
     super.initState();
@@ -50,12 +56,23 @@ class _State extends State<ProductUpdateForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextInput(
-            onText: (d) => updateFormState({"barcode": d}),
-            label: "Barcode / Qrcode",
-            placeholder: "Optional",
-            error: error['barcode'] ?? '',
-            initialText: product['barcode'] ?? '',
-            icon: _mobileQrScan('')),
+          onText: (d) {
+            updateFormState({"product": d});
+          },
+          label: "Name",
+          placeholder: 'Brand + generic name',
+          error: error['name'] ?? '',
+          initialText: product['product'] ?? '',
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"barcode": d}),
+          label: "Barcode / Qrcode",
+          placeholder: "Optional",
+          error: error['barcode'] ?? '',
+          value: '${product['barcode'] ?? ''}',
+          initialText: '${product['barcode'] ?? ''}',
+          icon: _mobileQrScan(''),
+        ),
         ChoicesInput(
           onText: (d) {
             updateFormState({"category": d});
@@ -93,6 +110,14 @@ class _State extends State<ProductUpdateForm> {
           initialText: '${product['wholesalePrice'] ?? ''}',
           type: TextInputType.number,
         ),
+        TextInput(
+          onText: (d) => updateFormState({"expire": d}),
+          label: "Expire",
+          placeholder: "YYYY-MM-DD ( Optional )",
+          error: error['expire'] ?? '',
+          initialText: product['expire'] ?? '',
+          type: TextInputType.datetime,
+        ),
         Container(
           height: 80,
           width: MediaQuery.of(context).size.width,
@@ -113,19 +138,17 @@ class _State extends State<ProductUpdateForm> {
       error = {};
       loading = true;
     });
-    createOrUpdateProduct(
-      context,
-      error,
-      loading,
-      true,
-      product,
-    ).catchError((error) {
+    createOrUpdateProduct(context, error, loading, true, product).then((value) {
+      Navigator.of(context).maybePop();
+    }).catchError((error) {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              title: const Text("Error!",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              content: Text('$error')));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error!",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          content: Text('$error'),
+        ),
+      );
     }).whenComplete(() {
       setState(() {
         loading = false;
@@ -133,10 +156,26 @@ class _State extends State<ProductUpdateForm> {
     });
   }
 
-  final _mobileQrScan = ifDoElse(
-    (_) => isNativeMobilePlatform(),
-    (_) =>
-        IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner)),
-    (_) => const SizedBox(),
-  );
+  _mobileQrScan(v) {
+    var a = ifDoElse(
+      (_) => isNativeMobilePlatform(),
+      (_) => IconButton(
+        onPressed: () {
+          fullScreeDialog(context, (p0) {
+            return const ReadBarcodeView();
+          }).then((value) {
+            updateFormState({"barcode": value});
+            refresh();
+          }).catchError((error) {
+            if (kDebugMode) {
+              print(error);
+            }
+          });
+        },
+        icon: const Icon(Icons.qr_code_scanner),
+      ),
+      (_) => const SizedBox(),
+    );
+    return a(v);
+  }
 }

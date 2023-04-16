@@ -43,24 +43,21 @@ class _State extends State<ProductCreateForm> {
         TextInput(
           onText: (d) {
             updateFormState({"product": d});
-            // state.refresh();
           },
           label: "Name",
           placeholder: 'Brand + generic name',
           error: error['product'] ?? '',
           initialText: product['product'] ?? '',
-          // getAddWidget: () => createItemContent(),
-          // onField: (x) =>
-          //     '${x['brand']} ${x['generic'] ?? ''} ${x['packaging'] ?? ''}',
-          // onLoad: getItemFromCacheOrRemote,
         ),
         TextInput(
-            onText: (d) => updateFormState({"barcode": d}),
-            label: "Barcode / Qrcode",
-            placeholder: "Optional",
-            error: error['barcode'] ?? '',
-            initialText: '${product['barcode'] ?? ''}',
-            icon: _mobileQrScan('')),
+          onText: (d) => updateFormState({"barcode": d}),
+          label: "Barcode / Qrcode",
+          placeholder: "Optional",
+          error: error['barcode'] ?? '',
+          value: '${product['barcode'] ?? ''}',
+          initialText: '${product['barcode'] ?? ''}',
+          icon: _mobileQrScan(''),
+        ),
         ChoicesInput(
           onText: (d) {
             updateFormState({"category": d});
@@ -131,11 +128,12 @@ class _State extends State<ProductCreateForm> {
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
           child: OutlinedButton(
-              onPressed: loading ? null : _createProduct,
-              child: Text(
-                loading ? "Waiting..." : "Continue.",
-                style: const TextStyle(fontSize: 16),
-              )),
+            onPressed: loading ? null : _createProduct,
+            child: Text(
+              loading ? "Waiting..." : "Continue.",
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
         )
       ],
     );
@@ -149,9 +147,6 @@ class _State extends State<ProductCreateForm> {
           fullScreeDialog(context, (p0) {
             return const ReadBarcodeView();
           }).then((value) {
-            if (kDebugMode) {
-              print('BARCODE:::: $value');
-            }
             updateFormState({"barcode": value});
             refresh();
           }).catchError((error) {
@@ -172,19 +167,18 @@ class _State extends State<ProductCreateForm> {
       error = {};
       loading = true;
     });
-    createOrUpdateProduct(
-      context,
-      error,
-      loading,
-      false,
-      product,
-    ).catchError((error) {
+    createOrUpdateProduct(context, error, loading, false, product)
+        .then((value) {
+      Navigator.of(context).maybePop();
+    }).catchError((error) {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              title: const Text("Error!",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              content: Text('$error')));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error!",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          content: Text('$error'),
+        ),
+      );
     }).whenComplete(() {
       setState(() {
         loading = false;

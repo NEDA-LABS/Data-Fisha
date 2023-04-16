@@ -15,7 +15,7 @@ class ProductEditPage extends StatelessWidget {
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,
-      onBack: (){
+      onBack: () {
         Navigator.of(context).maybePop();
       },
       context: context,
@@ -31,9 +31,9 @@ class ProductEditPage extends StatelessWidget {
       staticChildren: [
         Center(
           child: Container(
-              constraints: const BoxConstraints(maxWidth: 600),
-              // padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: ProductUpdateForm(product)),
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: ProductUpdateForm(product),
+          ),
         )
       ],
     );
