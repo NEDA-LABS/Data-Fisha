@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 
 class SwitchToPageGrid extends StatelessWidget {
   final Function() onPress;
@@ -37,19 +39,18 @@ class SwitchToPageGrid extends StatelessWidget {
               ),
               child: onIcon != null ? onIcon!() : Container(),
             ),
-            Container(
-              padding: const EdgeInsets.only(right: 5, top: 13, bottom: 5),
-              alignment: Alignment.topLeft,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  name,
-                  softWrap: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    overflow: TextOverflow.ellipsis
-                  ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(right: 5, top: 13, bottom: 5),
+                alignment: Alignment.topLeft,
+                child: LabelLarge(
+                  text: name,
+                  // softWrap: true,
+                  // style: const TextStyle(
+                  //   fontSize: 14,
+                  //   fontWeight: FontWeight.w300,
+                  //   overflow: TextOverflow.visible
+                  // ),
                 ),
               ),
             )

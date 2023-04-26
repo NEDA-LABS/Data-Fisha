@@ -64,11 +64,11 @@ class SmartStockCoreModule extends Module {
 
 List<MenuModel> getAppModuleMenus(BuildContext context) {
   return [
-    dashboardMenu(),
+    dashboardMenu(context),
     reportMenu(context),
     getSalesModuleMenu(context),
     getStocksModuleMenu(context),
-    expenseMenu(),
+    expenseMenu(context),
     getAccountMenu(context),
   ];
 }
