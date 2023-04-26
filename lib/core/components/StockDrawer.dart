@@ -177,31 +177,19 @@ class StockDrawer extends Drawer {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
-          decoration: item.link == current ? _getSelectedDecoration(context) : null,
+          decoration:
+              item.link == current ? _getSelectedDecoration(context) : null,
           child: ListTile(
             leading:
                 item.link == current ? _getSelectedIcon(context) : item.icon,
             title: Text(item.name, style: _itemStyle),
-            onTap: () => navigateTo(item.link),
+            onTap: (){
+              // print('TAPPED');
+              item.onClick != null ? item.onClick!() : navigateTo(item.link);
+            },
           ),
         ),
-        // : ExpansionTile(
-        //     leading: current?.contains(item.link) ?? false
-        //         ? _selectedIcon
-        //         : item.icon,
-        //     title: Text(item.name, style: _itemStyle),
-        //     initiallyExpanded: current?.contains(item.link) ?? false,
-        //     children: item.pages.map(_prepareSubMenuItem(current)).toList(),
-        //   ),
       );
     };
   }
-
-// Widget Function(SubMenuModule item) _prepareSubMenuItem(String? current) {
-//   return (SubMenuModule item) {
-//     return ListTile(
-//         title: Text('             ${item.name}', style: _itemStyle),
-//         onTap: () => navigateTo(item.link));
-//   };
-// }
 }

@@ -78,6 +78,7 @@ Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
       return {
         "wholesalePrice": e.product['wholesalePrice'],
         "retailPrice": e.product['retailPrice'],
+        "expire": e.product['expire'],
         "product": {
           "id": e.product['id'],
           "product": e.product['product'],

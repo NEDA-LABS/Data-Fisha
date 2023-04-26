@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/shop_user_details.dart';
+import 'package:smartstock/account/pages/user_create.dart';
 import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -36,7 +37,9 @@ class _State extends State<UsersPage> {
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loading(loading),
-          getIsSmallScreen(context)?Container():tableContextMenu(_contextItems()),
+          getIsSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextItems()),
           _tableHeader(),
         ],
         totalDynamicChildren: users.length,
@@ -59,7 +62,7 @@ class _State extends State<UsersPage> {
                   TableLikeListTextDataCell('${users[index]['role']}'),
                 ]),
               ),
-              HorizontalLine()
+              const HorizontalLine()
             ],
           );
         },
@@ -68,8 +71,13 @@ class _State extends State<UsersPage> {
   _appBar(context) {
     return getSliverSmartStockAppBar(
       title: "Users",
-      showBack: false,
-      backLink: '/account/',
+      showBack: true,
+      // backLink: '/account/',
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
       showSearch: false,
       context: context,
       // onSearch: (p0) {},
@@ -80,7 +88,13 @@ class _State extends State<UsersPage> {
   _contextItems() {
     return [
       ContextMenu(
-          name: 'Add', pressed: () => navigateTo('/account/users/create')),
+        name: 'Add',
+        pressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const ShopUserCreatePage(),
+          ),
+        ),
+      ),
       ContextMenu(
         name: 'Reload',
         pressed: () {
@@ -125,14 +139,18 @@ class _State extends State<UsersPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Add expense'),
+                title: const Text('Create user'),
                 onTap: () {
-                  Navigator.of(context)
-                      .maybePop()
-                      .whenComplete(() => navigateTo('/account/users/create'));
+                  Navigator.of(context).maybePop().whenComplete(
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const ShopUserCreatePage(),
+                          ),
+                        ),
+                      );
                 },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload users'),

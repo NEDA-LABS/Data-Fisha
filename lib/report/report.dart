@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/models/external_service.dart';
+import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/report/pages/sales_category_performance.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
 import 'package:smartstock/report/pages/sales_invoice_overview.dart';
@@ -8,7 +9,7 @@ import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/report/pages/sales_seller_performance.dart';
 
 class ReportModule extends Module {
-  final home = ChildRoute('/', child: (_, __) => const OverviewCashSales());
+  final home = ChildRoute('/', child: (_, __) =>  const ReportIndexPage());
   final dailyCashSales = ChildRoute('/sales/overview/cash',
       child: (_, __) => const OverviewCashSales());
   final dailyInvoiceSales = ChildRoute('/sales/overview/invoice',

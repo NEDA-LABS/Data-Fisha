@@ -45,22 +45,14 @@ MenuModel getSalesModuleMenu(BuildContext context) => MenuModel(
       name: 'Sales',
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
+      onClick: () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => SalesPage(pages: _pagesMenu(context)),
+              settings: const RouteSettings(name: 'r_sales')
+            ),
+            (route) => route.settings.name!='r_sales');
+      },
       roles: ['*'],
       pages: _pagesMenu(context),
-      // pages: [
-      //   ...,
-      // ...SalesExternalServiceState().salesExternalServices.map<SubMenuModule>(
-      //   (e) {
-      //     return SubMenuModule(
-      //       name: e.name,
-      //       link: '/sales${e.pageLink}',
-      //       svgName: null,
-      //       // 'transfer_icon.svg',
-      //       icon: e.icon,
-      //       roles: [],
-      //       onClick: () {},
-      //     );
-      //   },
-      // )
-      // ],
     );

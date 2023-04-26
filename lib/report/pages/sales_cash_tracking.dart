@@ -101,32 +101,23 @@ class _State extends State<SalesCashTrackingPage> {
     return getSliverSmartStockAppBar(
       title: "Cash sales tracking",
       showBack: true,
-      backLink: '/sales/',
+      // backLink: '/sales/',
       showSearch: false,
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
       searchHint: 'Search product...',
       context: context,
     );
-  }
-
-  _contextSales(context) {
-    return [
-      ContextMenu(
-        name: 'Add Retail',
-        pressed: () => navigateTo('/sales/cash/retail'),
-      ),
-      ContextMenu(
-        name: 'Add Wholesale',
-        pressed: () => navigateTo('/sales/cash/whole'),
-      ),
-      ContextMenu(name: 'Reload', pressed: () => _refresh())
-    ];
   }
 
   _tableHeader() {
     var height = 38.0;
     var smallView = SizedBox(
       height: height,
-      child: TableLikeListRow([
+      child: const TableLikeListRow([
         TableLikeListTextHeaderCell('Date'),
         TableLikeListTextHeaderCell('Amount ( TZS )'),
         TableLikeListTextHeaderCell('Customer'),
@@ -134,7 +125,7 @@ class _State extends State<SalesCashTrackingPage> {
     );
     var bigView = SizedBox(
       height: height,
-      child: TableLikeListRow([
+      child: const TableLikeListRow([
         TableLikeListTextHeaderCell('Date'),
         TableLikeListTextHeaderCell('Amount ( TZS )'),
         TableLikeListTextHeaderCell('Items'),

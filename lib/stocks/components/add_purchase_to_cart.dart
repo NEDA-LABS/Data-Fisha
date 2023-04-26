@@ -1,5 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -53,6 +54,7 @@ class _State extends State<_AddPurchase2CartDialog> {
       'purchase': _getFromCartProduct(widget.cart, 'purchase'),
       'retailPrice': _getFromCartProduct(widget.cart, 'retailPrice'),
       'wholesalePrice': _getFromCartProduct(widget.cart, 'wholesalePrice'),
+      'expire': _getFromCartProduct(widget.cart, 'expire'),
     };
     super.initState();
   }
@@ -96,6 +98,12 @@ class _State extends State<_AddPurchase2CartDialog> {
               type: TextInputType.number,
               onText: (v) =>
                   _prepareUpdateState()({'wholesalePrice': doubleOrZero(v)})),
+          TextInput(
+              label: 'New expire date',
+              initialText: '${states['expire'] ?? ''}',
+              lines: 1,
+              type: TextInputType.datetime,
+              onText: (v) => _prepareUpdateState()({'expire': v})),
           _addToCartButton(context, states, widget.onAddToCart)
         ],
       ),
@@ -112,16 +120,15 @@ class _State extends State<_AddPurchase2CartDialog> {
   }
 
   _addToCartButton(context, states, onAddToCart) => Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      height: 40,
-      width: MediaQuery.of(context).size.width,
-      child: TextButton(
+        margin: const EdgeInsets.symmetric(vertical: 15),
+        height: 40,
+        width: MediaQuery.of(context).size.width,
+        child: TextButton(
           onPressed: () => onAddToCart(_getPurchaseCart(states)),
-          style: _addToCartButtonStyle(context),
-          child: const Text(
-            "ADD TO CART",
-            // style: TextStyle(color: Colors.white),
-          )));
+          // style: _addToCartButtonStyle(context),
+          child: const BodyMedium(text: "ADD TO CART"),
+        ),
+      );
 
   _getPurchaseCart(states) {
     Map product = states['p'] is Map

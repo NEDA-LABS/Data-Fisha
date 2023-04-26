@@ -232,8 +232,13 @@ class _State extends State<SellerPerformance> {
   _appBar() {
     return getSliverSmartStockAppBar(
       title: "Seller performance",
-      showBack: false,
-      backLink: '/report/',
+      showBack: true,
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
+      // backLink: '/report/',
       context: context,
     );
   }

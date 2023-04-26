@@ -15,6 +15,9 @@ MenuModel dashboardMenu() => MenuModel(
   name: 'Dashboard',
   icon: const Icon(Icons.dashboard),
   link: '/dashboard/',
+  // onClick: (){
+  //
+  // },
   roles: ['admin'],
   pages: _pagesMenu(),
 );

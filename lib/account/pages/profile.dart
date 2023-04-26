@@ -14,8 +14,13 @@ class ProfilePage extends StatelessWidget {
       current: '/account/',
       sliverAppBar: getSliverSmartStockAppBar(
           title: "Profile",
-          showBack: false,
-          backLink: '/account/',
+          showBack: true,
+          // backLink: '/account/',
+          onBack: () {
+            Navigator.of(context).canPop()
+                ? Navigator.of(context).pop()
+                : Navigator.of(context).pushNamed('/');
+          },
           context: context),
       menus: getAppModuleMenus(context),
       staticChildren: const [ProfileForm()],

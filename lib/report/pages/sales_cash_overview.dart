@@ -183,8 +183,13 @@ class _State extends State<OverviewCashSales> {
   _appBar() {
     return getSliverSmartStockAppBar(
       title: "Cash sales overview",
-      showBack: false,
-      backLink: '/report/',
+      showBack: true,
+      // backLink: '/report/',
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
       context: context,
     );
   }

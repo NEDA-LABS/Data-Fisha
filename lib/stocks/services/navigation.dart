@@ -74,6 +74,13 @@ MenuModel getStocksModuleMenu(BuildContext context) {
     name: 'Stocks',
     icon: const Icon(Icons.inventory),
     link: '/stock/',
+    onClick: () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => StocksIndexPage(pages: _pages(context)),
+              settings: const RouteSettings(name: 'r_stocks')),
+          (route) => route.settings.name != 'r_stocks');
+    },
     roles: ['admin', 'manager'],
     pages: _pages(context),
   );

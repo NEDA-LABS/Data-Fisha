@@ -52,7 +52,12 @@ class _State extends State<ShopUserCreatePage> {
     return getSliverSmartStockAppBar(
       title: "Add user",
       showBack: true,
-      backLink: '/account/users',
+      // backLink: '/account/users',
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
       showSearch: false,
       context: context,
     );

@@ -44,9 +44,11 @@ class SwitchToPageGrid extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   name,
+                  softWrap: true,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w300,
+                    overflow: TextOverflow.ellipsis
                   ),
                 ),
               ),

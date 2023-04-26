@@ -216,8 +216,13 @@ class _State extends State<CategoryPerformance> {
   _appBar() {
     return getSliverSmartStockAppBar(
       title: "Category performance",
-      showBack: false,
-      backLink: '/report/',
+      showBack: true,
+      onBack: () {
+        Navigator.of(context).canPop()
+            ? Navigator.of(context).pop()
+            : Navigator.of(context).pushNamed('/');
+      },
+      // backLink: '/report/',
       context: context,
     );
   }
