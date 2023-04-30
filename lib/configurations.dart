@@ -39,4 +39,4 @@ MaterialColor getSmartStockMaterialColorSwatch() {
 App smartstockApp =
     App(applicationId: 'smartstock_lb', projectId: 'smartstock');
 
-String version = "1.1.1-2023.04.30-b.1";
+String version = "1.1.2-2023.5.1-b.1";
