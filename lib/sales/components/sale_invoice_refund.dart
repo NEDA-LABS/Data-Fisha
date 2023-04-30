@@ -7,8 +7,8 @@ import 'package:smartstock/sales/services/api_cash_sale.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
 class SaleInvoiceRefundContent extends StatefulWidget {
-  final saleId;
-  final item;
+  final dynamic saleId;
+  final dynamic item;
 
   const SaleInvoiceRefundContent(this.saleId, this.item, {Key? key})
       : super(key: key);

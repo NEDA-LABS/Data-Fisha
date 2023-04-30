@@ -13,7 +13,8 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class SellerPerformance extends StatefulWidget {
-  const SellerPerformance({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const SellerPerformance({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -39,7 +40,7 @@ class _State extends State<SellerPerformance> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),

@@ -15,7 +15,8 @@ import 'package:smartstock/report/services/report.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 
 class SalesCashTrackingPage extends StatefulWidget {
-  const SalesCashTrackingPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const SalesCashTrackingPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -39,7 +40,7 @@ class _State extends State<SalesCashTrackingPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       current: '/report/',
       sliverAppBar: _appBar(context),
       onBody: (d) {

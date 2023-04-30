@@ -8,7 +8,7 @@ import 'package:smartstock/stocks/components/add_transfer_to_cart.dart';
 import 'package:smartstock/stocks/components/transfer_add_shop_content.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
-transferSendPage(BuildContext context) => SaleLikePage(
+transferSendPage(BuildContext context,{required OnGetModulesMenu onGetModulesMenu}) => SaleLikePage(
       wholesale: false,
       showDiscountView: false,
       title: 'Send transfer',
@@ -23,7 +23,7 @@ transferSendPage(BuildContext context) => SaleLikePage(
       onCustomerLikeList: getOtherShopsNames,
       onCustomerLikeAddWidget: transferAddShopContent,
       checkoutCompleteMessage: 'Transfer complete.',
-      onGetProductsLike: getStockFromCacheOrRemote,
+      onGetProductsLike: getStockFromCacheOrRemote, onGetModulesMenu: onGetModulesMenu,
     );
 
 var _onGetPrice = compose([doubleOrZero, propertyOr('purchase', (p0) => 0)]);

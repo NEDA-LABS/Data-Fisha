@@ -1,5 +1,5 @@
 class CartModel{
-  var quantity;
+  dynamic quantity;
   Map<String, dynamic>? product;
 
   CartModel({this.product, this.quantity});

@@ -12,8 +12,8 @@ import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class SuppliersPage extends StatefulWidget {
-
-  const SuppliersPage({Key? key}) : super(key: key);
+final OnGetModulesMenu onGetModulesMenu;
+  const SuppliersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -93,7 +93,7 @@ class _State extends State<SuppliersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

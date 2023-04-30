@@ -13,26 +13,28 @@ class SwitchToPageMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isCompactView = getIsSmallScreen(context);
-    var largeScreenView =
-        Wrap(children: pages.map(_menuToGridItem(context)).toList());
-    var smallScreenView = Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
-      children: _mapPagesForMobileViewNavigation(pages).map((e) {
-        var y = e.length == 1 ? [...e, null] : e;
+      children: _mapPagesForMobileViewNavigation(pages,isCompactView?2:4).map((e) {
+        var remainder = (isCompactView?2:4) - e.length;
+        var y = [];
+        y.addAll(e);
+        for(var i=0; i<remainder;i++){
+          y.add(null);
+        }
         return Row(
           mainAxisSize: MainAxisSize.min,
-          children: y.map((x) {
+          children: y.map<Widget>((x) {
             return Expanded(
               flex: 1,
-              child: x is SubMenuModule
-                  ? _menuToGridItem(context)(x)
+              child: x !=null
+                  ? _menuToGridItem(context)(x as SubMenuModule)
                   : Container(),
             );
           }).toList(),
         );
       }).toList(),
     );
-    return isCompactView ? smallScreenView : largeScreenView;
   }
 
   Widget Function(SubMenuModule) _menuToGridItem(BuildContext context) {
@@ -55,7 +57,8 @@ class SwitchToPageMenu extends StatelessWidget {
 
   List<List<SubMenuModule>> _mapPagesForMobileViewNavigation(
     List<SubMenuModule> pages,
+      int count
   ) {
-    return divideList<SubMenuModule>(pages, 2);
+    return divideList<SubMenuModule>(pages, count);
   }
 }

@@ -11,7 +11,8 @@ import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ShopUserCreatePage extends StatefulWidget {
-  const ShopUserCreatePage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const ShopUserCreatePage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -33,7 +34,7 @@ class _State extends State<ShopUserCreatePage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       current: '/account/',
       sliverAppBar: _appBar(context),
       staticChildren: [

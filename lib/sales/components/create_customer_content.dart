@@ -15,7 +15,7 @@ class CreateCustomerContent extends StatefulWidget {
 
 class _State extends State<CreateCustomerContent> {
   Map states = {"loading": false};
-  var updateState;
+  dynamic updateState;
 
   @override
   void initState() {

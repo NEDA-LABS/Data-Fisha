@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_item_content.dart';
 import 'package:smartstock/expense/services/items.dart';
 
 class ExpenseItemsPage extends StatefulWidget {
-  const ExpenseItemsPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const ExpenseItemsPage({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -29,7 +32,7 @@ class _State extends State<ExpenseItemsPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/expense/',
         sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
@@ -62,7 +65,8 @@ class _State extends State<ExpenseItemsPage> {
           _query = p0;
         });
       },
-      searchHint: 'Search...', context: context,
+      searchHint: 'Search...',
+      context: context,
     );
   }
 

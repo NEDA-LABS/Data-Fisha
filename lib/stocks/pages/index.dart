@@ -5,12 +5,17 @@ import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/stock_summary.dart';
+import 'package:smartstock/stocks/pages/categories.dart';
+import 'package:smartstock/stocks/pages/products.dart';
+import 'package:smartstock/stocks/pages/purchases.dart';
+import 'package:smartstock/stocks/pages/suppliers.dart';
+import 'package:smartstock/stocks/pages/transfers.dart';
 
 class StocksIndexPage extends StatelessWidget {
-  final List<SubMenuModule> pages;
-
-  const StocksIndexPage({Key? key, required this.pages}) : super(key: key);
+final OnGetModulesMenu onGetModulesMenu;
+  const StocksIndexPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   Widget build(context) {
@@ -19,19 +24,65 @@ class StocksIndexPage extends StatelessWidget {
       showBack: false,
       context: context,
     );
-    var pagesWithNoIndex =
-        pages.where((element) => element.name != 'Summary').toList();
-
     return ResponsivePage(
       office: '',
       current: '/stock/',
-      menus: getAppModuleMenus(context),
+      menus: onGetModulesMenu(context),
       sliverAppBar: appBar,
       staticChildren: [
         const SwitchToTitle(),
-        SwitchToPageMenu(pages: pagesWithNoIndex),
+        SwitchToPageMenu(pages: _pages(context)),
         const StocksSummary()
       ],
     );
+  }
+
+  List<SubMenuModule> _pages(BuildContext context) {
+    pageNav(Widget page) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
+    }
+
+    return [
+      SubMenuModule(
+        name: 'Products',
+        link: '/stock/products',
+        roles: [],
+        icon: Icons.sell,
+        svgName: 'product_icon.svg',
+        onClick: () => pageNav(ProductsPage(onGetModulesMenu: onGetModulesMenu)),
+      ),
+      SubMenuModule(
+        name: 'Categories',
+        link: '/stock/categories',
+        roles: [],
+        icon: Icons.category,
+        svgName: 'category_icon.svg',
+        onClick: () => pageNav(CategoriesPage(onGetModulesMenu: onGetModulesMenu)),
+      ),
+      SubMenuModule(
+        name: 'Suppliers',
+        link: '/stock/suppliers',
+        roles: [],
+        icon: Icons.support_agent_sharp,
+        svgName: 'supplier_icon.svg',
+        onClick: () => pageNav(SuppliersPage(onGetModulesMenu: onGetModulesMenu)),
+      ),
+      SubMenuModule(
+        name: 'Purchases',
+        link: '/stock/purchases',
+        roles: [],
+        icon: Icons.receipt,
+        svgName: 'invoice_icon.svg',
+        onClick: () => pageNav(PurchasesPage(onGetModulesMenu: onGetModulesMenu)),
+      ),
+      SubMenuModule(
+        name: 'Transfer',
+        link: '/stock/transfers',
+        roles: [],
+        icon: Icons.change_circle,
+        svgName: 'transfer_icon.svg',
+        onClick: () => pageNav(TransfersPage(onGetModulesMenu: onGetModulesMenu,)),
+      ),
+    ];
   }
 }

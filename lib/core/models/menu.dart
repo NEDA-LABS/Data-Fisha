@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MenuModel {
   final String name;
-  final List<SubMenuModule> pages;
+  // final ListSubMenuModule> pages;
   final String link;
   final Function()? onClick;
   final List<String> roles;
@@ -13,7 +13,7 @@ class MenuModel {
     required this.icon,
     required this.link,
     required this.roles,
-    required this.pages,
+    // required this.pages,
     this.onClick
   });
 }

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_create_form.dart';
 
 class ProductCreatePage extends StatelessWidget {
-  const ProductCreatePage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const ProductCreatePage({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   _appBar(context) {
     return getSliverSmartStockAppBar(
       title: "Add product",
       showBack: true,
       backLink: '/stock/products',
-      onBack: (){
+      onBack: () {
         Navigator.of(context).maybePop();
       },
       showSearch: false,
@@ -22,7 +25,7 @@ class ProductCreatePage extends StatelessWidget {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

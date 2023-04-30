@@ -14,7 +14,8 @@ import 'package:smartstock/stocks/components/transfer_details.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
 class TransfersPage extends StatefulWidget {
-  const TransfersPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const TransfersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TransfersPage();
@@ -33,13 +34,6 @@ class _TransfersPage extends State<TransfersPage> {
       onBack: (){
         Navigator.of(context).maybePop();
       },
-      // onSearch: (d) {
-      //   setState(() {
-      //     _query = d;
-      //   });
-      //   _refresh(skip: false);
-      // },
-      // searchHint: 'Search...',
       context: context);
 
   _contextTransfers(context) => [
@@ -74,7 +68,7 @@ class _TransfersPage extends State<TransfersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         loading: _loading,

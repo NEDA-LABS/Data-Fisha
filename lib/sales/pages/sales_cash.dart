@@ -14,7 +14,8 @@ import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashPage extends StatefulWidget {
-  const SalesCashPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const SalesCashPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -22,7 +23,7 @@ class SalesCashPage extends StatefulWidget {
 
 class _State extends State<SalesCashPage> {
   bool _loading = false;
-  String _query = '';
+  final String _query = '';
   int size = 20;
   List _sales = [];
 
@@ -59,13 +60,6 @@ class _State extends State<SalesCashPage> {
       onBack: (){
         Navigator.of(context).maybePop();
       },
-      // onSearch: (d) {
-      //   setState(() {
-      //     _query = d;
-      //   });
-      //   _refresh();
-      // },
-      // searchHint: 'Search product...',
       context: context,
     );
   }
@@ -96,10 +90,6 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-  // _fields() => isSmallScreen(context)
-  //     ? ['date', 'amount', 'customer']
-  //     : ['date', 'amount', 'items', 'customer'];
-
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
@@ -111,7 +101,7 @@ class _State extends State<SalesCashPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/sales/',
         sliverAppBar: _appBar(context),
         staticChildren: [

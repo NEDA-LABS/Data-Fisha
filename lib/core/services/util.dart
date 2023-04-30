@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
@@ -123,3 +124,5 @@ List<List<T>> divideList<T>(List<T> list, int length) {
   }
   return chunks;
 }
+
+typedef OnGetModulesMenu =  List<MenuModel> Function(BuildContext context);

@@ -17,7 +17,10 @@ import 'package:smartstock/stocks/components/product_details.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
 
 class ProductsPage extends StatefulWidget {
-  const ProductsPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const ProductsPage({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -38,7 +41,7 @@ class _State extends State<ProductsPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       current: '/stock/',
       sliverAppBar: getSliverSmartStockAppBar(
         title: "Products",
@@ -76,7 +79,9 @@ class _State extends State<ProductsPage> {
             name: 'Add',
             pressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProductCreatePage(),
+                builder: (context) => ProductCreatePage(
+                  onGetModulesMenu: widget.onGetModulesMenu,
+                ),
               ));
             }),
         ContextMenu(name: 'Reload', pressed: _reload),
@@ -121,7 +126,7 @@ class _State extends State<ProductsPage> {
   }
 
   _productItemClicked(item) =>
-      showDialogOrModalSheet(ProductDetail(item: item), context);
+      showDialogOrModalSheet(ProductDetail(item: item, onGetModulesMenu: widget.onGetModulesMenu), context);
 
   _outStyle() => TextStyle(
       color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
@@ -181,7 +186,9 @@ class _State extends State<ProductsPage> {
                 title: const Text('Create product'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ProductCreatePage(),
+                    builder: (context) => ProductCreatePage(
+                      onGetModulesMenu: widget.onGetModulesMenu,
+                    ),
                   ));
                 },
               ),

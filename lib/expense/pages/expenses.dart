@@ -12,11 +12,13 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_expense_content.dart';
+import 'package:smartstock/main.dart';
 
 import '../services/expenses.dart';
 
 class ExpenseExpensesPage extends StatefulWidget {
-  const ExpenseExpensesPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const ExpenseExpensesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -59,7 +61,7 @@ class _State extends State<ExpenseExpensesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       current: '/expense/',
       sliverAppBar:
           getSliverSmartStockAppBar(title: "Expenses", showBack: false, context: context),

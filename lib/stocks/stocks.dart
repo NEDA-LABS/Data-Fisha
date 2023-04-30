@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock/core/models/external_service.dart';
+import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/core/guards/manager.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/sales/guards/active_shop.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
@@ -16,35 +18,57 @@ import 'package:smartstock/stocks/pages/transfers.dart';
 import 'package:smartstock/stocks/services/navigation.dart';
 
 class StockModule extends Module {
-  StockModule(List<ExternalService> services);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  StockModule({required this.onGetModulesMenu});
 
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/',
-            child: (_, __) => StocksIndexPage(pages: getStocksModuleMenu(_).pages)),
-        ChildRoute('/products', child: (_, __) => const ProductsPage()),
-        ChildRoute('/categories', child: (_, __) => const CategoriesPage()),
-        ChildRoute('/suppliers', child: (_, __) => const SuppliersPage()),
-        ChildRoute('/purchases', child: (_, __) => const PurchasesPage()),
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) =>
+                StocksIndexPage(onGetModulesMenu: onGetModulesMenu)),
+        ChildRoute('/products',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => ProductsPage(onGetModulesMenu: onGetModulesMenu,)),
+        ChildRoute('/categories',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => CategoriesPage(onGetModulesMenu: onGetModulesMenu,)),
+        ChildRoute('/suppliers',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => SuppliersPage(onGetModulesMenu: onGetModulesMenu,)),
+        ChildRoute('/purchases',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => PurchasesPage(onGetModulesMenu: onGetModulesMenu)),
         ChildRoute(
           '/purchases/create',
-          child: (_, __) => const PurchaseCreatePage(),
+          guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+          child: (_, __) => PurchaseCreatePage(onGetModulesMenu: onGetModulesMenu),
         ),
-        ChildRoute('/products/create', child: (_, __) {
-          return const ProductCreatePage();
+        ChildRoute('/products/create',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) {
+          return  ProductCreatePage(onGetModulesMenu: onGetModulesMenu,);
         }),
-        ChildRoute('/products/edit', child: (_, __) {
+        ChildRoute('/products/edit',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) {
           var product = __.data;
           if (product is Map && product['id'] != null) {
-            return ProductEditPage(product);
+            return ProductEditPage(product, onGetModulesMenu: onGetModulesMenu,);
           }
           navigateToAndReplace('/stock/products');
           return Container();
         }),
-        ChildRoute('/transfers', child: (_, __) => const TransfersPage()),
-        ChildRoute('/transfers/send', child: (_, __) => transferSendPage(_)),
+        ChildRoute('/transfers',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => TransfersPage(onGetModulesMenu: onGetModulesMenu,)),
+        ChildRoute('/transfers/send',
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => transferSendPage(_, onGetModulesMenu: onGetModulesMenu)),
         ChildRoute('/transfers/receive',
-            child: (_, __) => transferReceivePage(_)),
+            guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
+            child: (_, __) => transferReceivePage(_, onGetModulesMenu: onGetModulesMenu)),
       ];
 
   @override

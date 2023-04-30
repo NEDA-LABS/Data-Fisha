@@ -12,8 +12,8 @@ import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
 class CategoriesPage extends StatefulWidget {
-
-  const CategoriesPage({Key? key}) : super(key: key);
+final OnGetModulesMenu onGetModulesMenu;
+  const CategoriesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -75,7 +75,7 @@ class _State extends State<CategoriesPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

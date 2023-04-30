@@ -9,7 +9,8 @@ import 'package:smartstock/stocks/services/purchase.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class PurchaseCreatePage extends StatelessWidget {
-  const PurchaseCreatePage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const PurchaseCreatePage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => SaleLikePage(
@@ -29,7 +30,7 @@ class PurchaseCreatePage extends StatelessWidget {
         onCustomerLikeList: getSupplierFromCacheOrRemote,
         onCustomerLikeAddWidget: () => const CreateSupplierContent(),
         checkoutCompleteMessage: 'Purchase complete.',
-        onGetProductsLike: getStockFromCacheOrRemote,
+        onGetProductsLike: getStockFromCacheOrRemote, onGetModulesMenu: onGetModulesMenu,
       );
 
   _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {

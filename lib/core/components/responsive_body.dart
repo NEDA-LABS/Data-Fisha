@@ -1,8 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/components/StockDrawer.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -27,6 +25,7 @@ class ResponsivePage extends StatefulWidget {
   final ChildBuilder dynamicChildBuilder;
   final bool loading;
   final Future Function()? onLoadMore;
+
   // final double currentBottomNavItemIndex;
 
   final EdgeInsets horizontalPadding;

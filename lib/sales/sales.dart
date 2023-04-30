@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock/core/states/sales_external_services.dart';
+import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 import 'package:smartstock/sales/pages/customers.dart';
 import 'package:smartstock/sales/pages/index.dart';
@@ -8,62 +9,59 @@ import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
-import 'package:smartstock/sales/services/navigation.dart';
-import 'package:smartstock/sales/states/sales.dart';
 
 class SalesModule extends Module {
+  final OnGetModulesMenu onGetModulesMenu;
+
+  SalesModule({required this.onGetModulesMenu});
+
   @override
   List<ChildRoute> get routes => [
         ChildRoute(
           '/',
-          guards: [ActiveShopGuard()],
-          child: (_, __) =>  SalesPage(pages: getSalesModuleMenu(_).pages,),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (_, __) => SalesPage(
+            onGetModulesMenu: onGetModulesMenu,
+          ),
         ),
         ChildRoute(
           '/cash',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => const SalesCashPage(),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              SalesCashPage(onGetModulesMenu: onGetModulesMenu),
         ),
         ChildRoute(
           '/cash/whole',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => SalesCashWhole(),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              SalesCashWhole(onGetModulesMenu: onGetModulesMenu),
         ),
         ChildRoute(
           '/cash/retail',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => SalesCashRetail(),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              SalesCashRetail(onGetModulesMenu: onGetModulesMenu),
         ),
         ChildRoute(
           '/customers',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => const CustomersPage(),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              CustomersPage(onGetModulesMenu: onGetModulesMenu),
         ),
         ChildRoute(
           '/invoice',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => const InvoicesPage(),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              InvoicesPage(onGetModulesMenu: onGetModulesMenu),
         ),
         ChildRoute(
           '/invoice/create',
-          guards: [ActiveShopGuard()],
-          child: (context, args) => invoiceSalePage(context),
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (context, args) =>
+              invoiceSalePage(context, onGetModulesMenu: onGetModulesMenu),
         ),
-        ..._getExternalServices()
       ];
 
   @override
-  List<Bind> get binds => [Bind.lazySingleton((i) => SalesState())];
-
-  _getExternalServices() {
-    return SalesExternalServiceState()
-        .salesExternalServices
-        .map<ChildRoute>((e) {
-      return ChildRoute(
-        e.pageLink,
-        guards: [ActiveShopGuard()],
-        child: e.onBuild,
-      );
-    });
-  }
+  List<Bind> get binds => [];
 }

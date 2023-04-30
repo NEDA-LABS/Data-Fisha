@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/account/pages/profile.dart';
+import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/services/util.dart';
 
 import '../../core/models/menu.dart';
 
 class ProfileIndexPage extends StatelessWidget {
-  final List<SubMenuModule> pages;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const ProfileIndexPage({Key? key, required this.pages}) : super(key: key);
+  const ProfileIndexPage({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   @override
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
-      menus: getAppModuleMenus(context),
+      menus: onGetModulesMenu(context),
       staticChildren: [
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [const SwitchToTitle(), SwitchToPageMenu(pages: pages)],
+          children: [
+            const SwitchToTitle(),
+            SwitchToPageMenu(pages: _pagesMenu(context))
+          ],
         )
       ],
       sliverAppBar: getSliverSmartStockAppBar(
@@ -33,5 +39,39 @@ class ProfileIndexPage extends StatelessWidget {
       //   bottomNavigationBar: bottomBar(1, moduleMenus(), context),
       // ),
     );
+  }
+
+  List<SubMenuModule> _pagesMenu(BuildContext context) {
+    pageNav(Widget page) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
+    }
+
+    return [
+      SubMenuModule(
+        name: 'Profile',
+        link: '/account/profile',
+        svgName: 'item_icon.svg',
+        icon: Icons.person,
+        roles: ["*"],
+        onClick: () => pageNav(ProfilePage(
+          onGetModulesMenu: onGetModulesMenu,
+        )),
+      ),
+      SubMenuModule(
+        name: 'Users',
+        link: '/account/users',
+        icon: Icons.groups,
+        svgName: 'item_icon.svg',
+        roles: ["*"],
+        onClick: () => pageNav(UsersPage(onGetModulesMenu: onGetModulesMenu,)),
+      ),
+      // SubMenuModule(
+      //   name: 'Payment',
+      //   link: '/account/bill',
+      //   svgName: 'item_icon.svg',
+      //   roles: [],
+      //   onClick: () {},
+      // )
+    ];
   }
 }

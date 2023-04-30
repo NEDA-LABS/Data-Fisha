@@ -26,6 +26,7 @@ class SaleLikePage extends StatefulWidget {
   final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
   final bool showDiscountView;
   final Function()? onBack;
+  final OnGetModulesMenu onGetModulesMenu;
 
   const SaleLikePage({
     required this.title,
@@ -43,6 +44,7 @@ class SaleLikePage extends StatefulWidget {
     this.showCustomerLike = true,
     this.showDiscountView = true,
     required this.onGetProductsLike,
+    required this.onGetModulesMenu,
     Key? key,
   }) : super(key: key);
 
@@ -71,7 +73,7 @@ class _State extends State<SaleLikePage> {
   @override
   Widget build(var context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       office: 'Menu',
       current: widget.backLink,
       rightDrawer: _hasCarts(states)
@@ -128,7 +130,7 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onBack: widget.onBack,
       onSearch: (text) {
-        updateState({"query": text ?? '', 'skip': false});
+        updateState({"query": text, 'skip': false});
       },
       context: context,
     );

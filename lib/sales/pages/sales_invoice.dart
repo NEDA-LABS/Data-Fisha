@@ -16,8 +16,8 @@ import 'package:smartstock/sales/components/sale_invoice_details.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
 class InvoicesPage extends StatefulWidget {
-
-  const InvoicesPage({Key? key}) : super(key: key);
+final OnGetModulesMenu onGetModulesMenu;
+  const InvoicesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();
@@ -90,7 +90,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: getAppModuleMenus(context),
+      menus: widget.onGetModulesMenu(context),
       current: '/sales/',
       sliverAppBar: _appBar(context),
       staticChildren: [

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 
 class ExpenseCategoriesPage extends StatefulWidget {
-  const ExpenseCategoriesPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const ExpenseCategoriesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -30,7 +30,7 @@ class _State extends State<ExpenseCategoriesPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/expense/',
         sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(
@@ -95,7 +95,7 @@ class _State extends State<ExpenseCategoriesPage> {
     ];
   }
 
-  _tableHeader() => TableLikeListRow([TableLikeListTextHeaderCell('Name')]);
+  _tableHeader() => const TableLikeListRow([TableLikeListTextHeaderCell('Name')]);
 
   _fields() => ['name'];
 

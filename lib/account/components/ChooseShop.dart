@@ -18,7 +18,7 @@ class ChooseShop extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             alignment: Alignment.center,
             child: const Text(
-              "SELECT SHOP",
+              "SELECT OFFICE",
               softWrap: true,
               style: TextStyle(
                 fontSize: 16,

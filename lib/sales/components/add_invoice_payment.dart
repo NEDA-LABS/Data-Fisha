@@ -16,7 +16,7 @@ class AddInvoicePaymentContent extends StatefulWidget {
 
 class _State extends State<AddInvoicePaymentContent> {
   Map states = {"loading": false};
-  var updateState;
+  dynamic updateState;
 
   @override
   void initState() {

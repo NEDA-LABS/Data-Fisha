@@ -1,37 +1,45 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:smartstock/core/models/external_service.dart';
+import 'package:smartstock/core/guards/auth.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/pages/categories.dart';
-import 'package:smartstock/expense/pages/expense_create.dart';
 import 'package:smartstock/expense/pages/expenses.dart';
 import 'package:smartstock/expense/pages/items.dart';
+import 'package:smartstock/sales/guards/active_shop.dart';
 
 class ExpenseModule extends Module {
-  final home = ChildRoute(
-    '/',
-    child: (_, __) => const ExpenseExpensesPage(),
-  );
-  final items = ChildRoute(
-    '/categories',
-    child: (_, __) => const ExpenseCategoriesPage(),
-  );
-  final categories = ChildRoute(
-    '/items',
-    child: (_, __) => const ExpenseItemsPage(),
-  );
-  final expenses = ChildRoute(
-    '/expenses',
-    child: (_, __) => const ExpenseExpensesPage(),
-  );
-  // final expenseCreate = ChildRoute(
-  //   '/expenses/create',
-  //   child: (_, __) => expenseCreatePage(_),
-  // );
+  final OnGetModulesMenu onGetModulesMenu;
 
-  ExpenseModule(List<ExternalService> services);
+  ExpenseModule({required this.onGetModulesMenu});
 
   @override
-  List<ChildRoute> get routes =>
-      [home, items, categories, expenses];
+  List<ChildRoute> get routes => [
+        ChildRoute(
+          '/',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (_, __) =>
+              ExpenseExpensesPage(onGetModulesMenu: onGetModulesMenu),
+        ),
+        ChildRoute(
+          '/categories',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (_, __) => ExpenseCategoriesPage(
+            onGetModulesMenu: onGetModulesMenu,
+          ),
+        ),
+        ChildRoute(
+          '/items',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (_, __) => ExpenseItemsPage(
+            onGetModulesMenu: onGetModulesMenu,
+          ),
+        ),
+        ChildRoute(
+          '/expenses',
+          guards: [AuthGuard(), ActiveShopGuard()],
+          child: (_, __) =>
+              ExpenseExpensesPage(onGetModulesMenu: onGetModulesMenu),
+        )
+      ];
 
   @override
   List<Bind> get binds => [];

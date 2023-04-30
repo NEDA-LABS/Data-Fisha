@@ -3,9 +3,11 @@ import 'package:smartstock/account/components/profile_form.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const ProfilePage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class ProfilePage extends StatelessWidget {
                 : Navigator.of(context).pushNamed('/');
           },
           context: context),
-      menus: getAppModuleMenus(context),
+      menus: onGetModulesMenu(context),
       staticChildren: const [ProfileForm()],
     );
   }

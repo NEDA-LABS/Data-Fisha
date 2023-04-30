@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
@@ -7,23 +6,28 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/summary.dart';
 
 class DashboardIndexPage extends StatelessWidget {
-  const DashboardIndexPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const DashboardIndexPage({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   @override
-  Widget build(context) => ResponsivePage(
-        office: 'Menu',
-        current: '/dashboard/',
-        menus: getAppModuleMenus(context),
-        sliverAppBar:
-            getSliverSmartStockAppBar(title: "Dashboard", showBack: false, context: context),
-        staticChildren: const [DashboardSummary()],
-        fab: !hasEnoughWidth(context)
-            ? FloatingActionButton(
-                onPressed: () => _getQuickActions(context),
-                child: const Icon(Icons.add))
-            : null,
-        // ),
-      );
+  Widget build(context) {
+    return ResponsivePage(
+      office: 'Menu',
+      current: '/dashboard/',
+      menus: onGetModulesMenu(context),
+      sliverAppBar: getSliverSmartStockAppBar(
+          title: "Dashboard", showBack: false, context: context),
+      staticChildren: const [DashboardSummary()],
+      fab: !hasEnoughWidth(context)
+          ? FloatingActionButton(
+              onPressed: () => _getQuickActions(context),
+              child: const Icon(Icons.add),
+            )
+          : null,
+    );
+  }
 
   _getQuickActions(context) {
     showDialogOrModalSheet(

@@ -12,8 +12,8 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
 class CustomersPage extends StatefulWidget {
-
-  const CustomersPage({Key? key}) : super(key: key);
+final OnGetModulesMenu onGetModulesMenu;
+  const CustomersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -69,7 +69,7 @@ class _CustomersPage extends State<CustomersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/sales/',
         sliverAppBar: _appBar(context),
         staticChildren: [

@@ -8,45 +8,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/color_schemes.dart';
-import 'package:smartstock/configurations.dart';
-import 'package:smartstock/core/models/external_service.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/core/states/sales_external_services.dart';
 import 'package:workmanager/workmanager.dart';
-
-startSmartStock({
-  required List<ExternalService> externalSaleServices,
-}) {
-  WidgetsFlutterBinding.ensureInitialized();
-  _periodicLocalSyncs();
-  // SalesExternalServiceState().setSalesExternalServices(externalSaleServices);
-  Builders.systemInjector(Modular.get);
-  runApp(
-    ModularApp(
-      module: SmartStockCoreModule(),
-      child: _mainWidget(),
-    ),
-  );
-}
-
-_mainWidget() {
-  return MaterialApp.router(
-    routeInformationParser: Modular.routeInformationParser,
-    routerDelegate: Modular.routerDelegate,
-    debugShowCheckedModeBanner: kDebugMode,
-    theme: ThemeData(
-      colorScheme: lightColorScheme,
-      fontFamily: 'Inter',
-      useMaterial3: true
-    ),
-    darkTheme: ThemeData(
-        colorScheme: darkColorScheme,
-        fontFamily: 'Inter',
-        useMaterial3: true,
-    ),
-  );
-}
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -63,6 +27,39 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
+}
+
+startSmartStock({
+  required OnGetModulesMenu onGetModulesMenu,
+  required Map<String, Module Function(OnGetModulesMenu)> coreModules,
+}) {
+  WidgetsFlutterBinding.ensureInitialized();
+  _periodicLocalSyncs();
+  Builders.systemInjector(Modular.get);
+  runApp(
+    ModularApp(
+      module: SmartStockCoreModule(
+        onGetModulesMenu: onGetModulesMenu,
+        coreModules: coreModules,
+      ),
+      child: _mainWidget(),
+    ),
+  );
+}
+
+_mainWidget() {
+  return MaterialApp.router(
+    routeInformationParser: Modular.routeInformationParser,
+    routerDelegate: Modular.routerDelegate,
+    debugShowCheckedModeBanner: kDebugMode,
+    theme: ThemeData(
+        colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: true),
+    darkTheme: ThemeData(
+      colorScheme: darkColorScheme,
+      fontFamily: 'Inter',
+      useMaterial3: true,
+    ),
+  );
 }
 
 Future _syncLocal2Remote(dynamic) async {

@@ -72,7 +72,7 @@ class _State extends State<TextInput> {
     var label = Padding(
       padding: labelPadding,
       child: Text(
-        widget.label ?? '',
+        widget.label,
         style: labelStyle,
       ),
     );

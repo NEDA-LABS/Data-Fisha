@@ -14,7 +14,8 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+  const UsersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -32,7 +33,7 @@ class _State extends State<UsersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: getAppModuleMenus(context),
+        menus: widget.onGetModulesMenu(context),
         current: '/account/',
         sliverAppBar: _appBar(context),
         staticChildren: [
@@ -91,7 +92,7 @@ class _State extends State<UsersPage> {
         name: 'Add',
         pressed: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const ShopUserCreatePage(),
+            builder: (context) => ShopUserCreatePage(onGetModulesMenu: widget.onGetModulesMenu),
           ),
         ),
       ),
@@ -144,7 +145,7 @@ class _State extends State<UsersPage> {
                   Navigator.of(context).maybePop().whenComplete(
                         () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const ShopUserCreatePage(),
+                            builder: (context) => ShopUserCreatePage(onGetModulesMenu: widget.onGetModulesMenu),
                           ),
                         ),
                       );
