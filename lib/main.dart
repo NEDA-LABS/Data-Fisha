@@ -6,7 +6,6 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/index.dart';
-import 'package:smartstock/expense/pages/expenses.dart';
 import 'package:smartstock/expense/pages/index.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/report/report.dart';
@@ -23,12 +22,11 @@ _onNavigate(BuildContext context, Widget page, String routeId) {
 }
 
 List<MenuModel> _onGetModules(BuildContext context) {
-  var dashboardIndex =
-      const DashboardIndexPage(onGetModulesMenu: _onGetModules);
+  var dashboardIndex = const DashboardIndexPage(onGetModulesMenu: _onGetModules);
   var reportIndex = const ReportIndexPage(onGetModulesMenu: _onGetModules);
   var salesIndex = const SalesPage(onGetModulesMenu: _onGetModules);
   var stockIndex = const StocksIndexPage(onGetModulesMenu: _onGetModules);
-  var expenseIndex = const ExpenseExpensesPage(onGetModulesMenu: _onGetModules);
+  var expenseIndex = const ExpenseIndexPage(onGetModulesMenu: _onGetModules);
   var accountIndex = const ProfileIndexPage(onGetModulesMenu: _onGetModules);
   return [
     MenuModel(
@@ -39,11 +37,11 @@ List<MenuModel> _onGetModules(BuildContext context) {
       roles: ['admin'],
     ),
     MenuModel(
-      name: 'Reports',
-      icon: const Icon(Icons.data_saver_off),
-      link: '/report/',
-      onClick: () => _onNavigate(context, reportIndex, 'r_report'),
-      roles: ['admin'],
+        name: 'Reports',
+        icon: const Icon(Icons.data_saver_off),
+        link: '/report/',
+        onClick: () => _onNavigate(context, reportIndex, 'r_report'),
+        roles: ['admin'],
     ),
     MenuModel(
       name: 'Point Of Sale',
@@ -77,17 +75,13 @@ List<MenuModel> _onGetModules(BuildContext context) {
 }
 
 void main() {
-  startSmartStock(
-    onGetModulesMenu: _onGetModules,
-    coreModules: {
-      '/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      '/dashboard/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      '/account/': (p0) => AccountModule(onGetModulesMenu: p0),
-      '/report/': (p0) => ReportModule(onGetModulesMenu: p0),
-      '/sales/': (p0) => SalesModule(onGetModulesMenu: p0),
-      '/stock/': (p0) => StockModule(onGetModulesMenu: p0),
-      '/expense/': (p0) => ExpenseModule(onGetModulesMenu: p0),
-    },
-    featureModules: {},
-  );
+  startSmartStock(onGetModulesMenu: _onGetModules, coreModules: {
+    '/': (p0) => DashboardModule(onGetModulesMenu: p0),
+    '/dashboard/': (p0) => DashboardModule(onGetModulesMenu: p0),
+    '/account/': (p0) => AccountModule(onGetModulesMenu: p0),
+    '/report/': (p0) => ReportModule(onGetModulesMenu: p0),
+    '/sales/': (p0) => SalesModule(onGetModulesMenu: p0),
+    '/stock/': (p0) => StockModule(onGetModulesMenu: p0),
+    '/expense/': (p0) => ExpenseModule(onGetModulesMenu: p0),
+  });
 }

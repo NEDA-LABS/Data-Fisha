@@ -33,7 +33,6 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.5.0
   camera: ^0.10.4
   image_picker: ^0.8.7+3
-  sembast_sqflite: ^2.1.1
 #  fl_chart: ^0.55.2
 
 dev_dependencies:

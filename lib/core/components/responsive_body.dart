@@ -2,7 +2,6 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/StockDrawer.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -135,13 +134,27 @@ class _State extends State<ResponsivePage> {
           widget.showLeftDrawer
               ? StockDrawer(widget.menus, widget.current)
               : Container(),
+          // widget.showLeftDrawer
+          //     ? Container(
+          //         width: 0.5,
+          //         // color: const Color(0xFFDADADA),
+          //       )
+          //     : Container(),
           Expanded(
               child: widget.onBody != null
                   ? widget.onBody!(null)
                   : Scaffold(body: _customScrollView(24))),
+          // Container(
+          //   width: 0.5,
+          //   // color: const Color(0xFFDADADA),
+          // ),
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
+
+  // _centeredContainer(view) => Center(
+  //     child: Container(
+  //         constraints: const BoxConstraints(maxWidth: 790), child: view));
 
   _getSmallScreenView(_) {
     var drawer = StockDrawer(widget.menus, widget.current);
@@ -150,7 +163,6 @@ class _State extends State<ResponsivePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
       body: _customScrollView(100),
-      bottomNavigationBar: getBottomBar(widget.menus, context),
     );
     var view = widget.onBody != null
         ? widget.onBody!(StockDrawer(widget.menus, widget.current))

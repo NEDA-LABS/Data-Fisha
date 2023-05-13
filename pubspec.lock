@@ -713,13 +713,13 @@ packages:
     source: hosted
     version: "3.4.4"
   sembast_sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sembast_sqflite
-      sha256: "2a3d55173c16d559182ed4d1f91ae102722f770f96af07f8e119951d8154c0f7"
+      sha256: b039a9dc98fafd69cab8ca3a39d164f82c9c7884e205de3388cb0947df12334a
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.0.1"
   sembast_web:
     dependency: transitive
     description:
@@ -817,10 +817,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: e77abf6ff961d69dfef41daccbb66b51e9983cdd5cb35bf30733598057401555
+      sha256: "0c21a187d645aa65da5be6997c0c713eed61e049158870ae2de157e6897067ab"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.5"
+    version: "2.4.0+2"
   sqflite_common_ffi:
     dependency: transitive
     description:
@@ -914,7 +914,7 @@ packages:
     description:
       path: app_sembast
       ref: dart2_3
-      resolved-ref: "695998b6b341c57a819a024bf4e34e472c1b3f57"
+      resolved-ref: "02dc21e40a5f3e65c55d5bd68b173df82a44b216"
       url: "https://github.com/tekartik/app_flutter_utils.dart"
     source: git
     version: "0.5.1"
