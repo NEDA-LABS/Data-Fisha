@@ -1,21 +1,34 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:smartstock/core/plugins/downloader/index.dart';
 import 'package:smartstock/core/services/util.dart';
+
+// import 'dart:html' as webFile;
+
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 exportToCsv(String fileName, x) {
+  // var getData = compose(
+  //     [ifDoElse((a) => a is List<Map>, (y) => y, (_) => []), itOrEmptyArray]);
   List data = itOrEmptyArray(x);
   var csv = '';
   if (data.isNotEmpty) {
+    // throw Exception("No data to export");
     var getHeader = ifDoElse((f) => f is Map, (x) => x, (_) => {});
     var title = getHeader(data[0]).keys.join(',');
     var body = data.map((e) => e.values.join(',')).join('\n');
     csv = '$title\n$body'.trim();
   }
-  DownloaderPlugin().callDownload(csv, 'text/plain;charset=utf-8', '$fileName.csv');
+  // if (kIsWeb) {
+  //   var blob = webFile.Blob([csv], 'text/plain', 'native');
+  //   var anchorElement = webFile.AnchorElement(
+  //     href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
+  //   )
+  //     ..setAttribute("download", "$fileName.csv")
+  //     ..click();
+  // }
 }
 
 exportToExcel(String filename, x) {
@@ -36,18 +49,16 @@ exportToExcel(String filename, x) {
             .setValue(data[r - 1].values.toList()[c - 1]);
       }
     }
-    excel = workbook.saveAsCSV(',');
+    excel = workbook.saveAsStream();
     workbook.dispose();
   }
-  // List data = itOrEmptyArray(x);
-  // var csv = '';
-  // if (data.isNotEmpty) {
-  //   var getHeader = ifDoElse((f) => f is Map, (x) => x, (_) => {});
-  //   var title = getHeader(data[0]).keys.join(',');
-  //   var body = data.map((e) => e.values.join(',')).join('\n');
-  //   csv = '$title\n$body'.trim();
+  // if (kIsWeb) {
+  //   var blob = webFile.Blob([excel], 'application/xlsx', 'native');
+  //   webFile.AnchorElement(
+  //       href: webFile.Url.createObjectUrlFromBlob(blob).toString())
+  //     ..setAttribute("download", "$filename.xlsx")
+  //     ..click();
   // }
-  DownloaderPlugin().callDownload(excel.toString(), 'application/xlsx', '$filename.xlsx');
 }
 
 exportPDF(String title, x) async {

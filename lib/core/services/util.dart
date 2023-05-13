@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/plugins/printer/index.dart';
+import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
@@ -87,7 +87,7 @@ isWebMobilePlatform() =>
         defaultTargetPlatform == TargetPlatform.android);
 
 Future<bool> isOfflineFirstEnv() async {
-  var a = await PrinterPlugin().callHasDirectPosPrinterAPI();
+  var a = await JSHelper().callHasDirectPosPrinterAPI();
   if (a == true) {
     return true;
   }

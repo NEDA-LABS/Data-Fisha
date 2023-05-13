@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:smartstock/core/plugins/printer/index.dart';
+import 'package:smartstock/core/plugins/js_helper.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -59,7 +59,7 @@ Future _printUsingPrinterService(String data) async {
 
 Future<bool> _shouldPrintInElectron() async {
   if (kIsWeb) {
-    return PrinterPlugin().callHasDirectPosPrinterAPI();
+    return JSHelper().callHasDirectPosPrinterAPI();
   } else {
     return false;
   }
@@ -67,7 +67,7 @@ Future<bool> _shouldPrintInElectron() async {
 
 Future<dynamic> _printInElectron(data, qr) async {
   if (kIsWeb) {
-    return PrinterPlugin().callDirectPosPrintAPI(data, qr);
+    return JSHelper().callDirectPosPrintAPI(data, qr);
   } else {
     throw {'message': 'not in web platform'};
   }

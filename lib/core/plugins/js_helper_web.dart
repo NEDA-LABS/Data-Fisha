@@ -1,8 +1,8 @@
 import 'package:js/js_util.dart';
 
-import './printer_js.dart';
+import 'printer.dart';
 
-class PrinterPlugin {
+class JSHelper {
   Future<bool> callHasDirectPosPrinterAPI() async {
     return await promiseToFuture(hasDirectPosPrinterAPI());
   }
