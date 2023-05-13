@@ -1,5 +1,4 @@
-class JSHelper {
-  /// This method name inside 'getPlatform' should be same in JavaScript file
+class PrinterPlugin {
   String getPlatformFromJS() {
     return '';
   }
