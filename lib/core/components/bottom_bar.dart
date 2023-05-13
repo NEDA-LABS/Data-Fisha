@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/StockDrawer.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
@@ -26,13 +27,21 @@ Widget? getBottomBar(
           unselectedItemColor: Theme.of(context).colorScheme.primary,
           onTap: (index) {
             if (index == 3) {
-              fullScreeDialog(
-                  context,
-                  (p0) => Scaffold(
-                      appBar: AppBar(
-                        title: const TitleLarge(text: 'Navigation'),
-                      ),
-                      body: StockDrawer(menus, '', cWidth: width)));
+              showModalBottomSheet(context: context, builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: menus.map((e) => ListTile(
+                      title: BodyLarge(text: e.name),
+                      leading: e.icon,
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: e.onClick,
+                    )).toList(),
+                  ),
+                );
+              },);
               return;
             }
             if (menus[index].onClick != null) {

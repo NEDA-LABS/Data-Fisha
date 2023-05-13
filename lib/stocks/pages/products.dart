@@ -1,7 +1,5 @@
-import 'package:bfast/controller/database.dart';
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/configurations.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -11,6 +9,7 @@ import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
@@ -48,46 +47,68 @@ class _State extends State<ProductsPage> {
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
-        onBack: () {
-          Navigator.of(context).maybePop();
-        },
+        onBack: onAppGoBack(context),
         onSearch: _updateQuery,
         searchHint: 'Search...',
         context: context,
       ),
       staticChildren: [
-        _ifLargerScreen(tableContextMenu(_contextItems())),
+        _ifLargerScreen(tableContextMenu(_getContextItems())),
         _loading(_isLoading),
         _ifLargerScreen(_tableHeader())
       ],
-      // horizontalPadding: EdgeInsets.all(0),
       dynamicChildBuilder: getIsSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
       totalDynamicChildren: _products.length,
       fab: FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
-        child: const Icon(Icons.unfold_more_outlined),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   _ifLargerScreen(view) => getIsSmallScreen(context) ? Container() : view;
 
-  _contextItems() => [
-        ContextMenu(
-            name: 'Add',
-            pressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductCreatePage(
-                  onGetModulesMenu: widget.onGetModulesMenu,
-                ),
-              ));
-            }),
-        ContextMenu(name: 'Reload', pressed: _reload),
-        // ContextMenu(name: 'Import', pressed: () => {}),
-        // ContextMenu(name: 'Export', pressed: () => {}),
-      ];
+  ContextMenu _getAddProductMenu() {
+    return ContextMenu(
+      name: 'Add product',
+      pressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductCreatePage(
+            onGetModulesMenu: widget.onGetModulesMenu,
+          ),
+        ));
+      },
+    );
+  }
+
+  ContextMenu _getAddServiceMenu() {
+    return ContextMenu(
+      name: 'Add service',
+      pressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductCreatePage(
+            onGetModulesMenu: widget.onGetModulesMenu,
+          ),
+        ));
+      },
+    );
+  }
+
+  ContextMenu _getReloadMenu() {
+    return ContextMenu(name: 'Reload', pressed: _reload);
+  }
+
+  _getContextItems() {
+    return [
+      _getAddProductMenu(),
+      _getAddServiceMenu(),
+      _getReloadMenu()
+      // ContextMenu(name: 'Import', pressed: () => {}),
+      // ContextMenu(name: 'Export', pressed: () => {}),
+    ];
+  }
 
   _tableHeader() => const TableLikeListRow([
         TableLikeListTextHeaderCell('Name'),
@@ -125,8 +146,9 @@ class _State extends State<ProductsPage> {
     });
   }
 
-  _productItemClicked(item) =>
-      showDialogOrModalSheet(ProductDetail(item: item, onGetModulesMenu: widget.onGetModulesMenu), context);
+  _productItemClicked(item) => showDialogOrModalSheet(
+      ProductDetail(item: item, onGetModulesMenu: widget.onGetModulesMenu),
+      context);
 
   _outStyle() => TextStyle(
       color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
@@ -182,20 +204,23 @@ class _State extends State<ProductsPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text('Create product'),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ProductCreatePage(
-                      onGetModulesMenu: widget.onGetModulesMenu,
-                    ),
-                  ));
-                },
+                leading: const Icon(Icons.card_giftcard),
+                trailing: const Icon(Icons.chevron_right),
+                title: Text(_getAddProductMenu().name),
+                onTap: _getAddProductMenu().pressed,
+              ),
+              const HorizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.home_repair_service_rounded),
+                trailing: const Icon(Icons.chevron_right),
+                title: Text(_getAddServiceMenu().name),
+                onTap: _getAddServiceMenu().pressed,
               ),
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload products'),
+                title: Text(_getReloadMenu().name),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _reload();
@@ -208,9 +233,6 @@ class _State extends State<ProductsPage> {
   }
 
   _reload() {
-    // setState(() {
-    //   _query = '';
-    // });
     _skipLocal = true;
     _getProducts();
   }

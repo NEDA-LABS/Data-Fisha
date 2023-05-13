@@ -27,8 +27,6 @@ class ResponsivePage extends StatefulWidget {
   final bool loading;
   final Future Function()? onLoadMore;
 
-  // final double currentBottomNavItemIndex;
-
   final EdgeInsets horizontalPadding;
 
   const ResponsivePage({
@@ -70,8 +68,7 @@ class _State extends State<ResponsivePage> {
 
   @override
   Widget build(BuildContext context) {
-    var getView =
-        ifDoElse(_screenCheck, _getLargerScreenView, _getSmallScreenView);
+    var getView = ifDoElse(_screenCheck, _getLargerView, _getSmallView);
     return getView(context);
   }
 
@@ -129,7 +126,7 @@ class _State extends State<ResponsivePage> {
 
   _screenCheck(context) => hasEnoughWidth(context);
 
-  _getLargerScreenView(_) => Row(
+  _getLargerView(_) => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.showLeftDrawer
@@ -143,7 +140,7 @@ class _State extends State<ResponsivePage> {
         ],
       );
 
-  _getSmallScreenView(_) {
+  _getSmallView(_) {
     var drawer = StockDrawer(widget.menus, widget.current);
     var scaffold = Scaffold(
       drawer: drawer,

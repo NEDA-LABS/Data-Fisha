@@ -44,7 +44,7 @@ final OnGetModulesMenu onGetModulesMenu;
 
     return [
       SubMenuModule(
-        name: 'Products',
+        name: 'Inventories',
         link: '/stock/products',
         roles: [],
         icon: Icons.sell,

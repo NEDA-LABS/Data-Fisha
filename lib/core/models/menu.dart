@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MenuModel {
   final String name;
-  // final ListSubMenuModule> pages;
+  // final Widget indexPage;
   final String link;
   final Function()? onClick;
   final List<String> roles;
@@ -13,7 +13,7 @@ class MenuModel {
     required this.icon,
     required this.link,
     required this.roles,
-    // required this.pages,
+    // required t his.indexPage,
     this.onClick
   });
 }
@@ -38,6 +38,6 @@ class SubMenuModule {
 
 class ContextMenu{
   final String name;
-  final Function pressed;
-  ContextMenu({required this.name, required this.pressed});
+  final Function() pressed;
+   ContextMenu({required this.name, required this.pressed});
 }
