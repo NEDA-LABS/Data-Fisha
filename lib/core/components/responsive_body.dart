@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/StockDrawer.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
 const _emptyList = <Widget>[];
@@ -147,7 +149,24 @@ class _State extends State<ResponsivePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
       body: _customScrollView(100),
-      bottomNavigationBar: getBottomBar(widget.menus, context),
+      bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
+          ? FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                }
+                if (snapshot.hasData && snapshot.data != null) {
+                  var m = widget.menus
+                      .where((element) => hasRbaAccess(
+                          snapshot.data, element.roles, element.link))
+                      .toList();
+                  return getBottomBar(m, context);
+                }
+                return Container();
+              },
+              future: getLocalCurrentUser(),
+            )
+          : null,
     );
     var view = widget.onBody != null
         ? widget.onBody!(StockDrawer(widget.menus, widget.current))

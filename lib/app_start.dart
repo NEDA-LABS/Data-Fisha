@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart';
 import 'package:smartstock/app.dart';
@@ -18,7 +20,7 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
     if (task == 'bg-period' || task == 'bg-onetime') {
       try {
-        _syncLocal2Remote(1).then((value) => Future.value(true));
+        _syncLocal2Remote(null).then((value) => Future.value(true));
       } catch (e) {
         if (kDebugMode) {
           print(e);
@@ -65,8 +67,14 @@ _mainWidget() {
   );
 }
 
-Future _syncLocal2Remote(dynamic) async {
+Future _syncLocal2Remote(RootIsolateToken? rootIsolateToken) async {
+  if (rootIsolateToken != null) {
+    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+  }
   List keys = await getLocalSyncsKeys();
+  if (kDebugMode) {
+    print('Data to sync: ${keys.length}');
+  }
   for (var key in keys) {
     var element = await getLocalSync(key);
     var getUrl = propertyOr('url', (p0) => '');
@@ -86,7 +94,8 @@ Future _syncLocal2Remote(dynamic) async {
 var _shouldRun = true;
 
 _periodicLocalSyncs() async {
-  if (isNativeMobilePlatform()) {
+  var isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+  if (isAndroid) {
     if (kDebugMode) {
       print("::::: native mobile");
     }
@@ -101,17 +110,19 @@ _periodicLocalSyncs() async {
     if (kDebugMode) {
       print("::::: others");
     }
-    Timer.periodic(const Duration(seconds: 8), (_) async {
+    Timer.periodic(const Duration(seconds: 15), (_) async {
       if (_shouldRun) {
         _shouldRun = false;
-        compute(_syncLocal2Remote, 2).catchError((_) {
+        // compute(_syncLocal2Remote, 2)
+        Isolate.spawn(_syncLocal2Remote, ServicesBinding.rootIsolateToken)
+            .then((value) {
+          if (kDebugMode) {
+            print('done sync local data');
+          }
+        }).catchError((_) {
           if (kDebugMode) {
             print(_);
           }
-        }).then((value) {
-          // if (kDebugMode) {
-          //   print('done sync local data --> $value');
-          // }
         }).whenComplete(() {
           _shouldRun = true;
         });

@@ -39,13 +39,6 @@ List<MenuModel> _onGetModules(BuildContext context) {
       roles: ['admin'],
     ),
     MenuModel(
-      name: 'Reports',
-      icon: const Icon(Icons.data_saver_off),
-      link: '/report/',
-      onClick: () => _onNavigate(context, reportIndex, 'r_report'),
-      roles: ['admin'],
-    ),
-    MenuModel(
       name: 'Point Of Sale',
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
@@ -65,6 +58,13 @@ List<MenuModel> _onGetModules(BuildContext context) {
       link: '/expense/',
       onClick: () => _onNavigate(context, expenseIndex, 'r_expense'),
       roles: ['*'],
+    ),
+    MenuModel(
+      name: 'Reports',
+      icon: const Icon(Icons.data_saver_off),
+      link: '/report/',
+      onClick: () => _onNavigate(context, reportIndex, 'r_report'),
+      roles: ['admin'],
     ),
     MenuModel(
       name: 'Account',
