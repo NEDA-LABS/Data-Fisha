@@ -7,8 +7,10 @@ import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
+import 'package:smartstock/stocks/services/supplier.dart';
 
 class ProductUpdateForm extends StatefulWidget {
   final Map product;
@@ -42,7 +44,6 @@ class _State extends State<ProductUpdateForm> {
       "category": widget.product['category'],
       "purchase": widget.product['purchase'],
       "retailPrice": widget.product['retailPrice'],
-      "wholesalePrice": widget.product['wholesalePrice'],
       "expire": widget.product['expire'] ?? '',
       "id": widget.product['id'],
     });
@@ -88,7 +89,7 @@ class _State extends State<ProductUpdateForm> {
         ),
         TextInput(
           onText: (d) => updateFormState({"purchase": d}),
-          label: "Purchase Cost ( Tsh ) / Unit price",
+          label: "Purchase price / Unit quantity",
           placeholder: "",
           error: error['purchase'] ?? '',
           initialText: '${product['purchase'] ?? ''}',
@@ -96,18 +97,10 @@ class _State extends State<ProductUpdateForm> {
         ),
         TextInput(
           onText: (d) => updateFormState({"retailPrice": d}),
-          label: "Retail price ( Tsh ) / Unit price",
+          label: "Sale price / Unit quantity",
           placeholder: "",
           error: error['retailPrice'] ?? '',
           initialText: '${product['retailPrice'] ?? ''}',
-          type: TextInputType.number,
-        ),
-        TextInput(
-          onText: (d) => updateFormState({"wholesalePrice": d}),
-          label: "Wholesale price ( Tsh ) / Unit price",
-          placeholder: "",
-          error: error['wholesalePrice'] ?? '',
-          initialText: '${product['wholesalePrice'] ?? ''}',
           type: TextInputType.number,
         ),
         TextInput(

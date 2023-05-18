@@ -32,7 +32,7 @@ final OnGetModulesMenu onGetModulesMenu;
       staticChildren: [
         const SwitchToTitle(),
         SwitchToPageMenu(pages: _pages(context)),
-        const StocksSummary()
+        StocksSummary(onGetModulesMenu: onGetModulesMenu)
       ],
     );
   }

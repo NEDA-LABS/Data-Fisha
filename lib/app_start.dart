@@ -38,7 +38,7 @@ startSmartStock({
   required Map<String, FeatureModule Function(OnGetModulesMenu)> featureModules,
 }) {
   WidgetsFlutterBinding.ensureInitialized();
-  _periodicLocalSyncs();
+  // _periodicLocalSyncs();
   Builders.systemInjector(Modular.get);
   runApp(
     ModularApp(

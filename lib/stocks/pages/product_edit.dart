@@ -14,7 +14,7 @@ class ProductEditPage extends StatelessWidget {
 
   _appBar(context) {
     return getSliverSmartStockAppBar(
-      title: "Update ${product['product']} detail",
+      title: "Update ${product['product']}",
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,

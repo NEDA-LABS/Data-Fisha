@@ -40,7 +40,7 @@ _fieldIsValidNumber(field, product, error) {
 }
 
 Future<dynamic> createOrUpdateProduct(
-    context, error, loading, isUpdate, product) {
+    context, error, loading, isUpdate, product) async {
   var invalids = [
     isUpdate ? true : _fieldIsValidString('product', product, error),
     _fieldIsValidString('category', product, error),
@@ -52,7 +52,7 @@ Future<dynamic> createOrUpdateProduct(
   ].where((element) => element == false);
   var createIfValid = ifDoElse(
     (f) => f.length > 0,
-    (x) async => throw "Fix all issues",
+    (x) async => throw "Please, enter all required fields",
     (x) async {
       product['retailPrice'] = doubleOrZero(product['retailPrice']);
       product['barcode'] = product['barcode'] ?? '';
@@ -63,7 +63,6 @@ Future<dynamic> createOrUpdateProduct(
       product['purchase'] = doubleOrZero(product['purchase']);
       product['stockable'] = true;
       product['purchasable'] = true;
-      product['saleable'] = true;
       if (!isUpdate) {
         product['wholesaleQuantity'] = 1;
       }
@@ -95,15 +94,4 @@ Future<dynamic> createOrUpdateProduct(
         .catchError((err) {});
     isUpdate = false;
   });
-  //     .catchError((error) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //           title: const Text("Error!",
-  //               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-  //           content: Text('$error')));
-  // }).whenComplete(() {
-  //   loading = false;
-  //   notifyListeners();
-  // });
 }

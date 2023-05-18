@@ -1,0 +1,4 @@
+enum InventoryType {
+  product,
+  rawMaterial
+}

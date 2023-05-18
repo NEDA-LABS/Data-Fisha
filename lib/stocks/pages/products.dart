@@ -8,42 +8,47 @@ import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
+import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
+import 'package:smartstock/stocks/services/inventories_filters.dart';
 
 class ProductsPage extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final Map<String, dynamic Function(dynamic)> initialFilter;
 
-  const ProductsPage({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const ProductsPage({
+    Key? key,
+    required this.onGetModulesMenu,
+    this.initialFilter = const {},
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<ProductsPage> {
-  String _query = '';
+  Map<String, dynamic Function(dynamic)> _filters = {};
   bool _isLoading = false;
   bool _skipLocal = false;
-  List _products = [];
+  List _allProducts = [];
 
   @override
   void initState() {
-    _getProducts();
+    _filters = widget.initialFilter;
+    _getProducts('');
     super.initState();
   }
 
   @override
   Widget build(context) {
-    return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
-      current: '/stock/',
-      sliverAppBar: getSliverSmartStockAppBar(
-        title: "Products",
+    var appBar = getSliverSmartStockAppBar(
+        title: "Inventories",
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
@@ -51,7 +56,82 @@ class _State extends State<ProductsPage> {
         onSearch: _updateQuery,
         searchHint: 'Search...',
         context: context,
-      ),
+        filters: [
+          SearchFilter(
+            name: 'Negatives',
+            selected: _filters['negative'] != null,
+            onClick: () {
+              var name = 'negative';
+              setState(() {
+                if (_filters.containsKey(name)) {
+                  _filters.removeWhere((key, value) => key == name);
+                } else {
+                  _filters = getNegativeProductFilter(name);
+                }
+              });
+            },
+          ),
+          SearchFilter(
+            name: 'Zeros',
+            selected: _filters['zeros'] != null,
+            onClick: () {
+              setState(() {
+                var filterName = 'zeros';
+                if (_filters.containsKey(filterName)) {
+                  _filters.removeWhere((key, value) => key == filterName);
+                } else {
+                  _filters = getZeroProductsFilter(filterName);
+                }
+              });
+            },
+          ),
+          SearchFilter(
+            name: 'Positives',
+            selected: _filters['positives'] != null,
+            onClick: () {
+              setState(() {
+                var name = 'positives';
+                if (_filters.containsKey(name)) {
+                  _filters.removeWhere((key, value) => key == name);
+                } else {
+                  _filters = getPositiveProductsFilter(name);
+                }
+              });
+            },
+          ),
+          SearchFilter(
+            name: 'Expired',
+            selected: _filters['expired'] != null,
+            onClick: () {
+              var name = 'expired';
+              setState(() {
+                if (_filters.containsKey(name)) {
+                  _filters.removeWhere((key, value) => key == name);
+                } else {
+                  _filters = getExpiredProductsFilter(name);
+                }
+              });
+            },
+          ),
+          SearchFilter(
+            name: 'Near to expire',
+            selected: _filters['near_expired'] != null,
+            onClick: () {
+              var name = 'near_expired';
+              setState(() {
+                if (_filters.containsKey(name)) {
+                  _filters.removeWhere((key, value) => key == name);
+                } else {
+                  _filters = getNearExpiredProductsFilter(name);
+                }
+              });
+            },
+          )
+        ]);
+    return ResponsivePage(
+      menus: widget.onGetModulesMenu(context),
+      current: '/stock/',
+      sliverAppBar: appBar,
       staticChildren: [
         _ifLargerScreen(tableContextMenu(_getContextItems())),
         _loading(_isLoading),
@@ -60,12 +140,18 @@ class _State extends State<ProductsPage> {
       dynamicChildBuilder: getIsSmallScreen(context)
           ? _smallScreenChildBuilder
           : _largerScreenChildBuilder,
-      totalDynamicChildren: _products.length,
+      totalDynamicChildren: _getFilteredProducts().length,
       fab: FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  List _getFilteredProducts() {
+    dynamic Function(dynamic p1) filter =
+        _filters.isNotEmpty ? _filters.values.toList()[0] : (v) => true;
+    return _allProducts.where((e) => filter(e) == true).toList();
   }
 
   _ifLargerScreen(view) => getIsSmallScreen(context) ? Container() : view;
@@ -77,6 +163,7 @@ class _State extends State<ProductsPage> {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductCreatePage(
             onGetModulesMenu: widget.onGetModulesMenu,
+            inventoryType: InventoryType.product,
           ),
         ));
       },
@@ -85,11 +172,12 @@ class _State extends State<ProductsPage> {
 
   ContextMenu _getAddServiceMenu() {
     return ContextMenu(
-      name: 'Add service',
+      name: 'Add raw material',
       pressed: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductCreatePage(
             onGetModulesMenu: widget.onGetModulesMenu,
+            inventoryType: InventoryType.rawMaterial,
           ),
         ));
       },
@@ -123,19 +211,18 @@ class _State extends State<ProductsPage> {
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
   _updateQuery(String q) {
-    _query = q;
-    _getProducts();
+    _getProducts(q);
   }
 
-  _getProducts() async {
+  _getProducts(String query) async {
     setState(() {
       _isLoading = true;
     });
     getStockFromCacheOrRemote(
-      stringLike: _query,
+      stringLike: query,
       skipLocal: _skipLocal,
     ).then((data) {
-      _products = data;
+      _allProducts = data;
     }).catchError((error) {
       showInfoDialog(context, error);
     }).whenComplete(() {
@@ -197,44 +284,45 @@ class _State extends State<ProductsPage> {
 
   void _showMobileContextMenu(context) {
     showDialogOrModalSheet(
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.card_giftcard),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text(_getAddProductMenu().name),
-                onTap: _getAddProductMenu().pressed,
-              ),
-              const HorizontalLine(),
-              ListTile(
-                leading: const Icon(Icons.home_repair_service_rounded),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text(_getAddServiceMenu().name),
-                onTap: _getAddServiceMenu().pressed,
-              ),
-              const HorizontalLine(),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: Text(_getReloadMenu().name),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.of(context).maybePop();
-                  _reload();
-                },
-              ),
-            ],
-          ),
+      Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.card_giftcard),
+              trailing: const Icon(Icons.chevron_right),
+              title: Text(_getAddProductMenu().name),
+              onTap: _getAddProductMenu().pressed,
+            ),
+            const HorizontalLine(),
+            ListTile(
+              leading: const Icon(Icons.home_repair_service_rounded),
+              trailing: const Icon(Icons.chevron_right),
+              title: Text(_getAddServiceMenu().name),
+              onTap: _getAddServiceMenu().pressed,
+            ),
+            const HorizontalLine(),
+            ListTile(
+              leading: const Icon(Icons.refresh),
+              title: Text(_getReloadMenu().name),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).maybePop();
+                _reload();
+              },
+            ),
+          ],
         ),
-        context);
+      ),
+      context,
+    );
   }
 
   _reload() {
     _skipLocal = true;
-    _getProducts();
+    _getProducts('');
   }
 
   Widget _smallScreenChildBuilder(context, index) {
@@ -243,12 +331,17 @@ class _State extends State<ProductsPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 2),
-          onTap: () => _productItemClicked(_products[index]),
-          title: TableLikeListTextDataCell('${_products[index]['product']}'),
-          subtitle: _renderStockStatus(_products[index], appendQuantity: true),
-          trailing: TableLikeListTextDataCell(
-              compactNumber('${_products[index]['purchase']}')),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+          onTap: () => _productItemClicked(_getFilteredProducts()[index]),
+          title: TableLikeListTextDataCell(
+              '${_getFilteredProducts()[index]['product']}'),
+          subtitle: _renderStockStatus(_getFilteredProducts()[index],
+              appendQuantity: true),
+          trailing: Icon(
+            Icons.chevron_right,
+            color: Theme.of(context).primaryColor,
+          ),
+          // dense: true,
         ),
         const SizedBox(height: 5),
         const HorizontalLine(),
@@ -262,18 +355,19 @@ class _State extends State<ProductsPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InkWell(
-          onTap: () => _productItemClicked(_products[index]),
+          onTap: () => _productItemClicked(_getFilteredProducts()[index]),
           child: TableLikeListRow([
-            TableLikeListTextDataCell('${_products[index]['product']}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_products[index]['quantity'])}'),
+                '${_getFilteredProducts()[index]['product']}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_products[index]['purchase'])}'),
+                '${formatNumber(_getFilteredProducts()[index]['quantity'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_products[index]['retailPrice'])}'),
+                '${formatNumber(_getFilteredProducts()[index]['purchase'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_products[index]['wholesalePrice'])}'),
-            _renderStockStatus(_products[index]),
+                '${formatNumber(_getFilteredProducts()[index]['retailPrice'])}'),
+            TableLikeListTextDataCell(
+                '${formatNumber(_getFilteredProducts()[index]['wholesalePrice'])}'),
+            _renderStockStatus(_getFilteredProducts()[index]),
           ]),
         ),
         const HorizontalLine()
