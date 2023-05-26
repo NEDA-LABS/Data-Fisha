@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/configurations.dart';
+import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
@@ -41,13 +41,36 @@ class _State extends State<ProductsPage> {
   @override
   void initState() {
     _filters = widget.initialFilter;
+    setState(() {
+      _isLoading = true;
+    });
     _getProducts('');
     super.initState();
   }
 
   @override
   Widget build(context) {
-    var appBar = getSliverSmartStockAppBar(
+    return ResponsivePage(
+      menus: widget.onGetModulesMenu(context),
+      current: '/stock/',
+      sliverAppBar: _appBar(),
+      staticChildren: [
+        _ifLargerScreen(tableContextMenu(_getContextItems())),
+        _loading(_isLoading),
+        _ifLargerScreen(_tableHeader())
+      ],
+      dynamicChildBuilder: getIsSmallScreen(context)
+          ? _smallScreenChildBuilder
+          : _largerScreenChildBuilder,
+      totalDynamicChildren: _getFilteredProducts().length,
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  _appBar() => getSliverSmartStockAppBar(
         title: "Inventories",
         showBack: true,
         backLink: '/stock/',
@@ -127,26 +150,8 @@ class _State extends State<ProductsPage> {
               });
             },
           )
-        ]);
-    return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
-      current: '/stock/',
-      sliverAppBar: appBar,
-      staticChildren: [
-        _ifLargerScreen(tableContextMenu(_getContextItems())),
-        _loading(_isLoading),
-        _ifLargerScreen(_tableHeader())
-      ],
-      dynamicChildBuilder: getIsSmallScreen(context)
-          ? _smallScreenChildBuilder
-          : _largerScreenChildBuilder,
-      totalDynamicChildren: _getFilteredProducts().length,
-      fab: FloatingActionButton(
-        onPressed: () => _showMobileContextMenu(context),
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+        ],
+      );
 
   List _getFilteredProducts() {
     dynamic Function(dynamic p1) filter =
@@ -215,22 +220,29 @@ class _State extends State<ProductsPage> {
   }
 
   _getProducts(String query) async {
-    setState(() {
-      _isLoading = true;
-    });
-    getStockFromCacheOrRemote(
-      stringLike: query,
-      skipLocal: _skipLocal,
-    ).then((data) {
-      _allProducts = data;
-    }).catchError((error) {
-      showInfoDialog(context, error);
-    }).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-        _skipLocal = false;
+    var inventory = _allProducts.firstWhere((element) {
+      var getBarCode = propertyOrNull('barcode');
+      var barCode = getBarCode(element);
+      return barCode == query;
+    }, orElse: () => null);
+    // var isBarCode = _allProducts.map(propertyOrNull('barcode')).toList().contains(query);
+    if (inventory != null) {
+      _productItemClicked(inventory);
+    } else {
+      getStockFromCacheOrRemote(
+        stringLike: query,
+        skipLocal: _skipLocal,
+      ).then((data) {
+        _allProducts = data;
+      }).catchError((error) {
+        showInfoDialog(context, error);
+      }).whenComplete(() {
+        setState(() {
+          _isLoading = false;
+          _skipLocal = false;
+        });
       });
-    });
+    }
   }
 
   _productItemClicked(item) => showDialogOrModalSheet(
@@ -322,6 +334,9 @@ class _State extends State<ProductsPage> {
 
   _reload() {
     _skipLocal = true;
+    setState(() {
+      _isLoading = true;
+    });
     _getProducts('');
   }
 

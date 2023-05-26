@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/configurations.dart';
+import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';

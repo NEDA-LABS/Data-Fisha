@@ -19,7 +19,7 @@ SliverAppBar getSliverSmartStockAppBar(
     required BuildContext context,
     List<SearchFilter> filters = const []}) {
   return SliverAppBar(
-    expandedHeight: showSearch ? (filters.isNotEmpty ? 130 : 100) : 65,
+    expandedHeight: showSearch ? (filters.isNotEmpty ? 140 : 110) : 65,
     centerTitle: true,
     title: Text(title, overflow: TextOverflow.ellipsis),
     bottom: showSearch

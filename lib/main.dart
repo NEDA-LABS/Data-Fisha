@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/account.dart';
 import 'package:smartstock/account/pages/ProfileAccountIndex.dart';
-import 'package:smartstock/app_start.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/dashboard.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/index.dart';
 import 'package:smartstock/expense/pages/expenses.dart';
-import 'package:smartstock/expense/pages/index.dart';
+import 'package:smartstock/index.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/report/report.dart';
 import 'package:smartstock/sales/pages/index.dart';

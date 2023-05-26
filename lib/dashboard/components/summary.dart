@@ -51,13 +51,6 @@ class _State extends State<DashboardSummary> {
     return getView(loading);
   }
 
-  // _withPaddingView(view) {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(5),
-  //     child: view,
-  //   );
-  // }
-
   _getIt(String p, data) => data is Map ? data[p] : null;
 
   _mainView() {
