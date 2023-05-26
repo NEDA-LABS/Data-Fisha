@@ -87,6 +87,6 @@ void main() {
       '/stock/': (p0) => StockModule(onGetModulesMenu: p0),
       '/expense/': (p0) => ExpenseModule(onGetModulesMenu: p0),
     },
-    featureModules: {},
+    // featureModules: {},
   );
 }

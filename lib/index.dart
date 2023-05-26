@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/configs.dart';
-import 'package:smartstock/core/pages/FeatureModule.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/plugins/sync_common.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -34,7 +33,7 @@ void callbackDispatcher() {
 startSmartStock({
   required OnGetModulesMenu onGetModulesMenu,
   required Map<String, Module Function(OnGetModulesMenu)> coreModules,
-  required Map<String, FeatureModule Function(OnGetModulesMenu)> featureModules,
+  // required Map<String, FeatureModule Function(OnGetModulesMenu)> featureModules,
 }) {
   WidgetsFlutterBinding.ensureInitialized();
   periodicLocalDataSyncs(callbackDispatcher);
@@ -42,7 +41,7 @@ startSmartStock({
   var coreModule = SmartStockCoreModule(
     onGetModulesMenu: onGetModulesMenu,
     coreModules: coreModules,
-    featureModules: featureModules,
+    // featureModules: featureModules,
   );
   runApp(ModularApp(module: coreModule, child: _mainWidget()));
 }

@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0-beta.1"
+  bidi:
+    dependency: transitive
+    description:
+      name: bidi
+      sha256: dc00274c7edabae2ab30c676e736ea1eb0b1b7a1b436cb5fe372e431ccb39ab0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.6"
   bloc:
     dependency: transitive
     description:
@@ -356,10 +364,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: f6ffe2895e3c86c6ad5a27e6302cf807403463e397cb2f0c580f619ac2fa588b
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.2"
+    version: "4.0.17"
   image_picker:
     dependency: "direct main"
     description:
@@ -596,10 +604,18 @@ packages:
     dependency: "direct main"
     description:
       name: pdf
-      sha256: "10659b915e65832b106f6d1d213e09b789cc1f24bf282ee911e49db35b96be4d"
+      sha256: "586d3debf5432e5377044754032cfa53ab45e9abf371d4865e9ad5019570e246"
       url: "https://pub.dev"
     source: hosted
-    version: "3.8.4"
+    version: "3.10.1"
+  pdf_widget_wrapper:
+    dependency: transitive
+    description:
+      name: pdf_widget_wrapper
+      sha256: "754867bf32c4683da29ccc6bf31250905431fb0818a7258c153e21cd627b3212"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   petitparser:
     dependency: transitive
     description:
@@ -644,10 +660,10 @@ packages:
     dependency: "direct main"
     description:
       name: printing
-      sha256: "4df9e22bd4cb2ecea67183e5b328711b10276127b8878d9d5cb60ccd4c24a77c"
+      sha256: "6aa86779d51f1c60608defee7b231e1133ab9b00f63b3b71abfa85cb39898571"
       url: "https://pub.dev"
     source: hosted
-    version: "5.9.3"
+    version: "5.10.4"
   process:
     dependency: transitive
     description:
@@ -697,13 +713,13 @@ packages:
     source: hosted
     version: "3.4.4"
   sembast_sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sembast_sqflite
-      sha256: b039a9dc98fafd69cab8ca3a39d164f82c9c7884e205de3388cb0947df12334a
+      sha256: "6878ddd9597c0f63d56d1ab7226b46507eb999a561e380d216ae651ffb5d3166"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.2.0"
   sembast_web:
     dependency: transitive
     description:
@@ -801,10 +817,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "0c21a187d645aa65da5be6997c0c713eed61e049158870ae2de157e6897067ab"
+      sha256: e77abf6ff961d69dfef41daccbb66b51e9983cdd5cb35bf30733598057401555
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0+2"
+    version: "2.4.5"
   sqflite_common_ffi:
     dependency: transitive
     description:
@@ -865,26 +881,26 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "0c051d9f525212d8f5631c51271c2831c007a077eac84815ae8d115eb7904b4d"
+      sha256: "3979f0b1c5a97422cadae52d476c21fa3e0fb671ef51de6cae1d646d8b99fe1f"
       url: "https://pub.dev"
     source: hosted
-    version: "20.3.57"
+    version: "20.4.54"
   syncfusion_flutter_xlsio:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_xlsio
-      sha256: "3542a855d76dc9b4949b3578f3b859159da1e367c36a7169ef59c4b3939b558d"
+      sha256: a73bb379ab01f37a764038667d1e3636a46cc55a4bfa573e98475a35659b7bff
       url: "https://pub.dev"
     source: hosted
-    version: "20.3.57-beta"
+    version: "20.4.54-beta"
   syncfusion_officecore:
     dependency: transitive
     description:
       name: syncfusion_officecore
-      sha256: "5a7896f91e5ac197e942045e86f621bda7e50922484fb7aef510a79f116eee29"
+      sha256: "2ca66b01fb903bb8444d02c122078917d34edf2e5ad640cb41e3f07076c3b677"
       url: "https://pub.dev"
     source: hosted
-    version: "20.3.57-beta"
+    version: "20.4.54-beta"
   synchronized:
     dependency: transitive
     description:
@@ -1058,4 +1074,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.18.1 <3.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.7.0"

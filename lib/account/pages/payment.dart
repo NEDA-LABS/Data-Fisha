@@ -26,7 +26,7 @@ class PaymentPage extends StatelessWidget {
       onBody: (d) => Scaffold(
         drawer: d,
         body: const PaymentBody(),
-        bottomNavigationBar: bottomBar(3, onGetModulesMenu(context), context),
+        // bottomNavigationBar: bottomBar(3, onGetModulesMenu(context), context),
       ),
     );
   }
