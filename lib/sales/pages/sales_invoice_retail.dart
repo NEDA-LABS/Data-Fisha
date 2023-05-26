@@ -1,5 +1,6 @@
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
+import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
@@ -13,6 +14,7 @@ invoiceSalePage(context,{required OnGetModulesMenu onGetModulesMenu})=> SaleLike
   backLink: '/sales/invoice',
   onSubmitCart: onSubmitInvoice,
   customerLikeLabel: 'Select customer',
+  onBack: onAppGoBack(context),
   onGetPrice: _getPrice,
   onAddToCartView: _onPrepareSalesAddToCartView(context),
   onCustomerLikeList: getCustomerFromCacheOrRemote,

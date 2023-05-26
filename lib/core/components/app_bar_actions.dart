@@ -3,7 +3,7 @@ import 'package:smartstock/core/services/account.dart';
 
 List<Widget> getAppBarActions(context) => <Widget>[
       PopupMenuButton(
-        onSelected: (dynamic value) {},
+        // onSelected: (dynamic value) {},
         itemBuilder: (context) => [
           PopupMenuItem(
             child: GestureDetector(

@@ -2,7 +2,10 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/StockDrawer.dart';
+import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/cache_user.dart';
+import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
 const _emptyList = <Widget>[];
@@ -25,8 +28,6 @@ class ResponsivePage extends StatefulWidget {
   final ChildBuilder dynamicChildBuilder;
   final bool loading;
   final Future Function()? onLoadMore;
-
-  // final double currentBottomNavItemIndex;
 
   final EdgeInsets horizontalPadding;
 
@@ -69,8 +70,7 @@ class _State extends State<ResponsivePage> {
 
   @override
   Widget build(BuildContext context) {
-    var getView =
-        ifDoElse(_screenCheck, _getLargerScreenView, _getSmallScreenView);
+    var getView = ifDoElse(_screenCheck, _getLargerView, _getSmallView);
     return getView(context);
   }
 
@@ -128,41 +128,45 @@ class _State extends State<ResponsivePage> {
 
   _screenCheck(context) => hasEnoughWidth(context);
 
-  _getLargerScreenView(_) => Row(
+  _getLargerView(_) => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.showLeftDrawer
               ? StockDrawer(widget.menus, widget.current)
               : Container(),
-          // widget.showLeftDrawer
-          //     ? Container(
-          //         width: 0.5,
-          //         // color: const Color(0xFFDADADA),
-          //       )
-          //     : Container(),
           Expanded(
               child: widget.onBody != null
                   ? widget.onBody!(null)
                   : Scaffold(body: _customScrollView(24))),
-          // Container(
-          //   width: 0.5,
-          //   // color: const Color(0xFFDADADA),
-          // ),
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
 
-  // _centeredContainer(view) => Center(
-  //     child: Container(
-  //         constraints: const BoxConstraints(maxWidth: 790), child: view));
-
-  _getSmallScreenView(_) {
+  _getSmallView(_) {
     var drawer = StockDrawer(widget.menus, widget.current);
     var scaffold = Scaffold(
       drawer: drawer,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
       body: _customScrollView(100),
+      bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
+          ? FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                }
+                if (snapshot.hasData && snapshot.data != null) {
+                  var m = widget.menus
+                      .where((element) => hasRbaAccess(
+                          snapshot.data, element.roles, element.link))
+                      .toList();
+                  return getBottomBar(m, context);
+                }
+                return Container();
+              },
+              future: getLocalCurrentUser(),
+            )
+          : null,
     );
     var view = widget.onBody != null
         ? widget.onBody!(StockDrawer(widget.menus, widget.current))

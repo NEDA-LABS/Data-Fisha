@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/configurations.dart';
+import 'package:smartstock/configs.dart';
 
 raisedButton({
   Function? onPressed,
@@ -35,19 +35,19 @@ outlineActionButton(
     {Function? onPressed, required String title, Color? textColor}) {
   return Container(
     height: 34,
-    margin: const EdgeInsets.all(8),
+    margin: const EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 0),
     child: OutlinedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          primaryBaseLightColor,
-        ),
-      ),
+      // style: ButtonStyle(
+      //   backgroundColor: MaterialStateProperty.all<Color>(
+      //     primaryBaseLightColor,
+      //   ),
+      // ),
       onPressed: onPressed as void Function()?,
       child: Text(
         title,
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          color: textColor ?? primaryBaseColorValue,
+          // color: textColor ?? primaryBaseColorValue,
           fontSize: 16,
         ),
       ),

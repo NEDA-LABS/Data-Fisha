@@ -1,14 +1,11 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
-import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
-import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
@@ -64,19 +61,19 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-  _contextSales(context) {
-    return [
-      ContextMenu(
-        name: 'Add Retail',
-        pressed: () => navigateTo('/sales/cash/retail'),
-      ),
-      ContextMenu(
-        name: 'Add Wholesale',
-        pressed: () => navigateTo('/sales/cash/whole'),
-      ),
-      ContextMenu(name: 'Reload', pressed: () => _refresh())
-    ];
-  }
+  // _contextSales(context) {
+  //   return [
+  //     ContextMenu(
+  //       name: 'Add Retail',
+  //       pressed: () => navigateTo('/sales/cash/retail'),
+  //     ),
+  //     ContextMenu(
+  //       name: 'Add Wholesale',
+  //       pressed: () => navigateTo('/sales/cash/whole'),
+  //     ),
+  //     ContextMenu(name: 'Reload', pressed: () => _refresh())
+  //   ];
+  // }
 
   _tableHeader() {
     return const SizedBox(
@@ -106,17 +103,17 @@ class _State extends State<SalesCashPage> {
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loadingView(_loading),
-          getIsSmallScreen(context)
-              ? Container()
-              : tableContextMenu(_contextSales(context)),
+          // getIsSmallScreen(context)
+          //     ? Container()
+          //     : tableContextMenu(_contextSales(context)),
           getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         loading: _loading,
         onLoadMore: () async => _loadMore(),
-        fab: FloatingActionButton(
-          onPressed: () => _showMobileContextMenu(context),
-          child: const Icon(Icons.unfold_more_outlined),
-        ),
+        // fab: FloatingActionButton(
+        //   onPressed: () => _showMobileContextMenu(context),
+        //   child: const Icon(Icons.unfold_more_outlined),
+        // ),
         totalDynamicChildren: _sales.length,
         dynamicChildBuilder: getIsSmallScreen(context)
             ? _smallScreenChildBuilder
@@ -254,37 +251,37 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-  void _showMobileContextMenu(context) {
-    showDialogOrModalSheet(
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text('Add retail'),
-                onTap: () => navigateTo('/sales/cash/retail'),
-              ),
-              HorizontalLine(),
-              ListTile(
-                leading: const Icon(Icons.business),
-                title: const Text('Add wholesale'),
-                onTap: () => navigateTo('/sales/cash/whole'),
-              ),
-              HorizontalLine(),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: const Text('Reload sales'),
-                onTap: () {
-                  Navigator.of(context).maybePop();
-                  _refresh();
-                },
-              ),
-            ],
-          ),
-        ),
-        context);
-  }
+  // void _showMobileContextMenu(context) {
+  //   showDialogOrModalSheet(
+  //       Container(
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.stretch,
+  //           children: [
+  //             ListTile(
+  //               leading: const Icon(Icons.add),
+  //               title: const Text('Add retail'),
+  //               onTap: () => navigateTo('/sales/cash/retail'),
+  //             ),
+  //             HorizontalLine(),
+  //             ListTile(
+  //               leading: const Icon(Icons.business),
+  //               title: const Text('Add wholesale'),
+  //               onTap: () => navigateTo('/sales/cash/whole'),
+  //             ),
+  //             HorizontalLine(),
+  //             ListTile(
+  //               leading: const Icon(Icons.refresh),
+  //               title: const Text('Reload sales'),
+  //               onTap: () {
+  //                 Navigator.of(context).maybePop();
+  //                 _refresh();
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       context);
+  // }
 }

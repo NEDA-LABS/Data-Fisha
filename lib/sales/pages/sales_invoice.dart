@@ -10,6 +10,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/components/sale_invoice_details.dart';
@@ -36,9 +37,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onBack: (){
-        Navigator.of(context).maybePop();
-      },
+      onBack: onAppGoBack(context),
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;

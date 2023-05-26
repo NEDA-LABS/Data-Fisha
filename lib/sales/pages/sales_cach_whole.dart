@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
+import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
@@ -22,6 +23,7 @@ class SalesCashWhole extends StatelessWidget {
       backLink: '/sales/cash',
       onSubmitCart: onSubmitWholeSale,
       customerLikeLabel: 'Select customer',
+      onBack: onAppGoBack(context),
       onGetPrice: _getPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context),
       onCustomerLikeList: getCustomerFromCacheOrRemote,

@@ -3,17 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ReadBarcodeView.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
+import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class ProductCreateForm extends StatefulWidget {
-  const ProductCreateForm({Key? key}) : super(key: key);
+  final InventoryType inventoryType;
+
+  const ProductCreateForm({
+    Key? key,
+    required this.inventoryType,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -42,6 +50,7 @@ class _State extends State<ProductCreateForm> {
       children: [
         TextInput(
           onText: (d) {
+            // error['product']='';
             updateFormState({"product": d});
           },
           label: "Name",
@@ -56,7 +65,10 @@ class _State extends State<ProductCreateForm> {
           error: error['barcode'] ?? '',
           value: '${product['barcode'] ?? ''}',
           initialText: '${product['barcode'] ?? ''}',
-          icon: _mobileQrScan(''),
+          icon: mobileQrScanIconButton(context, (code) {
+            updateFormState({"barcode": '$code'});
+            refresh();
+          }),
         ),
         ChoicesInput(
           onText: (d) {
@@ -86,28 +98,30 @@ class _State extends State<ProductCreateForm> {
         ),
         TextInput(
           onText: (d) => updateFormState({"purchase": d}),
-          label: "Purchase Cost ( Tsh ) / Unit price",
+          label: "Purchase price / Unit quantity",
           placeholder: "",
           error: error['purchase'] ?? '',
           initialText: '${product['purchase'] ?? ''}',
           type: TextInputType.number,
         ),
-        TextInput(
-          onText: (d) => updateFormState({"retailPrice": d}),
-          label: "Retail price ( Tsh ) / Unit price",
-          placeholder: "",
-          error: error['retailPrice'] ?? '',
-          initialText: '${product['retailPrice'] ?? ''}',
-          type: TextInputType.number,
-        ),
-        TextInput(
-          onText: (d) => updateFormState({"wholesalePrice": d}),
-          label: "Wholesale price ( Tsh ) / Unit price",
-          placeholder: "",
-          error: error['wholesalePrice'] ?? '',
-          initialText: '${product['wholesalePrice'] ?? ''}',
-          type: TextInputType.number,
-        ),
+        widget.inventoryType == InventoryType.product
+            ? TextInput(
+                onText: (d) => updateFormState({"retailPrice": d}),
+                label: "Sale price / Unit quantity",
+                placeholder: "",
+                error: error['retailPrice'] ?? '',
+                initialText: '${product['retailPrice'] ?? ''}',
+                type: TextInputType.number,
+              )
+            : Container(),
+        // TextInput(
+        //   onText: (d) => updateFormState({"wholesalePrice": d}),
+        //   label: "Wholesale price / Unit price",
+        //   placeholder: "",
+        //   error: error['wholesalePrice'] ?? '',
+        //   initialText: '${product['wholesalePrice'] ?? ''}',
+        //   type: TextInputType.number,
+        // ),
         TextInput(
           onText: (d) => updateFormState({"quantity": d}),
           label: "Quantity",
@@ -116,13 +130,17 @@ class _State extends State<ProductCreateForm> {
           initialText: '${product['quantity'] ?? ''}',
           type: TextInputType.number,
         ),
-        TextInput(
-            onText: (d) => updateFormState({"expire": d}),
-            label: "Expire",
-            placeholder: "YYYY-MM-DD ( Optional )",
-            error: error['expire'] ?? '',
-            initialText: product['expire'] ?? '',
-            type: TextInputType.datetime),
+        DateInput(
+          onText: (d) => updateFormState({"expire": d}),
+          label: "Expire",
+          placeholder: "YYYY-MM-DD ( Optional )",
+          error: error['expire'] ?? '',
+          initialText: product['expire'] ?? '',
+          firstDate: DateTime.now(),
+          initialDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 360 * 100)),
+          // type: TextInputType.datetime,
+        ),
         Container(
           height: 80,
           width: MediaQuery.of(context).size.width,
@@ -139,36 +157,19 @@ class _State extends State<ProductCreateForm> {
     );
   }
 
-  _mobileQrScan(v) {
-    var a = ifDoElse(
-      (_) => isNativeMobilePlatform(),
-      (_) => IconButton(
-        onPressed: () {
-          fullScreeDialog(context, (p0) {
-            return const ReadBarcodeView();
-          }).then((value) {
-            updateFormState({"barcode": value});
-            refresh();
-          }).catchError((error) {
-            if (kDebugMode) {
-              print(error);
-            }
-          });
-        },
-        icon: const Icon(Icons.qr_code_scanner),
-      ),
-      (_) => const SizedBox(),
-    );
-    return a(v);
-  }
-
   _createProduct() {
     setState(() {
       error = {};
       loading = true;
     });
-    createOrUpdateProduct(context, error, loading, false, product)
-        .then((value) {
+    createOrUpdateProduct(context, error, loading, false, {
+      ...product,
+      'saleable': widget.inventoryType == InventoryType.product,
+      'retailPrice': widget.inventoryType == InventoryType.rawMaterial
+          ? '0'
+          : product['retailPrice'],
+      'wholesalePrice': product['retailPrice'] ?? '0'
+    }).then((value) {
       Navigator.of(context).maybePop();
     }).catchError((error) {
       showDialog(

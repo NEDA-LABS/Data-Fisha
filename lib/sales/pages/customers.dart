@@ -7,6 +7,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
@@ -29,9 +30,7 @@ class _CustomersPage extends State<CustomersPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: true,
-      onBack: (){
-        Navigator.of(context).maybePop();
-      },
+      onBack: onAppGoBack(context),
       onSearch: (d) {
         setState(() {
           _query = d;

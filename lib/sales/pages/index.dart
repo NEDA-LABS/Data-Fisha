@@ -1,69 +1,241 @@
+import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/sales/pages/sales_cach_whole.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
+import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
+import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/services/index.dart';
 
 import '../../core/models/menu.dart';
 import 'customers.dart';
 
-class SalesPage extends StatelessWidget {
+class SalesPage extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
 
   const SalesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<SalesPage> {
+  bool loading = false;
+  DateTime date = DateTime.now();
+  var data = {};
+
+  @override
+  void initState() {
+    _fetchSummary();
+    super.initState();
+  }
 
   @override
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
       current: '/sales/',
-      menus: onGetModulesMenu(context),
+      menus: widget.onGetModulesMenu(context),
       staticChildren: [
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            loading ? const LinearProgressIndicator() : Container(),
             const SwitchToTitle(),
-            SwitchToPageMenu(pages: _pagesMenu(context))
+            SwitchToPageMenu(pages: _pagesMenu(context)),
+            const WhiteSpacer(height: 16),
+            const BodySmall(text: 'Summary'),
+            const WhiteSpacer(height: 8),
+            _getTotalSalesView(context),
           ],
         )
       ],
       sliverAppBar: getSliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
-      // onBody: (x) => Scaffold(
-      //   drawer: x,
-      //   body: ,
-      //   bottomNavigationBar: bottomBar(1, moduleMenus(), context),
-      // ),
     );
   }
 
-  List<SubMenuModule> _pagesMenu(BuildContext context) {
-    pageNav(Widget page) {
-      return Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => page,
-      ));
-    }
+  void _fetchSummary() {
+    setState(() {
+      loading = true;
+    });
+    getSalesReport(date).then((value) {
+      // setState(() {
+      data = value;
+      // });
+    }).catchError((onError) {
+      // setState(() {
+      //   error = '$onError';
+      // });
+      if (kDebugMode) {
+        print(onError);
+      }
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
 
+  _getIt(String p, data) => data is Map ? data[p] : null;
+
+  _getTotalSalesView(BuildContext context) {
+    var cashSale = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Total cash",
+        doubleOrZero(_getIt('cash_total', data)),
+        null,
+      ),
+    );
+    var invoiceSale = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Unpaid invoices",
+        doubleOrZero(_getIt('invoice_unpaid', data)),
+        null,
+        isDanger: true,
+        // onClick: () => _pageNav(
+        //   InvoicesPage(
+        //     onGetModulesMenu: widget.onGetModulesMenu,
+        //   ),
+        // ),
+      ),
+    );
+    var expenses = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Cash sales",
+        doubleOrZero(_getIt('cash_sale', data)),
+        null,
+        onClick: () => _pageNav(
+          SalesCashPage(onGetModulesMenu: widget.onGetModulesMenu),
+        ),
+      ),
+    );
+    var profit = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Invoice sales",
+        doubleOrZero(_getIt('invoice_sale', data)),
+        null,
+        onClick: () => _pageNav(
+          InvoicesPage(onGetModulesMenu: widget.onGetModulesMenu),
+        ),
+      ),
+    );
+    var paidInvoice = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Invoice paid",
+        doubleOrZero(_getIt('invoice_paid', data)),
+        null,
+        // onClick: () => _pageNav(
+        //   InvoicesPage(
+        //     onGetModulesMenu: widget.onGetModulesMenu,
+        //   ),
+        // ),
+      ),
+    );
+    var totalSales = Expanded(
+      flex: 1,
+      child: NumberPercentageCard(
+        "Total sales",
+        doubleOrZero(_getIt('invoice_sale', data)) +
+            doubleOrZero(_getIt('cash_sale', data)),
+        null,
+      ),
+    );
+    var getView = ifDoElse(
+      (context) => getIsSmallScreen(context),
+      (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [expenses, profit],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [cashSale, invoiceSale],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [totalSales, paidInvoice],
+          )
+        ],
+      ),
+      (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              expenses,
+              profit,
+              cashSale,
+              invoiceSale,
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [totalSales, paidInvoice],
+          )
+        ],
+      ),
+    );
+    return getView(context);
+  }
+
+  _pageNav(Widget page) {
+    return Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => page,
+    ));
+  }
+
+  List<SubMenuModule> _pagesMenu(BuildContext context) {
     return [
       SubMenuModule(
-        name: 'Cash sale',
+        name: 'Create retail sale',
         link: '/sales/cash',
         icon: Icons.storefront_sharp,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => pageNav(SalesCashPage(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => _pageNav(SalesCashRetail(
+          onGetModulesMenu: widget.onGetModulesMenu,
+        )),
       ),
       SubMenuModule(
-        name: 'Invoices',
+        name: 'Create wholesale',
+        link: '/sales/cash',
+        icon: Icons.business,
+        svgName: 'product_icon.svg',
+        roles: [],
+        onClick: () => _pageNav(SalesCashWhole(
+          onGetModulesMenu: widget.onGetModulesMenu,
+        )),
+      ),
+      SubMenuModule(
+        name: 'Create invoices',
         link: '/sales/invoice',
         icon: Icons.receipt_long,
         svgName: 'invoice_icon.svg',
         roles: [],
-        onClick: () => pageNav( InvoicesPage(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => _pageNav(invoiceSalePage(
+          context,onGetModulesMenu: widget.onGetModulesMenu,
+        )),
       ),
       SubMenuModule(
         name: 'Customers',
@@ -72,7 +244,7 @@ class SalesPage extends StatelessWidget {
         icon: Icons.supervised_user_circle_outlined,
         roles: [],
         onClick: () =>
-            pageNav(CustomersPage(onGetModulesMenu: onGetModulesMenu)),
+            _pageNav(CustomersPage(onGetModulesMenu: widget.onGetModulesMenu)),
       ),
     ];
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/Histogram.dart';
@@ -6,6 +7,8 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/stocks/pages/products.dart';
+import 'package:smartstock/stocks/services/inventories_filters.dart';
 import 'package:smartstock/stocks/services/stocks_report.dart';
 
 Widget _expandedByOne({required Widget child}) {
@@ -73,14 +76,34 @@ List<Widget> _getItemValueLargeScreen(Map summary) {
   ];
 }
 
-Widget _getProductsTotal(Map summary) {
+_pageNavigate(BuildContext context, Widget page) {
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) {
+      return page;
+    },
+  ));
+}
+
+Widget _getProductsTotal(
+    Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu) {
   return _expandedByOne(
-    child: NumberPercentageCard('Products', summary['values']?['items'], 0),
+    child: NumberPercentageCard(
+      'Products',
+      summary['values']?['items'],
+      0,
+      onClick: () {
+        _pageNavigate(
+            context, ProductsPage(onGetModulesMenu: onGetModulesMenu));
+      },
+    ),
   );
 }
 
 class StocksSummary extends StatefulWidget {
-  const StocksSummary({Key? key}) : super(key: key);
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const StocksSummary({Key? key, required this.onGetModulesMenu})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -122,8 +145,16 @@ class _State extends State<StocksSummary> {
             ? _getItemValueCompactScreenView(summary)
             : _getItemValueLargeScreen(summary),
         ...isSmallScreen
-            ? _getProductsCompactScreen(summary)
-            : _getProductsLargeScreen(summary),
+            ? _getProductsCompactScreen(
+                summary,
+                context,
+                widget.onGetModulesMenu,
+              )
+            : _getProductsLargeScreen(
+                summary,
+                context,
+                widget.onGetModulesMenu,
+              ),
         space,
         const BodySmall(text: 'Group by categories'),
         space,
@@ -146,8 +177,8 @@ class _State extends State<StocksSummary> {
                 ),
                 Row(
                   children: [
-                    _getNearToExpire(summary),
-                    _getExpired(summary),
+                    _getNearToExpire(summary, context, widget.onGetModulesMenu),
+                    _getExpired(summary, context, widget.onGetModulesMenu),
                   ],
                 )
               ]
@@ -156,8 +187,8 @@ class _State extends State<StocksSummary> {
                   children: [
                     _get30DaysPurchase(summary),
                     _getDuePurchases(summary),
-                    _getNearToExpire(summary),
-                    _getExpired(summary),
+                    _getNearToExpire(summary, context, widget.onGetModulesMenu),
+                    _getExpired(summary, context, widget.onGetModulesMenu),
                   ],
                 )
               ],
@@ -178,22 +209,47 @@ class _State extends State<StocksSummary> {
   }
 }
 
-Widget _getExpired(Map summary) {
+Widget _getExpired(
+  Map summary,
+  BuildContext context,
+  OnGetModulesMenu onGetModulesMenu,
+) {
   return _expandedByOne(
     child: NumberPercentageCard(
       'Expired',
       summary['purchases']?['expired'],
       0,
       isDanger: true,
+      onClick: () {
+        _pageNavigate(
+          context,
+          ProductsPage(
+            onGetModulesMenu: onGetModulesMenu,
+            initialFilter: getExpiredProductsFilter('expired'),
+          ),
+        );
+      },
     ),
   );
 }
 
-Widget _getNearToExpire(Map summary) {
+Widget _getNearToExpire(Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu,) {
   return _expandedByOne(
     child: NumberPercentageCard(
-        'Near to expired', summary['purchases']?['expire_next_3_month'], 0,
-        isWarning: true),
+      'Near to expired',
+      summary['purchases']?['expire_next_3_month'],
+      0,
+      isWarning: true,
+      onClick: () {
+        _pageNavigate(
+          context,
+          ProductsPage(
+            onGetModulesMenu: onGetModulesMenu,
+            initialFilter: getExpiredProductsFilter('near_expired'),
+          ),
+        );
+      },
+    ),
   );
 }
 
@@ -216,55 +272,127 @@ Widget _get30DaysPurchase(Map summary) {
   );
 }
 
-List<Widget> _getProductsLargeScreen(Map summary) {
+List<Widget> _getProductsLargeScreen(
+    Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu) {
   return [
     Row(
       children: [
-        _getProductsTotal(summary),
-        _getProductsPositive(summary),
-        _getProductsZero(summary),
-        _getProductsNegative(summary),
+        _getProductsTotal(summary, context, onGetModulesMenu),
+        _getProductsPositive(
+          summary,
+          context,
+          onGetModulesMenu,
+        ),
+        _getProductsZero(
+          summary,
+          context,
+          onGetModulesMenu,
+        ),
+        _getProductsNegative(
+          summary,
+          context,
+          onGetModulesMenu,
+        ),
       ],
     )
   ];
 }
 
-List<Widget> _getProductsCompactScreen(Map summary) {
+List<Widget> _getProductsCompactScreen(
+    Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu) {
   return [
     Row(
-      children: [_getProductsTotal(summary), _getProductsPositive(summary)],
+      children: [
+        _getProductsTotal(
+          summary,
+          context,
+          onGetModulesMenu,
+        ),
+        _getProductsPositive(
+          summary,
+          context,
+          onGetModulesMenu,
+        )
+      ],
     ),
     Row(
-      children: [_getProductsZero(summary), _getProductsNegative(summary)],
+      children: [
+        _getProductsZero(
+          summary,
+          context,
+          onGetModulesMenu,
+        ),
+        _getProductsNegative(
+          summary,
+          context,
+          onGetModulesMenu,
+        )
+      ],
     )
   ];
 }
 
-Widget _getProductsNegative(Map summary) {
+Widget _getProductsNegative(
+    Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu) {
   return _expandedByOne(
     child: NumberPercentageCard(
       'Negative products',
       summary['values']?['items_negative'],
       0,
       isDanger: true,
+      onClick: () {
+        _pageNavigate(
+          context,
+          ProductsPage(
+            onGetModulesMenu: onGetModulesMenu,
+            initialFilter: getNegativeProductFilter('negative'),
+          ),
+        );
+      },
     ),
   );
 }
 
-Widget _getProductsZero(Map summary) {
+Widget _getProductsZero(
+    Map summary, BuildContext context, OnGetModulesMenu onGetModulesMenu) {
   return _expandedByOne(
     child: NumberPercentageCard(
       'Zero products',
       summary['values']?['items_zero'],
       0,
       isWarning: true,
+      onClick: () {
+        _pageNavigate(
+          context,
+          ProductsPage(
+            onGetModulesMenu: onGetModulesMenu,
+            initialFilter: getZeroProductsFilter('zeros'),
+          ),
+        );
+      },
     ),
   );
 }
 
-Widget _getProductsPositive(Map summary) {
+Widget _getProductsPositive(
+  Map summary,
+  BuildContext context,
+  OnGetModulesMenu onGetModulesMenu,
+) {
   return _expandedByOne(
     child: NumberPercentageCard(
-        'Positive products', summary['values']?['items_positive'], 0),
+      'Positive products',
+      summary['values']?['items_positive'],
+      0,
+      onClick: () {
+        _pageNavigate(
+          context,
+          ProductsPage(
+            onGetModulesMenu: onGetModulesMenu,
+            initialFilter: getPositiveProductsFilter('positives'),
+          ),
+        );
+      },
+    ),
   );
 }

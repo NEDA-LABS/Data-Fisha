@@ -2,7 +2,7 @@
 // import 'package:smartstock/account/services/api_account.dart';
 // import 'package:smartstock/core/services/cache_shop.dart';
 // import 'package:smartstock/core/services/cache_user.dart';
-// import 'package:smartstock/configurations.dart';
+// import 'package:smartstock/configs.dart';
 // import 'package:smartstock/core/services/util.dart';
 //
 // class LoginPageState extends ChangeNotifier {
