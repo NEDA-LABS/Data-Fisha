@@ -4,7 +4,7 @@ import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -19,12 +19,10 @@ import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/services/inventories_filters.dart';
 
 class ProductsPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
   final Map<String, dynamic Function(dynamic)> initialFilter;
 
   const ProductsPage({
     Key? key,
-    required this.onGetModulesMenu,
     this.initialFilter = const {},
   }) : super(key: key);
 
@@ -51,7 +49,6 @@ class _State extends State<ProductsPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
       current: '/stock/',
       sliverAppBar: _appBar(),
       staticChildren: [
@@ -167,7 +164,6 @@ class _State extends State<ProductsPage> {
       pressed: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductCreatePage(
-            onGetModulesMenu: widget.onGetModulesMenu,
             inventoryType: InventoryType.product,
           ),
         ));
@@ -181,7 +177,6 @@ class _State extends State<ProductsPage> {
       pressed: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductCreatePage(
-            onGetModulesMenu: widget.onGetModulesMenu,
             inventoryType: InventoryType.rawMaterial,
           ),
         ));
@@ -246,7 +241,7 @@ class _State extends State<ProductsPage> {
   }
 
   _productItemClicked(item) => showDialogOrModalSheet(
-      ProductDetail(item: item, onGetModulesMenu: widget.onGetModulesMenu),
+      ProductDetail(item: item),
       context);
 
   _outStyle() => TextStyle(

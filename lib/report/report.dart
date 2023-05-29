@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/core/guards/auth.dart';
 import 'package:smartstock/core/guards/owner.dart';
-import 'package:smartstock/core/models/external_service.dart';
-import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
@@ -24,30 +21,28 @@ class ReportModule extends Module {
         ChildRoute(
           '/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-          child: (_, __) => ReportIndexPage(onGetModulesMenu: onGetModulesMenu),
+          child: (_, __) => ReportIndexPage(),
         ),
-    ChildRoute('/sales/overview/cash',
-        guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-        child: (_, __) => OverviewCashSales(onGetModulesMenu: onGetModulesMenu,)),
-    ChildRoute('/sales/overview/invoice',
-        guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-        child: (_, __) => OverviewInvoiceSales(onGetModulesMenu: onGetModulesMenu,)),
-    ChildRoute('/sales/track/cash',
-        guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-        child: (_, __) => SalesCashTrackingPage(onGetModulesMenu: onGetModulesMenu,)),
+        ChildRoute('/sales/overview/cash',
+            guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
+            child: (_, __) => OverviewCashSales()),
+        ChildRoute('/sales/overview/invoice',
+            guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
+            child: (_, __) => OverviewInvoiceSales()),
+        ChildRoute('/sales/track/cash',
+            guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
+            child: (_, __) => SalesCashTrackingPage()),
         ChildRoute(
           '/sales/performance/product',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-          child: (_, __) => ProductPerformance(
-            onGetModulesMenu: onGetModulesMenu,
-          ),
+          child: (_, __) => ProductPerformance(),
         ),
-    ChildRoute('/sales/performance/category',
-        guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-        child: (_, __) => CategoryPerformance(onGetModulesMenu: onGetModulesMenu,)),
-    ChildRoute('/sales/performance/seller',
-        guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
-        child: (_, __) => SellerPerformance(onGetModulesMenu: onGetModulesMenu,))
+        ChildRoute('/sales/performance/category',
+            guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
+            child: (_, __) => CategoryPerformance()),
+        ChildRoute('/sales/performance/seller',
+            guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
+            child: (_, __) => SellerPerformance())
       ];
 
   @override

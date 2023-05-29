@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/shop_user_details.dart';
 import 'package:smartstock/account/pages/user_create.dart';
 import 'package:smartstock/account/services/shop_users.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -14,8 +13,7 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class UsersPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const UsersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const UsersPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -33,7 +31,6 @@ class _State extends State<UsersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
         current: '/account/',
         sliverAppBar: _appBar(context),
         staticChildren: [
@@ -92,7 +89,7 @@ class _State extends State<UsersPage> {
         name: 'Add',
         pressed: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ShopUserCreatePage(onGetModulesMenu: widget.onGetModulesMenu),
+            builder: (context) => ShopUserCreatePage(),
           ),
         ),
       ),
@@ -145,7 +142,7 @@ class _State extends State<UsersPage> {
                   Navigator.of(context).maybePop().whenComplete(
                         () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ShopUserCreatePage(onGetModulesMenu: widget.onGetModulesMenu),
+                            builder: (context) => ShopUserCreatePage(),
                           ),
                         ),
                       );

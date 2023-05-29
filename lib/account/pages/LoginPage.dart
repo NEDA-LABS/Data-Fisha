@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/LoginForm.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final Function() onDoneSelectShop;
+
+  const LoginPage({Key? key, required this.onDoneSelectShop}) : super(key: key);
 
   @override
   Widget build(var context) {
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: const SingleChildScrollView(child: LoginForm()),
+        child: SingleChildScrollView(
+          child: LoginForm(onDoneSelectShop: onDoneSelectShop),
+        ),
       ),
     );
   }

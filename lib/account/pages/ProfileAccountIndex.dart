@@ -3,24 +3,20 @@ import 'package:smartstock/account/pages/profile.dart';
 import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 
 import '../../core/models/menu.dart';
 
 class ProfileIndexPage extends StatelessWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-
-  const ProfileIndexPage({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const ProfileIndexPage({Key? key}) : super(key: key);
 
   @override
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
-      menus: onGetModulesMenu(context),
       staticChildren: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,29 +37,27 @@ class ProfileIndexPage extends StatelessWidget {
     );
   }
 
-  List<SubMenuModule> _pagesMenu(BuildContext context) {
+  List<ModulePageMenu> _pagesMenu(BuildContext context) {
     pageNav(Widget page) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
     }
 
     return [
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Profile',
         link: '/account/profile',
         svgName: 'item_icon.svg',
         icon: Icons.person,
         roles: ["*"],
-        onClick: () => pageNav(ProfilePage(
-          onGetModulesMenu: onGetModulesMenu,
-        )),
+        onClick: () => pageNav(ProfilePage()),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Users',
         link: '/account/users',
         icon: Icons.groups,
         svgName: 'item_icon.svg',
         roles: ["*"],
-        onClick: () => pageNav(UsersPage(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => pageNav(UsersPage()),
       ),
       // SubMenuModule(
       //   name: 'Payment',

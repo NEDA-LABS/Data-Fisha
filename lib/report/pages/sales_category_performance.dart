@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -12,9 +12,8 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class CategoryPerformance extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
 
-  const CategoryPerformance({Key? key, required this.onGetModulesMenu})
+  const CategoryPerformance({Key? key})
       : super(key: key);
 
   @override
@@ -41,7 +40,6 @@ class _State extends State<CategoryPerformance> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: widget.onGetModulesMenu(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),

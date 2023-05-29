@@ -37,25 +37,26 @@ startSmartStock({
 }) {
   WidgetsFlutterBinding.ensureInitialized();
   periodicLocalDataSyncs(callbackDispatcher);
-  Builders.systemInjector(Modular.get);
-  var coreModule = SmartStockCoreModule(
-    onGetModulesMenu: onGetModulesMenu,
-    coreModules: coreModules,
-    // featureModules: featureModules,
-  );
-  runApp(ModularApp(module: coreModule, child: _mainWidget()));
+  // Builders.systemInjector(Modular.get);
+  // var coreModule = SmartStockCoreModule(
+  //   onGetModulesMenu: onGetModulesMenu,
+  //   coreModules: coreModules,
+  // //   featureModules: featureModules,
+  // );
+  runApp(_mainWidget(onGetModulesMenu));
 }
 
-_mainWidget() {
+Widget _mainWidget(OnGetModulesMenu onGetModulesMenu) {
   var lightTheme = ThemeData(
       colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: true);
   var darkTheme = ThemeData(
       colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: true);
-  return MaterialApp.router(
-    routeInformationParser: Modular.routeInformationParser,
-    routerDelegate: Modular.routerDelegate,
+  return MaterialApp(
+    // routeInformationParser: Modular.routeInformationParser,
+    // routerDelegate: Modular.routerDelegate,
     debugShowCheckedModeBanner: kDebugMode,
     theme: lightTheme,
     darkTheme: darkTheme,
+    home: SmartStockApp(onGetModulesMenu: onGetModulesMenu),
   );
 }

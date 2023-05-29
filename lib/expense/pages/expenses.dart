@@ -5,7 +5,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -17,8 +17,7 @@ import 'package:smartstock/main.dart';
 import '../services/expenses.dart';
 
 class ExpenseExpensesPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const ExpenseExpensesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const ExpenseExpensesPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -61,7 +60,6 @@ class _State extends State<ExpenseExpensesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
       current: '/expense/',
       sliverAppBar:
           getSliverSmartStockAppBar(title: "Expenses", showBack: false, context: context),

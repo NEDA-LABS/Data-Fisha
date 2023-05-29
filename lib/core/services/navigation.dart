@@ -6,7 +6,8 @@ Function() onAppGoBack(BuildContext context) {
     if (nav.canPop()) {
       nav.pop();
     } else {
-      nav.pushNamedAndRemoveUntil('/', (route) => false);
+      // Navigator.of(context).pushAndRemoveUntil(Mater, (route) => false)
+      // nav.pushNamedAndRemoveUntil('/', (route) => false);
     }
   };
 }

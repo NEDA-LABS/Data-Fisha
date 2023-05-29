@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -10,9 +10,8 @@ import 'package:smartstock/expense/components/create_item_content.dart';
 import 'package:smartstock/expense/services/items.dart';
 
 class ExpenseItemsPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
 
-  const ExpenseItemsPage({Key? key, required this.onGetModulesMenu})
+  const ExpenseItemsPage({Key? key})
       : super(key: key);
 
   @override
@@ -32,7 +31,6 @@ class _State extends State<ExpenseItemsPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
         current: '/expense/',
         sliverAppBar: _appBar(context),
         onBody: (d) => Scaffold(

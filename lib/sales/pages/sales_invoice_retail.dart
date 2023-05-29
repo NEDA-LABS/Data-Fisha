@@ -8,7 +8,7 @@ import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
-invoiceSalePage(context,{required OnGetModulesMenu onGetModulesMenu})=> SaleLikePage(
+invoiceSalePage(context)=> SaleLikePage(
   wholesale: false,
   title: 'Invoice sale',
   backLink: '/sales/invoice',
@@ -21,7 +21,6 @@ invoiceSalePage(context,{required OnGetModulesMenu onGetModulesMenu})=> SaleLike
   onCustomerLikeAddWidget: ()=>const CreateCustomerContent(),
   checkoutCompleteMessage: 'Checkout complete.',
   onGetProductsLike: getStockFromCacheOrRemote,
-  onGetModulesMenu: onGetModulesMenu,
 );
 
 _onPrepareSalesAddToCartView(context) => (product, onAddToCart) {

@@ -16,7 +16,6 @@ import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfer_receive.dart';
 import 'package:smartstock/stocks/pages/transfer_send.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
-import 'package:smartstock/stocks/services/navigation.dart';
 
 class StockModule extends Module {
   final OnGetModulesMenu onGetModulesMenu;
@@ -27,38 +26,28 @@ class StockModule extends Module {
   List<ModularRoute> get routes => [
         ChildRoute('/',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) =>
-                StocksIndexPage(onGetModulesMenu: onGetModulesMenu)),
+            child: (_, __) => StocksIndexPage()),
         ChildRoute('/products',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) => ProductsPage(
-                  onGetModulesMenu: onGetModulesMenu,
-                )),
+            child: (_, __) => ProductsPage()),
         ChildRoute('/categories',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) => CategoriesPage(
-                  onGetModulesMenu: onGetModulesMenu,
-                )),
+            child: (_, __) => CategoriesPage()),
         ChildRoute('/suppliers',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) => SuppliersPage(
-                  onGetModulesMenu: onGetModulesMenu,
-                )),
+            child: (_, __) => SuppliersPage()),
         ChildRoute('/purchases',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) =>
-                PurchasesPage(onGetModulesMenu: onGetModulesMenu)),
+            child: (_, __) => PurchasesPage()),
         ChildRoute(
           '/purchases/create',
           guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-          child: (_, __) =>
-              PurchaseCreatePage(onGetModulesMenu: onGetModulesMenu),
+          child: (_, __) => PurchaseCreatePage(),
         ),
         ChildRoute('/products/create',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
             child: (_, __) {
           return ProductCreatePage(
-            onGetModulesMenu: onGetModulesMenu,
             inventoryType: InventoryType.product,
           );
         }),
@@ -67,19 +56,14 @@ class StockModule extends Module {
             child: (_, __) {
           var product = __.data;
           if (product is Map && product['id'] != null) {
-            return ProductEditPage(
-              product,
-              onGetModulesMenu: onGetModulesMenu,
-            );
+            return ProductEditPage(product);
           }
           navigateToAndReplace('/stock/products');
           return Container();
         }),
         ChildRoute('/transfers',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
-            child: (_, __) => TransfersPage(
-                  onGetModulesMenu: onGetModulesMenu,
-                )),
+            child: (_, __) => TransfersPage()),
         ChildRoute('/transfers/send',
             guards: [AuthGuard(), ActiveShopGuard(), ManagerGuard()],
             child: (_, __) =>

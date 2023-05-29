@@ -6,9 +6,8 @@ import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 
 class DashboardModule extends Module {
-  final OnGetModulesMenu onGetModulesMenu;
 
-  DashboardModule({required this.onGetModulesMenu});
+  DashboardModule();
 
   @override
   List<ChildRoute> get routes => [
@@ -16,7 +15,7 @@ class DashboardModule extends Module {
           '/',
           guards: [AuthGuard(), ActiveShopGuard(), OwnerGuard()],
           child: (_, __) =>
-              DashboardIndexPage(onGetModulesMenu: onGetModulesMenu),
+              DashboardIndexPage(),
         )
       ];
 

@@ -10,10 +10,9 @@ import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashRetail extends StatelessWidget {
-  final OnGetModulesMenu onGetModulesMenu;
   final TextEditingController searchTextController = TextEditingController();
 
-  SalesCashRetail({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  SalesCashRetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class SalesCashRetail extends StatelessWidget {
       title: 'Retail',
       backLink: '/sales/cash',
       onSubmitCart: onSubmitRetailSale,
-      onBack: onAppGoBack(context),
+      // onBack: ,
       customerLikeLabel: 'Select customer',
       onGetPrice: _getPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context),
@@ -31,7 +30,6 @@ class SalesCashRetail extends StatelessWidget {
       onCustomerLikeAddWidget: () => const CreateCustomerContent(),
       checkoutCompleteMessage: 'Checkout complete.',
       onGetProductsLike: getStockFromCacheOrRemote,
-      onGetModulesMenu: onGetModulesMenu,
     );
   }
 

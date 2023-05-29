@@ -125,4 +125,5 @@ List<List<T>> divideList<T>(List<T> list, int length) {
   return chunks;
 }
 
-typedef OnGetModulesMenu =  List<MenuModel> Function(BuildContext context);
+typedef OnGetModulesMenu =  List<ModuleMenu> Function(BuildContext context, Function(Widget page) onChangePage);
+typedef OnChangePage = Function(Widget page);

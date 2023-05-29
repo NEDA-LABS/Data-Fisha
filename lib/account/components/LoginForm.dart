@@ -1,13 +1,16 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:smartstock/account/pages/ChooseShopPage.dart';
+import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/core/services/util.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  final Function() onDoneSelectShop;
+
+  const LoginForm({Key? key, required this.onDoneSelectShop}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -95,9 +98,16 @@ class _State extends State<LoginForm> {
       return;
     }
     updateState({'loading': true});
-    accountLogin(username, password)
-        .then((value) => navigateToAndReplace('/account/shop'))
-        .catchError((error) {
+    accountLogin(username, password).then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => ChooseShopPage(
+            onDoneSelectShop: widget.onDoneSelectShop,
+          ),
+        ),
+        (route) => false,
+      );
+    }).catchError((error) {
       showDialog(
           context: context,
           builder: (context) =>
@@ -134,7 +144,7 @@ class _State extends State<LoginForm> {
   }
 
   _orSeparatorView() {
-    Widget line = Expanded(flex: 1, child: HorizontalLine());
+    Widget line = const Expanded(flex: 1, child: HorizontalLine());
     Widget orText = const Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Text(
@@ -165,9 +175,10 @@ class _State extends State<LoginForm> {
                 child: TextButton(
                   onPressed: () => _loginPressed(states, updateState, context),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.tertiary),
                     overlayColor: MaterialStateProperty.resolveWith(
-                          (states) {
+                      (states) {
                         return states.contains(MaterialState.pressed)
                             ? Theme.of(context).colorScheme.onTertiaryContainer
                             : null;
@@ -192,7 +203,11 @@ class _State extends State<LoginForm> {
       height: 48,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        onPressed: () => navigateTo('/account/register'),
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RegisterPage(onDoneSelectShop: widget.onDoneSelectShop,),
+          ),
+        ),
         child: const Text(
           "Open account for free.",
           style: TextStyle(

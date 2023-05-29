@@ -2,37 +2,60 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class ChooseShop extends StatelessWidget {
-  const ChooseShop({Key? key}) : super(key: key);
+class ChooseShop extends StatefulWidget {
+  final Function() onDoneSelectShop;
+
+  const ChooseShop({Key? key, required this.onDoneSelectShop}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<ChooseShop> {
+  bool loading = false;
+  List shops = [];
+
+  @override
+  void initState() {
+    _fetchShops();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    getState<ChooseShopState>().getShops();
-    return consumerComponent<ChooseShopState>(builder: (context, state) {
-      return ListView(
-        // shrinkWrap: true,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            alignment: Alignment.center,
-            child: const Text(
-              "SELECT OFFICE",
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                // color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-          Wrap(
-            alignment: WrapAlignment.center,
-            children: state?.shops.map((e) => _shop(e)).toList() ?? [],
-          )
-        ],
-      );
+    return ListView(
+      // shrinkWrap: true,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: const TitleMedium(text: "SELECT OFFICE"),
+        ),
+        Wrap(
+          alignment: WrapAlignment.center,
+          children: shops.map((e) => _shop(e)).toList(),
+        )
+      ],
+    );
+  }
+
+  _fetchShops() {
+    setState(() {
+      loading = true;
+    });
+    ChooseShopState().getShops().then((value) {
+      shops = itOrEmptyArray(value);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
     });
   }
 
@@ -41,8 +64,10 @@ class ChooseShop extends StatelessWidget {
     return Builder(builder: (context) {
       return InkWell(
         onTap: () {
-          ChooseShopState shopState = getState<ChooseShopState>();
-          shopState.setCurrentShop(shop).catchError((e) {
+          ChooseShopState shopState = ChooseShopState();
+          shopState.setCurrentShop(shop).then((value) {
+            widget.onDoneSelectShop();
+          }).catchError((e) {
             if (kDebugMode) {
               print(e);
             }
@@ -61,7 +86,7 @@ class ChooseShop extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
                 child: Image.network(
-                  imgSrc is String?imgSrc:'',
+                  imgSrc is String ? imgSrc : '',
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(
                       Icons.storefront,

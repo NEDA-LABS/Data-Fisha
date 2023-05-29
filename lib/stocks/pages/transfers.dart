@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -14,8 +14,7 @@ import 'package:smartstock/stocks/components/transfer_details.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
 class TransfersPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const TransfersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const TransfersPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TransfersPage();
@@ -68,7 +67,6 @@ class _TransfersPage extends State<TransfersPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         loading: _loading,

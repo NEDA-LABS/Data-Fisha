@@ -1,15 +1,20 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/account/pages/ChooseShopPage.dart';
+import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
+import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/core/services/util.dart';
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
+  final Function() onDoneSelectShop;
+
+  const RegisterForm({Key? key, required this.onDoneSelectShop})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -124,7 +129,16 @@ class _State extends State<RegisterForm> {
       };
       updateState({'loading': true});
       accountRegister(data)
-          .then((value) => navigateToAndReplace('/account/shop'))
+          .then((value) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => ChooseShopPage(
+                  onDoneSelectShop: widget.onDoneSelectShop,
+                ),
+              ),
+              (route) => false,
+            );
+          })
           .catchError(lE)
           .whenComplete(() => updateState({'loading': false}));
     }
@@ -226,7 +240,7 @@ class _State extends State<RegisterForm> {
   }
 
   _separatorView() {
-    Widget line = Expanded(flex: 1, child: HorizontalLine());
+    Widget line = const Expanded(flex: 1, child: HorizontalLine());
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Row(children: [line]),
@@ -266,15 +280,17 @@ class _State extends State<RegisterForm> {
         children: [
           Expanded(flex: 2, child: Container()),
           InkWell(
-            onTap: () => navigateToAndReplace('/account/login'),
-            child: Text(
-              'Already have account? Go to login.',
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                  fontWeight: FontWeight.w200,
-                  fontSize: 14,
-                  color: Theme.of(context).primaryColorDark),
-            ),
+            onTap: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(
+                    onDoneSelectShop: widget.onDoneSelectShop,
+                  ),
+                ),
+                (route) => false,
+              );
+            },
+            child: const BodySmall(text: 'Already have account? Go to login.'),
           ),
         ],
       ),

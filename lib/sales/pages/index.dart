@@ -5,7 +5,7 @@ import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/numberCard.dart';
@@ -20,9 +20,9 @@ import '../../core/models/menu.dart';
 import 'customers.dart';
 
 class SalesPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnChangePage onChangePage;
 
-  const SalesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const SalesPage({Key? key, required this.onChangePage}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -44,7 +44,6 @@ class _State extends State<SalesPage> {
     return ResponsivePage(
       office: 'Menu',
       current: '/sales/',
-      menus: widget.onGetModulesMenu(context),
       staticChildren: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -118,9 +117,7 @@ class _State extends State<SalesPage> {
         "Cash sales",
         doubleOrZero(_getIt('cash_sale', data)),
         null,
-        onClick: () => _pageNav(
-          SalesCashPage(onGetModulesMenu: widget.onGetModulesMenu),
-        ),
+        onClick: () => widget.onChangePage(SalesCashPage()),
       ),
     );
     var profit = Expanded(
@@ -129,9 +126,7 @@ class _State extends State<SalesPage> {
         "Invoice sales",
         doubleOrZero(_getIt('invoice_sale', data)),
         null,
-        onClick: () => _pageNav(
-          InvoicesPage(onGetModulesMenu: widget.onGetModulesMenu),
-        ),
+        onClick: () => widget.onChangePage(InvoicesPage()),
       ),
     );
     var paidInvoice = Expanded(
@@ -198,53 +193,46 @@ class _State extends State<SalesPage> {
     );
     return getView(context);
   }
+  //
+  // _pageNav(Widget page) {
+  //   return Navigator.of(context).push(MaterialPageRoute(
+  //     builder: (context) => page,
+  //   ));
+  // }
 
-  _pageNav(Widget page) {
-    return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => page,
-    ));
-  }
-
-  List<SubMenuModule> _pagesMenu(BuildContext context) {
+  List<ModulePageMenu> _pagesMenu(BuildContext context) {
     return [
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Create retail sale',
         link: '/sales/cash',
         icon: Icons.storefront_sharp,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => _pageNav(SalesCashRetail(
-          onGetModulesMenu: widget.onGetModulesMenu,
-        )),
+        onClick: () => widget.onChangePage(SalesCashRetail()),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Create wholesale',
         link: '/sales/cash',
         icon: Icons.business,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => _pageNav(SalesCashWhole(
-          onGetModulesMenu: widget.onGetModulesMenu,
-        )),
+        onClick: () => widget.onChangePage(SalesCashWhole()),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Create invoices',
         link: '/sales/invoice',
         icon: Icons.receipt_long,
         svgName: 'invoice_icon.svg',
         roles: [],
-        onClick: () => _pageNav(invoiceSalePage(
-          context,onGetModulesMenu: widget.onGetModulesMenu,
-        )),
+        onClick: () => widget.onChangePage(invoiceSalePage(context)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Customers',
         link: '/sales/customers',
         svgName: 'customers_icon.svg',
         icon: Icons.supervised_user_circle_outlined,
         roles: [],
-        onClick: () =>
-            _pageNav(CustomersPage(onGetModulesMenu: widget.onGetModulesMenu)),
+        onClick: () => widget.onChangePage(CustomersPage()),
       ),
     ];
   }

@@ -8,15 +8,17 @@ import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class StockDrawer extends Drawer {
-  final List<MenuModel> menus;
+  final List<ModuleMenu> menus;
   final String? current;
   final double cWidth;
+  final Function(Widget page) onChangePage;
 
   const StockDrawer(
     this.menus,
     this.current, {
     Key? key,
     this.cWidth = 250,
+    required this.onChangePage,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class StockDrawer extends Drawer {
     );
   }
 
-  _modulesMenuContent(List<MenuModel> allMenus, String? current) {
+  _modulesMenuContent(List<ModuleMenu> allMenus, String? current) {
     var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
     var getOfficeLogo = compose(
         [propertyOr('logo', (p0) => ''), propertyOr('ecommerce', (p0) => {})]);
@@ -71,7 +73,7 @@ class StockDrawer extends Drawer {
     );
   }
 
-  Future _future(List<MenuModel> menus) async {
+  Future _future(List<ModuleMenu> menus) async {
     var shop = await getActiveShop();
     var user = await getLocalCurrentUser();
     var m = menus
@@ -173,7 +175,7 @@ class StockDrawer extends Drawer {
 
   _moduleMenuItems(String? current, BuildContext context) {
     return (dynamic item) {
-      item as MenuModel;
+      item as ModuleMenu;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
@@ -183,9 +185,10 @@ class StockDrawer extends Drawer {
             leading:
                 item.link == current ? _getSelectedIcon(context) : item.icon,
             title: Text(item.name, style: _itemStyle),
-            onTap: (){
+            onTap: () {
+              onChangePage(item.page);
               // print('TAPPED');
-              item.onClick != null ? item.onClick!() : navigateTo(item.link);
+              // item.onClick != null ? item.onClick!() : navigateTo(item.link);
             },
           ),
         ),

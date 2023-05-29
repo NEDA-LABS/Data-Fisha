@@ -7,9 +7,8 @@ import 'package:smartstock/expense/pages/items.dart';
 import 'package:smartstock/sales/guards/active_shop.dart';
 
 class ExpenseModule extends Module {
-  final OnGetModulesMenu onGetModulesMenu;
 
-  ExpenseModule({required this.onGetModulesMenu});
+  ExpenseModule();
 
   @override
   List<ChildRoute> get routes => [
@@ -17,27 +16,25 @@ class ExpenseModule extends Module {
           '/',
           guards: [AuthGuard(), ActiveShopGuard()],
           child: (_, __) =>
-              ExpenseExpensesPage(onGetModulesMenu: onGetModulesMenu),
+              ExpenseExpensesPage(),
         ),
         ChildRoute(
           '/categories',
           guards: [AuthGuard(), ActiveShopGuard()],
           child: (_, __) => ExpenseCategoriesPage(
-            onGetModulesMenu: onGetModulesMenu,
           ),
         ),
         ChildRoute(
           '/items',
           guards: [AuthGuard(), ActiveShopGuard()],
           child: (_, __) => ExpenseItemsPage(
-            onGetModulesMenu: onGetModulesMenu,
           ),
         ),
         ChildRoute(
           '/expenses',
           guards: [AuthGuard(), ActiveShopGuard()],
           child: (_, __) =>
-              ExpenseExpensesPage(onGetModulesMenu: onGetModulesMenu),
+              ExpenseExpensesPage(),
         )
       ];
 

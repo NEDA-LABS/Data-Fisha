@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -12,8 +12,7 @@ import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
 class CategoriesPage extends StatefulWidget {
-final OnGetModulesMenu onGetModulesMenu;
-  const CategoriesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const CategoriesPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -75,7 +74,6 @@ class _State extends State<CategoriesPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

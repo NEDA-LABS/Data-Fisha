@@ -23,7 +23,7 @@ transferSendPage(BuildContext context,{required OnGetModulesMenu onGetModulesMen
       onCustomerLikeList: getOtherShopsNames,
       onCustomerLikeAddWidget: transferAddShopContent,
       checkoutCompleteMessage: 'Transfer complete.',
-      onGetProductsLike: getStockFromCacheOrRemote, onGetModulesMenu: onGetModulesMenu,
+      onGetProductsLike: getStockFromCacheOrRemote
     );
 
 var _onGetPrice = compose([doubleOrZero, propertyOr('purchase', (p0) => 0)]);

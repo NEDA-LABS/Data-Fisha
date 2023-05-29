@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ExpenseIndexPage extends StatelessWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const ExpenseIndexPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const ExpenseIndexPage({Key? key}) : super(key: key);
 
   @override
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
       current: '/expense/',
-      menus: onGetModulesMenu(context),
       sliverAppBar:
           getSliverSmartStockAppBar(title: "Expense", showBack: false, context: context),
       staticChildren: [
@@ -31,7 +29,7 @@ class ExpenseIndexPage extends StatelessWidget {
     );
   }
 
-  List<SubMenuModule> _pagesMenu() => [
+  List<ModulePageMenu> _pagesMenu() => [
     // SubMenuModule(
     //   name: 'Categories',
     //   link: '/expense/categories',

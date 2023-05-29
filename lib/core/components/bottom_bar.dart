@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/StockDrawer.dart';
-import 'package:smartstock/core/components/TitleLarge.dart';
-import 'package:smartstock/core/components/TitleMedium.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/util.dart';
 
-Widget getBottomBar(List<MenuModel> menus, BuildContext context) {
+Widget getBottomBar(
+  List<ModuleMenu> menus,
+  BuildContext context, {
+  required Function(Widget page) onChangePage,
+}) {
   var size = menus.length;
   return BottomNavigationBar(
     currentIndex: size > 3 ? 3 : 0,
@@ -31,12 +29,17 @@ Widget getBottomBar(List<MenuModel> menus, BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: menus
-                    .map((e) => ListTile(
-                          title: BodyLarge(text: e.name),
-                          leading: e.icon,
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: e.onClick,
-                        ))
+                    .map(
+                      (e) => ListTile(
+                        title: BodyLarge(text: e.name),
+                        leading: e.icon,
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.of(context).maybePop();
+                          onChangePage(e.page);
+                        },
+                      ),
+                    )
                     .toList(),
               ),
             );
@@ -45,7 +48,8 @@ Widget getBottomBar(List<MenuModel> menus, BuildContext context) {
         return;
       }
       if (menus[index].onClick != null) {
-        menus[index].onClick!();
+        onChangePage(menus[index].page);
+        // menus[index].onClick!();
       }
     },
     items: [
