@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ProfileAccountIndex.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/pages/expenses.dart';
 import 'package:smartstock/index.dart';
@@ -10,16 +11,22 @@ import 'package:smartstock/stocks/pages/index.dart';
 
 _onNavigate(BuildContext context, Widget page, String routeId) {
   Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (context) => page, settings: RouteSettings(name: routeId)),
-      (route) => route.settings.name != routeId);
+    MaterialPageRoute(
+        builder: (context) => page, settings: RouteSettings(name: routeId)),
+    (route) => route.settings.name != routeId,
+  );
 }
 
-List<ModuleMenu> _onGetModules(
-    BuildContext context, Function(Widget page) onChangePage) {
+List<ModuleMenu> _onGetModules({
+  required BuildContext context,
+  required OnChangePage onChangePage,
+  required OnBackPage onBackPage,
+  required OnChangeRightDrawer onChangeRightDrawer,
+}) {
   var dashboardIndex = DashboardIndexPage();
   var reportIndex = ReportIndexPage();
-  var salesIndex = SalesPage(onChangePage: onChangePage);
+  var salesIndex =
+      SalesPage(onChangePage: onChangePage, onBackPage: onBackPage, onChangeRightDrawer: onChangeRightDrawer);
   var stockIndex = StocksIndexPage();
   var expenseIndex = ExpenseExpensesPage();
   var accountIndex = ProfileIndexPage();

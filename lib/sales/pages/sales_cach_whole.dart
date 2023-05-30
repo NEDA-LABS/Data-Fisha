@@ -11,7 +11,8 @@ import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashWhole extends StatelessWidget {
   final TextEditingController searchTextController = TextEditingController();
-  SalesCashWhole({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  SalesCashWhole({Key? key, required this.onBackPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class SalesCashWhole extends StatelessWidget {
       backLink: '/sales/cash',
       onSubmitCart: onSubmitWholeSale,
       customerLikeLabel: 'Select customer',
-      onBack: onAppGoBack(context),
+      onBack: onBackPage,
       onGetPrice: _getPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context),
       onCustomerLikeList: getCustomerFromCacheOrRemote,

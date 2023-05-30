@@ -77,14 +77,19 @@ class _State extends State<SaleLikePage> {
           ? SizedBox(
               width: 350,
               child: _cartDrawer(
-                  states, updateState, context, widget.wholesale, (a) {}))
+                states,
+                updateState,
+                context,
+                widget.wholesale,
+                (a) {},
+              ),
+            )
           : null,
-      sliverAppBar: null,//states['hab'] == true ? null : _appBar(updateState),
+      sliverAppBar: null,
+      //states['hab'] == true ? null : _appBar(updateState),
       onBody: (drawer) => NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              states['hab'] == true ? Container() : _appBar(updateState)
-            ];
+            return [states['hab'] == true ? Container() : _appBar(updateState)];
           },
           body: Scaffold(
             floatingActionButton: _fab(states, updateState),
@@ -122,10 +127,10 @@ class _State extends State<SaleLikePage> {
       title: widget.title,
       backLink: widget.backLink,
       searchTextController: widget.searchTextController,
-      // showBack: true,
+      showBack: true,
       showSearch: true,
       searchHint: "Search here...",
-      // onBack: widget.onBack,
+      onBack: widget.onBack,
       onSearch: (text) {
         updateState({"query": text, 'skip': false});
       },

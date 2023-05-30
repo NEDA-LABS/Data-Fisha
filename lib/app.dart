@@ -37,7 +37,9 @@ class SmartStockApp extends StatefulWidget {
 }
 
 class _State extends State<SmartStockApp> {
-  Widget? child = DashboardIndexPage();
+  Widget? child = const DashboardIndexPage();
+  Widget? rightDrawer;
+  List<Widget> pageHistories = [];
   bool loading = false;
   bool initialized = false;
   Map? user;
@@ -55,14 +57,22 @@ class _State extends State<SmartStockApp> {
     }
     if (user is Map && propertyOrNull('username')(user) != null) {
       return ResponsivePageContainer(
-        menus: widget.onGetModulesMenu(context, _onChangePage),
+        menus: widget.onGetModulesMenu(
+          context: context,
+          onChangePage: _onChangePage,
+          onBackPage: _onBackPage,
+          onChangeRightDrawer: _onChangeRightDrawer,
+        ),
         onChangePage: _onChangePage,
+        rightDrawer: rightDrawer,
         child: child ?? Container(),
       );
     } else {
       return LoginPage(
-        onDoneSelectShop: () {
-          _getLoginUser();
+        onDoneSelectShop: (Map data) {
+          _updateState(() {
+            user = data;
+          });
         },
       );
     }
@@ -71,7 +81,23 @@ class _State extends State<SmartStockApp> {
   _onChangePage(page) {
     _updateState(() {
       child = page;
+      pageHistories.add(page);
     });
+  }
+
+  _onBackPage() {
+    // print(pageHistories);
+    var length = pageHistories.length;
+    if (length > 0) {
+      var last = pageHistories[length - 2];
+      if (last != null) {
+        _updateState(() {
+          child = last;
+          pageHistories.removeAt(length - 1);
+        });
+      }
+    }
+    // print(pageHistories);
   }
 
   _updateState(Function() fn) {
@@ -93,7 +119,11 @@ class _State extends State<SmartStockApp> {
       }
       var role = propertyOrNull('role')(user);
       if (role != 'admin' && initialized == false) {
-        child = SalesPage(onChangePage: _onChangePage);
+        child = SalesPage(
+          onChangePage: _onChangePage,
+          onBackPage: _onBackPage,
+          onChangeRightDrawer: _onChangeRightDrawer,
+        );
       }
       initialized = true;
     }).catchError((err) {
@@ -105,6 +135,12 @@ class _State extends State<SmartStockApp> {
       _updateState(() {
         loading = false;
       });
+    });
+  }
+
+  _onChangeRightDrawer(drawer) {
+    _updateState(() {
+      rightDrawer = drawer;
     });
   }
 }

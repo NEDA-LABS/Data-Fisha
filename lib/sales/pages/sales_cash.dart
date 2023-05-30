@@ -11,7 +11,8 @@ import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashPage extends StatefulWidget {
-  const SalesCashPage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  const SalesCashPage({Key? key, required this.onBackPage}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -53,9 +54,7 @@ class _State extends State<SalesCashPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onBack: (){
-        Navigator.of(context).maybePop();
-      },
+      onBack: widget.onBackPage,
       context: context,
     );
   }

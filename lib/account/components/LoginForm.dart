@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
 
 class LoginForm extends StatefulWidget {
-  final Function() onDoneSelectShop;
+  final Function(Map user) onDoneSelectShop;
 
   const LoginForm({Key? key, required this.onDoneSelectShop}) : super(key: key);
 

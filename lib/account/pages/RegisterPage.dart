@@ -3,7 +3,7 @@ import 'package:smartstock/account/components/RegisterForm.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 
 class RegisterPage extends StatelessWidget {
-  final Function() onDoneSelectShop;
+  final Function(Map user) onDoneSelectShop;
 
   const RegisterPage({Key? key, required this.onDoneSelectShop})
       : super(key: key);
@@ -31,9 +31,7 @@ class RegisterPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: RegisterForm(
-            onDoneSelectShop: onDoneSelectShop,
-          ),
+          child: RegisterForm(onDoneSelectShop: onDoneSelectShop),
         ),
       ),
     );

@@ -3,12 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChooseShop extends StatefulWidget {
-  final Function() onDoneSelectShop;
+  final OnDoneSelectShop onDoneSelectShop;
 
-  const ChooseShop({Key? key, required this.onDoneSelectShop}) : super(key: key);
+  const ChooseShop({Key? key, required this.onDoneSelectShop})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -65,8 +67,11 @@ class _State extends State<ChooseShop> {
       return InkWell(
         onTap: () {
           ChooseShopState shopState = ChooseShopState();
-          shopState.setCurrentShop(shop).then((value) {
-            widget.onDoneSelectShop();
+          shopState
+              .setCurrentShop(shop)
+              .then((value) => getLocalCurrentUser())
+              .then((user) {
+            widget.onDoneSelectShop(user is Map ? user : {});
           }).catchError((e) {
             if (kDebugMode) {
               print(e);

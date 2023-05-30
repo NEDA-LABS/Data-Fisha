@@ -21,8 +21,14 @@ import 'customers.dart';
 
 class SalesPage extends StatefulWidget {
   final OnChangePage onChangePage;
+  final OnBackPage onBackPage;
 
-  const SalesPage({Key? key, required this.onChangePage}) : super(key: key);
+  const SalesPage({
+    Key? key,
+    required this.onChangePage,
+    required this.onBackPage,
+    required OnChangeRightDrawer onChangeRightDrawer,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -117,7 +123,9 @@ class _State extends State<SalesPage> {
         "Cash sales",
         doubleOrZero(_getIt('cash_sale', data)),
         null,
-        onClick: () => widget.onChangePage(SalesCashPage()),
+        onClick: () => widget.onChangePage(
+          SalesCashPage(onBackPage: widget.onBackPage),
+        ),
       ),
     );
     var profit = Expanded(
@@ -126,7 +134,8 @@ class _State extends State<SalesPage> {
         "Invoice sales",
         doubleOrZero(_getIt('invoice_sale', data)),
         null,
-        onClick: () => widget.onChangePage(InvoicesPage()),
+        onClick: () =>
+            widget.onChangePage(InvoicesPage(onBackPage: widget.onBackPage)),
       ),
     );
     var paidInvoice = Expanded(
@@ -193,12 +202,6 @@ class _State extends State<SalesPage> {
     );
     return getView(context);
   }
-  //
-  // _pageNav(Widget page) {
-  //   return Navigator.of(context).push(MaterialPageRoute(
-  //     builder: (context) => page,
-  //   ));
-  // }
 
   List<ModulePageMenu> _pagesMenu(BuildContext context) {
     return [
@@ -208,7 +211,8 @@ class _State extends State<SalesPage> {
         icon: Icons.storefront_sharp,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => widget.onChangePage(SalesCashRetail()),
+        onClick: () =>
+            widget.onChangePage(SalesCashRetail(onBackPage: widget.onBackPage)),
       ),
       ModulePageMenu(
         name: 'Create wholesale',
@@ -216,7 +220,8 @@ class _State extends State<SalesPage> {
         icon: Icons.business,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => widget.onChangePage(SalesCashWhole()),
+        onClick: () =>
+            widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
       ),
       ModulePageMenu(
         name: 'Create invoices',
@@ -224,7 +229,8 @@ class _State extends State<SalesPage> {
         icon: Icons.receipt_long,
         svgName: 'invoice_icon.svg',
         roles: [],
-        onClick: () => widget.onChangePage(invoiceSalePage(context)),
+        onClick: () => widget.onChangePage(
+            invoiceSalePage(context, onBackPage: widget.onBackPage)),
       ),
       ModulePageMenu(
         name: 'Customers',
@@ -232,7 +238,8 @@ class _State extends State<SalesPage> {
         svgName: 'customers_icon.svg',
         icon: Icons.supervised_user_circle_outlined,
         roles: [],
-        onClick: () => widget.onChangePage(CustomersPage()),
+        onClick: () =>
+            widget.onChangePage(CustomersPage(onBackPage: widget.onBackPage)),
       ),
     ];
   }

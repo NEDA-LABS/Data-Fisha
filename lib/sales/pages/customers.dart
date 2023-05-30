@@ -12,9 +12,9 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
 class CustomersPage extends StatefulWidget {
+  final OnBackPage onBackPage;
 
-  const CustomersPage({Key? key})
-      : super(key: key);
+  const CustomersPage({Key? key, required this.onBackPage}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -25,16 +25,18 @@ class _CustomersPage extends State<CustomersPage> {
   String _query = '';
   List _customers = [];
 
-  _appBar(context){
+  _appBar(context) {
     return getSliverSmartStockAppBar(
         title: "Customers",
         showBack: true,
         backLink: '/sales/',
         showSearch: true,
-        onBack: onAppGoBack(context),
+        onBack: widget.onBackPage,
         onSearch: (d) {
           setState(() {
-            _query = d;
+            if (mounted) {
+              _query = d;
+            }
           });
           _refresh(skip: false);
         },
@@ -52,7 +54,7 @@ class _CustomersPage extends State<CustomersPage> {
     ];
   }
 
-  _tableHeader(){
+  _tableHeader() {
     return const SizedBox(
       height: 38,
       child: TableLikeListRow([
@@ -63,8 +65,8 @@ class _CustomersPage extends State<CustomersPage> {
     );
   }
 
-  _loadingView(bool show){
-    return  show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  _loadingView(bool show) {
+    return show ? const LinearProgressIndicator(minHeight: 4) : Container();
   }
 
   @override
@@ -74,7 +76,7 @@ class _CustomersPage extends State<CustomersPage> {
   }
 
   @override
-  Widget build(context){
+  Widget build(context) {
     return ResponsivePage(
       current: '/sales/',
       sliverAppBar: _appBar(context),
@@ -87,7 +89,7 @@ class _CustomersPage extends State<CustomersPage> {
       ],
       totalDynamicChildren: _customers.length,
       dynamicChildBuilder:
-      getIsSmallScreen(context) ? _smallScreen : _largerScreen,
+          getIsSmallScreen(context) ? _smallScreen : _largerScreen,
       fab: FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
         child: const Icon(Icons.unfold_more_outlined),

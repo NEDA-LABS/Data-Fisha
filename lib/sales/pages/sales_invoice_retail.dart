@@ -8,13 +8,13 @@ import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
-invoiceSalePage(context)=> SaleLikePage(
+invoiceSalePage(context,{required OnBackPage onBackPage})=> SaleLikePage(
   wholesale: false,
   title: 'Invoice sale',
   backLink: '/sales/invoice',
   onSubmitCart: onSubmitInvoice,
   customerLikeLabel: 'Select customer',
-  onBack: onAppGoBack(context),
+  onBack: onBackPage,
   onGetPrice: _getPrice,
   onAddToCartView: _onPrepareSalesAddToCartView(context),
   onCustomerLikeList: getCustomerFromCacheOrRemote,

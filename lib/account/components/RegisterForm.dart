@@ -9,9 +9,10 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class RegisterForm extends StatefulWidget {
-  final Function() onDoneSelectShop;
+  final OnDoneSelectShop onDoneSelectShop;
 
   const RegisterForm({Key? key, required this.onDoneSelectShop})
       : super(key: key);

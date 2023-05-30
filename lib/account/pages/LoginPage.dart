@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/LoginForm.dart';
 
 class LoginPage extends StatelessWidget {
-  final Function() onDoneSelectShop;
+  final Function(Map user) onDoneSelectShop;
 
   const LoginPage({Key? key, required this.onDoneSelectShop}) : super(key: key);
 

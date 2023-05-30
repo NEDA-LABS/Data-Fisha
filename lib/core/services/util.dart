@@ -125,5 +125,14 @@ List<List<T>> divideList<T>(List<T> list, int length) {
   return chunks;
 }
 
-typedef OnGetModulesMenu =  List<ModuleMenu> Function(BuildContext context, Function(Widget page) onChangePage);
 typedef OnChangePage = Function(Widget page);
+typedef OnChangeRightDrawer = Function(Widget? drawer);
+typedef OnBackPage = Function();
+typedef OnGetModulesMenu = List<ModuleMenu> Function({
+  required BuildContext context,
+  required OnChangePage onChangePage,
+  required OnBackPage onBackPage,
+  required OnChangeRightDrawer onChangeRightDrawer,
+});
+
+typedef OnDoneSelectShop =  Function(Map user);

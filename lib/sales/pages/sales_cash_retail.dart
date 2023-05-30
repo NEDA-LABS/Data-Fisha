@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
-import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
@@ -10,9 +9,10 @@ import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashRetail extends StatelessWidget {
+  final OnBackPage onBackPage;
   final TextEditingController searchTextController = TextEditingController();
 
-  SalesCashRetail({Key? key}) : super(key: key);
+  SalesCashRetail({Key? key, required this.onBackPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class SalesCashRetail extends StatelessWidget {
       title: 'Retail',
       backLink: '/sales/cash',
       onSubmitCart: onSubmitRetailSale,
-      // onBack: ,
+      onBack: onBackPage,
       customerLikeLabel: 'Select customer',
       onGetPrice: _getPrice,
       onAddToCartView: _onPrepareSalesAddToCartView(context),
@@ -35,12 +35,12 @@ class SalesCashRetail extends StatelessWidget {
 
   _onPrepareSalesAddToCartView(context) {
     return (product, onAddToCart) {
-      return salesAddToCart(
-        onGetPrice: _getPrice,
-        cart: CartModel(product: product, quantity: 1),
-        onAddToCart: onAddToCart,
-        context: context,
-      );
+      // return salesAddToCart(
+      //   onGetPrice: _getPrice,
+      //   cart: CartModel(product: product, quantity: 1),
+      //   onAddToCart: onAddToCart,
+      //   context: context,
+      // );
     };
   }
 
