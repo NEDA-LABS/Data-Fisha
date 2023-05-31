@@ -1,16 +1,15 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
@@ -43,9 +42,6 @@ class _State extends State<ProductsPage> {
   @override
   void initState() {
     _filters = widget.initialFilter;
-    setState(() {
-      _isLoading = true;
-    });
     _getProducts('');
     super.initState();
   }
@@ -71,8 +67,7 @@ class _State extends State<ProductsPage> {
     );
   }
 
-  _appBar() =>
-      getSliverSmartStockAppBar(
+  _appBar() => getSliverSmartStockAppBar(
         title: "Inventories",
         showBack: true,
         backLink: '/stock/',
@@ -157,7 +152,7 @@ class _State extends State<ProductsPage> {
 
   List _getFilteredProducts() {
     dynamic Function(dynamic p1) filter =
-    _filters.isNotEmpty ? _filters.values.toList()[0] : (v) => true;
+        _filters.isNotEmpty ? _filters.values.toList()[0] : (v) => true;
     return _allProducts.where((e) => filter(e) == true).toList();
   }
 
@@ -205,8 +200,7 @@ class _State extends State<ProductsPage> {
     ];
   }
 
-  _tableHeader() =>
-      const TableLikeListRow([
+  _tableHeader() => const TableLikeListRow([
         TableLikeListTextHeaderCell('Name'),
         TableLikeListTextHeaderCell('Quantity'),
         TableLikeListTextHeaderCell('Purchase ( Tsh )'),
@@ -223,14 +217,24 @@ class _State extends State<ProductsPage> {
   }
 
   _getProducts(String query) async {
-    var inventory = _allProducts.firstWhere((element) {
-      var getBarCode = propertyOrNull('barcode');
-      var barCode = getBarCode(element);
-      return barCode == query;
-    }, orElse: () => null);
-    // var isBarCode = _allProducts.map(propertyOrNull('barcode')).toList().contains(query);
-    if (inventory != null) {
-      _productItemClicked(inventory);
+    setState(() {
+      _isLoading = true;
+    });
+    if (query.startsWith('-1:')) {
+      var inventory = _allProducts.firstWhere((element) {
+        var getBarCode = propertyOrNull('barcode');
+        var barCode = getBarCode(element);
+        var barCodeQ = query.replaceFirst('-1:', '');
+        return barCode == barCodeQ && barCodeQ != '' && barCodeQ != '_';
+      }, orElse: () => null);
+      // var isBarCode = _allProducts.map(propertyOrNull('barcode')).toList().contains(query);
+      if (inventory != null) {
+        _productItemClicked(inventory);
+      }
+      setState(() {
+        _isLoading = false;
+        _skipLocal = false;
+      });
     } else {
       getStockFromCacheOrRemote(
         stringLike: query,
@@ -251,56 +255,50 @@ class _State extends State<ProductsPage> {
   _productItemClicked(item) =>
       showDialogOrModalSheet(ProductDetail(item: item), context);
 
-  _outStyle() =>
-      TextStyle(
-          color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
+  _outStyle() => TextStyle(
+      color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
 
   _inStyle() =>
       TextStyle(color: healthColor, fontWeight: FontWeight.w400, fontSize: 14);
 
-  _renderStockStatus(product, {appendQuantity = false}) =>
-      ifDoElse(
-              (_) => doubleOrZero(_['quantity']) > 0,
-              (_) =>
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 6,
-                    width: 6,
-                    decoration: BoxDecoration(
-                        color: healthColor,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10))),
-                    margin: const EdgeInsets.only(right: 8),
-                  ),
-                  Text('In stock', style: _inStyle()),
-                  appendQuantity
-                      ? Text(' ( ${formatNumber(_['quantity'])} )',
-                      style: _inStyle())
-                      : Container(),
-                ],
+  _renderStockStatus(product, {appendQuantity = false}) => ifDoElse(
+      (_) => doubleOrZero(_['quantity']) > 0,
+      (_) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 6,
+                width: 6,
+                decoration: BoxDecoration(
+                    color: healthColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                margin: const EdgeInsets.only(right: 8),
               ),
-              (_) =>
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 6,
-                    width: 6,
-                    decoration: BoxDecoration(
-                        color: criticalColor,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10))),
-                    margin: const EdgeInsets.only(right: 8),
-                  ),
-                  Text('Out stock', style: _outStyle()),
-                  appendQuantity
-                      ? Text(' ( ${formatNumber(_['quantity'])} )',
+              Text('In stock', style: _inStyle()),
+              appendQuantity
+                  ? Text(' ( ${formatNumber(_['quantity'])} )',
+                      style: _inStyle())
+                  : Container(),
+            ],
+          ),
+      (_) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 6,
+                width: 6,
+                decoration: BoxDecoration(
+                    color: criticalColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                margin: const EdgeInsets.only(right: 8),
+              ),
+              Text('Out stock', style: _outStyle()),
+              appendQuantity
+                  ? Text(' ( ${formatNumber(_['quantity'])} )',
                       style: _outStyle())
-                      : Container(),
-                ],
-              ))(product);
+                  : Container(),
+            ],
+          ))(product);
 
   void _showMobileContextMenu(context) {
     showDialogOrModalSheet(
@@ -324,7 +322,7 @@ class _State extends State<ProductsPage> {
               leading: const Icon(Icons.home_repair_service_rounded),
               trailing: const Icon(Icons.chevron_right),
               title: Text(_getAddServiceMenu().name),
-              onTap: (){
+              onTap: () {
                 _getAddServiceMenu().pressed();
                 Navigator.of(context).maybePop();
               },
@@ -348,9 +346,6 @@ class _State extends State<ProductsPage> {
 
   _reload() {
     _skipLocal = true;
-    setState(() {
-      _isLoading = true;
-    });
     _getProducts('');
   }
 
@@ -368,9 +363,7 @@ class _State extends State<ProductsPage> {
               appendQuantity: true),
           trailing: Icon(
             Icons.chevron_right,
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           // dense: true,
         ),
@@ -395,11 +388,9 @@ class _State extends State<ProductsPage> {
             TableLikeListTextDataCell(
                 '${formatNumber(_getFilteredProducts()[index]['purchase'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(
-                    _getFilteredProducts()[index]['retailPrice'])}'),
+                '${formatNumber(_getFilteredProducts()[index]['retailPrice'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(
-                    _getFilteredProducts()[index]['wholesalePrice'])}'),
+                '${formatNumber(_getFilteredProducts()[index]['wholesalePrice'])}'),
             _renderStockStatus(_getFilteredProducts()[index]),
           ]),
         ),

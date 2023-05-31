@@ -40,9 +40,11 @@ class _State extends State<StocksSummary> {
         print(err);
       }
     }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if(mounted){
+        setState(() {
+          loading = false;
+        });
+      }
     });
     super.initState();
   }

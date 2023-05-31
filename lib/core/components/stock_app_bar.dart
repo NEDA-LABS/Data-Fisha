@@ -79,8 +79,8 @@ PreferredSizeWidget _toolBarSearchInput(
               suffixIcon: mobileQrScanIconButton(
                 context,
                 (code) {
-                  if (onSearch != null) {
-                    onSearch('$code');
+                  if (onSearch != null && code!=null) {
+                    onSearch('-1:$code');
                   }
                 },
               ),

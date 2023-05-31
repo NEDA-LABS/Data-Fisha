@@ -51,20 +51,7 @@
 //         ),
 //       );
 //
-//   _appBar(context) {
-//     return getSliverSmartStockAppBar(
-//       title: "Expense categories",
-//       showBack: true,
-//       backLink: '/expense/',
-//       showSearch: true,
-//       onSearch: (p0) {
-//         setState(() {
-//           _query = p0;
-//         });
-//       },
-//       searchHint: 'Search...', context: context,
-//     );
-//   }
+
 //
 //   _contextItems(context) {
 //     return [

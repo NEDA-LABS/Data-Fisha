@@ -33,12 +33,14 @@ class _CustomersPage extends State<CustomersPage> {
         showSearch: true,
         onBack: widget.onBackPage,
         onSearch: (d) {
-          setState(() {
-            if (mounted) {
-              _query = d;
-            }
-          });
-          _refresh(skip: false);
+          if('$d'.startsWith('-1:')==false){
+            setState(() {
+              if (mounted) {
+                _query = d;
+              }
+            });
+            _refresh(skip: false);
+          }
         },
         searchHint: 'Search...',
         context: context);

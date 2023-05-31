@@ -86,15 +86,15 @@ class _State extends State<SaleLikePage> {
             )
           : null,
       sliverAppBar: null,
-      //states['hab'] == true ? null : _appBar(updateState),
       onBody: (drawer) => NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [states['hab'] == true ? Container() : _appBar(updateState)];
-          },
-          body: Scaffold(
-            floatingActionButton: _fab(states, updateState),
-            body: FutureBuilder<List>(future: _future(), builder: _getView),
-          )),
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [states['hab'] == true ? Container() : _appBar(updateState)];
+        },
+        body: Scaffold(
+          floatingActionButton: _fab(states, updateState),
+          body: FutureBuilder<List>(future: _future(), builder: _getView),
+        ),
+      ),
     );
   }
 
@@ -132,7 +132,23 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onBack: widget.onBack,
       onSearch: (text) {
-        updateState({"query": text, 'skip': false});
+        if (text.startsWith('-1:')) {
+          var barCodeQ = text.replaceFirst('-1:', '');
+          widget
+              .onGetProductsLike(skipLocal: false, stringLike: barCodeQ)
+              .then((value) {
+            var inventory = itOrEmptyArray(value).firstWhere((element) {
+              var getBarCode = propertyOrNull('barcode');
+              var barCode = getBarCode(element);
+              return barCode == barCodeQ && barCodeQ != '' && barCodeQ != '_';
+            }, orElse: () => null);
+            if (inventory != null) {
+              widget.onAddToCartView(inventory,_onAddToCart(states, updateState));
+            }
+          }).catchError((e) {});
+        } else {
+          updateState({"query": text, 'skip': false});
+        }
       },
       context: context,
     );

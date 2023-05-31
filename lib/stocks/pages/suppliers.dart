@@ -35,16 +35,18 @@ class _State extends State<SuppliersPage> {
       showSearch: true,
       onBack: widget.onBackPage,
       onSearch: (p0) {
-        setState(() {
-          _query = p0;
-          getSupplierFromCacheOrRemote(skipLocal: false).then((value) {
-            _suppliers = value
-                .where((element) => '${element['name']}'
-                    .toLowerCase()
-                    .contains(_query.toLowerCase()))
-                .toList();
-          }).whenComplete(() => setState(() {}));
-        });
+        if(p0.startsWith('-1:')==false){
+          setState(() {
+            _query = p0;
+            getSupplierFromCacheOrRemote(skipLocal: false).then((value) {
+              _suppliers = value
+                  .where((element) => '${element['name']}'
+                  .toLowerCase()
+                  .contains(_query.toLowerCase()))
+                  .toList();
+            }).whenComplete(() => setState(() {}));
+          });
+        }
       },
       searchHint: 'Search...',
       context: context,
