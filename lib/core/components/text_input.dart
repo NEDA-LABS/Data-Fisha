@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 
@@ -67,13 +69,13 @@ class _State extends State<TextInput> {
 
   _label() {
     var labelPadding = const EdgeInsets.fromLTRB(0, 8, 0, 8);
-    var labelStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
+    // var labelStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
     var empty = Container(height: 10);
     var label = Padding(
       padding: labelPadding,
-      child: Text(
-        widget.label,
-        style: labelStyle,
+      child: LabelMedium(
+        text: widget.label,
+        // style: labelStyle,
       ),
     );
     return widget.label.isEmpty ? empty : label;

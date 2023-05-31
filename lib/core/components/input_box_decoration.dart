@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 _boxBorder(error, context) => Border.all(
       color: error is String && error.isNotEmpty
           ? Colors.red
-          : const Color(0xffe1e1e1),
+          : Theme.of(context).colorScheme.primary,
       width: .8,
     );
 

@@ -1,18 +1,16 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_expense_content.dart';
-import 'package:smartstock/main.dart';
 
 import '../services/expenses.dart';
 
@@ -61,8 +59,8 @@ class _State extends State<ExpenseExpensesPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/expense/',
-      sliverAppBar:
-          getSliverSmartStockAppBar(title: "Expenses", showBack: false, context: context),
+      sliverAppBar: getSliverSmartStockAppBar(
+          title: "Expenses", showBack: false, context: context),
       staticChildren: [
         _loadingView(_loading),
         getIsSmallScreen(context)

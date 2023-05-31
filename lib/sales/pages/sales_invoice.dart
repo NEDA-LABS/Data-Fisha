@@ -1,25 +1,28 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
-import 'package:smartstock/sales/components/sale_invoice_details.dart';
+import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
 class InvoicesPage extends StatefulWidget {
   final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
 
-  const InvoicesPage({Key? key, required this.onBackPage}) : super(key: key);
+  const InvoicesPage({
+    Key? key,
+    required this.onBackPage,
+    required this.onChangePage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();
@@ -54,7 +57,8 @@ class _InvoicesPage extends State<InvoicesPage> {
     return [
       ContextMenu(
         name: 'Create',
-        pressed: () => navigateTo('/sales/invoice/create'),
+        pressed: () =>
+            widget.onChangePage(InvoiceSalePage(onBackPage: widget.onBackPage)),
       ),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
@@ -242,7 +246,7 @@ class _InvoicesPage extends State<InvoicesPage> {
           ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }
@@ -265,7 +269,7 @@ class _InvoicesPage extends State<InvoicesPage> {
             Center(child: _getStatusView(_invoices[index]))
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -333,9 +337,13 @@ class _InvoicesPage extends State<InvoicesPage> {
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Add invoice'),
-                onTap: () => navigateTo('/sales/invoice/create'),
+                onTap: () => widget.onChangePage(
+                  InvoiceSalePage(
+                    onBackPage: widget.onBackPage,
+                  ),
+                ),
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload invoices'),

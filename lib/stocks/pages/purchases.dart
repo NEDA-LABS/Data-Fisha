@@ -13,7 +13,14 @@ import 'package:smartstock/stocks/pages/purchase_create.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends StatefulWidget {
-  const PurchasesPage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
+
+  const PurchasesPage({
+    Key? key,
+    required this.onChangePage,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PurchasesPage();
@@ -29,9 +36,7 @@ class _PurchasesPage extends State<PurchasesPage> {
       showBack: true,
       backLink: '/stock/',
       showSearch: false,
-      onBack: () {
-        Navigator.of(context).maybePop();
-      },
+      onBack: widget.onBackPage,
       searchHint: 'Search...',
       context: context);
 
@@ -39,9 +44,8 @@ class _PurchasesPage extends State<PurchasesPage> {
         ContextMenu(
           name: 'Create',
           pressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PurchaseCreatePage(),
-            ));
+            widget.onChangePage(
+                PurchaseCreatePage(onBackPage: widget.onBackPage));
           },
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh())
@@ -258,9 +262,12 @@ class _PurchasesPage extends State<PurchasesPage> {
                 leading: const Icon(Icons.add),
                 title: const Text('Record purchase'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PurchaseCreatePage(),
-                  ));
+                  widget.onChangePage(
+                    PurchaseCreatePage(
+                      onBackPage: widget.onBackPage,
+                    ),
+                  );
+                  Navigator.of(context).maybePop();
                 },
               ),
               const HorizontalLine(),

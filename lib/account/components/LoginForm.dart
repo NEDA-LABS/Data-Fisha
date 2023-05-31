@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
+import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class LoginForm extends StatefulWidget {
-  final Function(Map user) onDoneSelectShop;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const LoginForm({Key? key, required this.onDoneSelectShop}) : super(key: key);
+  const LoginForm({Key? key, required this.onGetModulesMenu}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -99,14 +102,34 @@ class _State extends State<LoginForm> {
     }
     updateState({'loading': true});
     accountLogin(username, password).then((value) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => ChooseShopPage(
-            onDoneSelectShop: widget.onDoneSelectShop,
+      return getUserShops();
+    }).then((value) async {
+      var l = itOrEmptyArray(value).length;
+      if (l == 1) {
+        return await ChooseShopState().setCurrentShop(value[0]);
+      } else {
+        return -11;
+      }
+    }).then((value) {
+      if (value == -11) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => ChooseShopPage(
+              onGetModulesMenu: widget.onGetModulesMenu,
+            ),
           ),
-        ),
-        (route) => false,
-      );
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => SmartStockApp(
+              onGetModulesMenu: widget.onGetModulesMenu,
+            ),
+          ),
+          (route) => false,
+        );
+      }
     }).catchError((error) {
       showDialog(
           context: context,
@@ -205,7 +228,9 @@ class _State extends State<LoginForm> {
       child: TextButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(onDoneSelectShop: widget.onDoneSelectShop,),
+            builder: (context) => RegisterPage(
+              onGetModulesMenu: widget.onGetModulesMenu,
+            ),
           ),
         ),
         child: const Text(

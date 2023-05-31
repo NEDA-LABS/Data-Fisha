@@ -1,5 +1,8 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/HeadineMedium.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -15,12 +18,9 @@ class CreateCustomerContent extends StatefulWidget {
 
 class _State extends State<CreateCustomerContent> {
   Map states = {"loading": false};
-  dynamic updateState;
 
   @override
   void initState() {
-    updateState = ifDoElse(
-        (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
     super.initState();
   }
 
@@ -29,51 +29,78 @@ class _State extends State<CreateCustomerContent> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
-        child: ListBody(children: [
-          TextInput(
-              onText: (d) => updateState({'displayName': d}),
-              label: "Name",
-              error: states['error_d'] ?? '',
-              placeholder: ''),
-          TextInput(
-              onText: (d) => updateState({'phone': d}),
-              label: "Phone",
-              error: states['error_p'] ?? '',
-              placeholder: '255XXXXXXXXX'),
-          TextInput(
-              onText: (d) => updateState({'email': d}),
-              label: "Email",
-              placeholder: "( Optional )"),
-          // TextInput(
-          //     onText: (d) => updateState({'company': d}),
-          //     label: "Company",
-          //     placeholder: "( Optional )"),
-          TextInput(
-              onText: (d) => updateState({'tin': d}),
-              label: "TIN",
-              placeholder: "( Optional )"),
-          Container(
+        child: ListBody(
+          children: [
+            Row(
+              children: [
+                const Expanded(flex: 1, child: BodyLarge(text: 'New customer')),
+                const WhiteSpacer(width: 16),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).maybePop();
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                )
+              ],
+            ),
+            TextInput(
+                onText: (d) => _updateState({'displayName': d}),
+                label: "Name",
+                error: states['error_d'] ?? '',
+                placeholder: 'Required'),
+            TextInput(
+                onText: (d) => _updateState({'phone': d}),
+                label: "Phone",
+                error: states['error_p'] ?? '',
+                placeholder: 'Required'),
+            TextInput(
+                onText: (d) => _updateState({'email': d}),
+                label: "Email",
+                placeholder: "( Optional )"),
+            TextInput(
+                onText: (d) => _updateState({'tin': d}),
+                label: "TIN",
+                placeholder: "( Optional )"),
+            Container(
               height: 64,
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: Row(children: [
-                Expanded(
+              child: Row(
+                children: [
+                  Expanded(
                     child: SizedBox(
-                        height: 40,
-                        child: OutlinedButton(
-                            onPressed: states['loading']
-                                ? null
-                                : () => _createCustomer(states, updateState),
-                            child: Text(
-                              states['loading']
-                                  ? "Waiting..."
-                                  : "Create Customer.",
-                              style: const TextStyle(fontSize: 16),
-                            ))))
-              ])),
-          Text(states['error'] ?? '')
-        ]),
+                      height: 40,
+                      child: OutlinedButton(
+                        onPressed: states['loading']
+                            ? null
+                            : () => _createCustomer(states, _updateState),
+                        child: BodyLarge(
+                          text: states['loading']
+                              ? "Waiting..."
+                              : "Create Customer",
+                          // style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Text(states['error'] ?? '')
+          ],
+        ),
       ),
     );
+  }
+
+  _updateState(dynamic x) {
+    if (mounted && x is Map) {
+      setState(() {
+        states.addAll(x);
+      });
+    }
   }
 
   _validateName(data) => data is String && data.isNotEmpty;
@@ -102,10 +129,10 @@ class _State extends State<CreateCustomerContent> {
       createCustomer(shop)
           .then((value) {
             saveLocalCustomer(shopToApp(shop), customer);
-            navigator().maybePop();
+            Navigator.of(context).maybePop();
           })
           .catchError((onError) => updateState({'error': onError.toString()}))
           .whenComplete(() => updateState({'loading': false}));
-    });
+    }).catchError((onError) => updateState({'error': onError.toString()}));
   }
 }

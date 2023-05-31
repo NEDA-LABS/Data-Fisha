@@ -11,7 +11,8 @@ import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ShopUserCreatePage extends StatefulWidget {
-  const ShopUserCreatePage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  const ShopUserCreatePage({required this.onBackPage,Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -52,11 +53,7 @@ class _State extends State<ShopUserCreatePage> {
       title: "Add user",
       showBack: true,
       // backLink: '/account/users',
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       showSearch: false,
       context: context,
     );
@@ -166,7 +163,7 @@ class _State extends State<ShopUserCreatePage> {
       "shops": shops.sublist(1)
     }).then((value) {
       // print(value);
-      navigateTo('/account/users');
+      // navigateTo('/account/users');
     }).catchError((onError) {
       showInfoDialog(context, '$onError}', title: "Error!");
     }).whenComplete(() {

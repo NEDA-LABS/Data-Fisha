@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
+import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -12,9 +14,9 @@ import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class RegisterForm extends StatefulWidget {
-  final OnDoneSelectShop onDoneSelectShop;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const RegisterForm({Key? key, required this.onDoneSelectShop})
+  const RegisterForm({Key? key, required this.onGetModulesMenu})
       : super(key: key);
 
   @override
@@ -130,16 +132,45 @@ class _State extends State<RegisterForm> {
       };
       updateState({'loading': true});
       accountRegister(data)
-          .then((value) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => ChooseShopPage(
-                  onDoneSelectShop: widget.onDoneSelectShop,
-                ),
-              ),
-              (route) => false,
-            );
+          .then((value) => getUserShops())
+          .then((value) async {
+            var l = itOrEmptyArray(value).length;
+            if (l == 1) {
+              return await ChooseShopState().setCurrentShop(value[0]);
+            } else {
+              return -11;
+            }
           })
+          .then((value) {
+            if (value == -11) {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => ChooseShopPage(
+                    onGetModulesMenu: widget.onGetModulesMenu,
+                  ),
+                ),
+                (route) => false,
+              );
+            } else {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => SmartStockApp(
+                    onGetModulesMenu: widget.onGetModulesMenu,
+                  ),
+                ),
+                (route) => false,
+              );
+            }
+          })
+          // .then((value) {
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(
+          //       builder: (context) =>
+          //           ChooseShopPage(onGetModulesMenu: widget.onGetModulesMenu),
+          //     ),
+          //     (route) => false,
+          //   );
+          // })
           .catchError(lE)
           .whenComplete(() => updateState({'loading': false}));
     }
@@ -284,9 +315,8 @@ class _State extends State<RegisterForm> {
             onTap: () {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => LoginPage(
-                    onDoneSelectShop: widget.onDoneSelectShop,
-                  ),
+                  builder: (context) =>
+                      LoginPage(onGetModulesMenu: widget.onGetModulesMenu),
                 ),
                 (route) => false,
               );

@@ -12,9 +12,12 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class CategoryPerformance extends StatefulWidget {
+  final OnBackPage onBackPage;
 
-  const CategoryPerformance({Key? key})
-      : super(key: key);
+  const CategoryPerformance({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -145,11 +148,7 @@ class _State extends State<CategoryPerformance> {
     return getSliverSmartStockAppBar(
       title: "Category performance",
       showBack: true,
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       // backLink: '/report/',
       context: context,
     );

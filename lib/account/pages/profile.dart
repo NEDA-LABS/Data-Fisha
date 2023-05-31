@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/profile_form.dart';
-import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const ProfilePage({
+    required this.onBackPage,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +18,11 @@ class ProfilePage extends StatelessWidget {
       office: 'Menu',
       current: '/account/',
       sliverAppBar: getSliverSmartStockAppBar(
-          title: "Profile",
-          showBack: true,
-          // backLink: '/account/',
-          onBack: () {
-            Navigator.of(context).canPop()
-                ? Navigator.of(context).pop()
-                : Navigator.of(context).pushNamed('/');
-          },
-          context: context),
+        title: "Profile",
+        showBack: true,
+        onBack: onBackPage,
+        context: context,
+      ),
       staticChildren: const [ProfileForm()],
     );
   }

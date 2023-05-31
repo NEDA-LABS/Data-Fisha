@@ -77,7 +77,7 @@ class _State extends State<OffsetQuantityContent> {
     }
     _offset()
         .catchError((err) => setState(() {}))
-        .then((value) => navigator().maybePop())
+        .then((value) => Navigator.of(context).maybePop())
         .whenComplete(() => setState(() {
               qErr = '';
               reqErr = '';

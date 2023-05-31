@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/account/pages/ProfileAccountIndex.dart';
+import 'package:smartstock/account/pages/index.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
@@ -9,34 +9,44 @@ import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 
-_onNavigate(BuildContext context, Widget page, String routeId) {
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(
-        builder: (context) => page, settings: RouteSettings(name: routeId)),
-    (route) => route.settings.name != routeId,
-  );
-}
+// _onNavigate(BuildContext context, Widget page, String routeId) {
+//   Navigator.of(context).pushAndRemoveUntil(
+//     MaterialPageRoute(
+//         builder: (context) => page, settings: RouteSettings(name: routeId)),
+//     (route) => route.settings.name != routeId,
+//   );
+// }
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
   required OnChangePage onChangePage,
   required OnBackPage onBackPage,
-  required OnChangeRightDrawer onChangeRightDrawer,
 }) {
   var dashboardIndex = DashboardIndexPage();
-  var reportIndex = ReportIndexPage();
-  var salesIndex =
-      SalesPage(onChangePage: onChangePage, onBackPage: onBackPage, onChangeRightDrawer: onChangeRightDrawer);
-  var stockIndex = StocksIndexPage();
+  var reportIndex = ReportIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
+  var salesIndex = SalesPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
+  var stockIndex = StocksIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
   var expenseIndex = ExpenseExpensesPage();
-  var accountIndex = ProfileIndexPage();
+  var accountIndex = ProfileIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
   return [
     ModuleMenu(
       name: 'Dashboard',
       icon: const Icon(Icons.dashboard),
       link: '/dashboard/',
       page: dashboardIndex,
-      onClick: () => _onNavigate(context, dashboardIndex, 'r_dashboard'),
+      onClick: () => null,
       roles: ['admin'],
     ),
     ModuleMenu(
@@ -44,7 +54,7 @@ List<ModuleMenu> _onGetModules({
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
       page: salesIndex,
-      onClick: () => _onNavigate(context, salesIndex, 'r_sales'),
+      onClick: () => null,
       roles: ['*'],
     ),
     ModuleMenu(
@@ -52,7 +62,7 @@ List<ModuleMenu> _onGetModules({
       icon: const Icon(Icons.inventory),
       link: '/stock/',
       page: stockIndex,
-      onClick: () => _onNavigate(context, stockIndex, 'r_stock'),
+      onClick: () => null,
       roles: ['admin', 'manager'],
     ),
     ModuleMenu(
@@ -60,7 +70,7 @@ List<ModuleMenu> _onGetModules({
       icon: const Icon(Icons.receipt_long_rounded),
       link: '/expense/',
       page: expenseIndex,
-      onClick: () => _onNavigate(context, expenseIndex, 'r_expense'),
+      onClick: () => null,
       roles: ['*'],
     ),
     ModuleMenu(
@@ -68,7 +78,7 @@ List<ModuleMenu> _onGetModules({
       icon: const Icon(Icons.data_saver_off),
       link: '/report/',
       page: reportIndex,
-      onClick: () => _onNavigate(context, reportIndex, 'r_report'),
+      onClick: () => null,
       roles: ['admin'],
     ),
     ModuleMenu(
@@ -76,24 +86,12 @@ List<ModuleMenu> _onGetModules({
       icon: const Icon(Icons.supervised_user_circle),
       link: '/account/',
       page: accountIndex,
-      onClick: () => _onNavigate(context, accountIndex, 'r_account'),
+      onClick: () => null,
       roles: ['*'],
     ),
   ];
 }
 
 void main() {
-  startSmartStock(
-    onGetModulesMenu: _onGetModules,
-    coreModules: {
-      // '/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      // '/dashboard/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      // '/account/': (p0) => AccountModule(onGetModulesMenu: p0),
-      // '/report/': (p0) => ReportModule(onGetModulesMenu: p0),
-      // // '/sales/': (p0) => SalesModule(onGetModulesMenu: p0),
-      // '/stock/': (p0) => StockModule(onGetModulesMenu: p0),
-      // '/expense/': (p0) => ExpenseModule(onGetModulesMenu: p0),
-    },
-    // featureModules: {},
-  );
+  startSmartStock(onGetModulesMenu: _onGetModules);
 }

@@ -15,7 +15,12 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class OverviewCashSales extends StatefulWidget {
-  const OverviewCashSales({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const OverviewCashSales({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -184,11 +189,7 @@ class _State extends State<OverviewCashSales> {
       title: "Cash sales overview",
       showBack: true,
       // backLink: '/report/',
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       context: context,
     );
   }

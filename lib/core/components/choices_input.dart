@@ -134,6 +134,7 @@ class _State extends State<ChoicesInput> {
                     onTitle: onField,
                     onText: onText,
                     multiple: widget.multiple,
+                    label: widget.placeholder,
                   ),
                 ),
               );
@@ -150,6 +151,7 @@ class _State extends State<ChoicesInput> {
                 onTitle: onField,
                 onText: onText,
                 multiple: widget.multiple,
+                label: widget.placeholder,
               ),
             ),
           );

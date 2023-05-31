@@ -93,8 +93,10 @@ class _State extends State<_Dialog> {
       height: 40,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        onPressed: () =>
-            onAddToCart(CartModel(product: states['p'], quantity: states['q'])),
+        onPressed: (){
+          onAddToCart(CartModel(product: states['p'], quantity: states['q']));
+          Navigator.of(context).maybePop();
+        },
         style: _addToCartButtonStyle(context),
         child: const BodyMedium(text: "ADD TO CART"),
       ),

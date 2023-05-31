@@ -19,11 +19,15 @@ import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/services/inventories_filters.dart';
 
 class ProductsPage extends StatefulWidget {
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
   final Map<String, dynamic Function(dynamic)> initialFilter;
 
   const ProductsPage({
     Key? key,
     this.initialFilter = const {},
+    required this.onBackPage,
+    required this.onChangePage,
   }) : super(key: key);
 
   @override
@@ -62,17 +66,18 @@ class _State extends State<ProductsPage> {
       totalDynamicChildren: _getFilteredProducts().length,
       fab: FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.unfold_more),
       ),
     );
   }
 
-  _appBar() => getSliverSmartStockAppBar(
+  _appBar() =>
+      getSliverSmartStockAppBar(
         title: "Inventories",
         showBack: true,
         backLink: '/stock/',
         showSearch: true,
-        onBack: onAppGoBack(context),
+        onBack: widget.onBackPage,
         onSearch: _updateQuery,
         searchHint: 'Search...',
         context: context,
@@ -152,7 +157,7 @@ class _State extends State<ProductsPage> {
 
   List _getFilteredProducts() {
     dynamic Function(dynamic p1) filter =
-        _filters.isNotEmpty ? _filters.values.toList()[0] : (v) => true;
+    _filters.isNotEmpty ? _filters.values.toList()[0] : (v) => true;
     return _allProducts.where((e) => filter(e) == true).toList();
   }
 
@@ -162,11 +167,12 @@ class _State extends State<ProductsPage> {
     return ContextMenu(
       name: 'Add product',
       pressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductCreatePage(
+        widget.onChangePage(
+          ProductCreatePage(
             inventoryType: InventoryType.product,
+            onBackPage: widget.onBackPage,
           ),
-        ));
+        );
       },
     );
   }
@@ -175,11 +181,12 @@ class _State extends State<ProductsPage> {
     return ContextMenu(
       name: 'Add raw material',
       pressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductCreatePage(
+        widget.onChangePage(
+          ProductCreatePage(
             inventoryType: InventoryType.rawMaterial,
+            onBackPage: widget.onBackPage,
           ),
-        ));
+        );
       },
     );
   }
@@ -198,7 +205,8 @@ class _State extends State<ProductsPage> {
     ];
   }
 
-  _tableHeader() => const TableLikeListRow([
+  _tableHeader() =>
+      const TableLikeListRow([
         TableLikeListTextHeaderCell('Name'),
         TableLikeListTextHeaderCell('Quantity'),
         TableLikeListTextHeaderCell('Purchase ( Tsh )'),
@@ -240,54 +248,59 @@ class _State extends State<ProductsPage> {
     }
   }
 
-  _productItemClicked(item) => showDialogOrModalSheet(
-      ProductDetail(item: item),
-      context);
+  _productItemClicked(item) =>
+      showDialogOrModalSheet(ProductDetail(item: item), context);
 
-  _outStyle() => TextStyle(
-      color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
+  _outStyle() =>
+      TextStyle(
+          color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);
 
   _inStyle() =>
       TextStyle(color: healthColor, fontWeight: FontWeight.w400, fontSize: 14);
 
-  _renderStockStatus(product, {appendQuantity = false}) => ifDoElse(
-      (_) => doubleOrZero(_['quantity']) > 0,
-      (_) => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 6,
-                width: 6,
-                decoration: BoxDecoration(
-                    color: healthColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                margin: const EdgeInsets.only(right: 8),
-              ),
-              Text('In stock', style: _inStyle()),
-              appendQuantity
-                  ? Text(' ( ${formatNumber(_['quantity'])} )',
+  _renderStockStatus(product, {appendQuantity = false}) =>
+      ifDoElse(
+              (_) => doubleOrZero(_['quantity']) > 0,
+              (_) =>
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 6,
+                    width: 6,
+                    decoration: BoxDecoration(
+                        color: healthColor,
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10))),
+                    margin: const EdgeInsets.only(right: 8),
+                  ),
+                  Text('In stock', style: _inStyle()),
+                  appendQuantity
+                      ? Text(' ( ${formatNumber(_['quantity'])} )',
                       style: _inStyle())
-                  : Container(),
-            ],
-          ),
-      (_) => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 6,
-                width: 6,
-                decoration: BoxDecoration(
-                    color: criticalColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                margin: const EdgeInsets.only(right: 8),
+                      : Container(),
+                ],
               ),
-              Text('Out stock', style: _outStyle()),
-              appendQuantity
-                  ? Text(' ( ${formatNumber(_['quantity'])} )',
+              (_) =>
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 6,
+                    width: 6,
+                    decoration: BoxDecoration(
+                        color: criticalColor,
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10))),
+                    margin: const EdgeInsets.only(right: 8),
+                  ),
+                  Text('Out stock', style: _outStyle()),
+                  appendQuantity
+                      ? Text(' ( ${formatNumber(_['quantity'])} )',
                       style: _outStyle())
-                  : Container(),
-            ],
-          ))(product);
+                      : Container(),
+                ],
+              ))(product);
 
   void _showMobileContextMenu(context) {
     showDialogOrModalSheet(
@@ -301,14 +314,20 @@ class _State extends State<ProductsPage> {
               leading: const Icon(Icons.card_giftcard),
               trailing: const Icon(Icons.chevron_right),
               title: Text(_getAddProductMenu().name),
-              onTap: _getAddProductMenu().pressed,
+              onTap: () {
+                _getAddProductMenu().pressed();
+                Navigator.of(context).maybePop();
+              },
             ),
             const HorizontalLine(),
             ListTile(
               leading: const Icon(Icons.home_repair_service_rounded),
               trailing: const Icon(Icons.chevron_right),
               title: Text(_getAddServiceMenu().name),
-              onTap: _getAddServiceMenu().pressed,
+              onTap: (){
+                _getAddServiceMenu().pressed();
+                Navigator.of(context).maybePop();
+              },
             ),
             const HorizontalLine(),
             ListTile(
@@ -349,7 +368,9 @@ class _State extends State<ProductsPage> {
               appendQuantity: true),
           trailing: Icon(
             Icons.chevron_right,
-            color: Theme.of(context).primaryColor,
+            color: Theme
+                .of(context)
+                .primaryColor,
           ),
           // dense: true,
         ),
@@ -374,9 +395,11 @@ class _State extends State<ProductsPage> {
             TableLikeListTextDataCell(
                 '${formatNumber(_getFilteredProducts()[index]['purchase'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['retailPrice'])}'),
+                '${formatNumber(
+                    _getFilteredProducts()[index]['retailPrice'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['wholesalePrice'])}'),
+                '${formatNumber(
+                    _getFilteredProducts()[index]['wholesalePrice'])}'),
             _renderStockStatus(_getFilteredProducts()[index]),
           ]),
         ),

@@ -6,11 +6,13 @@ import 'package:smartstock/stocks/components/product_create_form.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 
 class ProductCreatePage extends StatelessWidget {
+  final OnBackPage onBackPage;
   final InventoryType inventoryType;
 
   const ProductCreatePage({
     Key? key,
     required this.inventoryType,
+    required this.onBackPage,
   }) : super(key: key);
 
   _appBar(context) {
@@ -18,9 +20,7 @@ class ProductCreatePage extends StatelessWidget {
       title: inventoryType == InventoryType.product?"Add product":'Add raw material',
       showBack: true,
       backLink: '/stock/products',
-      onBack: () {
-        Navigator.of(context).maybePop();
-      },
+      onBack: onBackPage,
       showSearch: false,
       context: context,
     );

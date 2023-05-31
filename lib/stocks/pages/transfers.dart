@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -11,10 +10,19 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/transfer_details.dart';
+import 'package:smartstock/stocks/pages/transfer_receive.dart';
+import 'package:smartstock/stocks/pages/transfer_send.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
 class TransfersPage extends StatefulWidget {
-  const TransfersPage({Key? key}) : super(key: key);
+  final OnChangePage onChangePage;
+  final OnBackPage onBackPage;
+
+  const TransfersPage({
+    Key? key,
+    required this.onBackPage,
+    required this.onChangePage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TransfersPage();
@@ -26,23 +34,36 @@ class _TransfersPage extends State<TransfersPage> {
   List _transfers = [];
 
   _appBar(context) => getSliverSmartStockAppBar(
-      title: "Transfers",
-      showBack: true,
-      backLink: '/stock/',
-      showSearch: false,
-      onBack: (){
-        Navigator.of(context).maybePop();
-      },
-      context: context);
+        title: "Transfers",
+        showBack: true,
+        backLink: '/stock/',
+        showSearch: false,
+        onBack: widget.onBackPage,
+        context: context,
+      );
 
   _contextTransfers(context) => [
         ContextMenu(
           name: 'Send',
-          pressed: () => navigateTo('/stock/transfers/send'),
+          pressed: () {
+            // navigateTo('/stock/transfers/send');
+            widget.onChangePage(
+              TransferSendPage(
+                onBackPage: widget.onBackPage,
+              ),
+            );
+          },
         ),
         ContextMenu(
           name: 'Receive',
-          pressed: () => navigateTo('/stock/transfers/receive'),
+          pressed: () {
+            // navigateTo('/stock/transfers/receive')
+            widget.onChangePage(
+              TransferReceivePage(
+                onBackPage: widget.onBackPage,
+              ),
+            );
+          },
         ),
         ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
       ];
@@ -143,21 +164,35 @@ class _TransfersPage extends State<TransfersPage> {
               ListTile(
                 leading: const Icon(Icons.call_made_outlined),
                 title: const Text('Send'),
-                onTap: () => navigateTo('/stock/transfers/send'),
+                onTap: () {
+                  widget.onChangePage(
+                    TransferSendPage(
+                      onBackPage: widget.onBackPage,
+                    ),
+                  );
+                  Navigator.of(context).maybePop();
+                },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.call_received),
                 title: const Text('Receive'),
-                onTap: () => navigateTo('/stock/transfers/receive'),
+                onTap: () {
+                  widget.onChangePage(
+                    TransferReceivePage(
+                      onBackPage: widget.onBackPage,
+                    ),
+                  );
+                  Navigator.of(context).maybePop();
+                },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload transfers'),
                 onTap: () {
-                  Navigator.of(context).maybePop();
                   _refresh();
+                  Navigator.of(context).maybePop();
                 },
               ),
             ],
@@ -202,7 +237,7 @@ class _TransfersPage extends State<TransfersPage> {
             // Center(child: _getStatusView(_purchases[index]))
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -239,7 +274,7 @@ class _TransfersPage extends State<TransfersPage> {
           ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }

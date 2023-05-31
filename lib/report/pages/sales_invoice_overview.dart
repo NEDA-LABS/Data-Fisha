@@ -17,7 +17,8 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class OverviewInvoiceSales extends StatefulWidget {
-  const OverviewInvoiceSales({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  const OverviewInvoiceSales({Key? key, required this.onBackPage,}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -252,11 +253,7 @@ class _State extends State<OverviewInvoiceSales> {
     return getSliverSmartStockAppBar(
       title: "Invoice sales overview",
       showBack: true,
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       // backLink: '/report/',
       context: context,
     );

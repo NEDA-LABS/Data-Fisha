@@ -88,7 +88,7 @@ class _State extends State<SaleItemsDetails> {
                     margin: nameMargin,
                     child: TextButton(
                       onPressed: () {
-                        navigator().maybePop().whenComplete(() {
+                        Navigator.of(context).maybePop().whenComplete(() {
                           widget.onRefund(item);
                         });
                       },

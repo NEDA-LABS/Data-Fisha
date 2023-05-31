@@ -63,7 +63,7 @@ class _State extends State<SaleInvoiceDetail> {
           ),
           outlineActionButton(
             onPressed: () {
-              navigator().maybePop().whenComplete(() {
+              Navigator.of(context).maybePop().whenComplete(() {
                 showDialog(
                   context: context,
                   builder: (_) => Dialog(
@@ -82,7 +82,7 @@ class _State extends State<SaleInvoiceDetail> {
   }
 
   _showItems() {
-    navigator().maybePop().whenComplete(() {
+    Navigator.of(context).maybePop().whenComplete(() {
       showDialogOrModalSheet(
           SaleItemsDetails(
             sale: widget.sale,

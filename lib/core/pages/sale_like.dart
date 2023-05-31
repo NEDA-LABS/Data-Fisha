@@ -1,10 +1,10 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/cart_drawer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -106,7 +106,7 @@ class _State extends State<SaleLikePage> {
   _onAddToCart(states, updateState) => (cart) {
         var carts = appendToCarts(cart, _getCarts(states));
         updateState({"carts": carts, 'query': ''});
-        navigator().maybePop();
+        Navigator.of(context).maybePop();
       };
 
   _onShowCheckoutSheet(states, updateState, context) {
@@ -193,28 +193,29 @@ class _State extends State<SaleLikePage> {
         var carts = states['carts'];
         return widget.onSubmitCart(carts, customer, discount).then((value) {
           updateState({'carts': [], 'customer': ''});
-          navigator().maybePop().whenComplete(() {
-            showDialog(
-              context: context,
-              builder: (c) => AlertDialog(
-                title: const Text(
-                  'Info',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                ),
-                content: Text(widget.checkoutCompleteMessage),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.of(context).maybePop(),
-                      child: const Text(
-                        'Close',
-                        style: TextStyle(fontSize: 12),
-                      ))
-                ],
-              ),
-            );
+          Navigator.of(context).maybePop().whenComplete(() {
+            showInfoDialog(context, widget.checkoutCompleteMessage);
+            // showDialog(
+            //   context: context,
+            //   builder: (c) => AlertDialog(
+            //     title: const Text(
+            //       'Info',
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w500,
+            //         fontSize: 16,
+            //       ),
+            //     ),
+            //     content: Text(widget.checkoutCompleteMessage),
+            //     actions: [
+            //       TextButton(
+            //           onPressed: () => Navigator.of(context).maybePop(),
+            //           child: const Text(
+            //             'Close',
+            //             style: TextStyle(fontSize: 12),
+            //           ))
+            //     ],
+            //   ),
+            // );
           });
         }).catchError(_showCheckoutError(context));
         // onCheckout
@@ -238,28 +239,5 @@ class _State extends State<SaleLikePage> {
   _prepareAddCartQuantity(states, updateState) => (String id, dynamic q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
-  _showCheckoutError(context) => (error) {
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Container(
-                constraints:
-                    const BoxConstraints(maxWidth: 200, maxHeight: 100),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text('Error',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400)),
-                    Expanded(
-                        child: SingleChildScrollView(child: Text('$error'))),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      };
+  _showCheckoutError(context) => (error) => showInfoDialog(context, error);
 }

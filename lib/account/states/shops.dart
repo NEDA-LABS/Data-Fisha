@@ -15,6 +15,6 @@ class ChooseShopState {
     String? projectId = shop["projectId"];
     await saveShopId(projectId);
     await saveActiveShop(shop);
-    // navigateTo('/dashboard/');
+    return projectId;
   }
 }

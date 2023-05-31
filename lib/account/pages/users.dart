@@ -13,7 +13,14 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
+
+  const UsersPage({
+    required this.onBackPage,
+    required this.onChangePage,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -71,11 +78,7 @@ class _State extends State<UsersPage> {
       title: "Users",
       showBack: true,
       // backLink: '/account/',
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       showSearch: false,
       context: context,
       // onSearch: (p0) {},
@@ -87,11 +90,8 @@ class _State extends State<UsersPage> {
     return [
       ContextMenu(
         name: 'Add',
-        pressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ShopUserCreatePage(),
-          ),
-        ),
+        pressed: () => widget
+            .onChangePage(ShopUserCreatePage(onBackPage: widget.onBackPage)),
       ),
       ContextMenu(
         name: 'Reload',
@@ -142,7 +142,9 @@ class _State extends State<UsersPage> {
                   Navigator.of(context).maybePop().whenComplete(
                         () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ShopUserCreatePage(),
+                            builder: (context) => ShopUserCreatePage(
+                              onBackPage: widget.onBackPage,
+                            ),
                           ),
                         ),
                       );

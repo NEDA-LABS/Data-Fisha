@@ -124,52 +124,49 @@ class _State extends State<ResponsivePage> {
 
   _screenCheck(context) => hasEnoughWidth(context);
 
-  _getLargerView(_) => widget.onBody != null
-      ? widget.onBody!(null)
-      : Scaffold(body: _customScrollView(24));
+  _getLargerView(_) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: widget.onBody != null
+                ? widget.onBody!(null)
+                : Scaffold(body: _customScrollView(24)),
+          ),
+          widget.rightDrawer ?? const SizedBox(width: 0)
+        ],
+      );
 
-  // Row(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     widget.showLeftDrawer
-  //         ? StockDrawer(widget.menus, widget.current)
-  //         : Container(),
-  //     Expanded(
-  //         child: widget.onBody != null
-  //             ? widget.onBody!(null)
-  //             : ),
-  //     widget.rightDrawer ?? const SizedBox(width: 0)
-  //   ],
-  // );
+  // widget.onBody != null
+  // ? widget.onBody!(null)
+  // : Scaffold(body: _customScrollView(24));
 
   _getSmallView(_) {
-    var body = _customScrollView(100);
+    // var body = _customScrollView(100);
     // var drawer = StockDrawer(widget.menus, widget.current);
-    // var scaffold = Scaffold(
-    //   drawer: drawer,
-    //   floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    //   floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
-    //   body: _customScrollView(100),
-    //   bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
-    //       ? FutureBuilder(
-    //           builder: (context, snapshot) {
-    //             if (snapshot.connectionState == ConnectionState.waiting) {
-    //               return Container();
-    //             }
-    //             if (snapshot.hasData && snapshot.data != null) {
-    //               var m = widget.menus
-    //                   .where((element) => hasRbaAccess(
-    //                       snapshot.data, element.roles, element.link))
-    //                   .toList();
-    //               return getBottomBar(m, context);
-    //             }
-    //             return Container();
-    //           },
-    //           future: getLocalCurrentUser(),
-    //         )
-    //       : null,
-    // );
-    var view = widget.onBody != null ? widget.onBody!(null) : body;
-    return view;
+    var scaffold = Scaffold(
+      // drawer: drawer,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
+      body: _customScrollView(100),
+      // bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
+      //     ? FutureBuilder(
+      //         builder: (context, snapshot) {
+      //           if (snapshot.connectionState == ConnectionState.waiting) {
+      //             return Container();
+      //           }
+      //           if (snapshot.hasData && snapshot.data != null) {
+      //             var m = widget.menus
+      //                 .where((element) => hasRbaAccess(
+      //                     snapshot.data, element.roles, element.link))
+      //                 .toList();
+      //             return getBottomBar(m, context);
+      //           }
+      //           return Container();
+      //         },
+      //         future: getLocalCurrentUser(),
+      //       )
+      //     : null,
+    );
+    return widget.onBody != null ? widget.onBody!(null) : scaffold;
   }
 }

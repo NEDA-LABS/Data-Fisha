@@ -1,33 +1,12 @@
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
-import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
-
-navigateTo(String route) => Modular.to.navigate(route);
-
-IModularNavigator navigator() => Modular.to;
-
-navigateToAndReplace(String route) => Modular.to.pushReplacementNamed(route);
-
-T getState<T extends Object>() => Modular.get<T>();
-
-Widget consumerComponent<T extends ChangeNotifier>({
-  required Widget Function(BuildContext context, T? state) builder,
-}) =>
-    Consumer<T>(builder: builder);
-
-selectorComponent<T extends ChangeNotifier, D>({
-  required Function(T state) selector,
-  required Widget Function(BuildContext context, D? value) builder,
-}) =>
-    Selector<T, D>(builder: builder, selector: selector as D Function(T?));
 
 String shopDatabaseURL(App app) =>
     '$baseUrl/shop/${app.projectId}/${app.applicationId}/v2';
@@ -132,7 +111,6 @@ typedef OnGetModulesMenu = List<ModuleMenu> Function({
   required BuildContext context,
   required OnChangePage onChangePage,
   required OnBackPage onBackPage,
-  required OnChangeRightDrawer onChangeRightDrawer,
 });
 
-typedef OnDoneSelectShop =  Function(Map user);
+typedef OnDoneSelectShop = Function(Map user);

@@ -28,19 +28,19 @@ class SalesCashRetail extends StatelessWidget {
       onAddToCartView: _onPrepareSalesAddToCartView(context),
       onCustomerLikeList: getCustomerFromCacheOrRemote,
       onCustomerLikeAddWidget: () => const CreateCustomerContent(),
-      checkoutCompleteMessage: 'Checkout complete.',
+      checkoutCompleteMessage: 'Checkout completed.',
       onGetProductsLike: getStockFromCacheOrRemote,
     );
   }
 
   _onPrepareSalesAddToCartView(context) {
     return (product, onAddToCart) {
-      // return salesAddToCart(
-      //   onGetPrice: _getPrice,
-      //   cart: CartModel(product: product, quantity: 1),
-      //   onAddToCart: onAddToCart,
-      //   context: context,
-      // );
+      return salesAddToCart(
+        onGetPrice: _getPrice,
+        cart: CartModel(product: product, quantity: 1),
+        onAddToCart: onAddToCart,
+        context: context,
+      );
     };
   }
 

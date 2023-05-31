@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/RegisterForm.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class RegisterPage extends StatelessWidget {
-  final Function(Map user) onDoneSelectShop;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const RegisterPage({Key? key, required this.onDoneSelectShop})
+  const RegisterPage({Key? key, required this.onGetModulesMenu})
       : super(key: key);
 
   @override
@@ -19,9 +20,8 @@ class RegisterPage extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => LoginPage(
-                  onDoneSelectShop: onDoneSelectShop,
-                ),
+                builder: (context) =>
+                    LoginPage(onGetModulesMenu: onGetModulesMenu),
               ),
               (route) => false,
             );
@@ -31,7 +31,7 @@ class RegisterPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: RegisterForm(onDoneSelectShop: onDoneSelectShop),
+          child: RegisterForm(onGetModulesMenu: onGetModulesMenu),
         ),
       ),
     );

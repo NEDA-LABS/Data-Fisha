@@ -102,7 +102,7 @@ class _State extends State<SaleInvoiceRefundContent> {
     updateState({'loading': true});
     getActiveShop()
         .then((shop) => invoiceRefund(shop))
-        .then((value) => navigator().maybePop())
+        .then((value) => Navigator.of(context).maybePop())
         .catchError((onError) => updateState({'error': onError.toString()}))
         .whenComplete(() => updateState({'loading': false}));
   }

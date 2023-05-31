@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:builders/builders.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/plugins/sync.dart';
@@ -30,33 +28,46 @@ void callbackDispatcher() {
   });
 }
 
-startSmartStock({
-  required OnGetModulesMenu onGetModulesMenu,
-  required Map<String, Module Function(OnGetModulesMenu)> coreModules,
-  // required Map<String, FeatureModule Function(OnGetModulesMenu)> featureModules,
-}) {
+startSmartStock({required OnGetModulesMenu onGetModulesMenu}) {
   WidgetsFlutterBinding.ensureInitialized();
   periodicLocalDataSyncs(callbackDispatcher);
-  // Builders.systemInjector(Modular.get);
-  // var coreModule = SmartStockCoreModule(
-  //   onGetModulesMenu: onGetModulesMenu,
-  //   coreModules: coreModules,
-  // //   featureModules: featureModules,
-  // );
-  runApp(_mainWidget(onGetModulesMenu));
+  runApp(_MainWidget(onGetModulesMenu: onGetModulesMenu));
 }
 
-Widget _mainWidget(OnGetModulesMenu onGetModulesMenu) {
-  var lightTheme = ThemeData(
-      colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: true);
-  var darkTheme = ThemeData(
-      colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: true);
-  return MaterialApp(
-    // routeInformationParser: Modular.routeInformationParser,
-    // routerDelegate: Modular.routerDelegate,
-    debugShowCheckedModeBanner: kDebugMode,
-    theme: lightTheme,
-    darkTheme: darkTheme,
-    home: SmartStockApp(onGetModulesMenu: onGetModulesMenu),
-  );
+class _MainWidget extends StatefulWidget {
+  final OnGetModulesMenu onGetModulesMenu;
+
+  const _MainWidget({required this.onGetModulesMenu}) : super();
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<_MainWidget> {
+
+  @override
+  Widget build(BuildContext context) {
+    var lightTheme = ThemeData(
+        colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: true);
+    var darkTheme = ThemeData(
+        colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: true);
+    return MaterialApp(
+      debugShowCheckedModeBanner: kDebugMode,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      home: SmartStockApp(
+        onGetModulesMenu: widget.onGetModulesMenu,
+        // onDoneSelectShop: _onDoneSelectShop,
+      ),
+    );
+  }
+
+  // _onDoneSelectShop(Map user) {
+  //   print('---------');
+  //   setState(() {
+  //     if (mounted) {
+  //       appKey = UniqueKey();
+  //     }
+  //   });
+  // }
 }

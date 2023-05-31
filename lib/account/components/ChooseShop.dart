@@ -2,14 +2,15 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChooseShop extends StatefulWidget {
-  final OnDoneSelectShop onDoneSelectShop;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const ChooseShop({Key? key, required this.onDoneSelectShop})
+  const ChooseShop({Key? key, required this.onGetModulesMenu})
       : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class _State extends State<ChooseShop> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      // shrinkWrap: true,
+      shrinkWrap: true,
       children: [
         Container(
           padding: const EdgeInsets.all(16),
@@ -67,11 +68,14 @@ class _State extends State<ChooseShop> {
       return InkWell(
         onTap: () {
           ChooseShopState shopState = ChooseShopState();
-          shopState
-              .setCurrentShop(shop)
-              .then((value) => getLocalCurrentUser())
-              .then((user) {
-            widget.onDoneSelectShop(user is Map ? user : {});
+          shopState.setCurrentShop(shop).then((shop) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) =>
+                    SmartStockApp(onGetModulesMenu: widget.onGetModulesMenu),
+              ),
+              (route) => false,
+            );
           }).catchError((e) {
             if (kDebugMode) {
               print(e);
@@ -81,7 +85,6 @@ class _State extends State<ChooseShop> {
         hoverColor: Colors.transparent,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
                 height: 80,

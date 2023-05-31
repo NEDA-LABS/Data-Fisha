@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/StockDrawer.dart';
+import 'package:smartstock/core/components/AppDrawer.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -13,19 +13,19 @@ class ResponsivePageContainer extends StatefulWidget {
   final String office;
   final String current;
   final bool showLeftDrawer;
-  final Widget? rightDrawer;
   final List<ModuleMenu> menus;
   final Widget child;
-  final Function(Widget page) onChangePage;
+  final OnChangePage onChangePage;
+  final OnGetModulesMenu onGetModulesMenu;
 
   const ResponsivePageContainer({
     this.office = '',
     this.current = '/',
     this.showLeftDrawer = true,
-    this.rightDrawer,
     required this.menus,
     required this.child,
     required this.onChangePage,
+    required this.onGetModulesMenu,
     Key? key,
   }) : super(key: key);
 
@@ -57,47 +57,79 @@ class _State extends State<ResponsivePageContainer> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.showLeftDrawer
-            ? StockDrawer(
-                widget.menus,
-                widget.current,
+            ? AppDrawer(
+                onGetModulesMenu: widget.onGetModulesMenu,
+                menus: widget.menus,
+                current: widget.current,
                 onChangePage: widget.onChangePage,
               )
             : Container(),
-        Expanded(child: widget.child),
-        widget.rightDrawer ?? const SizedBox(width: 0)
+        Expanded(child: widget.child)
       ],
     );
   }
 
   _getSmallView(_) {
-    var drawer = StockDrawer(
-      widget.menus,
-      widget.current,
-      onChangePage: widget.onChangePage,
+    // var drawer = AppDrawer(
+    //   onGetModulesMenu: widget.onGetModulesMenu,
+    //   menus: widget.menus,
+    //   current: widget.current,
+    //   onChangePage: widget.onChangePage,
+    // );
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          Expanded(child: widget.child),
+          widget.menus.isNotEmpty
+              ? FutureBuilder(
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    }
+                    if (snapshot.hasData && snapshot.data != null) {
+                      var menu = widget.menus
+                          .where((element) => hasRbaAccess(
+                              snapshot.data, element.roles, element.link))
+                          .toList();
+                      return AppBottomBar(
+                        menus: menu,
+                        onChangePage: widget.onChangePage,
+                        onGetModulesMenu: widget.onGetModulesMenu,
+                      );
+                    }
+                    return Container();
+                  },
+                  future: getLocalCurrentUser(),
+                )
+              : Container()
+        ],
+      ),
     );
-    return Scaffold(
-      drawer: drawer,
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
-      body: widget.child,
-      bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
-          ? FutureBuilder(
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
-                }
-                if (snapshot.hasData && snapshot.data != null) {
-                  var m = widget.menus
-                      .where((element) => hasRbaAccess(
-                          snapshot.data, element.roles, element.link))
-                      .toList();
-                  return getBottomBar(m, context, onChangePage: widget.onChangePage);
-                }
-                return Container();
-              },
-              future: getLocalCurrentUser(),
-            )
-          : null,
-    );
+    // return Scaffold(
+    //   // drawer: drawer,
+    //   // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    //   // floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
+    //   body: widget.child,
+    //   bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
+    //       ? FutureBuilder(
+    //           builder: (context, snapshot) {
+    //             if (snapshot.connectionState == ConnectionState.waiting) {
+    //               return Container();
+    //             }
+    //             if (snapshot.hasData && snapshot.data != null) {
+    //               var m = widget.menus
+    //                   .where((element) => hasRbaAccess(
+    //                       snapshot.data, element.roles, element.link))
+    //                   .toList();
+    //               return getBottomBar(m, context,
+    //                   onChangePage: widget.onChangePage);
+    //             }
+    //             return Container();
+    //           },
+    //           future: getLocalCurrentUser(),
+    //         )
+    //       : null,
+    // );
   }
 }

@@ -49,7 +49,7 @@ class _State extends State<DeleteDialog> {
                             });
                             widget
                                 .onConfirm()
-                                .then((value) => navigator().maybePop())
+                                .then((value) => Navigator.of(context).maybePop())
                                 .catchError((err) {
                               setState(() {
                                 error = '$err';

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -14,7 +13,14 @@ import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
 class StocksIndexPage extends StatelessWidget {
-  const StocksIndexPage({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
+
+  const StocksIndexPage({
+    Key? key,
+    required this.onChangePage,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   Widget build(context) {
@@ -30,16 +36,15 @@ class StocksIndexPage extends StatelessWidget {
       staticChildren: [
         const SwitchToTitle(),
         SwitchToPageMenu(pages: _pages(context)),
-        StocksSummary()
+        StocksSummary(
+          onBackPage: onBackPage,
+          onChangePage: onChangePage,
+        )
       ],
     );
   }
 
   List<ModulePageMenu> _pages(BuildContext context) {
-    pageNav(Widget page) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
-    }
-
     return [
       ModulePageMenu(
         name: 'Inventories',
@@ -47,7 +52,12 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.sell,
         svgName: 'product_icon.svg',
-        onClick: () => pageNav(ProductsPage()),
+        onClick: () => onChangePage(
+          ProductsPage(
+            onBackPage: onBackPage,
+            onChangePage: onChangePage,
+          ),
+        ),
       ),
       ModulePageMenu(
         name: 'Categories',
@@ -55,7 +65,11 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.category,
         svgName: 'category_icon.svg',
-        onClick: () => pageNav(CategoriesPage()),
+        onClick: () => onChangePage(
+          CategoriesPage(
+            onBackPage: onBackPage,
+          ),
+        ),
       ),
       ModulePageMenu(
         name: 'Suppliers',
@@ -63,7 +77,11 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.support_agent_sharp,
         svgName: 'supplier_icon.svg',
-        onClick: () => pageNav(SuppliersPage()),
+        onClick: () => onChangePage(
+          SuppliersPage(
+            onBackPage: onBackPage,
+          ),
+        ),
       ),
       ModulePageMenu(
         name: 'Purchases',
@@ -71,7 +89,12 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.receipt,
         svgName: 'invoice_icon.svg',
-        onClick: () => pageNav(PurchasesPage()),
+        onClick: () => onChangePage(
+          PurchasesPage(
+            onBackPage: onBackPage,
+            onChangePage: onChangePage,
+          ),
+        ),
       ),
       ModulePageMenu(
         name: 'Transfer',
@@ -79,7 +102,12 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.change_circle,
         svgName: 'transfer_icon.svg',
-        onClick: () => pageNav(TransfersPage()),
+        onClick: () => onChangePage(
+          TransfersPage(
+            onBackPage: onBackPage,
+            onChangePage: onChangePage,
+          ),
+        ),
       ),
     ];
   }

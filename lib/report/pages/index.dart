@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
 import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/report/pages/sales_category_performance.dart';
@@ -11,9 +12,14 @@ import 'package:smartstock/report/pages/sales_product_performance.dart';
 import 'package:smartstock/report/pages/sales_seller_performance.dart';
 
 class ReportIndexPage extends StatelessWidget {
+  final OnChangePage onChangePage;
+  final OnBackPage onBackPage;
 
-  const ReportIndexPage({Key? key})
-      : super(key: key);
+  const ReportIndexPage({
+    required this.onBackPage,
+    required this.onChangePage,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(context) {
@@ -30,10 +36,6 @@ class ReportIndexPage extends StatelessWidget {
   }
 
   List<ModulePageMenu> _pages(BuildContext context) {
-    pageNav(Widget page) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
-    }
-
     return [
       ModulePageMenu(
         name: 'Cash overview',
@@ -41,7 +43,7 @@ class ReportIndexPage extends StatelessWidget {
         svgName: 'product_icon.svg',
         icon: Icons.money,
         roles: [],
-        onClick: () => pageNav(OverviewCashSales()),
+        onClick: () => onChangePage(OverviewCashSales(onBackPage: onBackPage)),
       ),
       ModulePageMenu(
         name: 'Invoices overview',
@@ -49,7 +51,8 @@ class ReportIndexPage extends StatelessWidget {
         icon: Icons.receipt,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => pageNav(OverviewInvoiceSales()),
+        onClick: () =>
+            onChangePage(OverviewInvoiceSales(onBackPage: onBackPage)),
       ),
       ModulePageMenu(
         name: 'Sales tracking',
@@ -57,7 +60,8 @@ class ReportIndexPage extends StatelessWidget {
         svgName: 'product_icon.svg',
         icon: Icons.receipt_long,
         roles: [],
-        onClick: () => pageNav(SalesCashTrackingPage()),
+        onClick: () =>
+            onChangePage(SalesCashTrackingPage(onBackPage: onBackPage)),
       ),
       ModulePageMenu(
         name: 'Product performance',
@@ -65,7 +69,7 @@ class ReportIndexPage extends StatelessWidget {
         svgName: 'product_icon.svg',
         icon: Icons.trending_up,
         roles: [],
-        onClick: () => pageNav(ProductPerformance()),
+        onClick: () => onChangePage(ProductPerformance(onBackPage: onBackPage)),
       ),
       ModulePageMenu(
         name: 'Seller performance',
@@ -73,7 +77,7 @@ class ReportIndexPage extends StatelessWidget {
         svgName: 'product_icon.svg',
         icon: Icons.supervisor_account_outlined,
         roles: [],
-        onClick: () => pageNav( SellerPerformance()),
+        onClick: () => onChangePage(SellerPerformance(onBackPage: onBackPage)),
       ),
       ModulePageMenu(
         name: 'Category overview',
@@ -81,7 +85,8 @@ class ReportIndexPage extends StatelessWidget {
         icon: Icons.category,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => pageNav(CategoryPerformance()),
+        onClick: () =>
+            onChangePage(CategoryPerformance(onBackPage: onBackPage)),
       ),
     ];
   }
