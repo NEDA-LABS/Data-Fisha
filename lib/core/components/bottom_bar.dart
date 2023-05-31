@@ -60,9 +60,8 @@ class _State extends State<AppBottomBar> {
             builder: (context) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: ListView(
+                  // shrinkWrap: true,
                   children: [
                     ...widget.menus
                         .map(

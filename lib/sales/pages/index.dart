@@ -85,9 +85,11 @@ class _State extends State<SalesPage> {
         print(onError);
       }
     }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if(mounted){
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
