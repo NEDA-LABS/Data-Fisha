@@ -2,17 +2,17 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/numberCard.dart';
-import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
+import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/services/index.dart';
@@ -85,7 +85,7 @@ class _State extends State<SalesPage> {
         print(onError);
       }
     }).whenComplete(() {
-      if(mounted){
+      if (mounted) {
         setState(() {
           loading = false;
         });
