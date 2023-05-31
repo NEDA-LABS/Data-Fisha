@@ -47,10 +47,6 @@ class ProfileIndexPage extends StatelessWidget {
   }
 
   List<ModulePageMenu> _pagesMenu(BuildContext context) {
-    pageNav(Widget page) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
-    }
-
     return [
       ModulePageMenu(
         name: 'Profile',

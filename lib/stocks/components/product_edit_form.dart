@@ -14,8 +14,13 @@ import 'package:smartstock/stocks/services/supplier.dart';
 
 class ProductUpdateForm extends StatefulWidget {
   final Map product;
+  final OnBackPage onBackPage;
 
-  const ProductUpdateForm(this.product, {Key? key}) : super(key: key);
+  const ProductUpdateForm(
+    this.product, {
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -44,6 +49,7 @@ class _State extends State<ProductUpdateForm> {
       "category": widget.product['category'],
       "purchase": widget.product['purchase'],
       "retailPrice": widget.product['retailPrice'],
+      "wholesalePrice": widget.product['wholesalePrice'],
       "expire": widget.product['expire'] ?? '',
       "id": widget.product['id'],
     });
@@ -97,10 +103,18 @@ class _State extends State<ProductUpdateForm> {
         ),
         TextInput(
           onText: (d) => updateFormState({"retailPrice": d}),
-          label: "Sale price / Unit quantity",
+          label: "Retail price / Unit quantity",
           placeholder: "",
           error: error['retailPrice'] ?? '',
           initialText: '${product['retailPrice'] ?? ''}',
+          type: TextInputType.number,
+        ),
+        TextInput(
+          onText: (d) => updateFormState({"wholesalePrice": d}),
+          label: "Wholesale price / Unit quantity",
+          placeholder: "",
+          error: error['wholesalePrice'] ?? '',
+          initialText: '${product['wholesalePrice'] ?? ''}',
           type: TextInputType.number,
         ),
         TextInput(
@@ -131,8 +145,9 @@ class _State extends State<ProductUpdateForm> {
       error = {};
       loading = true;
     });
+    print(product);
     createOrUpdateProduct(context, error, loading, true, product).then((value) {
-      Navigator.of(context).maybePop();
+      widget.onBackPage();
     }).catchError((error) {
       showDialog(
         context: context,

@@ -9,14 +9,6 @@ import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 
-// _onNavigate(BuildContext context, Widget page, String routeId) {
-//   Navigator.of(context).pushAndRemoveUntil(
-//     MaterialPageRoute(
-//         builder: (context) => page, settings: RouteSettings(name: routeId)),
-//     (route) => route.settings.name != routeId,
-//   );
-// }
-
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
   required OnChangePage onChangePage,

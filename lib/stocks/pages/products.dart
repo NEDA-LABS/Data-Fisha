@@ -252,8 +252,14 @@ class _State extends State<ProductsPage> {
     }
   }
 
-  _productItemClicked(item) =>
-      showDialogOrModalSheet(ProductDetail(item: item), context);
+  _productItemClicked(item) => showDialogOrModalSheet(
+        ProductDetail(
+          item: item,
+          onChangePage: widget.onChangePage,
+          onBackPage: widget.onBackPage,
+        ),
+        context,
+      );
 
   _outStyle() => TextStyle(
       color: criticalColor, fontWeight: FontWeight.w400, fontSize: 14);

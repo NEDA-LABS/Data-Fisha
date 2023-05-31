@@ -17,10 +17,12 @@ import 'package:smartstock/stocks/services/supplier.dart';
 
 class ProductCreateForm extends StatefulWidget {
   final InventoryType inventoryType;
+  final OnBackPage onBackPage;
 
   const ProductCreateForm({
     Key? key,
     required this.inventoryType,
+    required this.onBackPage,
   }) : super(key: key);
 
   @override
@@ -107,21 +109,23 @@ class _State extends State<ProductCreateForm> {
         widget.inventoryType == InventoryType.product
             ? TextInput(
                 onText: (d) => updateFormState({"retailPrice": d}),
-                label: "Sale price / Unit quantity",
+                label: "Retail price / Unit quantity",
                 placeholder: "",
                 error: error['retailPrice'] ?? '',
                 initialText: '${product['retailPrice'] ?? ''}',
                 type: TextInputType.number,
               )
             : Container(),
-        // TextInput(
-        //   onText: (d) => updateFormState({"wholesalePrice": d}),
-        //   label: "Wholesale price / Unit price",
-        //   placeholder: "",
-        //   error: error['wholesalePrice'] ?? '',
-        //   initialText: '${product['wholesalePrice'] ?? ''}',
-        //   type: TextInputType.number,
-        // ),
+        widget.inventoryType == InventoryType.product
+            ? TextInput(
+                onText: (d) => updateFormState({"wholesalePrice": d}),
+                label: "Wholesale price / Unit price",
+                placeholder: "",
+                error: error['wholesalePrice'] ?? '',
+                initialText: '${product['wholesalePrice'] ?? ''}',
+                type: TextInputType.number,
+              )
+            : Container(),
         TextInput(
           onText: (d) => updateFormState({"quantity": d}),
           label: "Quantity",
@@ -168,9 +172,9 @@ class _State extends State<ProductCreateForm> {
       'retailPrice': widget.inventoryType == InventoryType.rawMaterial
           ? '0'
           : product['retailPrice'],
-      'wholesalePrice': product['retailPrice'] ?? '0'
+      'wholesalePrice': product['wholesalePrice'] ?? '0'
     }).then((value) {
-      Navigator.of(context).maybePop();
+      widget.onBackPage();
     }).catchError((error) {
       showDialog(
         context: context,

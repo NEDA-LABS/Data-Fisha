@@ -140,14 +140,12 @@ class _State extends State<UsersPage> {
                 title: const Text('Create user'),
                 onTap: () {
                   Navigator.of(context).maybePop().whenComplete(
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ShopUserCreatePage(
-                              onBackPage: widget.onBackPage,
-                            ),
-                          ),
-                        ),
+                    () {
+                      widget.onChangePage(
+                        ShopUserCreatePage(onBackPage: widget.onBackPage),
                       );
+                    },
+                  );
                 },
               ),
               const HorizontalLine(),

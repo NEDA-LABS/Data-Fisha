@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/HeadineLarge.dart';
-import 'package:smartstock/core/components/HeadineMedium.dart';
 import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
@@ -15,8 +13,15 @@ import 'package:smartstock/stocks/services/product.dart';
 
 class ProductDetail extends StatelessWidget {
   final Map item;
+  final OnChangePage onChangePage;
+  final OnBackPage onBackPage;
 
-  const ProductDetail({Key? key, required this.item}) : super(key: key);
+  const ProductDetail({
+    Key? key,
+    required this.item,
+    required this.onChangePage,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +44,7 @@ class ProductDetail extends StatelessWidget {
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then((v) {
-                        return nav.push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProductEditPage(item);
-                            },
-                          ),
-                        );
+                        onChangePage(ProductEditPage(item, onBackPage: onBackPage));
                       });
                     },
                     title: 'Edit details',

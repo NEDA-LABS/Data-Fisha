@@ -17,7 +17,9 @@ class ProductCreatePage extends StatelessWidget {
 
   _appBar(context) {
     return getSliverSmartStockAppBar(
-      title: inventoryType == InventoryType.product?"Add product":'Add raw material',
+      title: inventoryType == InventoryType.product
+          ? "Add product"
+          : 'Add raw material',
       showBack: true,
       backLink: '/stock/products',
       onBack: onBackPage,
@@ -34,7 +36,8 @@ class ProductCreatePage extends StatelessWidget {
           Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 600),
-              child: ProductCreateForm(inventoryType: inventoryType),
+              child: ProductCreateForm(
+                  inventoryType: inventoryType, onBackPage: onBackPage),
             ),
           )
         ],
