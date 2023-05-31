@@ -17,14 +17,9 @@ shopUserDetail(Map item, context) => Padding(
       SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: [
-            // outlineActionButton(
-            //     onPressed: () => navigator().maybePop().whenComplete(() =>
-            //         navigator()
-            //             .pushNamed('/account/products/edit', arguments: item)),
-            //     title: 'Edit details'),
             outlineActionButton(
               onPressed: () {
-                navigator().maybePop().whenComplete(
+                Navigator.of(context).maybePop().whenComplete(
                   () {
                     return showDialog(
                       context: context,
@@ -45,14 +40,9 @@ shopUserDetail(Map item, context) => Padding(
               },
               title: 'Update password',
             ),
-            // outlineActionButton(
-            //     onPressed: () => navigator().maybePop().whenComplete(() =>
-            //         showDialogOrModalSheet(
-            //             ProductMovementDetails(item: item), context)),
-            //     title: 'Track movement'),
             outlineActionButton(
                 onPressed: () {
-                  navigator().maybePop().whenComplete(() {
+                  Navigator.of(context).maybePop().whenComplete(() {
                     showDialog(
                         context: context,
                         builder: (_) => DeleteDialog(

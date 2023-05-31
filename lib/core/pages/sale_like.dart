@@ -1,10 +1,10 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/cart_drawer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -26,7 +26,6 @@ class SaleLikePage extends StatefulWidget {
   final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
   final bool showDiscountView;
   final Function()? onBack;
-  final OnGetModulesMenu onGetModulesMenu;
 
   const SaleLikePage({
     required this.title,
@@ -44,7 +43,6 @@ class SaleLikePage extends StatefulWidget {
     this.showCustomerLike = true,
     this.showDiscountView = true,
     required this.onGetProductsLike,
-    required this.onGetModulesMenu,
     Key? key,
   }) : super(key: key);
 
@@ -73,21 +71,25 @@ class _State extends State<SaleLikePage> {
   @override
   Widget build(var context) {
     return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
       office: 'Menu',
       current: widget.backLink,
       rightDrawer: _hasCarts(states)
           ? SizedBox(
               width: 350,
               child: _cartDrawer(
-                  states, updateState, context, widget.wholesale, (a) {}))
+                states,
+                updateState,
+                context,
+                widget.wholesale,
+                (a) {},
+              ),
+            )
           : null,
-      sliverAppBar: null,//states['hab'] == true ? null : _appBar(updateState),
+      sliverAppBar: null,
+      //states['hab'] == true ? null : _appBar(updateState),
       onBody: (drawer) => NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              states['hab'] == true ? Container() : _appBar(updateState)
-            ];
+            return [states['hab'] == true ? Container() : _appBar(updateState)];
           },
           body: Scaffold(
             floatingActionButton: _fab(states, updateState),
@@ -104,7 +106,7 @@ class _State extends State<SaleLikePage> {
   _onAddToCart(states, updateState) => (cart) {
         var carts = appendToCarts(cart, _getCarts(states));
         updateState({"carts": carts, 'query': ''});
-        navigator().maybePop();
+        Navigator.of(context).maybePop();
       };
 
   _onShowCheckoutSheet(states, updateState, context) {
@@ -191,28 +193,29 @@ class _State extends State<SaleLikePage> {
         var carts = states['carts'];
         return widget.onSubmitCart(carts, customer, discount).then((value) {
           updateState({'carts': [], 'customer': ''});
-          navigator().maybePop().whenComplete(() {
-            showDialog(
-              context: context,
-              builder: (c) => AlertDialog(
-                title: const Text(
-                  'Info',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                ),
-                content: Text(widget.checkoutCompleteMessage),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.of(context).maybePop(),
-                      child: const Text(
-                        'Close',
-                        style: TextStyle(fontSize: 12),
-                      ))
-                ],
-              ),
-            );
+          Navigator.of(context).maybePop().whenComplete(() {
+            showInfoDialog(context, widget.checkoutCompleteMessage);
+            // showDialog(
+            //   context: context,
+            //   builder: (c) => AlertDialog(
+            //     title: const Text(
+            //       'Info',
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w500,
+            //         fontSize: 16,
+            //       ),
+            //     ),
+            //     content: Text(widget.checkoutCompleteMessage),
+            //     actions: [
+            //       TextButton(
+            //           onPressed: () => Navigator.of(context).maybePop(),
+            //           child: const Text(
+            //             'Close',
+            //             style: TextStyle(fontSize: 12),
+            //           ))
+            //     ],
+            //   ),
+            // );
           });
         }).catchError(_showCheckoutError(context));
         // onCheckout
@@ -236,28 +239,5 @@ class _State extends State<SaleLikePage> {
   _prepareAddCartQuantity(states, updateState) => (String id, dynamic q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
-  _showCheckoutError(context) => (error) {
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Container(
-                constraints:
-                    const BoxConstraints(maxWidth: 200, maxHeight: 100),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text('Error',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400)),
-                    Expanded(
-                        child: SingleChildScrollView(child: Text('$error'))),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      };
+  _showCheckoutError(context) => (error) => showInfoDialog(context, error);
 }

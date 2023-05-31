@@ -101,7 +101,7 @@ class _State extends State<CreateSupplierContent> {
       // var productFormState = getState<ProductCreateState>();
       // productFormState.product['supplier'] = supplier['name'];
       // productFormState.refresh();
-      navigator().maybePop();
+      Navigator.of(context).maybePop();
     }).catchError((err) {
       requestError = '$err, Please try again';
     }).whenComplete(() {

@@ -1,11 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/StockDrawer.dart';
-import 'package:smartstock/core/components/bottom_bar.dart';
-import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
 const _emptyList = <Widget>[];
@@ -19,7 +14,8 @@ class ResponsivePage extends StatefulWidget {
   final String current;
   final bool showLeftDrawer;
   final Widget? rightDrawer;
-  final List<MenuModel> menus;
+
+  // final List<ModuleMenu> menus;
   final Widget Function(Drawer? drawer)? onBody;
   final SliverAppBar? sliverAppBar;
   final FloatingActionButton? fab;
@@ -36,7 +32,7 @@ class ResponsivePage extends StatefulWidget {
     this.current = '/',
     this.showLeftDrawer = true,
     this.rightDrawer,
-    required this.menus,
+    // required this.menus,
     this.onBody,
     required this.sliverAppBar,
     this.staticChildren = _emptyList,
@@ -131,46 +127,46 @@ class _State extends State<ResponsivePage> {
   _getLargerView(_) => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          widget.showLeftDrawer
-              ? StockDrawer(widget.menus, widget.current)
-              : Container(),
           Expanded(
-              child: widget.onBody != null
-                  ? widget.onBody!(null)
-                  : Scaffold(body: _customScrollView(24))),
+            child: widget.onBody != null
+                ? widget.onBody!(null)
+                : Scaffold(body: _customScrollView(24)),
+          ),
           widget.rightDrawer ?? const SizedBox(width: 0)
         ],
       );
 
+  // widget.onBody != null
+  // ? widget.onBody!(null)
+  // : Scaffold(body: _customScrollView(24));
+
   _getSmallView(_) {
-    var drawer = StockDrawer(widget.menus, widget.current);
+    // var body = _customScrollView(100);
+    // var drawer = StockDrawer(widget.menus, widget.current);
     var scaffold = Scaffold(
-      drawer: drawer,
+      // drawer: drawer,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
       body: _customScrollView(100),
-      bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
-          ? FutureBuilder(
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
-                }
-                if (snapshot.hasData && snapshot.data != null) {
-                  var m = widget.menus
-                      .where((element) => hasRbaAccess(
-                          snapshot.data, element.roles, element.link))
-                      .toList();
-                  return getBottomBar(m, context);
-                }
-                return Container();
-              },
-              future: getLocalCurrentUser(),
-            )
-          : null,
+      // bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
+      //     ? FutureBuilder(
+      //         builder: (context, snapshot) {
+      //           if (snapshot.connectionState == ConnectionState.waiting) {
+      //             return Container();
+      //           }
+      //           if (snapshot.hasData && snapshot.data != null) {
+      //             var m = widget.menus
+      //                 .where((element) => hasRbaAccess(
+      //                     snapshot.data, element.roles, element.link))
+      //                 .toList();
+      //             return getBottomBar(m, context);
+      //           }
+      //           return Container();
+      //         },
+      //         future: getLocalCurrentUser(),
+      //       )
+      //     : null,
     );
-    var view = widget.onBody != null
-        ? widget.onBody!(StockDrawer(widget.menus, widget.current))
-        : scaffold;
-    return view;
+    return widget.onBody != null ? widget.onBody!(null) : scaffold;
   }
 }

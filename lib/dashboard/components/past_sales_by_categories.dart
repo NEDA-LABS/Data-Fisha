@@ -54,9 +54,11 @@ class _State extends State<PastSalesByCategory> {
     }).catchError((err) {
       error = '$err';
     }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if(mounted){
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 

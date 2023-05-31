@@ -35,9 +35,11 @@ SliverAppBar getSliverSmartStockAppBar(
     leading: showBack
         ? IconButton(
             icon: const Icon(Icons.chevron_left),
-            onPressed: () => onBack != null ? onBack() : navigateTo(backLink))
+            onPressed: () =>
+                onBack != null ? onBack() : Navigator.of(context).maybePop(),
+          )
         : null,
-    actions: getAppBarActions(context),
+    // actions: getAppBarActions(context,),
     pinned: true,
     snap: true,
     floating: true,

@@ -47,7 +47,7 @@ invoiceDetails(context, item) => ListView(
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
           child: OutlinedButton(
             onPressed: () {
-              navigator().maybePop().whenComplete(() {
+              Navigator.of(context).maybePop().whenComplete(() {
                 showDialog(
                     context: context,
                     builder: (_) =>

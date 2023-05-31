@@ -92,7 +92,7 @@ class _State extends State<CreateCategoryContent> {
       // var productFormState = getState<ProductCreateState>();
       // productFormState.product['category'] = category['name'];
       // productFormState.refresh();
-      navigator().maybePop();
+      Navigator.of(context).maybePop();
     }).catchError((err) {
       requestError = '$err, Please try again';
     }).whenComplete(() {

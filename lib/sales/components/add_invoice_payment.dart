@@ -83,7 +83,7 @@ class _State extends State<AddInvoicePaymentContent> {
     getActiveShop().then((shop) {
       updateState({'loading': true});
       patchInvoice(shop)
-          .then((value) => navigator().maybePop())
+          .then((value) => Navigator.of(context).maybePop())
           .catchError((onError) => updateState({'error': onError.toString()}))
           .whenComplete(() => updateState({'loading': false}));
     });

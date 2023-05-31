@@ -80,7 +80,6 @@ _onSubmitSale(List carts, String customer, discount, wholesale) async {
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
-  await _printSaleItems(carts, discount, customer, wholesale, cartId);
   var sales = await _carts2Sales(carts, discount, wholesale, customer, cartId);
   var offlineFirst = await isOfflineFirstEnv();
   if (offlineFirst == true) {
@@ -88,8 +87,10 @@ _onSubmitSale(List carts, String customer, discount, wholesale) async {
     oneTimeLocalSyncs();
   } else {
     var saveSales = preparePostRequest(sales);
-    return saveSales(url);
+    await saveSales(url);
   }
+  _printSaleItems(carts, discount, customer, wholesale, cartId)
+      .catchError((e) {});
 }
 
 Future onSubmitRetailSale(List carts, String customer, discount) async {
@@ -97,7 +98,9 @@ Future onSubmitRetailSale(List carts, String customer, discount) async {
 }
 
 Future onSubmitWholeSale(List carts, String customer, discount) async {
-  if (customer.isEmpty) throw "Customer required";
+  if (customer.isEmpty) {
+    throw "Please select customer, at the top right of the cart.";
+  }
   return _onSubmitSale(carts, customer, discount, true);
 }
 

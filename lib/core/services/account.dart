@@ -1,4 +1,7 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:smartstock/app.dart';
 import 'package:smartstock/core/services/api_account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -34,45 +37,27 @@ Future accountResetPassword(username) async {
   }
 }
 
-logOut() {
-  removeActiveShop().then((value) {
-    return removeLocalCurrentUser();
+logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu) {
+  removeLocalCurrentUser().then((value) {
+    return removeActiveShop();
   }).then((value) {
-    navigateToAndReplace('/account/login');
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => SmartStockApp(onGetModulesMenu: onGetModulesMenu),
+      ),
+      (route) => false,
+    );
   });
 }
 
 Future<List> getUserShops() async {
   var user = await getLocalCurrentUser();
   var getShops = compose([
-    (shops) {
-      user['shops'] = [];
-      shops.add(user);
-      return shops;
-    },
-    propertyOr('shops', (p0) => []),
+    itOrEmptyArray,
+    propertyOrNull('shops'),
   ]);
   return getShops(user);
 }
-
-// Future getAllCurrentUserShops() async {
-//   var user = await getLocalCurrentUser();
-//   var shops = _getUserShops(user);
-//   // user['shops'].forEach((element) {
-//   //   shops.add(element);
-//   // });
-//   shops.add({
-//     "businessName": user['businessName'],
-//     "projectId": user['projectId'],
-//     "applicationId": user['applicationId'],
-//     "projectUrlId": user['projectUrlId'],
-//     "settings": user['settings'],
-//     "street": user['street'],
-//     "country": user['country'],
-//     "region": user['region']
-//   });
-//   return shops;
-// }
 
 Future shopName2Shop(name) async {
   var shops = await getUserShops();

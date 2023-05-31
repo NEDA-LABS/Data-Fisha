@@ -15,9 +15,8 @@ import 'package:smartstock/stocks/services/product.dart';
 
 class ProductDetail extends StatelessWidget {
   final Map item;
-  final OnGetModulesMenu onGetModulesMenu;
 
-  const ProductDetail({Key? key, required this.item, required this.onGetModulesMenu}) : super(key: key);
+  const ProductDetail({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class ProductDetail extends StatelessWidget {
                         return nav.push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return ProductEditPage(item, onGetModulesMenu: onGetModulesMenu,);
+                              return ProductEditPage(item);
                             },
                           ),
                         );

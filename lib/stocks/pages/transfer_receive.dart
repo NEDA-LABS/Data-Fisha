@@ -8,29 +8,38 @@ import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
 import 'package:smartstock/stocks/components/transfer_add_shop_content.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
-transferReceivePage(BuildContext context,{required OnGetModulesMenu onGetModulesMenu}) => SaleLikePage(
-      wholesale: false,
-      showDiscountView: false,
-      title: 'Receive transfer',
-      backLink: '/stock/transfers',
-      customerLikeLabel: 'Transferred from?',
-      onSubmitCart: prepareOnSubmitTransfer(context, 'receive'),
-      onGetPrice: _onGetPrice,
-      onBack: () {
-        Navigator.of(context).maybePop();
-      },
-      onAddToCartView: _onPrepareSalesAddToCartView(context, false),
-      onCustomerLikeList: getOtherShopsNames,
-      onCustomerLikeAddWidget: transferAddShopContent,
-      checkoutCompleteMessage: 'Transfer complete.',
-      onGetProductsLike: getStockFromCacheOrRemote, onGetModulesMenu: onGetModulesMenu,
-    );
-
 var _onGetPrice = compose([doubleOrZero, propertyOr('purchase', (p0) => 0)]);
 
-_onPrepareSalesAddToCartView(context, _) =>
-    (product, onAddToCart) => addPurchaseToCartView(
+class TransferReceivePage extends StatelessWidget {
+  final OnBackPage onBackPage;
+
+  const TransferReceivePage({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SaleLikePage(
+        wholesale: false,
+        showDiscountView: false,
+        title: 'Receive transfer',
+        backLink: '/stock/transfers',
+        customerLikeLabel: 'Transferred from?',
+        onSubmitCart: prepareOnSubmitTransfer(context, 'receive'),
         onGetPrice: _onGetPrice,
-        cart: CartModel(product: product, quantity: 1),
-        onAddToCart: onAddToCart,
-        context: context);
+        onBack: onBackPage,
+        onAddToCartView: _onPrepareSalesAddToCartView(context, false),
+        onCustomerLikeList: getOtherShopsNames,
+        onCustomerLikeAddWidget: transferAddShopContent,
+        checkoutCompleteMessage: 'Transfer complete.',
+        onGetProductsLike: getStockFromCacheOrRemote);
+  }
+
+  _onPrepareSalesAddToCartView(context, _) =>
+      (product, onAddToCart) => addPurchaseToCartView(
+          onGetPrice: _onGetPrice,
+          cart: CartModel(product: product, quantity: 1),
+          onAddToCart: onAddToCart,
+          context: context);
+}

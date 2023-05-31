@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/DisplayTextMedium.dart';
+import 'package:smartstock/core/components/DisplayTextSmall.dart';
+import 'package:smartstock/core/components/HeadineSmall.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/services/util.dart';
 
-showInfoDialog(context, err, {title = 'Info'}) {
+showInfoDialog(context, message, {title = 'Info'}) {
   return showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text(title),
-        content: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: Text('$err'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.info, color: Theme.of(context).colorScheme.error),
+            const WhiteSpacer(width: 8),
+            BodyLarge(text: title)
+          ],
         ),
-        actions: [
-          outlineActionButton(
-              title: 'Ok',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Center(child: BodyMedium(text: '$message')),
+            ),
+            const WhiteSpacer(height: 16),
+            outlineActionButton(
+              title: 'Close',
               onPressed: () {
-                navigator().maybePop();
-              })
-        ],
+                Navigator.of(context).maybePop();
+              },
+            )
+          ],
+        ),
       );
     },
   );

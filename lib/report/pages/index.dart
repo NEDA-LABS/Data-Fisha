@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
 import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/report/pages/sales_category_performance.dart';
@@ -11,17 +12,20 @@ import 'package:smartstock/report/pages/sales_product_performance.dart';
 import 'package:smartstock/report/pages/sales_seller_performance.dart';
 
 class ReportIndexPage extends StatelessWidget {
-  final List<MenuModel> Function(BuildContext context) onGetModulesMenu;
+  final OnChangePage onChangePage;
+  final OnBackPage onBackPage;
 
-  const ReportIndexPage({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const ReportIndexPage({
+    required this.onBackPage,
+    required this.onChangePage,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: onGetModulesMenu(context),
       sliverAppBar: getSliverSmartStockAppBar(
         title: "Report",
         showBack: false,
@@ -31,59 +35,58 @@ class ReportIndexPage extends StatelessWidget {
     );
   }
 
-  List<SubMenuModule> _pages(BuildContext context) {
-    pageNav(Widget page) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
-    }
-
+  List<ModulePageMenu> _pages(BuildContext context) {
     return [
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Cash overview',
         link: '/report/sales/overview/cash',
         svgName: 'product_icon.svg',
         icon: Icons.money,
         roles: [],
-        onClick: () => pageNav(OverviewCashSales(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => onChangePage(OverviewCashSales(onBackPage: onBackPage)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Invoices overview',
         link: '/report/sales/overview/invoice',
         icon: Icons.receipt,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => pageNav(OverviewInvoiceSales(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () =>
+            onChangePage(OverviewInvoiceSales(onBackPage: onBackPage)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Sales tracking',
         link: '/report/sales/track/cash',
         svgName: 'product_icon.svg',
         icon: Icons.receipt_long,
         roles: [],
-        onClick: () => pageNav(SalesCashTrackingPage(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () =>
+            onChangePage(SalesCashTrackingPage(onBackPage: onBackPage)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Product performance',
         link: '/report/sales/performance/product',
         svgName: 'product_icon.svg',
         icon: Icons.trending_up,
         roles: [],
-        onClick: () => pageNav(ProductPerformance(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => onChangePage(ProductPerformance(onBackPage: onBackPage)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Seller performance',
         link: '/report/sales/performance/seller',
         svgName: 'product_icon.svg',
         icon: Icons.supervisor_account_outlined,
         roles: [],
-        onClick: () => pageNav( SellerPerformance(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () => onChangePage(SellerPerformance(onBackPage: onBackPage)),
       ),
-      SubMenuModule(
+      ModulePageMenu(
         name: 'Category overview',
         link: '/report/sales/performance/category',
         icon: Icons.category,
         svgName: 'product_icon.svg',
         roles: [],
-        onClick: () => pageNav(CategoryPerformance(onGetModulesMenu: onGetModulesMenu,)),
+        onClick: () =>
+            onChangePage(CategoryPerformance(onBackPage: onBackPage)),
       ),
     ];
   }

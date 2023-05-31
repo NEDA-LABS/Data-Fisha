@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -13,8 +12,9 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';
 
 class CustomersPage extends StatefulWidget {
-final OnGetModulesMenu onGetModulesMenu;
-  const CustomersPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const CustomersPage({Key? key, required this.onBackPage}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -25,40 +25,49 @@ class _CustomersPage extends State<CustomersPage> {
   String _query = '';
   List _customers = [];
 
-  _appBar(context) => getSliverSmartStockAppBar(
-      title: "Customers",
-      showBack: true,
-      backLink: '/sales/',
-      showSearch: true,
-      onBack: onAppGoBack(context),
-      onSearch: (d) {
-        setState(() {
-          _query = d;
-        });
-        _refresh(skip: false);
-      },
-      searchHint: 'Search...',
-      context: context);
+  _appBar(context) {
+    return getSliverSmartStockAppBar(
+        title: "Customers",
+        showBack: true,
+        backLink: '/sales/',
+        showSearch: true,
+        onBack: widget.onBackPage,
+        onSearch: (d) {
+          setState(() {
+            if (mounted) {
+              _query = d;
+            }
+          });
+          _refresh(skip: false);
+        },
+        searchHint: 'Search...',
+        context: context);
+  }
 
-  _contextCustomers(context) => [
-        ContextMenu(
-          name: 'Create',
-          pressed: _createDialog,
-        ),
-        ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
-      ];
+  _contextCustomers(context) {
+    return [
+      ContextMenu(
+        name: 'Create',
+        pressed: _createDialog,
+      ),
+      ContextMenu(name: 'Reload', pressed: () => _refresh(skip: true))
+    ];
+  }
 
-  _tableHeader() => const SizedBox(
-        height: 38,
-        child: TableLikeListRow([
-          TableLikeListTextHeaderCell('Name'),
-          TableLikeListTextHeaderCell('Phone'),
-          TableLikeListTextHeaderCell('Email'),
-        ]),
-      );
+  _tableHeader() {
+    return const SizedBox(
+      height: 38,
+      child: TableLikeListRow([
+        TableLikeListTextHeaderCell('Name'),
+        TableLikeListTextHeaderCell('Phone'),
+        TableLikeListTextHeaderCell('Email'),
+      ]),
+    );
+  }
 
-  _loadingView(bool show) =>
-      show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  _loadingView(bool show) {
+    return show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  }
 
   @override
   void initState() {
@@ -67,25 +76,26 @@ class _CustomersPage extends State<CustomersPage> {
   }
 
   @override
-  Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
-        current: '/sales/',
-        sliverAppBar: _appBar(context),
-        staticChildren: [
-          getIsSmallScreen(context)
-              ? Container()
-              : tableContextMenu(_contextCustomers(context)),
-          _loadingView(_loading),
-          getIsSmallScreen(context) ? Container() : _tableHeader(),
-        ],
-        totalDynamicChildren: _customers.length,
-        dynamicChildBuilder:
-            getIsSmallScreen(context) ? _smallScreen : _largerScreen,
-        fab: FloatingActionButton(
-          onPressed: () => _showMobileContextMenu(context),
-          child: const Icon(Icons.unfold_more_outlined),
-        ),
-      );
+  Widget build(context) {
+    return ResponsivePage(
+      current: '/sales/',
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        getIsSmallScreen(context)
+            ? Container()
+            : tableContextMenu(_contextCustomers(context)),
+        _loadingView(_loading),
+        getIsSmallScreen(context) ? Container() : _tableHeader(),
+      ],
+      totalDynamicChildren: _customers.length,
+      dynamicChildBuilder:
+          getIsSmallScreen(context) ? _smallScreen : _largerScreen,
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined),
+      ),
+    );
+  }
 
   _refresh({skip = false}) {
     setState(() {
@@ -115,7 +125,7 @@ class _CustomersPage extends State<CustomersPage> {
           TableLikeListTextDataCell('${_customers[index]['phone']}'),
           TableLikeListTextDataCell('${_customers[index]['email']}'),
         ]),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -126,7 +136,8 @@ class _CustomersPage extends State<CustomersPage> {
         ListTile(
           title: Text(
             '${_customers[index]['displayName']}',
-            style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16),
+            style:
+                const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16),
           ),
           subtitle: Column(
             mainAxisSize: MainAxisSize.min,
@@ -134,18 +145,20 @@ class _CustomersPage extends State<CustomersPage> {
             children: [
               Text(
                 '${_customers[index]['phone']}',
-                style:
-                    const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 13),
+                style: const TextStyle(
+                    overflow: TextOverflow.ellipsis, fontSize: 13),
               ),
-              '${_customers[index]['email']??''}'.isNotEmpty? Text(
-                '${_customers[index]['email']}',
-                style:
-                    const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 13),
-              ): Container()
+              '${_customers[index]['email'] ?? ''}'.isNotEmpty
+                  ? Text(
+                      '${_customers[index]['email']}',
+                      style: const TextStyle(
+                          overflow: TextOverflow.ellipsis, fontSize: 13),
+                    )
+                  : Container()
             ],
           ),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -163,7 +176,7 @@ class _CustomersPage extends State<CustomersPage> {
                 title: const Text('Create customer'),
                 onTap: _createDialog,
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload customers'),

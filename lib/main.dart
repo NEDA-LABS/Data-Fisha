@@ -1,92 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/account/account.dart';
-import 'package:smartstock/account/pages/ProfileAccountIndex.dart';
+import 'package:smartstock/account/pages/index.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/dashboard/dashboard.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/expense/index.dart';
 import 'package:smartstock/expense/pages/expenses.dart';
 import 'package:smartstock/index.dart';
 import 'package:smartstock/report/pages/index.dart';
-import 'package:smartstock/report/report.dart';
 import 'package:smartstock/sales/pages/index.dart';
-import 'package:smartstock/sales/sales.dart';
 import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/stocks.dart';
 
-_onNavigate(BuildContext context, Widget page, String routeId) {
-  Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (context) => page, settings: RouteSettings(name: routeId)),
-      (route) => route.settings.name != routeId);
-}
+// _onNavigate(BuildContext context, Widget page, String routeId) {
+//   Navigator.of(context).pushAndRemoveUntil(
+//     MaterialPageRoute(
+//         builder: (context) => page, settings: RouteSettings(name: routeId)),
+//     (route) => route.settings.name != routeId,
+//   );
+// }
 
-List<MenuModel> _onGetModules(BuildContext context) {
-  var dashboardIndex =
-      const DashboardIndexPage(onGetModulesMenu: _onGetModules);
-  var reportIndex = const ReportIndexPage(onGetModulesMenu: _onGetModules);
-  var salesIndex = const SalesPage(onGetModulesMenu: _onGetModules);
-  var stockIndex = const StocksIndexPage(onGetModulesMenu: _onGetModules);
-  var expenseIndex = const ExpenseExpensesPage(onGetModulesMenu: _onGetModules);
-  var accountIndex = const ProfileIndexPage(onGetModulesMenu: _onGetModules);
+List<ModuleMenu> _onGetModules({
+  required BuildContext context,
+  required OnChangePage onChangePage,
+  required OnBackPage onBackPage,
+}) {
+  var dashboardIndex = DashboardIndexPage();
+  var reportIndex = ReportIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
+  var salesIndex = SalesPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
+  var stockIndex = StocksIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
+  var expenseIndex = ExpenseExpensesPage();
+  var accountIndex = ProfileIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
   return [
-    MenuModel(
+    ModuleMenu(
       name: 'Dashboard',
       icon: const Icon(Icons.dashboard),
       link: '/dashboard/',
-      onClick: () => _onNavigate(context, dashboardIndex, 'r_dashboard'),
+      page: dashboardIndex,
+      onClick: () => null,
       roles: ['admin'],
     ),
-    MenuModel(
+    ModuleMenu(
       name: 'Point Of Sale',
       icon: const Icon(Icons.point_of_sale),
       link: '/sales/',
-      onClick: () => _onNavigate(context, salesIndex, 'r_sales'),
+      page: salesIndex,
+      onClick: () => null,
       roles: ['*'],
     ),
-    MenuModel(
+    ModuleMenu(
       name: 'Stocks',
       icon: const Icon(Icons.inventory),
       link: '/stock/',
-      onClick: () => _onNavigate(context, stockIndex, 'r_stock'),
+      page: stockIndex,
+      onClick: () => null,
       roles: ['admin', 'manager'],
     ),
-    MenuModel(
+    ModuleMenu(
       name: 'Expenses',
       icon: const Icon(Icons.receipt_long_rounded),
       link: '/expense/',
-      onClick: () => _onNavigate(context, expenseIndex, 'r_expense'),
+      page: expenseIndex,
+      onClick: () => null,
       roles: ['*'],
     ),
-    MenuModel(
+    ModuleMenu(
       name: 'Reports',
       icon: const Icon(Icons.data_saver_off),
       link: '/report/',
-      onClick: () => _onNavigate(context, reportIndex, 'r_report'),
+      page: reportIndex,
+      onClick: () => null,
       roles: ['admin'],
     ),
-    MenuModel(
+    ModuleMenu(
       name: 'Account',
       icon: const Icon(Icons.supervised_user_circle),
       link: '/account/',
-      onClick: () => _onNavigate(context, accountIndex, 'r_account'),
+      page: accountIndex,
+      onClick: () => null,
       roles: ['*'],
     ),
   ];
 }
 
 void main() {
-  startSmartStock(
-    onGetModulesMenu: _onGetModules,
-    coreModules: {
-      '/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      '/dashboard/': (p0) => DashboardModule(onGetModulesMenu: p0),
-      '/account/': (p0) => AccountModule(onGetModulesMenu: p0),
-      '/report/': (p0) => ReportModule(onGetModulesMenu: p0),
-      '/sales/': (p0) => SalesModule(onGetModulesMenu: p0),
-      '/stock/': (p0) => StockModule(onGetModulesMenu: p0),
-      '/expense/': (p0) => ExpenseModule(onGetModulesMenu: p0),
-    },
-    // featureModules: {},
-  );
+  startSmartStock(onGetModulesMenu: _onGetModules);
 }

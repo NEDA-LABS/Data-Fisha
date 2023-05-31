@@ -78,7 +78,7 @@ class _State extends State<UpdateUserPasswordContent> {
     });
     updateUserPassword(widget.userId, password).then((value) {
       // print(value);
-      navigator().maybePop();
+      Navigator.of(context).maybePop();
     }).catchError((err) {
       // print(err);
       setState(() {

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_create_form.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 
 class ProductCreatePage extends StatelessWidget {
+  final OnBackPage onBackPage;
   final InventoryType inventoryType;
-  final OnGetModulesMenu onGetModulesMenu;
 
   const ProductCreatePage({
     Key? key,
-    required this.onGetModulesMenu,
     required this.inventoryType,
+    required this.onBackPage,
   }) : super(key: key);
 
   _appBar(context) {
@@ -20,9 +20,7 @@ class ProductCreatePage extends StatelessWidget {
       title: inventoryType == InventoryType.product?"Add product":'Add raw material',
       showBack: true,
       backLink: '/stock/products',
-      onBack: () {
-        Navigator.of(context).maybePop();
-      },
+      onBack: onBackPage,
       showSearch: false,
       context: context,
     );
@@ -30,7 +28,6 @@ class ProductCreatePage extends StatelessWidget {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: onGetModulesMenu(context),
         current: '/stock/',
         sliverAppBar: _appBar(context),
         staticChildren: [

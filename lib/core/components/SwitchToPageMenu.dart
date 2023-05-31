@@ -6,7 +6,7 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class SwitchToPageMenu extends StatelessWidget {
-  final List<SubMenuModule> pages;
+  final List<ModulePageMenu> pages;
 
   const SwitchToPageMenu({Key? key, required this.pages}) : super(key: key);
 
@@ -28,7 +28,7 @@ class SwitchToPageMenu extends StatelessWidget {
             return Expanded(
               flex: 1,
               child: x !=null
-                  ? _menuToGridItem(context)(x as SubMenuModule)
+                  ? _menuToGridItem(context)(x as ModulePageMenu)
                   : Container(),
             );
           }).toList(),
@@ -37,7 +37,7 @@ class SwitchToPageMenu extends StatelessWidget {
     );
   }
 
-  Widget Function(SubMenuModule) _menuToGridItem(BuildContext context) {
+  Widget Function(ModulePageMenu) _menuToGridItem(BuildContext context) {
     return (e) {
       return SwitchToPageGrid(
         onPress: e.onClick,
@@ -55,10 +55,10 @@ class SwitchToPageMenu extends StatelessWidget {
     };
   }
 
-  List<List<SubMenuModule>> _mapPagesForMobileViewNavigation(
-    List<SubMenuModule> pages,
+  List<List<ModulePageMenu>> _mapPagesForMobileViewNavigation(
+    List<ModulePageMenu> pages,
       int count
   ) {
-    return divideList<SubMenuModule>(pages, count);
+    return divideList<ModulePageMenu>(pages, count);
   }
 }

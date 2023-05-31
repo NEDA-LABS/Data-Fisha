@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_edit_form.dart';
 
 class ProductEditPage extends StatelessWidget {
   final Map product;
-  final OnGetModulesMenu onGetModulesMenu;
 
-  const ProductEditPage(this.product,
-      {Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const ProductEditPage(this.product, {Key? key}) : super(key: key);
 
   _appBar(context) {
     return getSliverSmartStockAppBar(
@@ -28,7 +24,6 @@ class ProductEditPage extends StatelessWidget {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: onGetModulesMenu(context),
       current: '/stock/',
       sliverAppBar: _appBar(context),
       staticChildren: [

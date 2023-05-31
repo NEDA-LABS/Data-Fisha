@@ -162,9 +162,11 @@ class _State extends State<DashboardSummary> {
         error = '$onError';
       });
     }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 

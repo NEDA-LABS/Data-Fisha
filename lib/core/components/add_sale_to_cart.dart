@@ -1,5 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -46,7 +48,6 @@ class _State extends State<_Dialog> {
 
   @override
   void initState() {
-    // controller = TextEditingController(text: widget.cart.quantity);
     states = {'p': widget.cart.product, 'q': widget.cart.quantity};
     updateState = ifDoElse(
         (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
@@ -71,11 +72,10 @@ class _State extends State<_Dialog> {
 
   _cartQuantityInput(context, states, updateState) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 200),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: TextInput(
-        // initialText: '${states['q']}',
         controller: controller,
         lines: 1,
         placeholder: 'Quantity',
@@ -93,13 +93,12 @@ class _State extends State<_Dialog> {
       height: 40,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        onPressed: () =>
-            onAddToCart(CartModel(product: states['p'], quantity: states['q'])),
+        onPressed: (){
+          onAddToCart(CartModel(product: states['p'], quantity: states['q']));
+          Navigator.of(context).maybePop();
+        },
         style: _addToCartButtonStyle(context),
-        child: const Text(
-          "ADD TO CART",
-          style: TextStyle(color: Colors.white),
-        ),
+        child: const BodyMedium(text: "ADD TO CART"),
       ),
     );
   }
@@ -107,7 +106,7 @@ class _State extends State<_Dialog> {
   _addToCartButtonStyle(context) {
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.all(
-        Theme.of(context).primaryColorDark,
+        Theme.of(context).colorScheme.primaryContainer,
       ),
     );
   }
@@ -117,14 +116,14 @@ class _State extends State<_Dialog> {
       padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
       child: Column(
         children: <Widget>[
-          Text(
-            product["product"],
-            softWrap: true,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+          BodyLarge(
+            text: product["product"],
+            // softWrap: true,
+            // style: const TextStyle(
+            //   color: Colors.black,
+            //   fontSize: 16,
+            //   fontWeight: FontWeight.w500,
+            // ),
           ),
           _amountWidget(product, onGetPrice),
         ],
@@ -135,14 +134,14 @@ class _State extends State<_Dialog> {
   _amountWidget(product, onGetPrice) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Text(
-        'TZS ${onGetPrice(product)}',
+      child: BodyMedium(
+        text: 'TZS ${onGetPrice(product)}',
         //formattedAmount(product, wholesale),
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
+        // style: const TextStyle(
+        //   color: Colors.black,
+        //   fontWeight: FontWeight.bold,
+        //   fontSize: 17,
+        // ),
       ),
     );
   }

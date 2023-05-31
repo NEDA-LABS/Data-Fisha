@@ -64,7 +64,7 @@ class _State extends State<CashSaleDetail> {
   }
 
   _showItems() {
-    navigator().maybePop().whenComplete(() {
+    Navigator.of(context).maybePop().whenComplete(() {
       showDialogOrModalSheet(
           SaleItemsDetails(
             sale: widget.sale,

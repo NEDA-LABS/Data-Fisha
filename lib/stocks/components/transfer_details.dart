@@ -36,12 +36,6 @@ transferDetails(context, item) => ListView(
                   }else{
                     printPreviousSendTransfer(item);
                   }
-                  // navigator().maybePop().whenComplete(() {
-                  //   showDialog(
-                  //       context: context,
-                  //       builder: (_) => Dialog(
-                  //           child: addPurchasePaymentContent(item['id'])));
-                  // });
                 },
                 child: const Text('Print.', style: TextStyle(fontSize: 16)))),
         const SizedBox(height: 24)

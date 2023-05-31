@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-class MenuModel {
+class ModuleMenu {
   final String name;
-
-  // final Widget indexPage;
   final String link;
+  final Widget page;
   final Function()? onClick;
   final List<String> roles;
   final Icon icon;
 
-  MenuModel(
-      {required this.name,
-      required this.icon,
-      required this.link,
-      required this.roles,
-      // required t his.indexPage,
-      this.onClick});
+  ModuleMenu({
+    required this.name,
+    required this.icon,
+    required this.link,
+    required this.roles,
+    required this.page,
+    this.onClick,
+  });
 }
 
-class SubMenuModule {
+class ModulePageMenu {
   final String name;
   final String link;
   final List<String> roles;
@@ -26,7 +26,7 @@ class SubMenuModule {
   final IconData? icon;
   final String? svgName;
 
-  SubMenuModule(
+  ModulePageMenu(
       {required this.name,
       required this.link,
       required this.roles,

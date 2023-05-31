@@ -21,18 +21,14 @@ Future<List> getInvoiceSalesFromCacheOrRemote(startAt, size, product) async {
   return await getInvoices(shop);
 }
 
-Future _printInvoiceItems(
-    List carts, discount, customer, batchId) async {
-  var items = cartItems(carts, discount,false, '$customer');
+Future _printInvoiceItems(List carts, discount, customer, batchId) async {
+  var items = cartItems(carts, discount, false, '$customer');
   var data = await cartItemsToPrinterData(
-      items,
-      '$customer',
-      (cart) => cart['stock']['retailPrice']);
+      items, '$customer', (cart) => cart['stock']['retailPrice']);
   await posPrint(data: data, qr: batchId);
 }
 
-Future<Map> _carts2Invoice(
-    List carts, dis, customer, cartId, batchId) async {
+Future<Map> _carts2Invoice(List carts, dis, customer, cartId, batchId) async {
   var discount = doubleOrZero('$dis');
   var totalAmount = doubleOrZero(
       '${cartTotalAmount(carts, false, (product) => product['retailPrice'])}');
@@ -67,12 +63,13 @@ Future<Map> _carts2Invoice(
 }
 
 Future onSubmitInvoice(List carts, String customer, discount) async {
-  if (customer.isEmpty) throw "Customer required";
+  if (customer.isEmpty) {
+    throw "Please select customer, at the top right of the cart.";
+  }
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/invoice';
-  await _printInvoiceItems(carts, discount, customer, cartId);
   var invoice =
       await _carts2Invoice(carts, discount, customer, cartId, batchId);
   var offlineFirst = await isOfflineFirstEnv();
@@ -81,7 +78,7 @@ Future onSubmitInvoice(List carts, String customer, discount) async {
     oneTimeLocalSyncs();
   } else {
     var saveInvoice = prepareHttpPutRequest(invoice);
-    return saveInvoice(url);
+    await saveInvoice(url);
   }
+  _printInvoiceItems(carts, discount, customer, cartId).catchError((e) => null);
 }
-

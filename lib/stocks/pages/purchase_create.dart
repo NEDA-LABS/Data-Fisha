@@ -9,29 +9,30 @@ import 'package:smartstock/stocks/services/purchase.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class PurchaseCreatePage extends StatelessWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const PurchaseCreatePage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const PurchaseCreatePage({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => SaleLikePage(
-        wholesale: false,
-        showDiscountView: false,
-        title: 'Create purchase',
-        backLink: '/stock/purchases',
-        onBack: (){
-          Navigator.of(context).maybePop();
-        },
-        customerLikeLabel: 'Choose supplier',
-        onSubmitCart: prepareOnSubmitPurchase(context),
-        onGetPrice: (product) {
-          return doubleOrZero('${product['purchase']}');
-        },
-        onAddToCartView: _onPrepareSalesAddToCartView(context, false),
-        onCustomerLikeList: getSupplierFromCacheOrRemote,
-        onCustomerLikeAddWidget: () => const CreateSupplierContent(),
-        checkoutCompleteMessage: 'Purchase complete.',
-        onGetProductsLike: getStockFromCacheOrRemote, onGetModulesMenu: onGetModulesMenu,
-      );
+      wholesale: false,
+      showDiscountView: false,
+      title: 'Create purchase',
+      backLink: '/stock/purchases',
+      onBack: onBackPage,
+      customerLikeLabel: 'Choose supplier',
+      onSubmitCart: prepareOnSubmitPurchase(context),
+      onGetPrice: (product) {
+        return doubleOrZero('${product['purchase']}');
+      },
+      onAddToCartView: _onPrepareSalesAddToCartView(context, false),
+      onCustomerLikeList: getSupplierFromCacheOrRemote,
+      onCustomerLikeAddWidget: () => const CreateSupplierContent(),
+      checkoutCompleteMessage: 'Purchase complete.',
+      onGetProductsLike: getStockFromCacheOrRemote);
 
   _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
         addPurchaseToCartView(

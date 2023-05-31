@@ -4,7 +4,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/Histogram.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
@@ -15,8 +15,12 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class OverviewCashSales extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const OverviewCashSales({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const OverviewCashSales({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -43,7 +47,6 @@ class _State extends State<OverviewCashSales> {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      menus: widget.onGetModulesMenu(context),
       sliverAppBar: _appBar(),
       staticChildren: [
         _rangePicker(),
@@ -186,11 +189,7 @@ class _State extends State<OverviewCashSales> {
       title: "Cash sales overview",
       showBack: true,
       // backLink: '/report/',
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       context: context,
     );
   }

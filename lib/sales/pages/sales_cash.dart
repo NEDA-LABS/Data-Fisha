@@ -3,16 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
+import 'package:smartstock/sales/pages/sales_cash_retail.dart';
+import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const SalesCashPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
+
+  const SalesCashPage({
+    Key? key,
+    required this.onBackPage,
+    required this.onChangePage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -54,26 +64,26 @@ class _State extends State<SalesCashPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onBack: (){
-        Navigator.of(context).maybePop();
-      },
+      onBack: widget.onBackPage,
       context: context,
     );
   }
 
-  // _contextSales(context) {
-  //   return [
-  //     ContextMenu(
-  //       name: 'Add Retail',
-  //       pressed: () => navigateTo('/sales/cash/retail'),
-  //     ),
-  //     ContextMenu(
-  //       name: 'Add Wholesale',
-  //       pressed: () => navigateTo('/sales/cash/whole'),
-  //     ),
-  //     ContextMenu(name: 'Reload', pressed: () => _refresh())
-  //   ];
-  // }
+  _contextSales(context) {
+    return [
+      ContextMenu(
+        name: 'Add Retail',
+        pressed: () =>
+            widget.onChangePage(SalesCashRetail(onBackPage: widget.onBackPage)),
+      ),
+      ContextMenu(
+        name: 'Add Wholesale',
+        pressed: () =>
+            widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
+      ),
+      ContextMenu(name: 'Reload', pressed: () => _refresh())
+    ];
+  }
 
   _tableHeader() {
     return const SizedBox(
@@ -98,14 +108,13 @@ class _State extends State<SalesCashPage> {
 
   @override
   Widget build(context) => ResponsivePage(
-        menus: widget.onGetModulesMenu(context),
         current: '/sales/',
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loadingView(_loading),
-          // getIsSmallScreen(context)
-          //     ? Container()
-          //     : tableContextMenu(_contextSales(context)),
+          getIsSmallScreen(context)
+              ? Container()
+              : tableContextMenu(_contextSales(context)),
           getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
         loading: _loading,
@@ -215,17 +224,19 @@ class _State extends State<SalesCashPage> {
             children: [
               Text(
                 '${_getTimer(_sales[index])}',
-                style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 14),
+                style: const TextStyle(
+                    overflow: TextOverflow.ellipsis, fontSize: 14),
               ),
               Text(
                 'Items ${doubleOrZero(_itemsSize(_sales[index]))}',
-                style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 14),
+                style: const TextStyle(
+                    overflow: TextOverflow.ellipsis, fontSize: 14),
               ),
             ],
           ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }
@@ -246,42 +257,42 @@ class _State extends State<SalesCashPage> {
             TableLikeListTextDataCell('${_getTimer(_sales[index])}'),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
 
-  // void _showMobileContextMenu(context) {
-  //   showDialogOrModalSheet(
-  //       Container(
-  //         padding: const EdgeInsets.all(16),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.stretch,
-  //           children: [
-  //             ListTile(
-  //               leading: const Icon(Icons.add),
-  //               title: const Text('Add retail'),
-  //               onTap: () => navigateTo('/sales/cash/retail'),
-  //             ),
-  //             HorizontalLine(),
-  //             ListTile(
-  //               leading: const Icon(Icons.business),
-  //               title: const Text('Add wholesale'),
-  //               onTap: () => navigateTo('/sales/cash/whole'),
-  //             ),
-  //             HorizontalLine(),
-  //             ListTile(
-  //               leading: const Icon(Icons.refresh),
-  //               title: const Text('Reload sales'),
-  //               onTap: () {
-  //                 Navigator.of(context).maybePop();
-  //                 _refresh();
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       context);
-  // }
+// void _showMobileContextMenu(context) {
+//   showDialogOrModalSheet(
+//       Container(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             ListTile(
+//               leading: const Icon(Icons.add),
+//               title: const Text('Add retail'),
+//               onTap: () => navigateTo('/sales/cash/retail'),
+//             ),
+//             HorizontalLine(),
+//             ListTile(
+//               leading: const Icon(Icons.business),
+//               title: const Text('Add wholesale'),
+//               onTap: () => navigateTo('/sales/cash/whole'),
+//             ),
+//             HorizontalLine(),
+//             ListTile(
+//               leading: const Icon(Icons.refresh),
+//               title: const Text('Reload sales'),
+//               onTap: () {
+//                 Navigator.of(context).maybePop();
+//                 _refresh();
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//       context);
+// }
 }

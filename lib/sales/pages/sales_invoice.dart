@@ -1,24 +1,28 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
-import 'package:smartstock/sales/components/sale_invoice_details.dart';
+import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
 class InvoicesPage extends StatefulWidget {
-final OnGetModulesMenu onGetModulesMenu;
-  const InvoicesPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
+
+  const InvoicesPage({
+    Key? key,
+    required this.onBackPage,
+    required this.onChangePage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();
@@ -37,7 +41,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       showBack: true,
       backLink: '/sales/',
       showSearch: false,
-      onBack: onAppGoBack(context),
+      onBack: widget.onBackPage,
       // onSearch: (d) {
       //   setState(() {
       //     _query = d;
@@ -53,7 +57,8 @@ class _InvoicesPage extends State<InvoicesPage> {
     return [
       ContextMenu(
         name: 'Create',
-        pressed: () => navigateTo('/sales/invoice/create'),
+        pressed: () =>
+            widget.onChangePage(InvoiceSalePage(onBackPage: widget.onBackPage)),
       ),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
@@ -89,7 +94,6 @@ class _InvoicesPage extends State<InvoicesPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
       current: '/sales/',
       sliverAppBar: _appBar(context),
       staticChildren: [
@@ -174,12 +178,12 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   _prepareGetInvoices(String product, size, bool more) {
     return ifDoElse(
-          (sales) => sales is List && sales.isNotEmpty,
-          (sales) {
+      (sales) => sales is List && sales.isNotEmpty,
+      (sales) {
         var last = more ? sales.last['timer'] : _defaultLast();
         return getInvoiceSalesFromCacheOrRemote(last, size, product);
       },
-          (sales) =>
+      (sales) =>
           getInvoiceSalesFromCacheOrRemote(_defaultLast(), size, product),
     );
   }
@@ -206,10 +210,10 @@ class _InvoicesPage extends State<InvoicesPage> {
     return dF.format(date);
   }
 
-  final _getCustomer=compose([
-      propertyOr('displayName', (p0) => 'Walk in customer'),
-      propertyOrNull('customer')
-    ]);
+  final _getCustomer = compose([
+    propertyOr('displayName', (p0) => 'Walk in customer'),
+    propertyOrNull('customer')
+  ]);
 
   Widget _smallScreenChildBuilder(context, index) {
     return Column(
@@ -235,15 +239,14 @@ class _InvoicesPage extends State<InvoicesPage> {
                 children: [
                   Text('${_invoices[index]['date']}'),
                   Text(
-                      'total ${compactNumber(
-                          '${_invoices[index]['amount']}')}'),
+                      'total ${compactNumber('${_invoices[index]['amount']}')}'),
                 ],
               ),
             ],
           ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }
@@ -259,15 +262,14 @@ class _InvoicesPage extends State<InvoicesPage> {
           child: TableLikeListRow([
             TableLikeListTextDataCell('${_getCustomer(_invoices[index])}'),
             TableLikeListTextDataCell(
-                '${toSqlDate(DateTime.tryParse(_invoices[index]['date']) ??
-                    DateTime.now())}'),
+                '${toSqlDate(DateTime.tryParse(_invoices[index]['date']) ?? DateTime.now())}'),
             TableLikeListTextDataCell(
                 '${formatNumber(_invoices[index]['amount'])}'),
             TableLikeListTextDataCell('${_getInvPayment(_invoices[index])}'),
             Center(child: _getStatusView(_invoices[index]))
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -277,8 +279,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       var payments = invoice['payments'];
       if (payments is List) {
         var a = payments.fold(0,
-                (dynamic a, element) =>
-            a + doubleOrZero('${element['amount']}'));
+            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
         return formatNumber(a);
       }
     }
@@ -302,8 +303,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       var payments = invoice['payments'];
       if (payments is List) {
         return payments.fold(0,
-                (dynamic a, element) =>
-            a + doubleOrZero('${element['amount']}'));
+            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
       }
       return 0;
     }
@@ -320,7 +320,8 @@ class _InvoicesPage extends State<InvoicesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,
-        child: Text("${formatNumber((paid * 100)/amount,decimals: 0)}%", style: tStyle),
+        child: Text("${formatNumber((paid * 100) / amount, decimals: 0)}%",
+            style: tStyle),
       );
     }
   }
@@ -336,9 +337,13 @@ class _InvoicesPage extends State<InvoicesPage> {
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Add invoice'),
-                onTap: () => navigateTo('/sales/invoice/create'),
+                onTap: () => widget.onChangePage(
+                  InvoiceSalePage(
+                    onBackPage: widget.onBackPage,
+                  ),
+                ),
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload invoices'),

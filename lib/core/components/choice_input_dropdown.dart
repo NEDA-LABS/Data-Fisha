@@ -2,23 +2,26 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/text_input.dart';
-import 'package:smartstock/core/services/util.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
   final List items;
   final Function(dynamic) onTitle;
   final Function(dynamic) onText;
   final bool multiple;
+  final String label;
 
-  const ChoiceInputDropdown(
-      {Key? key,
-      required this.items,
-      required this.onTitle,
-      required this.onText,
-      required this.multiple})
-      : super(key: key);
+  const ChoiceInputDropdown({
+    Key? key,
+    required this.items,
+    required this.onTitle,
+    required this.onText,
+    required this.multiple,
+    required this.label,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ChoiceInputDropdown();
@@ -35,7 +38,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
 
   _searchInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      padding: const EdgeInsets.only(bottom: 8),
       child: TextInput(
         onText: (d) {
           if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -75,7 +78,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
                 title: Text('${widget.onTitle(items[index]) ?? ''}'),
                 onTap: () {
                   widget.onText(widget.onTitle(items[index]));
-                  navigator().maybePop();
+                  Navigator.of(context).maybePop();
                 },
               );
       },
@@ -97,18 +100,37 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        _searchInput(),
-        _itemsList(),
-        outlineActionButton(
-            title: 'Close',
-            onPressed: () {
-              navigator().maybePop();
-            })
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            children: [
+              Expanded(flex: 1, child: BodyLarge(text: widget.label)),
+              const WhiteSpacer(width: 16),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).maybePop();
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              )
+            ],
+          ),
+          _searchInput(),
+          _itemsList(),
+          // outlineActionButton(
+          //   title: 'Close',
+          //   onPressed: () {
+          //     Navigator.of(context).maybePop();
+          //   },
+          // )
+        ],
+      ),
     );
   }
 

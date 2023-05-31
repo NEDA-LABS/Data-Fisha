@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/components/responsive_body.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -15,8 +15,12 @@ import 'package:smartstock/report/services/report.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 
 class SalesCashTrackingPage extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  const SalesCashTrackingPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const SalesCashTrackingPage({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -40,7 +44,6 @@ class _State extends State<SalesCashTrackingPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
-      menus: widget.onGetModulesMenu(context),
       current: '/report/',
       sliverAppBar: _appBar(context),
       onBody: (d) {
@@ -104,11 +107,7 @@ class _State extends State<SalesCashTrackingPage> {
       showBack: true,
       // backLink: '/sales/',
       showSearch: false,
-      onBack: () {
-        Navigator.of(context).canPop()
-            ? Navigator.of(context).pop()
-            : Navigator.of(context).pushNamed('/');
-      },
+      onBack: widget.onBackPage,
       searchHint: 'Search product...',
       context: context,
     );

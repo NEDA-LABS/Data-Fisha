@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -106,7 +107,7 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
           context: context,
           onSubmit: (state) {
             pDetail = state;
-            navigator().maybePop();
+            Navigator.of(context).maybePop();
           });
       if (pDetail is! Map) {
         throw 'Purchase details ( reference, date, due and type ) required';

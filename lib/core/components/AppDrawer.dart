@@ -1,22 +1,30 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class StockDrawer extends Drawer {
-  final List<MenuModel> menus;
+class AppDrawer extends Drawer {
+  final List<ModuleMenu> menus;
   final String? current;
   final double cWidth;
+  final OnChangePage onChangePage;
+  final OnGetModulesMenu onGetModulesMenu;
 
-  const StockDrawer(
-    this.menus,
-    this.current, {
-    Key? key,
+  const AppDrawer({
+    required this.onGetModulesMenu,
+    required this.menus,
+    required this.onChangePage,
+    this.current,
     this.cWidth = 250,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -27,7 +35,7 @@ class StockDrawer extends Drawer {
     );
   }
 
-  _modulesMenuContent(List<MenuModel> allMenus, String? current) {
+  _modulesMenuContent(List<ModuleMenu> allMenus, String? current) {
     var getOfficeName = propertyOr('businessName', (p0) => 'Menu');
     var getOfficeLogo = compose(
         [propertyOr('logo', (p0) => ''), propertyOr('ecommerce', (p0) => {})]);
@@ -47,13 +55,15 @@ class StockDrawer extends Drawer {
                     controller: ScrollController(),
                     children: [
                       _header(
-                          getOfficeName(
-                              propertyOr('shop', (p0) => {})(snapshot.data)),
-                          getOfficeLogo(
-                              propertyOr('shop', (p0) => {})(snapshot.data))),
+                        getOfficeName(
+                            propertyOr('shop', (p0) => {})(snapshot.data)),
+                        getOfficeLogo(
+                            propertyOr('shop', (p0) => {})(snapshot.data)),
+                      ),
                       ...propertyOr('menus', (p0) => [])(snapshot.data)
                           .map<Widget>(_moduleMenuItems(current, context))
-                          .toList()
+                          .toList(),
+                      _logOutMenuItem(context)
                     ],
                   ),
                 ),
@@ -71,7 +81,7 @@ class StockDrawer extends Drawer {
     );
   }
 
-  Future _future(List<MenuModel> menus) async {
+  Future _future(List<ModuleMenu> menus) async {
     var shop = await getActiveShop();
     var user = await getLocalCurrentUser();
     var m = menus
@@ -134,14 +144,21 @@ class StockDrawer extends Drawer {
       builder: (context) => Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed: () => navigateTo('/account/shop'),
-          child: const Text(
-            'Change Office',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              // color: Theme.of(context).primaryColor,
-            ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    ChooseShopPage(onGetModulesMenu: onGetModulesMenu),
+              ),
+            );
+          },
+          child: const BodySmall(
+            text: 'Change Office',
+            // style: TextStyle(
+            //   fontSize: 16,
+            //   fontWeight: FontWeight.w400,
+            //   // color: Theme.of(context).primaryColor,
+            // ),
           ),
         ),
       ),
@@ -165,15 +182,9 @@ class StockDrawer extends Drawer {
     );
   }
 
-  final _itemStyle = const TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    // color: Color(0xFF1C1C1C),
-  );
-
   _moduleMenuItems(String? current, BuildContext context) {
     return (dynamic item) {
-      item as MenuModel;
+      item as ModuleMenu;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
@@ -182,14 +193,28 @@ class StockDrawer extends Drawer {
           child: ListTile(
             leading:
                 item.link == current ? _getSelectedIcon(context) : item.icon,
-            title: Text(item.name, style: _itemStyle),
-            onTap: (){
+            title: BodyMedium(text: item.name),
+            onTap: () {
+              onChangePage(item.page);
               // print('TAPPED');
-              item.onClick != null ? item.onClick!() : navigateTo(item.link);
+              // item.onClick != null ? item.onClick!() : navigateTo(item.link);
             },
           ),
         ),
       );
     };
+  }
+
+  _logOutMenuItem(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ListTile(
+        leading: const Icon(Icons.exit_to_app),
+        title: const BodyMedium(text: 'Sign out'),
+        onTap: () {
+          logOut(context, onGetModulesMenu);
+        },
+      ),
+    );
   }
 }
