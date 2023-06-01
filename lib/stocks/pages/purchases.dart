@@ -100,9 +100,11 @@ class _PurchasesPage extends State<PurchasesPage> {
     getPurchasesRemote(_startAt).then((value) {
       _purchases = value;
     }).whenComplete(() {
-      setState(() {
-        _loading = false;
-      });
+      if(mounted){
+        setState(() {
+          _loading = false;
+        });
+      }
     });
   }
 

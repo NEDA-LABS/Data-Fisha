@@ -44,7 +44,6 @@ class _MainWidget extends StatefulWidget {
 }
 
 class _State extends State<_MainWidget> {
-
   @override
   Widget build(BuildContext context) {
     var lightTheme = ThemeData(
@@ -52,22 +51,16 @@ class _State extends State<_MainWidget> {
     var darkTheme = ThemeData(
         colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: true);
     return MaterialApp(
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child ?? Container(),
+        );
+      },
       debugShowCheckedModeBanner: kDebugMode,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: SmartStockApp(
-        onGetModulesMenu: widget.onGetModulesMenu,
-        // onDoneSelectShop: _onDoneSelectShop,
-      ),
+      home: SmartStockApp(onGetModulesMenu: widget.onGetModulesMenu),
     );
   }
-
-  // _onDoneSelectShop(Map user) {
-  //   print('---------');
-  //   setState(() {
-  //     if (mounted) {
-  //       appKey = UniqueKey();
-  //     }
-  //   });
-  // }
 }

@@ -14,7 +14,7 @@ List<ModuleMenu> _onGetModules({
   required OnChangePage onChangePage,
   required OnBackPage onBackPage,
 }) {
-  var dashboardIndex = DashboardIndexPage();
+  var dashboardIndex = const DashboardIndexPage();
   var reportIndex = ReportIndexPage(
     onChangePage: onChangePage,
     onBackPage: onBackPage,
@@ -27,7 +27,7 @@ List<ModuleMenu> _onGetModules({
     onChangePage: onChangePage,
     onBackPage: onBackPage,
   );
-  var expenseIndex = ExpenseExpensesPage();
+  var expenseIndex = const ExpenseExpensesPage();
   var accountIndex = ProfileIndexPage(
     onChangePage: onChangePage,
     onBackPage: onBackPage,

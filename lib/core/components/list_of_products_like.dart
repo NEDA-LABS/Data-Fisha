@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
+import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -70,7 +71,7 @@ class ListOfProductsLike extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Expanded(
-                child: BodySmall(text: category ?? ''),
+                child: FittedBox(child: LabelSmall(text: category ?? ''), fit: BoxFit.scaleDown,),
               ),
               Expanded(
                 flex: 2,
@@ -88,16 +89,19 @@ class ListOfProductsLike extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(4),
-                  child: Text(
-                    price != null
-                        ? NumberFormat.currency(name: 'TZS ')
-                            .format(doubleOrZero(price))
-                        : '',
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      // fontSize: 14
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      price != null
+                          ? NumberFormat.currency(name: 'TZS ')
+                              .format(doubleOrZero(price))
+                          : '',
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        // fontSize: 14
+                      ),
                     ),
                   ),
                 ),

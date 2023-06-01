@@ -58,9 +58,10 @@ class _State extends State<_Dialog> {
   Widget build(BuildContext context) {
     return Container(
       decoration: _addToCartBoxDecoration(),
-      height: 230,
+      // height: 230,
       constraints: const BoxConstraints(maxWidth: 400),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _productAndPrice(states['p'], widget.onGetPrice),
           _cartQuantityInput(context, states, updateState),
@@ -118,6 +119,7 @@ class _State extends State<_Dialog> {
         children: <Widget>[
           BodyLarge(
             text: product["product"],
+            textAlign: TextAlign.center,
             // softWrap: true,
             // style: const TextStyle(
             //   color: Colors.black,
@@ -134,7 +136,7 @@ class _State extends State<_Dialog> {
   _amountWidget(product, onGetPrice) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: BodyMedium(
+      child: BodyLarge(
         text: 'TZS ${onGetPrice(product)}',
         //formattedAmount(product, wholesale),
         // style: const TextStyle(
