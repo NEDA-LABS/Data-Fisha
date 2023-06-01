@@ -41,15 +41,29 @@ class _State extends State<SmartStockApp> {
       return Container();
     }
     if (user is Map && propertyOrNull('username')(user) != null) {
-      return ResponsivePageContainer(
-        onGetModulesMenu: widget.onGetModulesMenu,
-        menus: widget.onGetModulesMenu(
-          context: context,
+      return WillPopScope(
+        child: ResponsivePageContainer(
+          onGetModulesMenu: widget.onGetModulesMenu,
+          menus: widget.onGetModulesMenu(
+            context: context,
+            onChangePage: _onChangePage,
+            onBackPage: _onBackPage,
+          ),
           onChangePage: _onChangePage,
-          onBackPage: _onBackPage,
+          child: child ?? Container(),
         ),
-        onChangePage: _onChangePage,
-        child: child ?? Container(),
+        onWillPop: () async {
+          if (kDebugMode) {
+            print('------');
+            print('Back pressed');
+            print('------');
+          }
+          if (pageHistories.length == 1) {
+            return true;
+          }
+          _onBackPage();
+          return false;
+        },
       );
     } else {
       return LoginPage(onGetModulesMenu: widget.onGetModulesMenu);
@@ -59,20 +73,41 @@ class _State extends State<SmartStockApp> {
   _onChangePage(page) {
     _updateState(() {
       child = page;
-      pageHistories.add(page);
+      if (pageHistories.isNotEmpty) {
+        var lastWidget = pageHistories.last;
+        if ('$lastWidget' == '$page') {
+          if (kDebugMode) {
+            print('---- SAME PAGE ----');
+          }
+        } else {
+          pageHistories.add(page);
+        }
+      } else {
+        pageHistories.add(page);
+      }
     });
   }
 
   _onBackPage() {
     var length = pageHistories.length;
-    if (length > 0) {
-      var last = pageHistories[length - 2];
+    if (kDebugMode) {
+      print('Length ---> $length');
+    }
+    goBack(int offset) {
+      var last = pageHistories[length - offset];
       if (last != null) {
         _updateState(() {
           child = last;
           pageHistories.removeAt(length - 1);
         });
       }
+    }
+
+    if (length == 1) {
+      goBack(1);
+    }
+    if (length > 1) {
+      goBack(2);
     }
   }
 
@@ -103,6 +138,9 @@ class _State extends State<SmartStockApp> {
           onChangePage: _onChangePage,
           onBackPage: _onBackPage,
         );
+      }
+      if (child != null) {
+        pageHistories.add(child!);
       }
       initialized = true;
     }).catchError((err) {
