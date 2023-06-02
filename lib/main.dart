@@ -3,7 +3,7 @@ import 'package:smartstock/account/pages/index.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/expense/pages/expenses.dart';
+import 'package:smartstock/expense/pages/index.dart';
 import 'package:smartstock/index.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
@@ -27,7 +27,10 @@ List<ModuleMenu> _onGetModules({
     onChangePage: onChangePage,
     onBackPage: onBackPage,
   );
-  var expenseIndex = const ExpenseExpensesPage();
+  var expenseIndex = ExpenseIndexPage(
+    onChangePage: onChangePage,
+    onBackPage: onBackPage,
+  );
   var accountIndex = ProfileIndexPage(
     onChangePage: onChangePage,
     onBackPage: onBackPage,

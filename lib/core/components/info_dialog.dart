@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/services/util.dart';
 
-showInfoDialog(context, message, {title = 'Info'}) {
+Future showInfoDialog(context, message, {title = 'Info'}) {
   return showDialog(
     context: context,
     builder: (context) {

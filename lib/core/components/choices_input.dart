@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/choice_input_dropdown.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
@@ -91,9 +92,9 @@ class _State extends State<ChoicesInput> {
   _label(label) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
+      child: LabelMedium(
+        text: label,
+        // style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
       ),
     );
   }

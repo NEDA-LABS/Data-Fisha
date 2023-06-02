@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/components/create_item_content.dart';
+import 'package:smartstock/expense/services/categories.dart';
 import 'package:smartstock/expense/services/expenses.dart';
 import 'package:smartstock/expense/services/items.dart';
 
 class CreateExpenseContent extends StatefulWidget {
-  const CreateExpenseContent({Key? key}) : super(key: key);
+  final OnBackPage onBackPage;
+
+  const CreateExpenseContent({Key? key, required this.onBackPage})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -17,12 +24,13 @@ class _State extends State<CreateExpenseContent> {
   Map state = {
     "item": "",
     "item_err": "",
+    "category": "",
+    "category_err": "",
     "amount": "",
     "amount_err": "",
     "req_err": "",
     "creating": false
   };
-  Map _categories = {};
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +39,23 @@ class _State extends State<CreateExpenseContent> {
       child: SingleChildScrollView(
         child: ListBody(
           children: [
+            TextInput(
+              label: "Item name",
+              placeholder: "",
+              error: state['name_err'] ?? '',
+              onText: (d) => _updateState({'name': d, 'name_err': ''}),
+            ),
             ChoicesInput(
-              label: "Item",
-              placeholder: "Choose item",
-              onText: (d) => _updateState({'item': d, 'item_err': ''}),
-              onLoad: getExpenseItemFromCacheOrRemote,
-              onField: (p0){
-                _categories[p0['name']] = p0['category'];
+              label: "Category",
+              placeholder: "Click to select",
+              error: state['category_err'] ?? '',
+              onText: (d) => _updateState({'category': d, 'category_err': ''}),
+              onLoad: getExpenseCategoriesFromCacheOrRemote,
+              onField: (p0) {
+                // _categories[p0['name']] = p0['category'];
                 return p0['name'];
               },
-              getAddWidget: () => const CreateExpenseItemContent(),
+              getAddWidget: () => const CreateExpenseCategoryContent(),
             ),
             TextInput(
               onText: (d) => _updateState({'amount': d, 'amount_err': ''}),
@@ -48,6 +63,7 @@ class _State extends State<CreateExpenseContent> {
               error: state['amount_err'] ?? '',
               type: TextInputType.number,
             ),
+            const WhiteSpacer(height: 16),
             Container(
               height: 64,
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -62,7 +78,7 @@ class _State extends State<CreateExpenseContent> {
                         child: Text(
                           state['creating'] == true
                               ? "Waiting..."
-                              : "Save expense.",
+                              : "Save expense",
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -71,7 +87,7 @@ class _State extends State<CreateExpenseContent> {
                 ],
               ),
             ),
-            Text(state['req_err'])
+            // Text(state['req_err'])
           ],
         ),
       ),
@@ -80,33 +96,41 @@ class _State extends State<CreateExpenseContent> {
 
   _updateState(map) {
     if (map is Map) {
-      setState(() {
-        state.addAll(map);
-      });
+      if (mounted) {
+        setState(() {
+          state.addAll(map);
+        });
+      }
     }
   }
 
   _onPressed() {
-    _updateState({'req_err': ''});
-    var item = state['item']??'';
+    // _updateState({'req_err': ''});
+    var name = '${state['name'] ?? ''}';
+    var category = '${state['category'] ?? ''}';
     var amount = doubleOrZero(state['amount']);
-    if (item.isEmpty) {
-      _updateState({'item_err': 'Item required'});
+    if (name.isEmpty) {
+      _updateState({'name_err': 'Item name required'});
       return;
     }
-    if (amount<=0) {
+    if (category.isEmpty) {
+      _updateState({'category_err': 'Item category required'});
+      return;
+    }
+    if (amount <= 0) {
       _updateState({'amount_err': 'Amount must be greater than zero'});
       return;
     }
+    print('Everything cool, expenses');
     _updateState({'creating': true});
     submitExpenses(
-            name: item,
-            category: _categories[item],
-            amount: amount)
-        .catchError((err) {
-          _updateState({'req_err': '$err'});
-        })
-        .then((value) => Navigator.of(context).maybePop())
+      name: name,
+      category: category,
+      amount: amount,
+    )
+        .catchError((e) => showInfoDialog(context, e))
+        .then((value) => showInfoDialog(context, 'Expense created successful'))
+        .then((value) => widget.onBackPage())
         .whenComplete(() => _updateState({'creating': false}));
   }
 }

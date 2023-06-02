@@ -18,3 +18,17 @@ prepareCreateExpensesRemote(Map items) {
       () => httpPutRequest('${shopFunctionsURL(app)}/expense');
   return composeAsync([executeHttp, putHttpRequestFn, shopToApp]);
 }
+
+prepareGetExpensesSummaryReport(shop, date) {
+  var request = composeAsync(
+    [
+      (app) => executeHttp(
+            () => httpGetRequest(
+              '${shopFunctionsURL(app)}/report/expenses/dashboard?from=$date&to=$date',
+            ),
+          ),
+      shopToApp,
+    ],
+  );
+  return request(shop);
+}
