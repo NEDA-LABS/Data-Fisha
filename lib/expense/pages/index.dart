@@ -13,8 +13,6 @@ import 'package:smartstock/dashboard/components/numberCard.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 import 'package:smartstock/expense/pages/ExpensesPage.dart';
 import 'package:smartstock/expense/services/index.dart';
-import 'package:smartstock/sales/pages/sales_cash.dart';
-import 'package:smartstock/sales/pages/sales_invoice.dart';
 
 class ExpenseIndexPage extends StatefulWidget {
   final OnChangePage onChangePage;
@@ -92,6 +90,10 @@ class _State extends State<ExpenseIndexPage> {
         "Today",
         doubleOrZero(_getIt('today', data)),
         null,
+        onClick: () => widget.onChangePage(ExpenseExpensesPage(
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
+        )),
       ),
     );
     var weekExpense = Expanded(
@@ -100,6 +102,10 @@ class _State extends State<ExpenseIndexPage> {
         "This week",
         doubleOrZero(_getIt('week', data)),
         null,
+        onClick: () => widget.onChangePage(ExpenseExpensesPage(
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
+        )),
       ),
     );
     var monthExpense = Expanded(
@@ -108,12 +114,10 @@ class _State extends State<ExpenseIndexPage> {
         "This month",
         doubleOrZero(_getIt('month', data)),
         null,
-        onClick: () => widget.onChangePage(
-          SalesCashPage(
-            onBackPage: widget.onBackPage,
-            onChangePage: widget.onChangePage,
-          ),
-        ),
+        onClick: () => widget.onChangePage(ExpenseExpensesPage(
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
+        )),
       ),
     );
     var yearExpense = Expanded(
@@ -122,7 +126,7 @@ class _State extends State<ExpenseIndexPage> {
         "This year",
         doubleOrZero(_getIt('year', data)),
         null,
-        onClick: () => widget.onChangePage(InvoicesPage(
+        onClick: () => widget.onChangePage(ExpenseExpensesPage(
           onBackPage: widget.onBackPage,
           onChangePage: widget.onChangePage,
         )),
