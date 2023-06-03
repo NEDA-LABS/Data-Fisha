@@ -4,10 +4,21 @@ import 'package:smartstock/core/services/util.dart';
 
 class ChooseShopPage extends StatelessWidget {
   final OnGetModulesMenu onGetModulesMenu;
-  const ChooseShopPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  final OnGetInitialPage onGetInitialModule;
+
+  const ChooseShopPage({
+    Key? key,
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super(key: key);
 
   @override
   Widget build(var context) {
-    return Scaffold(body: ChooseShop(onGetModulesMenu: onGetModulesMenu));
+    return Scaffold(
+      body: ChooseShop(
+        onGetModulesMenu: onGetModulesMenu,
+        onGetInitialModule: onGetInitialModule,
+      ),
+    );
   }
 }

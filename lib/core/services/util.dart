@@ -113,4 +113,9 @@ typedef OnGetModulesMenu = List<ModuleMenu> Function({
   required OnBackPage onBackPage,
 });
 
+typedef OnGetInitialPage = Widget? Function({
+  required OnChangePage onChangePage,
+  required OnBackPage onBackPage,
+});
+
 typedef OnDoneSelectShop = Function(Map user);

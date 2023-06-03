@@ -4,8 +4,13 @@ import 'package:smartstock/core/services/util.dart';
 
 class LoginPage extends StatelessWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
-  const LoginPage({Key? key, required this.onGetModulesMenu}) : super(key: key);
+  const LoginPage({
+    Key? key,
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super(key: key);
 
   @override
   Widget build(var context) {
@@ -13,7 +18,10 @@ class LoginPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: LoginForm(onGetModulesMenu: onGetModulesMenu),
+          child: LoginForm(
+            onGetModulesMenu: onGetModulesMenu,
+            onGetInitialModule: onGetInitialModule,
+          ),
         ),
       ),
     );

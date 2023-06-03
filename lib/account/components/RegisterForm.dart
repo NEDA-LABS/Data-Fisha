@@ -15,9 +15,13 @@ import 'package:smartstock/core/services/util.dart';
 
 class RegisterForm extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
-  const RegisterForm({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const RegisterForm({
+    Key? key,
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -147,6 +151,7 @@ class _State extends State<RegisterForm> {
                 MaterialPageRoute(
                   builder: (context) => ChooseShopPage(
                     onGetModulesMenu: widget.onGetModulesMenu,
+                    onGetInitialModule: widget.onGetInitialModule,
                   ),
                 ),
                 (route) => false,
@@ -156,6 +161,7 @@ class _State extends State<RegisterForm> {
                 MaterialPageRoute(
                   builder: (context) => SmartStockApp(
                     onGetModulesMenu: widget.onGetModulesMenu,
+                    onGetInitialModule: widget.onGetInitialModule,
                   ),
                 ),
                 (route) => false,
@@ -315,8 +321,10 @@ class _State extends State<RegisterForm> {
             onTap: () {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      LoginPage(onGetModulesMenu: widget.onGetModulesMenu),
+                  builder: (context) => LoginPage(
+                    onGetModulesMenu: widget.onGetModulesMenu,
+                    onGetInitialModule: widget.onGetInitialModule,
+                  ),
                 ),
                 (route) => false,
               );

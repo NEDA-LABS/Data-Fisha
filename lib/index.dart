@@ -28,16 +28,27 @@ void callbackDispatcher() {
   });
 }
 
-startSmartStock({required OnGetModulesMenu onGetModulesMenu}) {
+startSmartStock({
+  required OnGetModulesMenu onGetModulesMenu,
+  OnGetInitialPage? onGetInitialModule,
+}) {
   WidgetsFlutterBinding.ensureInitialized();
   periodicLocalDataSyncs(callbackDispatcher);
-  runApp(_MainWidget(onGetModulesMenu: onGetModulesMenu));
+  runApp(_MainWidget(
+    onGetModulesMenu: onGetModulesMenu,
+    onGetInitialModule: onGetInitialModule ??
+        ({required onBackPage, required onChangePage}) => null,
+  ));
 }
 
 class _MainWidget extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
-  const _MainWidget({required this.onGetModulesMenu}) : super();
+  const _MainWidget({
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super();
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -60,7 +71,10 @@ class _State extends State<_MainWidget> {
       debugShowCheckedModeBanner: kDebugMode,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: SmartStockApp(onGetModulesMenu: widget.onGetModulesMenu),
+      home: SmartStockApp(
+        onGetModulesMenu: widget.onGetModulesMenu,
+        onGetInitialModule: widget.onGetInitialModule,
+      ),
     );
   }
 }

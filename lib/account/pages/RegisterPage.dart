@@ -5,9 +5,13 @@ import 'package:smartstock/core/services/util.dart';
 
 class RegisterPage extends StatelessWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
-  const RegisterPage({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const RegisterPage({
+    Key? key,
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super(key: key);
 
   @override
   Widget build(var context) {
@@ -20,8 +24,10 @@ class RegisterPage extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) =>
-                    LoginPage(onGetModulesMenu: onGetModulesMenu),
+                builder: (context) => LoginPage(
+                  onGetModulesMenu: onGetModulesMenu,
+                  onGetInitialModule: onGetInitialModule,
+                ),
               ),
               (route) => false,
             );
@@ -31,7 +37,10 @@ class RegisterPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: RegisterForm(onGetModulesMenu: onGetModulesMenu),
+          child: RegisterForm(
+            onGetModulesMenu: onGetModulesMenu,
+            onGetInitialModule: onGetInitialModule,
+          ),
         ),
       ),
     );

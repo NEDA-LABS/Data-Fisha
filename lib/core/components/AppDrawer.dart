@@ -17,11 +17,13 @@ class AppDrawer extends Drawer {
   final double cWidth;
   final OnChangePage onChangePage;
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
   const AppDrawer({
     required this.onGetModulesMenu,
     required this.menus,
     required this.onChangePage,
+    required this.onGetInitialModule,
     this.current,
     this.cWidth = 250,
     Key? key,
@@ -147,8 +149,10 @@ class AppDrawer extends Drawer {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>
-                    ChooseShopPage(onGetModulesMenu: onGetModulesMenu),
+                builder: (context) => ChooseShopPage(
+                  onGetModulesMenu: onGetModulesMenu,
+                  onGetInitialModule: onGetInitialModule,
+                ),
               ),
             );
           },
@@ -212,7 +216,7 @@ class AppDrawer extends Drawer {
         leading: const Icon(Icons.exit_to_app),
         title: const BodyMedium(text: 'Sign out'),
         onTap: () {
-          logOut(context, onGetModulesMenu);
+          logOut(context, onGetModulesMenu, onGetInitialModule);
         },
       ),
     );

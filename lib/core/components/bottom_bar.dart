@@ -11,11 +11,13 @@ class AppBottomBar extends StatefulWidget {
   final List<ModuleMenu> menus;
   final OnChangePage onChangePage;
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
   const AppBottomBar({
     required this.menus,
     required this.onChangePage,
     required this.onGetModulesMenu,
+    required this.onGetInitialModule,
     Key? key,
   }) : super(key: key);
 
@@ -86,6 +88,7 @@ class _State extends State<AppBottomBar> {
                           MaterialPageRoute(
                             builder: (context) => ChooseShopPage(
                               onGetModulesMenu: widget.onGetModulesMenu,
+                              onGetInitialModule: widget.onGetInitialModule,
                             ),
                           ),
                         );
@@ -96,7 +99,11 @@ class _State extends State<AppBottomBar> {
                       leading: const Icon(Icons.exit_to_app),
                       // trailing: const Icon(Icons.chevron_right),
                       onTap: () {
-                        logOut(context, widget.onGetModulesMenu);
+                        logOut(
+                          context,
+                          widget.onGetModulesMenu,
+                          widget.onGetInitialModule,
+                        );
                       },
                     )
                   ],

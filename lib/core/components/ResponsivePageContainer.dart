@@ -17,6 +17,7 @@ class ResponsivePageContainer extends StatefulWidget {
   final Widget child;
   final OnChangePage onChangePage;
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
   const ResponsivePageContainer({
     this.office = '',
@@ -26,6 +27,7 @@ class ResponsivePageContainer extends StatefulWidget {
     required this.child,
     required this.onChangePage,
     required this.onGetModulesMenu,
+    required this.onGetInitialModule,
     Key? key,
   }) : super(key: key);
 
@@ -62,6 +64,7 @@ class _State extends State<ResponsivePageContainer> {
                 menus: widget.menus,
                 current: widget.current,
                 onChangePage: widget.onChangePage,
+                onGetInitialModule: widget.onGetInitialModule,
               )
             : Container(),
         Expanded(child: widget.child)
@@ -96,6 +99,7 @@ class _State extends State<ResponsivePageContainer> {
                         menus: menu,
                         onChangePage: widget.onChangePage,
                         onGetModulesMenu: widget.onGetModulesMenu,
+                        onGetInitialModule: widget.onGetInitialModule,
                       );
                     }
                     return Container();

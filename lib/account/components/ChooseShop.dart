@@ -9,9 +9,13 @@ import 'package:smartstock/core/services/util.dart';
 
 class ChooseShop extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
-  const ChooseShop({Key? key, required this.onGetModulesMenu})
-      : super(key: key);
+  const ChooseShop({
+    Key? key,
+    required this.onGetModulesMenu,
+    required this.onGetInitialModule,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -71,8 +75,10 @@ class _State extends State<ChooseShop> {
           shopState.setCurrentShop(shop).then((shop) {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) =>
-                    SmartStockApp(onGetModulesMenu: widget.onGetModulesMenu),
+                builder: (context) => SmartStockApp(
+                  onGetModulesMenu: widget.onGetModulesMenu,
+                  onGetInitialModule: widget.onGetInitialModule,
+                ),
               ),
               (route) => false,
             );

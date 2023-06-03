@@ -11,10 +11,12 @@ import 'package:smartstock/sales/pages/index.dart';
 
 class SmartStockApp extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialModule;
 
   const SmartStockApp({
     Key? key,
     required this.onGetModulesMenu,
+    required this.onGetInitialModule,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class _State extends State<SmartStockApp> {
       return WillPopScope(
         child: ResponsivePageContainer(
           onGetModulesMenu: widget.onGetModulesMenu,
+          onGetInitialModule: widget.onGetInitialModule,
           menus: widget.onGetModulesMenu(
             context: context,
             onChangePage: _onChangePage,
@@ -66,7 +69,10 @@ class _State extends State<SmartStockApp> {
         },
       );
     } else {
-      return LoginPage(onGetModulesMenu: widget.onGetModulesMenu);
+      return LoginPage(
+        onGetModulesMenu: widget.onGetModulesMenu,
+        onGetInitialModule: widget.onGetInitialModule,
+      );
     }
   }
 
@@ -132,12 +138,18 @@ class _State extends State<SmartStockApp> {
       if (user == null) {
         return;
       }
-      var role = propertyOrNull('role')(user);
-      if (role != 'admin' && initialized == false) {
-        child = SalesPage(
-          onChangePage: _onChangePage,
-          onBackPage: _onBackPage,
-        );
+      var initialPage = widget.onGetInitialModule(
+          onBackPage: _onBackPage, onChangePage: _onChangePage);
+      if (initialPage != null) {
+        child = initialPage;
+      } else {
+        var role = propertyOrNull('role')(user);
+        if (role != 'admin' && initialized == false) {
+          child = SalesPage(
+            onChangePage: _onChangePage,
+            onBackPage: _onBackPage,
+          );
+        }
       }
       if (child != null) {
         pageHistories.add(child!);

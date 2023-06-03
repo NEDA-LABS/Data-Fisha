@@ -1,5 +1,4 @@
 import 'package:bfast/util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/core/services/api_account.dart';
@@ -37,13 +36,17 @@ Future accountResetPassword(username) async {
   }
 }
 
-logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu) {
+logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu,
+    OnGetInitialPage onGetInitialModule) {
   removeLocalCurrentUser().then((value) {
     return removeActiveShop();
   }).then((value) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => SmartStockApp(onGetModulesMenu: onGetModulesMenu),
+        builder: (context) => SmartStockApp(
+          onGetModulesMenu: onGetModulesMenu,
+          onGetInitialModule: onGetInitialModule,
+        ),
       ),
       (route) => false,
     );

@@ -87,6 +87,16 @@ List<ModuleMenu> _onGetModules({
   ];
 }
 
+// Widget _onGetInitialModule({
+//   required OnChangePage onChangePage,
+//   required OnBackPage onBackPage,
+// }) {
+//   return const DashboardIndexPage();
+// }
+
 void main() {
-  startSmartStock(onGetModulesMenu: _onGetModules);
+  startSmartStock(
+    onGetModulesMenu: _onGetModules,
+    // onGetInitialModule: _onGetInitialModule,
+  );
 }
