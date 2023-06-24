@@ -73,7 +73,7 @@ class _CustomersPage extends State<CustomersPage> {
 
   @override
   void initState() {
-    _refresh();
+    _refresh(skip: true);
     super.initState();
   }
 
@@ -99,7 +99,7 @@ class _CustomersPage extends State<CustomersPage> {
     );
   }
 
-  _refresh({skip = false}) {
+  _refresh({skip = true}) {
     setState(() {
       _loading = true;
     });
@@ -184,7 +184,7 @@ class _CustomersPage extends State<CustomersPage> {
                 title: const Text('Reload customers'),
                 onTap: () {
                   Navigator.of(context).maybePop();
-                  _refresh();
+                  _refresh(skip: true);
                 },
               ),
             ],
