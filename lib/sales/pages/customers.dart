@@ -73,7 +73,7 @@ class _CustomersPage extends State<CustomersPage> {
 
   @override
   void initState() {
-    _refresh(skip: true);
+    _refresh(skip: false);
     super.initState();
   }
 
