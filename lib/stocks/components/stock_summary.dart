@@ -65,17 +65,17 @@ class _State extends State<StocksSummary> {
             ? _getProductsCompactScreen(summary, context)
             : _getProductsLargeScreen(summary, context),
         space,
-        const BodySmall(text: 'Group by categories'),
-        space,
-        _getGroups(summary).isNotEmpty
-            ? Histogram(
-                height: 230,
-                data: _getGroups(summary).map((e) {
-                  return HistogramData(
-                      x: e['name'], y: '${e['total']}', name: e['name']);
-                }).toList(),
-              )
-            : Container(),
+        // const BodySmall(text: 'Group by categories'),
+        // space,
+        // _getGroups(summary).isNotEmpty
+        //     ? Histogram(
+        //         height: 230,
+        //         data: _getGroups(summary).map((e) {
+        //           return HistogramData(
+        //               x: e['name'], y: '${e['total']}', name: e['name']);
+        //         }).toList(),
+        //       )
+        //     : Container(),
         ...isSmallScreen
             ? [
                 Row(

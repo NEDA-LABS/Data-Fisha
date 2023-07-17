@@ -106,35 +106,39 @@ class _State extends State<ProductCreateForm> {
           initialText: '${product['purchase'] ?? ''}',
           type: TextInputType.number,
         ),
-        widget.inventoryType == InventoryType.product
+        widget.inventoryType != InventoryType.rawMaterial
             ? TextInput(
-                onText: (d) => updateFormState({"retailPrice": d}),
-                label: "Retail price / Unit quantity",
-                placeholder: "",
-                error: error['retailPrice'] ?? '',
-                initialText: '${product['retailPrice'] ?? ''}',
-                type: TextInputType.number,
-              )
+          onText: (d) => updateFormState({"retailPrice": d}),
+          label: "Retail price / Unit quantity",
+          placeholder: "",
+          error: error['retailPrice'] ?? '',
+          initialText: '${product['retailPrice'] ?? ''}',
+          type: TextInputType.number,
+        )
             : Container(),
-        widget.inventoryType == InventoryType.product
+        widget.inventoryType != InventoryType.rawMaterial
             ? TextInput(
-                onText: (d) => updateFormState({"wholesalePrice": d}),
-                label: "Wholesale price / Unit price",
-                placeholder: "",
-                error: error['wholesalePrice'] ?? '',
-                initialText: '${product['wholesalePrice'] ?? ''}',
-                type: TextInputType.number,
-              )
+          onText: (d) => updateFormState({"wholesalePrice": d}),
+          label: "Wholesale price / Unit price",
+          placeholder: "",
+          error: error['wholesalePrice'] ?? '',
+          initialText: '${product['wholesalePrice'] ?? ''}',
+          type: TextInputType.number,
+        )
             : Container(),
-        TextInput(
+        widget.inventoryType != InventoryType.nonStockProduct
+            ? TextInput(
           onText: (d) => updateFormState({"quantity": d}),
           label: "Quantity",
           placeholder: "Current stock quantity",
           error: error['quantity'] ?? '',
           initialText: '${product['quantity'] ?? ''}',
           type: TextInputType.number,
-        ),
-        DateInput(
+        )
+            : Container(),
+        widget.inventoryType == InventoryType.nonStockProduct
+            ? Container()
+            : DateInput(
           onText: (d) => updateFormState({"expire": d}),
           label: "Expire",
           placeholder: "YYYY-MM-DD ( Optional )",
@@ -147,7 +151,10 @@ class _State extends State<ProductCreateForm> {
         ),
         Container(
           height: 80,
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
           child: OutlinedButton(
             onPressed: loading ? null : _createProduct,
@@ -168,21 +175,27 @@ class _State extends State<ProductCreateForm> {
     });
     createOrUpdateProduct(context, error, loading, false, {
       ...product,
-      'saleable': widget.inventoryType == InventoryType.product,
+      'stockable': widget.inventoryType != InventoryType.nonStockProduct,
+      'saleable': (widget.inventoryType == InventoryType.product ||
+          widget.inventoryType == InventoryType.nonStockProduct),
+      'purchasable': true,
       'retailPrice': widget.inventoryType == InventoryType.rawMaterial
           ? '0'
-          : product['retailPrice'],
-      'wholesalePrice': product['wholesalePrice'] ?? '0'
+          : product['retailPrice'] ?? '0',
+      'wholesalePrice': widget.inventoryType == InventoryType.rawMaterial
+          ? '0'
+          : product['wholesalePrice'] ?? '0'
     }).then((value) {
       widget.onBackPage();
     }).catchError((error) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Error!",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          content: Text('$error'),
-        ),
+        builder: (context) =>
+            AlertDialog(
+              title: const Text("Error!",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              content: Text('$error'),
+            ),
       );
     }).whenComplete(() {
       setState(() {

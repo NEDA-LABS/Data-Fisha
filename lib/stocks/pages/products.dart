@@ -172,6 +172,20 @@ class _State extends State<ProductsPage> {
     );
   }
 
+  ContextMenu _getAddNonStockableProductMenu() {
+    return ContextMenu(
+      name: 'Add non-stock product',
+      pressed: () {
+        widget.onChangePage(
+          ProductCreatePage(
+            inventoryType: InventoryType.nonStockProduct,
+            onBackPage: widget.onBackPage,
+          ),
+        );
+      },
+    );
+  }
+
   ContextMenu _getAddServiceMenu() {
     return ContextMenu(
       name: 'Add raw material',
@@ -193,6 +207,7 @@ class _State extends State<ProductsPage> {
   _getContextItems() {
     return [
       _getAddProductMenu(),
+      _getAddNonStockableProductMenu(),
       _getAddServiceMenu(),
       _getReloadMenu()
       // ContextMenu(name: 'Import', pressed: () => {}),
@@ -268,7 +283,7 @@ class _State extends State<ProductsPage> {
       TextStyle(color: healthColor, fontWeight: FontWeight.w400, fontSize: 14);
 
   _renderStockStatus(product, {appendQuantity = false}) => ifDoElse(
-      (_) => doubleOrZero(_['quantity']) > 0,
+      (_) => doubleOrZero(_['quantity']) > 0 || _['stockable'] == false,
       (_) => Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -280,7 +295,7 @@ class _State extends State<ProductsPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 margin: const EdgeInsets.only(right: 8),
               ),
-              Text('In stock', style: _inStyle()),
+              Text(_['stockable']==false ? 'N/A' : 'In stock', style: _inStyle()),
               appendQuantity
                   ? Text(' ( ${formatNumber(_['quantity'])} )',
                       style: _inStyle())
@@ -320,6 +335,16 @@ class _State extends State<ProductsPage> {
               title: Text(_getAddProductMenu().name),
               onTap: () {
                 _getAddProductMenu().pressed();
+                Navigator.of(context).maybePop();
+              },
+            ),
+            const HorizontalLine(),
+            ListTile(
+              leading: const Icon(Icons.free_breakfast),
+              trailing: const Icon(Icons.chevron_right),
+              title: Text(_getAddNonStockableProductMenu().name),
+              onTap: () {
+                _getAddNonStockableProductMenu().pressed();
                 Navigator.of(context).maybePop();
               },
             ),

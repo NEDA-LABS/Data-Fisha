@@ -61,7 +61,7 @@ Future<dynamic> createOrUpdateProduct(
         product['quantity'] = doubleOrZero(product['quantity']);
       }
       product['purchase'] = doubleOrZero(product['purchase']);
-      product['stockable'] = true;
+      // product['stockable'] = true;
       product['purchasable'] = true;
       if (!isUpdate) {
         product['wholesaleQuantity'] = 1;

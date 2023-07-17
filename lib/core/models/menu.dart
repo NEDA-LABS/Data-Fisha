@@ -37,7 +37,8 @@ class ModulePageMenu {
 
 class ContextMenu {
   final String name;
+  final String detail;
   final Function() pressed;
 
-  ContextMenu({required this.name, required this.pressed});
+  ContextMenu({required this.name, this.detail = '', required this.pressed});
 }
