@@ -1,6 +1,6 @@
 name: smartstock
 description: SmartStock mobile application
-version: 1.2.3-2023.6.24-b.0
+version: 1.3.0-2023.7.27-b.0
 publish_to: none
 
 environment:

@@ -85,4 +85,4 @@ var primaryBaseLightColor = const Color(0x1a005aa9);
 App smartStockApp =
     App(applicationId: 'smartstock_lb', projectId: 'smartstock');
 
-String version = "1.2.3-2023.6.24-b.0";
+String version = "1.3.0-2023.7.27-b.0";
