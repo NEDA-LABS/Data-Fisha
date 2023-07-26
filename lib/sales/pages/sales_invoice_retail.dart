@@ -7,6 +7,7 @@ import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/customer.dart';
 import 'package:smartstock/sales/services/invoice.dart';
+import 'package:smartstock/sales/services/products.dart';
 
 class InvoiceSalePage extends StatelessWidget {
   final OnBackPage onBackPage;
@@ -27,7 +28,7 @@ class InvoiceSalePage extends StatelessWidget {
       onCustomerLikeList: getCustomerFromCacheOrRemote,
       onCustomerLikeAddWidget: () => const CreateCustomerContent(),
       checkoutCompleteMessage: 'Checkout completed.',
-      onGetProductsLike: getStockFromCacheOrRemote,
+      onGetProductsLike: getProductsFromCacheOrRemote,
     );
   }
 

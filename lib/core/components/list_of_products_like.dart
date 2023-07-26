@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
@@ -27,10 +28,14 @@ class ListOfProductsLike extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 100),
-      itemCount: products.length,
+      itemCount: itOrEmptyArray(products).length, //+1,
       shrinkWrap: true,
       gridDelegate: _delegate(),
       itemBuilder: (context, index) {
+        // todo: implement add product after showing all available products
+        // if(index==itOrEmptyArray(products).length){
+        //   return Container(child: BodyLarge(text: 'Hi,',),);
+        // }
         return _productCardItem(
             product: products[index],
             category: _getCategory(products[index]),

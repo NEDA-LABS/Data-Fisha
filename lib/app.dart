@@ -1,13 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
+import 'package:smartstock/account/pages/payment.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/HeadineLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePageContainer.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
+
+import 'core/plugins/sync_common.dart';
 
 class SmartStockApp extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
@@ -31,9 +41,15 @@ class _State extends State<SmartStockApp> {
   bool initialized = false;
   Map? user;
 
+  // var _subscription = {};
+  var _shouldSubsRun = true;
+  var _shouldShowSubsDialog = true;
+  Timer? _timer;
+
   @override
   void initState() {
     _getLoginUser();
+    _listenForSubscription();
     super.initState();
   }
 
@@ -165,5 +181,136 @@ class _State extends State<SmartStockApp> {
         loading = false;
       });
     });
+  }
+
+  void _listenForSubscription() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) async {
+      if (_shouldSubsRun) {
+        _shouldSubsRun = false;
+        compute(_checkSubscription, '').then((value) {
+          if (kDebugMode) {
+            print('Subscription: $value');
+          }
+          var getSubscription = propertyOrNull('subscription');
+          if (getSubscription(value) == false && _shouldShowSubsDialog) {
+            _shouldShowSubsDialog = false;
+            showDialog(
+              context: context,
+              builder: (_) {
+                return Dialog(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        constraints:
+                            const BoxConstraints(minHeight: 210, maxWidth: 400),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const LabelLarge(text: 'You have unpaid invoice'),
+                            const WhiteSpacer(height: 8),
+                            HeadlineLarge(
+                                text: 'TZ ${formatNumber(value['balance'])}'),
+                            const WhiteSpacer(height: 16),
+                            const BodyLarge(
+                                text:
+                                    'To continue using the service you must pay'),
+                            const WhiteSpacer(height: 24),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .maybePop()
+                                          .whenComplete(() {
+                                        _shouldShowSubsDialog = true;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                      ),
+                                      child: const BodyMedium(text: 'CANCEL'),
+                                    ),
+                                  ),
+                                ),
+                                const WhiteSpacer(width: 8),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .maybePop()
+                                          .whenComplete(() {
+                                        Navigator.of(context)
+                                            .push(
+                                          MaterialPageRoute(
+                                            fullscreenDialog: true,
+                                            builder: (context) {
+                                              return PaymentPage(
+                                                subscription: value,
+                                              );
+                                            },
+                                          ),
+                                        )
+                                            .whenComplete(() {
+                                          _shouldShowSubsDialog = true;
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                      ),
+                                      child: const BodyMedium(text: 'PAY NOW'),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        }).catchError((_) {
+          if (kDebugMode) {
+            print(_);
+          }
+        }).whenComplete(() {
+          _shouldSubsRun = true;
+        });
+      } else {
+        if (kDebugMode) {
+          print('another subscription sync running');
+        }
+      }
+    });
+  }
+
+  Future _checkSubscription(dynamic x) async {
+    return await syncSubscriptionFromRemoteServer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }

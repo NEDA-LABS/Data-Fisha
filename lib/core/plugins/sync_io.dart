@@ -7,13 +7,21 @@ import 'package:smartstock/core/plugins/sync_common.dart';
 import 'package:workmanager/workmanager.dart';
 
 var _shouldRun = true;
+// var _shouldSubsRun = true;
 
 Future _pushDataToServer(RootIsolateToken? rootIsolateToken) async {
   if (rootIsolateToken != null) {
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
   }
-  await syncLocalDataToRemoteServer();
+  return await syncLocalDataToRemoteServer();
 }
+
+// Future _checkSubscription(RootIsolateToken? rootIsolateToken) async {
+//   if (rootIsolateToken != null) {
+//     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+//   }
+//   return await syncSubscriptionFromRemoteServer();
+// }
 
 periodicLocalDataSyncs(Function() callbackDispatcher) async {
   var isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
@@ -32,7 +40,7 @@ periodicLocalDataSyncs(Function() callbackDispatcher) async {
     if (kDebugMode) {
       print("::::: others");
     }
-    Timer.periodic(const Duration(seconds: 15), (_) async {
+    Timer.periodic(const Duration(seconds: 5), (_) async {
       if (_shouldRun) {
         _shouldRun = false;
         Isolate.spawn(_pushDataToServer, ServicesBinding.rootIsolateToken)
@@ -55,3 +63,28 @@ periodicLocalDataSyncs(Function() callbackDispatcher) async {
     });
   }
 }
+
+// periodicSubscription({required Function(dynamic subs) onSubscription}) async {
+//   Timer.periodic(const Duration(minutes: 5), (_) async {
+//     if (_shouldSubsRun) {
+//       _shouldSubsRun = false;
+//       Isolate.spawn(_checkSubscription, ServicesBinding.rootIsolateToken)
+//           .then((value) {
+//         if (kDebugMode) {
+//           print('Subscription: $value');
+//         }
+//         onSubscription(value);
+//       }).catchError((_) {
+//         if (kDebugMode) {
+//           print(_);
+//         }
+//       }).whenComplete(() {
+//         _shouldSubsRun = true;
+//       });
+//     } else {
+//       if (kDebugMode) {
+//         print('another subscription sync running');
+//       }
+//     }
+//   });
+// }

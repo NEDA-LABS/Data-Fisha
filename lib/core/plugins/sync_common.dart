@@ -3,7 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:smartstock/core/services/api_subscription.dart';
+import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 
 Future syncLocalDataToRemoteServer() async {
@@ -25,4 +28,24 @@ Future syncLocalDataToRemoteServer() async {
       throw response.body;
     }
   }
+}
+
+Future syncSubscriptionFromRemoteServer() async {
+  var user = await getLocalCurrentUser();
+  user = user is Map ? user : {};
+  if (user['id'] == null) {
+    throw Exception('No user can\'t check for subscription');
+  }
+  var subscription = await getSubscriptionLocal();
+  subscription ??= await getSubscriptionStatus(user['id']);
+  getSubscriptionStatus(user['id']).then((value) async {
+    if (value is Map) {
+      await saveSubscriptionLocal(value);
+    }
+  }).catchError((err) {
+    if (kDebugMode) {
+      print(err);
+    }
+  });
+  return subscription;
 }
