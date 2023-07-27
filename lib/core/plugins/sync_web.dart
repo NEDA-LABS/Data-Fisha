@@ -4,15 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/plugins/sync_common.dart';
 
 var _shouldRun = true;
-// var _shouldSubsRun = true;
 
 Future _pushDataToServer(dynamic v) async {
   return await syncLocalDataToRemoteServer();
 }
-
-// Future _checkSubscription(dynamic v) async {
-//   return await syncSubscriptionFromRemoteServer();
-// }
 
 periodicLocalDataSyncs(Function() callbackDispatcher) async {
   if (kDebugMode) {
@@ -40,26 +35,6 @@ periodicLocalDataSyncs(Function() callbackDispatcher) async {
   });
 }
 
-// periodicSubscription({required Function(dynamic subs) onSubscription}) async {
-//   Timer.periodic(const Duration(minutes: 5), (_) async {
-//     if (_shouldSubsRun) {
-//       _shouldSubsRun = false;
-//       compute(_checkSubscription, '').then((value) {
-//         if (kDebugMode) {
-//           print('Subscription: $value');
-//         }
-//         onSubscription(value);
-//       }).catchError((_) {
-//         if (kDebugMode) {
-//           print(_);
-//         }
-//       }).whenComplete(() {
-//         _shouldSubsRun = true;
-//       });
-//     } else {
-//       if (kDebugMode) {
-//         print('another subscription sync running');
-//       }
-//     }
-//   });
-// }
+Future<dynamic> checkSubscription(List<dynamic> args) async {
+  return await syncSubscriptionFromRemoteServer();
+}
