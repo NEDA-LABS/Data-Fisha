@@ -247,7 +247,7 @@ class _State extends State<SmartStockApp> {
                     HeadlineLarge(text: 'TZ ${formatNumber(value['balance'])}'),
                     const WhiteSpacer(height: 16),
                     const BodyLarge(
-                        text: 'To continue using the service you must pay'),
+                        text: 'For all your shops, to continue using the service you must pay'),
                     const WhiteSpacer(height: 24),
                     Row(
                       children: [
