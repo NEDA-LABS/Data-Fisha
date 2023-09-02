@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/expense/components/create_expense_content.dart';
+import 'package:smartstock/expense/components/expense_details.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 
 import '../services/expenses.dart';
@@ -102,37 +101,43 @@ class _State extends State<ExpenseExpensesPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TableLikeListRow([
-          TableLikeListTextDataCell('${_expenses[index]['name']}'),
-          TableLikeListTextDataCell('${_expenses[index]['category']}'),
-          TableLikeListTextDataCell(
-              '${formatNumber(_expenses[index]['amount'])}'),
-          TableLikeListTextDataCell('${_expenses[index]['date']}'),
-        ]),
+        InkWell(
+          onTap: ()=>_showDetails(index),
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${_expenses[index]['name']}'),
+            TableLikeListTextDataCell('${_expenses[index]['category']}'),
+            TableLikeListTextDataCell(
+                '${formatNumber(_expenses[index]['amount'])}'),
+            TableLikeListTextDataCell('${_expenses[index]['date']}'),
+          ]),
+        ),
         const HorizontalLine()
       ],
     );
   }
 
   Widget _smallScreen(context, index) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TableLikeListTextDataCell('${_expenses[index]['name']}'),
-              TableLikeListTextDataCell(
-                  '${formatNumber(_expenses[index]['amount'])}'),
-            ],
+    return InkWell(
+      onTap: ()=>_showDetails(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TableLikeListTextDataCell('${_expenses[index]['name']}'),
+                TableLikeListTextDataCell(
+                    '${formatNumber(_expenses[index]['amount'])}'),
+              ],
+            ),
+            subtitle: Text('${_expenses[index]['date']}'),
           ),
-          subtitle: Text('${_expenses[index]['date']}'),
-        ),
-        const SizedBox(height: 5),
-        const HorizontalLine(),
-      ],
+          const SizedBox(height: 5),
+          const HorizontalLine(),
+        ],
+      ),
     );
   }
 
@@ -213,6 +218,18 @@ class _State extends State<ExpenseExpensesPage> {
             ),
           ],
         ),
+      ),
+      context,
+    );
+  }
+
+  void _showDetails(index){
+    showDialogOrModalSheet(
+      ExpenseDetail(
+        item: _expenses[index],
+        onChangePage: widget.onChangePage,
+        onBackPage: widget.onBackPage,
+        onRefresh: _refresh,
       ),
       context,
     );

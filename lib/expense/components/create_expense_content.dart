@@ -1,14 +1,18 @@
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/services/files.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
-import 'package:smartstock/expense/components/create_item_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 import 'package:smartstock/expense/services/expenses.dart';
-import 'package:smartstock/expense/services/items.dart';
 
 class CreateExpenseContent extends StatefulWidget {
   final OnBackPage onBackPage;
@@ -23,6 +27,7 @@ class CreateExpenseContent extends StatefulWidget {
 class _State extends State<CreateExpenseContent> {
   Map state = {
     "item": "",
+    "date": "",
     "item_err": "",
     "category": "",
     "category_err": "",
@@ -31,6 +36,7 @@ class _State extends State<CreateExpenseContent> {
     "req_err": "",
     "creating": false
   };
+  PlatformFile? _platformFile;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +45,14 @@ class _State extends State<CreateExpenseContent> {
       child: SingleChildScrollView(
         child: ListBody(
           children: [
+            DateInput(
+                onText: (d) => _updateState({'date': d, 'date_err': ''}),
+                label: 'Date',
+                error: state['date_err'],
+                firstDate:
+                    DateTime.now().subtract(const Duration(days: 360 * 2)),
+                initialDate: DateTime.now(),
+                lastDate: DateTime.now()),
             TextInput(
               label: "Item name",
               placeholder: "",
@@ -56,6 +70,19 @@ class _State extends State<CreateExpenseContent> {
                 return p0['name'];
               },
               getAddWidget: () => const CreateExpenseCategoryContent(),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: LabelLarge(text: 'Receipt'),
+            ),
+            Container(
+              height: 48,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: OutlinedButton(
+                  onPressed: _onUploadReceipt,
+                  child: BodyLarge(
+                      text:
+                          'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
             ),
             TextInput(
               onText: (d) => _updateState({'amount': d, 'amount_err': ''}),
@@ -107,30 +134,77 @@ class _State extends State<CreateExpenseContent> {
   _onPressed() {
     // _updateState({'req_err': ''});
     var name = '${state['name'] ?? ''}';
+    var date = '${state['date'] ?? ''}';
     var category = '${state['category'] ?? ''}';
     var amount = doubleOrZero(state['amount']);
     if (name.isEmpty) {
       _updateState({'name_err': 'Item name required'});
-      return;
+    }
+    if (date.isEmpty) {
+      _updateState({'date_err': 'Date required'});
     }
     if (category.isEmpty) {
       _updateState({'category_err': 'Item category required'});
-      return;
     }
     if (amount <= 0) {
       _updateState({'amount_err': 'Amount must be greater than zero'});
       return;
     }
-    print('Everything cool, expenses');
+    if (kDebugMode) {
+      print('Everything cool, expenses');
+    }
     _updateState({'creating': true});
-    submitExpenses(
-      name: name,
-      category: category,
-      amount: amount,
-    )
+    uploadFileToWeb3(_platformFile)
+        .then((fileResponse) {
+          return submitExpenses(
+              name: name,
+              date: date,
+              category: category,
+              amount: amount,
+              file: fileResponse is Map
+                  ? {
+                      "name": fileResponse['name'],
+                      "size": fileResponse['size'],
+                      "mime": fileResponse['mime'],
+                      "link": 'https://${fileResponse['cid']}.ipfs.w3s.link',
+                      "cid": fileResponse['cid'],
+                      "tags": 'receipt,expense,expenses',
+                    }
+                  : null);
+        })
         .catchError((e) => showInfoDialog(context, e))
         .then((value) => showInfoDialog(context, 'Expense created successful'))
         .then((value) => widget.onBackPage())
         .whenComplete(() => _updateState({'creating': false}));
+  }
+
+  void _onUploadReceipt() {
+    handleFile(value) {
+      FilePickerResult? result = value;
+      if (mounted) {
+        if (result != null) {
+          setState(() {
+            _platformFile = result.files.single;
+          });
+        } else {
+          showInfoDialog(context, "Fail to get selected file");
+        }
+      }
+    }
+
+    handleError(error) {
+      if (mounted) {
+        showInfoDialog(context, error);
+      }
+    }
+
+    FilePicker.platform
+        .pickFiles(
+            allowMultiple: false,
+            lockParentWindow: true,
+            withReadStream: true,
+            withData: false)
+        .then(handleFile)
+        .catchError(handleError);
   }
 }

@@ -53,6 +53,7 @@ class _DateInputState extends State<DateInput> {
   _fullWidthText(onText, String hintText, initialText) => Expanded(
       child: TextField(
           controller: textController,
+          onTap: _showDate,
           onChanged: onText,
           autofocus: false,
           maxLines: 1,
@@ -68,45 +69,57 @@ class _DateInputState extends State<DateInput> {
       child: Text(label,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)));
 
-  _actionsItems(data, onText, BuildContext context) => Row(children: [
+  _actionsItems(data, BuildContext context) => Row(children: [
         IconButton(
-            onPressed: () {
-              showDatePicker(
-                context: context,
-                initialDate: widget.initialDate,
-                firstDate: widget.firstDate,
-                lastDate: widget.lastDate,
-              ).then((value) => value != null ? onText(toSqlDate(value)) : {});
-            },
-            icon: const Icon(Icons.date_range_outlined))
+            onPressed: _showDate, icon: const Icon(Icons.date_range_outlined))
       ]);
 
-  _actions(onText) => _getIsLoading(_states)
+  _actions() => _getIsLoading(_states)
       ? const Padding(
           padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
           child: SizedBox(
               height: 16, width: 16, child: CircularProgressIndicator()))
-      : _actionsItems(_getData(_states), onText, context);
+      : _actionsItems(_getData(_states), context);
 
   @override
-  Widget build(BuildContext context) =>
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        widget.label.isNotEmpty
-            ? _label(widget.label)
-            : const SizedBox(height: 0),
-        Container(
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          widget.label.isNotEmpty
+              ? _label(widget.label)
+              : const SizedBox(height: 0),
+          Container(
             decoration: widget.showBorder
                 ? inputBoxDecoration(context, widget.error)
                 : null,
-            child: Row(children: [
-              _fullWidthText(
-                  widget.onText, widget.placeholder, widget.initialText),
-              _actions((text) {
-                textController = TextEditingController(text: text);
-                _updateState({});
-                widget.onText(text);
-              })
-            ])),
-        inputErrorMessageOrEmpty(widget.error)
-      ]);
+            child: Row(
+              children: [
+                _fullWidthText(
+                  widget.onText,
+                  widget.placeholder,
+                  widget.initialText,
+                ),
+                _actions()
+              ],
+            ),
+          ),
+          inputErrorMessageOrEmpty(widget.error)
+        ],
+      );
+
+  _onText(text) {
+    textController = TextEditingController(text: text);
+    _updateState({});
+    widget.onText(text);
+  }
+
+  void _showDate() {
+    print('Date clicked');
+    showDatePicker(
+      context: context,
+      initialDate: widget.initialDate,
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+    ).then((value) => value != null ? _onText(toSqlDate(value)) : {});
+  }
 }

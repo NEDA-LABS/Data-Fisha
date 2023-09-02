@@ -1,7 +1,12 @@
 import 'package:bfast/util.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/date_input.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
+
+import '../../core/components/BodyLarge.dart';
 
 Future addPurchaseDetail({
   required BuildContext context,
@@ -26,6 +31,7 @@ class _AddPurchaseDetailDialog extends StatefulWidget {
 
 class _State extends State<_AddPurchaseDetailDialog> {
   Map states = {"reference": '', "type": 'receipt', 'date': '', 'due': ''};
+  PlatformFile? _platformFile;
 
   _prepareUpdateState() => ifDoElse(
       (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
@@ -54,10 +60,10 @@ class _State extends State<_AddPurchaseDetailDialog> {
               lines: 1,
               error: states['error_r'] ?? '',
               type: TextInputType.text,
-              onText: (v) => _prepareUpdateState()({'reference': v})),
+              onText: (v) => _prepareUpdateState()({'reference': v,'error_r':''})),
           DateInput(
             label: 'Purchase date',
-            onText: (d) => _prepareUpdateState()({'date': d}),
+            onText: (d) => _prepareUpdateState()({'date': d,'error_d':''}),
             error: states['error_d'],
             firstDate: DateTime.now().subtract(const Duration(days: 360)),
             lastDate: DateTime.now(),
@@ -72,6 +78,19 @@ class _State extends State<_AddPurchaseDetailDialog> {
                   initialDate: DateTime.now(),
                 )
               : Container(),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: LabelLarge(text: 'Purchase receipt'),
+          ),
+          Container(
+            height: 48,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: OutlinedButton(
+                onPressed: _onUploadReceipt,
+                child: BodyLarge(
+                    text:
+                        'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
+          ),
           _addToCartButton(
               context, states, _prepareUpdateState(), widget.onSubmit),
         ],
@@ -88,13 +107,12 @@ class _State extends State<_AddPurchaseDetailDialog> {
             updateState({'error_r': '', 'error_d': ''});
             if ('${states['reference'] ?? ''}'.isEmpty) {
               updateState({'error_r': 'Reference required'});
-              return;
             }
             if ('${states['date'] ?? ''}'.isEmpty) {
               updateState({'error_d': 'Purchase date required'});
               return;
             }
-            onSubmit(states);
+            onSubmit(states,_platformFile);
           },
           style: _addToCartButtonStyle(context),
           child: const Text("SUBMIT", style: TextStyle(color: Colors.white))));
@@ -109,4 +127,34 @@ class _State extends State<_AddPurchaseDetailDialog> {
           topRight: Radius.circular(30),
         ),
       );
+
+  void _onUploadReceipt() {
+    handleFile(value) {
+      FilePickerResult? result = value;
+      if (mounted) {
+        if (result != null) {
+          setState(() {
+            _platformFile = result.files.single;
+          });
+        } else {
+          showInfoDialog(context, "Fail to get selected file");
+        }
+      }
+    }
+
+    handleError(error) {
+      if (mounted) {
+        showInfoDialog(context, error);
+      }
+    }
+
+    FilePicker.platform
+        .pickFiles(
+            allowMultiple: false,
+            lockParentWindow: true,
+            withReadStream: true,
+            withData: false)
+        .then(handleFile)
+        .catchError(handleError);
+  }
 }

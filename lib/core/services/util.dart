@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
-
+//'http://localhost:3000'; //
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
 String shopDatabaseURL(App app) =>

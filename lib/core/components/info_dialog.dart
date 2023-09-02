@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/DisplayTextMedium.dart';
-import 'package:smartstock/core/components/DisplayTextSmall.dart';
-import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/button.dart';
-import 'package:smartstock/core/services/util.dart';
 
 Future showInfoDialog(context, message, {title = 'Info'}) {
   return showDialog(

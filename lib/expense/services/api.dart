@@ -19,6 +19,13 @@ prepareCreateExpensesRemote(Map items) {
   return composeAsync([executeHttp, putHttpRequestFn, shopToApp]);
 }
 
+prepareDeleteExpensesRemote(dynamic id) {
+  var httpDeleteRequest = prepareDeleteRequest({});
+  deleteHttpRequestFn(app) =>
+      () => httpDeleteRequest('${shopFunctionsURL(app)}/expense/$id');
+  return composeAsync([executeHttp, deleteHttpRequestFn, shopToApp]);
+}
+
 prepareGetExpensesSummaryReport(shop, date) {
   var request = composeAsync(
     [

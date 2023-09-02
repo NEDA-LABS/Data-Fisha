@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class DeleteDialog extends StatefulWidget {
@@ -23,7 +25,7 @@ class _State extends State<DeleteDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         constraints: const BoxConstraints(maxWidth: 400),
         child: Wrap(
           children: [
@@ -38,29 +40,27 @@ class _State extends State<DeleteDialog> {
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: OutlinedButton(
-                    onPressed: loading
-                        ? null
-                        : () {
-                            setState(() {
-                              loading = true;
-                            });
-                            widget
-                                .onConfirm()
-                                .then((value) => Navigator.of(context).maybePop())
-                                .catchError((err) {
-                              setState(() {
-                                error = '$err';
-                              });
-                            }).whenComplete(() {
-                              setState(() {
-                                loading = false;
-                              });
-                            });
-                          },
-                    child: Text(loading ? 'Processing...' : 'Yes'))),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: OutlinedButton(
+                    onPressed: loading ? null : _handleOk,
+                    child:
+                        BodyMedium(text: loading ? 'Processing...' : 'Proceed'),
+                  ),
+                ),
+                const WhiteSpacer(width: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    child: const BodyMedium(text: 'Cancel'),
+                  ),
+                ),
+              ],
+            ),
             error.isNotEmpty
                 ? Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -72,5 +72,24 @@ class _State extends State<DeleteDialog> {
         ),
       ),
     );
+  }
+
+  _handleOk() {
+    setState(() {
+      loading = true;
+    });
+    widget
+        .onConfirm()
+        .then((value) => Navigator.of(context).maybePop())
+        .catchError((err) {
+      setState(() {
+        error = '$err';
+      });
+      return err;
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 }

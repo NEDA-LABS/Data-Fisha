@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/core/services/files.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_detail.dart';
@@ -102,11 +104,13 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       String batchId = generateUUID();
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
-      late Map pDetail;
+      Map? pDetail;
+      PlatformFile? file;
       await addPurchaseDetail(
           context: context,
-          onSubmit: (state) {
+          onSubmit: (state, PlatformFile? platformFile) {
             pDetail = state;
+            file = platformFile;
             Navigator.of(context).maybePop();
           });
       if (pDetail is! Map) {
@@ -114,8 +118,22 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       }
       // await _printPurchaseItems(carts, discount, customer, true, cartId);
       var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
-      var createPurchase = prepareCreatePurchase(purchase);
-      return createPurchase(shop);
+      return uploadFileToWeb3(file).then((fileResponse) {
+        var createPurchase = prepareCreatePurchase({
+          ...purchase,
+          'file': fileResponse is Map
+              ? {
+                  "name": fileResponse['name'],
+                  "size": fileResponse['size'],
+                  "mime": fileResponse['mime'],
+                  "link": 'https://${fileResponse['cid']}.ipfs.w3s.link',
+                  "cid": fileResponse['cid'],
+                  "tags": 'receipt,invoice,purchase,purchases',
+                }
+              : null
+        });
+        return createPurchase(shop);
+      });
       // await saveLocalSync(batchId, url, purchase);
       // oneTimeLocalSyncs();
     };
