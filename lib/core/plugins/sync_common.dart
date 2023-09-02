@@ -8,6 +8,7 @@ import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:uuid/uuid.dart';
 
 Future syncLocalDataToRemoteServer() async {
   List keys = await getLocalSyncsKeys();
@@ -36,11 +37,11 @@ Future syncSubscriptionFromRemoteServer() async {
   if (user['id'] == null) {
     throw Exception('No user can\'t check for subscription');
   }
-  var subscription = await getSubscriptionLocal();
+  var subscription = await getSubscriptionLocal(user['projectId']??const Uuid().v4());
   subscription ??= await getSubscriptionStatus(user['id']);
   getSubscriptionStatus(user['id']).then((value) async {
     if (value is Map) {
-      await saveSubscriptionLocal(value);
+      await saveSubscriptionLocal(value,user['projectId']??const Uuid().v4());
     }
   }).catchError((err) {
     if (kDebugMode) {

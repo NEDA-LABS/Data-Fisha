@@ -10,6 +10,7 @@ import 'package:smartstock/core/services/api_subscription.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentBody extends StatefulWidget {
   final dynamic subscription;
@@ -134,8 +135,6 @@ Ukishalipa tuma ujuma kwenda namba 0764 943 055 ukisema umeshalipa.
     );
   }
 
-  _onPressed() {}
-
   final _getStatus = propertyOrNull('reason');
 
   final _getBalance = propertyOrNull('balance');
@@ -144,11 +143,13 @@ Ukishalipa tuma ujuma kwenda namba 0764 943 055 ukisema umeshalipa.
     setState(() {
       loading = true;
     });
-    getLocalCurrentUser().then((value) {
-      return getSubscriptionStatus(value['id']);
+    getLocalCurrentUser().then((user) async {
+      var subscription = await getSubscriptionStatus(user['id']);
+      return {"user": user, "subs": subscription};
     }).then((value) {
-      if (value is Map && value['subscription'] == true) {
-        saveSubscriptionLocal(value).catchError((e) {
+      if (value['subs'] is Map && value['subs']['subscription'] == true) {
+        saveSubscriptionLocal(value, value['user']['projectId'] ?? const Uuid().v4())
+            .catchError((e) {
           if (kDebugMode) {
             print(e);
           }
