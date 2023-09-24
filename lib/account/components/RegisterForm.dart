@@ -5,6 +5,7 @@ import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/app.dart';
+import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -133,6 +134,10 @@ class _State extends State<RegisterForm> {
         'region': states['country'],
         'country': states['country'],
         'street': states['country'],
+        'vendor': {
+          'name': getVendorName(),
+          'cost': getVendorCost()
+        }
       };
       updateState({'loading': true});
       accountRegister(data)

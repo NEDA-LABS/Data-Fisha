@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/cart_drawer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
@@ -7,7 +11,9 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class SaleLikePage extends StatefulWidget {
@@ -57,6 +63,7 @@ class _State extends State<SaleLikePage> {
   final _getQuery = propertyOr('query', (p0) => '');
   final _getCarts = propertyOr('carts', (p0) => []);
   final _getCustomer = propertyOr('customer', (p0) => '');
+  StreamSubscription<Position>? _locationSubscriptionStream;
 
   @override
   void initState() {
@@ -65,6 +72,29 @@ class _State extends State<SaleLikePage> {
       (x) => setState(() => states.addAll(x)),
       (x) => null,
     );
+    _locationSubscriptionStream =
+        getLocationChangeStream().listen((Position? position) {
+      if (position != null) {
+        updateShopLocation(
+          latitude: position.latitude.toString(),
+          longitude: position.longitude.toString(),
+        ).then((value) {
+          if (kDebugMode) {
+            print(value);
+          }
+        }).catchError((error) {
+          if (kDebugMode) {
+            print(error);
+          }
+        });
+      }
+      //
+      // // if (kDebugMode) {
+      // print(position == null
+      //     ? 'Unknown'
+      //     : 'Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
+      // // }
+    });
     super.initState();
   }
 
@@ -143,7 +173,8 @@ class _State extends State<SaleLikePage> {
               return barCode == barCodeQ && barCodeQ != '' && barCodeQ != '_';
             }, orElse: () => null);
             if (inventory != null) {
-              widget.onAddToCartView(inventory,_onAddToCart(states, updateState));
+              widget.onAddToCartView(
+                  inventory, _onAddToCart(states, updateState));
             }
           }).catchError((e) {});
         } else {
@@ -256,4 +287,12 @@ class _State extends State<SaleLikePage> {
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
   _showCheckoutError(context) => (error) => showInfoDialog(context, error);
+
+  @override
+  void dispose() {
+    if (_locationSubscriptionStream != null) {
+      _locationSubscriptionStream?.cancel();
+    }
+    super.dispose();
+  }
 }

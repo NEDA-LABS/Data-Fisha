@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 Future readBarAndQRCode(InputImage inputImage)async{

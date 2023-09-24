@@ -3,21 +3,35 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
 
 String _web3Token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEI5YTAxYTI1MjE2MTJkMjY2NDQ4NDMyMjlGMzk2QzljNzU0N0IyY0IiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTM2NDg4Mjc4MzYsIm5hbWUiOiJzbWFydHN0b2NrLW1vYmlsZSJ9.mBzUijlLENpNUVZWAf5rvXAKr29NDWZaY78fi53SUSk';
 
-Future<Map?> uploadFileToWeb3(PlatformFile? file) async {
-  if (file == null) {
-    if (kDebugMode) {
-      print('File is empty');
-    }
-    return null;
-  }
+ByteStream _getByteStream(PlatformFile file) {
   // final file = result.files.first;
+  final fileReadStream = file.readStream;
+  if (fileReadStream == null) {
+    throw Exception('Cannot read file from null stream');
+  }
+  return http.ByteStream(fileReadStream);
+}
+
+MultipartFile _getMultipartFromStream(PlatformFile file, ByteStream stream) {
+  Map metadata = _getFileMetaData(file);
+  MediaType? contentType = _getContentType(file);
+  return http.MultipartFile(
+    'file',
+    stream,
+    metadata['fileSize'],
+    filename: metadata['filename'],
+    contentType: contentType,
+  );
+}
+
+Map<String, dynamic> _getFileMetaData(PlatformFile file) {
   String? filePath;
   try {
     filePath = file.path;
@@ -32,27 +46,30 @@ Future<Map?> uploadFileToWeb3(PlatformFile? file) async {
   if (kDebugMode) {
     print(mimeType);
   }
-  final contentType = mimeType != null ? MediaType.parse(mimeType) : null;
+  return {'filename': filename, 'fileSize': fileSize, 'mimeType': mimeType};
+}
 
-  final fileReadStream = file.readStream;
-  if (fileReadStream == null) {
-    throw Exception('Cannot read file from null stream');
+_getContentType(PlatformFile file) {
+  var metadata = _getFileMetaData(file);
+  return metadata['mimeType'] != null
+      ? MediaType.parse(metadata['mimeType'])
+      : null;
+}
+
+Future<Map?> uploadFileToWeb3(PlatformFile? file) async {
+  if (file == null) {
+    if (kDebugMode) {
+      print('File is empty');
+    }
+    return null;
   }
-  final stream = http.ByteStream(fileReadStream);
 
-  var shop = await getActiveShop();
-  // '${shopFunctionsURL(shopToApp(shop))}/files'
-  final uri = Uri.parse(
-    'https://api.web3.storage/upload',
-  );
+  ByteStream stream = _getByteStream(file);
+  Map metadata = _getFileMetaData(file);
+
+  final uri = Uri.parse('https://api.web3.storage/upload');
   final request = http.MultipartRequest('POST', uri);
-  final multipartFile = http.MultipartFile(
-    'file',
-    stream,
-    fileSize,
-    filename: filename,
-    contentType: contentType,
-  );
+  MultipartFile multipartFile = _getMultipartFromStream(file, stream);
   request.files.add(multipartFile);
   request.headers.addAll({'Authorization': 'Bearer $_web3Token'});
 
@@ -66,9 +83,9 @@ Future<Map?> uploadFileToWeb3(PlatformFile? file) async {
   final body = await response.stream.transform(utf8.decoder).join();
   return {
     ...jsonDecode(body),
-    "mime": mimeType,
-    "name": filename,
-    "size": fileSize
+    "mime": metadata['mimeType'],
+    "name": metadata['filename'],
+    "size": metadata['fileSize']
   };
 }
 

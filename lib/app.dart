@@ -18,6 +18,9 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io_client;
+
+import 'core/plugins/sync_common.dart';
 
 class SmartStockApp extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
@@ -41,13 +44,18 @@ class _State extends State<SmartStockApp> {
   bool initialized = false;
   Map? user;
   var _shouldSubsRun = true;
+  var _shouldProductsSyncsRun = true;
   var _shouldShowSubsDialog = true;
-  Timer? _timer;
+  Timer? _subscriptionTimer;
+  Timer? _productRefreshTimer;
+  io_client.Socket? _socket;
 
   @override
   void initState() {
     _getLoginUser();
-    _listenForSubscription();
+    _periodicSubscriptionCheck();
+    _periodProductsSync();
+    _listeningForStockChanges();
     super.initState();
   }
 
@@ -181,8 +189,8 @@ class _State extends State<SmartStockApp> {
     });
   }
 
-  void _listenForSubscription() {
-    _timer = Timer.periodic(const Duration(minutes: 1), (_) async {
+  void _periodicSubscriptionCheck() {
+    _subscriptionTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
       if (_shouldSubsRun) {
         try {
           _shouldSubsRun = false;
@@ -218,9 +226,72 @@ class _State extends State<SmartStockApp> {
     });
   }
 
+  void _periodProductsSync() {
+    _productRefreshTimer =
+        Timer.periodic(const Duration(minutes: 1), (_) async {
+      if (_shouldProductsSyncsRun) {
+        try {
+          _shouldProductsSyncsRun = false;
+          dynamic value = {};
+          if (isNativeMobilePlatform() == true) {
+            final resultPort = ReceivePort();
+            await Isolate.spawn(updateLocalProducts,
+                [resultPort.sendPort, ServicesBinding.rootIsolateToken]);
+            value = await (resultPort.first);
+          } else {
+            value = await compute(updateLocalProducts, [1]);
+          }
+          if (kDebugMode) {
+            print('Products sync: $value');
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            print(_);
+          }
+        } finally {
+          _shouldProductsSyncsRun = true;
+        }
+      } else {
+        if (kDebugMode) {
+          print('Another products sync running');
+        }
+      }
+    });
+  }
+
+  void _listeningForStockChanges() {
+    // _socket = io_client.io('$baseUrl/changes/stock/products', io_client.OptionBuilder()
+    // .enableReconnection()
+    // .enableAutoConnect()
+    // .setTransports(['websocket'])
+    // .build());
+    // getActiveShop().then((value) {
+    //   if (value is Map && value['projectId'] != null) {
+    //     var projectId = value['projectId'];
+    //     _socket?.onConnect((_) {
+    //       if (kDebugMode) {
+    //         print('connected stock socket');
+    //       }
+    //       _socket?.emit('${projectId}_stocks', {
+    //         'auth': {'projectId': projectId}
+    //       });
+    //     });
+    //     _socket?.on('${projectId}_stocks', (data) => print(data));
+    //     _socket?.onDisconnect((_) => print('disconnect from stock changes'));
+    //     // socket.on('fromServer', (_) => print(_));
+    //   }
+    // }).catchError((error) {
+    //   if (kDebugMode) {
+    //     print(error);
+    //   }
+    // });
+  }
+
   @override
   void dispose() {
-    _timer?.cancel();
+    _subscriptionTimer?.cancel();
+    _productRefreshTimer?.cancel();
+    // _socket?.close();
     super.dispose();
   }
 
@@ -247,7 +318,8 @@ class _State extends State<SmartStockApp> {
                     HeadlineLarge(text: 'TZ ${formatNumber(value['balance'])}'),
                     const WhiteSpacer(height: 16),
                     const BodyLarge(
-                        text: 'For all your shops, to continue using the service you must pay'),
+                        text:
+                            'For all your shops, to continue using the service you must pay'),
                     const WhiteSpacer(height: 24),
                     Row(
                       children: [

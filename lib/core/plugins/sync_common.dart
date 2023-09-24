@@ -3,11 +3,15 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:smartstock/core/services/api_stocks.dart';
 import 'package:smartstock/core/services/api_subscription.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/services/cache_stocks.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/products_syncs.dart';
 import 'package:uuid/uuid.dart';
 
 Future syncLocalDataToRemoteServer() async {
@@ -49,4 +53,19 @@ Future syncSubscriptionFromRemoteServer() async {
     }
   });
   return subscription;
+}
+
+Future updateLocalProducts(List<dynamic> args) async{
+  var maybeSync = await shouldSync();
+  if (kDebugMode) {
+    print(maybeSync);
+  }
+  if(maybeSync==true){
+    var shop = await getActiveShop();
+    if(shop is Map && shop['projectId']!=null){
+      var products = await getAllRemoteStocks(shop);
+      await saveLocalStocks(shopToApp(shop), products);
+      return products is List? products.length: products;
+    }
+  }
 }

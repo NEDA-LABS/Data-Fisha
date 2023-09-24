@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  uuid: ^4.0.0
+  uuid: ^3.0.7
   crypto: ^3.0.3
   bfast: ^5.0.0-beta.1
   intl: ^0.17.0
@@ -36,6 +36,8 @@ dependencies:
   mime: ^1.0.4
   http_parser: ^4.0.2
   url_launcher: ^6.1.14
+  geolocator: ^10.1.0
+  socket_io_client: ^2.0.3+1
 
 dev_dependencies:
  flutter_test:

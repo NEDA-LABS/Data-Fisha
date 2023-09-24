@@ -6,11 +6,14 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/plugins/sync_common.dart';
+import 'package:smartstock/core/services/api_stocks.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/services/products_syncs.dart';
 import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point')
-void callbackDispatcher() {
+void localDataCallbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     if (task == 'bg-period' || task == 'bg-onetime') {
       try {
@@ -28,12 +31,38 @@ void callbackDispatcher() {
   });
 }
 
+// @pragma('vm:entry-point')
+// void productsSyncCallbackDispatcher() {
+//   Workmanager().executeTask((task, inputData) async {
+//     if (task == 'bg-period' || task == 'bg-onetime') {
+//       try {
+//         var maybeSync = await shouldSync();
+//         if(maybeSync==true){
+//           var shop = await getActiveShop();
+//           if(shop is Map && shop['projectId']!=null){
+//             var products = await getAllRemoteStocks(shop);
+//             print(products);
+//           }
+//         }
+//         return Future.value(true);
+//       } catch (e) {
+//         if (kDebugMode) {
+//           print(e);
+//         }
+//         rethrow;
+//       }
+//     } else {
+//       return Future.value(true);
+//     }
+//   });
+// }
+
 startSmartStock({
   required OnGetModulesMenu onGetModulesMenu,
   OnGetInitialPage? onGetInitialModule,
 }) {
   WidgetsFlutterBinding.ensureInitialized();
-  periodicLocalDataSyncs(callbackDispatcher);
+  periodicLocalDataSyncs(localDataCallbackDispatcher);
   runApp(_MainWidget(
     onGetModulesMenu: onGetModulesMenu,
     onGetInitialModule: onGetInitialModule ??

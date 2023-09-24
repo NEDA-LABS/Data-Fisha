@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
@@ -8,6 +11,8 @@ import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/api_shop.dart';
+import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/numberCard.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
@@ -37,10 +42,33 @@ class _State extends State<SalesPage> {
   bool loading = false;
   DateTime date = DateTime.now();
   var data = {};
+  StreamSubscription<Position>? _locationSubscriptionStream;
 
   @override
   void initState() {
     _fetchSummary();
+    _locationSubscriptionStream =
+        getLocationChangeStream().listen((Position? position) {
+      if (position != null) {
+        updateShopLocation(
+          latitude: position.latitude.toString(),
+          longitude: position.longitude.toString(),
+        ).then((value) {
+          if (kDebugMode) {
+            print(value);
+          }
+        }).catchError((error) {
+          if (kDebugMode) {
+            print(error);
+          }
+        });
+      }
+      // // if (kDebugMode) {
+      // print(position == null
+      //     ? 'Unknown'
+      //     : 'Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
+      // // }
+    });
     super.initState();
   }
 
@@ -248,5 +276,13 @@ class _State extends State<SalesPage> {
             widget.onChangePage(CustomersPage(onBackPage: widget.onBackPage)),
       ),
     ];
+  }
+
+  @override
+  void dispose() {
+    if (_locationSubscriptionStream != null) {
+      _locationSubscriptionStream?.cancel();
+    }
+    super.dispose();
   }
 }

@@ -6,7 +6,7 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/files.dart';
+import 'package:smartstock/core/services/files_api.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_detail.dart';
