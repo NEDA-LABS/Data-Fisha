@@ -18,7 +18,7 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io_client;
+// import 'package:socket_io_client/socket_io_client.dart' as io_client;
 
 import 'core/plugins/sync_common.dart';
 
@@ -48,7 +48,7 @@ class _State extends State<SmartStockApp> {
   var _shouldShowSubsDialog = true;
   Timer? _subscriptionTimer;
   Timer? _productRefreshTimer;
-  io_client.Socket? _socket;
+  // io_client.Socket? _socket;
 
   @override
   void initState() {

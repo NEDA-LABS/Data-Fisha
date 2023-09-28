@@ -1,6 +1,6 @@
 name: smartstock
 description: SmartStock mobile application
-version: 1.4.0-2023.9.2-b.0
+version: 1.4.0-2023.9.28-b.0
 publish_to: none
 
 environment:
@@ -37,7 +37,8 @@ dependencies:
   http_parser: ^4.0.2
   url_launcher: ^6.1.14
   geolocator: ^10.1.0
-  socket_io_client: ^2.0.3+1
+#  socket_io_client: ^2.0.3+1
+  geolocator_web: ^2.2.0
 
 dev_dependencies:
  flutter_test:
