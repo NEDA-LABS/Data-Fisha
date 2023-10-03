@@ -46,7 +46,7 @@ android {
         applicationId "com.fahamutech.smartstock"
         minSdkVersion 21
         targetSdk 33//flutter.minSdkVersion
-        versionCode 53 //flutterVersionCode.toInteger()
+        versionCode 54 //flutterVersionCode.toInteger()
         versionName flutterVersionName
         signingConfig signingConfigs.debug
     }
