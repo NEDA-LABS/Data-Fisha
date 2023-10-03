@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class NumberPercentageCard extends StatelessWidget {
@@ -57,22 +56,20 @@ class NumberPercentageCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 8, 24),
-                    child: Text(compactNumber(value),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24,
-                          // color: Color(0xFF1C1C1C),
-                          // overflow: TextOverflow.fade,
-                        ),
-                        textAlign: TextAlign.left),
-                  ),
-                ],
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 0, 8, 24),
+                alignment: Alignment.topLeft,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(formatNumber(value, decimals: 2),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24,
+                        // color: Color(0xFF1C1C1C),
+                        // overflow: TextOverflow.fade,
+                      ),
+                      textAlign: TextAlign.left),
+                ),
               )
             ],
           ),

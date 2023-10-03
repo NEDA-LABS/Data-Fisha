@@ -89,17 +89,26 @@ class _State extends State<OverviewCashSales> {
       return const TableLikeListRow([
         TableLikeListTextHeaderCell('Date'),
         TableLikeListTextHeaderCell('Total'),
+        TableLikeListTextHeaderCell('Profit'),
       ]);
     }
     return const TableLikeListRow([
       TableLikeListTextHeaderCell('Date'),
-      TableLikeListTextHeaderCell('Retail'),
-      TableLikeListTextHeaderCell('Wholesale'),
-      TableLikeListTextHeaderCell('Total'),
+      TableLikeListTextHeaderCell('Sales'),
+      TableLikeListTextHeaderCell('COG'),
+      TableLikeListTextHeaderCell('Expenses'),
+      TableLikeListTextHeaderCell('Profit'),
     ]);
   }
 
+  _getProfit(index) {
+    return doubleOrZero(dailySales[index]['amount']) -
+        (doubleOrZero(dailySales[index]['cogs']) +
+            doubleOrZero(dailySales[index]['expenses']));
+  }
+
   Widget _largerScreenChildBuilder(context, index) {
+    var profit = _getProfit(index);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -112,17 +121,21 @@ class _State extends State<OverviewCashSales> {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: TableLikeListTextDataCell(
-                  '${formatNumber(dailySales[index]['amount_retail'])}'),
+                  '${formatNumber(dailySales[index]['amount'])}'),
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: TableLikeListTextDataCell(
-                  '${formatNumber(dailySales[index]['amount_whole'])}'),
+                  '${formatNumber(dailySales[index]['cogs'])}'),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TableLikeListTextDataCell(
-                  '${formatNumber(dailySales[index]['amount'])}'),
+                  '${formatNumber(dailySales[index]['expenses'])}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TableLikeListTextDataCell('${formatNumber(profit)}'),
             ),
           ]),
         ),
@@ -132,6 +145,7 @@ class _State extends State<OverviewCashSales> {
   }
 
   Widget _smallScreenChildBuilder(context, index) {
+    var profit = _getProfit(index);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -140,9 +154,13 @@ class _State extends State<OverviewCashSales> {
           child: TableLikeListRow([
             TableLikeListTextDataCell('${dailySales[index]['date']}'),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(2.0),
               child: TableLikeListTextDataCell(
                   '${formatNumber(dailySales[index]['amount'])}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: TableLikeListTextDataCell('${formatNumber(profit)}'),
             ),
           ]),
         ),
@@ -193,15 +211,6 @@ class _State extends State<OverviewCashSales> {
       context: context,
     );
   }
-
-  // _whatToShow() {
-  //   var getView = ifDoElse(
-  //       (x) => x,
-  //       (_) => _loading(),
-  //       ifDoElse(
-  //           (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
-  //   return getView(loading);
-  // }
 
   _showLoading() => loading ? const LinearProgressIndicator() : Container();
 }
