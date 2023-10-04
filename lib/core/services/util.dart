@@ -6,8 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 //'http://localhost:3000'; //
-var baseUrl = 'http://localhost:3000';
-    //'https://smartstock-faas.bfast.fahamutech.com';
+var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
 String shopDatabaseURL(App app) =>
     '$baseUrl/shop/${app.projectId}/${app.applicationId}/v2';
