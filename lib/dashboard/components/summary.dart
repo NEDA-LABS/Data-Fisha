@@ -2,7 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/dashboard/components/NumberCard.dart';
 import 'package:smartstock/dashboard/components/past_expenses.dart';
 import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
 import 'package:smartstock/dashboard/components/past_sales.dart';
@@ -173,22 +173,22 @@ class _State extends State<DashboardSummary> {
   _getTotalSalesView() {
     var cashSale = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
           "Cash sales", doubleOrZero(_getIt('sales_cash', data)), null),
     );
     var invoiceSale = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
           "Invoices", doubleOrZero(_getIt('sales_invoice', data)), null),
     );
     var expenses = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
           "Expenses", doubleOrZero(_getIt('expense', data)), null),
     );
     var profit = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
           "Gross profit",
           doubleOrZero(_getIt('profit', data)),
           doubleOrZero(_getIt('margin', data))),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class NumberPercentageCard extends StatelessWidget {
+class NumberCard extends StatelessWidget {
   final String? title;
   final dynamic value;
   final dynamic percentage;
@@ -9,7 +9,7 @@ class NumberPercentageCard extends StatelessWidget {
   final bool isDanger;
   final Function()? onClick;
 
-  const NumberPercentageCard(
+  const NumberCard(
     this.title,
     this.value,
     this.percentage, {

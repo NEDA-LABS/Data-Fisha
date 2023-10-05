@@ -9,7 +9,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/stock_app_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/dashboard/components/NumberCard.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 import 'package:smartstock/expense/pages/ExpensesPage.dart';
 import 'package:smartstock/expense/services/index.dart';
@@ -86,7 +86,7 @@ class _State extends State<ExpenseIndexPage> {
   _getSummaryReportView(BuildContext context) {
     var todayExpense = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Today",
         doubleOrZero(_getIt('today', data)),
         null,
@@ -98,7 +98,7 @@ class _State extends State<ExpenseIndexPage> {
     );
     var weekExpense = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "This week",
         doubleOrZero(_getIt('week', data)),
         null,
@@ -110,7 +110,7 @@ class _State extends State<ExpenseIndexPage> {
     );
     var monthExpense = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "This month",
         doubleOrZero(_getIt('month', data)),
         null,
@@ -122,7 +122,7 @@ class _State extends State<ExpenseIndexPage> {
     );
     var yearExpense = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "This year",
         doubleOrZero(_getIt('year', data)),
         null,

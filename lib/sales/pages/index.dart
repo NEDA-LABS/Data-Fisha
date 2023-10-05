@@ -14,7 +14,7 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/dashboard/components/NumberCard.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
@@ -126,7 +126,7 @@ class _State extends State<SalesPage> {
   _getTotalSalesView(BuildContext context) {
     var cashSale = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Total cash",
         doubleOrZero(_getIt('cash_total', data)),
         null,
@@ -134,7 +134,7 @@ class _State extends State<SalesPage> {
     );
     var invoiceSale = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Unpaid invoices",
         doubleOrZero(_getIt('invoice_unpaid', data)),
         null,
@@ -148,7 +148,7 @@ class _State extends State<SalesPage> {
     );
     var expenses = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Cash sales",
         doubleOrZero(_getIt('cash_sale', data)),
         null,
@@ -162,7 +162,7 @@ class _State extends State<SalesPage> {
     );
     var profit = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Invoice sales",
         doubleOrZero(_getIt('invoice_sale', data)),
         null,
@@ -174,7 +174,7 @@ class _State extends State<SalesPage> {
     );
     var paidInvoice = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Invoice paid",
         doubleOrZero(_getIt('invoice_paid', data)),
         null,
@@ -187,7 +187,7 @@ class _State extends State<SalesPage> {
     );
     var totalSales = Expanded(
       flex: 1,
-      child: NumberPercentageCard(
+      child: NumberCard(
         "Total sales",
         doubleOrZero(_getIt('invoice_sale', data)) +
             doubleOrZero(_getIt('cash_sale', data)),

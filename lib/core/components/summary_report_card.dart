@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/dashboard/components/numberCard.dart';
+import 'package:smartstock/dashboard/components/NumberCard.dart';
 
 class DashboardSummaryReportCard extends StatefulWidget {
   final String title;
@@ -28,7 +28,7 @@ class _State extends State<DashboardSummaryReportCard> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _loading(context);
         }
-        return NumberPercentageCard(
+        return NumberCard(
           widget.title,
           snapshot.hasData ? snapshot.data : 0,
           0,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
+
 //'http://localhost:3000'; //
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
@@ -89,9 +90,20 @@ compactNumber(value) =>
     NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
         .format(doubleOrZero(value));
 
-formatNumber(value, {decimals = 0}) =>
-    NumberFormat.currency(decimalDigits: decimals, symbol: '')
-        .format(doubleOrZero(value));
+formatNumber(value, {decimals = 2}) {
+  var formatted = NumberFormat.currency(decimalDigits: decimals, symbol: '')
+      .format(doubleOrZero(value));
+  var formattedChunks = formatted.split('.');
+  if (formattedChunks.length > 1) {
+    if (formattedChunks[1] == '00' || formattedChunks[1] == '0') {
+      return formatted.split('.')[0];
+    } else {
+      return formatted;
+    }
+  } else {
+    return formatted;
+  }
+}
 
 List<List<T>> divideList<T>(List<T> list, int length) {
   var len = list.length;
