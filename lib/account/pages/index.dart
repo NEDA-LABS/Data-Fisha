@@ -4,7 +4,7 @@ import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -33,7 +33,7 @@ class ProfileIndexPage extends StatelessWidget {
           ],
         )
       ],
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
         title: "My Account",
         showBack: false,
         context: context,

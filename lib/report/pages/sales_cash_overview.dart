@@ -5,7 +5,7 @@ import 'package:smartstock/core/components/Histogram.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -203,7 +203,7 @@ class _State extends State<OverviewCashSales> {
   }
 
   _appBar() {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: "Cash sales overview",
       showBack: true,
       // backLink: '/report/',

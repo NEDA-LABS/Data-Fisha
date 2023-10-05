@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/profile_form.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
         title: "Profile",
         showBack: true,
         onBack: onBackPage,

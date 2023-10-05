@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -26,7 +26,7 @@ class _CustomersPage extends State<CustomersPage> {
   List _customers = [];
 
   _appBar(context) {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
         title: "Customers",
         showBack: true,
         backLink: '/sales/',

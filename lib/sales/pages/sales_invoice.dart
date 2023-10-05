@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -36,7 +36,7 @@ class _InvoicesPage extends State<InvoicesPage> {
   List _invoices = [];
 
   _appBar(context) {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: "Invoices",
       showBack: true,
       backLink: '/sales/',

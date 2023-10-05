@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -33,7 +33,7 @@ class _TransfersPage extends State<TransfersPage> {
   final String _date = toSqlDate(DateTime.now());
   List _transfers = [];
 
-  _appBar(context) => getSliverSmartStockAppBar(
+  _appBar(context) => SliverSmartStockAppBar(
         title: "Transfers",
         showBack: true,
         backLink: '/stock/',

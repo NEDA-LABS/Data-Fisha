@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/HeadineLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/ResponsivePageContainer.dart';
+import 'package:smartstock/core/components/responsive_page_container.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';

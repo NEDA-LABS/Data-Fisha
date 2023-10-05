@@ -9,12 +9,12 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/components/NumberCard.dart';
+import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
@@ -92,7 +92,7 @@ class _State extends State<SalesPage> {
           ],
         )
       ],
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
     );
   }

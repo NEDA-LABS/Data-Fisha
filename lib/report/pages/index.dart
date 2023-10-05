@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
@@ -26,7 +26,7 @@ class ReportIndexPage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/report/',
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
         title: "Report",
         showBack: false,
         context: context,

@@ -3,7 +3,7 @@ import 'package:smartstock/account/components/payment_body.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/HeadineLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class PaymentPage extends StatelessWidget {

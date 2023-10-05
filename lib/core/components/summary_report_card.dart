@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/dashboard/components/NumberCard.dart';
+import 'package:smartstock/dashboard/components/number_card.dart';
 
 class DashboardSummaryReportCard extends StatefulWidget {
   final String title;

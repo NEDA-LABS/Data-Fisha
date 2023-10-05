@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/text_input.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
@@ -49,7 +49,7 @@ class _State extends State<ShopUserCreatePage> {
   }
 
   _appBar(context) {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: "Add user",
       showBack: true,
       // backLink: '/account/users',

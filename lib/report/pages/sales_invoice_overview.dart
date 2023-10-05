@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -250,7 +250,7 @@ class _State extends State<OverviewInvoiceSales> {
   }
 
   _appBar() {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: "Invoice sales overview",
       showBack: true,
       onBack: widget.onBackPage,

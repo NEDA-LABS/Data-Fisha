@@ -6,10 +6,10 @@ import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/dashboard/components/NumberCard.dart';
+import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 import 'package:smartstock/expense/pages/ExpensesPage.dart';
 import 'package:smartstock/expense/services/index.dart';
@@ -59,7 +59,7 @@ class _State extends State<ExpenseIndexPage> {
           ],
         )
       ],
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
     );
   }

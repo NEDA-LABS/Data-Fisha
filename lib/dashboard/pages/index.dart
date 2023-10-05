@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/dashboard/components/summary.dart';
 
 class DashboardIndexPage extends StatelessWidget {
@@ -13,7 +13,7 @@ class DashboardIndexPage extends StatelessWidget {
     return ResponsivePage(
       office: 'Menu',
       current: '/dashboard/',
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
           title: "Dashboard", showBack: false, context: context),
       staticChildren: const [DashboardSummary()],
       // fab: !hasEnoughWidth(context)

@@ -6,10 +6,7 @@ import 'package:smartstock/app.dart';
 import 'package:smartstock/configs.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/plugins/sync_common.dart';
-import 'package:smartstock/core/services/api_stocks.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/stocks/services/products_syncs.dart';
 import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point')

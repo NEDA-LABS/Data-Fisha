@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_edit_form.dart';
 
@@ -15,7 +15,7 @@ class ProductEditPage extends StatelessWidget {
   }) : super(key: key);
 
   _appBar(context) {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: "Update ${product['product']}",
       showBack: true,
       backLink: '/stock/products',

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/stock_summary.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
-import 'package:smartstock/stocks/pages/products.dart';
+import 'package:smartstock/stocks/pages/products_page.dart';
 import 'package:smartstock/stocks/pages/purchases.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
@@ -24,7 +24,7 @@ class StocksIndexPage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    var appBar = getSliverSmartStockAppBar(
+    var appBar = SliverSmartStockAppBar(
       title: "Stocks",
       showBack: false,
       context: context,

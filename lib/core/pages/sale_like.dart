@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/location.dart';
@@ -153,7 +153,7 @@ class _State extends State<SaleLikePage> {
   }
 
   _appBar(updateState) {
-    return getSliverSmartStockAppBar(
+    return SliverSmartStockAppBar(
       title: widget.title,
       backLink: widget.backLink,
       searchTextController: widget.searchTextController,

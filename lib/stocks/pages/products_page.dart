@@ -5,13 +5,14 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
@@ -36,6 +37,7 @@ class ProductsPage extends StatefulWidget {
 class _State extends State<ProductsPage> {
   Map<String, dynamic Function(dynamic)> _filters = {};
   bool _isLoading = false;
+  bool _isExporting = false;
   bool _skipLocal = false;
   List _allProducts = [];
 
@@ -50,7 +52,7 @@ class _State extends State<ProductsPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/stock/',
-      sliverAppBar: _appBar(),
+      sliverAppBar: _getAppBar(),
       staticChildren: [
         _ifLargerScreen(tableContextMenu(_getContextItems())),
         _loading(_isLoading),
@@ -67,88 +69,90 @@ class _State extends State<ProductsPage> {
     );
   }
 
-  _appBar() => getSliverSmartStockAppBar(
-        title: "Inventories",
-        showBack: true,
-        backLink: '/stock/',
-        showSearch: true,
-        onBack: widget.onBackPage,
-        onSearch: _updateQuery,
-        searchHint: 'Search...',
-        context: context,
-        filters: [
-          SearchFilter(
-            name: 'Negatives',
-            selected: _filters['negative'] != null,
-            onClick: () {
-              var name = 'negative';
-              setState(() {
-                if (_filters.containsKey(name)) {
-                  _filters.removeWhere((key, value) => key == name);
-                } else {
-                  _filters = getNegativeProductFilter(name);
-                }
-              });
-            },
-          ),
-          SearchFilter(
-            name: 'Zeros',
-            selected: _filters['zeros'] != null,
-            onClick: () {
-              setState(() {
-                var filterName = 'zeros';
-                if (_filters.containsKey(filterName)) {
-                  _filters.removeWhere((key, value) => key == filterName);
-                } else {
-                  _filters = getZeroProductsFilter(filterName);
-                }
-              });
-            },
-          ),
-          SearchFilter(
-            name: 'Positives',
-            selected: _filters['positives'] != null,
-            onClick: () {
-              setState(() {
-                var name = 'positives';
-                if (_filters.containsKey(name)) {
-                  _filters.removeWhere((key, value) => key == name);
-                } else {
-                  _filters = getPositiveProductsFilter(name);
-                }
-              });
-            },
-          ),
-          SearchFilter(
-            name: 'Expired',
-            selected: _filters['expired'] != null,
-            onClick: () {
-              var name = 'expired';
-              setState(() {
-                if (_filters.containsKey(name)) {
-                  _filters.removeWhere((key, value) => key == name);
-                } else {
-                  _filters = getExpiredProductsFilter(name);
-                }
-              });
-            },
-          ),
-          SearchFilter(
-            name: 'Near to expire',
-            selected: _filters['near_expired'] != null,
-            onClick: () {
-              var name = 'near_expired';
-              setState(() {
-                if (_filters.containsKey(name)) {
-                  _filters.removeWhere((key, value) => key == name);
-                } else {
-                  _filters = getNearExpiredProductsFilter(name);
-                }
-              });
-            },
-          )
-        ],
-      );
+  _getAppBar() {
+    return SliverSmartStockAppBar(
+      title: "Inventories",
+      showBack: true,
+      backLink: '/stock/',
+      showSearch: true,
+      onBack: widget.onBackPage,
+      onSearch: _updateQuery,
+      searchHint: 'Search...',
+      context: context,
+      filters: [
+        SearchFilter(
+          name: 'Negatives',
+          selected: _filters['negative'] != null,
+          onClick: () {
+            var name = 'negative';
+            setState(() {
+              if (_filters.containsKey(name)) {
+                _filters.removeWhere((key, value) => key == name);
+              } else {
+                _filters = getNegativeProductFilter(name);
+              }
+            });
+          },
+        ),
+        SearchFilter(
+          name: 'Zeros',
+          selected: _filters['zeros'] != null,
+          onClick: () {
+            setState(() {
+              var filterName = 'zeros';
+              if (_filters.containsKey(filterName)) {
+                _filters.removeWhere((key, value) => key == filterName);
+              } else {
+                _filters = getZeroProductsFilter(filterName);
+              }
+            });
+          },
+        ),
+        SearchFilter(
+          name: 'Positives',
+          selected: _filters['positives'] != null,
+          onClick: () {
+            setState(() {
+              var name = 'positives';
+              if (_filters.containsKey(name)) {
+                _filters.removeWhere((key, value) => key == name);
+              } else {
+                _filters = getPositiveProductsFilter(name);
+              }
+            });
+          },
+        ),
+        SearchFilter(
+          name: 'Expired',
+          selected: _filters['expired'] != null,
+          onClick: () {
+            var name = 'expired';
+            setState(() {
+              if (_filters.containsKey(name)) {
+                _filters.removeWhere((key, value) => key == name);
+              } else {
+                _filters = getExpiredProductsFilter(name);
+              }
+            });
+          },
+        ),
+        SearchFilter(
+          name: 'Near to expire',
+          selected: _filters['near_expired'] != null,
+          onClick: () {
+            var name = 'near_expired';
+            setState(() {
+              if (_filters.containsKey(name)) {
+                _filters.removeWhere((key, value) => key == name);
+              } else {
+                _filters = getNearExpiredProductsFilter(name);
+              }
+            });
+          },
+        )
+      ],
+    );
+  }
 
   List _getFilteredProducts() {
     dynamic Function(dynamic p1) filter =
@@ -204,12 +208,42 @@ class _State extends State<ProductsPage> {
     return ContextMenu(name: 'Reload', pressed: _reload);
   }
 
+  ContextMenu _getExportMenu() {
+    return ContextMenu(
+      name: _isExporting ? 'Exporting...' : 'Export',
+      pressed: _isExporting
+          ? () => {}
+          : () {
+              setState(() {
+                _isLoading = true;
+                _isExporting = true;
+              });
+              getStockFromCacheOrRemote(
+                stringLike: '',
+                skipLocal: true,
+              ).then((data) {
+                _allProducts = data;
+                exportToCsv('stock_export', data);
+              }).catchError((error) {
+                showInfoDialog(context, error);
+              }).whenComplete(() {
+                setState(() {
+                  _isLoading = false;
+                  _skipLocal = false;
+                  _isExporting = false;
+                });
+              });
+            },
+    );
+  }
+
   _getContextItems() {
     return [
       _getAddProductMenu(),
       _getAddNonStockableProductMenu(),
       _getAddServiceMenu(),
-      _getReloadMenu()
+      _getExportMenu(),
+      _getReloadMenu(),
       // ContextMenu(name: 'Import', pressed: () => {}),
       // ContextMenu(name: 'Export', pressed: () => {}),
     ];
@@ -295,7 +329,8 @@ class _State extends State<ProductsPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 margin: const EdgeInsets.only(right: 8),
               ),
-              Text(_['stockable']==false ? 'N/A' : 'In stock', style: _inStyle()),
+              Text(_['stockable'] == false ? 'N/A' : 'In stock',
+                  style: _inStyle()),
               appendQuantity
                   ? Text(' ( ${formatNumber(_['quantity'])} )',
                       style: _inStyle())
@@ -355,6 +390,16 @@ class _State extends State<ProductsPage> {
               title: Text(_getAddServiceMenu().name),
               onTap: () {
                 _getAddServiceMenu().pressed();
+                Navigator.of(context).maybePop();
+              },
+            ),
+            const HorizontalLine(),
+            ListTile(
+              leading: const Icon(Icons.file_download_rounded),
+              title: Text(_getExportMenu().name),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _getExportMenu().pressed();
                 Navigator.of(context).maybePop();
               },
             ),

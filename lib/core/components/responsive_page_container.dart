@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/AppDrawer.dart';
+import 'package:smartstock/core/components/smartstock_app_drawer.dart';
 import 'package:smartstock/core/components/bottom_bar.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -59,7 +59,7 @@ class _State extends State<ResponsivePageContainer> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.showLeftDrawer
-            ? AppDrawer(
+            ? SmartStockAppDrawer(
                 onGetModulesMenu: widget.onGetModulesMenu,
                 menus: widget.menus,
                 current: widget.current,

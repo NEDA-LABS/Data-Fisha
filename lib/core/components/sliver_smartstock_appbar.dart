@@ -5,8 +5,10 @@ import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/services/util.dart';
 
-SliverAppBar getSliverSmartStockAppBar(
-    {required String title,
+class SliverSmartStockAppBar extends SliverAppBar {
+  SliverSmartStockAppBar({
+    super.key,
+    required String title,
     bool showSearch = false,
     bool showBack = false,
     Function()? onBack,
@@ -17,36 +19,37 @@ SliverAppBar getSliverSmartStockAppBar(
     Function(String)? onSearch,
     TextEditingController? searchTextController,
     required BuildContext context,
-    List<SearchFilter> filters = const []}) {
-  return SliverAppBar(
-    expandedHeight: showSearch ? (filters.isNotEmpty ? 140 : 110) : 65,
-    centerTitle: true,
-    title: Text(title, overflow: TextOverflow.ellipsis),
-    bottom: showSearch
-        ? (searchInput as PreferredSizeWidget?) ??
-            _toolBarSearchInput(
-              onSearch,
-              searchHint,
-              searchTextController,
-              context,
-              filters,
-            )
-        : null,
-    leading: showBack
-        ? IconButton(
-            icon: const Icon(Icons.chevron_left),
-            onPressed: () =>
-                onBack != null ? onBack() : Navigator.of(context).maybePop(),
-          )
-        : null,
-    // actions: getAppBarActions(context,),
-    pinned: true,
-    snap: true,
-    floating: true,
-  );
+    List<SearchFilter> filters = const [],
+  }) : super(
+          expandedHeight: showSearch ? (filters.isNotEmpty ? 156 : 126) : 65,
+          centerTitle: true,
+          title: Text(title, overflow: TextOverflow.ellipsis),
+          bottom: showSearch
+              ? (searchInput as PreferredSizeWidget?) ??
+                  _getToolBarSearchInput(
+                    onSearch,
+                    searchHint,
+                    searchTextController,
+                    context,
+                    filters,
+                  )
+              : null,
+          leading: showBack
+              ? IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => onBack != null
+                      ? onBack()
+                      : Navigator.of(context).maybePop(),
+                )
+              : null,
+          // actions: getAppBarActions(context,),
+          pinned: true,
+          snap: true,
+          floating: true,
+        );
 }
 
-PreferredSizeWidget _toolBarSearchInput(
+PreferredSizeWidget _getToolBarSearchInput(
   Function(String)? onSearch,
   String placeholder,
   TextEditingController? searchTextController,
@@ -54,13 +57,18 @@ PreferredSizeWidget _toolBarSearchInput(
   List<SearchFilter> filters,
 ) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(filters.isNotEmpty ? 100 : 50),
+    preferredSize: Size.fromHeight(filters.isNotEmpty ? 116 : 66),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Theme.of(context).colorScheme.surfaceVariant
+          ),
           child: TextField(
             controller: searchTextController,
             autofocus: false,
@@ -79,7 +87,7 @@ PreferredSizeWidget _toolBarSearchInput(
               suffixIcon: mobileQrScanIconButton(
                 context,
                 (code) {
-                  if (onSearch != null && code!=null) {
+                  if (onSearch != null && code != null) {
                     onSearch('-1:$code');
                   }
                 },

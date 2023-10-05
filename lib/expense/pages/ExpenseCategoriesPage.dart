@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/stock_app_bar.dart';
+import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -36,7 +36,7 @@ class _State extends State<ExpenseCategoriesPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/expense/',
-      sliverAppBar: getSliverSmartStockAppBar(
+      sliverAppBar: SliverSmartStockAppBar(
         title: 'Expense categories',
         onBack: widget.onBackPage,
         showBack: true,

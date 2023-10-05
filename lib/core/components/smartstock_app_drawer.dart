@@ -11,7 +11,7 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/rbac.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class AppDrawer extends Drawer {
+class SmartStockAppDrawer extends Drawer {
   final List<ModuleMenu> menus;
   final String? current;
   final double cWidth;
@@ -19,7 +19,7 @@ class AppDrawer extends Drawer {
   final OnGetModulesMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
-  const AppDrawer({
+  const SmartStockAppDrawer({
     required this.onGetModulesMenu,
     required this.menus,
     required this.onChangePage,
@@ -33,6 +33,11 @@ class AppDrawer extends Drawer {
   Widget build(BuildContext context) {
     return Drawer(
       width: cWidth,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(0),
+            bottomRight: Radius.circular(0)),
+      ),
       child: _modulesMenuContent(menus, current),
     );
   }
