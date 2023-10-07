@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 Future<void> downloadExportFile({
   required dynamic data,
@@ -21,13 +20,6 @@ Future<void> downloadExportFile({
       print(reason);
     }
   });
-}
-
-_checkStoragePermission()async{
-  var status = await Permission.storage.status;
-  if (status.isDenied) {
-    // We didn't ask for permission yet or the permission has been denied before, but not permanently.
-  }
 }
 
 Uint8List _sendCorrectBytes(data) {
