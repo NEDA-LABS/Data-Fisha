@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/index.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/plugins/geolocator_helper.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/pages/index.dart';
@@ -90,5 +89,4 @@ List<ModuleMenu> _onGetModules({
 
 void main() {
   startSmartStock(onGetModulesMenu: _onGetModules);
-  ensureGeolocatorWeb();
 }

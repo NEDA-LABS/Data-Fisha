@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/app.dart';
 import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/plugins/geolocator_helper.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/plugins/sync_common.dart';
+import 'package:smartstock/core/services/cache_factory.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -28,37 +30,13 @@ void localDataCallbackDispatcher() {
   });
 }
 
-// @pragma('vm:entry-point')
-// void productsSyncCallbackDispatcher() {
-//   Workmanager().executeTask((task, inputData) async {
-//     if (task == 'bg-period' || task == 'bg-onetime') {
-//       try {
-//         var maybeSync = await shouldSync();
-//         if(maybeSync==true){
-//           var shop = await getActiveShop();
-//           if(shop is Map && shop['projectId']!=null){
-//             var products = await getAllRemoteStocks(shop);
-//             print(products);
-//           }
-//         }
-//         return Future.value(true);
-//       } catch (e) {
-//         if (kDebugMode) {
-//           print(e);
-//         }
-//         rethrow;
-//       }
-//     } else {
-//       return Future.value(true);
-//     }
-//   });
-// }
-
 startSmartStock({
   required OnGetModulesMenu onGetModulesMenu,
   OnGetInitialPage? onGetInitialModule,
 }) {
   WidgetsFlutterBinding.ensureInitialized();
+  CacheFactory().init();
+  ensureGeolocatorWeb();
   periodicLocalDataSyncs(localDataCallbackDispatcher);
   runApp(_MainWidget(
     onGetModulesMenu: onGetModulesMenu,

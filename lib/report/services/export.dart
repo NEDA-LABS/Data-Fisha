@@ -1,7 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import 'package:smartstock/core/plugins/file_export.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
@@ -16,7 +15,7 @@ exportToCsv(String fileName, x) {
     csv = '$title\n$body'.trim();
   }
   downloadExportFile(
-      data: [csv], fileName: '$fileName.csv', mime: 'text/plain');
+      data: csv, fileName: '$fileName.csv', mime: 'text/plain');
 }
 
 exportToExcel(String filename, x) {
@@ -90,9 +89,13 @@ exportPDF(String title, x) async {
     }
   }
 
-  await Printing.layoutPdf(
-    onLayout: (format) async => doc.save(),
-    name: title,
-    dynamicLayout: true,
-  );
+  // await Printing.layoutPdf(
+  //   onLayout: (format) async => doc.save(),
+  //   name: title,
+  //   dynamicLayout: true,
+  // );
+  var pdfFile = await doc.save();
+  downloadExportFile(
+      data: pdfFile, fileName: '$title.pdf', mime: 'application/pdf');
+
 }

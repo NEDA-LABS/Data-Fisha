@@ -20,18 +20,13 @@ class CacheFactory {
   Database? _db;
 
   _lazyInitialize(_) async {
-    // Get the sembast database factory according to the current platform
-    // * sembast_web for FlutterWeb and Web
-    // * sembast_sqflite and sqflite on Flutter iOS/Android/MacOS
-    // * sembast_sqflite and sqflite3 ffi on Flutter Windows/Linux and dart VM (might require extra initialization steps)
-    // var factory = ;
-    // var store = StoreRef(app?.projectId ?? 'cache');
-    // Open the database
-    _db = await getDatabaseFactory().openDatabase('smartstock.db');
-    // await store.record('key').put(db, 'value');
-    // Not needed in a flutter application
-    // await db.close();
+    var factory = getDatabaseFactory();
+    _db = await factory.openDatabase('smartstock.db');
     return _db;
+  }
+
+  init(){
+    _lazyInitialize(null);
   }
 
   Future Function(String? a, dynamic b) prepareSetData(
