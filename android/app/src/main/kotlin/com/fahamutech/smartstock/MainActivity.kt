@@ -1,6 +1,5 @@
 package com.fahamutech.smartstock
 
-import androidx.activity.result.contract.ActivityResultContracts
 import com.fahamutech.smartstock.plugins.flutterCommunicationChannel
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
