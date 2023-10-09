@@ -4,12 +4,17 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
+import 'package:smartstock/core/components/HeadineMedium.dart';
+import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
@@ -211,7 +216,8 @@ class _State extends State<SalesPage> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [totalSales, paidInvoice],
-          )
+          ),
+          _getSoldItemsTable(true),
         ],
       ),
       (context) => Column(
@@ -228,8 +234,26 @@ class _State extends State<SalesPage> {
             ],
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [totalSales, paidInvoice],
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
+                child: _getSoldItemsTable(false),
+              ),
+              Expanded(
+                flex: 1,
+                child: SizedBox(
+                  height: 250,
+                  child: Column(
+                    children: [
+                      totalSales,
+                      paidInvoice,
+                    ],
+                  ),
+                ),
+              )
+            ],
           )
         ],
       ),
@@ -284,5 +308,70 @@ class _State extends State<SalesPage> {
       _locationSubscriptionStream?.cancel();
     }
     super.dispose();
+  }
+
+  Widget _getSoldItemsTable(isSmallScreen) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const BodyLarge(text: "Sold Items"),
+          const WhiteSpacer(height: 8),
+          const Divider(),
+          SizedBox(
+            child: isSmallScreen == true
+                ? const TableLikeListRow([
+                    TableLikeListTextHeaderCell('Item'),
+                    TableLikeListTextHeaderCell('Quantity'),
+                    TableLikeListTextHeaderCell('Amount ( TZS )'),
+                  ])
+                : const TableLikeListRow([
+                    TableLikeListTextHeaderCell('Item'),
+                    TableLikeListTextHeaderCell('Quantity'),
+                    TableLikeListTextHeaderCell('Amount ( TZS )'),
+                    TableLikeListTextHeaderCell('Purchase ( TZS )'),
+                  ]),
+          ),
+          ...itOrEmptyArray(data['sold_items']).map((e) {
+            return SizedBox(
+              // height: 38,
+              child: isSmallScreen == true
+                  ? TableLikeListRow([
+                      TableLikeListTextDataCell("${e['name']}"),
+                      TableLikeListTextDataCell('${e['quantity']}'),
+                      TableLikeListTextDataCell(
+                          formatNumber('${e['amount'] ?? '0'}')),
+                    ])
+                  : TableLikeListRow([
+                      TableLikeListTextDataCell("${e['name']}"),
+                      TableLikeListTextDataCell('${e['quantity']}'),
+                      TableLikeListTextDataCell(
+                          formatNumber('${e['amount'] ?? '0'}')),
+                      TableLikeListTextDataCell(
+                          formatNumber('${e['purchase_price'] ?? '0'}')),
+                    ]),
+            );
+          }),
+          itOrEmptyArray(data['sold_items']).length > 0
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    OutlinedButton(
+                        onPressed: () {},
+                        child: const BodyLarge(text: 'View More'))
+                  ],
+                )
+              : Container()
+        ],
+      ),
+    );
   }
 }
