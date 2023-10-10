@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
@@ -6,6 +5,7 @@ import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -15,9 +15,11 @@ import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/report/components/export_options.dart';
+import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/sales/services/report.dart';
 
-enum _RangeName { TODAY, YESTERDAY, WEEK, CUSTOM }
+enum _RangeName { today, yesterday, week, custom }
 
 class SoldItemsPage extends StatefulWidget {
   final OnBackPage onBackPage;
@@ -35,11 +37,11 @@ class SoldItemsPage extends StatefulWidget {
 
 class _State extends State<SoldItemsPage> {
   bool _loading = false;
-  String _query = '';
+  TextEditingController _searchInputController = TextEditingController();
   int size = 20;
   List _filteredSoldItems = [];
   List _soldItems = [];
-  _RangeName _rangeName = _RangeName.TODAY;
+  _RangeName _rangeName = _RangeName.today;
   DateTimeRange _dateTimeRange =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
@@ -71,37 +73,38 @@ class _State extends State<SoldItemsPage> {
         SearchFilter(
             name: "Today",
             onClick: () {
-              _rangeName = _RangeName.TODAY;
+              _rangeName = _RangeName.today;
               _dateTimeRange =
                   DateTimeRange(start: DateTime.now(), end: DateTime.now());
               _refresh();
             },
-            selected: _rangeName == _RangeName.TODAY),
+            selected: _rangeName == _RangeName.today),
         SearchFilter(
             name: "Yesterday",
             onClick: () {
-              _rangeName = _RangeName.YESTERDAY;
+              _rangeName = _RangeName.yesterday;
               _dateTimeRange = DateTimeRange(
                   start: DateTime.now().subtract(const Duration(days: 1)),
                   end: DateTime.now().subtract(const Duration(days: 1)));
               _refresh();
             },
-            selected: _rangeName == _RangeName.YESTERDAY),
+            selected: _rangeName == _RangeName.yesterday),
         SearchFilter(
             name: "Last Week",
             onClick: () {
-              _rangeName = _RangeName.WEEK;
+              _rangeName = _RangeName.week;
               _dateTimeRange = DateTimeRange(
                   start: DateTime.now().subtract(const Duration(days: 7)),
                   end: DateTime.now());
               _refresh();
             },
-            selected: _rangeName == _RangeName.WEEK),
+            selected: _rangeName == _RangeName.week),
         SearchFilter(
             name: "Custom Dates",
             onClick: _onCustomDatesClicked,
-            selected: _rangeName == _RangeName.CUSTOM),
+            selected: _rangeName == _RangeName.custom),
       ],
+      searchTextController: _searchInputController,
       onSearch: (p0) {
         setState(() {
           _filteredSoldItems = _soldItems
@@ -116,12 +119,7 @@ class _State extends State<SoldItemsPage> {
 
   _contextSales(context) {
     return [
-      ContextMenu(name: 'Export', pressed: () {}),
-      // ContextMenu(
-      //   name: 'Add Wholesale',
-      //   pressed: () =>
-      //       widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
-      // ),
+      ContextMenu(name: 'Export', pressed: _handleOnExport),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
   }
@@ -150,38 +148,40 @@ class _State extends State<SoldItemsPage> {
   }
 
   @override
-  Widget build(context) => ResponsivePage(
-        current: '/sales/',
-        sliverAppBar: _appBar(context),
-        staticChildren: [
-          _loadingView(_loading),
-          Row(
-            children: [
-              _rangeName == _RangeName.CUSTOM
-                  ? LabelLarge(text: "From: ${toSqlDate(_dateTimeRange.start)}")
-                  : Container(),
-              const WhiteSpacer(width: 8),
-              _rangeName == _RangeName.CUSTOM
-                  ? LabelLarge(text: "To: ${toSqlDate(_dateTimeRange.end)}")
-                  : Container(),
-            ],
-          ),
-          getIsSmallScreen(context)
-              ? Container()
-              : tableContextMenu(_contextSales(context)),
-          getIsSmallScreen(context) ? Container() : _tableHeader(),
-        ],
-        loading: _loading,
-        // onLoadMore: () async => _loadMore(),
-        // fab: FloatingActionButton(
-        //   onPressed: () => _showMobileContextMenu(context),
-        //   child: const Icon(Icons.unfold_more_outlined),
-        // ),
-        totalDynamicChildren: _filteredSoldItems.length,
-        dynamicChildBuilder: getIsSmallScreen(context)
-            ? _smallScreenChildBuilder
-            : _largerScreenChildBuilder,
-      );
+  Widget build(context) {
+    return ResponsivePage(
+      current: '/sales/',
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        _loadingView(_loading),
+        Row(
+          children: [
+            _rangeName == _RangeName.custom
+                ? LabelLarge(text: "From: ${toSqlDate(_dateTimeRange.start)}")
+                : Container(),
+            const WhiteSpacer(width: 8),
+            _rangeName == _RangeName.custom
+                ? LabelLarge(text: "To: ${toSqlDate(_dateTimeRange.end)}")
+                : Container(),
+          ],
+        ),
+        getIsSmallScreen(context)
+            ? Container()
+            : tableContextMenu(_contextSales(context)),
+        getIsSmallScreen(context) ? Container() : _tableHeader(),
+      ],
+      loading: _loading,
+      // onLoadMore: () async => _loadMore(),
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined),
+      ),
+      totalDynamicChildren: _filteredSoldItems.length,
+      dynamicChildBuilder: getIsSmallScreen(context)
+          ? _smallScreenChildBuilder
+          : _largerScreenChildBuilder,
+    );
+  }
 
   _refresh() {
     setState(() {
@@ -191,7 +191,7 @@ class _State extends State<SoldItemsPage> {
       if (value is List) {
         _soldItems = [...value ?? []];
         _filteredSoldItems = [...value ?? []];
-        _query = '';
+        _searchInputController = TextEditingController();
       }
     }).catchError((error) {
       showInfoDialog(context, error, title: "Error");
@@ -203,9 +203,6 @@ class _State extends State<SoldItemsPage> {
   }
 
   Widget _productNameView(c) {
-    if (kDebugMode) {
-      print(c);
-    }
     var subText = _getTimer(c);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -282,39 +279,37 @@ class _State extends State<SoldItemsPage> {
     );
   }
 
-// void _showMobileContextMenu(context) {
-//   showDialogOrModalSheet(
-//       Container(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             ListTile(
-//               leading: const Icon(Icons.add),
-//               title: const Text('Add retail'),
-//               onTap: () => navigateTo('/sales/cash/retail'),
-//             ),
-//             HorizontalLine(),
-//             ListTile(
-//               leading: const Icon(Icons.business),
-//               title: const Text('Add wholesale'),
-//               onTap: () => navigateTo('/sales/cash/whole'),
-//             ),
-//             HorizontalLine(),
-//             ListTile(
-//               leading: const Icon(Icons.refresh),
-//               title: const Text('Reload sales'),
-//               onTap: () {
-//                 Navigator.of(context).maybePop();
-//                 _refresh();
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//       context);
-// }
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.download_rounded),
+                title: const Text('Export'),
+                onTap: (){
+                  Navigator.of(context).maybePop().whenComplete(() {
+                    _handleOnExport();
+                  });
+                },
+              ),
+              const HorizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _refresh();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
+  }
 
   _onCustomDatesClicked() {
     DateTime? startDate;
@@ -345,7 +340,7 @@ class _State extends State<SoldItemsPage> {
       }
       endDate = value;
       _dateTimeRange = DateTimeRange(start: startDate!, end: endDate!);
-      _rangeName = _RangeName.CUSTOM;
+      _rangeName = _RangeName.custom;
       _refresh();
     }).catchError((error) {
       showInfoDialog(context, error);
@@ -356,23 +351,47 @@ class _State extends State<SoldItemsPage> {
     return Container(
       color: Colors.transparent,
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  borderRadius: BorderRadius.circular(100)),
-              child: Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  child: BodyLarge(text: title)),
-            ),
-            child ?? Container()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(100)),
+                child: Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: BodyLarge(text: title)),
+              ),
+              child ?? Container()
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _handleOnExport() {
+      showDialogOrModalSheet(
+        dataExportOptions(onPdf: () {
+          exportPDF(
+              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+              _soldItems);
+          Navigator.maybePop(context);
+        }, onCsv: () {
+          exportToCsv(
+              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+              _soldItems);
+          Navigator.maybePop(context);
+        }, onExcel: () {
+          exportToExcel(
+              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+              _soldItems);
+          Navigator.maybePop(context);
+        }),
+        context,
+      );
   }
 }

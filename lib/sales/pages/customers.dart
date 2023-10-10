@@ -6,7 +6,6 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/navigation.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/services/customer.dart';

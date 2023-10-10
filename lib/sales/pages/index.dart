@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
-import 'package:smartstock/core/components/HeadineMedium.dart';
-import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -324,7 +321,19 @@ class _State extends State<SalesPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const BodyLarge(text: "Sold Items"),
+          Row(
+            children: [
+              const Expanded(flex: 1, child: BodyLarge(text: "Sold Items")),
+              const WhiteSpacer(width: 8),
+              OutlinedButton(
+                  onPressed: () {
+                    widget.onChangePage(SoldItemsPage(
+                        onBackPage: widget.onBackPage,
+                        onChangePage: widget.onChangePage));
+                  },
+                  child: const BodyLarge(text: 'View More'))
+            ],
+          ),
           const WhiteSpacer(height: 8),
           const Divider(),
           SizedBox(
@@ -361,20 +370,6 @@ class _State extends State<SalesPage> {
                     ]),
             );
           }),
-          itOrEmptyArray(data['sold_items']).length > 0
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    OutlinedButton(
-                        onPressed: () {
-                          widget.onChangePage(SoldItemsPage(
-                              onBackPage: widget.onBackPage,
-                              onChangePage: widget.onChangePage));
-                        },
-                        child: const BodyLarge(text: 'View More'))
-                  ],
-                )
-              : Container()
         ],
       ),
     );

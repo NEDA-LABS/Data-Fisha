@@ -17,6 +17,6 @@ showDialogOrModalSheet(Widget content, context) => hasEnoughWidth(context)
         builder: (_) => Dialog(
             child: Container(
                 constraints: const BoxConstraints(
-                    maxWidth: 600, minHeight: 300, maxHeight: 600),
+                    maxWidth: 600, minHeight: 200, maxHeight: 600),
                 child: content)))
     : showModalBottomSheet(context: context, builder: (_) => content);
