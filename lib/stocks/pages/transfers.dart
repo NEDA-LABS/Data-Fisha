@@ -7,6 +7,7 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/transfer_details.dart';
@@ -14,7 +15,7 @@ import 'package:smartstock/stocks/pages/transfer_receive.dart';
 import 'package:smartstock/stocks/pages/transfer_send.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
-class TransfersPage extends StatefulWidget {
+class TransfersPage extends PageBase {
   final OnChangePage onChangePage;
   final OnBackPage onBackPage;
 
@@ -22,7 +23,7 @@ class TransfersPage extends StatefulWidget {
     Key? key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'TransfersPage');
 
   @override
   State<StatefulWidget> createState() => _TransfersPage();

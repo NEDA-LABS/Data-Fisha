@@ -13,6 +13,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/export_options.dart';
@@ -21,7 +22,7 @@ import 'package:smartstock/sales/services/report.dart';
 
 enum _RangeName { today, yesterday, week, custom }
 
-class SoldItemsPage extends StatefulWidget {
+class SoldItemsPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
@@ -29,7 +30,7 @@ class SoldItemsPage extends StatefulWidget {
     Key? key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'SoldItemsPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -290,7 +291,7 @@ class _State extends State<SoldItemsPage> {
               ListTile(
                 leading: const Icon(Icons.download_rounded),
                 title: const Text('Export'),
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).maybePop().whenComplete(() {
                     _handleOnExport();
                   });
@@ -374,24 +375,24 @@ class _State extends State<SoldItemsPage> {
   }
 
   void _handleOnExport() {
-      showDialogOrModalSheet(
-        dataExportOptions(onPdf: () {
-          exportPDF(
-              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
-              _soldItems);
-          Navigator.maybePop(context);
-        }, onCsv: () {
-          exportToCsv(
-              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
-              _soldItems);
-          Navigator.maybePop(context);
-        }, onExcel: () {
-          exportToExcel(
-              "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
-              _soldItems);
-          Navigator.maybePop(context);
-        }),
-        context,
-      );
+    showDialogOrModalSheet(
+      dataExportOptions(onPdf: () {
+        exportPDF(
+            "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+            _soldItems);
+        Navigator.maybePop(context);
+      }, onCsv: () {
+        exportToCsv(
+            "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+            _soldItems);
+        Navigator.maybePop(context);
+      }, onExcel: () {
+        exportToExcel(
+            "Sold items ${toSqlDate(_dateTimeRange.start)} -> ${toSqlDate(_dateTimeRange.end)}",
+            _soldItems);
+        Navigator.maybePop(context);
+      }),
+      context,
+    );
   }
 }

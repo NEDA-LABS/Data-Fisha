@@ -10,9 +10,10 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class UsersPage extends StatefulWidget {
+class UsersPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
@@ -20,7 +21,7 @@ class UsersPage extends StatefulWidget {
     required this.onBackPage,
     required this.onChangePage,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'UsersPage');
 
   @override
   State<StatefulWidget> createState() => _State();

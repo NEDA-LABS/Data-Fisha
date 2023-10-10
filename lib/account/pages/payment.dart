@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/payment_body.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/HeadineLarge.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/components/HeadineMedium.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 
-class PaymentPage extends StatelessWidget {
+class PaymentPage extends PageBase {
   final dynamic subscription;
 
   const PaymentPage({
     Key? key,
     required this.subscription,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'PaymentPage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const BodyLarge(text: 'Bills Payment'),
-      ),
-      body: PaymentBody(subscription: subscription),
+      appBar:
+          widget.subscription != null && widget.subscription['force'] == true
+              ? null
+              : AppBar(
+                  title: const BodyLarge(text: 'Subscription Payments'),
+                ),
+      body: PaymentBody(initialSubscription: widget.subscription),
     );
   }
 }

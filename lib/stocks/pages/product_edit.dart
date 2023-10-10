@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/product_edit_form.dart';
 
-class ProductEditPage extends StatelessWidget {
+class ProductEditPage extends PageBase {
   final Map product;
   final OnBackPage onBackPage;
 
@@ -12,15 +13,20 @@ class ProductEditPage extends StatelessWidget {
     this.product, {
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ProductEditPage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<ProductEditPage>{
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Update ${product['product']}",
+      title: "Update ${widget.product['product']}",
       showBack: true,
       backLink: '/stock/products',
       showSearch: false,
-      onBack: onBackPage,
+      onBack: widget.onBackPage,
       context: context,
     );
   }
@@ -34,7 +40,7 @@ class ProductEditPage extends StatelessWidget {
         Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 600),
-            child: ProductUpdateForm(product, onBackPage: onBackPage),
+            child: ProductUpdateForm(widget.product, onBackPage: widget.onBackPage),
           ),
         )
       ],

@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_expense_content.dart';
 
-class ExpenseCreatePage extends StatefulWidget {
+class ExpenseCreatePage extends PageBase {
   final OnBackPage onBackPage;
 
   const ExpenseCreatePage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ExpenseCreatePage');
 
   @override
   State<StatefulWidget> createState() => _State();

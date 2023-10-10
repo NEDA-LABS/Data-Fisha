@@ -5,17 +5,18 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 
-class ExpenseCategoriesPage extends StatefulWidget {
+class ExpenseCategoriesPage extends PageBase {
   final OnBackPage onBackPage;
 
   const ExpenseCategoriesPage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key,pageName: 'ExpenseCategoriesPage');
 
   @override
   State<StatefulWidget> createState() => _State();

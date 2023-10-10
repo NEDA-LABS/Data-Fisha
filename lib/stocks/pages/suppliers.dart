@@ -6,17 +6,18 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
-class SuppliersPage extends StatefulWidget {
+class SuppliersPage extends PageBase {
   final OnBackPage onBackPage;
 
   const SuppliersPage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'SuppliersPage');
 
   @override
   State<StatefulWidget> createState() => _State();

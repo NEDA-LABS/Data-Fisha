@@ -1,5 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -10,14 +11,19 @@ import 'package:smartstock/stocks/services/transfer.dart';
 
 var _onGetPrice = compose([doubleOrZero, propertyOr('purchase', (p0) => 0)]);
 
-class TransferReceivePage extends StatelessWidget {
+class TransferReceivePage extends PageBase {
   final OnBackPage onBackPage;
 
   const TransferReceivePage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'TransferReceivePage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<TransferReceivePage> {
   @override
   Widget build(BuildContext context) {
     return SaleLikePage(
@@ -28,7 +34,7 @@ class TransferReceivePage extends StatelessWidget {
         customerLikeLabel: 'Transferred from?',
         onSubmitCart: prepareOnSubmitTransfer(context, 'receive'),
         onGetPrice: _onGetPrice,
-        onBack: onBackPage,
+        onBack: widget.onBackPage,
         onAddToCartView: _onPrepareSalesAddToCartView(context, false),
         onCustomerLikeList: getOtherShopsNames,
         onCustomerLikeAddWidget: transferAddShopContent,

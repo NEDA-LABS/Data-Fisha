@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -8,21 +9,28 @@ import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
-class PurchaseCreatePage extends StatelessWidget {
+class PurchaseCreatePage extends PageBase {
   final OnBackPage onBackPage;
 
   const PurchaseCreatePage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'PurchaseCreatePage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+
+}
+
+
+class _State extends State<PurchaseCreatePage>{
   @override
   Widget build(BuildContext context) => SaleLikePage(
       wholesale: false,
       showDiscountView: false,
       title: 'Create purchase',
       backLink: '/stock/purchases',
-      onBack: onBackPage,
+      onBack: widget.onBackPage,
       customerLikeLabel: 'Choose supplier',
       onSubmitCart: prepareOnSubmitPurchase(context),
       onGetPrice: (product) {
@@ -35,12 +43,12 @@ class PurchaseCreatePage extends StatelessWidget {
       onGetProductsLike: getStockFromCacheOrRemote);
 
   _onPrepareSalesAddToCartView(context, wholesale) => (product, onAddToCart) {
-        addPurchaseToCartView(
-            onGetPrice: (product) {
-              return doubleOrZero('${product['purchase']}');
-            },
-            cart: CartModel(product: product, quantity: 1),
-            onAddToCart: onAddToCart,
-            context: context);
-      };
+    addPurchaseToCartView(
+        onGetPrice: (product) {
+          return doubleOrZero('${product['purchase']}');
+        },
+        cart: CartModel(product: product, quantity: 1),
+        onAddToCart: onAddToCart,
+        context: context);
+  };
 }

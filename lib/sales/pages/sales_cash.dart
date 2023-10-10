@@ -8,13 +8,14 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
-class SalesCashPage extends StatefulWidget {
+class SalesCashPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
@@ -22,7 +23,7 @@ class SalesCashPage extends StatefulWidget {
     Key? key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'SalesCashPage');
 
   @override
   State<StatefulWidget> createState() => _State();

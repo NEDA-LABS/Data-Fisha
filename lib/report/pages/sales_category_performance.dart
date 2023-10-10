@@ -5,19 +5,20 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class CategoryPerformance extends StatefulWidget {
+class CategoryPerformance extends PageBase {
   final OnBackPage onBackPage;
 
   const CategoryPerformance({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'CategoryPerformance');
 
   @override
   State<StatefulWidget> createState() => _State();

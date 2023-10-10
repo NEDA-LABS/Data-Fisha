@@ -8,19 +8,20 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class OverviewCashSales extends StatefulWidget {
+class OverviewCashSales extends PageBase {
   final OnBackPage onBackPage;
 
   const OverviewCashSales({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'OverviewCashSales');
 
   @override
   State<StatefulWidget> createState() => _State();

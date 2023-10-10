@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/services/shop_users.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class ShopUserCreatePage extends StatefulWidget {
+class ShopUserCreatePage extends PageBase {
   final OnBackPage onBackPage;
-  const ShopUserCreatePage({required this.onBackPage,Key? key}) : super(key: key);
+
+  const ShopUserCreatePage({required this.onBackPage, Key? key})
+      : super(key: key, pageName: 'ShopUserCreatePage');
 
   @override
   State<StatefulWidget> createState() => _State();

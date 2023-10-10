@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/ChooseShop.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class ChooseShopPage extends StatelessWidget {
+class ChooseShopPage extends PageBase {
   final OnGetModulesMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
@@ -10,14 +11,19 @@ class ChooseShopPage extends StatelessWidget {
     Key? key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ChooseShopPage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<ChooseShopPage> {
   @override
   Widget build(var context) {
     return Scaffold(
       body: ChooseShop(
-        onGetModulesMenu: onGetModulesMenu,
-        onGetInitialModule: onGetInitialModule,
+        onGetModulesMenu: widget.onGetModulesMenu,
+        onGetInitialModule: widget.onGetInitialModule,
       ),
     );
   }

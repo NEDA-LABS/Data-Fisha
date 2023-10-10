@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class SellerPerformance extends StatefulWidget {
+class SellerPerformance extends PageBase {
   final OnBackPage onBackPage;
 
   const SellerPerformance({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'OverviewInvoiceSales');
 
   @override
   State<StatefulWidget> createState() => _State();

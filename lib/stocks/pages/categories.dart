@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
-class CategoriesPage extends StatefulWidget {
+class CategoriesPage extends PageBase {
   final OnBackPage onBackPage;
 
   const CategoriesPage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'CategoriesPage');
 
   @override
   State<StatefulWidget> createState() => _State();

@@ -2,23 +2,27 @@ import 'package:bfast/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 
-class OverviewInvoiceSales extends StatefulWidget {
+class OverviewInvoiceSales extends PageBase {
   final OnBackPage onBackPage;
-  const OverviewInvoiceSales({Key? key, required this.onBackPage,}) : super(key: key);
+
+  const OverviewInvoiceSales({
+    Key? key,
+    required this.onBackPage,
+  }) : super(key: key, pageName: 'OverviewInvoiceSales');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -82,7 +86,7 @@ class _State extends State<OverviewInvoiceSales> {
                 ),
               ]),
             ),
-            HorizontalLine()
+            const HorizontalLine()
           ],
         );
       },
@@ -203,7 +207,7 @@ class _State extends State<OverviewInvoiceSales> {
   }
 
   _tableHeader() {
-    return TableLikeListRow([
+    return const TableLikeListRow([
       TableLikeListTextHeaderCell('Date'),
       // tableLikeListTextHeader('Retail ( Tsh )'),
       // tableLikeListTextHeader('Wholesale ( Tsh )'),

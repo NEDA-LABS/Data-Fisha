@@ -13,6 +13,7 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -27,7 +28,7 @@ import 'package:smartstock/sales/services/index.dart';
 
 import 'customers.dart';
 
-class SalesPage extends StatefulWidget {
+class SalesPage extends PageBase {
   final OnChangePage onChangePage;
   final OnBackPage onBackPage;
 
@@ -35,7 +36,7 @@ class SalesPage extends StatefulWidget {
     Key? key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'SalesPage');
 
   @override
   State<StatefulWidget> createState() => _State();

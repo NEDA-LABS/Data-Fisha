@@ -16,7 +16,7 @@ import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class SaleLikePage extends StatefulWidget {
+class SaleLikePage extends StatefulWidget{
   final String title;
   final bool wholesale;
   final String backLink;

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/LoginForm.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends PageBase {
   final OnGetModulesMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
@@ -10,8 +11,13 @@ class LoginPage extends StatelessWidget {
     Key? key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'LoginPage');
 
+  @override
+  State<StatefulWidget> createState()=> _State();
+}
+
+class _State extends State<LoginPage>{
   @override
   Widget build(var context) {
     return Scaffold(
@@ -19,8 +25,8 @@ class LoginPage extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: LoginForm(
-            onGetModulesMenu: onGetModulesMenu,
-            onGetInitialModule: onGetInitialModule,
+            onGetModulesMenu: widget.onGetModulesMenu,
+            onGetInitialModule: widget.onGetInitialModule,
           ),
         ),
       ),

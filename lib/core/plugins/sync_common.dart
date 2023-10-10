@@ -12,7 +12,6 @@ import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/products_syncs.dart';
-import 'package:uuid/uuid.dart';
 
 Future syncLocalDataToRemoteServer() async {
   List keys = await getLocalSyncsKeys();
@@ -41,31 +40,38 @@ Future syncSubscriptionFromRemoteServer() async {
   if (user['id'] == null) {
     throw Exception('No user can\'t check for subscription');
   }
-  var subscription = await getSubscriptionLocal(user['projectId']??const Uuid().v4());
+  var subscription = await getSubscriptionLocal(user['id'] ?? 'nop');
+  if (kDebugMode) {
+    print("local subs: $subscription");
+  }
   subscription ??= await getSubscriptionStatus(user['id']);
+  _updateLocalSubs(user);
+  return subscription;
+}
+
+void _updateLocalSubs(user) {
   getSubscriptionStatus(user['id']).then((value) async {
     if (value is Map) {
-      await saveSubscriptionLocal(value,user['projectId']??const Uuid().v4());
+      await saveSubscriptionLocal(value, user['id'] ?? "nop");
     }
   }).catchError((err) {
     if (kDebugMode) {
       print(err);
     }
   });
-  return subscription;
 }
 
-Future updateLocalProducts(List<dynamic> args) async{
+Future updateLocalProducts(List<dynamic> args) async {
   var maybeSync = await shouldSync();
   if (kDebugMode) {
     print(maybeSync);
   }
-  if(maybeSync==true){
+  if (maybeSync == true) {
     var shop = await getActiveShop();
     if(shop is Map && shop['projectId']!=null){
       var products = await getAllRemoteStocks(shop);
       await saveLocalStocks(shopToApp(shop), products);
-      return products is List? products.length: products;
+      return products is List ? products.length : products;
     }
   }
 }

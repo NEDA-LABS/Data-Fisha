@@ -6,13 +6,14 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/purchase_details.dart';
 import 'package:smartstock/stocks/pages/purchase_create.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
-class PurchasesPage extends StatefulWidget {
+class PurchasesPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
@@ -20,7 +21,7 @@ class PurchasesPage extends StatefulWidget {
     Key? key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'PurchasesPage');
 
   @override
   State<StatefulWidget> createState() => _PurchasesPage();

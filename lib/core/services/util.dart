@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 //'http://localhost:3000'; //
@@ -116,7 +117,7 @@ List<List<T>> divideList<T>(List<T> list, int length) {
   return chunks;
 }
 
-typedef OnChangePage = Function(Widget page);
+typedef OnChangePage = Function(PageBase page);
 typedef OnChangeRightDrawer = Function(Widget? drawer);
 typedef OnBackPage = Function();
 typedef OnGetModulesMenu = List<ModuleMenu> Function({
@@ -125,7 +126,7 @@ typedef OnGetModulesMenu = List<ModuleMenu> Function({
   required OnBackPage onBackPage,
 });
 
-typedef OnGetInitialPage = Widget? Function({
+typedef OnGetInitialPage = PageBase? Function({
   required OnChangePage onChangePage,
   required OnBackPage onBackPage,
 });

@@ -4,6 +4,7 @@ import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/stock_summary.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
@@ -12,7 +13,7 @@ import 'package:smartstock/stocks/pages/purchases.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
-class StocksIndexPage extends StatelessWidget {
+class StocksIndexPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
@@ -20,8 +21,14 @@ class StocksIndexPage extends StatelessWidget {
     Key? key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'StocksIndexPage');
 
+  @override
+  State<StatefulWidget> createState() => _State();
+
+}
+
+class _State extends State<StocksIndexPage>{
   @override
   Widget build(context) {
     var appBar = SliverSmartStockAppBar(
@@ -37,8 +44,8 @@ class StocksIndexPage extends StatelessWidget {
         const SwitchToTitle(),
         SwitchToPageMenu(pages: _pages(context)),
         StocksSummary(
-          onBackPage: onBackPage,
-          onChangePage: onChangePage,
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
         )
       ],
     );
@@ -52,10 +59,10 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.sell,
         svgName: 'product_icon.svg',
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           ProductsPage(
-            onBackPage: onBackPage,
-            onChangePage: onChangePage,
+            onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
           ),
         ),
       ),
@@ -65,9 +72,9 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.category,
         svgName: 'category_icon.svg',
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           CategoriesPage(
-            onBackPage: onBackPage,
+            onBackPage: widget.onBackPage,
           ),
         ),
       ),
@@ -77,9 +84,9 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.support_agent_sharp,
         svgName: 'supplier_icon.svg',
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           SuppliersPage(
-            onBackPage: onBackPage,
+            onBackPage: widget.onBackPage,
           ),
         ),
       ),
@@ -89,10 +96,10 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.receipt,
         svgName: 'invoice_icon.svg',
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           PurchasesPage(
-            onBackPage: onBackPage,
-            onChangePage: onChangePage,
+            onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
           ),
         ),
       ),
@@ -102,10 +109,10 @@ class StocksIndexPage extends StatelessWidget {
         roles: [],
         icon: Icons.change_circle,
         svgName: 'transfer_icon.svg',
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           TransfersPage(
-            onBackPage: onBackPage,
-            onChangePage: onChangePage,
+            onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
           ),
         ),
       ),

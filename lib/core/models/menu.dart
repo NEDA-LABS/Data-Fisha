@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 
 class ModuleMenu {
   final String name;
   final String link;
-  final Widget page;
+  final PageBase page;
   final Function()? onClick;
   final List<String> roles;
   final Icon icon;

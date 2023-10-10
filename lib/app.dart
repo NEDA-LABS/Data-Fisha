@@ -8,16 +8,19 @@ import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/pages/payment.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/HeadineLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/responsive_page_container.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/headline_large.dart';
+import 'package:smartstock/core/components/responsive_page_container.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
+import 'package:smartstock/page_history.dart';
 import 'package:smartstock/sales/pages/index.dart';
+
 // import 'package:socket_io_client/socket_io_client.dart' as io_client;
 
 import 'core/plugins/sync_common.dart';
@@ -38,16 +41,17 @@ class SmartStockApp extends StatefulWidget {
 
 class _State extends State<SmartStockApp> {
   int i = 0;
-  Widget? child = const DashboardIndexPage();
-  List<Widget> pageHistories = [];
+  PageBase? child = const DashboardIndexPage();
   bool loading = false;
   bool initialized = false;
   Map? user;
   var _shouldSubsRun = true;
   var _shouldProductsSyncsRun = true;
   var _shouldShowSubsDialog = true;
+  var _payNowClicked = false;
   Timer? _subscriptionTimer;
   Timer? _productRefreshTimer;
+
   // io_client.Socket? _socket;
 
   @override
@@ -83,7 +87,7 @@ class _State extends State<SmartStockApp> {
             print('Back pressed');
             print('------');
           }
-          if (pageHistories.length == 1) {
+          if (PageHistory().getLength() == 1) {
             return true;
           }
           _onBackPage();
@@ -98,35 +102,37 @@ class _State extends State<SmartStockApp> {
     }
   }
 
-  _onChangePage(page) {
+  _onChangePage(PageBase page) {
     _updateState(() {
       child = page;
-      if (pageHistories.isNotEmpty) {
-        var lastWidget = pageHistories.last;
-        if ('$lastWidget' == '$page') {
+      if (PageHistory().getIsNotEmpty()) {
+        PageBase lastWidget = PageHistory().getLast();
+        if (lastWidget.pageName == page.pageName) {
           if (kDebugMode) {
+            print('---- ${lastWidget.pageName} ----');
+            print('---- ${page.pageName} ----');
             print('---- SAME PAGE ----');
           }
         } else {
-          pageHistories.add(page);
+          PageHistory().add(page);
         }
       } else {
-        pageHistories.add(page);
+        PageHistory().add(page);
       }
     });
   }
 
   _onBackPage() {
-    var length = pageHistories.length;
+    var length = PageHistory().getLength();
     if (kDebugMode) {
       print('Length ---> $length');
     }
     goBack(int offset) {
-      var last = pageHistories[length - offset];
+      var last = PageHistory().getAt(length - offset);
       if (last != null) {
         _updateState(() {
           child = last;
-          pageHistories.removeAt(length - 1);
+          PageHistory().removeAt(length - 1);
         });
       }
     }
@@ -174,7 +180,7 @@ class _State extends State<SmartStockApp> {
         }
       }
       if (child != null) {
-        pageHistories.add(child!);
+        PageHistory().add(child!);
       }
       initialized = true;
     }).catchError((err) {
@@ -298,89 +304,105 @@ class _State extends State<SmartStockApp> {
   void _showD(dynamic value) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) {
-        return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                constraints:
-                    const BoxConstraints(minHeight: 210, maxWidth: 400),
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(4)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const LabelLarge(text: 'You have unpaid invoice'),
-                    const WhiteSpacer(height: 8),
-                    HeadlineLarge(text: 'TZ ${formatNumber(value['balance'])}'),
-                    const WhiteSpacer(height: 16),
-                    const BodyLarge(
-                        text:
-                            'For all your shops, to continue using the service you must pay'),
-                    const WhiteSpacer(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).maybePop().whenComplete(() {
-                                _shouldShowSubsDialog = true;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                              ),
-                              child: const BodyMedium(text: 'CANCEL'),
-                            ),
-                          ),
-                        ),
-                        const WhiteSpacer(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).maybePop().whenComplete(() {
-                                Navigator.of(context)
-                                    .push(
-                                  MaterialPageRoute(
-                                    fullscreenDialog: true,
-                                    builder: (context) {
-                                      return PaymentPage(
-                                        subscription: value,
-                                      );
+        return WillPopScope(
+          onWillPop: () async {
+            if (_payNowClicked == true) {
+              return true;
+            }
+            var noGrace = value is Map && value['force'] == true;
+            return noGrace == true ? false : true;
+          },
+          child: Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  constraints:
+                      const BoxConstraints(minHeight: 210, maxWidth: 400),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const LabelLarge(text: 'You have unpaid invoice'),
+                      const WhiteSpacer(height: 8),
+                      HeadlineLarge(
+                          text: 'TZ ${formatNumber(value['balance'])}'),
+                      const WhiteSpacer(height: 16),
+                      const BodyLarge(
+                          text:
+                              'For all your shops, to continue using the service you must pay'),
+                      const WhiteSpacer(height: 24),
+                      Row(
+                        children: [
+                          value is Map && value['force'] == true
+                              ? Container()
+                              : Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .maybePop()
+                                          .whenComplete(() {
+                                        _shouldShowSubsDialog = true;
+                                      });
                                     },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                      ),
+                                      child: const BodyMedium(text: 'CANCEL'),
+                                    ),
                                   ),
-                                )
+                                ),
+                          const WhiteSpacer(width: 8),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                _payNowClicked = true;
+                                Navigator.of(context)
+                                    .maybePop()
                                     .whenComplete(() {
-                                  _shouldShowSubsDialog = true;
+                                  Navigator.of(context)
+                                      .push(
+                                    MaterialPageRoute(
+                                      fullscreenDialog: true,
+                                      builder: (context) {
+                                        return PaymentPage(subscription: value);
+                                      },
+                                    ),
+                                  )
+                                      .whenComplete(() {
+                                    _shouldShowSubsDialog = true;
+                                  });
                                 });
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                ),
+                                child: const BodyMedium(text: 'PAY NOW'),
                               ),
-                              child: const BodyMedium(text: 'PAY NOW'),
                             ),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

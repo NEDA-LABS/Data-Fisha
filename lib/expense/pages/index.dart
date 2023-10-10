@@ -8,13 +8,14 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 import 'package:smartstock/expense/pages/ExpensesPage.dart';
 import 'package:smartstock/expense/services/index.dart';
 
-class ExpenseIndexPage extends StatefulWidget {
+class ExpenseIndexPage extends PageBase {
   final OnChangePage onChangePage;
   final OnBackPage onBackPage;
 
@@ -22,7 +23,7 @@ class ExpenseIndexPage extends StatefulWidget {
     Key? key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ExpenseIndexPage');
 
   @override
   State<StatefulWidget> createState() => _State();

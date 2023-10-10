@@ -6,9 +6,10 @@ import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 
-class ProfileIndexPage extends StatelessWidget {
+class ProfileIndexPage extends PageBase {
   final OnChangePage onChangePage;
   final OnBackPage onBackPage;
 
@@ -16,8 +17,14 @@ class ProfileIndexPage extends StatelessWidget {
     required this.onBackPage,
     required this.onChangePage,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ProfileIndexPage');
 
+  @override
+  State<StatefulWidget> createState()=> _State();
+
+}
+
+class _State extends State<ProfileIndexPage>{
   @override
   Widget build(context) {
     return ResponsivePage(
@@ -54,7 +61,7 @@ class ProfileIndexPage extends StatelessWidget {
         svgName: 'item_icon.svg',
         icon: Icons.person,
         roles: ["*"],
-        onClick: () => onChangePage(ProfilePage(onBackPage: onBackPage)),
+        onClick: () => widget.onChangePage(ProfilePage(onBackPage: widget.onBackPage)),
       ),
       ModulePageMenu(
         name: 'Users',
@@ -62,10 +69,10 @@ class ProfileIndexPage extends StatelessWidget {
         icon: Icons.groups,
         svgName: 'item_icon.svg',
         roles: ["*"],
-        onClick: () => onChangePage(
+        onClick: () => widget.onChangePage(
           UsersPage(
-            onBackPage: onBackPage,
-            onChangePage: onChangePage,
+            onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
           ),
         ),
       ),

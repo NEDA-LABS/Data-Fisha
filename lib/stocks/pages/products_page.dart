@@ -10,6 +10,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -18,7 +19,7 @@ import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/services/inventories_filters.dart';
 
-class ProductsPage extends StatefulWidget {
+class ProductsPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
   final Map<String, dynamic Function(dynamic)> initialFilter;
@@ -28,7 +29,7 @@ class ProductsPage extends StatefulWidget {
     this.initialFilter = const {},
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key);
+  }) : super(key: key, pageName: 'ProductsPage');
 
   @override
   State<StatefulWidget> createState() => _State();
