@@ -25,6 +25,7 @@ import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/pages/sold_items.dart';
 import 'package:smartstock/sales/services/index.dart';
 
 import 'customers.dart';
@@ -365,7 +366,11 @@ class _State extends State<SalesPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.onChangePage(SoldItemsPage(
+                              onBackPage: widget.onBackPage,
+                              onChangePage: widget.onChangePage));
+                        },
                         child: const BodyLarge(text: 'View More'))
                   ],
                 )
