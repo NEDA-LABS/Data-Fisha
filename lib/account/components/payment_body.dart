@@ -61,7 +61,9 @@ class _State extends State<PaymentBody> {
               children: [
                 widget.initialSubscription != null &&
                         widget.initialSubscription['force'] == true
-                    ? const BodyLarge(text: 'Subscription Payments')
+                    ? Container(
+                        padding: const EdgeInsets.only(top: 54),
+                        child: const BodyLarge(text: 'Subscription Payments'))
                     : Container(),
                 const TableLikeListRow([
                   TableLikeListTextHeaderCell("Number"),

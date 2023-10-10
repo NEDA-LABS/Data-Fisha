@@ -196,7 +196,7 @@ class _State extends State<SmartStockApp> {
   }
 
   void _periodicSubscriptionCheck() {
-    _subscriptionTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
+    _subscriptionTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (_shouldSubsRun) {
         try {
           _shouldSubsRun = false;
