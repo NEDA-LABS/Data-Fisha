@@ -2,60 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-
-class TableLikeListRow extends StatelessWidget {
-  final List<Widget> items;
-
-  const TableLikeListRow(this.items, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    mapFn(e) => Expanded(flex: items.indexOf(e) == 0 ? 2 : 1, child: e);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: Row(children: items.map(mapFn).toList()),
-    );
-  }
-}
-
-class TableLikeListTextHeaderCell extends StatelessWidget {
-  final String name;
-
-  const TableLikeListTextHeaderCell(this.name, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var style = const TextStyle(
-      fontWeight: FontWeight.w400,
-      overflow: TextOverflow.ellipsis,
-      fontSize: 14,
-      // color: Color(0x40000000),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(name, style: style),
-    );
-  }
-}
-
-class TableLikeListTextDataCell extends StatelessWidget {
-  final String name;
-
-  const TableLikeListTextDataCell(this.name, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var style = const TextStyle(
-      fontWeight: FontWeight.w300,
-      overflow: TextOverflow.ellipsis,
-      // color: Color(0xFF1C1C1C),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Text(name, style: style),
-    );
-  }
-}
+import 'package:smartstock/core/components/table_like_list_row.dart';
 
 _a(dynamic) {}
 
@@ -140,23 +87,24 @@ class _State extends State<TableLikeList> {
           child: TableLikeListRow(keys.map(keyToView).toList()),
         ),
       ),
-      HorizontalLine()
+      const HorizontalLine()
     ]);
   }
 
   _tableRows(List data, context, List<String> keys, onCell, onPress) {
     return ListView.builder(
-        controller: controller,
-        shrinkWrap: true,
-        itemCount: data.isNotEmpty ? data.length + 1 : data.length,
-        itemBuilder: (context, index) {
-          var getRow = ifDoElse(
-            (i) => data.length == i,
-            (_) => _loadMoreView(),
-            (i) => _tableRow(data[i], keys, onCell, onPress),
-          );
-          return getRow(index);
-        });
+      controller: controller,
+      shrinkWrap: true,
+      itemCount: data.isNotEmpty ? data.length + 1 : data.length,
+      itemBuilder: (context, index) {
+        var getRow = ifDoElse(
+          (i) => data.length == i,
+          (_) => _loadMoreView(),
+          (i) => _tableRow(data[i], keys, onCell, onPress),
+        );
+        return getRow(index);
+      },
+    );
   }
 
   _showErrorOrContent(context, List<String> keys, onCell, onPress) {

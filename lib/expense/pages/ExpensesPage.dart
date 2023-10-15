@@ -6,7 +6,9 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -51,10 +53,10 @@ class _State extends State<ExpenseExpensesPage> {
     return SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListTextHeaderCell('Item'),
-        TableLikeListTextHeaderCell('Category'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
-        TableLikeListTextHeaderCell('Date'),
+        TableLikeListHeaderCell('Item'),
+        TableLikeListHeaderCell('Category'),
+        TableLikeListHeaderCell('Amount ( TZS )'),
+        TableLikeListHeaderCell('Date'),
       ]),
     );
   }

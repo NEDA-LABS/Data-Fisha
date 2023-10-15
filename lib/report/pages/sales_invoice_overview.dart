@@ -9,6 +9,9 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -208,10 +211,10 @@ class _State extends State<OverviewInvoiceSales> {
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListTextHeaderCell('Date'),
+      TableLikeListHeaderCell('Date'),
       // tableLikeListTextHeader('Retail ( Tsh )'),
       // tableLikeListTextHeader('Wholesale ( Tsh )'),
-      TableLikeListTextHeaderCell('Total ( Tsh )'),
+      TableLikeListHeaderCell('Total ( Tsh )'),
     ]);
   }
 

@@ -5,6 +5,9 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -117,18 +120,18 @@ class _State extends State<SalesCashTrackingPage> {
     var smallView = SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
-        TableLikeListTextHeaderCell('Customer'),
+        TableLikeListHeaderCell('Date'),
+        TableLikeListHeaderCell('Amount ( TZS )'),
+        TableLikeListHeaderCell('Customer'),
       ]),
     );
     var bigView = SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
-        TableLikeListTextHeaderCell('Items'),
-        TableLikeListTextHeaderCell('Customer'),
+        TableLikeListHeaderCell('Date'),
+        TableLikeListHeaderCell('Amount ( TZS )'),
+        TableLikeListHeaderCell('Items'),
+        TableLikeListHeaderCell('Customer'),
       ]),
     );
     return getIsSmallScreen(context) ? smallView : bigView;

@@ -1,18 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/HeadineMedium.dart';
 import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/services/api_subscription.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
-import 'package:uuid/uuid.dart';
 
 class PaymentBody extends StatefulWidget {
   final dynamic initialSubscription;
@@ -66,23 +64,21 @@ class _State extends State<PaymentBody> {
                         child: const BodyLarge(text: 'Subscription Payments'))
                     : Container(),
                 const TableLikeListRow([
-                  TableLikeListTextHeaderCell("Number"),
-                  TableLikeListTextHeaderCell("Status")
+                  TableLikeListHeaderCell("Number"),
+                  TableLikeListHeaderCell("Status")
                 ]),
                 TableLikeListRow([
-                  const TableLikeListTextHeaderCell("0764943055"),
-                  TableLikeListTextHeaderCell(
-                      "${_getStatus(_remoteSubscription)}")
+                  const TableLikeListHeaderCell("0764943055"),
+                  TableLikeListHeaderCell("${_getStatus(_remoteSubscription)}")
                 ]),
                 const TableLikeListRow([
-                  TableLikeListTextHeaderCell("Cost ( TZS ) / Month"),
-                  TableLikeListTextHeaderCell("Balance ( TZS )")
+                  TableLikeListHeaderCell("Cost ( TZS ) / Month"),
+                  TableLikeListHeaderCell("Balance ( TZS )")
                 ]),
                 const HorizontalLine(),
                 TableLikeListRow([
-                  const TableLikeListTextHeaderCell(""),
-                  TableLikeListTextHeaderCell(
-                      "${_getBalance(_remoteSubscription)}")
+                  const TableLikeListHeaderCell(""),
+                  TableLikeListHeaderCell("${_getBalance(_remoteSubscription)}")
                 ]),
                 // const Text(
                 //     'Ukimaliza weka kumbukumbu namba apo chini. Kisha bofya thibitisha malipo.'),

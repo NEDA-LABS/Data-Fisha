@@ -11,25 +11,25 @@ import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/headline_large.dart';
-import 'package:smartstock/core/components/responsive_page_container.dart';
+import 'package:smartstock/core/components/responsive_page_layout.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/page_history.dart';
+import 'package:smartstock/core/helpers/page_history.dart';
 import 'package:smartstock/sales/pages/index.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io_client;
 
 import 'core/plugins/sync_common.dart';
 
-class SmartStockApp extends StatefulWidget {
+class SmartStock extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
-  const SmartStockApp({
+  const SmartStock({
     Key? key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
@@ -39,7 +39,7 @@ class SmartStockApp extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SmartStockApp> {
+class _State extends State<SmartStock> {
   int i = 0;
   PageBase? child = const DashboardIndexPage();
   bool loading = false;
@@ -70,7 +70,7 @@ class _State extends State<SmartStockApp> {
     }
     if (user is Map && propertyOrNull('username')(user) != null) {
       return WillPopScope(
-        child: ResponsivePageContainer(
+        child: ResponsivePageLayout(
           onGetModulesMenu: widget.onGetModulesMenu,
           onGetInitialModule: widget.onGetInitialModule,
           menus: widget.onGetModulesMenu(
@@ -103,23 +103,22 @@ class _State extends State<SmartStockApp> {
   }
 
   _onChangePage(PageBase page) {
-    _updateState(() {
-      child = page;
-      if (PageHistory().getIsNotEmpty()) {
-        PageBase lastWidget = PageHistory().getLast();
-        if (lastWidget.pageName == page.pageName) {
-          if (kDebugMode) {
-            print('---- ${lastWidget.pageName} ----');
-            print('---- ${page.pageName} ----');
-            print('---- SAME PAGE ----');
-          }
-        } else {
-          PageHistory().add(page);
+    child = page;
+    if (PageHistory().getIsNotEmpty()) {
+      PageBase lastWidget = PageHistory().getLast();
+      if (lastWidget.pageName == page.pageName) {
+        if (kDebugMode) {
+          print('---- ${lastWidget.pageName} ----');
+          print('---- ${page.pageName} ----');
+          print('---- SAME PAGE ----');
         }
       } else {
         PageHistory().add(page);
       }
-    });
+    } else {
+      PageHistory().add(page);
+    }
+    _updateState();
   }
 
   _onBackPage() {
@@ -130,10 +129,9 @@ class _State extends State<SmartStockApp> {
     goBack(int offset) {
       var last = PageHistory().getAt(length - offset);
       if (last != null) {
-        _updateState(() {
-          child = last;
-          PageHistory().removeAt(length - 1);
-        });
+        child = last;
+        PageHistory().removeAt(length - 1);
+        _updateState();
       }
     }
 
@@ -145,18 +143,17 @@ class _State extends State<SmartStockApp> {
     }
   }
 
-  _updateState(Function() fn) {
+  _updateState([Function()? fn]) {
     if (mounted) {
-      setState(fn);
+      setState(fn??(){});
     }
   }
 
   _getLoginUser() {
-    _updateState(() {
-      loading = true;
-      user = null;
-      initialized = false;
-    });
+    loading = true;
+    user = null;
+    initialized = false;
+    _updateState();
     getLocalCurrentUser().then((value) async {
       var shop = await getActiveShop();
       if (shop == null) {
@@ -189,9 +186,8 @@ class _State extends State<SmartStockApp> {
       }
       user = null;
     }).whenComplete(() {
-      _updateState(() {
-        loading = false;
-      });
+      loading = false;
+      _updateState();
     });
   }
 
@@ -291,14 +287,6 @@ class _State extends State<SmartStockApp> {
     //     print(error);
     //   }
     // });
-  }
-
-  @override
-  void dispose() {
-    _subscriptionTimer?.cancel();
-    _productRefreshTimer?.cancel();
-    // _socket?.close();
-    super.dispose();
   }
 
   void _showD(dynamic value) {
@@ -407,5 +395,13 @@ class _State extends State<SmartStockApp> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _subscriptionTimer?.cancel();
+    _productRefreshTimer?.cancel();
+    // _socket?.close();
+    super.dispose();
   }
 }

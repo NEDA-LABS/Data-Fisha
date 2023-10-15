@@ -4,7 +4,9 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -53,11 +55,11 @@ class _PurchasesPage extends State<PurchasesPage> {
       ];
 
   _tableHeader() => const TableLikeListRow([
-        TableLikeListTextHeaderCell('Reference'),
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Cost ( TZS )'),
-        TableLikeListTextHeaderCell('Paid ( TZS )'),
-        Center(child: TableLikeListTextHeaderCell('Status')),
+        TableLikeListHeaderCell('Reference'),
+        TableLikeListHeaderCell('Date'),
+        TableLikeListHeaderCell('Cost ( TZS )'),
+        TableLikeListHeaderCell('Paid ( TZS )'),
+        Center(child: TableLikeListHeaderCell('Status')),
       ]);
 
   _loadingView(bool show) =>

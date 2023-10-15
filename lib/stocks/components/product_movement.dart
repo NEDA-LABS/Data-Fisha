@@ -2,7 +2,9 @@ import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
@@ -113,11 +115,11 @@ class _State extends State<ProductMovementDetails> {
         child: SizedBox(
           height: 38,
           child: TableLikeListRow([
-            TableLikeListTextHeaderCell('Date'),
-            TableLikeListTextHeaderCell('Source'),
-            TableLikeListTextHeaderCell('Close'),
-            TableLikeListTextHeaderCell('Open'),
-            TableLikeListTextHeaderCell('Move'),
+            TableLikeListHeaderCell('Date'),
+            TableLikeListHeaderCell('Source'),
+            TableLikeListHeaderCell('Close'),
+            TableLikeListHeaderCell('Open'),
+            TableLikeListHeaderCell('Move'),
           ]),
         ),
       );

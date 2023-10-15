@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
@@ -114,11 +117,11 @@ class _State extends State<PastTopProducts> {
                 ),
               ),
               const TableLikeListRow([
-                TableLikeListTextHeaderCell('Name'),
-                TableLikeListTextHeaderCell('Qty'),
-                TableLikeListTextHeaderCell('Amount'),
-                TableLikeListTextHeaderCell('Profit'),
-                TableLikeListTextHeaderCell('Margin'),
+                TableLikeListHeaderCell('Name'),
+                TableLikeListHeaderCell('Qty'),
+                TableLikeListHeaderCell('Amount'),
+                TableLikeListHeaderCell('Profit'),
+                TableLikeListHeaderCell('Margin'),
               ]),
               HorizontalLine(),
               Expanded(

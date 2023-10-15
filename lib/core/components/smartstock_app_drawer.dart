@@ -1,7 +1,7 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
-import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/models/menu.dart';

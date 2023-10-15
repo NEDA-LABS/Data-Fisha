@@ -11,7 +11,9 @@ import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/api_shop.dart';
@@ -51,28 +53,7 @@ class _State extends State<SalesPage> {
   @override
   void initState() {
     _fetchSummary();
-    _locationSubscriptionStream =
-        getLocationChangeStream().listen((Position? position) {
-      if (position != null) {
-        updateShopLocation(
-          latitude: position.latitude.toString(),
-          longitude: position.longitude.toString(),
-        ).then((value) {
-          if (kDebugMode) {
-            print(value);
-          }
-        }).catchError((error) {
-          if (kDebugMode) {
-            print(error);
-          }
-        });
-      }
-      // // if (kDebugMode) {
-      // print(position == null
-      //     ? 'Unknown'
-      //     : 'Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
-      // // }
-    });
+    _listeningForLocation();
     super.initState();
   }
 
@@ -82,19 +63,13 @@ class _State extends State<SalesPage> {
       office: 'Menu',
       current: '/sales/',
       staticChildren: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            loading ? const LinearProgressIndicator() : Container(),
-            const SwitchToTitle(),
-            SwitchToPageMenu(pages: _pagesMenu(context)),
-            const WhiteSpacer(height: 16),
-            const BodySmall(text: 'Summary'),
-            const WhiteSpacer(height: 8),
-            _getTotalSalesView(context),
-          ],
-        )
+        loading ? const LinearProgressIndicator() : Container(),
+        const SwitchToTitle(),
+        SwitchToPageMenu(pages: _pagesMenu(context)),
+        const WhiteSpacer(height: 16),
+        const BodySmall(text: 'Summary'),
+        const WhiteSpacer(height: 8),
+        _getTotalSalesView(context),
       ],
       sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
@@ -340,15 +315,15 @@ class _State extends State<SalesPage> {
           SizedBox(
             child: isSmallScreen == true
                 ? const TableLikeListRow([
-                    TableLikeListTextHeaderCell('Item'),
-                    TableLikeListTextHeaderCell('Quantity'),
-                    TableLikeListTextHeaderCell('Amount ( TZS )'),
+                    TableLikeListHeaderCell('Item'),
+                    TableLikeListHeaderCell('Quantity'),
+                    TableLikeListHeaderCell('Amount ( TZS )'),
                   ])
                 : const TableLikeListRow([
-                    TableLikeListTextHeaderCell('Item'),
-                    TableLikeListTextHeaderCell('Quantity'),
-                    TableLikeListTextHeaderCell('Amount ( TZS )'),
-                    TableLikeListTextHeaderCell('Purchase ( TZS )'),
+                    TableLikeListHeaderCell('Item'),
+                    TableLikeListHeaderCell('Quantity'),
+                    TableLikeListHeaderCell('Amount ( TZS )'),
+                    TableLikeListHeaderCell('Purchase ( TZS )'),
                   ]),
           ),
           ...itOrEmptyArray(data['sold_items']).map((e) {
@@ -374,5 +349,26 @@ class _State extends State<SalesPage> {
         ],
       ),
     );
+  }
+
+  void _listeningForLocation() {
+    listener(Position? position) {
+      if (position != null) {
+        updateShopLocation(
+          latitude: position.latitude.toString(),
+          longitude: position.longitude.toString(),
+        ).then((value) {
+          if (kDebugMode) {
+            print(value);
+          }
+        }).catchError((error) {
+          if (kDebugMode) {
+            print(error);
+          }
+        });
+      }
+    }
+
+    _locationSubscriptionStream = getLocationChangeStream().listen(listener);
   }
 }

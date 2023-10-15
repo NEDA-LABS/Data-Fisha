@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/services/account.dart';
@@ -130,7 +130,7 @@ class _State extends State<LoginForm> {
       } else {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => SmartStockApp(
+            builder: (context) => SmartStock(
               onGetModulesMenu: widget.onGetModulesMenu,
               onGetInitialModule: widget.onGetInitialModule,
             ),

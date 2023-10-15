@@ -1,6 +1,6 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/services/api_account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -43,7 +43,7 @@ logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu,
   }).then((value) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => SmartStockApp(
+        builder: (context) => SmartStock(
           onGetModulesMenu: onGetModulesMenu,
           onGetInitialModule: onGetInitialModule,
         ),

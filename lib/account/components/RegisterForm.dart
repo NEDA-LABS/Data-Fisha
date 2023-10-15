@@ -4,8 +4,8 @@ import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
-import 'package:smartstock/app.dart';
-import 'package:smartstock/configs.dart';
+import 'package:smartstock/smartstock.dart';
+import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -164,7 +164,7 @@ class _State extends State<RegisterForm> {
             } else {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => SmartStockApp(
+                  builder: (context) => SmartStock(
                     onGetModulesMenu: widget.onGetModulesMenu,
                     onGetInitialModule: widget.onGetInitialModule,
                   ),

@@ -1,7 +1,9 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class SaleItemsDetails extends StatefulWidget {
@@ -37,9 +39,9 @@ class _State extends State<SaleItemsDetails> {
       child: SizedBox(
         height: 38,
         child: TableLikeListRow([
-          TableLikeListTextHeaderCell('Product'),
-          TableLikeListTextHeaderCell('Quantity'),
-          TableLikeListTextHeaderCell('Amount ( TZS )')
+          TableLikeListHeaderCell('Product'),
+          TableLikeListHeaderCell('Quantity'),
+          TableLikeListHeaderCell('Amount ( TZS )')
         ]),
       ),
     );

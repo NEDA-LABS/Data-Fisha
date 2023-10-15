@@ -2,7 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -75,7 +75,7 @@ class _State extends State<ChooseShop> {
           shopState.setCurrentShop(shop).then((shop) {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => SmartStockApp(
+                builder: (context) => SmartStock(
                   onGetModulesMenu: widget.onGetModulesMenu,
                   onGetInitialModule: widget.onGetInitialModule,
                 ),

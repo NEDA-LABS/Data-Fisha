@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/helpers/configs.dart';
 
 raisedButton({
   Function? onPressed,

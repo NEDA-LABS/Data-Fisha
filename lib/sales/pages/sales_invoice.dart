@@ -6,7 +6,9 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -70,11 +72,11 @@ class _InvoicesPage extends State<InvoicesPage> {
     return SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListTextHeaderCell('Customer'),
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
-        TableLikeListTextHeaderCell('Paid ( TZS )'),
-        TableLikeListTextHeaderCell('Status'),
+        TableLikeListHeaderCell('Customer'),
+        TableLikeListHeaderCell('Date'),
+        TableLikeListHeaderCell('Amount ( TZS )'),
+        TableLikeListHeaderCell('Paid ( TZS )'),
+        TableLikeListHeaderCell('Status'),
       ]),
     );
   }

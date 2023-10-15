@@ -4,7 +4,9 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -74,9 +76,9 @@ class _State extends State<CategoryPerformance> {
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListTextHeaderCell('Category'),
-      TableLikeListTextHeaderCell('Quantity'),
-      TableLikeListTextHeaderCell('Amount ( Tsh )'),
+      TableLikeListHeaderCell('Category'),
+      TableLikeListHeaderCell('Quantity'),
+      TableLikeListHeaderCell('Amount ( Tsh )'),
       // tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }

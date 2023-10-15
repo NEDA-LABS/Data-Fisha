@@ -4,7 +4,7 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/pages/index.dart';
-import 'package:smartstock/index.dart';
+import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/stocks/pages/index.dart';
@@ -88,5 +88,5 @@ List<ModuleMenu> _onGetModules({
 }
 
 void main() {
-  startSmartStock(onGetModulesMenu: _onGetModules);
+  initializeSmartStock(onGetModulesMenu: _onGetModules);
 }

@@ -1,5 +1,5 @@
 import 'package:smartstock/core/services/cache_factory.dart';
-import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/helpers/configs.dart';
 
 const _shopTable = 'shop';
 const _activeShopId = 'active';

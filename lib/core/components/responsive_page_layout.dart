@@ -9,7 +9,7 @@ import 'package:smartstock/core/services/util.dart';
 
 typedef ChildBuilder = Widget Function(BuildContext context, dynamic index);
 
-class ResponsivePageContainer extends StatefulWidget {
+class ResponsivePageLayout extends StatefulWidget {
   final String office;
   final String current;
   final bool showLeftDrawer;
@@ -19,7 +19,7 @@ class ResponsivePageContainer extends StatefulWidget {
   final OnGetModulesMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
-  const ResponsivePageContainer({
+  const ResponsivePageLayout({
     this.office = '',
     this.current = '/',
     this.showLeftDrawer = true,
@@ -35,7 +35,7 @@ class ResponsivePageContainer extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ResponsivePageContainer> {
+class _State extends State<ResponsivePageLayout> {
   @override
   void initState() {
     super.initState();
@@ -73,12 +73,6 @@ class _State extends State<ResponsivePageContainer> {
   }
 
   _getSmallView(_) {
-    // var drawer = AppDrawer(
-    //   onGetModulesMenu: widget.onGetModulesMenu,
-    //   menus: widget.menus,
-    //   current: widget.current,
-    //   onChangePage: widget.onChangePage,
-    // );
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -110,30 +104,5 @@ class _State extends State<ResponsivePageContainer> {
         ],
       ),
     );
-    // return Scaffold(
-    //   // drawer: drawer,
-    //   // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    //   // floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
-    //   body: widget.child,
-    //   bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
-    //       ? FutureBuilder(
-    //           builder: (context, snapshot) {
-    //             if (snapshot.connectionState == ConnectionState.waiting) {
-    //               return Container();
-    //             }
-    //             if (snapshot.hasData && snapshot.data != null) {
-    //               var m = widget.menus
-    //                   .where((element) => hasRbaAccess(
-    //                       snapshot.data, element.roles, element.link))
-    //                   .toList();
-    //               return getBottomBar(m, context,
-    //                   onChangePage: widget.onChangePage);
-    //             }
-    //             return Container();
-    //           },
-    //           future: getLocalCurrentUser(),
-    //         )
-    //       : null,
-    // );
   }
 }

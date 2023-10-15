@@ -3,7 +3,9 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -50,7 +52,7 @@ class _State extends State<ExpenseCategoriesPage> {
       ],
       dynamicChildBuilder: (context, index) {
         return TableLikeListRow([
-          TableLikeListTextHeaderCell(_categories[index]['name'] ?? ''),
+          TableLikeListHeaderCell(_categories[index]['name'] ?? ''),
         ]);
       },
       totalDynamicChildren: _categories.length,
@@ -100,7 +102,7 @@ class _State extends State<ExpenseCategoriesPage> {
   }
 
   _tableHeader() =>
-      const TableLikeListRow([TableLikeListTextHeaderCell('Name')]);
+      const TableLikeListRow([TableLikeListHeaderCell('Name')]);
 
   _fields() => ['name'];
 

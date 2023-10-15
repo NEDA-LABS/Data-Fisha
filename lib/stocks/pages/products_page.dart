@@ -1,13 +1,15 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/configs.dart';
+import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
@@ -251,12 +253,12 @@ class _State extends State<ProductsPage> {
   }
 
   _tableHeader() => const TableLikeListRow([
-        TableLikeListTextHeaderCell('Name'),
-        TableLikeListTextHeaderCell('Quantity'),
-        TableLikeListTextHeaderCell('Purchase ( Tsh )'),
-        TableLikeListTextHeaderCell('Retail ( Tsh )'),
-        TableLikeListTextHeaderCell("Wholesale ( Tsh )"),
-        TableLikeListTextHeaderCell("Status"),
+        TableLikeListHeaderCell('Name'),
+        TableLikeListHeaderCell('Quantity'),
+        TableLikeListHeaderCell('Purchase ( Tsh )'),
+        TableLikeListHeaderCell('Retail ( Tsh )'),
+        TableLikeListHeaderCell("Wholesale ( Tsh )"),
+        TableLikeListHeaderCell("Status"),
       ]);
 
   _loading(bool show) =>

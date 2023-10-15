@@ -4,7 +4,9 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -67,10 +69,10 @@ class _State extends State<SuppliersPage> {
   }
 
   _tableHeader() => const TableLikeListRow([
-        TableLikeListTextHeaderCell('Name'),
-        TableLikeListTextHeaderCell('Mobile'),
-        TableLikeListTextHeaderCell('Email'),
-        TableLikeListTextHeaderCell('Address'),
+        TableLikeListHeaderCell('Name'),
+        TableLikeListHeaderCell('Mobile'),
+        TableLikeListHeaderCell('Email'),
+        TableLikeListHeaderCell('Address'),
       ]);
 
   _loading(bool show) =>

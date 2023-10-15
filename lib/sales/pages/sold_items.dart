@@ -10,7 +10,9 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
@@ -129,12 +131,12 @@ class _State extends State<SoldItemsPage> {
     return const SizedBox(
       height: 38,
       child: TableLikeListRow([
-        TableLikeListTextHeaderCell('Product'),
-        TableLikeListTextHeaderCell('Amount ( TZS )'),
-        TableLikeListTextHeaderCell('Quantity'),
-        TableLikeListTextHeaderCell('Purchase ( TZS )'),
-        TableLikeListTextHeaderCell('Refund ( TZS )'),
-        TableLikeListTextHeaderCell('Refund Quantity'),
+        TableLikeListHeaderCell('Product'),
+        TableLikeListHeaderCell('Amount ( TZS )'),
+        TableLikeListHeaderCell('Quantity'),
+        TableLikeListHeaderCell('Purchase ( TZS )'),
+        TableLikeListHeaderCell('Refund ( TZS )'),
+        TableLikeListHeaderCell('Refund Quantity'),
       ]),
     );
   }

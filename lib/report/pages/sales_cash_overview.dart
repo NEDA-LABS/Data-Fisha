@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/app.dart';
+import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/Histogram.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
+import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -88,17 +90,17 @@ class _State extends State<OverviewCashSales> {
   _tableHeader() {
     if (getIsSmallScreen(context)) {
       return const TableLikeListRow([
-        TableLikeListTextHeaderCell('Date'),
-        TableLikeListTextHeaderCell('Total'),
-        TableLikeListTextHeaderCell('Profit'),
+        TableLikeListHeaderCell('Date'),
+        TableLikeListHeaderCell('Total'),
+        TableLikeListHeaderCell('Profit'),
       ]);
     }
     return const TableLikeListRow([
-      TableLikeListTextHeaderCell('Date'),
-      TableLikeListTextHeaderCell('Sales'),
-      TableLikeListTextHeaderCell('COG'),
-      TableLikeListTextHeaderCell('Expenses'),
-      TableLikeListTextHeaderCell('Profit'),
+      TableLikeListHeaderCell('Date'),
+      TableLikeListHeaderCell('Sales'),
+      TableLikeListHeaderCell('COG'),
+      TableLikeListHeaderCell('Expenses'),
+      TableLikeListHeaderCell('Profit'),
     ]);
   }
 
