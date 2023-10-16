@@ -6,10 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
+import 'package:smartstock/core/components/HeadineMedium.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
+import 'package:smartstock/core/components/TitleLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
@@ -20,6 +25,7 @@ import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
+import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
@@ -67,7 +73,7 @@ class _State extends State<SalesPage> {
         const SwitchToTitle(),
         SwitchToPageMenu(pages: _pagesMenu(context)),
         const WhiteSpacer(height: 16),
-        const BodySmall(text: 'Summary'),
+        const TitleMedium(text: 'Summary'),
         const WhiteSpacer(height: 8),
         _getTotalSalesView(context),
       ],
@@ -100,98 +106,88 @@ class _State extends State<SalesPage> {
     });
   }
 
-  _getIt(String p, data) => data is Map ? data[p] : null;
+  // _getIt(String p, data) => data is Map ? data[p] : null;
 
   _getTotalSalesView(BuildContext context) {
-    var cashSale = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Total cash",
-        doubleOrZero(_getIt('cash_total', data)),
-        null,
-      ),
-    );
-    var invoiceSale = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Unpaid invoices",
-        doubleOrZero(_getIt('invoice_unpaid', data)),
-        null,
-        isDanger: true,
-        // onClick: () => _pageNav(
-        //   InvoicesPage(
-        //     onGetModulesMenu: widget.onGetModulesMenu,
-        //   ),
-        // ),
-      ),
-    );
-    var expenses = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Cash sales",
-        doubleOrZero(_getIt('cash_sale', data)),
-        null,
-        onClick: () => widget.onChangePage(
-          SalesCashPage(
-            onBackPage: widget.onBackPage,
-            onChangePage: widget.onChangePage,
-          ),
-        ),
-      ),
-    );
-    var profit = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Invoice sales",
-        doubleOrZero(_getIt('invoice_sale', data)),
-        null,
-        onClick: () => widget.onChangePage(InvoicesPage(
-          onBackPage: widget.onBackPage,
-          onChangePage: widget.onChangePage,
-        )),
-      ),
-    );
-    var paidInvoice = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Invoice paid",
-        doubleOrZero(_getIt('invoice_paid', data)),
-        null,
-        // onClick: () => _pageNav(
-        //   InvoicesPage(
-        //     onGetModulesMenu: widget.onGetModulesMenu,
-        //   ),
-        // ),
-      ),
-    );
-    var totalSales = Expanded(
-      flex: 1,
-      child: NumberCard(
-        "Total sales",
-        doubleOrZero(_getIt('invoice_sale', data)) +
-            doubleOrZero(_getIt('cash_sale', data)),
-        null,
-      ),
-    );
+    // var cashSale = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Total cash",
+    //     doubleOrZero(_getIt('cash_total', data)),
+    //     null,
+    //   ),
+    // );
+    // var invoiceSale = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Unpaid invoices",
+    //     doubleOrZero(_getIt('invoice_unpaid', data)),
+    //     null,
+    //     isDanger: true,
+    //     // onClick: () => _pageNav(
+    //     //   InvoicesPage(
+    //     //     onGetModulesMenu: widget.onGetModulesMenu,
+    //     //   ),
+    //     // ),
+    //   ),
+    // );
+    // var expenses = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Cash sales",
+    //     doubleOrZero(_getIt('cash_sale', data)),
+    //     null,
+    //     onClick: () => widget.onChangePage(
+    //       SalesCashPage(
+    //         onBackPage: widget.onBackPage,
+    //         onChangePage: widget.onChangePage,
+    //       ),
+    //     ),
+    //   ),
+    // );
+    // var profit = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Invoice sales",
+    //     doubleOrZero(_getIt('invoice_sale', data)),
+    //     null,
+    //     onClick: () => widget.onChangePage(InvoicesPage(
+    //       onBackPage: widget.onBackPage,
+    //       onChangePage: widget.onChangePage,
+    //     )),
+    //   ),
+    // );
+    // var paidInvoice = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Invoice paid",
+    //     doubleOrZero(_getIt('invoice_paid', data)),
+    //     null,
+    //     // onClick: () => _pageNav(
+    //     //   InvoicesPage(
+    //     //     onGetModulesMenu: widget.onGetModulesMenu,
+    //     //   ),
+    //     // ),
+    //   ),
+    // );
+    // var totalSales = Expanded(
+    //   flex: 1,
+    //   child: NumberCard(
+    //     "Total sales",
+    //     doubleOrZero(_getIt('invoice_sale', data)) +
+    //         doubleOrZero(_getIt('cash_sale', data)),
+    //     null,
+    //   ),
+    // );
     var getView = ifDoElse(
       (context) => getIsSmallScreen(context),
       (context) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [expenses, profit],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [cashSale, invoiceSale],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [totalSales, paidInvoice],
-          ),
           _getSoldItemsTable(true),
+          _getReceiptsTable(true),
+          _getInvoicesTable(true),
         ],
       ),
       (context) => Column(
@@ -199,12 +195,17 @@ class _State extends State<SalesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              expenses,
-              profit,
-              cashSale,
-              invoiceSale,
+              Expanded(
+                flex: 2,
+                child: _getSoldItemsTable(false),
+              ),
+              Expanded(
+                flex: 2,
+                child: _getReceiptsTable(false),
+              ),
             ],
           ),
           Row(
@@ -212,21 +213,13 @@ class _State extends State<SalesPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 3,
-                child: _getSoldItemsTable(false),
+                flex: 2,
+                child: _getInvoicesTable(false),
               ),
               Expanded(
-                flex: 1,
-                child: SizedBox(
-                  height: 250,
-                  child: Column(
-                    children: [
-                      totalSales,
-                      paidInvoice,
-                    ],
-                  ),
-                ),
-              )
+                flex: 2,
+                child: Container(),
+              ),
             ],
           )
         ],
@@ -299,7 +292,8 @@ class _State extends State<SalesPage> {
         children: [
           Row(
             children: [
-              const Expanded(flex: 1, child: BodyLarge(text: "Sold Items")),
+              const Expanded(
+                  flex: 1, child: BodyLarge(text: "Latest sold items")),
               const WhiteSpacer(width: 8),
               OutlinedButton(
                   onPressed: () {
@@ -312,43 +306,191 @@ class _State extends State<SalesPage> {
           ),
           const WhiteSpacer(height: 8),
           const Divider(),
-          SizedBox(
-            child: isSmallScreen == true
-                ? const TableLikeListRow([
-                    TableLikeListHeaderCell('Item'),
-                    TableLikeListHeaderCell('Quantity'),
-                    TableLikeListHeaderCell('Amount ( TZS )'),
-                  ])
-                : const TableLikeListRow([
-                    TableLikeListHeaderCell('Item'),
-                    TableLikeListHeaderCell('Quantity'),
-                    TableLikeListHeaderCell('Amount ( TZS )'),
-                    TableLikeListHeaderCell('Purchase ( TZS )'),
-                  ]),
+          const SizedBox(
+            child: TableLikeListRow([
+              TableLikeListHeaderCell('Item'),
+              TableLikeListHeaderCell('Quantity'),
+              TableLikeListHeaderCell('Amount ( TZS )'),
+            ]),
           ),
           ...itOrEmptyArray(data['sold_items']).map((e) {
             return SizedBox(
               // height: 38,
-              child: isSmallScreen == true
-                  ? TableLikeListRow([
-                      TableLikeListTextDataCell("${e['name']}"),
-                      TableLikeListTextDataCell('${e['quantity']}'),
-                      TableLikeListTextDataCell(
-                          formatNumber('${e['amount'] ?? '0'}')),
-                    ])
-                  : TableLikeListRow([
-                      TableLikeListTextDataCell("${e['name']}"),
-                      TableLikeListTextDataCell('${e['quantity']}'),
-                      TableLikeListTextDataCell(
-                          formatNumber('${e['amount'] ?? '0'}')),
-                      TableLikeListTextDataCell(
-                          formatNumber('${e['purchase_price'] ?? '0'}')),
-                    ]),
+              child: TableLikeListRow([
+                TableLikeListTextDataCell("${e['name']}"),
+                TableLikeListTextDataCell('${e['quantity']}'),
+                TableLikeListTextDataCell(
+                    formatNumber('${e['amount'] ?? '0'}')),
+              ]),
             );
           }),
         ],
       ),
     );
+  }
+
+  Widget _getReceiptsTable(isSmallScreen) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                  flex: 1, child: BodyLarge(text: "Latest receipts")),
+              const WhiteSpacer(width: 8),
+              OutlinedButton(
+                  onPressed: () {
+                    widget.onChangePage(SalesCashPage(
+                        onBackPage: widget.onBackPage,
+                        onChangePage: widget.onChangePage));
+                  },
+                  child: const BodyLarge(text: 'View More'))
+            ],
+          ),
+          const WhiteSpacer(height: 8),
+          const Divider(),
+          const SizedBox(
+            child: TableLikeListRow([
+              TableLikeListHeaderCell('Customer'),
+              TableLikeListHeaderCell('Amount'),
+              TableLikeListHeaderCell('Items'),
+            ]),
+          ),
+          ...itOrEmptyArray(data['sales_cash']).map((e) {
+            return SizedBox(
+              // height: 38,
+              child: TableLikeListRow([
+                TableLikeListTextDataCell('${e['customer'] ?? ''}'.isEmpty
+                    ? 'Walk in customer'
+                    : e['customer']),
+                TableLikeListTextDataCell(
+                    formatNumber('${e['amount'] ?? '0'}')),
+                TableLikeListTextDataCell(formatNumber('${_itemsSize(e)}')),
+              ]),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  _itemsSize(c) {
+    var getItems = compose([
+      (x) => x.fold(
+            0,
+            (a, element) => doubleOrZero(a) + doubleOrZero(element['quantity']),
+          ),
+      itOrEmptyArray,
+      propertyOrNull('items')
+    ]);
+    return getItems(c);
+  }
+
+  Widget _getInvoicesTable(isSmallScreen) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                  flex: 1, child: BodyLarge(text: "Latest invoices")),
+              const WhiteSpacer(width: 8),
+              OutlinedButton(
+                  onPressed: () {
+                    widget.onChangePage(InvoicesPage(
+                        onBackPage: widget.onBackPage,
+                        onChangePage: widget.onChangePage));
+                  },
+                  child: const BodyLarge(text: 'View More'))
+            ],
+          ),
+          const WhiteSpacer(height: 8),
+          const Divider(),
+          const SizedBox(
+            child: TableLikeListRow([
+              TableLikeListHeaderCell('Customer'),
+              TableLikeListHeaderCell('Amount'),
+              TableLikeListHeaderCell('Status'),
+            ]),
+          ),
+          ...itOrEmptyArray(data['sales_invoice']).map((e) {
+            return SizedBox(
+              // height: 38,
+              child: TableLikeListRow([
+                TableLikeListTextDataCell("${_getCustomer(e)}"),
+                TableLikeListTextDataCell('${e['amount']}'),
+                _getStatusView(e),
+              ]),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  _getCustomer(e) {
+    return compose([
+      propertyOr('displayName', (p0) => 'Walk in customer'),
+      propertyOrNull('customer')
+    ])(e);
+  }
+
+  _getStatusView(invoice) {
+    var amount = doubleOrZero(invoice['amount']);
+    var paidView = Container(
+      height: 34,
+      width: 76,
+      decoration: BoxDecoration(
+        color: const Color(0xFFadf0cc),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      alignment: Alignment.center,
+      child: const LabelLarge(text: "Paid", overflow: TextOverflow.ellipsis),
+    );
+    getPayment() {
+      var payments = invoice['payments'];
+      if (payments is List) {
+        return payments.fold(0,
+            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+      }
+      return 0;
+    }
+
+    var paid = getPayment();
+    if (paid >= amount) {
+      return paidView;
+    } else {
+      return Container(
+        height: 34,
+        width: 76,
+        decoration: BoxDecoration(
+          color: const Color(0xFFffed8a),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        alignment: Alignment.center,
+        child: LabelLarge(
+            text: "${formatNumber((paid * 100) / amount, decimals: 0)}%",
+            overflow: TextOverflow.ellipsis),
+      );
+    }
   }
 
   void _listeningForLocation() {

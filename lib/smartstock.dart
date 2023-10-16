@@ -230,7 +230,7 @@ class _State extends State<SmartStock> {
 
   void _periodProductsSync() {
     _productRefreshTimer =
-        Timer.periodic(const Duration(seconds: 5), (_) async {
+        Timer.periodic(const Duration(minutes: 3), (_) async {
       if (_shouldProductsSyncsRun) {
         try {
           _shouldProductsSyncsRun = false;

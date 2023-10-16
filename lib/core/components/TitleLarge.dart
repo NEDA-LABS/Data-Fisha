@@ -10,7 +10,7 @@ class TitleLarge extends StatelessWidget{
     return Text(
       text,
       style: const TextStyle(
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w500,
           fontSize: 22,
           height: 1.27
       ),
