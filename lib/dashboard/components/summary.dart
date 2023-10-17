@@ -171,6 +171,11 @@ class _State extends State<DashboardSummary> {
   }
 
   _getTotalSalesView() {
+    var totalCash = Expanded(
+      flex: 1,
+      child: NumberCard(
+          "Total cash", doubleOrZero(_getIt('sales_cash', data))+doubleOrZero(_getIt('paid_invoice', data)), null),
+    );
     var cashSale = Expanded(
       flex: 1,
       child: NumberCard(
@@ -179,19 +184,22 @@ class _State extends State<DashboardSummary> {
     var invoiceSale = Expanded(
       flex: 1,
       child: NumberCard(
-          "Invoices", doubleOrZero(_getIt('sales_invoice', data)), null),
+          "Invoice sales", doubleOrZero(_getIt('sales_invoice', data)), null),
+    );
+    var paidInvoices = Expanded(
+      flex: 1,
+      child: NumberCard(
+          "Paid invoices", doubleOrZero(_getIt('paid_invoice', data)), null),
     );
     var expenses = Expanded(
       flex: 1,
-      child: NumberCard(
-          "Expenses", doubleOrZero(_getIt('expense', data)), null),
+      child:
+          NumberCard("Expenses", doubleOrZero(_getIt('expense', data)), null),
     );
-    var profit = Expanded(
+    var grossProfit = Expanded(
       flex: 1,
       child: NumberCard(
-          "Gross profit",
-          doubleOrZero(_getIt('profit', data)),
-          doubleOrZero(_getIt('margin', data))),
+          "Gross profit", doubleOrZero(_getIt('profit', data)), null),
     );
     var getView = ifDoElse(
       (context) => getIsSmallScreen(context),
@@ -201,17 +209,31 @@ class _State extends State<DashboardSummary> {
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
+            children: [totalCash, grossProfit],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [cashSale, invoiceSale],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: [expenses, profit],
+            children: [paidInvoices, expenses],
           )
         ],
       ),
-      (context) => Row(
+      (context) => Column(
         mainAxisSize: MainAxisSize.min,
-        children: [cashSale, invoiceSale, expenses, profit],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [cashSale, paidInvoices, totalCash],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [invoiceSale, expenses, grossProfit],
+          ),
+        ],
       ),
     );
     return getView(context);

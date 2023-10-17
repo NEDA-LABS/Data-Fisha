@@ -5,16 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodySmall.dart';
-import 'package:smartstock/core/components/HeadineMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
@@ -25,7 +21,6 @@ import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
-import 'package:smartstock/report/pages/sales_cash_tracking.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
@@ -109,82 +104,13 @@ class _State extends State<SalesPage> {
   // _getIt(String p, data) => data is Map ? data[p] : null;
 
   _getTotalSalesView(BuildContext context) {
-    // var cashSale = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Total cash",
-    //     doubleOrZero(_getIt('cash_total', data)),
-    //     null,
-    //   ),
-    // );
-    // var invoiceSale = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Unpaid invoices",
-    //     doubleOrZero(_getIt('invoice_unpaid', data)),
-    //     null,
-    //     isDanger: true,
-    //     // onClick: () => _pageNav(
-    //     //   InvoicesPage(
-    //     //     onGetModulesMenu: widget.onGetModulesMenu,
-    //     //   ),
-    //     // ),
-    //   ),
-    // );
-    // var expenses = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Cash sales",
-    //     doubleOrZero(_getIt('cash_sale', data)),
-    //     null,
-    //     onClick: () => widget.onChangePage(
-    //       SalesCashPage(
-    //         onBackPage: widget.onBackPage,
-    //         onChangePage: widget.onChangePage,
-    //       ),
-    //     ),
-    //   ),
-    // );
-    // var profit = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Invoice sales",
-    //     doubleOrZero(_getIt('invoice_sale', data)),
-    //     null,
-    //     onClick: () => widget.onChangePage(InvoicesPage(
-    //       onBackPage: widget.onBackPage,
-    //       onChangePage: widget.onChangePage,
-    //     )),
-    //   ),
-    // );
-    // var paidInvoice = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Invoice paid",
-    //     doubleOrZero(_getIt('invoice_paid', data)),
-    //     null,
-    //     // onClick: () => _pageNav(
-    //     //   InvoicesPage(
-    //     //     onGetModulesMenu: widget.onGetModulesMenu,
-    //     //   ),
-    //     // ),
-    //   ),
-    // );
-    // var totalSales = Expanded(
-    //   flex: 1,
-    //   child: NumberCard(
-    //     "Total sales",
-    //     doubleOrZero(_getIt('invoice_sale', data)) +
-    //         doubleOrZero(_getIt('cash_sale', data)),
-    //     null,
-    //   ),
-    // );
     var getView = ifDoElse(
       (context) => getIsSmallScreen(context),
       (context) => Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          _getRevenueCards(),
           _getSoldItemsTable(true),
           _getReceiptsTable(true),
           _getInvoicesTable(true),
@@ -195,6 +121,7 @@ class _State extends State<SalesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -204,11 +131,12 @@ class _State extends State<SalesPage> {
               ),
               Expanded(
                 flex: 2,
-                child: _getReceiptsTable(false),
+                child: _getRevenueCards(),
               ),
             ],
           ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -218,7 +146,7 @@ class _State extends State<SalesPage> {
               ),
               Expanded(
                 flex: 2,
-                child: Container(),
+                child: _getReceiptsTable(false),
               ),
             ],
           )
@@ -275,6 +203,101 @@ class _State extends State<SalesPage> {
       _locationSubscriptionStream?.cancel();
     }
     super.dispose();
+  }
+
+  Widget _getRevenueCards() {
+    var totalCash = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Total cash",
+        doubleOrZero(_getIt('cash_total', data)),
+        null,
+      ),
+    );
+    var invoiceSale = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Unpaid invoices",
+        doubleOrZero(_getIt('invoice_unpaid', data)),
+        null,
+        isDanger: true,
+        // onClick: () => _pageNav(
+        //   InvoicesPage(
+        //     onGetModulesMenu: widget.onGetModulesMenu,
+        //   ),
+        // ),
+      ),
+    );
+    var cashSales = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Cash sales",
+        doubleOrZero(_getIt('cash_sale', data)),
+        null,
+        onClick: () => widget.onChangePage(
+          SalesCashPage(
+            onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
+          ),
+        ),
+      ),
+    );
+    var invoiceSales = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Invoice sales",
+        doubleOrZero(_getIt('invoice_sale', data)),
+        null,
+        onClick: () => widget.onChangePage(InvoicesPage(
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
+        )),
+      ),
+    );
+    var paidInvoice = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Invoice paid",
+        doubleOrZero(_getIt('invoice_paid', data)),
+        null,
+        // onClick: () => _pageNav(
+        //   InvoicesPage(
+        //     onGetModulesMenu: widget.onGetModulesMenu,
+        //   ),
+        // ),
+      ),
+    );
+    var totalSales = Expanded(
+      flex: 1,
+      child: NumberCard(
+        "Total sales",
+        doubleOrZero(_getIt('invoice_sale', data)) +
+            doubleOrZero(_getIt('cash_sale', data)),
+        null,
+      ),
+    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 4.0),
+          child: BodyLarge(text: "Today's revenue"),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [cashSales, invoiceSales],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [invoiceSale, paidInvoice],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [totalSales, totalCash],
+        )
+      ],
+    );
   }
 
   Widget _getSoldItemsTable(isSmallScreen) {
@@ -512,5 +535,9 @@ class _State extends State<SalesPage> {
     }
 
     _locationSubscriptionStream = getLocationChangeStream().listen(listener);
+  }
+
+  _getIt(String s, Map<dynamic, dynamic> data) {
+    return propertyOrNull(s)(data);
   }
 }

@@ -332,7 +332,7 @@ class _State extends State<SoldItemsPage> {
       return showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: startDate!.add(const Duration(days: 1)),
+        firstDate: startDate!,
         lastDate: DateTime.now(),
         builder: (context, child) =>
             _datePickerBuilder(context, child, 'Select end date'),
