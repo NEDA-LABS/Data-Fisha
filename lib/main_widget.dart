@@ -36,9 +36,11 @@ class _State extends State<MainWidget> {
       debugShowCheckedModeBanner: kDebugMode,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: SmartStock(
-        onGetModulesMenu: widget.onGetModulesMenu,
-        onGetInitialModule: widget.onGetInitialModule,
+      home: SafeArea(
+        child: SmartStock(
+          onGetModulesMenu: widget.onGetModulesMenu,
+          onGetInitialModule: widget.onGetInitialModule,
+        ),
       ),
     );
   }

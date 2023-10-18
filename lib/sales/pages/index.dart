@@ -218,8 +218,8 @@ class _State extends State<SalesPage> {
     var invoiceSale = Expanded(
       flex: 1,
       child: NumberCard(
-        "Unpaid invoices",
-        doubleOrZero(_getIt('invoice_unpaid', data)),
+        "Expenses",
+        doubleOrZero(_getIt('expense', data)),
         null,
         isDanger: true,
         // onClick: () => _pageNav(
