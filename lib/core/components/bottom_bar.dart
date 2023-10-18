@@ -45,7 +45,7 @@ class _State extends State<AppBottomBar> {
     var size = widget.menus.length;
     return BottomNavigationBar(
       currentIndex: size > 3 ? 3 : 0,
-      // backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,
       showSelectedLabels: true,

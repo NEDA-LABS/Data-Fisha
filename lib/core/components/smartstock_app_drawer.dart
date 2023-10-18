@@ -33,10 +33,13 @@ class SmartStockAppDrawer extends Drawer {
   Widget build(BuildContext context) {
     return Drawer(
       width: cWidth,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(0),
-            bottomRight: Radius.circular(0)),
+          topRight: Radius.circular(0),
+          bottomRight: Radius.circular(0),
+        ),
       ),
       child: _modulesMenuContent(menus, current),
     );
@@ -51,8 +54,11 @@ class SmartStockAppDrawer extends Drawer {
       future: _future(allMenus),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SizedBox(
+          return Container(
             height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              border: Border(right: BorderSide(color: Theme.of(context).colorScheme.onBackground, width: .2))
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

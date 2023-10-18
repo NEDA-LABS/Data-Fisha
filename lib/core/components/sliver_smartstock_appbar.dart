@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
-import 'package:smartstock/core/components/app_bar_actions.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
-import 'package:smartstock/core/services/util.dart';
 
 class SliverSmartStockAppBar extends SliverAppBar {
   SliverSmartStockAppBar({
@@ -24,6 +22,10 @@ class SliverSmartStockAppBar extends SliverAppBar {
           expandedHeight: showSearch ? (filters.isNotEmpty ? 156 : 126) : 65,
           centerTitle: true,
           title: Text(title, overflow: TextOverflow.ellipsis),
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          scrolledUnderElevation: 4,
+          surfaceTintColor: Theme.of(context).colorScheme.surface,
+          shadowColor: Theme.of(context).colorScheme.shadow,
           bottom: showSearch
               ? (searchInput as PreferredSizeWidget?) ??
                   _getToolBarSearchInput(
@@ -58,65 +60,67 @@ PreferredSizeWidget _getToolBarSearchInput(
 ) {
   return PreferredSize(
     preferredSize: Size.fromHeight(filters.isNotEmpty ? 116 : 66),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Theme.of(context).colorScheme.surfaceVariant
-          ),
-          child: TextField(
-            controller: searchTextController,
-            autofocus: false,
-            autocorrect: false,
-            maxLines: 1,
-            minLines: 1,
-            onChanged: (text) {
-              if (onSearch != null) {
-                onSearch(text);
-              }
-            },
-            decoration: InputDecoration(
-              hintText: placeholder,
-              border: InputBorder.none,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: mobileQrScanIconButton(
-                context,
-                (code) {
-                  if (onSearch != null && code != null) {
-                    onSearch('-1:$code');
-                  }
-                },
+    child: Container(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Theme.of(context).colorScheme.background),
+            child: TextField(
+              controller: searchTextController,
+              autofocus: false,
+              autocorrect: false,
+              maxLines: 1,
+              minLines: 1,
+              onChanged: (text) {
+                if (onSearch != null) {
+                  onSearch(text);
+                }
+              },
+              decoration: InputDecoration(
+                hintText: placeholder,
+                border: InputBorder.none,
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: mobileQrScanIconButton(
+                  context,
+                  (code) {
+                    if (onSearch != null && code != null) {
+                      onSearch('-1:$code');
+                    }
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        filters.isNotEmpty
-            ? SizedBox(
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(left: 16),
-                  children: filters.map((e) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      child: FilterChip(
-                        label: LabelMedium(text: e.name),
-                        selected: e.selected,
-                        selectedColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        onSelected: (value) => e.onClick(),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              )
-            : Container(),
-      ],
+          filters.isNotEmpty
+              ? SizedBox(
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(left: 16),
+                    children: filters.map((e) {
+                      return Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          label: LabelMedium(text: e.name),
+                          selected: e.selected,
+                          selectedColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          onSelected: (value) => e.onClick(),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
     ),
   );
 }
