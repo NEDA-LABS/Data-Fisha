@@ -1,0 +1,1 @@
+enum DateRangeName { today, yesterday, week, custom }

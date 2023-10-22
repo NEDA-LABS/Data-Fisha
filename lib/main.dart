@@ -38,7 +38,10 @@ List<ModuleMenu> _onGetModules({
   return [
     ModuleMenu(
       name: 'Dashboard',
-      icon: const Icon(Icons.dashboard),
+      icon: Icon(
+        Icons.dashboard,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       link: '/dashboard/',
       page: dashboardIndex,
       onClick: () => null,
@@ -46,7 +49,8 @@ List<ModuleMenu> _onGetModules({
     ),
     ModuleMenu(
       name: 'Point Of Sale',
-      icon: const Icon(Icons.point_of_sale),
+      icon: Icon(Icons.point_of_sale,
+          color: Theme.of(context).colorScheme.primary),
       link: '/sales/',
       page: salesIndex,
       onClick: () => null,
@@ -54,7 +58,7 @@ List<ModuleMenu> _onGetModules({
     ),
     ModuleMenu(
       name: 'Stocks',
-      icon: const Icon(Icons.inventory),
+      icon: Icon(Icons.inventory, color: Theme.of(context).colorScheme.primary),
       link: '/stock/',
       page: stockIndex,
       onClick: () => null,
@@ -62,7 +66,8 @@ List<ModuleMenu> _onGetModules({
     ),
     ModuleMenu(
       name: 'Expenses',
-      icon: const Icon(Icons.receipt_long_rounded),
+      icon: Icon(Icons.receipt_long_rounded,
+          color: Theme.of(context).colorScheme.primary),
       link: '/expense/',
       page: expenseIndex,
       onClick: () => null,
@@ -70,7 +75,8 @@ List<ModuleMenu> _onGetModules({
     ),
     ModuleMenu(
       name: 'Reports',
-      icon: const Icon(Icons.data_saver_off),
+      icon: Icon(Icons.data_saver_off,
+          color: Theme.of(context).colorScheme.primary),
       link: '/report/',
       page: reportIndex,
       onClick: () => null,
@@ -78,7 +84,8 @@ List<ModuleMenu> _onGetModules({
     ),
     ModuleMenu(
       name: 'Account',
-      icon: const Icon(Icons.supervised_user_circle),
+      icon: Icon(Icons.supervised_user_circle,
+          color: Theme.of(context).colorScheme.primary),
       link: '/account/',
       page: accountIndex,
       onClick: () => null,
@@ -89,4 +96,9 @@ List<ModuleMenu> _onGetModules({
 
 void main() {
   initializeSmartStock(onGetModulesMenu: _onGetModules);
+  //
+  // initializeSmartStock(
+  //     onGetModulesMenu: _onGetModules,
+  //     onGetInitialModule: ({required onBackPage, required onChangePage}) =>
+  //         SalesCashWhole(onBackPage: onBackPage));
 }

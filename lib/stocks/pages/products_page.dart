@@ -55,6 +55,7 @@ class _State extends State<ProductsPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/stock/',
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: _getAppBar(),
       staticChildren: [
         _ifLargerScreen(tableContextMenu(_getContextItems())),

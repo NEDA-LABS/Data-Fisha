@@ -93,6 +93,7 @@ class _TransfersPage extends State<TransfersPage> {
   Widget build(context) => ResponsivePage(
         current: '/stock/',
         sliverAppBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         loading: _loading,
         onLoadMore: () async => _loadMore(),
         staticChildren: [

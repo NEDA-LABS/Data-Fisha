@@ -106,8 +106,11 @@ class _State extends State<_Dialog> {
 
   _addToCartButtonStyle(context) {
     return ButtonStyle(
+      foregroundColor: MaterialStateProperty.all(
+        Theme.of(context).colorScheme.onPrimary,
+      ),
       backgroundColor: MaterialStateProperty.all(
-        Theme.of(context).colorScheme.primaryContainer,
+        Theme.of(context).colorScheme.primary,
       ),
     );
   }

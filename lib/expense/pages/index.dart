@@ -44,7 +44,7 @@ class _State extends State<ExpenseIndexPage> {
   Widget build(context) {
     return ResponsivePage(
       office: 'Menu',
-      current: '/sales/',
+      current: '/expenses/',
       staticChildren: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -61,7 +61,7 @@ class _State extends State<ExpenseIndexPage> {
         )
       ],
       sliverAppBar: SliverSmartStockAppBar(
-          title: "Sales", showBack: false, context: context),
+          title: "Expenses", showBack: false, context: context),
     );
   }
 

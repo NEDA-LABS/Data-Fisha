@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 
 Widget cartPreview(List carts, wholesale, context, onShowCheckout) =>
     carts.isNotEmpty
@@ -13,13 +14,12 @@ Widget _cartPreview(List carts, bool wholesale, context, onShowCheckout) =>
                 height: 54,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: const BorderRadius.all(Radius.circular(5))),
-                child: Text('${_getTotalItems(carts)} Items',
+                child: BodyLarge(text: '${_getTotalItems(carts)} Items',
                     textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        const TextStyle(color: Colors.white, fontSize: 20)))));
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    overflow: TextOverflow.ellipsis))));
 
 _getTotalItems(List<dynamic> carts) =>
     carts.fold(0, (dynamic a, element) => a + element.quantity);

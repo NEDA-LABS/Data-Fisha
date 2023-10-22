@@ -14,6 +14,7 @@ import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
+import 'package:smartstock/core/models/date_range_name.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -21,8 +22,6 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/sales/services/report.dart';
-
-enum _RangeName { today, yesterday, week, custom }
 
 class SoldItemsPage extends PageBase {
   final OnBackPage onBackPage;
@@ -41,17 +40,14 @@ class SoldItemsPage extends PageBase {
 class _State extends State<SoldItemsPage> {
   bool _loading = false;
   TextEditingController _searchInputController = TextEditingController();
-  int size = 20;
+  // int size = 20;
   List _filteredSoldItems = [];
   List _soldItems = [];
-  _RangeName _rangeName = _RangeName.today;
+  DateRangeName _rangeName = DateRangeName.today;
   DateTimeRange _dateTimeRange =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
-  _onItemPressed(item) {
-    // showDialogOrModalSheet(
-    //     CashSaleDetail(sale: item, pageContext: context), context);
-  }
+  _onItemPressed(item) {}
 
   _productQuantity(c) {
     return c['quantity'];
@@ -76,40 +72,40 @@ class _State extends State<SoldItemsPage> {
         SearchFilter(
             name: "Today",
             onClick: () {
-              _rangeName = _RangeName.today;
+              _rangeName = DateRangeName.today;
               _dateTimeRange =
                   DateTimeRange(start: DateTime.now(), end: DateTime.now());
               _refresh();
             },
-            selected: _rangeName == _RangeName.today),
+            selected: _rangeName == DateRangeName.today),
         SearchFilter(
             name: "Yesterday",
             onClick: () {
-              _rangeName = _RangeName.yesterday;
+              _rangeName = DateRangeName.yesterday;
               _dateTimeRange = DateTimeRange(
                   start: DateTime.now().subtract(const Duration(days: 1)),
                   end: DateTime.now().subtract(const Duration(days: 1)));
               _refresh();
             },
-            selected: _rangeName == _RangeName.yesterday),
+            selected: _rangeName == DateRangeName.yesterday),
         SearchFilter(
             name: "Last Week",
             onClick: () {
-              _rangeName = _RangeName.week;
+              _rangeName = DateRangeName.week;
               _dateTimeRange = DateTimeRange(
                   start: DateTime.now().subtract(const Duration(days: 7)),
                   end: DateTime.now());
               _refresh();
             },
-            selected: _rangeName == _RangeName.week),
+            selected: _rangeName == DateRangeName.week),
         SearchFilter(
             name: "Custom Dates",
             onClick: _onCustomDatesClicked,
-            selected: _rangeName == _RangeName.custom),
+            selected: _rangeName == DateRangeName.custom),
       ],
       searchTextController: _searchInputController,
       onSearch: (p0) {
-        setState(() {
+        _updateState(() {
           _filteredSoldItems = _soldItems
               .where((element) => '${element['name']}'
                   .toLowerCase()
@@ -152,42 +148,37 @@ class _State extends State<SoldItemsPage> {
 
   @override
   Widget build(context) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var tableContext =
+        isSmallScreen ? Container() : tableContextMenu(_contextSales(context));
+    var tableHeader = isSmallScreen ? Container() : _tableHeader();
+    var fab = FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined));
+    var dynamicBuilder =
+        isSmallScreen ? _smallScreenChildBuilder : _largerScreenChildBuilder;
+
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       current: '/sales/',
       sliverAppBar: _appBar(context),
-      staticChildren: [
-        _loadingView(_loading),
-        Row(
-          children: [
-            _rangeName == _RangeName.custom
-                ? LabelLarge(text: "From: ${toSqlDate(_dateTimeRange.start)}")
-                : Container(),
-            const WhiteSpacer(width: 8),
-            _rangeName == _RangeName.custom
-                ? LabelLarge(text: "To: ${toSqlDate(_dateTimeRange.end)}")
-                : Container(),
-          ],
-        ),
-        getIsSmallScreen(context)
-            ? Container()
-            : tableContextMenu(_contextSales(context)),
-        getIsSmallScreen(context) ? Container() : _tableHeader(),
-      ],
+      staticChildren: _loading
+          ? [_getLoaderSpinner()]
+          : [_getFromToTextIndicator(), tableContext, tableHeader],
       loading: _loading,
       // onLoadMore: () async => _loadMore(),
-      fab: FloatingActionButton(
-        onPressed: () => _showMobileContextMenu(context),
-        child: const Icon(Icons.unfold_more_outlined),
-      ),
+      fab: fab,
       totalDynamicChildren: _filteredSoldItems.length,
-      dynamicChildBuilder: getIsSmallScreen(context)
-          ? _smallScreenChildBuilder
-          : _largerScreenChildBuilder,
+      dynamicChildBuilder: dynamicBuilder,
     );
   }
 
+  _updateState(VoidCallback fn) {
+    setState(fn);
+  }
+
   _refresh() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
     getSoldItems(_dateTimeRange).then((value) {
@@ -199,7 +190,7 @@ class _State extends State<SoldItemsPage> {
     }).catchError((error) {
       showInfoDialog(context, error, title: "Error");
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
@@ -343,7 +334,7 @@ class _State extends State<SoldItemsPage> {
       }
       endDate = value;
       _dateTimeRange = DateTimeRange(start: startDate!, end: endDate!);
-      _rangeName = _RangeName.custom;
+      _rangeName = DateRangeName.custom;
       _refresh();
     }).catchError((error) {
       showInfoDialog(context, error);
@@ -395,6 +386,28 @@ class _State extends State<SoldItemsPage> {
         Navigator.maybePop(context);
       }),
       context,
+    );
+  }
+
+  _getFromToTextIndicator() {
+    return Row(
+      children: [
+        _rangeName == DateRangeName.custom
+            ? LabelLarge(text: "From: ${toSqlDate(_dateTimeRange.start)}")
+            : Container(),
+        const WhiteSpacer(width: 8),
+        _rangeName == DateRangeName.custom
+            ? LabelLarge(text: "To: ${toSqlDate(_dateTimeRange.end)}")
+            : Container(),
+      ],
+    );
+  }
+
+  _getLoaderSpinner() {
+    return Center(
+      child: Container(
+          padding: const EdgeInsets.all(24),
+          child: const CircularProgressIndicator()),
     );
   }
 }

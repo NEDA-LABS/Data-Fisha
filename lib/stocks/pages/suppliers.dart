@@ -5,8 +5,8 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -38,14 +38,14 @@ class _State extends State<SuppliersPage> {
       showSearch: true,
       onBack: widget.onBackPage,
       onSearch: (p0) {
-        if(p0.startsWith('-1:')==false){
+        if (p0.startsWith('-1:') == false) {
           setState(() {
             _query = p0;
             getSupplierFromCacheOrRemote(skipLocal: false).then((value) {
               _suppliers = value
                   .where((element) => '${element['name']}'
-                  .toLowerCase()
-                  .contains(_query.toLowerCase()))
+                      .toLowerCase()
+                      .contains(_query.toLowerCase()))
                   .toList();
             }).whenComplete(() => setState(() {}));
           });
@@ -101,6 +101,7 @@ class _State extends State<SuppliersPage> {
   Widget build(context) => ResponsivePage(
         current: '/stock/',
         sliverAppBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()

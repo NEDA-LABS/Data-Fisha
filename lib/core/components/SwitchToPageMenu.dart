@@ -46,7 +46,7 @@ class SwitchToPageMenu extends StatelessWidget {
           var icon = e.icon != null
               ? Icon(
                   e.icon!,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Theme.of(context).colorScheme.primary,
                 )
               : Container();
           return icon;

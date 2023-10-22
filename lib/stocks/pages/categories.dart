@@ -5,8 +5,6 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -83,6 +81,7 @@ class _State extends State<CategoriesPage> {
   Widget build(context) => ResponsivePage(
         current: '/stock/',
         sliverAppBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()

@@ -5,8 +5,8 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -75,6 +75,7 @@ class _PurchasesPage extends State<PurchasesPage> {
   Widget build(context) => ResponsivePage(
         current: '/stock/',
         sliverAppBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()
@@ -103,7 +104,7 @@ class _PurchasesPage extends State<PurchasesPage> {
     getPurchasesRemote(_startAt).then((value) {
       _purchases = value;
     }).whenComplete(() {
-      if(mounted){
+      if (mounted) {
         setState(() {
           _loading = false;
         });
@@ -220,7 +221,7 @@ class _PurchasesPage extends State<PurchasesPage> {
       height: 24,
       width: 76,
       decoration: BoxDecoration(
-        color: const Color(0xFFadf0cc),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
@@ -244,7 +245,7 @@ class _PurchasesPage extends State<PurchasesPage> {
           height: 24,
           width: 76,
           decoration: BoxDecoration(
-            color: const Color(0xFFffed8a),
+            color: Theme.of(context).colorScheme.errorContainer,
             borderRadius: BorderRadius.circular(5),
           ),
           alignment: Alignment.center,
@@ -278,7 +279,7 @@ class _PurchasesPage extends State<PurchasesPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload purchases'),
+                title: const Text('Reload'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();

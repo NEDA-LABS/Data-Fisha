@@ -4,12 +4,13 @@ class BodyLarge extends StatelessWidget {
   final String text;
   final TextAlign? textAlign;
   final TextOverflow? overflow;
+  final Color? color;
 
   const BodyLarge({
     Key? key,
     required this.text,
     this.textAlign,
-    this.overflow,
+    this.overflow, this.color,
   }) : super(key: key);
 
   @override
@@ -21,6 +22,7 @@ class BodyLarge extends StatelessWidget {
           fontWeight: FontWeight.w400,
           fontSize: 16,
           height: 1.5,
+          color: color,
           overflow: overflow),
     );
   }

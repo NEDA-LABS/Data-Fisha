@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 
 class SliverSmartStockAppBar extends SliverAppBar {
+  final Widget? searchByView;
+
   SliverSmartStockAppBar({
     super.key,
     required String title,
+    this.searchByView,
     bool showSearch = false,
     bool showBack = false,
     Function()? onBack,
@@ -21,23 +25,24 @@ class SliverSmartStockAppBar extends SliverAppBar {
   }) : super(
           expandedHeight: showSearch ? (filters.isNotEmpty ? 156 : 126) : 65,
           centerTitle: true,
-          title: Text(title, overflow: TextOverflow.ellipsis),
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(
+            title,
+            style: TextStyle(
+                overflow: TextOverflow.ellipsis,
+                color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           scrolledUnderElevation: 4,
-          surfaceTintColor: Theme.of(context).colorScheme.surface,
+          surfaceTintColor: Theme.of(context).colorScheme.primary,
           shadowColor: Theme.of(context).colorScheme.shadow,
           bottom: showSearch
               ? (searchInput as PreferredSizeWidget?) ??
-                  _getToolBarSearchInput(
-                    onSearch,
-                    searchHint,
-                    searchTextController,
-                    context,
-                    filters,
-                  )
+                  _getToolBarSearchInput(onSearch, searchHint,
+                      searchTextController, context, filters, searchByView)
               : null,
           leading: showBack
               ? IconButton(
+                  color: Theme.of(context).colorScheme.onPrimary,
                   icon: const Icon(Icons.chevron_left),
                   onPressed: () => onBack != null
                       ? onBack()
@@ -57,11 +62,12 @@ PreferredSizeWidget _getToolBarSearchInput(
   TextEditingController? searchTextController,
   BuildContext context,
   List<SearchFilter> filters,
+  Widget? searchByView,
 ) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(filters.isNotEmpty ? 116 : 66),
+    preferredSize: Size.fromHeight(filters.isNotEmpty ? 114 : 64),
     child: Container(
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.primary,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,30 +78,42 @@ PreferredSizeWidget _getToolBarSearchInput(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: Theme.of(context).colorScheme.background),
-            child: TextField(
-              controller: searchTextController,
-              autofocus: false,
-              autocorrect: false,
-              maxLines: 1,
-              minLines: 1,
-              onChanged: (text) {
-                if (onSearch != null) {
-                  onSearch(text);
-                }
-              },
-              decoration: InputDecoration(
-                hintText: placeholder,
-                border: InputBorder.none,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: mobileQrScanIconButton(
-                  context,
-                  (code) {
-                    if (onSearch != null && code != null) {
-                      onSearch('-1:$code');
-                    }
-                  },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: searchByView ?? const Icon(Icons.search),
                 ),
-              ),
+                const WhiteSpacer(width: 4),
+                Expanded(
+                  child: TextField(
+                    controller: searchTextController,
+                    autofocus: false,
+                    autocorrect: false,
+                    maxLines: 1,
+                    minLines: 1,
+                    onChanged: (text) {
+                      if (onSearch != null) {
+                        onSearch(text);
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: placeholder,
+                      border: InputBorder.none,
+                      suffixIcon: mobileQrScanIconButton(
+                        context,
+                        (code) {
+                          if (onSearch != null && code != null) {
+                            onSearch('-1:$code');
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           filters.isNotEmpty
@@ -109,9 +127,19 @@ PreferredSizeWidget _getToolBarSearchInput(
                         margin: const EdgeInsets.only(right: 8),
                         child: FilterChip(
                           label: LabelMedium(text: e.name),
+                          side: BorderSide.none,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
                           selected: e.selected,
+                          labelStyle: e.selected
+                              ? TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary)
+                              : null,
+                          checkmarkColor:
+                              Theme.of(context).colorScheme.onSecondary,
                           selectedColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              Theme.of(context).colorScheme.secondary,
                           onSelected: (value) => e.onClick(),
                         ),
                       );

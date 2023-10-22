@@ -57,8 +57,10 @@ class SmartStockAppDrawer extends Drawer {
           return Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              border: Border(right: BorderSide(color: Theme.of(context).colorScheme.onBackground, width: .2))
-            ),
+                border: Border(
+                    right: BorderSide(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        width: .2))),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -224,7 +226,8 @@ class SmartStockAppDrawer extends Drawer {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListTile(
-        leading: const Icon(Icons.exit_to_app),
+        leading: Icon(Icons.exit_to_app,
+            color: Theme.of(context).colorScheme.primary),
         title: const BodyMedium(text: 'Sign out'),
         onTap: () {
           logOut(context, onGetModulesMenu, onGetInitialModule);

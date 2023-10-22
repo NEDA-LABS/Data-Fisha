@@ -10,12 +10,11 @@ Widget _emptyBuilder(_, __) => Container();
 typedef ChildBuilder = Widget Function(BuildContext context, dynamic index);
 
 class ResponsivePage extends StatefulWidget {
+  final Color? backgroundColor;
   final String office;
   final String current;
   final bool showLeftDrawer;
   final Widget? rightDrawer;
-
-  // final List<ModuleMenu> menus;
   final Widget Function(Drawer? drawer)? onBody;
   final SliverAppBar? sliverAppBar;
   final FloatingActionButton? fab;
@@ -24,15 +23,14 @@ class ResponsivePage extends StatefulWidget {
   final ChildBuilder dynamicChildBuilder;
   final bool loading;
   final Future Function()? onLoadMore;
-
   final EdgeInsets horizontalPadding;
 
   const ResponsivePage({
+    this.backgroundColor,
     this.office = '',
     this.current = '/',
     this.showLeftDrawer = true,
     this.rightDrawer,
-    // required this.menus,
     this.onBody,
     required this.sliverAppBar,
     this.staticChildren = _emptyList,
@@ -70,23 +68,28 @@ class _State extends State<ResponsivePage> {
     return getView(context);
   }
 
-  _customScrollView(bottomMargin) => CustomScrollView(
+  _customScrollView(bottomMargin) {
+    return Container(
+      color: widget.backgroundColor,
+      child: CustomScrollView(
         controller: _controller,
         slivers: [
           widget.sliverAppBar ?? SliverToBoxAdapter(child: Container()),
-          ...widget.staticChildren
-              .map((e) => SliverToBoxAdapter(
-                      child: Padding(
-                    padding: widget.horizontalPadding,
-                    child: e,
-                  )))
-              .toList(),
+          ...widget.staticChildren.map((e) {
+            return SliverToBoxAdapter(
+                child: Padding(
+              padding: widget.horizontalPadding,
+              child: e,
+            ));
+          }).toList(),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => Padding(
-                padding: widget.horizontalPadding,
-                child: widget.dynamicChildBuilder(context, index),
-              ),
+              (context, index) {
+                return Padding(
+                  padding: widget.horizontalPadding,
+                  child: widget.dynamicChildBuilder(context, index),
+                );
+              },
               childCount: widget.totalDynamicChildren,
             ),
           ),
@@ -99,7 +102,9 @@ class _State extends State<ResponsivePage> {
           SliverPadding(
               padding: EdgeInsets.only(bottom: doubleOrZero(bottomMargin)))
         ],
-      );
+      ),
+    );
+  }
 
   _scrollListener() {
     if (_controller.position.extentAfter < 50) {
@@ -124,48 +129,25 @@ class _State extends State<ResponsivePage> {
 
   _screenCheck(context) => hasEnoughWidth(context);
 
-  _getLargerView(_) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: widget.onBody != null
-                ? widget.onBody!(null)
-                : Scaffold(body: _customScrollView(24)),
-          ),
-          widget.rightDrawer ?? const SizedBox(width: 0)
-        ],
-      );
-
-  // widget.onBody != null
-  // ? widget.onBody!(null)
-  // : Scaffold(body: _customScrollView(24));
+  _getLargerView(_) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: widget.onBody != null
+              ? widget.onBody!(null)
+              : Scaffold(body: _customScrollView(24)),
+        ),
+        widget.rightDrawer ?? const SizedBox(width: 0)
+      ],
+    );
+  }
 
   _getSmallView(_) {
-    // var body = _customScrollView(100);
-    // var drawer = StockDrawer(widget.menus, widget.current);
     var scaffold = Scaffold(
-      // drawer: drawer,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: getIsSmallScreen(_) ? widget.fab : null,
       body: _customScrollView(100),
-      // bottomNavigationBar: getIsSmallScreen(context) && widget.menus.isNotEmpty
-      //     ? FutureBuilder(
-      //         builder: (context, snapshot) {
-      //           if (snapshot.connectionState == ConnectionState.waiting) {
-      //             return Container();
-      //           }
-      //           if (snapshot.hasData && snapshot.data != null) {
-      //             var m = widget.menus
-      //                 .where((element) => hasRbaAccess(
-      //                     snapshot.data, element.roles, element.link))
-      //                 .toList();
-      //             return getBottomBar(m, context);
-      //           }
-      //           return Container();
-      //         },
-      //         future: getLocalCurrentUser(),
-      //       )
-      //     : null,
     );
     return widget.onBody != null ? widget.onBody!(null) : scaffold;
   }

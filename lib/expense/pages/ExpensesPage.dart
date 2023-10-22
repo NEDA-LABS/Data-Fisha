@@ -74,6 +74,7 @@ class _State extends State<ExpenseExpensesPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/expense/',
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: SliverSmartStockAppBar(
         title: "Expenses",
         showBack: true,

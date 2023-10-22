@@ -1,10 +1,14 @@
 import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/TitleLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class CartDrawer extends StatefulWidget {
   final Function(dynamic) onCheckout;
@@ -52,41 +56,58 @@ class _State extends State<CartDrawer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppBar(title: const Text('Cart'), elevation: 0),
-          widget.showCustomerLike
-              ? ChoicesInput(
-                  initialText: widget.customer,
-                  placeholder: widget.customerLikeLabel,
-                  showBorder: false,
-                  onText: widget.onCustomer,
-                  onLoad: widget.onCustomerLikeList,
-                  getAddWidget: widget.onCustomerLikeAddWidget,
-                  onField: (x) => x['name'] ?? x['displayName'])
-              : Container(),
-          Expanded(
-            child: ListView.builder(
-              controller: ScrollController(),
-              itemCount: widget.carts.length,
-              itemBuilder: _cartListItemBuilder(
-                widget.carts,
-                widget.wholesale,
-                widget.onAddItem,
-                widget.onRemoveItem,
-                widget.onGetPrice,
+      appBar: AppBar(
+        title: const TitleLarge(text:'Cart'),
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            border: Border(
+                left: BorderSide(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    width: .2))
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            widget.showCustomerLike
+                ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ChoicesInput(
+                      initialText: widget.customer,
+                      placeholder: widget.customerLikeLabel,
+                      showBorder: true,
+                      onText: widget.onCustomer,
+                      onLoad: widget.onCustomerLikeList,
+                      getAddWidget: widget.onCustomerLikeAddWidget,
+                      onField: (x) => x['name'] ?? x['displayName']),
+                )
+                : Container(),
+            Expanded(
+              child: ListView.builder(
+                controller: ScrollController(),
+                itemCount: widget.carts.length,
+                itemBuilder: _cartListItemBuilder(
+                  widget.carts,
+                  widget.wholesale,
+                  widget.onAddItem,
+                  widget.onRemoveItem,
+                  widget.onGetPrice,
+                ),
               ),
             ),
-          ),
-          _cartSummary(
-            widget.carts,
-            widget.wholesale,
-            context,
-            widget.onCheckout,
-            widget.onGetPrice,
-          )
-        ],
+            _cartSummary(
+              widget.carts,
+              widget.wholesale,
+              context,
+              widget.onCheckout,
+              widget.onGetPrice,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -113,7 +134,7 @@ class _State extends State<CartDrawer> {
             margin: const EdgeInsets.all(8),
             height: 54,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             child: states['loading']
@@ -134,22 +155,19 @@ class _State extends State<CartDrawer> {
           onCheckout(discount)
               .whenComplete(() => updateState({'loading': false}));
         },
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.onPrimary),
+          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+        ),
         child: Row(
           children: [
-            const Expanded(
-                child: Text('Checkout',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white))),
-            Text(
-                _formatPrice(
-                    _getFinalTotal(carts, discount, wholesale, onGetPrice)),
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-                softWrap: true)
+            const Expanded(child: BodyLarge(text: 'Checkout')),
+            FittedBox(
+              child: BodyLarge(
+                text:
+                    '${_formatPrice(_getFinalTotal(carts, discount, wholesale, onGetPrice))}',
+              ),
+            )
           ],
         ),
       );
@@ -169,12 +187,8 @@ class _State extends State<CartDrawer> {
         child: Row(
           children: [
             const Expanded(
-                child: Text("Total",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-            Text('${cartTotalAmount(carts, wholesale, onGetPrice)}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                child: TitleMedium(text: "Total")),
+            TitleMedium(text: '${cartTotalAmount(carts, wholesale, onGetPrice)}')
           ],
         ),
       );
@@ -183,7 +197,7 @@ class _State extends State<CartDrawer> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            const Expanded(child: Text('Discount ( TZS )')),
+            const Expanded(child: BodyLarge(text:'Discount ( TZS )')),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5), border: Border.all()),
@@ -221,14 +235,14 @@ class _State extends State<CartDrawer> {
     return Column(
       children: [
         ListTile(
-          title: Text('${cart.product['product'] ?? cart.product['name']}'),
+          title: BodyLarge(text: '${cart.product['product'] ?? cart.product['name']}'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               wholesale
-                  ? Text(
+                  ? BodyLarge(text:
                       '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
-                  : Text('$quantity @ $price = TZS $subTotal'),
+                  : BodyMedium(text: '$quantity @ $price = TZS $subTotal'),
               Row(
                 children: [
                   IconButton(

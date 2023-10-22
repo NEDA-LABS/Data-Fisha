@@ -92,4 +92,4 @@ getVendorCost() {
   return 10000;
 }
 
-String version = "1.4.2-2023.10.10-b.1";
+String version = "1.4.3-2023.10.22-b.0";

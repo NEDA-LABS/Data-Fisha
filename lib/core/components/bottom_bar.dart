@@ -60,53 +60,58 @@ class _State extends State<AppBottomBar> {
           showModalBottomSheet(
             context: context,
             builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ListView(
-                  // shrinkWrap: true,
-                  children: [
-                    ...widget.menus
-                        .map(
-                          (e) => ListTile(
-                            title: BodyMedium(text: e.name),
-                            leading: e.icon,
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () {
-                              Navigator.of(context).maybePop();
-                              widget.onChangePage(e.page);
-                            },
-                          ),
-                        )
-                        .toList(),
-                    ListTile(
-                      title: const BodyMedium(text: 'Change office'),
-                      subtitle: LabelMedium(text: currentOffice),
-                      leading: const Icon(Icons.change_circle),
-                      // trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChooseShopPage(
-                              onGetModulesMenu: widget.onGetModulesMenu,
-                              onGetInitialModule: widget.onGetInitialModule,
+              return Container(
+                color: Theme.of(context).colorScheme.background,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      ...widget.menus
+                          .map(
+                            (e) => ListTile(
+                              title: BodyMedium(text: e.name),
+                              leading: e.icon,
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () {
+                                Navigator.of(context).maybePop();
+                                widget.onChangePage(e.page);
+                              },
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      title: const BodyMedium(text: 'Sign out'),
-                      leading: const Icon(Icons.exit_to_app),
-                      // trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        logOut(
-                          context,
-                          widget.onGetModulesMenu,
-                          widget.onGetInitialModule,
-                        );
-                      },
-                    )
-                  ],
+                          )
+                          .toList(),
+                      ListTile(
+                        title: const BodyMedium(text: 'Change office'),
+                        subtitle: LabelMedium(text: currentOffice),
+                        leading: Icon(Icons.change_circle,
+                            color: Theme.of(context).colorScheme.primary),
+                        // trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ChooseShopPage(
+                                onGetModulesMenu: widget.onGetModulesMenu,
+                                onGetInitialModule: widget.onGetInitialModule,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        title: const BodyMedium(text: 'Sign out'),
+                        leading: Icon(Icons.exit_to_app,
+                            color: Theme.of(context).colorScheme.primary),
+                        // trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          logOut(
+                            context,
+                            widget.onGetModulesMenu,
+                            widget.onGetInitialModule,
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               );
             },

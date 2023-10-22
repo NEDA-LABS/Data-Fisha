@@ -8,8 +8,6 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/SwitchToPageMenu.dart';
-import 'package:smartstock/core/components/SwitchToTitle.dart';
-import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
@@ -71,7 +69,9 @@ class _State extends State<SalesPage> {
         const WhiteSpacer(height: 16),
         // const TitleMedium(text: 'Summary'),
         // const WhiteSpacer(height: 8),
-        loading ?const Center(child: CircularProgressIndicator()):_getTotalSalesView(context),
+        loading
+            ? const Center(child: CircularProgressIndicator())
+            : _getTotalSalesView(context),
       ],
       sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
@@ -483,7 +483,7 @@ class _State extends State<SalesPage> {
       height: 34,
       width: 76,
       decoration: BoxDecoration(
-        color: const Color(0xFFadf0cc),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
@@ -506,7 +506,7 @@ class _State extends State<SalesPage> {
         height: 34,
         width: 76,
         decoration: BoxDecoration(
-          color: const Color(0xFFffed8a),
+          color: Theme.of(context).colorScheme.errorContainer,
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,

@@ -36,7 +36,7 @@ class SwitchToPageGrid extends StatelessWidget {
               height: 45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).colorScheme.secondaryContainer,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
               child: onIcon != null ? onIcon!() : Container(),
             ),

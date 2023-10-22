@@ -1,14 +1,17 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -32,28 +35,46 @@ class InvoicesPage extends PageBase {
 }
 
 class _InvoicesPage extends State<InvoicesPage> {
+  final _debounce = Debounce(milliseconds: 500);
   bool _loading = false;
-
-  // String _query = '';
+  String _query = '';
   int size = 20;
   List _invoices = [];
+  Map<String, String> _searchByMap = {'name': "Customer", 'value': 'customer'};
 
   _appBar(context) {
     return SliverSmartStockAppBar(
       title: "Invoices",
       showBack: true,
       backLink: '/sales/',
-      showSearch: false,
+      showSearch: true,
       onBack: widget.onBackPage,
-      // onSearch: (d) {
-      //   setState(() {
-      //     _query = d;
-      //   });
-      //   _refresh();
-      // },
-      // searchHint: 'Search by date...',
+      searchByView: SearchByContainer(
+        currentValue: _searchByMap['name'] ?? '',
+        onUpdate: (searchMap) {
+          _updateState(() {
+            _searchByMap = searchMap;
+          });
+          _refresh();
+        },
+      ),
+      onSearch: (d) {
+        _debounce.run(() {
+          if (kDebugMode) {
+            print(d);
+          }
+          _query = d;
+          _refresh();
+        });
+      },
       context: context,
     );
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   _contextInvoices(context) {
@@ -81,10 +102,6 @@ class _InvoicesPage extends State<InvoicesPage> {
     );
   }
 
-  // _fields() => isSmallScreen(context)
-  //     ? ['date', 'amount', 'customer']
-  //     : ['date', 'amount', 'payment', 'customer'];
-
   _loadingView(bool show) =>
       show ? const LinearProgressIndicator(minHeight: 4) : Container();
 
@@ -96,112 +113,82 @@ class _InvoicesPage extends State<InvoicesPage> {
 
   @override
   Widget build(context) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var tableHeader = isSmallScreen ? Container() : _tableHeader();
+    var menuContext = isSmallScreen
+        ? Container()
+        : tableContextMenu(_contextInvoices(context));
+    var fab = FloatingActionButton(
+      onPressed: () => _showMobileContextMenu(context),
+      child: const Icon(Icons.unfold_more_outlined),
+    );
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       current: '/sales/',
       sliverAppBar: _appBar(context),
-      staticChildren: [
-        getIsSmallScreen(context)
-            ? Container()
-            : tableContextMenu(_contextInvoices(context)),
-        _loadingView(_loading),
-        getIsSmallScreen(context) ? Container() : _tableHeader(),
-      ],
-      fab: FloatingActionButton(
-        onPressed: () => _showMobileContextMenu(context),
-        child: const Icon(Icons.unfold_more_outlined),
-      ),
+      staticChildren: [menuContext, _loadingView(_loading), tableHeader],
+      fab: fab,
       totalDynamicChildren: _invoices.length,
-      dynamicChildBuilder: getIsSmallScreen(context)
-          ? _smallScreenChildBuilder
-          : _largerScreenChildBuilder,
+      dynamicChildBuilder:
+          isSmallScreen ? _smallScreenChildBuilder : _largerScreenChildBuilder,
       loading: _loading,
       onLoadMore: () async => _loadMore(),
-      // onBody: (d) {
-      //   return Scaffold(
-      //     body: Column(
-      //       crossAxisAlignment: CrossAxisAlignment.stretch,
-      //       mainAxisSize: MainAxisSize.min,
-      //       children: [
-      //         tableContextMenu(_contextInvoices(context)),
-      //         _loadingView(_loading),
-      //         _tableHeader(),
-      //         Expanded(
-      //           child: TableLikeList(
-      //             onFuture: () async => _invoices,
-      //             keys: _fields(),
-      //             onLoadMore: () async => _loadMore(),
-      //             loading: _loading,
-      //             onCell: (a, b, c) {
-      //               if (a == 'date') {
-      //                 return _dateView(c);
-      //               }
-      //               if (a == 'customer') {
-      //                 return Text('${b['displayName']}');
-      //               }
-      //               if (a == 'payment') {
-      //                 return Text('${_getInvPayment(b)}');
-      //               }
-      //               return Text('$b');
-      //             },
-      //             onItemPressed: (item) {
-      //               showDialogOrModalSheet(
-      //                 SaleInvoiceDetail(sale: item, pageContext: context),
-      //                 context,
-      //               );
-      //               // showDialogOrModalSheet(
-      //               //   invoiceDetails(context, item),
-      //               //   context,
-      //               // );
-      //             },
-      //           ),
-      //         ), // _tableFooter()
-      //       ],
-      //     ),
-      //   );
-      // },
     );
   }
 
   _loadMore() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
-    var getInvoices = _prepareGetInvoices('', size, true);
+    var getInvoices = _prepareGetInvoices(
+        size: size,
+        more: true,
+        filterBy: _searchByMap['value'] ?? 'customer',
+        filterValue: _query);
     getInvoices(_invoices).then((value) {
       if (value is List) {
         _invoices.addAll(value);
         _invoices = _invoices.toSet().toList();
       }
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
   }
 
-  _prepareGetInvoices(String product, size, bool more) {
+  _prepareGetInvoices(
+      {required String filterBy,
+      required String filterValue,
+      required int size,
+      required bool more}) {
     return ifDoElse(
       (sales) => sales is List && sales.isNotEmpty,
       (sales) {
         var last = more ? sales.last['timer'] : _defaultLast();
-        return getInvoiceSalesFromCacheOrRemote(last, size, product);
+        return getInvoiceSalesFromCacheOrRemote(
+            last, size, filterBy, filterValue);
       },
-      (sales) =>
-          getInvoiceSalesFromCacheOrRemote(_defaultLast(), size, product),
+      (sales) => getInvoiceSalesFromCacheOrRemote(
+          _defaultLast(), size, filterBy, filterValue),
     );
   }
 
   _refresh() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
-    var getInvoices = _prepareGetInvoices('', size, false);
+    var getInvoices = _prepareGetInvoices(
+        size: size,
+        more: false,
+        filterBy: _searchByMap['value'] ?? 'customer',
+        filterValue: _query);
     getInvoices(_invoices).then((value) {
       if (value is List) {
         _invoices = value;
       }
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
@@ -296,7 +283,7 @@ class _InvoicesPage extends State<InvoicesPage> {
       height: 24,
       width: 76,
       decoration: BoxDecoration(
-        color: const Color(0xFFadf0cc),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
@@ -319,7 +306,7 @@ class _InvoicesPage extends State<InvoicesPage> {
         height: 24,
         width: 76,
         decoration: BoxDecoration(
-          color: const Color(0xFFffed8a),
+          color: Theme.of(context).colorScheme.errorContainer,
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,
@@ -340,11 +327,14 @@ class _InvoicesPage extends State<InvoicesPage> {
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Add invoice'),
-                onTap: () => widget.onChangePage(
-                  InvoiceSalePage(
-                    onBackPage: widget.onBackPage,
-                  ),
-                ),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  widget.onChangePage(
+                    InvoiceSalePage(
+                      onBackPage: widget.onBackPage,
+                    ),
+                  );
+                },
               ),
               const HorizontalLine(),
               ListTile(

@@ -16,9 +16,10 @@ prepareAddInvoicePayment(String? id, Map payment) {
   return composeAsync([(app) => executeHttp(f(app)), map(shopToApp)]);
 }
 
-prepareGetRemoteInvoiceSales(startAt, size, product, username) {
+prepareGetRemoteInvoiceSales(
+    {required String startAt, required int size, required String filterBy, required String filterValue}) {
   url(app) => '${shopFunctionsURL(app)}/sale/invoice?'
-      'size=$size&startAt=$startAt&product=$product&username=$username';
+      'size=$size&startAt=$startAt&filterBy=$filterBy&filterValue=$filterValue';
   rFactory(app) => () => httpGetRequest(url(app));
   request(app) => executeHttp(rFactory(app));
   beList(invoices) => itOrEmptyArray(invoices);

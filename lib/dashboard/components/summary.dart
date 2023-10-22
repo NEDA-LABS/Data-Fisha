@@ -7,7 +7,6 @@ import 'package:smartstock/dashboard/components/past_expenses.dart';
 import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
 import 'package:smartstock/dashboard/components/past_sales.dart';
 import 'package:smartstock/dashboard/components/past_sales_by_categories.dart';
-import 'package:smartstock/dashboard/components/past_top_products.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
@@ -49,6 +48,12 @@ class _State extends State<DashboardSummary> {
       ),
     );
     return getView(loading);
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   _getIt(String p, data) => data is Map ? data[p] : null;
@@ -110,7 +115,7 @@ class _State extends State<DashboardSummary> {
         children: [
           Text(error),
           OutlinedButton(
-              onPressed: () => setState(() => _fetchData()),
+              onPressed: () => _updateState(() => _fetchData()),
               child: const Text('Retry'))
         ],
       ),
@@ -149,21 +154,21 @@ class _State extends State<DashboardSummary> {
   }
 
   void _fetchData() {
-    setState(() {
+    _updateState(() {
       loading = true;
       error = '';
     });
     prepareGetDashboardData(date).then((value) {
-      setState(() {
+      _updateState(() {
         data = value;
       });
     }).catchError((onError) {
-      setState(() {
+      _updateState(() {
         error = '$onError';
       });
     }).whenComplete(() {
       if (mounted) {
-        setState(() {
+        _updateState(() {
           loading = false;
         });
       }
@@ -174,7 +179,10 @@ class _State extends State<DashboardSummary> {
     var totalCash = Expanded(
       flex: 1,
       child: NumberCard(
-          "Total cash", doubleOrZero(_getIt('sales_cash', data))+doubleOrZero(_getIt('paid_invoice', data)), null),
+          "Total cash",
+          doubleOrZero(_getIt('sales_cash', data)) +
+              doubleOrZero(_getIt('paid_invoice', data)),
+          null),
     );
     var cashSale = Expanded(
       flex: 1,

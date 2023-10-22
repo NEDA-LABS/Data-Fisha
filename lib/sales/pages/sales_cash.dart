@@ -1,9 +1,12 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
@@ -32,10 +35,12 @@ class SalesCashPage extends PageBase {
 }
 
 class _State extends State<SalesCashPage> {
+  final _debounce = Debounce(milliseconds: 500);
   bool _loading = false;
-  final String _query = '';
+  String _query = '';
   int size = 20;
   List _sales = [];
+  Map<String, String> _searchByMap = {'name': "Receipt Date", 'value': 'date'};
 
   _onItemPressed(item) {
     showDialogOrModalSheet(
@@ -66,10 +71,34 @@ class _State extends State<SalesCashPage> {
       title: "Cash sales",
       showBack: true,
       backLink: '/sales/',
-      showSearch: false,
+      showSearch: true,
       onBack: widget.onBackPage,
       context: context,
+      searchByView: SearchByContainer(
+        currentValue: _searchByMap['name'] ?? '',
+        onUpdate: (searchMap) {
+          _updateState(() {
+            _searchByMap = searchMap;
+          });
+          _refresh();
+        },
+      ),
+      onSearch: (d) {
+        _debounce.run(() {
+          if (kDebugMode) {
+            print(d);
+          }
+          _query = d;
+          _refresh();
+        });
+      },
     );
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   _contextSales(context) {
@@ -110,56 +139,67 @@ class _State extends State<SalesCashPage> {
   }
 
   @override
-  Widget build(context) => ResponsivePage(
-        current: '/sales/',
-        sliverAppBar: _appBar(context),
-        staticChildren: [
-          _loadingView(_loading),
-          getIsSmallScreen(context)
-              ? Container()
-              : tableContextMenu(_contextSales(context)),
-          getIsSmallScreen(context) ? Container() : _tableHeader(),
-        ],
-        loading: _loading,
-        onLoadMore: () async => _loadMore(),
-        // fab: FloatingActionButton(
-        //   onPressed: () => _showMobileContextMenu(context),
-        //   child: const Icon(Icons.unfold_more_outlined),
-        // ),
-        totalDynamicChildren: _sales.length,
-        dynamicChildBuilder: getIsSmallScreen(context)
-            ? _smallScreenChildBuilder
-            : _largerScreenChildBuilder,
-      );
+  Widget build(context) {
+    return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      current: '/sales/',
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        _loadingView(_loading),
+        getIsSmallScreen(context)
+            ? Container()
+            : tableContextMenu(_contextSales(context)),
+        getIsSmallScreen(context) ? Container() : _tableHeader(),
+      ],
+      loading: _loading,
+      onLoadMore: () async => _loadMore(),
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined),
+      ),
+      totalDynamicChildren: _sales.length,
+      dynamicChildBuilder: getIsSmallScreen(context)
+          ? _smallScreenChildBuilder
+          : _largerScreenChildBuilder,
+    );
+  }
 
   _loadMore() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
-    var getSales = _prepareGetSales(_query, size, true);
+    var getSales = _prepareGetSales(
+        filterBy: _searchByMap['value'] ?? 'date',
+        filterValue: _query,
+        size: size,
+        more: true);
     getSales(_sales).then((value) {
       if (value is List) {
         _sales.addAll(value);
         _sales = _sales.toSet().toList();
       }
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
   }
 
   _refresh() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
-    var getSales = _prepareGetSales(_query, size, false);
+    var getSales = _prepareGetSales(
+        filterBy: _searchByMap['value'] ?? 'date',
+        filterValue: _query,
+        size: size,
+        more: false);
     getSales(_sales).then((value) {
       if (value is List) {
         _sales = value;
       }
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
@@ -171,14 +211,26 @@ class _State extends State<SalesCashPage> {
     return dF.format(date);
   }
 
-  _prepareGetSales(String product, size, bool more) {
+  _prepareGetSales(
+      {required size,
+      required bool more,
+      required String filterBy,
+      required String filterValue}) {
     return ifDoElse(
       (sales) => sales is List && sales.isNotEmpty,
       (sales) {
         var last = more ? sales.last['timer'] : _defaultLast();
-        return getCashSalesFromCacheOrRemote(last, size, product);
+        return getCashSalesFromCacheOrRemote(
+            startAt: last,
+            size: size,
+            filterBy: filterBy,
+            filterValue: filterValue);
       },
-      (sales) => getCashSalesFromCacheOrRemote(_defaultLast(), size, product),
+      (sales) => getCashSalesFromCacheOrRemote(
+          startAt: _defaultLast(),
+          size: size,
+          filterBy: filterBy,
+          filterValue: filterValue),
     );
   }
 
@@ -265,37 +317,45 @@ class _State extends State<SalesCashPage> {
     );
   }
 
-// void _showMobileContextMenu(context) {
-//   showDialogOrModalSheet(
-//       Container(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             ListTile(
-//               leading: const Icon(Icons.add),
-//               title: const Text('Add retail'),
-//               onTap: () => navigateTo('/sales/cash/retail'),
-//             ),
-//             HorizontalLine(),
-//             ListTile(
-//               leading: const Icon(Icons.business),
-//               title: const Text('Add wholesale'),
-//               onTap: () => navigateTo('/sales/cash/whole'),
-//             ),
-//             HorizontalLine(),
-//             ListTile(
-//               leading: const Icon(Icons.refresh),
-//               title: const Text('Reload sales'),
-//               onTap: () {
-//                 Navigator.of(context).maybePop();
-//                 _refresh();
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//       context);
-// }
+  void _showMobileContextMenu(context) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Add retail'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  widget.onChangePage(
+                      SalesCashRetail(onBackPage: widget.onBackPage));
+                },
+              ),
+              const HorizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.business),
+                title: const Text('Add wholesale'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  widget.onChangePage(
+                      SalesCashWhole(onBackPage: widget.onBackPage));
+                },
+              ),
+              const HorizontalLine(),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Reload sales'),
+                onTap: () {
+                  Navigator.of(context).maybePop();
+                  _refresh();
+                },
+              ),
+            ],
+          ),
+        ),
+        context);
+  }
 }

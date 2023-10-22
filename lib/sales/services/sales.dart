@@ -11,12 +11,17 @@ import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_cash_sale.dart';
 
-Future<List> getCashSalesFromCacheOrRemote(startAt, size, product) async {
+Future<List> getCashSalesFromCacheOrRemote(
+    {required startAt,
+    required size,
+    required String filterBy,
+    required String filterValue}) async {
   var shop = await getActiveShop();
-  var user = await getLocalCurrentUser();
-  var getUsername = propertyOr('username', (p0) => '');
-  var getSales =
-      prepareGetRemoteCashSales(startAt, size, product, getUsername(user));
+  var getSales = prepareGetRemoteCashSales(
+      startAt: startAt,
+      size: size,
+      filterValue: filterValue,
+      filterBy: filterBy);
   List sales = await getSales(shop);
   return sales;
 }

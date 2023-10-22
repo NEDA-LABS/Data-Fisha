@@ -19,4 +19,4 @@ showDialogOrModalSheet(Widget content, context) => hasEnoughWidth(context)
                 constraints: const BoxConstraints(
                     maxWidth: 600, minHeight: 200, maxHeight: 600),
                 child: content)))
-    : showModalBottomSheet(context: context, builder: (_) => content);
+    : showModalBottomSheet(context: context, builder: (_) => Container(color: Theme.of(context).colorScheme.background,child: content,));

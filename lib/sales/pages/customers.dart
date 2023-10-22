@@ -83,6 +83,7 @@ class _CustomersPage extends State<CustomersPage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/sales/',
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: _appBar(context),
       staticChildren: [
         getIsSmallScreen(context)

@@ -42,6 +42,7 @@ class _State extends State<UsersPage> {
   @override
   Widget build(context) => ResponsivePage(
         current: '/account/',
+        backgroundColor: Theme.of(context).colorScheme.surface,
         sliverAppBar: _appBar(context),
         staticChildren: [
           _loading(loading),
