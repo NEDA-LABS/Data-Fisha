@@ -7,6 +7,12 @@ import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
+firstLetterUpperCase(x) {
+  var first = '$x'.split('').first;
+  var other = '$x'.substring(1);
+  return first.toUpperCase() + other;
+}
+
 //'http://localhost:3000'; //
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 

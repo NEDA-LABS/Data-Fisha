@@ -17,7 +17,7 @@ Future<List<dynamic>> getExpenseCategoriesFromCacheOrRemote({
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
-      List r = await getRemoteExpenseCategories(shop);
+      List r = await getExpenseCategoriesAPI(shop);
       r = await compute(_filterAndSort, {"items": r, "query": ''});
       await saveLocalExpenseCategories(shopToApp(shop), r);
       return r;
@@ -41,6 +41,6 @@ Future<List> _filterAndSort(Map data) async {
 
 Future createExpenseCategory(String name) async {
   var shop = await getActiveShop();
-  var createCategory = prepareCreateExpenseCategory({"name": name});
+  var createCategory = prepareCreateExpenseCategoryAPI({"name": name});
   return createCategory(shop);
 }

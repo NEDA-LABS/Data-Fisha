@@ -1,12 +1,10 @@
-import 'package:bfast/controller/function.dart';
 import 'package:bfast/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/util.dart';
 
 getDashboardSummary(shop, date) {
   var request = composeAsync([
-    (app) => executeHttp(() =>
-        httpGetRequest('${shopFunctionsURL(app)}/report/dashboard?date=$date')),
+    (app) => httpGetRequest('${shopFunctionsURL(app)}/report/dashboard?date=$date'),
     shopToApp,
   ]);
   return request(shop);

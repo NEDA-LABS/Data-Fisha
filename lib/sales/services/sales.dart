@@ -91,7 +91,7 @@ _onSubmitSale(List carts, String customer, discount, wholesale) async {
     await saveLocalSync(batchId, url, sales);
     oneTimeLocalSyncs();
   } else {
-    var saveSales = preparePostRequest(sales);
+    var saveSales = prepareHttpPostRequest(sales);
     await saveSales(url);
   }
   _printSaleItems(carts, discount, customer, wholesale, cartId)

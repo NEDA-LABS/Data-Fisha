@@ -5,18 +5,23 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
+import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
 class CategoriesPage extends PageBase {
   final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
 
   const CategoriesPage({
     Key? key,
     required this.onBackPage,
+    required this.onChangePage,
   }) : super(key: key, pageName: 'CategoriesPage');
 
   @override
@@ -95,15 +100,47 @@ class _State extends State<CategoriesPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ListTile(
-                  title: TableLikeListTextDataCell(
-                      '${_categories[index]['name']}'),
-                  subtitle: Text(
-                    '${_categories[index]['description']}',
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w300),
-                  )),
-              const SizedBox(height: 5),
-              HorizontalLine(),
+                title: TableLikeListTextDataCell(
+                    firstLetterUpperCase('${_categories[index]['name']}')),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SizedBox(
+                    width: 60,
+                    // height: 60,
+                    child: Image.network(
+                      '${_categories[index]['image']}',
+                      errorBuilder: (context, error, stackTrace) => Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              borderRadius: BorderRadius.circular(8))),
+                    ),
+                  ),
+                ),
+                trailing: IconButton(
+                  onPressed: () {
+                    showDeleteDialogHelper(
+                        context: context,
+                        name: firstLetterUpperCase(
+                            '${_categories[index]['name']}'),
+                        onDelete: () {
+                          return _deleteCategory('${_categories[index]['id']}');
+                        });
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                // subtitle: Text(
+                //   '${_categories[index]['description']}',
+                //   style: const TextStyle(
+                //       fontSize: 12, fontWeight: FontWeight.w300),
+                // ),
+              ),
+              // const SizedBox(height: 5),
+              const HorizontalLine(),
             ],
           );
         },
@@ -146,7 +183,7 @@ class _State extends State<CategoriesPage> {
                       .whenComplete(() => _createCategory());
                 },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text('Reload categories'),
@@ -166,12 +203,21 @@ class _State extends State<CategoriesPage> {
       context: context,
       builder: (c) => Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 500),
+          constraints: const BoxConstraints(maxWidth: 800),
           child: const Dialog(
             child: CreateCategoryContent(),
           ),
         ),
       ),
-    );
+    ).whenComplete(() {
+      _fetchCategories();
+    });
+  }
+
+  Future _deleteCategory(id) async {
+    var shop = await getActiveShop();
+    var deleteCategory = prepareDeleteCategoryAPI(id);
+    await deleteCategory(shop);
+    _fetchCategories();
   }
 }

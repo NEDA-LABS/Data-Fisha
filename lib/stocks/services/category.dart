@@ -16,7 +16,7 @@ Future<List<dynamic>> getCategoryFromCacheOrRemote({
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
-      List rCategories = await getAllRemoteCategories(shop);
+      List rCategories = await getAllCategoriesAPI(shop);
       rCategories = await compute(
           _filterAndSort, {"categories": rCategories, "query": stringLike});
       await saveLocalCategories(shopToApp(shop), rCategories);

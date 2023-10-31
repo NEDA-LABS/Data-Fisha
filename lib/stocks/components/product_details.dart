@@ -5,6 +5,7 @@ import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/offset_quantity_content.dart';
 import 'package:smartstock/stocks/components/product_movement.dart';
@@ -44,7 +45,8 @@ class ProductDetail extends StatelessWidget {
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then((v) {
-                        onChangePage(ProductEditPage(item, onBackPage: onBackPage));
+                        onChangePage(
+                            ProductEditPage(item, onBackPage: onBackPage));
                       });
                     },
                     title: 'Edit details',
@@ -83,21 +85,15 @@ class ProductDetail extends StatelessWidget {
                       var nav = Navigator.of(context);
                       nav.maybePop().then(
                         (value) {
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return DeleteDialog(
-                                message:
-                                    'Delete of "${item['product']}" is permanent, do you wish to continue ? ',
-                                onConfirm: () => deleteProduct(item['id']),
-                              );
-                            },
-                          );
+                          showDeleteDialogHelper(
+                              context: context,
+                              name: item['product'],
+                              onDelete: () => deleteProduct(item['id']));
                         },
                       );
                     },
                     title: 'Delete',
-                    textColor: Colors.red,
+                    textColor: Theme.of(context).colorScheme.error,
                   )
                 ],
               ),

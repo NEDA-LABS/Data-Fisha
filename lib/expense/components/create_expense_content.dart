@@ -1,13 +1,14 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/date_input.dart';
+import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/files_api.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
@@ -36,7 +37,7 @@ class _State extends State<CreateExpenseContent> {
     "req_err": "",
     "creating": false
   };
-  PlatformFile? _platformFile;
+  FileData? _platformFile;
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +76,21 @@ class _State extends State<CreateExpenseContent> {
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: LabelLarge(text: 'Receipt'),
             ),
-            Container(
-              height: 48,
-              margin: const EdgeInsets.only(bottom: 16),
-              child: OutlinedButton(
-                  onPressed: _onUploadReceipt,
-                  child: BodyLarge(
-                      text:
-                          'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
+            // Container(
+            //   height: 48,
+            //   margin: const EdgeInsets.only(bottom: 16),
+            //   child: OutlinedButton(
+            //       onPressed: _onUploadReceipt,
+            //       child: BodyLarge(
+            //           text:
+            //               'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
+            // ),
+            FileSelect(
+              onFile: (file) {
+                if (mounted) {
+                  _platformFile = file;
+                }
+              },
             ),
             TextInput(
               onText: (d) => _updateState({'amount': d, 'amount_err': ''}),
@@ -166,7 +174,7 @@ class _State extends State<CreateExpenseContent> {
                       "name": fileResponse['name'],
                       "size": fileResponse['size'],
                       "mime": fileResponse['mime'],
-                      "link": 'https://${fileResponse['cid']}.ipfs.w3s.link',
+                      "link": fileResponse['link'],
                       "cid": fileResponse['cid'],
                       "tags": 'receipt,expense,expenses',
                     }
@@ -176,35 +184,5 @@ class _State extends State<CreateExpenseContent> {
         .then((value) => showInfoDialog(context, 'Expense created successful'))
         .then((value) => widget.onBackPage())
         .whenComplete(() => _updateState({'creating': false}));
-  }
-
-  void _onUploadReceipt() {
-    handleFile(value) {
-      FilePickerResult? result = value;
-      if (mounted) {
-        if (result != null) {
-          setState(() {
-            _platformFile = result.files.single;
-          });
-        } else {
-          showInfoDialog(context, "Fail to get selected file");
-        }
-      }
-    }
-
-    handleError(error) {
-      if (mounted) {
-        showInfoDialog(context, error);
-      }
-    }
-
-    FilePicker.platform
-        .pickFiles(
-            allowMultiple: false,
-            lockParentWindow: true,
-            withReadStream: true,
-            withData: false)
-        .then(handleFile)
-        .catchError(handleError);
   }
 }

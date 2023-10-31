@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/services/util.dart';
 
 class DeleteDialog extends StatefulWidget {
   final String message;
@@ -29,8 +31,7 @@ class _State extends State<DeleteDialog> {
         constraints: const BoxConstraints(maxWidth: 400),
         child: Wrap(
           children: [
-            const Text('Info',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const TitleMedium(text: 'Info'),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
@@ -45,18 +46,18 @@ class _State extends State<DeleteDialog> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: OutlinedButton(
+                  child: TextButton(
                     onPressed: loading ? null : _handleOk,
                     child:
-                        BodyMedium(text: loading ? 'Processing...' : 'Proceed'),
+                        BodyLarge(text: loading ? 'Processing...' : 'Delete',color: Theme.of(context).colorScheme.error,),
                   ),
                 ),
                 const WhiteSpacer(width: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: OutlinedButton(
+                  child: TextButton(
                     onPressed: () => Navigator.of(context).maybePop(),
-                    child: const BodyMedium(text: 'Cancel'),
+                    child: BodyLarge(text: 'Cancel', color: Theme.of(context).colorScheme.primary,),
                   ),
                 ),
               ],
@@ -65,8 +66,10 @@ class _State extends State<DeleteDialog> {
                 ? Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     width: MediaQuery.of(context).size.width,
-                    child:
-                        Text(error, style: const TextStyle(color: Colors.red)))
+                    child: LabelLarge(
+                      text: error,
+                      color: Theme.of(context).colorScheme.error,
+                    ))
                 : Container()
           ],
         ),

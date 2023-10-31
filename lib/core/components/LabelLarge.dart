@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 class LabelLarge extends StatelessWidget {
   final String text;
   final TextOverflow? overflow;
+  final Color? color;
 
-  const LabelLarge({Key? key, required this.text, this.overflow})
+  const LabelLarge({Key? key, required this.text, this.overflow, this.color})
       : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class LabelLarge extends StatelessWidget {
           fontSize: 14,
           height: 1.43,
           overflow: overflow,
-      ),
+          color: color),
     );
   }
 }

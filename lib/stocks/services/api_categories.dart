@@ -1,42 +1,29 @@
-import 'dart:convert';
-
-import 'package:bfast/controller/function.dart';
-import 'package:bfast/model/raw_response.dart';
 import 'package:bfast/options.dart';
 import 'package:bfast/util.dart';
-import 'package:http/http.dart';
+import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/util.dart';
 
-_allRemoteCategoriesHttpRequest(url) => get(Uri.parse(url));
+Future getAllCategoriesAPI(shop) async {
+  App app = shopToApp(shop);
+  String url = '${shopFunctionsURL(app)}/stock/categories';
+  var categories = await httpGetRequest(url);
+  return itOrEmptyArray(categories);
+}
 
-_createCategoryHttpRequest(category) => (url) => put(
-      Uri.parse(url),
-      headers: getInitialHeaders(),
-      body: jsonEncode(category),
-    );
-
-_createCategory(category) => composeAsync([
-      map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-      _createCategoryHttpRequest(category)
-    ]);
-
-var _allRemoteCategories = composeAsync([
-  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-  _allRemoteCategoriesHttpRequest,
-]);
-
-var getAllRemoteCategories = composeAsync([
-  (categories) => itOrEmptyArray(categories),
-  (app) => executeHttp(
-      () => _allRemoteCategories('${shopFunctionsURL(app)}/stock/categories')),
-  map(shopToApp),
-]);
-
-createCategory(Map category) {
-  var createRequest = _createCategory(category);
+Future Function(dynamic shop) prepareUpsertCategoryAPI(Map category) {
+  var httpPutRequest = prepareHttpPutRequest(category);
   return composeAsync([
-    (app) => executeHttp(
-        () => (createRequest('${shopFunctionsURL(app)}/stock/categories'))),
-    map(shopToApp)
+    httpPutRequest,
+    (app) => '${shopFunctionsURL(app)}/stock/categories',
+    shopToApp
+  ]);
+}
+
+Future Function(dynamic shop) prepareDeleteCategoryAPI(id) {
+  var httpDeleteRequest = prepareHttpDeleteRequest({});
+  return composeAsync([
+    httpDeleteRequest,
+    (app) => '${shopFunctionsURL(app)}/stock/categories/$id',
+    shopToApp
   ]);
 }

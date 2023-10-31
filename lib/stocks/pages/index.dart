@@ -75,6 +75,7 @@ class _State extends State<StocksIndexPage>{
         onClick: () => widget.onChangePage(
           CategoriesPage(
             onBackPage: widget.onBackPage,
+            onChangePage: widget.onChangePage,
           ),
         ),
       ),

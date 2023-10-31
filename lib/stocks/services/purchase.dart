@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
@@ -105,10 +106,10 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
       Map? pDetail;
-      PlatformFile? file;
+      FileData? file;
       await addPurchaseDetail(
           context: context,
-          onSubmit: (state, PlatformFile? platformFile) {
+          onSubmit: (state, FileData? platformFile) {
             pDetail = state;
             file = platformFile;
             Navigator.of(context).maybePop();
@@ -126,7 +127,7 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
                   "name": fileResponse['name'],
                   "size": fileResponse['size'],
                   "mime": fileResponse['mime'],
-                  "link": 'https://${fileResponse['cid']}.ipfs.w3s.link',
+                  "link": fileResponse['link'],
                   "cid": fileResponse['cid'],
                   "tags": 'receipt,invoice,purchase,purchases',
                 }
