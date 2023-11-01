@@ -180,33 +180,33 @@ class _State extends State<ProductsPage> {
     );
   }
 
-  ContextMenu _getAddNonStockableProductMenu() {
-    return ContextMenu(
-      name: 'Add non-stock product',
-      pressed: () {
-        widget.onChangePage(
-          ProductCreatePage(
-            inventoryType: InventoryType.nonStockProduct,
-            onBackPage: widget.onBackPage,
-          ),
-        );
-      },
-    );
-  }
+  // ContextMenu _getAddNonStockableProductMenu() {
+  //   return ContextMenu(
+  //     name: 'Add non-stock product',
+  //     pressed: () {
+  //       widget.onChangePage(
+  //         ProductCreatePage(
+  //           inventoryType: InventoryType.nonStockProduct,
+  //           onBackPage: widget.onBackPage,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  ContextMenu _getAddServiceMenu() {
-    return ContextMenu(
-      name: 'Add raw material',
-      pressed: () {
-        widget.onChangePage(
-          ProductCreatePage(
-            inventoryType: InventoryType.rawMaterial,
-            onBackPage: widget.onBackPage,
-          ),
-        );
-      },
-    );
-  }
+  // ContextMenu _getAddServiceMenu() {
+  //   return ContextMenu(
+  //     name: 'Add raw material',
+  //     pressed: () {
+  //       widget.onChangePage(
+  //         ProductCreatePage(
+  //           inventoryType: InventoryType.rawMaterial,
+  //           onBackPage: widget.onBackPage,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   ContextMenu _getReloadMenu() {
     return ContextMenu(name: 'Reload', pressed: _reload);
@@ -244,8 +244,8 @@ class _State extends State<ProductsPage> {
   _getContextItems() {
     return [
       _getAddProductMenu(),
-      _getAddNonStockableProductMenu(),
-      _getAddServiceMenu(),
+      // _getAddNonStockableProductMenu(),
+      // _getAddServiceMenu(),
       _getExportMenu(),
       _getReloadMenu(),
       // ContextMenu(name: 'Import', pressed: () => {}),
@@ -378,25 +378,25 @@ class _State extends State<ProductsPage> {
               },
             ),
             const HorizontalLine(),
-            ListTile(
-              leading: const Icon(Icons.free_breakfast),
-              trailing: const Icon(Icons.chevron_right),
-              title: Text(_getAddNonStockableProductMenu().name),
-              onTap: () {
-                _getAddNonStockableProductMenu().pressed();
-                Navigator.of(context).maybePop();
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.free_breakfast),
+            //   trailing: const Icon(Icons.chevron_right),
+            //   title: Text(_getAddNonStockableProductMenu().name),
+            //   onTap: () {
+            //     _getAddNonStockableProductMenu().pressed();
+            //     Navigator.of(context).maybePop();
+            //   },
+            // ),
             const HorizontalLine(),
-            ListTile(
-              leading: const Icon(Icons.home_repair_service_rounded),
-              trailing: const Icon(Icons.chevron_right),
-              title: Text(_getAddServiceMenu().name),
-              onTap: () {
-                _getAddServiceMenu().pressed();
-                Navigator.of(context).maybePop();
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.home_repair_service_rounded),
+            //   trailing: const Icon(Icons.chevron_right),
+            //   title: Text(_getAddServiceMenu().name),
+            //   onTap: () {
+            //     _getAddServiceMenu().pressed();
+            //     Navigator.of(context).maybePop();
+            //   },
+            // ),
             const HorizontalLine(),
             ListTile(
               leading: const Icon(Icons.file_download_rounded),

@@ -1,10 +1,10 @@
 import 'package:bfast/util.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/text_input.dart';
@@ -203,26 +203,26 @@ class _State extends State<LoginForm> {
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 height: 48,
                 width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(48)
+                ),
                 child: TextButton(
                   onPressed: () => _loginPressed(states, updateState, context),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.tertiary),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                      (states) {
-                        return states.contains(MaterialState.pressed)
-                            ? Theme.of(context).colorScheme.onTertiaryContainer
-                            : null;
-                      },
-                    ),
-                  ),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onTertiary,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
+                  // style: ButtonStyle(
+                  //   backgroundColor: MaterialStateProperty.all(
+                  //       Theme.of(context).colorScheme.tertiary),
+                  //   overlayColor: MaterialStateProperty.resolveWith(
+                  //     (states) {
+                  //       return states.contains(MaterialState.pressed)
+                  //           ? Theme.of(context).colorScheme.onTertiaryContainer
+                  //           : null;
+                  //     },
+                  //   ),
+                  // ),
+                  child: BodyLarge(
+                    text: "Login",
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ),

@@ -7,7 +7,9 @@ import 'package:smartstock/expense/pages/index.dart';
 import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
+import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/index.dart';
+import 'package:smartstock/stocks/pages/product_create.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -100,5 +102,5 @@ void main() {
   // initializeSmartStock(
   //     onGetModulesMenu: _onGetModules,
   //     onGetInitialModule: ({required onBackPage, required onChangePage}) =>
-  //         SalesCashWhole(onBackPage: onBackPage));
+  //         ProductCreatePage(onBackPage: onBackPage, inventoryType: InventoryType.product,));
 }

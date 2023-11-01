@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -25,7 +26,6 @@ class _State extends State<ProductCreatePage> {
     return SliverSmartStockAppBar(
       title: _getPageTitle(widget.inventoryType),
       showBack: true,
-      backLink: '/stock/products',
       onBack: widget.onBackPage,
       showSearch: false,
       context: context,
@@ -33,21 +33,25 @@ class _State extends State<ProductCreatePage> {
   }
 
   @override
-  Widget build(context) => ResponsivePage(
-        current: '/stock/',
-        sliverAppBar: _appBar(context),
-        staticChildren: [
-          Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: ProductCreateForm(
-                inventoryType: widget.inventoryType,
-                onBackPage: widget.onBackPage,
-              ),
-            ),
-          )
-        ],
-      );
+  Widget build(context) {
+    return ResponsivePage(
+      sliverAppBar: _appBar(context),
+      staticChildren: [
+        // Center(
+        //   child: Container(
+        //     constraints: const BoxConstraints(maxWidth: 600),
+        //     child:
+        const WhiteSpacer(height: 24),
+        ProductCreateForm(
+          inventoryType: widget.inventoryType,
+          onBackPage: widget.onBackPage,
+        ),
+        const WhiteSpacer(height: 24),
+        //   ),
+        // )
+      ],
+    );
+  }
 
   _getPageTitle(InventoryType inventoryType) {
     switch (inventoryType) {

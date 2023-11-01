@@ -10,8 +10,9 @@ import 'package:smartstock/core/services/util.dart';
 
 class FileSelect extends StatefulWidget {
   final Function(FileData file) onFile;
+  final Widget Function(bool isEmpty, VoidCallback onPress)? builder;
 
-  const FileSelect({super.key, required this.onFile});
+  const FileSelect({super.key, required this.onFile, this.builder});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -23,11 +24,14 @@ class _State extends State<FileSelect> {
 
   @override
   Widget build(BuildContext context) {
+    var hasPreview = _fileData != null &&
+        _preview != null &&
+        _isImage(_fileData!.extension!);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _fileData != null && _preview != null && _isImage(_fileData!.extension!)
+        hasPreview
             ? Container(
                 margin: const EdgeInsets.only(bottom: 16),
                 // alignment: Alignment.topLeft,
@@ -61,17 +65,19 @@ class _State extends State<FileSelect> {
             //         },
             //       )
             : Container(),
-        Container(
-          height: 48,
-          margin: const EdgeInsets.only(bottom: 16),
-          child: OutlinedButton(
-            onPressed: _onUploadReceipt,
-            child: BodyLarge(
-              text:
-                  'Select${_fileData != null ? 'ed' : ''} file [ ${_fileData?.name ?? ''} ]',
-            ),
-          ),
-        ),
+        widget.builder != null
+            ? widget.builder!(!hasPreview, _onUploadReceipt)
+            : Container(
+                height: 48,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: OutlinedButton(
+                  onPressed: _onUploadReceipt,
+                  child: BodyLarge(
+                    text:
+                        'Select${_fileData != null ? 'ed' : ''} file [ ${_fileData?.name ?? ''} ]',
+                  ),
+                ),
+              ),
       ],
     );
   }

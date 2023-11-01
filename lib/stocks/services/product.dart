@@ -1,6 +1,9 @@
 import 'package:bfast/util.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
+import 'package:smartstock/core/services/files_api.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
@@ -25,26 +28,25 @@ _fieldIsValidString(field, product, error) {
 }
 
 _fieldIsValidNumber(field, product, error) {
-  var valid = ifDoElse(
-    (x) =>
-        doubleOrZero(
-            '${product[x] ?? ''}'.isNotEmpty ? '${product[x]}' : '0') >=
-        0,
-    (x) => true,
-    (x) {
-      error[x] = 'Required, and must be greater than zero';
-      return false;
-    },
-  );
-  return valid(field);
+  var value = doubleOrZero(
+      '${product[field] ?? ''}'.isNotEmpty ? '${product[field]}' : '-1');
+  if (kDebugMode) {
+    print(value);
+  }
+  if (value >= 0) {
+    return true;
+  } else {
+    error[field] = 'Required, and must be greater than zero';
+    return false;
+  }
 }
 
 Future<dynamic> createOrUpdateProduct(
-    context, error, loading, isUpdate, product) async {
+    context, error, loading, isUpdate, product, FileData? fileData) async {
   var invalids = [
     isUpdate ? true : _fieldIsValidString('product', product, error),
     _fieldIsValidString('category', product, error),
-    isUpdate ? true : _fieldIsValidString('supplier', product, error),
+    // isUpdate ? true : _fieldIsValidString('supplier', product, error),
     _fieldIsValidNumber('purchase', product, error),
     _fieldIsValidNumber('retailPrice', product, error),
     _fieldIsValidNumber('wholesalePrice', product, error),
@@ -54,6 +56,10 @@ Future<dynamic> createOrUpdateProduct(
     (f) => f.length > 0,
     (x) async => throw "Please, enter all required fields",
     (x) async {
+      if (fileData != null) {
+        var url = (await uploadFileToWeb3(fileData))?['link'];
+        product['images'] = url!=null?[url]:[];
+      }
       product['retailPrice'] = doubleOrZero(product['retailPrice']);
       product['barcode'] = product['barcode'] ?? '';
       product['wholesalePrice'] = doubleOrZero(product['wholesalePrice']);
@@ -61,14 +67,13 @@ Future<dynamic> createOrUpdateProduct(
         product['quantity'] = doubleOrZero(product['quantity']);
       }
       product['purchase'] = doubleOrZero(product['purchase']);
-      // product['stockable'] = true;
       product['purchasable'] = true;
       if (!isUpdate) {
         product['wholesaleQuantity'] = 1;
       }
-      if (!isUpdate) {
-        product['images'] = [];
-      }
+      // if (!isUpdate) {
+      //   product['images'] = [];
+      // }
       var shop = await getActiveShop();
       var createProduct = prepareCreateProduct(product);
       var updateProduct = prepareUpdateProductDetails({
@@ -79,6 +84,7 @@ Future<dynamic> createOrUpdateProduct(
         'purchase': product['purchase'],
         'retailPrice': product['retailPrice'],
         'wholesalePrice': product['wholesalePrice'],
+        'images': product['images'],
         'id': product['id'],
       });
       if (isUpdate) {

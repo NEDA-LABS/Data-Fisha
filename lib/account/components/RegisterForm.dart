@@ -4,6 +4,7 @@ import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
@@ -134,10 +135,7 @@ class _State extends State<RegisterForm> {
         'region': states['country'],
         'country': states['country'],
         'street': states['country'],
-        'vendor': {
-          'name': getVendorName(),
-          'cost': getVendorCost()
-        }
+        'vendor': {'name': getVendorName(), 'cost': getVendorCost()}
       };
       updateState({'loading': true});
       accountRegister(data)
@@ -301,16 +299,13 @@ class _State extends State<RegisterForm> {
               margin: const EdgeInsets.symmetric(vertical: 24),
               height: 48,
               width: MediaQuery.of(context).size.width,
-              child: ElevatedButton(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(48)
+              ),
+              child: TextButton(
                 onPressed: () => _registerPressed(states, updateState, context),
-                child: const Text(
-                  "Register",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
+                child: BodyLarge(text: "Register", color: Theme.of(context).colorScheme.onPrimary,),
               ),
             ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -37,12 +38,9 @@ class _State extends State<ProductEditPage>{
       current: '/stock/',
       sliverAppBar: _appBar(context),
       staticChildren: [
-        Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: ProductUpdateForm(widget.product, onBackPage: widget.onBackPage),
-          ),
-        )
+        const WhiteSpacer(height: 24),
+        ProductUpdateForm(widget.product, onBackPage: widget.onBackPage),
+        const WhiteSpacer(height: 24),
       ],
     );
   }

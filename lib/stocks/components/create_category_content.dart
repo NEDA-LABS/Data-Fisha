@@ -32,7 +32,7 @@ class _State extends State<CreateCategoryContent> {
         child: ListBody(
           children: [
             TextInput(
-                onText: (d) => updateState({'name': d}),
+                onText: (d) => updateState({'name':(d??'').toLowerCase().trim()}),
                 label: "Name",
                 error: err['name'] ?? ''),
             const WhiteSpacer(height: 16),
