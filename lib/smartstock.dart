@@ -69,15 +69,17 @@ class _State extends State<SmartStock> {
       return Container();
     }
     if (user is Map && propertyOrNull('username')(user) != null) {
+      var menus = widget.onGetModulesMenu(
+        context: context,
+        onChangePage: _onChangePage,
+        onBackPage: _onBackPage,
+      );
       return WillPopScope(
         child: ResponsivePageLayout(
           onGetModulesMenu: widget.onGetModulesMenu,
           onGetInitialModule: widget.onGetInitialModule,
-          menus: widget.onGetModulesMenu(
-            context: context,
-            onChangePage: _onChangePage,
-            onBackPage: _onBackPage,
-          ),
+          showLeftDrawer: menus.isNotEmpty,
+          menus: menus,
           onChangePage: _onChangePage,
           child: child ?? Container(),
         ),

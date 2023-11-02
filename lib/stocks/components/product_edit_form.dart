@@ -55,6 +55,7 @@ class _State extends State<ProductUpdateForm> {
   void initState() {
     product.addAll({
       "product": widget.product['product'],
+      "description": widget.product['description'],
       "images": widget.product['images'],
       "barcode": widget.product['barcode'] ?? '',
       "category": widget.product['category'],
@@ -75,6 +76,20 @@ class _State extends State<ProductUpdateForm> {
     } else {
       return _largeScreenView();
     }
+  }
+
+  Widget _descriptionInput(){
+    return TextInput(
+      lines: 5,
+      onText: (d) {
+        // error['product']='';
+        updateFormState({"description": d});
+      },
+      label: "Description ( Optional )",
+      // placeholder: 'Optional',
+      error: error['description'] ?? '',
+      initialText: product['description'] ?? '',
+    );
   }
 
   Widget _largeScreenView() {
@@ -201,6 +216,12 @@ class _State extends State<ProductUpdateForm> {
         Container(
           padding: padding,
           decoration: decoration,
+          child: _descriptionInput(),
+        ),
+        const WhiteSpacer(height: 16),
+        Container(
+          padding: padding,
+          decoration: decoration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -314,6 +335,12 @@ class _State extends State<ProductUpdateForm> {
               )
             ],
           ),
+        ),
+        const WhiteSpacer(height: 16),
+        Container(
+          padding: padding,
+          decoration: decoration,
+          child: _descriptionInput(),
         ),
         const WhiteSpacer(height: 16),
         Container(

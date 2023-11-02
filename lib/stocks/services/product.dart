@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
-import 'package:smartstock/core/services/files_api.dart';
+import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
@@ -78,6 +78,7 @@ Future<dynamic> createOrUpdateProduct(
       var createProduct = prepareCreateProduct(product);
       var updateProduct = prepareUpdateProductDetails({
         'barcode': product['barcode'] ?? '',
+        'description': product['description'] ?? '',
         'name': product['product'],
         'expire': product['expire'],
         'category': product['category'],

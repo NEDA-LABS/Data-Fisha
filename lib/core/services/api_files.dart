@@ -9,13 +9,13 @@ import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/util.dart';
 
-ByteStream _getByteStream(Stream<List<int>>? stream) {
+ByteStream _getByteStream(List<int>? bytes) {
   // final file = result.files.first;
   // final fileReadStream = file.readStream;
-  if (stream == null) {
+  if (bytes == null) {
     throw Exception('Cannot read file from null stream');
   }
-  return http.ByteStream(stream);
+  return http.ByteStream.fromBytes(bytes);
 }
 
 MultipartFile _getMultipartFromStream(FileData file, ByteStream stream) {

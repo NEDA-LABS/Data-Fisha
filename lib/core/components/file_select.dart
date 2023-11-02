@@ -89,7 +89,7 @@ class _State extends State<FileSelect> {
       if (mounted) {
         if (platformFile != null && platformFile.bytes != null) {
           _fileData = FileData(
-              stream: Stream.value(platformFile.bytes!.toList()),
+              stream:platformFile.bytes!.toList(),
               extension: platformFile.extension,
               size: doubleOrZero(platformFile.size),
               name: platformFile.name,

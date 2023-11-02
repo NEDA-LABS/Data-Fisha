@@ -3,13 +3,12 @@ import 'package:smartstock/account/pages/index.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
+import 'package:smartstock/ecom/pages/categories.dart';
 import 'package:smartstock/expense/pages/index.dart';
 import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
-import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/pages/product_create.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -96,11 +95,19 @@ List<ModuleMenu> _onGetModules({
   ];
 }
 
+List<ModuleMenu> _getEmptyMenu({
+  required context,
+  required onBackPage,
+  required onChangePage,
+}) =>
+    [];
+
 void main() {
   initializeSmartStock(onGetModulesMenu: _onGetModules);
   //
   // initializeSmartStock(
-  //     onGetModulesMenu: _onGetModules,
+  //     onGetModulesMenu: _getEmptyMenu,
   //     onGetInitialModule: ({required onBackPage, required onChangePage}) =>
-  //         ProductCreatePage(onBackPage: onBackPage, inventoryType: InventoryType.product,));
+  //         EComCategoriesPage(
+  //             onBackPage: onBackPage, onChangePage: onChangePage));
 }

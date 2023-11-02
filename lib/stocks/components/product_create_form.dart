@@ -14,7 +14,7 @@ import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/components/text_input.dart';
-import 'package:smartstock/core/services/files_api.dart';
+import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
@@ -63,6 +63,20 @@ class _State extends State<ProductCreateForm> {
     } else {
       return _largeScreenView();
     }
+  }
+
+  Widget _descriptionInput(){
+    return TextInput(
+      lines: 5,
+      onText: (d) {
+        // error['product']='';
+        updateFormState({"description": d});
+      },
+      label: "Description ( Optional )",
+      // placeholder: 'Optional',
+      error: error['description'] ?? '',
+      initialText: product['description'] ?? '',
+    );
   }
 
   Widget _largeScreenView() {
@@ -237,6 +251,12 @@ class _State extends State<ProductCreateForm> {
               )
             ],
           ),
+        ),
+        const WhiteSpacer(height: 16),
+        Container(
+          padding: padding,
+          decoration: decoration,
+          child: _descriptionInput(),
         ),
         const WhiteSpacer(height: 16),
         Container(
@@ -444,6 +464,12 @@ class _State extends State<ProductCreateForm> {
               )
             ],
           ),
+        ),
+        const WhiteSpacer(height: 16),
+        Container(
+          padding: padding,
+          decoration: decoration,
+          child: _descriptionInput(),
         ),
         const WhiteSpacer(height: 16),
         Container(

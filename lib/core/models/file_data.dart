@@ -1,5 +1,5 @@
 class FileData {
-  final Stream<List<int>>? stream;
+  final List<int>? stream;
   final String? path;
   final String name;
   final double size;

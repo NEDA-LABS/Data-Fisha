@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/files_api.dart';
+import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 
 class CreateCategoryContent extends StatefulWidget {
