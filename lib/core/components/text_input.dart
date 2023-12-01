@@ -15,7 +15,7 @@ class TextInput extends StatefulWidget {
   final String label;
   final Widget icon;
   final TextInputType type;
-  final int lines;
+  final int? lines;
   final dynamic debounceTime;
   final bool show;
   final bool readOnly;

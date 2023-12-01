@@ -1,25 +1,21 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
-import 'package:smartstock/core/components/ReadBarcodeView.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/components/text_input.dart';
 import 'package:smartstock/core/models/file_data.dart';
+import 'package:smartstock/core/services/custom_text_editing_controller.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
-import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
-import 'package:smartstock/stocks/services/supplier.dart';
 
 class ProductUpdateForm extends StatefulWidget {
   final Map product;
@@ -40,6 +36,8 @@ class _State extends State<ProductUpdateForm> {
   Map<String, dynamic> error = {};
   var loading = false;
   FileData? _fileData;
+  int _textAreaLines = 5;
+  CustomTextEditingController? _editTextAreaController;
 
   clearFormState() {
     product = {};
@@ -53,6 +51,24 @@ class _State extends State<ProductUpdateForm> {
 
   @override
   void initState() {
+    _editTextAreaController =
+        CustomTextEditingController({
+          r"@.\w+": const TextStyle(
+            color: Colors.blue,
+          ),
+          r"#.\w+": const TextStyle(
+            color: Colors.blue,
+          ),
+          r'_(.*?)\_': const TextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+          '~(.*?)~': const TextStyle(
+            decoration: TextDecoration.lineThrough,
+          ),
+          r'\*(.*?)\*': const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        }, text: widget.product['description'] ?? '');
     product.addAll({
       "product": widget.product['product'],
       "description": widget.product['description'],
@@ -78,17 +94,28 @@ class _State extends State<ProductUpdateForm> {
     }
   }
 
-  Widget _descriptionInput(){
-    return TextInput(
-      lines: 5,
-      onText: (d) {
-        // error['product']='';
-        updateFormState({"description": d});
-      },
-      label: "Description ( Optional )",
-      // placeholder: 'Optional',
-      error: error['description'] ?? '',
-      initialText: product['description'] ?? '',
+  Widget _descriptionInput() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const BodyLarge(text: "Description ( Optional )"),
+        TextInput(
+          lines: 6,
+          type: TextInputType.multiline,
+          controller: _editTextAreaController,
+          onText: (d) {
+            updateFormState({"description": d});
+            // var lines = d.split(RegExp("\r\n|\r|\n")).length;
+            // if (kDebugMode) {
+            //   print(d);
+            // }
+          },
+          label: "Decorate with *bold*, ~strike~, _italic_",
+          error: error['description'] ?? '',
+          initialText: product['description'] ?? '',
+        ),
+      ],
     );
   }
 
