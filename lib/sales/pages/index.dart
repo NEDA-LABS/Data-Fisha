@@ -16,6 +16,7 @@ import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/api_shop.dart';
+import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
@@ -71,7 +72,15 @@ class _State extends State<SalesPage> {
         // const WhiteSpacer(height: 8),
         loading
             ? const Center(child: CircularProgressIndicator())
-            : _getTotalSalesView(context),
+            : FutureBuilder(
+                future: getLocalCurrentUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data['role'] == 'admin') {
+                    return _getTotalSalesView(context);
+                  }
+                  return Container();
+                },
+              ),
       ],
       sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
