@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class BodyMedium extends StatelessWidget{
   final String text;
+  final Color? color;
 
-  const BodyMedium({Key? key, required this.text}) : super(key: key);
+  const BodyMedium({Key? key, required this.text, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

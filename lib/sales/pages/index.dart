@@ -13,6 +13,7 @@ import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/with_rbac.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/api_shop.dart';
@@ -24,6 +25,7 @@ import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/pages/sales_orders.dart';
 import 'package:smartstock/sales/pages/sold_items.dart';
 import 'package:smartstock/sales/services/index.dart';
 
@@ -111,7 +113,12 @@ class _State extends State<SalesPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _getRevenueCards(),
+          WithRoleBasedAccessControl(
+            onChild: (shop) {
+              return _getRevenueCards();
+            },
+            roles: const ['admin'],
+          ),
           _getSoldItemsTable(true),
           _getReceiptsTable(true),
           _getInvoicesTable(true),
@@ -132,7 +139,12 @@ class _State extends State<SalesPage> {
               ),
               Expanded(
                 flex: 2,
-                child: _getRevenueCards(),
+                child: WithRoleBasedAccessControl(
+                  onChild: (shop) {
+                    return _getRevenueCards();
+                  },
+                  roles: const ['admin'],
+                ),
               ),
             ],
           ),
@@ -194,6 +206,16 @@ class _State extends State<SalesPage> {
         roles: [],
         onClick: () =>
             widget.onChangePage(CustomersPage(onBackPage: widget.onBackPage)),
+      ),
+      ModulePageMenu(
+        name: 'Orders',
+        link: '/sales/orders',
+        icon: Icons.receipt_long,
+        roles: [],
+        onClick: () => widget.onChangePage(OrdersPage(
+          onBackPage: widget.onBackPage,
+          onChangePage: widget.onChangePage,
+        )),
       ),
     ];
   }
@@ -281,10 +303,6 @@ class _State extends State<SalesPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.0),
-          child: BodyLarge(text: "Today's revenue"),
-        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [cashSales, invoiceSales],

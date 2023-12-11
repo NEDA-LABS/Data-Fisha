@@ -2,6 +2,7 @@ import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
@@ -50,6 +51,14 @@ class _InvoicesPage extends State<InvoicesPage> {
       showSearch: true,
       onBack: widget.onBackPage,
       searchByView: SearchByContainer(
+        filters: [
+          SearchByFilter(
+              child: const BodyLarge(text: "Customer name"),
+              value: {'name': "Customer", 'value': 'customer'}),
+          SearchByFilter(
+              child: const BodyLarge(text: "Invoice date"),
+              value: {'name': "Invoice date", 'value': 'date'}),
+        ],
         currentValue: _searchByMap['name'] ?? '',
         onUpdate: (searchMap) {
           _updateState(() {

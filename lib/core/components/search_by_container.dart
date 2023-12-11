@@ -7,12 +7,26 @@ import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/services/util.dart';
 
+class SearchByFilter {
+  final Widget child;
+  final Map<String, String> value;
+
+  SearchByFilter({required this.child, required this.value});
+}
+
 class SearchByContainer extends StatelessWidget {
   final Function(Map<String, String> searchMap) onUpdate;
   final String currentValue;
+  final String title;
+  final List<SearchByFilter> filters;
 
-  const SearchByContainer(
-      {super.key, required this.onUpdate, required this.currentValue});
+  const SearchByContainer({
+    super.key,
+    required this.onUpdate,
+    required this.currentValue,
+    required this.filters,
+    this.title = "Choose a filter",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,41 +66,40 @@ class SearchByContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Row(
+              Row(
                 children: [
-                  WhiteSpacer(width: 8),
-                  Icon(Icons.filter_list),
-                  WhiteSpacer(width: 8),
-                  TitleMedium(text: "Choose a filter"),
+                  const WhiteSpacer(width: 8),
+                  const Icon(Icons.filter_list),
+                  const WhiteSpacer(width: 8),
+                  TitleMedium(text: title),
                 ],
               ),
               const WhiteSpacer(height: 16),
-              ListTile(
-                onTap: () {
-                  onUpdate({'name': "Customer", 'value': 'customer'});
-                  Navigator.of(context).maybePop();
-                },
-                title: const BodyLarge(text: "Customer name"),
-              ),
-              const HorizontalLine(),
-              ListTile(
-                onTap: () {
-                  onUpdate({'name': "Invoice date", 'value': 'date'});
-                  Navigator.of(context).maybePop();
-                },
-                title: const BodyLarge(text: "Invoice date"),
-              ),
+              ...filters.map((e) {
+                return ListTile(
+                  onTap: () {
+                    onUpdate(e.value);
+                    Navigator.of(context).maybePop();
+                  },
+                  title: e.child,
+                  subtitle: const HorizontalLine(),
+                );
+              }),
+              // ListTile(
+              //   onTap: () {
+              //     onUpdate({'name': "Customer", 'value': 'customer'});
+              //     Navigator.of(context).maybePop();
+              //   },
+              //   title: const BodyLarge(text: "Customer name"),
+              // ),
               // const HorizontalLine(),
               // ListTile(
               //   onTap: () {
-              //     _updateState(() {
-              //       _searchByMap = {'name': "Invoice due date", 'value': 'due'};
-              //     });
+              //     onUpdate({'name': "Invoice date", 'value': 'date'});
               //     Navigator.of(context).maybePop();
               //   },
-              //   title: const BodyLarge(text: "Invoice due date"),
+              //   title: const BodyLarge(text: "Invoice date"),
               // ),
-              // const HorizontalLine()
             ],
           ),
         ),

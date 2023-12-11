@@ -16,7 +16,7 @@ invoiceDetails(context, item) => ListView(
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
         ),
         _tableHeader(),
-        ...item['items']
+        ...itOrEmptyArray(item['items'])
             .map<Widget>((item) => TableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
@@ -34,7 +34,7 @@ invoiceDetails(context, item) => ListView(
                         TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
               )
             : Container(),
-        ..._getPayments(item['payments'])
+        ...itOrEmptyArray(_getPayments(item['payments']))
             .map<Widget>((item) => TableLikeListRow([
                   Container(
                       margin: const EdgeInsets.symmetric(
