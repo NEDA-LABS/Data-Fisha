@@ -21,6 +21,7 @@ class FileSelect extends StatefulWidget {
 class _State extends State<FileSelect> {
   FileData? _fileData;
   Uint8List? _preview;
+  List<Uint8List?>? _previews;
 
   @override
   Widget build(BuildContext context) {
@@ -33,43 +34,33 @@ class _State extends State<FileSelect> {
       children: [
         hasPreview
             ? Container(
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 8),
                 // alignment: Alignment.topLeft,
-                constraints: const BoxConstraints(
-                  maxHeight: 350,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.memory(_preview!, fit: BoxFit.cover),
+          height: 150,
+                // constraints: const BoxConstraints(maxHeight: 150),
+                child: SingleChildScrollView(
+                  child: Row(
+                    children: justArray(_preview).map(
+                      (e) {
+                        return SizedBox(
+                          width: 150,
+                          height: 150,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.memory(_preview!, fit: BoxFit.cover),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
                 ),
               )
-            // StreamBuilder(
-            //         stream: _previewController.stream,
-            //         builder: (context, snapshot) {
-            //           if (snapshot.hasData) {
-            //             // _stream = snapshot.data!;
-            //             return Container(
-            //               margin: const EdgeInsets.only(bottom: 16),
-            //               // alignment: Alignment.topLeft,
-            //               constraints: const BoxConstraints(
-            //                 maxHeight: 350,
-            //               ),
-            //               child: ClipRRect(
-            //                 borderRadius: BorderRadius.circular(8),
-            //                 child: Image.memory(_preview!,
-            //                     fit: BoxFit.cover),
-            //               ),
-            //             );
-            //           }
-            //           return Container();
-            //         },
-            //       )
             : Container(),
         widget.builder != null
             ? widget.builder!(!hasPreview, _onUploadReceipt)
             : Container(
                 height: 48,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 8),
                 child: OutlinedButton(
                   onPressed: _onUploadReceipt,
                   child: BodyLarge(
@@ -89,24 +80,13 @@ class _State extends State<FileSelect> {
       if (mounted) {
         if (platformFile != null && platformFile.bytes != null) {
           _fileData = FileData(
-              stream:platformFile.bytes!.toList(),
+              stream: platformFile.bytes!.toList(),
               extension: platformFile.extension,
               size: doubleOrZero(platformFile.size),
               name: platformFile.name,
               path: null);
-          // final subscription = platformFile.readStream?.listen(null);
-          // subscription?.onData((event) {
-          // Update onData after listening.
           _preview = platformFile.bytes;
-          // subscription.cancel();
           setState(() {});
-          // });
-          // platformFile.readStream?.listen((event) {
-          //
-          // },).cancel();
-          // platformFile.readStream?.single.then((value){
-          //   _previewController.sink.add();
-          // });
           widget.onFile(_fileData!);
         } else {
           showInfoDialog(context, "Fail to get selected file");

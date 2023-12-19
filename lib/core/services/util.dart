@@ -25,7 +25,21 @@ String shopFunctionsURL(App app) =>
 shopToApp(x) =>
     App(applicationId: x['applicationId'], projectId: x['projectId']);
 
-var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (_) => []);
+List itOrEmptyArray(x) {
+  if (x is List) {
+    return x;
+  }
+  return [];
+}
+
+List justArray(x) {
+  if (x is List) {
+    return x;
+  }
+  return [x];
+}
+
+// var itOrEmptyArray = ifDoElse((x) => x is List, (x) => x, (_) => []);
 
 getStockQuantity({stock}) {
   if (stock == null) return 0;

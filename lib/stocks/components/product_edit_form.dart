@@ -14,6 +14,7 @@ import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/custom_text_editing_controller.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
+import 'package:smartstock/stocks/helpers/markdown_map.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
 
@@ -36,7 +37,6 @@ class _State extends State<ProductUpdateForm> {
   Map<String, dynamic> error = {};
   var loading = false;
   FileData? _fileData;
-  int _textAreaLines = 5;
   CustomTextEditingController? _editTextAreaController;
 
   clearFormState() {
@@ -52,23 +52,7 @@ class _State extends State<ProductUpdateForm> {
   @override
   void initState() {
     _editTextAreaController =
-        CustomTextEditingController({
-          r"@.\w+": const TextStyle(
-            color: Colors.blue,
-          ),
-          r"#.\w+": const TextStyle(
-            color: Colors.blue,
-          ),
-          r'_(.*?)\_': const TextStyle(
-            fontStyle: FontStyle.italic,
-          ),
-          '~(.*?)~': const TextStyle(
-            decoration: TextDecoration.lineThrough,
-          ),
-          r'\*(.*?)\*': const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        }, text: widget.product['description'] ?? '');
+        CustomTextEditingController(textEditorMarkdownMap, text: widget.product['description'] ?? '');
     product.addAll({
       "product": widget.product['product'],
       "description": widget.product['description'],
@@ -106,10 +90,6 @@ class _State extends State<ProductUpdateForm> {
           controller: _editTextAreaController,
           onText: (d) {
             updateFormState({"description": d});
-            // var lines = d.split(RegExp("\r\n|\r|\n")).length;
-            // if (kDebugMode) {
-            //   print(d);
-            // }
           },
           label: "Decorate with *bold*, ~strike~, _italic_",
           error: error['description'] ?? '',

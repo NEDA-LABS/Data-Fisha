@@ -37,18 +37,12 @@ class _State extends State<ProductCreatePage> {
     return ResponsivePage(
       sliverAppBar: _appBar(context),
       staticChildren: [
-        // Center(
-        //   child: Container(
-        //     constraints: const BoxConstraints(maxWidth: 600),
-        //     child:
         const WhiteSpacer(height: 24),
         ProductCreateForm(
           inventoryType: widget.inventoryType,
           onBackPage: widget.onBackPage,
         ),
         const WhiteSpacer(height: 24),
-        //   ),
-        // )
       ],
     );
   }
