@@ -27,7 +27,7 @@ _registerHttp(data) async {
 
 _resetHttp(username) async {
   var a = await http.get(
-      Uri.parse('$baseUrl/account/reset?username=$username}'),
+      Uri.parse('$baseUrl/account/reset?username=$username'),
       headers: getInitialHeaders());
   return RawResponse(body: a.body, statusCode: a.statusCode);
 }
