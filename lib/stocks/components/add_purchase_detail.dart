@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 
 import '../../core/components/BodyLarge.dart';
 

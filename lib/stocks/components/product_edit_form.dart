@@ -9,7 +9,7 @@ import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/custom_text_editing_controller.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -52,7 +52,7 @@ class _State extends State<ProductUpdateForm> {
   @override
   void initState() {
     _editTextAreaController =
-        CustomTextEditingController(textEditorMarkdownMap, text: widget.product['description'] ?? '');
+        CustomTextEditingController(getTextEditorMDMap, text: widget.product['description'] ?? '');
     product.addAll({
       "product": widget.product['product'],
       "description": widget.product['description'],

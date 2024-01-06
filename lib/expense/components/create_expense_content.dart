@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/util.dart';

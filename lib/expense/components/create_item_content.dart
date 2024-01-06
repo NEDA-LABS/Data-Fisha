@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/choices_input.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 import 'package:smartstock/expense/services/items.dart';

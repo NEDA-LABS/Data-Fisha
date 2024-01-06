@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/button.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/services/util.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
   final List items;
@@ -36,7 +37,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   _getItems(String q) =>
       compute(_filterAndSort, {"items": widget.items, "q": q});
 
-  _searchInput() {
+  _getSearchInput() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: TextInput(
@@ -48,7 +49,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
             });
           });
         },
-        placeholder: 'Search...',
+        placeholder: 'Filter...',
       ),
     );
   }
@@ -60,7 +61,8 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       itemBuilder: (context, index) {
         return widget.multiple
             ? CheckboxListTile(
-                title: Text('${widget.onTitle(items[index]) ?? ''}'),
+                title: Text(firstLetterUpperCase(
+                    '${widget.onTitle(items[index]) ?? ''}')),
                 value: checked[index] ?? false,
                 onChanged: (v) {
                   setState(() {
@@ -75,7 +77,9 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
                 },
               )
             : ListTile(
-                title: Text('${widget.onTitle(items[index]) ?? ''}'),
+                title: BodyLarge(
+                    text: firstLetterUpperCase(
+                        '${widget.onTitle(items[index]) ?? ''}')),
                 onTap: () {
                   widget.onText(widget.onTitle(items[index]));
                   Navigator.of(context).maybePop();
@@ -106,29 +110,10 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(
-            children: [
-              Expanded(flex: 1, child: BodyLarge(text: widget.label)),
-              const WhiteSpacer(width: 16),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).maybePop();
-                },
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              )
-            ],
-          ),
-          _searchInput(),
+          _getHeader(),
+          _getSearchInput(),
           _itemsList(),
-          // outlineActionButton(
-          //   title: 'Close',
-          //   onPressed: () {
-          //     Navigator.of(context).maybePop();
-          //   },
-          // )
+          _getBottomActions()
         ],
       ),
     );
@@ -138,6 +123,30 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   void dispose() {
     _debounce?.cancel();
     super.dispose();
+  }
+
+  _getHeader() {
+    var text =
+        widget.label.split(' ').map((e) => firstLetterUpperCase(e)).join(' ');
+    onClose() => Navigator.of(context).maybePop();
+    var icon = Icon(Icons.close, color: Theme.of(context).colorScheme.error);
+    return Row(
+      children: [
+        Expanded(flex: 1, child: BodyLarge(text: text)),
+        const WhiteSpacer(width: 16),
+        IconButton(onPressed: onClose, icon: icon)
+      ],
+    );
+  }
+
+  _getBottomActions() {
+    return Row(
+      children: [
+        FilledButton(onPressed: () {
+
+        }, child: BodyLarge(text: "Create new",))
+      ],
+    );
   }
 }
 

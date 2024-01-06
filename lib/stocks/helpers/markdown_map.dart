@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var textEditorMarkdownMap = {
+var getTextEditorMDMap = {
   r"@.\w+": const TextStyle(
     color: Colors.blue,
   ),

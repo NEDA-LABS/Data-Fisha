@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/choice_input_dropdown.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 import 'package:smartstock/core/services/util.dart';
@@ -79,9 +80,10 @@ class _State extends State<ChoicesInput> {
         decoration: InputDecoration(
           hintText: widget.placeholder,
           hintStyle: const TextStyle(
-              color: Color(0xffb0b0b0),
-              fontSize: 14,
-              fontWeight: FontWeight.w300),
+            color: Color(0xffb0b0b0),
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(8),
         ),
@@ -141,12 +143,10 @@ class _State extends State<ChoicesInput> {
               );
             },
           )
-        : showModalBottomSheet(
-            isScrollControlled: true,
-            enableDrag: true,
-            context: context,
-            builder: (context) => FractionallySizedBox(
-              heightFactor: 0.7,
+        : fullScreeDialog(
+            context,
+            (p0) => Container(
+              color: Theme.of(context).colorScheme.surface,
               child: ChoiceInputDropdown(
                 items: itOrEmptyArray(_getData(_states)),
                 onTitle: onField,
@@ -156,6 +156,21 @@ class _State extends State<ChoicesInput> {
               ),
             ),
           );
+    // showModalBottomSheet(
+    //         isScrollControlled: true,
+    //         enableDrag: true,
+    //         context: context,
+    //         builder: (context) => FractionallySizedBox(
+    //           heightFactor: 0.9,
+    //           child: ChoiceInputDropdown(
+    //             items: itOrEmptyArray(_getData(_states)),
+    //             onTitle: onField,
+    //             onText: onText,
+    //             multiple: widget.multiple,
+    //             label: widget.placeholder,
+    //           ),
+    //         ),
+    //       );
   }
 
   _showDialogForAdd(Widget content, context) => showDialog(

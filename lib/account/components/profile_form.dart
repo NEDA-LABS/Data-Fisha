@@ -3,7 +3,7 @@ import 'package:smartstock/account/services/api_account.dart';
 import 'package:smartstock/account/services/profile.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 
 class ProfileForm extends StatefulWidget {

@@ -7,7 +7,7 @@ import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 

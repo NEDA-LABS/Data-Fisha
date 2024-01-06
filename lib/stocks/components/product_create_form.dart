@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/CardRoot.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
+import 'package:smartstock/core/components/TextAreaInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
-import 'package:smartstock/core/components/text_input.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/custom_text_editing_controller.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
+import 'package:smartstock/stocks/components/ProductNameInput.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/helpers/markdown_map.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
-
-import '../../core/models/file_data.dart';
 
 class ProductCreateForm extends StatefulWidget {
   final InventoryType inventoryType;
@@ -39,7 +42,6 @@ class _State extends State<ProductCreateForm> {
   Map<String, dynamic> error = {};
   FileData? _fileData;
   var loading = false;
-  CustomTextEditingController? _editTextAreaController;
 
   clearFormState() {
     product = {};
@@ -53,8 +55,6 @@ class _State extends State<ProductCreateForm> {
 
   @override
   void initState() {
-    _editTextAreaController =
-        CustomTextEditingController(textEditorMarkdownMap);
     super.initState();
   }
 
@@ -63,47 +63,29 @@ class _State extends State<ProductCreateForm> {
     return WithActiveShop(onChild: (shop) {
       var isSmallScreen = getIsSmallScreen(context);
       if (isSmallScreen) {
-        return _smallScreenView(shop);
+        return _getSmallScreenView(shop);
       } else {
-        return _largeScreenView(shop);
+        return _getLargeScreenView(shop);
       }
     });
   }
 
-  Widget _descriptionInput() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const BodyLarge(text: "Description ( Optional )"),
-        TextInput(
-          lines: 6,
-          type: TextInputType.multiline,
-          controller: _editTextAreaController,
-          onText: (d) {
-            updateFormState({"description": d});
-          },
-          label: "Decorate with *bold*, ~strike~, _italic_",
-          error: error['description'] ?? '',
-        ),
-      ],
+  Widget _getDescriptionInput() {
+    return ProductDescriptionInput(
+      onText: (d) => updateFormState({"description": d}),
+      error: error['description'] ?? '',
     );
   }
 
-  Widget _productNameInput() {
-    return TextInput(
-      onText: (d) {
-        // error['product']='';
-        updateFormState({"product": d});
-      },
-      label: "Name",
-      placeholder: 'Brand + generic name',
+  Widget _getProductNameInput() {
+    return ProductNameInput(
+      onText: (d) => updateFormState({"product": d}),
+      // text: product['product'] ?? '',
       error: error['product'] ?? '',
-      initialText: product['product'] ?? '',
     );
   }
 
-  Widget _categoryInput() {
+  Widget _getCategoryInput() {
     return ChoicesInput(
       onText: (d) {
         updateFormState({"category": d});
@@ -141,53 +123,53 @@ class _State extends State<ProductCreateForm> {
       },
       builder: (isEmpty, onPress) {
         return InkWell(
-          onTap: onPress,
-          child:
-          // isEmpty
-          //     ?
-          LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Container(
-                        height: 100,
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.only(top: 36),
-                        width: constraints.maxWidth,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.background,
-                              width: 1),
-                        ),
-                        child: const Row(
+            onTap: onPress,
+            child:
+                // isEmpty
+                //     ?
+                LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                    height: 100,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(top: 36),
+                    width: constraints.maxWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.background,
+                          width: 1),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.image_outlined),
+                        WhiteSpacer(width: 16),
+                        Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.image_outlined),
-                            WhiteSpacer(width: 16),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                BodyLarge(text: "Click to select image"),
-                                WhiteSpacer(height: 6),
-                                LabelLarge(
-                                    text: "File should not exceed 2MB."
-                                        " Recommended ration 1:1",
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            )
+                            BodyLarge(text: "Click to select image"),
+                            WhiteSpacer(height: 6),
+                            LabelLarge(
+                              text: "File should not exceed 2MB."
+                                  " Recommended ration 1:1",
+                              color: Colors.grey,
+                            ),
                           ],
-                        ));
-                  },
-                )
-              // : Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //     child: LabelLarge(
-              //       text: 'Change image',
-              //       color: Theme.of(context).colorScheme.primary,
-              //     ),
-              //   ),
-        );
+                        )
+                      ],
+                    ));
+              },
+            )
+            // : Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //     child: LabelLarge(
+            //       text: 'Change image',
+            //       color: Theme.of(context).colorScheme.primary,
+            //     ),
+            //   ),
+            );
       },
     );
   }
@@ -267,42 +249,32 @@ class _State extends State<ProductCreateForm> {
     );
   }
 
-  Widget _section({required Widget child}) {
-    var decoration = BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8));
-    var padding = const EdgeInsets.all(16);
-    return Container(
-      padding: padding,
-      decoration: decoration,
-      child: child,
-    );
-  }
-
-  Widget _largeScreenView(Map shop) {
+  Widget _getLargeScreenView(Map shop) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _section(
+        CardRoot(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                  flex: 4,
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [_productNameInput(), _categoryInput()])),
+                flex: 4,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [_getProductNameInput(), _getCategoryInput()],
+                ),
+              ),
               const WhiteSpacer(width: 8),
               Expanded(flex: 2, child: _barcodeInput())
             ],
           ),
         ),
         const WhiteSpacer(height: 16),
-        _section(child: _imagesInput()),
+        CardRoot(child: _imagesInput()),
         const WhiteSpacer(height: 16),
-        _section(
+        CardRoot(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -325,9 +297,9 @@ class _State extends State<ProductCreateForm> {
           ),
         ),
         const WhiteSpacer(height: 16),
-        _section(child: _descriptionInput()),
+        CardRoot(child: _getDescriptionInput()),
         const WhiteSpacer(height: 16),
-        _section(
+        CardRoot(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -358,12 +330,12 @@ class _State extends State<ProductCreateForm> {
     );
   }
 
-  Widget _smallScreenView(Map shop) {
+  Widget _getSmallScreenView(Map shop) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _section(
+        CardRoot(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -372,11 +344,11 @@ class _State extends State<ProductCreateForm> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _productNameInput(),
+                    _getProductNameInput(),
                     const WhiteSpacer(height: 8),
                     _barcodeInput(),
                     const WhiteSpacer(height: 8),
-                    _categoryInput(),
+                    _getCategoryInput(),
                     const WhiteSpacer(height: 16),
                     _imagesInput()
                   ],
@@ -386,7 +358,7 @@ class _State extends State<ProductCreateForm> {
           ),
         ),
         const WhiteSpacer(height: 16),
-        _section(
+        CardRoot(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -398,9 +370,9 @@ class _State extends State<ProductCreateForm> {
           ),
         ),
         const WhiteSpacer(height: 16),
-        _section(child: _descriptionInput()),
+        CardRoot(child: _getDescriptionInput()),
         const WhiteSpacer(height: 16),
-        _section(
+        CardRoot(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [_quantityInput(), _expireInput()],
@@ -424,24 +396,20 @@ class _State extends State<ProductCreateForm> {
       loading = true;
     });
     createOrUpdateProduct(
-            context,
-            error,
-            loading,
-            false,
-            {
-              ...product,
-              'stockable': true,
-              'saleable': true,
-              'purchasable': true,
-              'supplier': 'general',
-              // 'retailPrice': product['retailPrice'],
-              'wholesalePrice':
-                  product['wholesalePrice'] ?? product['retailPrice']
-            },
-            _fileData)
-        .then((value) {
-      widget.onBackPage();
-    }).catchError((error) {
+      context,
+      error,
+      loading,
+      false,
+      {
+        ...product,
+        'stockable': true,
+        'saleable': true,
+        'purchasable': true,
+        'supplier': 'general',
+        'wholesalePrice': product['wholesalePrice'] ?? product['retailPrice']
+      },
+      _fileData,
+    ).then((value) => widget.onBackPage()).catchError((error) {
       showInfoDialog(context, error);
     }).whenComplete(() {
       setState(() {
