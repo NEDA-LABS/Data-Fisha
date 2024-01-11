@@ -82,7 +82,7 @@ class _State extends State<TextInput> {
 
   _input(context) {
     return Container(
-      decoration: inputBoxDecoration(context, widget.error),
+      decoration: getInputBoxDecoration(context, widget.error),
       child: Row(
         children: [
           _fulWidthTextField(),

@@ -35,9 +35,10 @@ class _State extends State<CreateExpenseItemContent> {
               error: state['name_err'] ?? '',
             ),
             ChoicesInput(
+              choice: state['category'],
               label: "Category",
               placeholder: "Choose category",
-              onText: (d) => _updateState({'category': d, 'category_err': ''}),
+              onChoice: (d) => _updateState({'category': d, 'category_err': ''}),
               onLoad: getExpenseCategoriesFromCacheOrRemote,
               onField: (p0) => p0["name"],
               getAddWidget: () => const CreateExpenseCategoryContent(),

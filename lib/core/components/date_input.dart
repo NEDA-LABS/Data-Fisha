@@ -90,7 +90,7 @@ class _DateInputState extends State<DateInput> {
               : const SizedBox(height: 0),
           Container(
             decoration: widget.showBorder
-                ? inputBoxDecoration(context, widget.error)
+                ? getInputBoxDecoration(context, widget.error)
                 : null,
             child: Row(
               children: [

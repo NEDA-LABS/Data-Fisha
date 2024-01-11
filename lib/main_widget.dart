@@ -23,9 +23,9 @@ class _State extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     var lightTheme = ThemeData(
-        colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: true);
+        colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: false);
     var darkTheme = ThemeData(
-        colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: true);
+        colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: false);
     return MaterialApp(
       builder: (context, child) {
         return MediaQuery(

@@ -47,6 +47,7 @@ class CartDrawer extends StatefulWidget {
 }
 
 class _State extends State<CartDrawer> {
+  dynamic _customer;
   Map states = {'discount': 0, 'loading': false};
   TextEditingController controller = TextEditingController();
 
@@ -57,7 +58,7 @@ class _State extends State<CartDrawer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const TitleLarge(text:'Cart'),
+        title: const TitleLarge(text: 'Cart'),
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.surface,
         centerTitle: true,
@@ -68,23 +69,22 @@ class _State extends State<CartDrawer> {
             border: Border(
                 left: BorderSide(
                     color: Theme.of(context).colorScheme.onBackground,
-                    width: .2))
-        ),
+                    width: .2))),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             widget.showCustomerLike
                 ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ChoicesInput(
-                      initialText: widget.customer,
-                      placeholder: widget.customerLikeLabel,
-                      showBorder: true,
-                      onText: widget.onCustomer,
-                      onLoad: widget.onCustomerLikeList,
-                      getAddWidget: widget.onCustomerLikeAddWidget,
-                      onField: (x) => x['name'] ?? x['displayName']),
-                )
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ChoicesInput(
+                        choice: _customer,
+                        placeholder: widget.customerLikeLabel,
+                        showBorder: true,
+                        onChoice: widget.onCustomer,
+                        onLoad: widget.onCustomerLikeList,
+                        getAddWidget: widget.onCustomerLikeAddWidget,
+                        onField: (x) => x['name'] ?? x['displayName']??''),
+                  )
                 : Container(),
             Expanded(
               child: ListView.builder(
@@ -156,8 +156,10 @@ class _State extends State<CartDrawer> {
               .whenComplete(() => updateState({'loading': false}));
         },
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.onPrimary),
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+          foregroundColor: MaterialStateProperty.all(
+              Theme.of(context).colorScheme.onPrimary),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
         ),
         child: Row(
           children: [
@@ -186,9 +188,9 @@ class _State extends State<CartDrawer> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            const Expanded(
-                child: TitleMedium(text: "Total")),
-            TitleMedium(text: '${cartTotalAmount(carts, wholesale, onGetPrice)}')
+            const Expanded(child: TitleMedium(text: "Total")),
+            TitleMedium(
+                text: '${cartTotalAmount(carts, wholesale, onGetPrice)}')
           ],
         ),
       );
@@ -197,7 +199,7 @@ class _State extends State<CartDrawer> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            const Expanded(child: BodyLarge(text:'Discount ( TZS )')),
+            const Expanded(child: BodyLarge(text: 'Discount ( TZS )')),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5), border: Border.all()),
@@ -235,13 +237,15 @@ class _State extends State<CartDrawer> {
     return Column(
       children: [
         ListTile(
-          title: BodyLarge(text: '${cart.product['product'] ?? cart.product['name']}'),
+          title: BodyLarge(
+              text: '${cart.product['product'] ?? cart.product['name']}'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               wholesale
-                  ? BodyLarge(text:
-                      '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
+                  ? BodyLarge(
+                      text:
+                          '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
                   : BodyMedium(text: '$quantity @ $price = TZS $subTotal'),
               Row(
                 children: [

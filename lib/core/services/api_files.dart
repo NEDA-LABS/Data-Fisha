@@ -55,24 +55,31 @@ _getContentType(FileData file) {
       : null;
 }
 
-Future<Map?> uploadFileToWeb3(FileData? file) async {
+Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
   var shop = await getActiveShop();
   var base = shopFunctionsURL(shopToApp(shop));
   var url = '$base/storage';
-  if (file == null) {
+  if (files.isEmpty) {
     if (kDebugMode) {
-      print('File is empty');
+      print('Files empty');
     }
-    return null;
+    return [];
   }
 
-  ByteStream stream = _getByteStream(file.stream);
-  Map metadata = _getFileMetaData(file);
-
+  final List<Map> metadatas = [];
   final uri = Uri.parse(url);
   final request = http.MultipartRequest('POST', uri);
-  MultipartFile multipartFile = _getMultipartFromStream(file, stream);
-  request.files.add(multipartFile);
+
+  for (FileData? file in files) {
+    if (file !=null) {
+      ByteStream stream = _getByteStream(file.stream);
+      Map metadata = _getFileMetaData(file);
+      metadatas.add(metadata);
+      MultipartFile multipartFile = _getMultipartFromStream(file, stream);
+      request.files.add(multipartFile);
+    }
+  }
+
   request.headers.addAll({'Authorization': 'Bearer'});
 
   final httpClient = http.Client();
@@ -85,22 +92,34 @@ Future<Map?> uploadFileToWeb3(FileData? file) async {
   final body = await response.stream.transform(utf8.decoder).join();
   var bodyInJson = jsonDecode(body);
   var filePaths = propertyOr('urls', (p0) => [])(bodyInJson);
-  var filePath = filePaths is List ? filePaths[0] ?? "" : "";
-  var cid = '$filePath'
-      .split('/')
-      .where((element) => element.trim() != '')
-      .toList()[1];
-  var link = '$base$filePath';
-  // print(filePath);
-  // print(link);
-  // throw Exception("just fail");
-  return {
-    "cid": cid,
-    "link": link,
-    "mime": metadata['mimeType'],
-    "name": metadata['filename'],
-    "size": metadata['fileSize']
-  };
+
+  return itOrEmptyArray(filePaths).map((filePath){
+
+
+    if (kDebugMode) {
+      print('----------------');
+      print(filePath);
+      print(metadatas);
+      print('----------------');
+    }
+
+
+    var cid = '$filePath'
+        .split('/')
+        .where((element) => element.trim() != '')
+        .toList()[1];
+    var link = '$base$filePath';
+    // print(filePath);
+    // print(link);
+    // throw Exception("just fail");
+    return {
+      "cid": cid,
+      "link": link,
+      // "mime": metadata['mimeType'],
+      // "name": metadata['filename'],
+      // "size": metadata['fileSize']
+    };
+  }).toList();
 }
 
 String _getMimeType(String fileExtension) {

@@ -1,27 +1,36 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/DialogContentWrapper.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/services/util.dart';
+import 'package:crypto/crypto.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
-  final List items;
   final Function(dynamic) onTitle;
-  final Function(dynamic) onText;
+  final Function(dynamic) onChoice;
+  final dynamic choice;
   final bool multiple;
   final String label;
+  final Widget Function()? onCreateBuilder;
+  final Future Function({bool skipLocal}) onLoadDataFuture;
 
   const ChoiceInputDropdown({
     Key? key,
-    required this.items,
     required this.onTitle,
-    required this.onText,
+    required this.choice,
+    required this.onChoice,
     required this.multiple,
     required this.label,
+    required this.onLoadDataFuture,
+    this.onCreateBuilder,
   }) : super(key: key);
 
   @override
@@ -31,11 +40,64 @@ class ChoiceInputDropdown extends StatefulWidget {
 class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
   String _query = '';
   Timer? _debounce;
-  Map checked = {};
-  Set selected = {};
+  final Map _selected = {};
+  List _data = [];
+  bool _loading = false;
 
-  _getItems(String q) =>
-      compute(_filterAndSort, {"items": widget.items, "q": q});
+  @override
+  void initState() {
+    _initialFetchData();
+    super.initState();
+  }
+
+  _sha1e(dynamic data) => '${sha1.convert(utf8.encode(jsonEncode(data)))}';
+
+  _initialFetchData() {
+    _updateState(() {
+      _loading = true;
+    });
+    widget.onLoadDataFuture(skipLocal: false).then((value) async {
+      _data = itOrEmptyArray(value);
+      if (_data.isEmpty) {
+        _data = itOrEmptyArray(await widget.onLoadDataFuture(skipLocal: true));
+      }
+      return _data;
+    }).then((value) {
+      itOrEmptyArray(widget.choice).forEach((element) {
+        _selected[_sha1e(element)] = element;
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error);
+      }
+      showInfoDialog(context, error);
+    }).whenComplete(() {
+      _updateState(() {
+        _loading = false;
+      });
+    });
+  }
+
+  _onRefresh() {
+    _updateState(() {
+      _loading = true;
+    });
+    widget.onLoadDataFuture(skipLocal: true).then((value) {
+      _data = itOrEmptyArray(value);
+    }).whenComplete(() {
+      _updateState(() {
+        _loading = false;
+      });
+    });
+  }
+
+  _updateState([VoidCallback? callback]) {
+    if (mounted) {
+      setState(callback ?? () {});
+    }
+  }
+
+  _getItems(String q) => compute(_filterAndSort, {"items": _data, "q": q});
 
   _getSearchInput() {
     return Padding(
@@ -59,44 +121,63 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       itemCount: items.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
+        var text = '${widget.onTitle(items[index]) ?? ''}';
         return widget.multiple
             ? CheckboxListTile(
-                title: Text(firstLetterUpperCase(
-                    '${widget.onTitle(items[index]) ?? ''}')),
-                value: checked[index] ?? false,
+                title: Text(firstLetterUpperCase(text)),
+                value: _selected.keys.contains(_sha1e(items[index])),
                 onChanged: (v) {
                   setState(() {
-                    checked[index] = v;
                     if (v == false) {
-                      selected.remove(items[index]);
+                      _selected.remove(_sha1e(items[index]));
                     } else {
-                      selected.add(items[index]);
+                      _selected[_sha1e(items[index])] = items[index];
                     }
-                    widget.onText(selected.toList());
                   });
                 },
               )
             : ListTile(
-                title: BodyLarge(
-                    text: firstLetterUpperCase(
-                        '${widget.onTitle(items[index]) ?? ''}')),
+                title: BodyLarge(text: firstLetterUpperCase(text)),
                 onTap: () {
-                  widget.onText(widget.onTitle(items[index]));
-                  Navigator.of(context).maybePop();
+                  widget.onChoice(items[index]);
                 },
               );
       },
     );
   }
 
-  Widget _itemsListBuilder(context, snapshot) =>
-      snapshot.hasData ? _listBuilder(snapshot.data) : Container();
-
   _itemsList() {
     return Expanded(
       child: FutureBuilder<List>(
-        builder: _itemsListBuilder,
-        initialData: widget.items,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? itOrEmptyArray(snapshot.data).isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          BodyLarge(
+                            text: _query.isNotEmpty
+                                ? 'Sorry, filter "$_query" does not match any data.\n'
+                                    'Please clear filter, refresh or create new data.'
+                                : 'Sorry there is no data to show for selection.',
+                          ),
+                          const WhiteSpacer(height: 8),
+                          InkWell(
+                            hoverColor: Colors.transparent,
+                            onTap: _onRefresh,
+                            child: BodyLarge(
+                              text: 'Refresh data',
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : _listBuilder(snapshot.data)
+              : Container();
+        },
+        initialData: _data,
         future: _getItems(_query),
       ),
     );
@@ -108,11 +189,14 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _getHeader(),
+          // _getHeader(),
           _getSearchInput(),
-          _itemsList(),
+          _loading
+              ? const Expanded(
+                  child: Center(child: CircularProgressIndicator()))
+              : _itemsList(),
           _getBottomActions()
         ],
       ),
@@ -125,28 +209,57 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
     super.dispose();
   }
 
-  _getHeader() {
-    var text =
-        widget.label.split(' ').map((e) => firstLetterUpperCase(e)).join(' ');
+  _getBottomActions() {
     onClose() => Navigator.of(context).maybePop();
-    var icon = Icon(Icons.close, color: Theme.of(context).colorScheme.error);
-    return Row(
-      children: [
-        Expanded(flex: 1, child: BodyLarge(text: text)),
-        const WhiteSpacer(width: 16),
-        IconButton(onPressed: onClose, icon: icon)
-      ],
+    return CancelProcessButtonsRow(
+      cancelText: 'Cancel',
+      proceedText: _selected.keys.isNotEmpty
+          ? 'Proceed'
+          : (widget.onCreateBuilder != null ? 'Create new' : null),
+      onCancel: onClose,
+      onProceed: _selected.keys.isNotEmpty
+          ? () {
+              // print(_selected.keys.toList());
+              // print(_selected.values.toList());
+              widget.onChoice(_selected.values.toList());
+            }
+          : _createNewHandler,
     );
   }
 
-  _getBottomActions() {
-    return Row(
-      children: [
-        FilledButton(onPressed: () {
-
-        }, child: BodyLarge(text: "Create new",))
-      ],
-    );
+  _createNewHandler() {
+    onClose() => Navigator.of(context).maybePop();
+    if (widget.onCreateBuilder == null) {
+      onClose();
+    } else {
+      onClose().whenComplete(() {
+        var isSmallScreen = getIsSmallScreen(context);
+        isSmallScreen
+            ? fullScreeDialog(context, (p0) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: BodyLarge(
+                        text: widget.label
+                            .split(' ')
+                            .map((e) => firstLetterUpperCase(e))
+                            .join(' ')),
+                    centerTitle: true,
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  body: widget.onCreateBuilder!(),
+                );
+              })
+            : showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child:
+                        DialogContentWrapper(child: widget.onCreateBuilder!()),
+                  );
+                },
+              );
+      });
+    }
   }
 }
 

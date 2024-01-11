@@ -106,10 +106,10 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
       Map? pDetail;
-      FileData? file;
+      List<FileData?> file = [];
       await addPurchaseDetail(
           context: context,
-          onSubmit: (state, FileData? platformFile) {
+          onSubmit: (state, List<FileData?> platformFile) {
             pDetail = state;
             file = platformFile;
             Navigator.of(context).maybePop();
@@ -122,16 +122,14 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       return uploadFileToWeb3(file).then((fileResponse) {
         var createPurchase = prepareCreatePurchase({
           ...purchase,
-          'file': fileResponse is Map
-              ? {
-                  "name": fileResponse['name'],
-                  "size": fileResponse['size'],
-                  "mime": fileResponse['mime'],
-                  "link": fileResponse['link'],
-                  "cid": fileResponse['cid'],
-                  "tags": 'receipt,invoice,purchase,purchases',
-                }
-              : null
+          'file': fileResponse.map((e)=>{
+            "name": e['name'],
+            "size": e['size'],
+            "mime": e['mime'],
+            "link": e['link'],
+            "cid": e['cid'],
+            "tags": 'receipt,invoice,purchase,purchases',
+          }).toList()
         });
         return createPurchase(shop);
       });

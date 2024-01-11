@@ -39,7 +39,7 @@ class _State extends State<MobileInput> {
           children: [
             _label('Mobile'),
             Container(
-              decoration: inputBoxDecoration(context, widget.error),
+              decoration: getInputBoxDecoration(context, widget.error),
               child: TextField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.call),

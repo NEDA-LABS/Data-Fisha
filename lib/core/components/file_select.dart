@@ -9,51 +9,92 @@ import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class FileSelect extends StatefulWidget {
-  final Function(FileData file) onFile;
+  final List<FileData?>? files;
+  final Function(List<FileData?> file) onFile;
   final Widget Function(bool isEmpty, VoidCallback onPress)? builder;
 
-  const FileSelect({super.key, required this.onFile, this.builder});
+  const FileSelect({super.key, required this.onFile, this.builder, this.files});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<FileSelect> {
-  FileData? _fileData;
-  Uint8List? _preview;
-  List<Uint8List?>? _previews;
+  final List<FileData?> _filesData = [];
+
+  final List<Uint8List> _previews = [];
+
+  @override
+  void initState() {
+    setState(() {
+      if (widget.files != null) {
+        _filesData.addAll(widget.files!);
+        for (var element in _filesData) {
+          if (element?.stream != null) {
+            _previews.add(Uint8List.fromList(element!.stream!));
+          }
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var hasPreview = _fileData != null &&
-        _preview != null &&
-        _isImage(_fileData!.extension!);
+    var hasPreview = _previews.isNotEmpty;
+    // && _isImage(_filesData);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         hasPreview
-            ? Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                // alignment: Alignment.topLeft,
-          height: 150,
-                // constraints: const BoxConstraints(maxHeight: 150),
-                child: SingleChildScrollView(
-                  child: Row(
-                    children: justArray(_preview).map(
-                      (e) {
-                        return SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.memory(_preview!, fit: BoxFit.cover),
+            ? Wrap(
+                children: _previews.map(
+                  (e) {
+                    return Container(
+                      width: 90,
+                      height: 90,
+                      margin: const EdgeInsets.only(left: 8, bottom: 8),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            width: 80,
+                            height: 80,
+                            bottom: 0,
+                            left: 0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.memory(e, fit: BoxFit.cover),
+                            ),
                           ),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    var index = _previews.indexOf(e);
+                                    _previews.removeAt(index);
+                                    _filesData.removeAt(index);
+                                    widget.onFile(_filesData);
+                                  });
+                                },
+                                child: const Icon(Icons.close),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ).toList(),
               )
             : Container(),
         widget.builder != null
@@ -63,10 +104,7 @@ class _State extends State<FileSelect> {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: OutlinedButton(
                   onPressed: _onUploadReceipt,
-                  child: BodyLarge(
-                    text:
-                        'Select${_fileData != null ? 'ed' : ''} file [ ${_fileData?.name ?? ''} ]',
-                  ),
+                  child: BodyLarge(text: 'Click to select files'),
                 ),
               ),
       ],
@@ -79,15 +117,18 @@ class _State extends State<FileSelect> {
       PlatformFile? platformFile = result?.files.single;
       if (mounted) {
         if (platformFile != null && platformFile.bytes != null) {
-          _fileData = FileData(
-              stream: platformFile.bytes!.toList(),
-              extension: platformFile.extension,
-              size: doubleOrZero(platformFile.size),
-              name: platformFile.name,
-              path: null);
-          _preview = platformFile.bytes;
+          _filesData.add(FileData(
+            stream: platformFile.bytes!.toList(),
+            extension: platformFile.extension,
+            size: doubleOrZero(platformFile.size),
+            name: platformFile.name,
+            path: null,
+          ));
+          if (platformFile.bytes != null) {
+            _previews.add(platformFile.bytes!);
+          }
           setState(() {});
-          widget.onFile(_fileData!);
+          widget.onFile(_filesData);
         } else {
           showInfoDialog(context, "Fail to get selected file");
         }
@@ -110,18 +151,20 @@ class _State extends State<FileSelect> {
         .catchError(handleError);
   }
 
-  bool _isImage(String extension) {
-    var es = extension;
-    if (es == 'jpg' || es == 'png' || es == 'jpeg' || es == 'gif') {
-      return true;
-    }
-    return false;
-  }
-
-  Stream<List<int>>? _copyStream(Stream<List<int>>? stream) {
-    if (stream == null) {
-      return null;
-    }
-    return stream.map((event) => [...event]);
-  }
+// bool _isImage(List<FileData?> data) {
+//   return data.map((e) => e?.extension ?? '_').fold(true,
+//       (a, b) => a && (b == 'jpg' || b == 'png' || b == 'jpeg' || b == 'gif'));
+//   // var es = extension;
+//   // if (es == 'jpg' || es == 'png' || es == 'jpeg' || es == 'gif') {
+//   //   return true;
+//   // }
+//   // return false;
+// }
+//
+// Stream<List<int>>? _copyStream(Stream<List<int>>? stream) {
+//   if (stream == null) {
+//     return null;
+//   }
+//   return stream.map((event) => [...event]);
+// }
 }

@@ -30,6 +30,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _State extends State<RegisterForm> {
+  dynamic _country;
   Map states = {
     'loading': false,
     'username': '',
@@ -267,10 +268,13 @@ class _State extends State<RegisterForm> {
 
   _countryInput(states, updateState) {
     return ChoicesInput(
+      choice: _country,
       label: "Country",
-      initialText: states['country'],
-      onText: (x) => updateState(
-          {'country': x, 'e_country': x.isNotEmpty ? '' : 'Country required'}),
+      onChoice: (x){
+        _country=x;
+        updateState(
+            {'country': x, 'e_country': x.isNotEmpty ? '' : 'Country required'});
+      },
       error: states['e_country'] ?? '',
       onLoad: ({skipLocal = false}) async => getCountries(),
       placeholder: "Choose country",

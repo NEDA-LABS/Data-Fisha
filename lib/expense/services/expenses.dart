@@ -18,7 +18,7 @@ Future submitExpenses({
   required String name,
   required String category,
   required amount,
-  Map? file,
+  List<Map>? file,
 }) async {
   String timer = DateTime.now().toIso8601String();
   var expense = {

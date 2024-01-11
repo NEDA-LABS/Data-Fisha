@@ -23,7 +23,8 @@ class ShopUserCreatePage extends PageBase {
 class _State extends State<ShopUserCreatePage> {
   var state = {};
   var loading = false;
-  var shops = [];
+  var _shops = [];
+  dynamic _role;
 
   updateState(map) {
     map is Map
@@ -83,13 +84,14 @@ class _State extends State<ShopUserCreatePage> {
         initialText: '${state['password'] ?? ''}',
       ),
       ChoicesInput(
-        onText: (d) {
-          updateState({"role": d, 'role_e': ''});
+        choice: _role,
+        onChoice: (d) {
+          _role = d;
+          updateState({"role": d['name'], 'role_e': ''});
         },
         label: "Role",
         placeholder: 'Select',
         error: state['role_e'] ?? '',
-        initialText: state['role'] ?? '',
         // getAddWidget: () => createCategoryContent(),
         onField: (x) => '${x['name']}',
         onLoad: ({skipLocal = false}) async => [
@@ -98,22 +100,17 @@ class _State extends State<ShopUserCreatePage> {
         ],
       ),
       ChoicesInput(
-        onText: (d) {
-          // print(d);
-          // print(d.runtimeType);
-          shops = d;
+        choice:_shops,
+        onChoice: (d) {
+          _shops = itOrEmptyArray(d);
           updateState({"shops": '', 'shops_e': ''});
         },
         label: "Shops",
         placeholder: 'Select',
         error: state['shops_e'] ?? '',
-        initialText: state['shops'] ?? '',
         multiple: true,
         // getAddWidget: () => createCategoryContent(),
-        onField: (x) {
-          // print(x);
-          return '${x['businessName']}';
-        },
+        onField: (x) => '${x['businessName']}',
         onLoad: ({skipLocal = false}) async => await getUserShops(),
       ),
       Container(
@@ -144,14 +141,14 @@ class _State extends State<ShopUserCreatePage> {
     if (!(role is String && role.isNotEmpty)) {
       updateState({'role_e': 'Role required'});
     }
-    if (!(shops is List && shops.isNotEmpty)) {
+    if (!(_shops is List && _shops.isNotEmpty)) {
       updateState({'shops_e': 'Shops required'});
       return;
     }
     setState(() {
       loading = true;
     });
-    var firstShop = shops.first;
+    var firstShop = _shops.first;
     addShopUser({
       "username": username,
       "firstname": '$fullname'.replaceAll('.', ''),
@@ -162,7 +159,7 @@ class _State extends State<ShopUserCreatePage> {
       "businessName": firstShop['businessName'],
       "role": role,
       "acl": [],
-      "shops": shops.sublist(1)
+      "shops": _shops.sublist(1)
     }).then((value) {
       // print(value);
       // navigateTo('/account/users');

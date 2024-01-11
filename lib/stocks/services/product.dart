@@ -42,7 +42,7 @@ _fieldIsValidNumber(field, product, error) {
 }
 
 Future<dynamic> createOrUpdateProduct(
-    context, error, loading, isUpdate, product, FileData? fileData) async {
+    context, error, loading, isUpdate, product, List<FileData?> fileData) async {
   var invalids = [
     isUpdate ? true : _fieldIsValidString('product', product, error),
     _fieldIsValidString('category', product, error),
@@ -56,10 +56,10 @@ Future<dynamic> createOrUpdateProduct(
     (f) => f.length > 0,
     (x) async => throw "Please, enter all required fields",
     (x) async {
-      if (fileData != null) {
-        var url = (await uploadFileToWeb3(fileData))?['link'];
-        product['images'] = url!=null?[url]:[];
-      }
+
+      var urls = (await uploadFileToWeb3(fileData));
+      product['images'] = urls.map((e) => e['link']??'').toList();
+
       product['retailPrice'] = doubleOrZero(product['retailPrice']);
       product['barcode'] = product['barcode'] ?? '';
       product['wholesalePrice'] = doubleOrZero(product['wholesalePrice']);
@@ -84,7 +84,7 @@ Future<dynamic> createOrUpdateProduct(
         'category': product['category'],
         'purchase': product['purchase'],
         'retailPrice': product['retailPrice'],
-        'wholesalePrice': product['wholesalePrice'],
+        'wholesalePrice': product['retailPrice'],
         'images': product['images'],
         'id': product['id'],
       });

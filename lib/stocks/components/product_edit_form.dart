@@ -36,8 +36,9 @@ class _State extends State<ProductUpdateForm> {
   Map<String, dynamic> product = {};
   Map<String, dynamic> error = {};
   var loading = false;
-  FileData? _fileData;
+  List<FileData?> _fileData = [];
   CustomTextEditingController? _editTextAreaController;
+  List _categories = [];
 
   clearFormState() {
     product = {};
@@ -51,8 +52,8 @@ class _State extends State<ProductUpdateForm> {
 
   @override
   void initState() {
-    _editTextAreaController =
-        CustomTextEditingController(getTextEditorMDMap, text: widget.product['description'] ?? '');
+    _editTextAreaController = CustomTextEditingController(getTextEditorMDMap,
+        text: widget.product['description'] ?? '');
     product.addAll({
       "product": widget.product['product'],
       "description": widget.product['description'],
@@ -144,14 +145,18 @@ class _State extends State<ProductUpdateForm> {
                     ),
                     // const WhiteSpacer(height: 8),
                     ChoicesInput(
-                      onText: (d) {
-                        updateFormState({"category": d});
+                      choice: _categories,
+                      onChoice: (d) {
+                        _categories = itOrEmptyArray(d);
+                        updateFormState({
+                          "category":
+                              _categories.map((e) => e['name'] ?? '').join(',')
+                        });
                         refresh();
                       },
                       label: "Category",
                       placeholder: 'Select category',
                       error: error['category'] ?? '',
-                      initialText: product['category'] ?? '',
                       getAddWidget: () => const CreateCategoryContent(),
                       onField: (x) => '${x['name']}',
                       onLoad: getCategoryFromCacheOrRemote,
@@ -323,14 +328,18 @@ class _State extends State<ProductUpdateForm> {
                     ),
                     const WhiteSpacer(height: 8),
                     ChoicesInput(
-                      onText: (d) {
-                        updateFormState({"category": d});
+                      choice: _categories,
+                      onChoice: (d) {
+                        _categories = itOrEmptyArray(d);
+                        updateFormState({
+                          "category":
+                              _categories.map((e) => e['name'] ?? '').join(',')
+                        });
                         refresh();
                       },
                       label: "Category",
                       placeholder: 'Select category',
                       error: error['category'] ?? '',
-                      initialText: product['category'] ?? '',
                       getAddWidget: () => const CreateCategoryContent(),
                       onField: (x) => '${x['name']}',
                       onLoad: getCategoryFromCacheOrRemote,

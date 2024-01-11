@@ -2,23 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CardRoot.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/LabelMedium.dart';
-import 'package:smartstock/core/components/TextAreaInput.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
-import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/services/custom_text_editing_controller.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
 import 'package:smartstock/stocks/components/ProductNameInput.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
-import 'package:smartstock/stocks/helpers/markdown_map.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/services/category.dart';
 import 'package:smartstock/stocks/services/product.dart';
@@ -40,7 +36,8 @@ class ProductCreateForm extends StatefulWidget {
 class _State extends State<ProductCreateForm> {
   Map<String, dynamic> product = {};
   Map<String, dynamic> error = {};
-  FileData? _fileData;
+  List<FileData?> _fileData = [];
+  List _categories = [];
   var loading = false;
 
   clearFormState() {
@@ -87,14 +84,18 @@ class _State extends State<ProductCreateForm> {
 
   Widget _getCategoryInput() {
     return ChoicesInput(
-      onText: (d) {
-        updateFormState({"category": d});
+      multiple: true,
+      choice: _categories,
+      onChoice: (d) {
+        _categories = itOrEmptyArray(d);
+        updateFormState(
+            {"category": _categories.map((e) => e['name']).join(',')});
+        // d['name']??''
         refresh();
       },
-      label: "Category",
-      placeholder: 'Select category',
+      label: "Categories",
+      placeholder: '',
       error: error['category'] ?? '',
-      initialText: product['category'] ?? '',
       getAddWidget: () => const CreateCategoryContent(),
       onField: (x) => '${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
@@ -117,22 +118,23 @@ class _State extends State<ProductCreateForm> {
   }
 
   Widget _imagesInput() {
+    // return Container();
     return FileSelect(
+      files: _fileData,
       onFile: (file) {
         _fileData = file;
       },
       builder: (isEmpty, onPress) {
-        return InkWell(
+        return Container(
+          margin: const EdgeInsets.only(top: 16),
+          child: InkWell(
             onTap: onPress,
-            child:
-                // isEmpty
-                //     ?
-                LayoutBuilder(
+            child: LayoutBuilder(
               builder: (context, constraints) {
                 return Container(
-                    height: 100,
+                    // height: 10,
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.only(top: 36),
+                    padding: const EdgeInsets.all(8),
                     width: constraints.maxWidth,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -140,36 +142,26 @@ class _State extends State<ProductCreateForm> {
                           color: Theme.of(context).colorScheme.background,
                           width: 1),
                     ),
-                    child: const Row(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.image_outlined),
-                        WhiteSpacer(width: 16),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BodyLarge(text: "Click to select image"),
-                            WhiteSpacer(height: 6),
-                            LabelLarge(
-                              text: "File should not exceed 2MB."
-                                  " Recommended ration 1:1",
-                              color: Colors.grey,
-                            ),
-                          ],
-                        )
+                        BodyLarge(text: "Click to select image"),
+                        WhiteSpacer(height: 6),
+                        LabelLarge(
+                          textAlign: TextAlign.center,
+                          text: "File should not exceed 2MB."
+                              "Recommended ration 1:1",
+                          color: Colors.grey,
+                        ),
                       ],
                     ));
               },
-            )
-            // : Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            //     child: LabelLarge(
-            //       text: 'Change image',
-            //       color: Theme.of(context).colorScheme.primary,
-            //     ),
-            //   ),
-            );
+            ),
+          ),
+        );
       },
     );
   }
@@ -185,17 +177,17 @@ class _State extends State<ProductCreateForm> {
     );
   }
 
-  Widget _wholesalePriceInput(Map shop) {
-    return TextInput(
-      onText: (d) => updateFormState({"wholesalePrice": d}),
-      label:
-          "Wholesale price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
-      placeholder: "",
-      error: error['wholesalePrice'] ?? '',
-      initialText: '${product['wholesalePrice'] ?? ''}',
-      type: TextInputType.number,
-    );
-  }
+  // Widget _wholesalePriceInput(Map shop) {
+  //   return TextInput(
+  //     onText: (d) => updateFormState({"wholesalePrice": d}),
+  //     label:
+  //         "Wholesale price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+  //     placeholder: "",
+  //     error: error['wholesalePrice'] ?? '',
+  //     initialText: '${product['wholesalePrice'] ?? ''}',
+  //     type: TextInputType.number,
+  //   );
+  // }
 
   Widget _costPriceInput(Map shop) {
     return TextInput(
@@ -282,17 +274,17 @@ class _State extends State<ProductCreateForm> {
                 children: [
                   Expanded(flex: 1, child: _priceInput(shop)),
                   const WhiteSpacer(width: 8),
-                  Expanded(flex: 1, child: _wholesalePriceInput(shop))
+                  Expanded(flex: 1, child: _costPriceInput(shop))
                 ],
               ),
               const WhiteSpacer(height: 8),
-              Row(
-                children: [
-                  Expanded(flex: 1, child: _costPriceInput(shop)),
-                  const WhiteSpacer(width: 8),
-                  Expanded(flex: 1, child: Container())
-                ],
-              )
+              // Row(
+              //   children: [
+              //     Expanded(flex: 1, child: _costPriceInput(shop)),
+              //     const WhiteSpacer(width: 8),
+              //     Expanded(flex: 1, child: Container())
+              //   ],
+              // )
             ],
           ),
         ),
@@ -363,7 +355,7 @@ class _State extends State<ProductCreateForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _priceInput(shop),
-              _wholesalePriceInput(shop),
+              // _wholesalePriceInput(shop),
               const WhiteSpacer(height: 8),
               _costPriceInput(shop)
             ],

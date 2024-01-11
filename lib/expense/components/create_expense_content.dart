@@ -37,7 +37,7 @@ class _State extends State<CreateExpenseContent> {
     "req_err": "",
     "creating": false
   };
-  FileData? _platformFile;
+  List<FileData?> _platformFile = [];
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +61,11 @@ class _State extends State<CreateExpenseContent> {
               onText: (d) => _updateState({'name': d, 'name_err': ''}),
             ),
             ChoicesInput(
+              choice: state['category'],
               label: "Category",
               placeholder: "Click to select",
               error: state['category_err'] ?? '',
-              onText: (d) => _updateState({'category': d, 'category_err': ''}),
+              onChoice: (d) => _updateState({'category': d, 'category_err': ''}),
               onLoad: getExpenseCategoriesFromCacheOrRemote,
               onField: (p0) {
                 // _categories[p0['name']] = p0['category'];
@@ -169,16 +170,14 @@ class _State extends State<CreateExpenseContent> {
               date: date,
               category: category,
               amount: amount,
-              file: fileResponse is Map
-                  ? {
-                      "name": fileResponse['name'],
-                      "size": fileResponse['size'],
-                      "mime": fileResponse['mime'],
-                      "link": fileResponse['link'],
-                      "cid": fileResponse['cid'],
-                      "tags": 'receipt,expense,expenses',
-                    }
-                  : null);
+              file: fileResponse.map((e) => {
+                "name": e['name'],
+                "size": e['size'],
+                "mime": e['mime'],
+                "link": e['link'],
+                "cid": e['cid'],
+                "tags": 'receipt,expense,expenses',
+              }).toList());
         })
         .catchError((e) => showInfoDialog(context, e))
         .then((value) => showInfoDialog(context, 'Expense created successful'))
