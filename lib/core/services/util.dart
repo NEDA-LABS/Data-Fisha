@@ -22,8 +22,8 @@ String shopFunctionsURL(App app) =>
 shopToApp(x) =>
     App(applicationId: x['applicationId'], projectId: x['projectId']);
 
-List itOrEmptyArray(x) {
-  if (x is List) {
+List<T> itOrEmptyArray<T>(x) {
+  if (x is List<T>) {
     return x;
   }
   return [];

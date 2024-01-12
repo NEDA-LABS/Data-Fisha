@@ -46,7 +46,7 @@ class ProductDetail extends StatelessWidget {
                       var nav = Navigator.of(context);
                       nav.maybePop().then((v) {
                         onChangePage(
-                            ProductEditPage(item, onBackPage: onBackPage));
+                            ProductEditPage(product: item, onBackPage: onBackPage));
                       });
                     },
                     title: 'Edit details',

@@ -49,22 +49,21 @@ _costIsLowePriceValid(product, error) {
 
 Future<dynamic> createProductRemote({
   required Map product,
-  required Map errors,
   required List<FileData?> fileData,
   required Map shop,
 }) async {
-  var invalids = [
-    _fieldIsValidString('product', product, errors),
-    _fieldIsValidString('category', product, errors),
-    _costIsLowePriceValid(product, errors),
-    _fieldIsValidNumber('retailPrice', product, errors),
-    product['stockable'] != true
-        ? true
-        : _fieldIsValidNumber('quantity', product, errors),
-  ].where((element) => element == false);
-  if (invalids.isNotEmpty) {
-    throw "Please, enter all required fields";
-  }
+  // var invalids = [
+  //   _fieldIsValidString('product', product, errors),
+  //   _fieldIsValidString('category', product, errors),
+  //   _costIsLowePriceValid(product, errors),
+  //   _fieldIsValidNumber('retailPrice', product, errors),
+  //   product['stockable'] != true
+  //       ? true
+  //       : _fieldIsValidNumber('quantity', product, errors),
+  // ].where((element) => element == false);
+  // if (invalids.isNotEmpty) {
+  //   throw "Please, enter all required fields";
+  // }
   var urls = (await uploadFileToWeb3(fileData));
   product['images'] = urls.map((e) => e['link'] ?? '').toList();
   product['retailPrice'] = doubleOrZero(product['retailPrice']);

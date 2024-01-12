@@ -38,10 +38,7 @@ class _State extends State<ProductCreatePage> {
       sliverAppBar: _appBar(context),
       staticChildren: [
         const WhiteSpacer(height: 24),
-        ProductCreateForm(
-          inventoryType: widget.inventoryType,
-          onBackPage: widget.onBackPage,
-        ),
+        ProductCreateForm(onBackPage: widget.onBackPage),
         const WhiteSpacer(height: 24),
       ],
     );

@@ -10,17 +10,17 @@ class ProductEditPage extends PageBase {
   final Map product;
   final OnBackPage onBackPage;
 
-  const ProductEditPage(
-    this.product, {
+  const ProductEditPage({
     Key? key,
     required this.onBackPage,
+    required this.product,
   }) : super(key: key, pageName: 'ProductEditPage');
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ProductEditPage>{
+class _State extends State<ProductEditPage> {
   _appBar(context) {
     return SliverSmartStockAppBar(
       title: "Update ${widget.product['product']}",
@@ -39,7 +39,8 @@ class _State extends State<ProductEditPage>{
       sliverAppBar: _appBar(context),
       staticChildren: [
         const WhiteSpacer(height: 24),
-        ProductUpdateForm(widget.product, onBackPage: widget.onBackPage),
+        ProductUpdateForm(
+            product: widget.product, onBackPage: widget.onBackPage),
         const WhiteSpacer(height: 24),
       ],
     );
