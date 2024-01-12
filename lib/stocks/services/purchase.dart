@@ -104,7 +104,6 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       if (customer == null || customer.isEmpty) throw "Supplier required";
       String batchId = generateUUID();
       var shop = await getActiveShop();
-      // var url = '${shopFunctionsURL(shopToApp(shop))}/purchase';
       Map? pDetail;
       List<FileData?> file = [];
       await addPurchaseDetail(
@@ -117,7 +116,6 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       if (pDetail is! Map) {
         throw 'Purchase details ( reference, date, due and type ) required';
       }
-      // await _printPurchaseItems(carts, discount, customer, true, cartId);
       var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
       return uploadFileToWeb3(file).then((fileResponse) {
         var createPurchase = prepareCreatePurchase({
@@ -133,6 +131,4 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
         });
         return createPurchase(shop);
       });
-      // await saveLocalSync(batchId, url, purchase);
-      // oneTimeLocalSyncs();
     };

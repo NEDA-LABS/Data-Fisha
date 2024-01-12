@@ -16,9 +16,6 @@ firstLetterUpperCase(x) {
 //'http://localhost:3000'; //
 var baseUrl = 'https://smartstock-faas.bfast.fahamutech.com';
 
-String shopDatabaseURL(App app) =>
-    '$baseUrl/shop/${app.projectId}/${app.applicationId}/v2';
-
 String shopFunctionsURL(App app) =>
     '$baseUrl/shop/${app.projectId}/${app.applicationId}';
 

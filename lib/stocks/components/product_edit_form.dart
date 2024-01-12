@@ -157,7 +157,14 @@ class _State extends State<ProductUpdateForm> {
                       label: "Category",
                       placeholder: 'Select category',
                       error: error['category'] ?? '',
-                      getAddWidget: () => const CreateCategoryContent(),
+                      getAddWidget: () =>  CreateCategoryContent(onNewCategory: (category) {
+                        _categories = [category];
+                        updateFormState({
+                          "category":
+                          _categories.map((e) => e['name'] ?? '').join(',')
+                        });
+                        refresh();
+                      },),
                       onField: (x) => '${x['name']}',
                       onLoad: getCategoryFromCacheOrRemote,
                     ),
@@ -340,7 +347,14 @@ class _State extends State<ProductUpdateForm> {
                       label: "Category",
                       placeholder: 'Select category',
                       error: error['category'] ?? '',
-                      getAddWidget: () => const CreateCategoryContent(),
+                      getAddWidget: () =>  CreateCategoryContent(onNewCategory: (category) {
+                        _categories = [category];
+                        updateFormState({
+                          "category":
+                          _categories.map((e) => e['name'] ?? '').join(',')
+                        });
+                        refresh();
+                      },),
                       onField: (x) => '${x['name']}',
                       onLoad: getCategoryFromCacheOrRemote,
                     ),
@@ -467,7 +481,7 @@ class _State extends State<ProductUpdateForm> {
   Widget _fileSelectWidget(
       {required double minHeight, required double marginTop}) {
     return FileSelect(
-      onFile: (file) {
+      onFiles: (file) {
         _fileData = file;
       },
       builder: (isEmpty, onPress) {

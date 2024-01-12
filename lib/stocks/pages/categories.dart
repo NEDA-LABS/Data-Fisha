@@ -204,8 +204,10 @@ class _State extends State<CategoriesPage> {
       builder: (c) => Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 800),
-          child: const Dialog(
-            child: CreateCategoryContent(),
+          child: Dialog(
+            child: CreateCategoryContent(onNewCategory: (category) {
+
+            },),
           ),
         ),
       ),

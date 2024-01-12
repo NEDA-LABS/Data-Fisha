@@ -9,10 +9,15 @@ import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/api_files.dart';
+import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
+import 'package:smartstock/stocks/services/category.dart';
 
 class CreateCategoryContent extends StatefulWidget {
-  const CreateCategoryContent({Key? key}) : super(key: key);
+  final dynamic Function(Map category) onNewCategory;
+
+  const CreateCategoryContent({Key? key, required this.onNewCategory})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -51,7 +56,7 @@ class _State extends State<CreateCategoryContent> {
                       placeholder: 'Optional'),
                   const WhiteSpacer(height: 16),
                   FileSelect(
-                    onFile: (file) {
+                    onFiles: (file) {
                       _platformFiles = file;
                     },
                   ),
@@ -98,22 +103,32 @@ class _State extends State<CreateCategoryContent> {
         if (kDebugMode) {
           print(fileResponse);
         }
-        throw new Exception('Just F!');
         var createCategory = prepareUpsertCategoryAPI({
           ...category,
           'image': fileResponse.map((e) => e['link']).join(','),
-          'file': fileResponse.map((e) => {
-            "name": e['name'],
-            "size": e['size'],
-            "mime": e['mime'],
-            "link": e['link'],
-            "cid": e['cid'],
-            "tags": 'receipt,expense,expenses',
-          }).toList()
+          'file': fileResponse
+              .map((e) => {
+                    "name": e['name'],
+                    "size": e['size'],
+                    "mime": e['mime'],
+                    "link": e['link'],
+                    "cid": e['cid'],
+                    "tags": 'receipt,expense,expenses',
+                  })
+              .toList()
         });
         return createCategory(shop);
       }).then((value) {
-        Navigator.of(context).maybePop();
+        if (kDebugMode) {
+          print(value);
+        }
+        widget.onNewCategory({...category, ...itOrEmptyArray(value)[0] ?? {}});
+        getCategoryFromCacheOrRemote(skipLocal: true)
+            .then((value) => null)
+            .catchError((error) {})
+            .whenComplete(() {
+          Navigator.of(context).maybePop();
+        });
       }).catchError((err) {
         showInfoDialog(context, err);
       }).whenComplete(() {

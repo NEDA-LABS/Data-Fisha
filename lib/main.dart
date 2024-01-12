@@ -10,6 +10,7 @@ import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
+import 'package:smartstock/stocks/pages/products_page.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -109,6 +110,5 @@ void main() {
   initializeSmartStock(
       onGetModulesMenu: _getEmptyMenu,
       onGetInitialModule: ({required onBackPage, required onChangePage}) =>
-          ProductCreatePage(
-              onBackPage: onBackPage, inventoryType: InventoryType.product));
+          ProductsPage(onBackPage: onBackPage, onChangePage: onChangePage));
 }

@@ -34,7 +34,7 @@ class _State extends State<ProductMovementDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List>(
+    return FutureBuilder<dynamic>(
       future: _future(widget.item),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -64,7 +64,7 @@ class _State extends State<ProductMovementDetails> {
           children: [
             _header(context, widget.item),
             _tableHeader(),
-            ...?snapshot.data?.reversed
+            ...itOrEmptyArray(snapshot.data).reversed
                 .toList()
                 .map<Widget>((item) => Column(
                       mainAxisSize: MainAxisSize.min,
@@ -82,7 +82,7 @@ class _State extends State<ProductMovementDetails> {
                           paddingText(item[1]),
                           paddingText(item[4] - item[1]),
                         ]),
-                        HorizontalLine()
+                        const HorizontalLine()
                       ],
                     ))
                 .toList(),
@@ -104,14 +104,14 @@ class _State extends State<ProductMovementDetails> {
     return format.format(time);
   }
 
-  Future<List> _future(item) async {
+  Future<dynamic> _future(item) async {
     var shop = await getActiveShop();
-    var getMovement = prepareProductMovement(item['id']);
-    return await getMovement(shop);
+    return productMovementRestAPI(id: item['id'], shop: shop);
+    // return fn;
   }
 
-  _tableHeader() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
+  _tableHeader() => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
         child: SizedBox(
           height: 38,
           child: TableLikeListRow([

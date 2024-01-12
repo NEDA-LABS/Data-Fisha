@@ -87,7 +87,7 @@ class _State extends State<CreateExpenseContent> {
             //               'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
             // ),
             FileSelect(
-              onFile: (file) {
+              onFiles: (file) {
                 if (mounted) {
                   _platformFile = file;
                 }

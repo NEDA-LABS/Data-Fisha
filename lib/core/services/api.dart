@@ -80,3 +80,9 @@ httpGetRequest(String url, [Map<String, dynamic> headers = const {}]) {
 
   return composeAsync([_parse, makeRequest])(url);
 }
+
+Future<dynamic> Function(String url) prepareHttpGetRequest(
+    [Map<String, dynamic> headers = const {}]) {
+  Future<dynamic> fn(String url) => httpGetRequest(url, headers);
+  return fn;
+}

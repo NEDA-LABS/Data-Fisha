@@ -42,9 +42,9 @@ Map<String, dynamic> _getFileMetaData(FileData file) {
   final mimeType = filePath != null
       ? lookupMimeType(filePath)
       : _getMimeType(file.extension ?? '');
-  if (kDebugMode) {
-    print(mimeType);
-  }
+  // if (kDebugMode) {
+  //   print(mimeType);
+  // }
   return {'filename': filename, 'fileSize': fileSize, 'mimeType': mimeType};
 }
 
@@ -66,15 +66,15 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
     return [];
   }
 
-  final List<Map> metadatas = [];
+  final Map metadata = {};
   final uri = Uri.parse(url);
   final request = http.MultipartRequest('POST', uri);
 
   for (FileData? file in files) {
-    if (file !=null) {
+    if (file != null) {
       ByteStream stream = _getByteStream(file.stream);
-      Map metadata = _getFileMetaData(file);
-      metadatas.add(metadata);
+      Map meta = _getFileMetaData(file);
+      metadata[meta['filename']] = meta;
       MultipartFile multipartFile = _getMultipartFromStream(file, stream);
       request.files.add(multipartFile);
     }
@@ -93,31 +93,19 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
   var bodyInJson = jsonDecode(body);
   var filePaths = propertyOr('urls', (p0) => [])(bodyInJson);
 
-  return itOrEmptyArray(filePaths).map((filePath){
-
-
-    if (kDebugMode) {
-      print('----------------');
-      print(filePath);
-      print(metadatas);
-      print('----------------');
-    }
-
-
+  return itOrEmptyArray(filePaths).map((filePath) {
+    var filename = '$filePath'.split('/').last;
     var cid = '$filePath'
         .split('/')
         .where((element) => element.trim() != '')
         .toList()[1];
     var link = '$base$filePath';
-    // print(filePath);
-    // print(link);
-    // throw Exception("just fail");
     return {
       "cid": cid,
       "link": link,
-      // "mime": metadata['mimeType'],
-      // "name": metadata['filename'],
-      // "size": metadata['fileSize']
+      "mime": metadata[filename]?['mimeType'] ?? 'application/octet-stream',
+      "name": metadata[filename]?['filename'] ?? 'no_name',
+      "size": metadata[filename]?['fileSize'] ?? 0
     };
   }).toList();
 }

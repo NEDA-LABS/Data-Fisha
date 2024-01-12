@@ -57,13 +57,16 @@ class _State extends State<CartDrawer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const TitleLarge(text: 'Cart'),
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        centerTitle: true,
-      ),
+      appBar: getIsSmallScreen(context)
+          ? AppBar(
+              title: const TitleLarge(text: 'Cart'),
+              // elevation: 0,
+              // backgroundColor: Theme.of(context).colorScheme.surface,
+              centerTitle: true,
+            )
+          : null,
       body: Container(
+        padding: const EdgeInsets.only(top: 16),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             border: Border(
@@ -83,7 +86,8 @@ class _State extends State<CartDrawer> {
                         onChoice: widget.onCustomer,
                         onLoad: widget.onCustomerLikeList,
                         getAddWidget: widget.onCustomerLikeAddWidget,
-                        onField: (x) => x['name'] ?? x['displayName']??''),
+                        onField: (x) =>
+                            x?['name'] ?? x?['displayName'] ?? '$x'),
                   )
                 : Container(),
             Expanded(

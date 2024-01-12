@@ -50,7 +50,11 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
     super.initState();
   }
 
-  _sha1e(dynamic data) => '${sha1.convert(utf8.encode(jsonEncode(data)))}';
+  _sha1e(dynamic data) => '${sha1.convert(
+        utf8.encode(
+          jsonEncode(data is Map ? (data['id']??data) : data),
+        ),
+      )}';
 
   _initialFetchData() {
     _updateState(() {

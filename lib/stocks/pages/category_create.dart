@@ -45,12 +45,14 @@ class _State extends State<CategoryCreatePage> {
     current: '/stock/',
     sliverAppBar: _appBar(context),
     backgroundColor: Theme.of(context).colorScheme.surface,
-    staticChildren: const [
+    staticChildren: [
       // getIsSmallScreen(context)
       //     ? Container()
       //     : tableContextMenu(_contextItems(context)),
       // _loading(_isLoading),
-      CreateCategoryContent()
+      CreateCategoryContent(onNewCategory: (category) {
+
+      },)
       // _tableHeader(),
     ],
     // dynamicChildBuilder: (context, index) {
@@ -131,8 +133,10 @@ class _State extends State<CategoryCreatePage> {
       builder: (c) => Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
-          child: const Dialog(
-            child: CreateCategoryContent(),
+          child: Dialog(
+            child: CreateCategoryContent(onNewCategory: (category) {
+
+            },),
           ),
         ),
       ),

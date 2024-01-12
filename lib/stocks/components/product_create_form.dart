@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CardRoot.dart';
@@ -5,7 +6,6 @@ import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/choices_input.dart';
-import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
@@ -13,7 +13,9 @@ import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
+import 'package:smartstock/stocks/components/ProductExpireInput.dart';
 import 'package:smartstock/stocks/components/ProductNameInput.dart';
+import 'package:smartstock/stocks/components/ProductQuantityInput.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
 import 'package:smartstock/stocks/services/category.dart';
@@ -34,24 +36,28 @@ class ProductCreateForm extends StatefulWidget {
 }
 
 class _State extends State<ProductCreateForm> {
-  Map<String, dynamic> product = {};
-  Map<String, dynamic> error = {};
+  bool _stockable = false;
+  bool _canExpire = false;
+  Map<String, dynamic> _product = {};
+  Map<String, dynamic> _errors = {};
   List<FileData?> _fileData = [];
   List _categories = [];
-  var loading = false;
+  var _loading = false;
 
   clearFormState() {
-    product = {};
+    _product = {};
   }
 
   updateFormState(Map<String, dynamic> data) {
-    product.addAll(data);
+    _product.addAll(data);
   }
 
   refresh() => setState(() {});
 
   @override
   void initState() {
+    _stockable = _product['stockable'] == true;
+    _canExpire = '${_product['expire'] ?? ''}'.isNotEmpty;
     super.initState();
   }
 
@@ -69,16 +75,18 @@ class _State extends State<ProductCreateForm> {
 
   Widget _getDescriptionInput() {
     return ProductDescriptionInput(
+      text: '${_product['description']??''}',
       onText: (d) => updateFormState({"description": d}),
-      error: error['description'] ?? '',
+      error: _errors['description'] ?? '',
     );
   }
 
   Widget _getProductNameInput() {
     return ProductNameInput(
+      text: '${_product['product'] ?? ''}',
       onText: (d) => updateFormState({"product": d}),
       // text: product['product'] ?? '',
-      error: error['product'] ?? '',
+      error: _errors['product'] ?? '',
     );
   }
 
@@ -88,15 +96,26 @@ class _State extends State<ProductCreateForm> {
       choice: _categories,
       onChoice: (d) {
         _categories = itOrEmptyArray(d);
+        if (kDebugMode) {
+          print(_categories);
+          print('------');
+        }
         updateFormState(
             {"category": _categories.map((e) => e['name']).join(',')});
-        // d['name']??''
         refresh();
       },
       label: "Categories",
       placeholder: '',
-      error: error['category'] ?? '',
-      getAddWidget: () => const CreateCategoryContent(),
+      error: _errors['category'] ?? '',
+      getAddWidget: () => CreateCategoryContent(onNewCategory: (category) {
+        _categories = [category];
+        if (kDebugMode) {
+          print(_categories);
+        }
+        updateFormState(
+            {"category": _categories.map((e) => e['name']).join(',')});
+        refresh();
+      },),
       onField: (x) => '${x['name']}',
       onLoad: getCategoryFromCacheOrRemote,
     );
@@ -107,9 +126,9 @@ class _State extends State<ProductCreateForm> {
       onText: (d) => updateFormState({"barcode": d}),
       label: "Barcode / Qrcode",
       placeholder: "Optional",
-      error: error['barcode'] ?? '',
-      value: '${product['barcode'] ?? ''}',
-      initialText: '${product['barcode'] ?? ''}',
+      error: _errors['barcode'] ?? '',
+      value: '${_product['barcode'] ?? ''}',
+      initialText: '${_product['barcode'] ?? ''}',
       icon: mobileQrScanIconButton(context, (code) {
         updateFormState({"barcode": '$code'});
         refresh();
@@ -118,10 +137,9 @@ class _State extends State<ProductCreateForm> {
   }
 
   Widget _imagesInput() {
-    // return Container();
     return FileSelect(
       files: _fileData,
-      onFile: (file) {
+      onFiles: (file) {
         _fileData = file;
       },
       builder: (isEmpty, onPress) {
@@ -153,7 +171,7 @@ class _State extends State<ProductCreateForm> {
                         LabelLarge(
                           textAlign: TextAlign.center,
                           text: "File should not exceed 2MB."
-                              "Recommended ration 1:1",
+                              " Recommended ration 1:1",
                           color: Colors.grey,
                         ),
                       ],
@@ -169,65 +187,55 @@ class _State extends State<ProductCreateForm> {
   Widget _priceInput(Map shop) {
     return TextInput(
       onText: (d) => updateFormState({"retailPrice": d}),
-      label: "Price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+      label: "Sell price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
       placeholder: "",
-      error: error['retailPrice'] ?? '',
-      initialText: '${product['retailPrice'] ?? ''}',
+      error: _errors['retailPrice'] ?? '',
+      initialText: '${_product['retailPrice'] ?? ''}',
       type: TextInputType.number,
     );
   }
 
-  // Widget _wholesalePriceInput(Map shop) {
-  //   return TextInput(
-  //     onText: (d) => updateFormState({"wholesalePrice": d}),
-  //     label:
-  //         "Wholesale price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
-  //     placeholder: "",
-  //     error: error['wholesalePrice'] ?? '',
-  //     initialText: '${product['wholesalePrice'] ?? ''}',
-  //     type: TextInputType.number,
-  //   );
-  // }
-
   Widget _costPriceInput(Map shop) {
     return TextInput(
       onText: (d) => updateFormState({"purchase": d}),
-      label: "Cost ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+      label:
+          "Purchase cost ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
       placeholder: "",
-      error: error['purchase'] ?? '',
-      initialText: '${product['purchase'] ?? ''}',
+      error: _errors['purchase'] ?? '',
+      initialText: '${_product['purchase'] ?? ''}',
       type: TextInputType.number,
     );
   }
 
   Widget _quantityInput() {
-    return TextInput(
-      onText: (d) => updateFormState({"quantity": d}),
-      label: "Quantity",
-      placeholder: "Current stock quantity",
-      error: error['quantity'] ?? '',
-      initialText: '${product['quantity'] ?? ''}',
-      type: TextInputType.number,
+    return ProductQuantityInput(
+      onCanTrack: (value) {
+        _stockable = value;
+      },
+      onQuantity: (value) {
+        updateFormState({"quantity": value});
+      },
+      text: '${_product['quantity'] ?? ''}',
+      error: _errors['quantity'] ?? '',
+      trackQuantity: _stockable,
     );
   }
 
   Widget _expireInput() {
-    return DateInput(
-      onText: (d) => updateFormState({"expire": d}),
-      label: "Expire",
-      placeholder: "YYYY-MM-DD ( Optional )",
-      error: error['expire'] ?? '',
-      initialText: product['expire'] ?? '',
-      firstDate: DateTime.now(),
-      initialDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 360 * 100)),
-      // type: TextInputType.datetime,
+    return ProductExpireInput(
+      onCanExpire: (value) {
+        _canExpire = value;
+      },
+      onDate: (d) => updateFormState({"expire": d}),
+      trackExpire: _canExpire,
+      error: _errors['expire'] ?? '',
+      date: _product['expire'] ?? '',
     );
   }
 
-  Widget _submitButton() {
+  Widget _submitButton(Map shop) {
     return TextButton(
-      onPressed: loading ? null : _createProduct,
+      onPressed: _loading ? null : () => _createProduct(shop),
       style: ButtonStyle(
         backgroundColor:
             MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -235,9 +243,7 @@ class _State extends State<ProductCreateForm> {
         foregroundColor:
             MaterialStateProperty.all(Theme.of(context).colorScheme.onPrimary),
       ),
-      child: BodyLarge(
-        text: loading ? "Waiting..." : "Continue",
-      ),
+      child: BodyLarge(text: _loading ? "Waiting..." : "Continue"),
     );
   }
 
@@ -316,7 +322,7 @@ class _State extends State<ProductCreateForm> {
           // width: MediaQuery.of(context).size.width,
           constraints: const BoxConstraints(minWidth: 200),
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-          child: _submitButton(),
+          child: _submitButton(shop),
         )
       ],
     );
@@ -367,7 +373,11 @@ class _State extends State<ProductCreateForm> {
         CardRoot(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [_quantityInput(), _expireInput()],
+            children: [
+              _quantityInput(),
+              const WhiteSpacer(height: 8),
+              _expireInput()
+            ],
           ),
         ),
         const WhiteSpacer(height: 16),
@@ -376,36 +386,35 @@ class _State extends State<ProductCreateForm> {
           width: MediaQuery.of(context).size.width,
           constraints: const BoxConstraints(minWidth: 200),
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-          child: _submitButton(),
+          child: _submitButton(shop),
         )
       ],
     );
   }
 
-  _createProduct() {
+  _createProduct(Map shop) {
     setState(() {
-      error = {};
-      loading = true;
+      _errors = {};
+      _loading = true;
     });
-    createOrUpdateProduct(
-      context,
-      error,
-      loading,
-      false,
-      {
-        ...product,
-        'stockable': true,
+    createProductRemote(
+      errors: _errors,
+      shop: shop,
+      product: {
+        ..._product,
+        'stockable': _stockable,
         'saleable': true,
         'purchasable': true,
+        'expire': _canExpire?(_product['expire']??''):'',
         'supplier': 'general',
-        'wholesalePrice': product['wholesalePrice'] ?? product['retailPrice']
+        'wholesalePrice': _product['retailPrice'] ?? '0'
       },
-      _fileData,
+      fileData: _fileData,
     ).then((value) => widget.onBackPage()).catchError((error) {
       showInfoDialog(context, error);
     }).whenComplete(() {
       setState(() {
-        loading = false;
+        _loading = false;
       });
     });
   }

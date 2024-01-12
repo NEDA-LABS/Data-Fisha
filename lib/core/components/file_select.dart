@@ -4,16 +4,18 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
+import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class FileSelect extends StatefulWidget {
   final List<FileData?>? files;
-  final Function(List<FileData?> file) onFile;
+  final Function(List<FileData?> file) onFiles;
   final Widget Function(bool isEmpty, VoidCallback onPress)? builder;
 
-  const FileSelect({super.key, required this.onFile, this.builder, this.files});
+  const FileSelect({super.key, required this.onFiles, this.builder, this.files});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -64,7 +66,47 @@ class _State extends State<FileSelect> {
                             left: 0,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.memory(e, fit: BoxFit.cover),
+                              child: Image.memory(
+                                e,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryContainer),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.file_present_rounded,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: LabelSmall(
+                                                text: firstLetterUpperCase(
+                                                  '${_filesData[_previews.indexOf(e)]?.extension ?? ''} file'
+                                                      .trim(),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           Positioned(
@@ -83,7 +125,7 @@ class _State extends State<FileSelect> {
                                     var index = _previews.indexOf(e);
                                     _previews.removeAt(index);
                                     _filesData.removeAt(index);
-                                    widget.onFile(_filesData);
+                                    widget.onFiles(_filesData);
                                   });
                                 },
                                 child: const Icon(Icons.close),
@@ -100,11 +142,29 @@ class _State extends State<FileSelect> {
         widget.builder != null
             ? widget.builder!(!hasPreview, _onUploadReceipt)
             : Container(
-                height: 48,
+                // height: 48,
                 margin: const EdgeInsets.only(bottom: 8),
-                child: OutlinedButton(
-                  onPressed: _onUploadReceipt,
-                  child: BodyLarge(text: 'Click to select files'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _filesData.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: LabelMedium(
+                                text: _filesData
+                                    .map((e) => e?.name ?? '')
+                                    .join(', ')),
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 48,
+                      child: OutlinedButton(
+                        onPressed: _onUploadReceipt,
+                        child: const BodyLarge(text: 'Click to select files'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
       ],
@@ -128,9 +188,9 @@ class _State extends State<FileSelect> {
             _previews.add(platformFile.bytes!);
           }
           setState(() {});
-          widget.onFile(_filesData);
+          widget.onFiles(_filesData);
         } else {
-          showInfoDialog(context, "Fail to get selected file");
+          // showInfoDialog(context, "Fail to get selected file");
         }
       }
     }

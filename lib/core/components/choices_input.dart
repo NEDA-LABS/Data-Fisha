@@ -46,11 +46,11 @@ class _State extends State<ChoicesInput> {
     super.initState();
   }
 
-  _updateState(Map state) {
-    setState(() {
-      _states.addAll(state);
-    });
-  }
+  // _updateState(Map state) {
+  //   setState(() {
+  //     _states.addAll(state);
+  //   });
+  // }
 
   Widget _getFullWidthText() {
     return Expanded(
@@ -61,15 +61,8 @@ class _State extends State<ChoicesInput> {
             _showDialogForChoiceSelection(
               context: context,
               onChoice: (value) {
-                // var text =
-                //     value is List ? value.map(widget.onField).join(',') : '$value';
-                // _updateState({'text': text});
                 widget.onChoice(value);
                 Navigator.of(context).maybePop();
-                // if (kDebugMode) {
-                //   print('+++++++++++');
-                //   print(value);
-                // }
               },
               onField: widget.onField,
             );

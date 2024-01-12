@@ -87,11 +87,11 @@ class _State extends State<OffsetQuantityContent> {
 
   Future _offset() async {
     var shop = await getActiveShop();
-    var offsetQuantity = prepareOffsetProductQuantity({
+    var offsetQuantity = productOffsetQuantityRestAPI(body: {
       "quantity": quantity,
       "product": widget.product,
       "id": widget.productId,
-    });
+    }, shop: shop);
     return offsetQuantity(shop);
   }
 }

@@ -1,79 +1,43 @@
-import 'dart:convert';
-
-import 'package:bfast/controller/function.dart';
-import 'package:bfast/model/raw_response.dart';
-import 'package:bfast/options.dart';
-import 'package:bfast/util.dart';
-import 'package:http/http.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/util.dart';
 
-_preparePatchRequest(body) => composeAsync([
-      (x) => RawResponse(body: x.body, statusCode: x.statusCode),
-      (url) => patch(Uri.parse(url),
-          headers: getInitialHeaders(), body: jsonEncode(body))
-    ]);
-
-_prepareDeleteRequest() => composeAsync([
-      (x) => RawResponse(body: x.body, statusCode: x.statusCode),
-      (url) => delete(Uri.parse(url))
-    ]);
-
-_prepareGetRequest() => composeAsync([
-      (x) => RawResponse(body: x.body, statusCode: x.statusCode),
-      (url) => get(Uri.parse(url))
-]);
-
-
-_preparePutRequest(body) => composeAsync([
-      (x) => RawResponse(body: x.body, statusCode: x.statusCode),
-      (url) => put(Uri.parse(url),
-          headers: getInitialHeaders(), body: jsonEncode(body))
-    ]);
-
-prepareCreateProduct(Map product) {
-  var putRequest = _preparePutRequest(product);
-  return composeAsync([
-    (app) => executeHttp(
-        () => putRequest('${shopFunctionsURL(app)}/stock/products')),
-    shopToApp
-  ]);
+Future productCreateRestAPI(
+    {required Map product, required dynamic shop}) async {
+  if (kDebugMode) {
+    print(product);
+  }
+  // throw Exception('F**k on');
+  var putRequest = prepareHttpPutRequest(product);
+  return putRequest('${shopFunctionsURL(shopToApp(shop))}/stock/products');
 }
 
-prepareOffsetProductQuantity(Map body) {
-  var patchRequest = _preparePatchRequest(body);
-  return composeAsync([
-    (app) => executeHttp(() => patchRequest(
-        '${shopFunctionsURL(app)}/stock/products/${body['id']}/quantity')),
-    shopToApp
-  ]);
+productOffsetQuantityRestAPI({required Map body, required Map shop}) {
+  var patchRequest = prepareHttpPatchRequest(body);
+  var url =
+      '${shopFunctionsURL(shopToApp(shop))}/stock/products/${body['id']}/quantity';
+  return patchRequest(url);
 }
 
-prepareUpdateProductDetails(Map body) {
-  var patchRequest = _preparePatchRequest(body);
-  return composeAsync([
-        (app) => executeHttp(() => patchRequest(
-        '${shopFunctionsURL(app)}/stock/products/${body['id']}/detail')),
-    shopToApp
-  ]);
+productUpdateDetailsRestAPI({required Map body, required Map shop}) {
+  var patchRequest = prepareHttpPatchRequest(body);
+  var url =
+      '${shopFunctionsURL(shopToApp(shop))}/stock/products/${body['id']}/detail';
+  return patchRequest(url);
 }
 
-prepareDeleteProduct(String? id) {
-  var deleteRequest = _prepareDeleteRequest();
-  return composeAsync([
-    (app) => executeHttp(
-        () => deleteRequest('${shopFunctionsURL(app)}/stock/products/$id')),
-    shopToApp
-  ]);
+productDeleteRestAPI({required String? id, required Map shop}) {
+  var deleteRequest = prepareHttpDeleteRequest({});
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/products/$id';
+  return deleteRequest(url);
 }
 
-prepareProductMovement(String id){
-  var getRequest = _prepareGetRequest();
+productMovementRestAPI({required String id, required Map shop}) {
+  var getRequest = prepareHttpGetRequest();
   var from = '2022-08-01';
   var to = toSqlDate(DateTime.now());
-  return composeAsync([
-        (app) => executeHttp(
-            () => getRequest('${shopFunctionsURL(app)}/stock/products/$id/quantity?from=$from&to=$to')),
-    shopToApp
-  ]);
+  var url =
+      '${shopFunctionsURL(shopToApp(shop))}/stock/products/$id/quantity?from=$from&to=$to';
+  return getRequest(url);
 }
