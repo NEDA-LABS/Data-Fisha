@@ -108,11 +108,7 @@ class _State extends State<CreateCategoryContent> {
           'image': fileResponse.map((e) => e['link']).join(','),
           'file': fileResponse
               .map((e) => {
-                    "name": e['name'],
-                    "size": e['size'],
-                    "mime": e['mime'],
                     "link": e['link'],
-                    "cid": e['cid'],
                     "tags": 'receipt,expense,expenses',
                   })
               .toList()

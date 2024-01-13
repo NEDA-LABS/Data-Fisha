@@ -126,7 +126,7 @@ class _State extends State<SmartStock> {
   _onBackPage() {
     var length = PageHistory().getLength();
     if (kDebugMode) {
-      print('Length ---> $length');
+      print('Page length ---> $length');
     }
     goBack(int offset) {
       var last = PageHistory().getAt(length - offset);
@@ -147,7 +147,7 @@ class _State extends State<SmartStock> {
 
   _updateState([Function()? fn]) {
     if (mounted) {
-      setState(fn??(){});
+      setState(fn ?? () {});
     }
   }
 

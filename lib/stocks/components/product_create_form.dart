@@ -25,7 +25,7 @@ class ProductCreateForm extends StatelessWidget {
     required Map product,
     required Map shop,
   }) {
-    return createProductRemote(
+    return productCreateRemote(
       shop: shop,
       product: product,
       fileData: files,

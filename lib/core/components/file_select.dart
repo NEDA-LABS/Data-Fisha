@@ -10,12 +10,116 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/util.dart';
 
+class _FilePreview extends StatelessWidget {
+  final dynamic data;
+
+  // final int index;
+  final String Function() onGetExtension;
+  final VoidCallback onClose;
+
+  const _FilePreview({
+    super.key,
+    required this.data,
+    // required this.index,
+    required this.onGetExtension,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 90,
+      height: 90,
+      margin: const EdgeInsets.only(left: 8, bottom: 8),
+      child: Stack(
+        children: [
+          Positioned(
+            width: 80,
+            height: 80,
+            bottom: 0,
+            left: 0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: data is String && '$data'.startsWith('http')
+                  ? Image.network(
+                      data,
+                      fit: BoxFit.cover,
+                      errorBuilder: _getErrorBuilder,
+                    )
+                  : Image.memory(
+                      data,
+                      fit: BoxFit.cover,
+                      errorBuilder: _getErrorBuilder,
+                    ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(100)),
+              child: InkWell(
+                onTap: onClose,
+                // () {
+                // setState(() {
+                //   var index = _previews.indexOf(e);
+                //   _previews.removeAt(index);
+                //   _filesData.removeAt(index);
+                //   widget.onFiles(_filesData);
+                // });
+                // },
+                child: const Icon(Icons.close),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _getErrorBuilder(context, error, stackTrace) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border:
+            Border.all(color: Theme.of(context).colorScheme.primaryContainer),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.file_present_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: LabelSmall(
+                  text: firstLetterUpperCase(
+                    '${onGetExtension()} file'.trim(),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class FileSelect extends StatefulWidget {
   final List<FileData?>? files;
   final Function(List<FileData?> file) onFiles;
   final Widget Function(bool isEmpty, VoidCallback onPress)? builder;
 
-  const FileSelect({super.key, required this.onFiles, this.builder, this.files});
+  const FileSelect(
+      {super.key, required this.onFiles, this.builder, this.files});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -24,20 +128,28 @@ class FileSelect extends StatefulWidget {
 class _State extends State<FileSelect> {
   final List<FileData?> _filesData = [];
 
-  final List<Uint8List> _previews = [];
+  final List _previews = [];
 
   @override
   void initState() {
     setState(() {
-      if (widget.files != null) {
-        _filesData.addAll(widget.files!);
+      var files = widget.files;
+      if (files != null) {
+        _filesData.addAll(files);
         for (var element in _filesData) {
-          if (element?.stream != null) {
-            _previews.add(Uint8List.fromList(element!.stream!));
+          var stream = element?.stream;
+          var path = element?.path;
+          if (stream != null) {
+            _previews.add(Uint8List.fromList(stream));
+          } else if (path is String &&
+              path.isNotEmpty &&
+              path.trim().startsWith('http')) {
+            _previews.add(path);
           }
         }
       }
     });
+    // print(_previews);
     super.initState();
   }
 
@@ -51,92 +163,22 @@ class _State extends State<FileSelect> {
       children: [
         hasPreview
             ? Wrap(
-                children: _previews.map(
-                  (e) {
-                    return Container(
-                      width: 90,
-                      height: 90,
-                      margin: const EdgeInsets.only(left: 8, bottom: 8),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            width: 80,
-                            height: 80,
-                            bottom: 0,
-                            left: 0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.memory(
-                                e,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.file_present_rounded,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 4.0),
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: LabelSmall(
-                                                text: firstLetterUpperCase(
-                                                  '${_filesData[_previews.indexOf(e)]?.extension ?? ''} file'
-                                                      .trim(),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    var index = _previews.indexOf(e);
-                                    _previews.removeAt(index);
-                                    _filesData.removeAt(index);
-                                    widget.onFiles(_filesData);
-                                  });
-                                },
-                                child: const Icon(Icons.close),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ).toList(),
+                children: _previews.map((e) {
+                  return _FilePreview(
+                    data: e,
+                    onGetExtension: () {
+                      return _filesData[_previews.indexOf(e)]?.extension ?? '';
+                    },
+                    onClose: () {
+                      setState(() {
+                        var index = _previews.indexOf(e);
+                        _previews.removeAt(index);
+                        _filesData.removeAt(index);
+                        widget.onFiles(_filesData);
+                      });
+                    },
+                  );
+                }).toList(),
               )
             : Container(),
         widget.builder != null

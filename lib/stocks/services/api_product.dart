@@ -20,10 +20,10 @@ productOffsetQuantityRestAPI({required Map body, required Map shop}) {
   return patchRequest(url);
 }
 
-productUpdateDetailsRestAPI({required Map body, required Map shop}) {
-  var patchRequest = prepareHttpPatchRequest(body);
+productUpdateDetailsRestAPI({required Map product, required Map shop}) {
+  var patchRequest = prepareHttpPatchRequest(product);
   var url =
-      '${shopFunctionsURL(shopToApp(shop))}/stock/products/${body['id']}/detail';
+      '${shopFunctionsURL(shopToApp(shop))}/stock/products/${product['id']}/detail';
   return patchRequest(url);
 }
 

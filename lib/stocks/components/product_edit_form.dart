@@ -516,12 +516,13 @@ class _State extends State<ProductUpdateForm> {
     required Map product,
     required Map shop,
   }) async {
-    throw 'Not implemented';
+    return productUpdateRemote(
+      shop: shop,
+      product: {
+        ...widget.product,
+        ...product
+      },
+      fileData: files,
+    ).then((value) => widget.onBackPage());
   }
-// return createProductRemote(
-//   shop: shop,
-//   product: product,
-//   fileData: files,
-// ).then((value) => onBackPage());
-// }
 }

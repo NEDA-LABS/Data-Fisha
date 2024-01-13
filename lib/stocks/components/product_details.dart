@@ -31,6 +31,7 @@ class ProductDetail extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ListTile(
               title: HeadlineSmall(text: item['product'] ?? ''),
@@ -51,23 +52,23 @@ class ProductDetail extends StatelessWidget {
                     },
                     title: 'Edit details',
                   ),
-                  outlineActionButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => Dialog(
-                          child: Container(
-                            constraints: const BoxConstraints(maxWidth: 400),
-                            child: OffsetQuantityContent(
-                              productId: item['id'],
-                              product: item['product'],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    title: 'Offset quantity',
-                  ),
+                  // outlineActionButton(
+                  //   onPressed: () {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (_) => Dialog(
+                  //         child: Container(
+                  //           constraints: const BoxConstraints(maxWidth: 400),
+                  //           child: OffsetQuantityContent(
+                  //             productId: item['id'],
+                  //             product: item['product'],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   title: 'Offset quantity',
+                  // ),
                   outlineActionButton(
                     onPressed: () {
                       var nav = Navigator.of(context);

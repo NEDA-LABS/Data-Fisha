@@ -61,17 +61,15 @@ class _State extends State<ProductForm> {
 
   @override
   void initState() {
-    if (kDebugMode) {
-      print('**************');
-    }
     _product = {...widget.product};
     _stockable = _product['stockable'] == true;
     _canExpire = '${_product['expire'] ?? ''}'.isNotEmpty;
     _categories = ('${_product['category'] ?? ''}')
         .split(',')
+        .where((ex) => ex.isNotEmpty)
         .map((e) => {'name': e})
         .toList();
-    _fileData = ('${_product['images'] ?? ''}').split(',').toList();
+    _fileData = _getInitialFileData({...widget.product});
     super.initState();
   }
 
@@ -108,6 +106,7 @@ class _State extends State<ProductForm> {
     return ChoicesInput(
       multiple: true,
       choice: _categories,
+      comparisonKey: 'name',
       onChoice: (d) {
         _categories = itOrEmptyArray(d);
         updateFormState(
@@ -475,31 +474,20 @@ class _State extends State<ProductForm> {
         });
       });
     }
-    // createProductRemote(
-    //   errors: _errors,
-    //   shop: shop,
-    //   product: {
-    //     ..._product,
-    //     'stockable': _stockable,
-    //     'saleable': true,
-    //     'purchasable': true,
-    //     'expire': _canExpire ? (_product['expire'] ?? '') : '',
-    //     'supplier': 'general',
-    //     'wholesalePrice': _product['retailPrice'] ?? '0'
-    //   },
-    //   fileData: _fileData,
-    // ).then((value) => widget.onBackPage()).catchError((error) {
-    //   showInfoDialog(context, error);
-    // }).whenComplete(() {
-    //   setState(() {
-    //     _loading = false;
-    //   });
-    // });
   }
 
   void _updateState(Null Function() fn) {
     if (mounted) {
       setState(fn);
     }
+  }
+
+  List<FileData?> _getInitialFileData(product) {
+    return itOrEmptyArray(product?['images']).map((x) {
+      String name = x.split('/').last;
+      String ext = name.split('.').last;
+      return FileData(
+          stream: null, extension: ext, size: -1, name: name, path: x);
+    }).toList();
   }
 }

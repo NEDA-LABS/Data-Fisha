@@ -8,7 +8,7 @@ import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/stock_summary.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
-import 'package:smartstock/stocks/pages/products_page.dart';
+import 'package:smartstock/stocks/pages/ProductsPage.dart';
 import 'package:smartstock/stocks/pages/purchases.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';

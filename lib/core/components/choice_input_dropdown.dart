@@ -14,6 +14,7 @@ import 'package:smartstock/core/services/util.dart';
 import 'package:crypto/crypto.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
+  final String comparisonKey;
   final Function(dynamic) onTitle;
   final Function(dynamic) onChoice;
   final dynamic choice;
@@ -25,6 +26,7 @@ class ChoiceInputDropdown extends StatefulWidget {
   const ChoiceInputDropdown({
     Key? key,
     required this.onTitle,
+    required this.comparisonKey,
     required this.choice,
     required this.onChoice,
     required this.multiple,
@@ -50,11 +52,13 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
     super.initState();
   }
 
-  _sha1e(dynamic data) => '${sha1.convert(
-        utf8.encode(
-          jsonEncode(data is Map ? (data['id']??data) : data),
-        ),
-      )}';
+  _sha1e(dynamic data) {
+    return '${sha1.convert(
+      utf8.encode(
+        jsonEncode(data is Map ? (data[widget.comparisonKey] ?? data) : data),
+      ),
+    )}';
+  }
 
   _initialFetchData() {
     _updateState(() {

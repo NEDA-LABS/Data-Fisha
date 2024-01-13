@@ -121,11 +121,7 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
         var createPurchase = prepareCreatePurchase({
           ...purchase,
           'file': fileResponse.map((e)=>{
-            "name": e['name'],
-            "size": e['size'],
-            "mime": e['mime'],
             "link": e['link'],
-            "cid": e['cid'],
             "tags": 'receipt,invoice,purchase,purchases',
           }).toList()
         });

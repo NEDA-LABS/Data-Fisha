@@ -171,11 +171,7 @@ class _State extends State<CreateExpenseContent> {
               category: category,
               amount: amount,
               file: fileResponse.map((e) => {
-                "name": e['name'],
-                "size": e['size'],
-                "mime": e['mime'],
                 "link": e['link'],
-                "cid": e['cid'],
                 "tags": 'receipt,expense,expenses',
               }).toList());
         })

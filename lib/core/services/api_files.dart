@@ -66,15 +66,15 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
     return [];
   }
 
-  final Map metadata = {};
+  // final Map metadata = {};
   final uri = Uri.parse(url);
   final request = http.MultipartRequest('POST', uri);
 
   for (FileData? file in files) {
-    if (file != null) {
+    if (file != null && file.stream != null) {
       ByteStream stream = _getByteStream(file.stream);
-      Map meta = _getFileMetaData(file);
-      metadata[meta['filename']] = meta;
+      // Map meta = _getFileMetaData(file);
+      // metadata[meta['filename']] = meta;
       MultipartFile multipartFile = _getMultipartFromStream(file, stream);
       request.files.add(multipartFile);
     }
@@ -93,21 +93,29 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
   var bodyInJson = jsonDecode(body);
   var filePaths = propertyOr('urls', (p0) => [])(bodyInJson);
 
-  return itOrEmptyArray(filePaths).map((filePath) {
-    var filename = '$filePath'.split('/').last;
-    var cid = '$filePath'
-        .split('/')
-        .where((element) => element.trim() != '')
-        .toList()[1];
+  var links = itOrEmptyArray(filePaths).map((filePath) {
+    // var filename = '$filePath'.split('/').last;
+    // var cid = '$filePath'
+    //     .split('/')
+    //     .where((element) => element.trim() != '')
+    //     .toList()[1];
     var link = '$base$filePath';
     return {
-      "cid": cid,
+      // "cid": cid,
       "link": link,
-      "mime": metadata[filename]?['mimeType'] ?? 'application/octet-stream',
-      "name": metadata[filename]?['filename'] ?? 'no_name',
-      "size": metadata[filename]?['fileSize'] ?? 0
+      // "mime": metadata[filename]?['mimeType'] ?? 'application/octet-stream',
+      // "name": metadata[filename]?['filename'] ?? 'no_name',
+      // "size": metadata[filename]?['fileSize'] ?? 0
     };
   }).toList();
+  return [
+    ...files
+        .where((element) => element?.path?.startsWith('http') == true)
+        .map((e) => {'link': e?.path})
+        .where((x) => x['link'] != null)
+        .toList(),
+    ...links,
+  ];
 }
 
 String _getMimeType(String fileExtension) {

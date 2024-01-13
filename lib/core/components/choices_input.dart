@@ -9,6 +9,7 @@ import 'package:smartstock/core/components/input_error_message.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChoicesInput extends StatefulWidget {
+  final String comparisonKey;
   final Function(dynamic) onChoice;
   final dynamic choice;
   final Future Function({bool skipLocal}) onLoad;
@@ -23,6 +24,7 @@ class ChoicesInput extends StatefulWidget {
   const ChoicesInput({
     Key? key,
     required this.onChoice,
+    this.comparisonKey='id',
     required this.choice,
     required this.onLoad,
     this.getAddWidget,
@@ -39,18 +41,12 @@ class ChoicesInput extends StatefulWidget {
 }
 
 class _State extends State<ChoicesInput> {
-  final _states = {};
 
   @override
   void initState() {
     super.initState();
   }
 
-  // _updateState(Map state) {
-  //   setState(() {
-  //     _states.addAll(state);
-  //   });
-  // }
 
   Widget _getFullWidthText() {
     return Expanded(
@@ -109,6 +105,7 @@ class _State extends State<ChoicesInput> {
               return Dialog(
                 child: DialogContentWrapper(
                   child: ChoiceInputDropdown(
+                    comparisonKey: widget.comparisonKey,
                     choice: widget.choice,
                     onCreateBuilder: widget.getAddWidget,
                     onTitle: onField,
@@ -133,6 +130,7 @@ class _State extends State<ChoicesInput> {
               ),
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: ChoiceInputDropdown(
+                comparisonKey: widget.comparisonKey,
                 choice: widget.choice,
                 onCreateBuilder: widget.getAddWidget,
                 onTitle: onField,
