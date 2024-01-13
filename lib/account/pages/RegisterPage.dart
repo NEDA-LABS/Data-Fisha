@@ -5,7 +5,7 @@ import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class RegisterPage extends PageBase {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const RegisterPage({

@@ -75,7 +75,7 @@ class _State extends State<ProductsPage> {
 
   _getAppBar() {
     return SliverSmartStockAppBar(
-      title: "Inventories",
+      title: "Products",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,

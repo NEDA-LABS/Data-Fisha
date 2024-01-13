@@ -8,9 +8,13 @@ import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/index.dart';
 import 'package:smartstock/sales/pages/index.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
+import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/product_create.dart';
 import 'package:smartstock/stocks/pages/ProductsPage.dart';
+import 'package:smartstock/stocks/pages/purchases.dart';
+import 'package:smartstock/stocks/pages/suppliers.dart';
+import 'package:smartstock/stocks/pages/transfers.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -18,26 +22,14 @@ List<ModuleMenu> _onGetModules({
   required OnBackPage onBackPage,
 }) {
   var dashboardIndex = const DashboardIndexPage();
-  var reportIndex = ReportIndexPage(
-    onChangePage: onChangePage,
-    onBackPage: onBackPage,
-  );
-  var salesIndex = SalesPage(
-    onChangePage: onChangePage,
-    onBackPage: onBackPage,
-  );
-  var stockIndex = StocksIndexPage(
-    onChangePage: onChangePage,
-    onBackPage: onBackPage,
-  );
-  var expenseIndex = ExpenseIndexPage(
-    onChangePage: onChangePage,
-    onBackPage: onBackPage,
-  );
-  var accountIndex = ProfileIndexPage(
-    onChangePage: onChangePage,
-    onBackPage: onBackPage,
-  );
+  var reportIndex =
+      ReportIndexPage(onChangePage: onChangePage, onBackPage: onBackPage);
+  var salesIndex =
+      SalesPage(onChangePage: onChangePage, onBackPage: onBackPage);
+  var expenseIndex =
+      ExpenseIndexPage(onChangePage: onChangePage, onBackPage: onBackPage);
+  var accountIndex =
+      ProfileIndexPage(onChangePage: onChangePage, onBackPage: onBackPage);
   return [
     ModuleMenu(
       name: 'Dashboard',
@@ -47,7 +39,7 @@ List<ModuleMenu> _onGetModules({
       ),
       link: '/dashboard/',
       page: dashboardIndex,
-      onClick: () => null,
+      // onClick: () => null,
       roles: ['admin'],
     ),
     ModuleMenu(
@@ -56,24 +48,73 @@ List<ModuleMenu> _onGetModules({
           color: Theme.of(context).colorScheme.primary),
       link: '/sales/',
       page: salesIndex,
-      onClick: () => null,
+      // onClick: () => null,
       roles: ['*'],
     ),
     ModuleMenu(
-      name: 'Stocks',
-      icon: Icon(Icons.inventory, color: Theme.of(context).colorScheme.primary),
-      link: '/stock/',
-      page: stockIndex,
-      onClick: () => null,
-      roles: ['admin', 'manager'],
-    ),
+        name: 'Inventory',
+        icon:
+            Icon(Icons.inventory, color: Theme.of(context).colorScheme.primary),
+        link: '/stock/',
+        page:
+            StocksIndexPage(onChangePage: onChangePage, onBackPage: onBackPage),
+        // onClick: () => null,
+        roles: [
+          'admin',
+          'manager'
+        ],
+        children: [
+          ModuleMenu(
+            name: 'Products',
+            link: '/stock/products',
+            roles: ['admin', 'manager'],
+            page: ProductsPage(
+                onBackPage: onBackPage, onChangePage: onChangePage),
+            icon: const Icon(Icons.sell),
+            // onClick: () => null,
+          ),
+          ModuleMenu(
+              name: 'Categories',
+              link: '/stock/categories',
+              roles: ['admin', 'manager'],
+              icon: const Icon(Icons.category),
+              page: CategoriesPage(
+                  onBackPage: onBackPage, onChangePage: onChangePage)),
+          // ModuleMenu(
+          //     name: 'Suppliers',
+          //     link: '/stock/suppliers',
+          //     roles: ['admin', 'manager'],
+          //     icon: const Icon(Icons.support_agent_sharp),
+          //     page: SuppliersPage(onBackPage: onBackPage)),
+          ModuleMenu(
+              name: 'Purchases',
+              link: '/stock/purchases',
+              roles: ['admin', 'manager'],
+              icon: const Icon(Icons.receipt),
+              page: PurchasesPage(
+                  onBackPage: onBackPage, onChangePage: onChangePage)),
+          ModuleMenu(
+              name: 'Transfer',
+              link: '/stock/transfers',
+              roles: ['admin', 'manager'],
+              icon: const Icon(Icons.change_circle),
+              page: TransfersPage(
+                  onBackPage: onBackPage, onChangePage: onChangePage)),
+          ModuleMenu(
+              name: 'Summary',
+              link: '/stock/reports',
+              roles: ['admin', 'manager'],
+              icon: const Icon(Icons.bar_chart),
+              page: StocksIndexPage(
+                  onBackPage: onBackPage, onChangePage: onChangePage)),
+        ]),
     ModuleMenu(
       name: 'Expenses',
       icon: Icon(Icons.receipt_long_rounded,
           color: Theme.of(context).colorScheme.primary),
       link: '/expense/',
       page: expenseIndex,
-      onClick: () => null,
+      // onClick: () => null,
       roles: ['*'],
     ),
     ModuleMenu(
@@ -82,7 +123,7 @@ List<ModuleMenu> _onGetModules({
           color: Theme.of(context).colorScheme.primary),
       link: '/report/',
       page: reportIndex,
-      onClick: () => null,
+      // onClick: () => null,
       roles: ['admin'],
     ),
     ModuleMenu(
@@ -91,7 +132,7 @@ List<ModuleMenu> _onGetModules({
           color: Theme.of(context).colorScheme.primary),
       link: '/account/',
       page: accountIndex,
-      onClick: () => null,
+      // onClick: () => null,
       roles: ['*'],
     ),
   ];
@@ -105,7 +146,7 @@ List<ModuleMenu> _getEmptyMenu({
     [];
 
 void main() {
-  initializeSmartStock(onGetModulesMenu: _onGetModules);
+  initializeSmartStock(onGetAppMenu: _onGetModules);
 
   // initializeSmartStock(
   //     onGetModulesMenu: _getEmptyMenu,

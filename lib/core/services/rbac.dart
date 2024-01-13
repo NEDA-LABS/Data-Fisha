@@ -11,12 +11,9 @@ bool hasRbaAccess(user, List<String> groups, String? pagePath) {
   } else {
     var result = groups
         .where((x) =>
-            '$x'.toLowerCase().trim() ==
-            '${getRole(user)}'.toLowerCase().trim())
+            x.toLowerCase().trim() == '${getRole(user)}'.toLowerCase().trim())
         .toList();
-    // print(result);
-    // print(result is List && result.length == 1);
-    groupAccess = (result is List && result.length == 1);
+    groupAccess = (result.length == 1);
   }
   if (pagePath != null &&
       pagePath.trim().isNotEmpty &&
@@ -30,13 +27,9 @@ bool hasRbaAccess(user, List<String> groups, String? pagePath) {
             .trim()
             .startsWith(pagePath.toLowerCase().trim()))
         .toString();
-    pathAccess = (result != null && result is List && result.isNotEmpty);
+    pathAccess = (result is List && result.isNotEmpty);
   } else {
     pathAccess = false;
   }
-  // print('--------');
-  // print(groupAccess);
-  // print(pathAccess);
-  // print('--------');
   return (groupAccess || pathAccess);
 }

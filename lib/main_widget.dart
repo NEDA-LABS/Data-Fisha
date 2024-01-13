@@ -6,7 +6,7 @@ import 'package:smartstock/core/services/util.dart';
 import 'smartstock.dart';
 
 class MainWidget extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const MainWidget({
@@ -39,7 +39,7 @@ class _State extends State<MainWidget> {
       home: SafeArea(
         child: SmartStock(
           onGetModulesMenu: widget.onGetModulesMenu,
-          onGetInitialModule: widget.onGetInitialModule,
+          onGetInitialPage: widget.onGetInitialModule,
         ),
       ),
     );

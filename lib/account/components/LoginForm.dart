@@ -12,7 +12,7 @@ import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class LoginForm extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const LoginForm({
@@ -132,7 +132,7 @@ class _State extends State<LoginForm> {
           MaterialPageRoute(
             builder: (context) => SmartStock(
               onGetModulesMenu: widget.onGetModulesMenu,
-              onGetInitialModule: widget.onGetInitialModule,
+              onGetInitialPage: widget.onGetInitialModule,
             ),
           ),
           (route) => false,

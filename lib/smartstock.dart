@@ -26,13 +26,13 @@ import 'package:smartstock/sales/pages/index.dart';
 import 'core/plugins/sync_common.dart';
 
 class SmartStock extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
-  final OnGetInitialPage onGetInitialModule;
+  final OnGeAppMenu onGetModulesMenu;
+  final OnGetInitialPage onGetInitialPage;
 
   const SmartStock({
     Key? key,
     required this.onGetModulesMenu,
-    required this.onGetInitialModule,
+    required this.onGetInitialPage,
   }) : super(key: key);
 
   @override
@@ -76,8 +76,9 @@ class _State extends State<SmartStock> {
       );
       return WillPopScope(
         child: ResponsivePageLayout(
+          currentUser: user??{},
           onGetModulesMenu: widget.onGetModulesMenu,
-          onGetInitialModule: widget.onGetInitialModule,
+          onGetInitialModule: widget.onGetInitialPage,
           showLeftDrawer: menus.isNotEmpty,
           menus: menus,
           onChangePage: _onChangePage,
@@ -99,7 +100,7 @@ class _State extends State<SmartStock> {
     } else {
       return LoginPage(
         onGetModulesMenu: widget.onGetModulesMenu,
-        onGetInitialModule: widget.onGetInitialModule,
+        onGetInitialModule: widget.onGetInitialPage,
       );
     }
   }
@@ -165,7 +166,7 @@ class _State extends State<SmartStock> {
       if (user == null) {
         return;
       }
-      var initialPage = widget.onGetInitialModule(
+      var initialPage = widget.onGetInitialPage(
           onBackPage: _onBackPage, onChangePage: _onChangePage);
       if (initialPage != null) {
         child = initialPage;

@@ -16,7 +16,7 @@ import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class RegisterForm extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const RegisterForm({
@@ -165,7 +165,7 @@ class _State extends State<RegisterForm> {
                 MaterialPageRoute(
                   builder: (context) => SmartStock(
                     onGetModulesMenu: widget.onGetModulesMenu,
-                    onGetInitialModule: widget.onGetInitialModule,
+                    onGetInitialPage: widget.onGetInitialModule,
                   ),
                 ),
                 (route) => false,

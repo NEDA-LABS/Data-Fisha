@@ -30,8 +30,8 @@ void localDataCallbackDispatcher() {
 }
 
 initializeSmartStock({
-  required OnGetModulesMenu onGetModulesMenu,
-  OnGetInitialPage? onGetInitialModule,
+  required OnGeAppMenu onGetAppMenu,
+  OnGetInitialPage? onGetInitialPage,
 }) {
   WidgetsFlutterBinding.ensureInitialized();
   CacheFactory().init();
@@ -39,8 +39,8 @@ initializeSmartStock({
   periodicLocalDataSyncs(localDataCallbackDispatcher);
   runApp(
     MainWidget(
-      onGetModulesMenu: onGetModulesMenu,
-      onGetInitialModule: onGetInitialModule ??
+      onGetModulesMenu: onGetAppMenu,
+      onGetInitialModule: onGetInitialPage ??
           ({required onBackPage, required onChangePage}) => null,
     ),
   );

@@ -8,7 +8,7 @@ import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/util.dart';
 
 class ChooseShop extends StatefulWidget {
-  final OnGetModulesMenu onGetModulesMenu;
+  final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const ChooseShop({
@@ -77,7 +77,7 @@ class _State extends State<ChooseShop> {
               MaterialPageRoute(
                 builder: (context) => SmartStock(
                   onGetModulesMenu: widget.onGetModulesMenu,
-                  onGetInitialModule: widget.onGetInitialModule,
+                  onGetInitialPage: widget.onGetInitialModule,
                 ),
               ),
               (route) => false,

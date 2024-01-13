@@ -57,7 +57,8 @@ class _State extends State<StocksSummary> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _title(),
+        // _title(),
+        const WhiteSpacer(height: 24),
         ...isSmallScreen
             ? _getItemValueCompactScreenView(summary)
             : _getItemValueLargeScreen(summary),
@@ -105,17 +106,17 @@ class _State extends State<StocksSummary> {
     );
   }
 
-  _title() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(0, 16, 0, 8),
-      child: BodySmall(text: "Summary"),
-    );
-  }
+  // _title() {
+  //   return const Padding(
+  //     padding: EdgeInsets.fromLTRB(0, 16, 0, 8),
+  //     child: BodySmall(text: "Summary"),
+  //   );
+  // }
 
-  List _getGroups(Map summary) {
-    List list = summary['group'] is List ? summary['group'] as List : [];
-    return list;
-  }
+  // List _getGroups(Map summary) {
+  //   List list = summary['group'] is List ? summary['group'] as List : [];
+  //   return list;
+  // }
 
   Widget _expandedByOne({required Widget child}) {
     return Expanded(

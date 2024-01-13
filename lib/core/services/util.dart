@@ -137,7 +137,7 @@ List<List<T>> divideList<T>(List<T> list, int length) {
 typedef OnChangePage = Function(PageBase page);
 typedef OnChangeRightDrawer = Function(Widget? drawer);
 typedef OnBackPage = Function();
-typedef OnGetModulesMenu = List<ModuleMenu> Function({
+typedef OnGeAppMenu = List<ModuleMenu> Function({
   required BuildContext context,
   required OnChangePage onChangePage,
   required OnBackPage onBackPage,

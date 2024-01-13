@@ -5,9 +5,10 @@ class ModuleMenu {
   final String name;
   final String link;
   final PageBase page;
-  final Function()? onClick;
+  final VoidCallback? onClick;
   final List<String> roles;
   final Icon icon;
+  final List<ModuleMenu>? children;
 
   ModuleMenu({
     required this.name,
@@ -15,6 +16,7 @@ class ModuleMenu {
     required this.link,
     required this.roles,
     required this.page,
+    this.children,
     this.onClick,
   });
 }

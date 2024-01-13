@@ -36,7 +36,7 @@ Future accountResetPassword(username) async {
   }
 }
 
-logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu,
+logOut(BuildContext context, OnGeAppMenu onGetModulesMenu,
     OnGetInitialPage onGetInitialModule) {
   removeLocalCurrentUser().then((value) {
     return removeActiveShop();
@@ -45,7 +45,7 @@ logOut(BuildContext context, OnGetModulesMenu onGetModulesMenu,
       MaterialPageRoute(
         builder: (context) => SmartStock(
           onGetModulesMenu: onGetModulesMenu,
-          onGetInitialModule: onGetInitialModule,
+          onGetInitialPage: onGetInitialModule,
         ),
       ),
       (route) => false,
