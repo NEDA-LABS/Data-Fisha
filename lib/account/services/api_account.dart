@@ -1,5 +1,5 @@
 import 'package:smartstock/core/services/api.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future updateUserDetailsRemote(user, data) async {
   var url = '$baseUrl/account/${user['id']}/details';

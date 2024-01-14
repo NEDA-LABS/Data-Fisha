@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,10 +12,11 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/services/invoice.dart';
@@ -26,10 +26,10 @@ class InvoicesPage extends PageBase {
   final OnChangePage onChangePage;
 
   const InvoicesPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'InvoicesPage');
+  }) : super(pageName: 'InvoicesPage');
 
   @override
   State<StatefulWidget> createState() => _InvoicesPage();

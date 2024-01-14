@@ -1,10 +1,10 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
@@ -13,17 +13,17 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class RegisterForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const RegisterForm({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

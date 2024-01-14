@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/SwitchToPageGrid.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class SwitchToPageMenu extends StatelessWidget {
   final List<ModulePageMenu> pages;

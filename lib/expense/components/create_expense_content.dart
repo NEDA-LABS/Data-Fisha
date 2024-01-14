@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/api_files.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 import 'package:smartstock/expense/services/expenses.dart';

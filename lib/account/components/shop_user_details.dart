@@ -3,7 +3,7 @@ import 'package:smartstock/account/components/update_user_password_content.dart'
 import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 shopUserDetail(Map item, context) => Padding(
     padding: const EdgeInsets.all(16.0),

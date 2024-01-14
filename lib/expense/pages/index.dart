@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
@@ -7,9 +6,10 @@ import 'package:smartstock/core/components/SwitchToTitle.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 import 'package:smartstock/expense/pages/ExpensesPage.dart';
@@ -20,10 +20,10 @@ class ExpenseIndexPage extends PageBase {
   final OnBackPage onBackPage;
 
   const ExpenseIndexPage({
-    Key? key,
+    super.key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'ExpenseIndexPage');
+  }) : super(pageName: 'ExpenseIndexPage');
 
   @override
   State<StatefulWidget> createState() => _State();

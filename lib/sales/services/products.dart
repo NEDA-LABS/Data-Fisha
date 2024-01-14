@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future<List<dynamic>> getProductsFromCacheOrRemote(
     {skipLocal = false, stringLike = ''}) async {

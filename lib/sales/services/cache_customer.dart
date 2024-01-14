@@ -1,4 +1,4 @@
-import 'package:bfast/options.dart';
+import 'package:smartstock/core/models/App.dart';
 import 'package:smartstock/core/services/cache_factory.dart';
 
 const _customersTable = 'customers';

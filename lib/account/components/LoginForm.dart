@@ -1,15 +1,15 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class LoginForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;

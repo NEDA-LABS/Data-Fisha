@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/AppMenu.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class MenuDrawer extends StatefulWidget {
   final Map currentUser;
   final List<ModuleMenu> menus;
-  final String? current;
+  final String currentPage;
   final double cWidth;
   final OnChangePage onChangePage;
   final OnGeAppMenu onGetModulesMenu;
@@ -18,10 +18,10 @@ class MenuDrawer extends StatefulWidget {
     required this.menus,
     required this.onChangePage,
     required this.onGetInitialModule,
-    this.current,
+    required this.currentPage,
     this.cWidth = 250,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -41,6 +41,7 @@ class _State extends State<MenuDrawer> {
         ),
       ),
       child: AppMenu(
+          currentPage: widget.currentPage,
           currentUser: widget.currentUser,
           onGetModulesMenu: widget.onGetModulesMenu,
           menus: widget.menus,

@@ -1,17 +1,15 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
-import 'package:smartstock/sales/services/api_cash_sale.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
 class SaleInvoiceRefundContent extends StatefulWidget {
   final dynamic saleId;
   final dynamic item;
 
-  const SaleInvoiceRefundContent(this.saleId, this.item, {Key? key})
-      : super(key: key);
+  const SaleInvoiceRefundContent(this.saleId, this.item, {super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -27,7 +25,9 @@ class _State extends State<SaleInvoiceRefundContent> {
       "loading": false,
       'amount': '${propertyOr('amount_refund', (p0) => 0)(widget.item)}',
       'quantity': '${propertyOr('quantity_refund', (p0) => 0)(widget.item)}',
-      'product': compose([propertyOr('product', (p0) => ''),propertyOrNull('stock')])(widget.item),
+      'product':
+          compose([propertyOr('product', (p0) => ''), propertyOrNull('stock')])(
+              widget.item),
       'batch': propertyOr('batch', (p0) => '')(widget.item),
     };
     updateState = ifDoElse(

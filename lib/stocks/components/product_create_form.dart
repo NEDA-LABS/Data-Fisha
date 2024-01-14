@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/product_form.dart';
 import 'package:smartstock/stocks/services/product.dart';
 

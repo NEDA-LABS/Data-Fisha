@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/add_invoice_payment.dart';
 
 orderDetails(context, item) {

@@ -1,14 +1,14 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
 class AddPurchasePaymentContent extends StatefulWidget {
   final String? id;
 
-  const AddPurchasePaymentContent(this.id, {Key? key}) : super(key: key);
+  const AddPurchasePaymentContent(this.id, {super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -16,7 +16,7 @@ class AddPurchasePaymentContent extends StatefulWidget {
 
 class _State extends State<AddPurchasePaymentContent> {
   Map states = {"loading": false};
-  var updateState;
+  dynamic updateState;
 
   @override
   void initState() {
@@ -83,10 +83,9 @@ class _State extends State<AddPurchasePaymentContent> {
       return;
     }
     var payment = {'amount': doubleOrZero("${states['amount']}")};
-    var patchPurchase = preparePatchPurchasePayment(id, payment);
     getActiveShop().then((shop) {
       updateState({'loading': true});
-      patchPurchase(shop)
+      productsUpdatePurchasePaymentsRestAPI(id ?? '', payment, shop)
           .then((value) => Navigator.of(context).maybePop())
           .catchError((onError) => updateState({'error': onError.toString()}))
           .whenComplete(() => updateState({'loading': false}));

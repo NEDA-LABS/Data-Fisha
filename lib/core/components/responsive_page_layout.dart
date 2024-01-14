@@ -1,18 +1,18 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/AppDrawer.dart';
 import 'package:smartstock/core/components/BottomBar.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/rbac.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 typedef ChildBuilder = Widget Function(BuildContext context, dynamic index);
 
 class ResponsivePageLayout extends StatefulWidget {
   final Map currentUser;
   final String office;
-  final String current;
+  final String currentPage;
   final bool showLeftDrawer;
   final List<ModuleMenu> menus;
   final Widget child;
@@ -22,7 +22,7 @@ class ResponsivePageLayout extends StatefulWidget {
 
   const ResponsivePageLayout({
     this.office = '',
-    this.current = '/',
+    required this.currentPage,
     this.showLeftDrawer = true,
     required this.menus,
     required this.currentUser,
@@ -30,8 +30,8 @@ class ResponsivePageLayout extends StatefulWidget {
     required this.onChangePage,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -65,7 +65,7 @@ class _State extends State<ResponsivePageLayout> {
                 currentUser: widget.currentUser,
                 onGetModulesMenu: widget.onGetModulesMenu,
                 menus: widget.menus,
-                current: widget.current,
+                currentPage: widget.currentPage,
                 onChangePage: widget.onChangePage,
                 onGetInitialModule: widget.onGetInitialModule,
               )
@@ -93,6 +93,7 @@ class _State extends State<ResponsivePageLayout> {
                               snapshot.data, element.roles, element.link))
                           .toList();
                       return AppBottomBar(
+                        currentPage: widget.currentPage,
                         currentUser: widget.currentUser,
                         menus: menu,
                         onChangePage: widget.onChangePage,

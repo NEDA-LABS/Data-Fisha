@@ -1,5 +1,5 @@
-import 'package:bfast/options.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/models/App.dart';
 
 // GREEN : 0xFF0b2e13
 // class Config{
@@ -26,7 +26,7 @@ const lightColorScheme = ColorScheme(
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),
-  background: Color(0xFFf5f5f5),
+  background: Color(0xfff0f0f0),
   onBackground: Color(0xFF1A1C1E),
   surface: Color(0xFFFFFFFF),
   onSurface: Color(0xFF1A1C1E),
@@ -60,11 +60,11 @@ const darkColorScheme = ColorScheme(
   errorContainer: Color(0xFF93000A),
   onError: Color(0xFF690005),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: Color(0xFF212121),
+  background: Color(0xFF000000),
   onBackground: Color(0xFFE3E2E6),
-  surface: Color(0xFF000000),
+  surface: Color(0xFF111111),
   onSurface: Color(0xFFE3E2E6),
-  surfaceVariant: Color(0xFF000000),
+  surfaceVariant: Color(0xFF111111),
   onSurfaceVariant: Color(0xFFC4C6CF),
   outline: Color(0xFF8D9199),
   onInverseSurface: Color(0xFF1A1C1E),

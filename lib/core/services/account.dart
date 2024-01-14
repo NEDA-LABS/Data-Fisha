@@ -1,10 +1,10 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/services/api_account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future accountLogin(String username, String password) async {
   var user = await accountRemoteLogin(username.trim(), password.trim());

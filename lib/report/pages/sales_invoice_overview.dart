@@ -1,5 +1,3 @@
-import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
@@ -12,8 +10,9 @@ import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -23,9 +22,9 @@ class OverviewInvoiceSales extends PageBase {
   final OnBackPage onBackPage;
 
   const OverviewInvoiceSales({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'OverviewInvoiceSales');
+  }) : super(pageName: 'OverviewInvoiceSales');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -120,15 +119,16 @@ class _State extends State<OverviewInvoiceSales> {
 
   _showLoading() => loading ? const LinearProgressIndicator() : Container();
 
-  charts.Series<dynamic, String> _sales2Series(List sales) {
-    return charts.Series<dynamic, String>(
-      id: 'Sales',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-      domainFn: (dynamic sales, _) => sales['date'],
-      measureFn: (dynamic sales, _) => sales['amount'],
-      data: dailySales,
-    );
+  Map<dynamic, String> _sales2Series(List sales) {
+    return {};
+    // return Map<dynamic, String>(
+    //   id: 'Sales',
+    //   colorFn: (_, __) =>
+    //       charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
+    //   domainFn: (dynamic sales, _) => sales['date'],
+    //   measureFn: (dynamic sales, _) => sales['amount'],
+    //   data: dailySales,
+    // );
   }
 
   _fetchData() {

@@ -1,21 +1,20 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
-import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class ChooseShop extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
   final OnGetInitialPage onGetInitialModule;
 
   const ChooseShop({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

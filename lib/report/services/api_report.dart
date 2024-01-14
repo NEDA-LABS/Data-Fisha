@@ -1,8 +1,8 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 prepareGetOverviewCashSales(shop, type) {
   return (DateTimeRange range) async {

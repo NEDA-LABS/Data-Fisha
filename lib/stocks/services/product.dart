@@ -3,7 +3,7 @@ import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
 Future deleteProduct(String? id) async {

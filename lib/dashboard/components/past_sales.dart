@@ -1,16 +1,14 @@
-import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/time_series_chart.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class PastSalesOverview extends StatefulWidget {
   final DateTime date;
 
-  const PastSalesOverview({required this.date, Key? key}) : super(key: key);
+  const PastSalesOverview({required this.date, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -39,27 +37,27 @@ class _State extends State<PastSalesOverview> {
     return _whatToShow();
   }
 
-  charts.Series<dynamic, DateTime> _sales2Series() {
-    return charts.Series<dynamic, DateTime>(
-      id: 'Cash',
-      domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
-      measureFn: (dynamic sales, _) => sales['amount'],
-      data: dailySales,
-      // displayName: 'Past seven days from ${dateRange?.end?.toLocal()}',
-    );
-  }
+  // charts.Series<dynamic, DateTime> _sales2Series() {
+  //   return charts.Series<dynamic, DateTime>(
+  //     id: 'Cash',
+  //     domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
+  //     measureFn: (dynamic sales, _) => sales['amount'],
+  //     data: dailySales,
+  //     displayName: 'Past seven days from ${dateRange?.end?.toLocal()}',
+    // );
+  // }
 
-  charts.Series<dynamic, DateTime> _invoiceSeries() {
-    return charts.Series<dynamic, DateTime>(
-      id: 'Invoices',
-      colorFn: (_, __) =>
-          charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.secondary),
-      domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
-      measureFn: (dynamic sales, _) => sales['amount'],
-      data: dailyInvoices,
-      // displayName: 'Past seven days from ${dateRange?.end?.toLocal()}',
-    );
-  }
+  // charts.Series<dynamic, DateTime> _invoiceSeries() {
+  //   return charts.Series<dynamic, DateTime>(
+  //     id: 'Invoices',
+  //     colorFn: (_, __) =>
+  //         charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.secondary),
+  //     domainFn: (dynamic sales, _) => DateTime.parse(sales['date']),
+  //     measureFn: (dynamic sales, _) => sales['amount'],
+  //     data: dailyInvoices,
+  //     displayName: 'Past seven days from ${dateRange?.end?.toLocal()}',
+    // );
+  // }
 
   _fetchData() {
     setState(() {
@@ -125,7 +123,7 @@ class _State extends State<PastSalesOverview> {
             : chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),
         child: TimeSeriesChart(
-          [_sales2Series(), _invoiceSeries()],
+          [],
           animate: false,
         ),
       ),

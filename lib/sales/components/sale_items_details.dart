@@ -1,10 +1,9 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class SaleItemsDetails extends StatefulWidget {
   final dynamic sale;
@@ -13,8 +12,8 @@ class SaleItemsDetails extends StatefulWidget {
   const SaleItemsDetails({
     required this.sale,
     required this.onRefund,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -60,7 +59,6 @@ class _State extends State<SaleItemsDetails> {
     );
   }
 
-
   List<Widget> _itemsList() {
     var getName = compose([propertyOrNull('product'), propertyOrNull('stock')]);
     var getQuantity = propertyOrNull('quantity');
@@ -72,7 +70,7 @@ class _State extends State<SaleItemsDetails> {
       fontWeight: FontWeight.w300,
       fontSize: 14,
     );
-    var getSaleId = propertyOr('id',(_)=>'');
+    var getSaleId = propertyOr('id', (_) => '');
     map2Widget(item) {
       return Column(
         mainAxisSize: MainAxisSize.min,

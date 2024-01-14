@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/api_stocks.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future<List<dynamic>> getStockFromCacheOrRemote({
   skipLocal = false,
@@ -16,7 +16,7 @@ Future<List<dynamic>> getStockFromCacheOrRemote({
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
-      List rStocks = await getAllRemoteStocks(shop);
+      List rStocks = await productsAllRestAPI(shop);
       rStocks = await compute(
           _pruneAndSortStocks, {'stocks': rStocks, 'query': ''});
       await saveLocalStocks(shopToApp(shop), rStocks);

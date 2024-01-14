@@ -1,9 +1,9 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/add_transfer_to_cart.dart';
 import 'package:smartstock/stocks/components/transfer_add_shop_content.dart';
@@ -15,9 +15,9 @@ class TransferSendPage extends PageBase {
   final OnBackPage onBackPage;
 
   const TransferSendPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'TransferSendPage');
+  }) : super(pageName: 'TransferSendPage');
 
   @override
   State<StatefulWidget> createState() => _State();

@@ -1,7 +1,7 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/dashboard/components/past_expenses.dart';
 import 'package:smartstock/dashboard/components/past_expenses_by_item.dart';
@@ -10,7 +10,7 @@ import 'package:smartstock/dashboard/components/past_sales_by_categories.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 
 class DashboardSummary extends StatefulWidget {
-  const DashboardSummary({Key? key}) : super(key: key);
+  const DashboardSummary({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();

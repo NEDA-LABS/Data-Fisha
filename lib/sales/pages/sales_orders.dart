@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +6,6 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
@@ -15,28 +13,26 @@ import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/components/order_details.dart';
-import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/services/orders_api.dart';
 
 import '../../core/components/BodyLarge.dart';
-import '../../core/components/TitleMedium.dart';
-import '../../core/components/WhiteSpacer.dart';
 
 class OrdersPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
   const OrdersPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'OrdersPage');
+  }) : super(pageName: 'OrdersPage');
 
   @override
   State<StatefulWidget> createState() => _OrdersPage();
@@ -296,10 +292,6 @@ class _OrdersPage extends State<OrdersPage> {
         const HorizontalLine()
       ],
     );
-  }
-
-  _processOrderInfo(){
-
   }
 
   _showOrderOptions(BuildContext context, order) {

@@ -9,7 +9,7 @@ import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category.dart';

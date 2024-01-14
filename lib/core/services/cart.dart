@@ -1,5 +1,5 @@
-import 'package:bfast/util.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 appendToCarts(cart, List carts) {
   var index = carts.indexWhere((x) => x.product['id'] == cart.product['id']);

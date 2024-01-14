@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/BodyMedium.dart';
 import '../components/WhiteSpacer.dart';
-import '../services/util.dart';
+import '../helpers/util.dart';
 import '../models/HistogramData.dart';
 
 class Histogram extends StatefulWidget {

@@ -1,25 +1,22 @@
-import 'package:bfast/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/api.dart';
-import 'package:smartstock/core/services/util.dart';
 
-
-prepareGetAllRemotePurchases(String startAt) {
-  return composeAsync([
-    itOrEmptyArray,
-    (app) => httpGetRequest(
-        '${shopFunctionsURL(app)}/stock/purchase?size=20&start=$startAt}'),
-    shopToApp,
-  ]);
+productsGetPurchaseRestAPI(String startAt, shop) async {
+  var url =
+      '${shopFunctionsURL(shopToApp(shop))}/stock/purchase?size=20&start=$startAt}';
+  var httpGetRequest = prepareHttpGetRequest();
+  var purchases = await httpGetRequest(url);
+  return itOrEmptyArray(purchases);
 }
 
-preparePatchPurchasePayment(String? id, Map payment) {
+productsUpdatePurchasePaymentsRestAPI(String id, Map payment, shop) {
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase/$id';
   var patchInvoice = prepareHttpPatchRequest(payment);
-  f(app) => patchInvoice('${shopFunctionsURL(app)}/stock/purchase/$id');
-  return composeAsync([f, shopToApp]);
+  return patchInvoice(url);
 }
 
-prepareCreatePurchase(Map purchase) {
+productsCreatePurchaseRestAPI(Map purchase, shop) {
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase';
   var createRequest = prepareHttpPutRequest(purchase);
-  f(app) => createRequest('${shopFunctionsURL(app)}/stock/purchase');
-  return composeAsync([f, shopToApp]);
+  return createRequest(url);
 }

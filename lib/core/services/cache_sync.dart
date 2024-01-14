@@ -1,6 +1,6 @@
-import 'package:bfast/options.dart';
+import 'package:smartstock/core/models/App.dart';
 import 'package:smartstock/core/services/cache_factory.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 const _tableName = 'cache_syncs';
 var _app = App(applicationId: 'smartstock', projectId: 'smartstock');

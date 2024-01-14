@@ -16,10 +16,11 @@ import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/core/helpers/page_history.dart';
 import 'package:smartstock/sales/pages/index.dart';
+import 'package:uuid/uuid.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io_client;
 
@@ -74,8 +75,18 @@ class _State extends State<SmartStock> {
         onChangePage: _onChangePage,
         onBackPage: _onBackPage,
       );
-      return WillPopScope(
+      return PopScope(
+        canPop: PageHistory().getLength() == 1,
+        onPopInvoked: (didPop) {
+            if (kDebugMode) {
+              print('------');
+              print('Back pressed');
+              print('------');
+            }
+            _onBackPage();
+        },
         child: ResponsivePageLayout(
+          currentPage: child?.pageName??const Uuid().v4(),
           currentUser: user??{},
           onGetModulesMenu: widget.onGetModulesMenu,
           onGetInitialModule: widget.onGetInitialPage,
@@ -84,18 +95,18 @@ class _State extends State<SmartStock> {
           onChangePage: _onChangePage,
           child: child ?? Container(),
         ),
-        onWillPop: () async {
-          if (kDebugMode) {
-            print('------');
-            print('Back pressed');
-            print('------');
-          }
-          if (PageHistory().getLength() == 1) {
-            return true;
-          }
-          _onBackPage();
-          return false;
-        },
+        // onWillPop: () async {
+        //   if (kDebugMode) {
+        //     print('------');
+        //     print('Back pressed');
+        //     print('------');
+        //   }
+        //   if (PageHistory().getLength() == 1) {
+        //     return true;
+        //   }
+        //   _onBackPage();
+        //   return false;
+        // },
       );
     } else {
       return LoginPage(
@@ -406,5 +417,18 @@ class _State extends State<SmartStock> {
     _productRefreshTimer?.cancel();
     // _socket?.close();
     super.dispose();
+  }
+
+  _calculateCanPop() {
+    if (kDebugMode) {
+      print('------');
+      print('Back pressed');
+      print('------');
+    }
+    if (PageHistory().getLength() == 1) {
+      return true;
+    }
+    _onBackPage();
+    return false;
   }
 }

@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/services/api_subscription.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class PaymentBody extends StatefulWidget {
   final dynamic initialSubscription;

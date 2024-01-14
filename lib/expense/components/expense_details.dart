@@ -5,7 +5,7 @@ import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/services/expenses.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -1,9 +1,9 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ReadBarcodeView.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Widget mobileQrScanIconButton(BuildContext context, Function(dynamic code) onBarCode) {
   var a = ifDoElse(
@@ -11,7 +11,7 @@ Widget mobileQrScanIconButton(BuildContext context, Function(dynamic code) onBar
         (_) =>
         IconButton(
           onPressed: () {
-            fullScreeDialog(context, (p0) {
+            showFullScreeDialog(context, (p0) {
               return const ReadBarcodeView();
             }).then(onBarCode).catchError((error) {
               if (kDebugMode) {

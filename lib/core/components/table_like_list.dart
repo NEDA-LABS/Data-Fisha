@@ -1,8 +1,8 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 
 _a(dynamic) {}
 

@@ -1,5 +1,5 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 
 var inputErrorMessageOrEmpty = ifDoElse(
     (x) => x is String && x.isNotEmpty,

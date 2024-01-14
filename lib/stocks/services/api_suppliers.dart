@@ -1,42 +1,15 @@
-import 'dart:convert';
+import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/api.dart';
 
-import 'package:bfast/controller/function.dart';
-import 'package:bfast/model/raw_response.dart';
-import 'package:bfast/options.dart';
-import 'package:bfast/util.dart';
-import 'package:http/http.dart';
-import 'package:smartstock/core/services/util.dart';
+Future<List> productSuppliersRestAPI(Map shop) async {
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/suppliers';
+  var httpGetRequest = prepareHttpGetRequest();
+  var suppliers = await httpGetRequest(url);
+  return itOrEmptyArray(suppliers);
+}
 
-_allRemoteSuppliersHttpRequest(url) => get(Uri.parse(url));
-
-_createSupplierHttpRequest(supplier) => (url) => put(
-  Uri.parse(url),
-  headers: getInitialHeaders(),
-  body: jsonEncode(supplier),
-);
-
-_createSupplier(supplier) => composeAsync([
-  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-  _createSupplierHttpRequest(supplier)
-]);
-
-var _allRemoteSuppliers = composeAsync([
-  map((x) => RawResponse(body: x.body, statusCode: x.statusCode)),
-  _allRemoteSuppliersHttpRequest,
-]);
-
-var getAllRemoteSuppliers = composeAsync([
-  (suppliers) => itOrEmptyArray(suppliers),
-  (app) => executeHttp(
-      () => _allRemoteSuppliers('${shopFunctionsURL(app)}/stock/suppliers')),
-  map(shopToApp),
-]);
-
-createSupplier(Map supplier) {
-  var createRequest = _createSupplier(supplier);
-  return composeAsync([
-        (app) => executeHttp(
-            () => (createRequest('${shopFunctionsURL(app)}/stock/suppliers'))),
-    map(shopToApp)
-  ]);
+productCreateSupplierRestAPI(Map supplier, Map shop) {
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/suppliers';
+  var httpPutRequest = prepareHttpPutRequest(supplier);
+  return httpPutRequest(url);
 }

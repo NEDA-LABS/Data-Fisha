@@ -12,7 +12,7 @@ import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/custom_text_editing_controller.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/components/product_form.dart';

@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodySmall.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 typedef OnAddToCart = Function(dynamic);
 typedef OnAddToCartView = Function(dynamic product, OnAddToCart onAddToCart);

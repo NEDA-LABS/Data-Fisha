@@ -1,10 +1,9 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/transfer.dart';
 
 transferDetails(context, item) => ListView(
@@ -35,7 +34,7 @@ transferDetails(context, item) => ListView(
                       compose([(x) => x == 'receive', propertyOrNull('type')]);
                   if (getIsReceive(item)) {
                     printPreviousReceiveTransfer(item);
-                  }else{
+                  } else {
                     printPreviousSendTransfer(item);
                   }
                 },
@@ -44,8 +43,8 @@ transferDetails(context, item) => ListView(
       ],
     );
 
-_tableHeader() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
+_tableHeader() => const Padding(
+    padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
     child: SizedBox(
         height: 38,
         child: TableLikeListRow([

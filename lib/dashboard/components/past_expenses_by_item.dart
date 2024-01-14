@@ -1,16 +1,13 @@
-import 'package:bfast/util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/pie_chart.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class PastExpensesByItemOverview extends StatefulWidget {
   final DateTime date;
 
-  const PastExpensesByItemOverview({required this.date, Key? key})
-      : super(key: key);
+  const PastExpensesByItemOverview({required this.date, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -49,7 +46,7 @@ class _State extends State<PastExpensesByItemOverview> {
     getExpensesDistribution(dateRange ?? defaultRange, 'name').then((value) {
       expenseByItem = itOrEmptyArray(value);
       expenseByItem.sort((a, b) =>
-      int.tryParse('${a['total'] - b['total']}'.split('.')[0]) ?? 0);
+          int.tryParse('${a['total'] - b['total']}'.split('.')[0]) ?? 0);
       expenseByItem = expenseByItem.reversed.toList();
       for (var element in expenseByItem) {
         totalAmount += doubleOrZero(element['total']);
@@ -121,36 +118,36 @@ class _State extends State<PastExpensesByItemOverview> {
                   children: [
                     const SizedBox(height: 24),
                     ...expenseByItem.map((e) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          // mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              '${e['name'] ?? ''}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Color(0xFF1C1C1C)),
+                            Row(
+                              // mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${e['name'] ?? ''}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Color(0xFF1C1C1C)),
+                                ),
+                                Text(
+                                  '${compactNumber(e['total'] ?? 0)}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Color(0xFF1C1C1C)),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '${compactNumber(e['total'] ?? 0)}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Color(0xFF1C1C1C)),
-                            ),
+                            const SizedBox(height: 16),
+                            LinearProgressIndicator(
+                                value: _getProgValue(e['total']),
+                                backgroundColor: const Color(0x370049a9)),
+                            const SizedBox(height: 16),
                           ],
-                        ),
-                        const SizedBox(height: 16),
-                        LinearProgressIndicator(
-                            value: _getProgValue(e['total']),
-                            backgroundColor: const Color(0x370049a9)),
-                        const SizedBox(height: 16),
-                      ],
-                    ))
+                        ))
                   ],
                 ),
               ),

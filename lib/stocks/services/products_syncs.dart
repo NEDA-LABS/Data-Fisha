@@ -6,7 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future<String> _getProductsHash() async {
   var shop = await getActiveShop();

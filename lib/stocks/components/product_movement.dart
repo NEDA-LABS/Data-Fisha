@@ -1,21 +1,20 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/services/api_product.dart';
 
 class ProductMovementDetails extends StatefulWidget {
-  final item;
+  final dynamic item;
 
   const ProductMovementDetails({
     this.item,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -64,7 +63,8 @@ class _State extends State<ProductMovementDetails> {
           children: [
             _header(context, widget.item),
             _tableHeader(),
-            ...itOrEmptyArray(snapshot.data).reversed
+            ...itOrEmptyArray(snapshot.data)
+                .reversed
                 .toList()
                 .map<Widget>((item) => Column(
                       mainAxisSize: MainAxisSize.min,

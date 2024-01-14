@@ -1,10 +1,10 @@
-import 'package:bfast/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/date_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 
 import '../../core/components/BodyLarge.dart';
 
@@ -20,10 +20,9 @@ Future addPurchaseDetail({
     );
 
 class _AddPurchaseDetailDialog extends StatefulWidget {
-  final onSubmit;
+  final dynamic onSubmit;
 
-  const _AddPurchaseDetailDialog({required this.onSubmit, Key? key})
-      : super(key: key);
+  const _AddPurchaseDetailDialog({required this.onSubmit});
 
   @override
   State<StatefulWidget> createState() => _State();

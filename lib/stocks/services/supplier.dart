@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_suppliers.dart';
 import 'package:smartstock/stocks/services/supplier_cache.dart';
 
@@ -16,7 +16,7 @@ Future<List<dynamic>> getSupplierFromCacheOrRemote({
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
-      List rSuppliers = await getAllRemoteSuppliers(shop);
+      List rSuppliers = await productSuppliersRestAPI(shop);
       rSuppliers = await compute(
           _filterAndSort, {"suppliers": rSuppliers, "query": stringLike});
       await saveLocalSuppliers(shopToApp(shop), rSuppliers);

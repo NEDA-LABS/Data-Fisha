@@ -1,12 +1,12 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_suppliers.dart';
 
 class CreateSupplierContent extends StatefulWidget {
-  const CreateSupplierContent({Key? key}) : super(key: key);
+  const CreateSupplierContent({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -93,7 +93,7 @@ class _State extends State<CreateSupplierContent> {
     var shop = await getActiveShop();
     var createIFValid = ifDoElse(
       (_) => _validSupplier(),
-      createSupplier({...supplier, 'id': '${supplier['name']}'.toLowerCase()}),
+        (_)=>productCreateSupplierRestAPI({...supplier, 'id': '${supplier['name']}'.toLowerCase()},shop),
       (_) async => 'nope',
     );
     createIFValid(shop).then((r) {

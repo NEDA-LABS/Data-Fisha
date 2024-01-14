@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:crypto/crypto.dart';
 
 class ChoiceInputDropdown extends StatefulWidget {
@@ -243,7 +243,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       onClose().whenComplete(() {
         var isSmallScreen = getIsSmallScreen(context);
         isSmallScreen
-            ? fullScreeDialog(context, (p0) {
+            ? showFullScreeDialog(context, (p0) {
                 return Scaffold(
                   appBar: AppBar(
                     title: BodyLarge(

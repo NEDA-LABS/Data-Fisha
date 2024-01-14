@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 typedef OnSetContent = Widget Function(StateSetter setState);
 
-Future fullScreeDialog(context, OnSetContent setContent) {
+Future showFullScreeDialog(context, OnSetContent setContent) {
   return Navigator.of(context).push(MaterialPageRoute<void>(
     builder: (BuildContext context) {
       return StatefulBuilder(

@@ -1,11 +1,11 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 var _getShopSettings =
     propertyOr('settings', (p0) => {'saleWithoutPrinter': false});

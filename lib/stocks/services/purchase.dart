@@ -1,28 +1,26 @@
 import 'dart:async';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/file_data.dart';
+import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/security.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/stocks/components/add_purchase_detail.dart';
 import 'package:smartstock/stocks/services/api_purchase.dart';
 
 Future<List<dynamic>> getPurchasesRemote(String? startAt) async {
-  var shop = await getActiveShop();
+  Map shop = await getActiveShop();
   // var purchases = [];
   //skipLocal ? [] : await getLocalPurchases(shopToApp(shop));
   // var getItOrRemoteAndSave = ifDoElse(
   //   (x) => x == null || (x is List && x.isEmpty),
   //   inv(_) async {
   var start = startAt ?? toSqlDate(DateTime.now());
-  var remoteRequest = prepareGetAllRemotePurchases(start);
-  List purchases = await remoteRequest(shop);
+  List purchases = await productsGetPurchaseRestAPI(start, shop);
   return purchases;
   // rPurchases = await compute(
   //     _filterAndSort, {"purchases": rPurchases, "query": stringLike});
@@ -118,13 +116,15 @@ Future Function(List, String, dynamic) prepareOnSubmitPurchase(context) =>
       }
       var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
       return uploadFileToWeb3(file).then((fileResponse) {
-        var createPurchase = prepareCreatePurchase({
+        var createPurchase = productsCreatePurchaseRestAPI({
           ...purchase,
-          'file': fileResponse.map((e)=>{
-            "link": e['link'],
-            "tags": 'receipt,invoice,purchase,purchases',
-          }).toList()
-        });
+          'file': fileResponse
+              .map((e) => {
+                    "link": e['link'],
+                    "tags": 'receipt,invoice,purchase,purchases',
+                  })
+              .toList()
+        }, shop);
         return createPurchase(shop);
       });
     };

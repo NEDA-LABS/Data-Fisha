@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future productCreateRestAPI(
     {required Map product, required dynamic shop}) async {

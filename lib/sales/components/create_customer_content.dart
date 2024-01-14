@@ -1,16 +1,14 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/HeadineMedium.dart';
-import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/sales/services/api_customer.dart';
 import 'package:smartstock/sales/services/cache_customer.dart';
 
 class CreateCustomerContent extends StatefulWidget {
-  const CreateCustomerContent({Key? key}) : super(key: key);
+  const CreateCustomerContent({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -123,10 +121,9 @@ class _State extends State<CreateCustomerContent> {
     };
     if (states['email'] != null) customer['email'] = states['email'];
     if (states['tin'] != null) customer['tin'] = states['tin'];
-    var createCustomer = prepareCreateCustomer(customer);
     getActiveShop().then((shop) {
       updateState({'loading': true});
-      createCustomer(shop)
+      salesCreateCustomerRestAPI(customer, shop)
           .then((value) {
             saveLocalCustomer(shopToApp(shop), customer);
             Navigator.of(context).maybePop();

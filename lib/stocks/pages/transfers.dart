@@ -11,7 +11,7 @@ import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/transfer_details.dart';
 import 'package:smartstock/stocks/pages/transfer_receive.dart';
 import 'package:smartstock/stocks/pages/transfer_send.dart';

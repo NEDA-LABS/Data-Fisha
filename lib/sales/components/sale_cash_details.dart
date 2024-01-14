@@ -1,8 +1,8 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/sale_cash_refund.dart';
 import 'package:smartstock/sales/components/sale_items_details.dart';
 import 'package:smartstock/sales/services/sales.dart';
@@ -12,8 +12,7 @@ class CashSaleDetail extends StatefulWidget {
   final BuildContext pageContext;
 
   const CashSaleDetail(
-      {required this.sale, required this.pageContext, Key? key})
-      : super(key: key);
+      {required this.sale, required this.pageContext, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();

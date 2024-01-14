@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
@@ -10,11 +9,12 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/stocks/components/product_details.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';

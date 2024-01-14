@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/customer.dart';

@@ -8,7 +8,7 @@ import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class _FilePreview extends StatelessWidget {
   final dynamic data;

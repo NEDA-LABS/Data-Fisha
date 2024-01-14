@@ -1,16 +1,15 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/services/api_cash_sale.dart';
 
 class CashSaleRefundContent extends StatefulWidget {
   final dynamic saleId;
   final dynamic item;
 
-  const CashSaleRefundContent(this.saleId, this.item, {Key? key})
-      : super(key: key);
+  const CashSaleRefundContent(this.saleId, this.item, {super.key});
 
   @override
   State<StatefulWidget> createState() => _State();

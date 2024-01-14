@@ -10,7 +10,7 @@ import 'package:smartstock/core/services/cache_stocks.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/products_syncs.dart';
 
 Future syncLocalDataToRemoteServer() async {
@@ -69,7 +69,7 @@ Future updateLocalProducts(List<dynamic> args) async {
   if (maybeSync == true) {
     var shop = await getActiveShop();
     if(shop is Map && shop['projectId']!=null){
-      var products = await getAllRemoteStocks(shop);
+      var products = await productsAllRestAPI(shop);
       await saveLocalStocks(shopToApp(shop), products);
       return products is List ? products.length : products;
     }

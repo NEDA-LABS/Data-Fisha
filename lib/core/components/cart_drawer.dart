@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
@@ -7,8 +6,9 @@ import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cart.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class CartDrawer extends StatefulWidget {
   final Function(dynamic) onCheckout;
@@ -68,11 +68,14 @@ class _State extends State<CartDrawer> {
       body: Container(
         padding: const EdgeInsets.only(top: 16),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border(
-                left: BorderSide(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    width: .2))),
+          color: Theme.of(context).colorScheme.surface,
+          border: Border(
+            left: BorderSide(
+              color: Theme.of(context).colorScheme.shadow,
+              width: .2,
+            ),
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

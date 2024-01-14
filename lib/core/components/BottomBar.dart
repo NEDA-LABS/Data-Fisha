@@ -9,10 +9,11 @@ import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class AppBottomBar extends StatefulWidget {
   final Map currentUser;
+  final String currentPage;
   final List<ModuleMenu> menus;
   final OnChangePage onChangePage;
   final OnGeAppMenu onGetModulesMenu;
@@ -24,8 +25,9 @@ class AppBottomBar extends StatefulWidget {
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
     required this.currentUser,
-    Key? key,
-  }) : super(key: key);
+    required this.currentPage,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -63,16 +65,23 @@ class _State extends State<AppBottomBar> {
         if (widget.menus.length > 3
             ? (index == 3)
             : (index == widget.menus.length)) {
-          fullScreeDialog(context, (p0) {
+          showFullScreeDialog(context, (p0) {
             return Scaffold(
-              appBar: AppBar(title: const BodyLarge(text: 'Menu'), centerTitle: true,),
+              appBar: AppBar(
+                title: const BodyLarge(text: 'Menu'),
+                centerTitle: true,
+              ),
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: AppMenu(
+                currentPage: widget.currentPage,
                 currentUser: widget.currentUser,
                 onGetModulesMenu: widget.onGetModulesMenu,
                 menus: widget.menus,
                 onChangePage: widget.onChangePage,
                 onGetInitialModule: widget.onGetInitialModule,
+                onDoneNavigate: () {
+                  Navigator.of(context).maybePop();
+                },
               ),
             );
           });
@@ -137,18 +146,17 @@ class _State extends State<AppBottomBar> {
           // );
           return;
         }
-        if (widget.menus[index].onClick != null) {
+        // if (widget.menus[index].onClick != null) {
           widget.onChangePage(widget.menus[index].page);
           // menus[index].onClick!();
-        }
+        // }
       },
       items: [
         ...widget.menus
             .sublist(0, size <= 3 ? size : 3)
-            .map<BottomNavigationBarItem>(
-              (e) => BottomNavigationBarItem(icon: e.icon, label: e.name),
-            )
-            .toList(),
+            .map<BottomNavigationBarItem>((e) {
+          return BottomNavigationBarItem(icon: e.icon, label: e.name);
+        }),
         const BottomNavigationBarItem(icon: Icon(Icons.dehaze), label: 'Menu')
       ],
     );

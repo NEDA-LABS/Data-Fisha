@@ -1,7 +1,7 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/TextInput.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 void addTransferToCartView({
@@ -24,15 +24,13 @@ void addTransferToCartView({
 
 class _Dialog extends StatefulWidget {
   final CartModel cart;
-  final onAddToCart;
-  final onGetPrice;
+  final dynamic onAddToCart;
+  final dynamic onGetPrice;
 
-  _Dialog(
+  const _Dialog(
       {required this.cart,
       required this.onAddToCart,
-      required this.onGetPrice,
-      Key? key})
-      : super(key: key);
+      required this.onGetPrice});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -40,7 +38,7 @@ class _Dialog extends StatefulWidget {
 
 class _State extends State<_Dialog> {
   Map states = {};
-  var _updateState;
+  dynamic _updateState;
 
   @override
   void initState() {

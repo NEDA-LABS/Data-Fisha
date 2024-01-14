@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/helpers/configs.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 import 'smartstock.dart';
 
@@ -22,10 +22,10 @@ class MainWidget extends StatefulWidget {
 class _State extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
-    var lightTheme = ThemeData(
-        colorScheme: lightColorScheme, fontFamily: 'Inter', useMaterial3: false);
-    var darkTheme = ThemeData(
-        colorScheme: darkColorScheme, fontFamily: 'Inter', useMaterial3: false);
+    var lightTheme =
+        ThemeData(colorScheme: lightColorScheme, fontFamily: 'Inter');
+    var darkTheme =
+        ThemeData(colorScheme: darkColorScheme, fontFamily: 'Inter');
     return MaterialApp(
       builder: (context, child) {
         return MediaQuery(

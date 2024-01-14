@@ -1,7 +1,7 @@
-import 'package:bfast/options.dart';
-import 'package:bfast/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/models/App.dart';
 import 'package:smartstock/core/services/api.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 Future getAllCategoriesAPI(shop) async {
   App app = shopToApp(shop);

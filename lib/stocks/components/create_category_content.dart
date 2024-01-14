@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
@@ -6,18 +5,18 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/api_files.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
 class CreateCategoryContent extends StatefulWidget {
   final dynamic Function(Map category) onNewCategory;
 
-  const CreateCategoryContent({Key? key, required this.onNewCategory})
-      : super(key: key);
+  const CreateCategoryContent({super.key, required this.onNewCategory});
 
   @override
   State<StatefulWidget> createState() => _State();

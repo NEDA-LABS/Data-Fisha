@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/ChooseShop.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class ChooseShopPage extends PageBase {
   final OnGeAppMenu onGetModulesMenu;

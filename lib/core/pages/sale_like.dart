@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,10 +10,11 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/refresh_button.dart';
 import 'package:smartstock/core/components/sales_like_body.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/location.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class SaleLikePage extends StatefulWidget{
   final String title;
@@ -140,7 +140,7 @@ class _State extends State<SaleLikePage> {
       };
 
   _onShowCheckoutSheet(states, updateState, context) {
-    return () => fullScreeDialog(
+    return () => showFullScreeDialog(
           context,
           (refresh) => _cartDrawer(
             states,

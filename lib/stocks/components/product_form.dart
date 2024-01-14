@@ -1,4 +1,3 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
@@ -11,8 +10,9 @@ import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
 import 'package:smartstock/stocks/components/ProductExpireInput.dart';
 import 'package:smartstock/stocks/components/ProductNameInput.dart';

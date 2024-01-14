@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class DateInput extends StatefulWidget {
   final Function(String) onText;

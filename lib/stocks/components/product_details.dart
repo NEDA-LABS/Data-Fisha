@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/offset_quantity_content.dart';
 import 'package:smartstock/stocks/components/product_movement.dart';
 import 'package:smartstock/stocks/pages/product_edit.dart';

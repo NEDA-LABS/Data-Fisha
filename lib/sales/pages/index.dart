@@ -1,46 +1,37 @@
 import 'dart:async';
 
-import 'package:bfast/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/SwitchToPageMenu.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/with_rbac.dart';
-import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/api_shop.dart';
-import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/location.dart';
-import 'package:smartstock/core/services/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
-import 'package:smartstock/sales/pages/sales_cash_retail.dart';
-import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/pages/sales_invoice.dart';
-import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
-import 'package:smartstock/sales/pages/sales_orders.dart';
 import 'package:smartstock/sales/pages/sold_items.dart';
 import 'package:smartstock/sales/services/index.dart';
-
-import 'customers.dart';
 
 class SalesPage extends PageBase {
   final OnChangePage onChangePage;
   final OnBackPage onBackPage;
 
   const SalesPage({
-    Key? key,
+    super.key,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'SalesPage');
+  }) : super(pageName: 'SalesPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -65,24 +56,10 @@ class _State extends State<SalesPage> {
       office: 'Menu',
       current: '/sales/',
       staticChildren: [
-        // loading ? const LinearProgressIndicator() : Container(),
-        // const SwitchToTitle(),
         const WhiteSpacer(height: 24),
-        SwitchToPageMenu(pages: _pagesMenu(context)),
-        const WhiteSpacer(height: 16),
-        // const TitleMedium(text: 'Summary'),
-        // const WhiteSpacer(height: 8),
         loading
             ? const Center(child: CircularProgressIndicator())
-            : FutureBuilder(
-                future: getLocalCurrentUser(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data['role'] == 'admin') {
-                    return _getTotalSalesView(context);
-                  }
-                  return Container();
-                },
-              ),
+            : _getTotalSalesView(context),
       ],
       sliverAppBar: SliverSmartStockAppBar(
           title: "Sales", showBack: false, context: context),
@@ -176,57 +153,6 @@ class _State extends State<SalesPage> {
       ),
     );
     return getView(context);
-  }
-
-  List<ModulePageMenu> _pagesMenu(BuildContext context) {
-    return [
-      ModulePageMenu(
-        name: 'Create retail sale',
-        link: '/sales/cash',
-        icon: Icons.storefront_sharp,
-        svgName: 'product_icon.svg',
-        roles: [],
-        onClick: () =>
-            widget.onChangePage(SalesCashRetail(onBackPage: widget.onBackPage)),
-      ),
-      ModulePageMenu(
-        name: 'Create wholesale',
-        link: '/sales/cash',
-        icon: Icons.business,
-        svgName: 'product_icon.svg',
-        roles: [],
-        onClick: () =>
-            widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
-      ),
-      ModulePageMenu(
-        name: 'Create invoices',
-        link: '/sales/invoice',
-        icon: Icons.receipt_long,
-        svgName: 'invoice_icon.svg',
-        roles: [],
-        onClick: () =>
-            widget.onChangePage(InvoiceSalePage(onBackPage: widget.onBackPage)),
-      ),
-      ModulePageMenu(
-        name: 'Customers',
-        link: '/sales/customers',
-        svgName: 'customers_icon.svg',
-        icon: Icons.supervised_user_circle_outlined,
-        roles: [],
-        onClick: () =>
-            widget.onChangePage(CustomersPage(onBackPage: widget.onBackPage)),
-      ),
-      ModulePageMenu(
-        name: 'Orders',
-        link: '/sales/orders',
-        icon: Icons.receipt_long,
-        roles: [],
-        onClick: () => widget.onChangePage(OrdersPage(
-          onBackPage: widget.onBackPage,
-          onChangePage: widget.onChangePage,
-        )),
-      ),
-    ];
   }
 
   @override

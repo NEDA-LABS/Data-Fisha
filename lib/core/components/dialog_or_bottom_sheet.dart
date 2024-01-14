@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 _bar(context) => Padding(
     padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),

@@ -1,13 +1,13 @@
-import 'package:bfast/util.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/services/report.dart';
 
 class PastSalesByCategory extends StatefulWidget {
   final DateTime date;
 
-  const PastSalesByCategory({required this.date, Key? key}) : super(key: key);
+  const PastSalesByCategory({required this.date, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();

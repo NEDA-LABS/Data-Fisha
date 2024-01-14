@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:bfast/options.dart';
-import 'package:bfast/util.dart';
+import 'package:smartstock/core/helpers/bfast.dart';
+import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/models/App.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
 
 StoreRef _getStore(name) =>

@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/choice_input_dropdown.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
-import 'package:smartstock/core/services/util.dart';
+import 'package:smartstock/core/helpers/util.dart';
 
 class ChoicesInput extends StatefulWidget {
   final String comparisonKey;
@@ -118,7 +118,7 @@ class _State extends State<ChoicesInput> {
               );
             },
           )
-        : fullScreeDialog(
+        : showFullScreeDialog(
             context,
             (p0) => Scaffold(
               appBar: AppBar(
