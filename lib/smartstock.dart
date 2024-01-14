@@ -12,14 +12,14 @@ import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/responsive_page_layout.dart';
+import 'package:smartstock/core/helpers/page_history.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/core/helpers/page_history.dart';
-import 'package:smartstock/sales/pages/index.dart';
+import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:uuid/uuid.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io_client;
@@ -31,10 +31,10 @@ class SmartStock extends StatefulWidget {
   final OnGetInitialPage onGetInitialPage;
 
   const SmartStock({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialPage,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -78,16 +78,16 @@ class _State extends State<SmartStock> {
       return PopScope(
         canPop: PageHistory().getLength() == 1,
         onPopInvoked: (didPop) {
-            if (kDebugMode) {
-              print('------');
-              print('Back pressed');
-              print('------');
-            }
-            _onBackPage();
+          if (kDebugMode) {
+            print('------');
+            print('Back pressed');
+            print('------');
+          }
+          _onBackPage();
         },
         child: ResponsivePageLayout(
-          currentPage: child?.pageName??const Uuid().v4(),
-          currentUser: user??{},
+          currentPage: child?.pageName ?? const Uuid().v4(),
+          currentUser: user ?? {},
           onGetModulesMenu: widget.onGetModulesMenu,
           onGetInitialModule: widget.onGetInitialPage,
           showLeftDrawer: menus.isNotEmpty,
@@ -184,10 +184,7 @@ class _State extends State<SmartStock> {
       } else {
         var role = propertyOrNull('role')(user);
         if (role != 'admin' && initialized == false) {
-          child = SalesPage(
-            onChangePage: _onChangePage,
-            onBackPage: _onBackPage,
-          );
+          child = SalesCashRetail(onBackPage: _onBackPage);
         }
       }
       if (child != null) {

@@ -203,7 +203,7 @@ class _State extends State<FileSelect> {
                       height: 48,
                       child: OutlinedButton(
                         onPressed: _onUploadReceipt,
-                        child: const BodyLarge(text: 'Click to select files'),
+                        child: const BodyLarge(text: 'Click to attach file'),
                       ),
                     ),
                   ],

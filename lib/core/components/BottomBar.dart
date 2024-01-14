@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/core/components/AppMenu.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/LabelMedium.dart';
-import 'package:smartstock/core/components/AppDrawer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
-import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/models/menu.dart';
 
 class AppBottomBar extends StatefulWidget {
   final Map currentUser;
@@ -34,20 +28,6 @@ class AppBottomBar extends StatefulWidget {
 }
 
 class _State extends State<AppBottomBar> {
-  String currentOffice = '';
-
-  @override
-  void initState() {
-    getActiveShop().then((value) {
-      if (mounted) {
-        setState(() {
-          currentOffice = propertyOr('businessName', (p0) => '')(value);
-        });
-      }
-    }).catchError((e) {});
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = widget.menus.length;
@@ -85,71 +65,9 @@ class _State extends State<AppBottomBar> {
               ),
             );
           });
-          // showModalBottomSheet(
-          //   context: context,
-          //   builder: (context) {
-          //     return Container(
-          //       color: Theme.of(context).colorScheme.background,
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(vertical: 16.0),
-          //         child: ListView(
-          //           shrinkWrap: true,
-          //           children: [
-          //             ...widget.menus
-          //                 .map(
-          //                   (e) => ListTile(
-          //                     title: BodyMedium(text: e.name),
-          //                     leading: e.icon,
-          //                     trailing: const Icon(Icons.chevron_right),
-          //                     onTap: () {
-          //                       Navigator.of(context).maybePop();
-          //                       widget.onChangePage(e.page);
-          //                     },
-          //                   ),
-          //                 )
-          //                 .toList(),
-          //             ListTile(
-          //               title: const BodyMedium(text: 'Change office'),
-          //               subtitle: LabelMedium(text: currentOffice),
-          //               leading: Icon(Icons.change_circle,
-          //                   color: Theme.of(context).colorScheme.primary),
-          //               // trailing: const Icon(Icons.chevron_right),
-          //               onTap: () {
-          //                 Navigator.of(context).push(
-          //                   MaterialPageRoute(
-          //                     builder: (context) => ChooseShopPage(
-          //                       onGetModulesMenu: widget.onGetModulesMenu,
-          //                       onGetInitialModule: widget.onGetInitialModule,
-          //                     ),
-          //                   ),
-          //                 );
-          //               },
-          //             ),
-          //             ListTile(
-          //               title: const BodyMedium(text: 'Sign out'),
-          //               leading: Icon(Icons.exit_to_app,
-          //                   color: Theme.of(context).colorScheme.primary),
-          //               // trailing: const Icon(Icons.chevron_right),
-          //               onTap: () {
-          //                 logOut(
-          //                   context,
-          //                   widget.onGetModulesMenu,
-          //                   widget.onGetInitialModule,
-          //                 );
-          //               },
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // );
           return;
         }
-        // if (widget.menus[index].onClick != null) {
-          widget.onChangePage(widget.menus[index].page);
-          // menus[index].onClick!();
-        // }
+        widget.onChangePage(widget.menus[index].page);
       },
       items: [
         ...widget.menus

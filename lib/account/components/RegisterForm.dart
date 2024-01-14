@@ -279,7 +279,10 @@ class _State extends State<RegisterForm> {
       onLoad: ({skipLocal = false}) async => getCountries(),
       placeholder: "Choose country",
       onField: (a) {
-        return '${a['name']} - ${a['code']}';
+        if(a !is Map){
+          return '';
+        }
+        return '${a['name']??''} - ${a['code']??''}';
       },
     );
   }

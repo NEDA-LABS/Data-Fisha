@@ -16,10 +16,10 @@ class LoginForm extends StatefulWidget {
   final OnGetInitialPage onGetInitialModule;
 
   const LoginForm({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

@@ -237,8 +237,6 @@ class _State extends State<AppMenu> {
             return ListTile(
               leading: item.icon,
               title: BodyMedium(text: item.name),
-              // onTap: () {
-              // },
             );
           },
           body: Padding(
@@ -246,7 +244,10 @@ class _State extends State<AppMenu> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: itOrEmptyArray(item.children).map((e) {
+              children: itOrEmptyArray(item.children)
+                  .where(
+                      (e) => hasRbaAccess(widget.currentUser, e.roles, e.link))
+                  .map((e) {
                 return Container(
                   decoration: e?.link == widget.currentPage
                       ? _getSelectedDecoration(context)

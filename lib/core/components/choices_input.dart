@@ -22,7 +22,7 @@ class ChoicesInput extends StatefulWidget {
   final bool multiple;
 
   const ChoicesInput({
-    Key? key,
+    super.key,
     required this.onChoice,
     this.comparisonKey='id',
     required this.choice,
@@ -34,7 +34,7 @@ class ChoicesInput extends StatefulWidget {
     this.showBorder = true,
     this.multiple = false,
     required this.onField,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -103,6 +103,8 @@ class _State extends State<ChoicesInput> {
             context: context,
             builder: (_) {
               return Dialog(
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                surfaceTintColor: Colors.transparent,
                 child: DialogContentWrapper(
                   child: ChoiceInputDropdown(
                     comparisonKey: widget.comparisonKey,

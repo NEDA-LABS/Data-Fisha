@@ -8,10 +8,10 @@ class ChooseShopPage extends PageBase {
   final OnGetInitialPage onGetInitialModule;
 
   const ChooseShopPage({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key, pageName: 'ChooseShopPage');
+  }) : super(pageName: 'ChooseShopPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -21,6 +21,7 @@ class _State extends State<ChooseShopPage> {
   @override
   Widget build(var context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ChooseShop(
         onGetModulesMenu: widget.onGetModulesMenu,
         onGetInitialModule: widget.onGetInitialModule,

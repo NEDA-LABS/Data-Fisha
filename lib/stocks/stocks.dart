@@ -6,7 +6,6 @@
 // import 'package:smartstock/sales/guards/active_shop.dart';
 // import 'package:smartstock/stocks/models/InventoryType.dart';
 // import 'package:smartstock/stocks/pages/categories.dart';
-// import 'package:smartstock/stocks/pages/index.dart';
 // import 'package:smartstock/stocks/pages/product_create.dart';
 // import 'package:smartstock/stocks/pages/product_edit.dart';
 // import 'package:smartstock/stocks/pages/products.dart';

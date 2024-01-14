@@ -18,9 +18,9 @@ class SellerPerformance extends PageBase {
   final OnBackPage onBackPage;
 
   const SellerPerformance({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'OverviewInvoiceSales');
+  }) : super(pageName: 'SellerPerformanceReport');
 
   @override
   State<StatefulWidget> createState() => _State();

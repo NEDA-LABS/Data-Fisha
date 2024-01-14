@@ -9,10 +9,10 @@ class RegisterPage extends PageBase {
   final OnGetInitialPage onGetInitialModule;
 
   const RegisterPage({
-    Key? key,
+    super.key,
     required this.onGetModulesMenu,
     required this.onGetInitialModule,
-  }) : super(key: key, pageName: 'RegisterPage');
+  }) : super(pageName: 'RegisterPage');
 
   @override
   State<StatefulWidget> createState()=> _State();
@@ -23,7 +23,10 @@ class _State extends State<RegisterPage>{
   @override
   Widget build(var context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Open account'),
         centerTitle: true,
         leading: IconButton(
