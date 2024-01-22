@@ -31,11 +31,11 @@ class SearchByContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: getIsSmallScreen(context) ? 135 : 150,
+      width: getIsSmallScreen(context) ? 120 : 130,
       padding: const EdgeInsets.symmetric(horizontal: 4),
       height: 32,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(100)),
       child: InkWell(
         onTap: () => _showSearchByOptions(context),
@@ -49,9 +49,16 @@ class SearchByContainer extends StatelessWidget {
                 child: LabelLarge(
               text: currentValue,
               overflow: TextOverflow.ellipsis,
+              color: Theme.of(context).colorScheme.onPrimary,
             )),
-            const SizedBox(
-                width: 32, height: 32, child: Icon(Icons.arrow_drop_down))
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: Icon(
+                Icons.arrow_drop_down,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            )
           ],
         ),
       ),

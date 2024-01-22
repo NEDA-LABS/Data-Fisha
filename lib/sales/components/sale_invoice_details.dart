@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -50,15 +50,15 @@ class _State extends State<SaleInvoiceDetail> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          outlineActionButton(
+          MenuContextAction(
             onPressed: () => rePrintASale(widget.sale),
             title: 'Print',
           ),
-          outlineActionButton(
+          MenuContextAction(
             onPressed: () => _showItems(),
             title: 'Show items',
           ),
-          outlineActionButton(
+          MenuContextAction(
             onPressed: () {
               Navigator.of(context).maybePop().whenComplete(() {
                 showDialog(

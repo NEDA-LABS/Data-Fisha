@@ -150,7 +150,7 @@ class _State extends State<SoldItemsPage> {
   Widget build(context) {
     var isSmallScreen = getIsSmallScreen(context);
     var tableContext =
-        isSmallScreen ? Container() : tableContextMenu(_contextSales(context));
+        isSmallScreen ? Container() : getTableContextMenu(_contextSales(context));
     var tableHeader = isSmallScreen ? Container() : _tableHeader();
     var fab = FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),

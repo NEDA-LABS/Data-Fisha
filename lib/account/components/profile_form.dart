@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/services/api_account.dart';
 import 'package:smartstock/account/services/profile.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/PrimaryAction.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/cache_user.dart';
@@ -97,9 +98,8 @@ class _State extends State<ProfileForm> {
                       onText: (v) => updateState({'emails': v, 'emails_e': ''}),
                     ),
                     const SizedBox(height: 16),
-                    raisedButton(
-                      title: loading ? "Waiting..." : "Update",
-                      height: 42,
+                    PrimaryAction(
+                      text: loading ? "Waiting..." : "Update",
                       onPressed: loading ? null : _onPressed,
                     )
                   ],

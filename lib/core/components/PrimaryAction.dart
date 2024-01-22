@@ -3,7 +3,7 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 
 class PrimaryAction extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const PrimaryAction({super.key, required this.text, required this.onPressed});
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 
 Future showInfoDialog(context, message, {title = 'Info'}) {
   return showDialog(
@@ -26,7 +26,7 @@ Future showInfoDialog(context, message, {title = 'Info'}) {
               child: Center(child: BodyMedium(text: '$message')),
             ),
             const WhiteSpacer(height: 16),
-            outlineActionButton(
+            MenuContextAction(
               title: 'Close',
               onPressed: () {
                 Navigator.of(context).maybePop();

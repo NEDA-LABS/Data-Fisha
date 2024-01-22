@@ -4,14 +4,17 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 class _FilePreview extends StatelessWidget {
   final dynamic data;
+  final bool readOnly;
 
   // final int index;
   final String Function() onGetExtension;
@@ -20,6 +23,7 @@ class _FilePreview extends StatelessWidget {
   const _FilePreview({
     super.key,
     required this.data,
+    required this.readOnly,
     // required this.index,
     required this.onGetExtension,
     required this.onClose,
@@ -56,21 +60,13 @@ class _FilePreview extends StatelessWidget {
           Positioned(
             right: 0,
             top: 0,
-            child: Container(
+            child: readOnly?Container():Container(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(100)),
               child: InkWell(
                 onTap: onClose,
-                // () {
-                // setState(() {
-                //   var index = _previews.indexOf(e);
-                //   _previews.removeAt(index);
-                //   _filesData.removeAt(index);
-                //   widget.onFiles(_filesData);
-                // });
-                // },
                 child: const Icon(Icons.close),
               ),
             ),
@@ -114,12 +110,17 @@ class _FilePreview extends StatelessWidget {
 }
 
 class FileSelect extends StatefulWidget {
+  final bool readOnly;
   final List<FileData?>? files;
   final Function(List<FileData?> file) onFiles;
   final Widget Function(bool isEmpty, VoidCallback onPress)? builder;
 
   const FileSelect(
-      {super.key, required this.onFiles, this.builder, this.files});
+      {super.key,
+      required this.onFiles,
+      this.builder,
+      this.files,
+      this.readOnly = false});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -165,6 +166,7 @@ class _State extends State<FileSelect> {
             ? Wrap(
                 children: _previews.map((e) {
                   return _FilePreview(
+                    readOnly: widget.readOnly,
                     data: e,
                     onGetExtension: () {
                       return _filesData[_previews.indexOf(e)]?.extension ?? '';
@@ -181,34 +183,61 @@ class _State extends State<FileSelect> {
                 }).toList(),
               )
             : Container(),
-        widget.builder != null
-            ? widget.builder!(!hasPreview, _onUploadReceipt)
-            : Container(
-                // height: 48,
-                margin: const EdgeInsets.only(bottom: 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _filesData.isNotEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: LabelMedium(
-                                text: _filesData
-                                    .map((e) => e?.name ?? '')
-                                    .join(', ')),
-                          )
-                        : const SizedBox(),
-                    SizedBox(
-                      height: 48,
-                      child: OutlinedButton(
-                        onPressed: _onUploadReceipt,
-                        child: const BodyLarge(text: 'Click to attach file'),
-                      ),
+        widget.readOnly
+            ? Container()
+            : (widget.builder != null
+                ? widget.builder!(!hasPreview, _onUploadReceipt)
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _filesData.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: LabelMedium(
+                                    text: _filesData
+                                        .map((e) => e?.name ?? '')
+                                        .join(', ')),
+                              )
+                            : const SizedBox(),
+                        InkWell(
+                          onTap: _onUploadReceipt,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return Container(
+                                padding: const EdgeInsets.all(8),
+                                width: constraints.maxWidth,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: const Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    BodyLarge(text: "Click to attach file"),
+                                    WhiteSpacer(height: 6),
+                                    LabelLarge(
+                                      text: "Recommended size 2MB",
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  )),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/update_user_password_content.dart';
 import 'package:smartstock/account/services/shop_users.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
@@ -17,7 +17,7 @@ shopUserDetail(Map item, context) => Padding(
       SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: [
-            outlineActionButton(
+            MenuContextAction(
               onPressed: () {
                 Navigator.of(context).maybePop().whenComplete(
                   () {
@@ -40,7 +40,7 @@ shopUserDetail(Map item, context) => Padding(
               },
               title: 'Update password',
             ),
-            outlineActionButton(
+            MenuContextAction(
                 onPressed: () {
                   Navigator.of(context).maybePop().whenComplete(() {
                     showDialog(

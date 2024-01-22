@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 
 class ReportDateRange extends StatefulWidget {
   final Function(DateTimeRange?, String? period) onRange;
@@ -8,11 +8,11 @@ class ReportDateRange extends StatefulWidget {
   final DateTimeRange dateRange;
 
   const ReportDateRange({
-    Key? key,
+    super.key,
     required this.onRange,
     required this.onExport,
     required this.dateRange,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -52,8 +52,8 @@ class _State extends State<ReportDateRange> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              outlineActionButton(onPressed: _chooseDateRange, title: 'Change'),
-              outlineActionButton(onPressed: _exportData, title: 'Export'),
+              MenuContextAction(onPressed: _chooseDateRange, title: 'Change'),
+              MenuContextAction(onPressed: _exportData, title: 'Export'),
               Container(
                 width: 120,
                 padding: const EdgeInsets.symmetric(horizontal: 10),

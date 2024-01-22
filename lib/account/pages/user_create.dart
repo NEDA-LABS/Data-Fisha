@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/services/shop_users.dart';
+import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/button.dart';
 import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -116,10 +116,9 @@ class _State extends State<ShopUserCreatePage> {
       Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-        child: raisedButton(
-            height: 40,
+        child: PrimaryAction(
             onPressed: loading ? null : _onPressed,
-            title: loading ? "Waiting..." : "Create"),
+            text: loading ? "Waiting..." : "Create"),
       )
     ];
   }

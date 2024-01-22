@@ -126,7 +126,7 @@ class _InvoicesPage extends State<InvoicesPage> {
     var tableHeader = isSmallScreen ? Container() : _tableHeader();
     var menuContext = isSmallScreen
         ? Container()
-        : tableContextMenu(_contextInvoices(context));
+        : getTableContextMenu(_contextInvoices(context));
     var fab = FloatingActionButton(
       onPressed: () => _showMobileContextMenu(context),
       child: const Icon(Icons.unfold_more_outlined),

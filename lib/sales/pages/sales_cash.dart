@@ -157,7 +157,7 @@ class _State extends State<SalesCashPage> {
         _loadingView(_loading),
         getIsSmallScreen(context)
             ? Container()
-            : tableContextMenu(_contextSales(context)),
+            : getTableContextMenu(_contextSales(context)),
         getIsSmallScreen(context) ? Container() : _tableHeader(),
       ],
       loading: _loading,

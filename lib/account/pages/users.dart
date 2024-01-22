@@ -48,7 +48,7 @@ class _State extends State<UsersPage> {
           _loading(loading),
           getIsSmallScreen(context)
               ? Container()
-              : tableContextMenu(_contextItems()),
+              : getTableContextMenu(_contextItems()),
           _tableHeader(),
         ],
         totalDynamicChildren: users.length,

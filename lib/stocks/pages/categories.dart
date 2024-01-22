@@ -90,7 +90,7 @@ class _State extends State<CategoriesPage> {
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()
-              : tableContextMenu(_contextItems(context)),
+              : getTableContextMenu(_contextItems(context)),
           _loading(_isLoading),
           // _tableHeader(),
         ],

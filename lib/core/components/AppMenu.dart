@@ -245,16 +245,8 @@ class _State extends State<AppMenu> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: itOrEmptyArray(item.children)
-                  .where(
-                      (e) => hasRbaAccess(widget.currentUser, e.roles, e.link))
-                  .map((e) {
-                return Container(
-                  decoration: e?.link == widget.currentPage
-                      ? _getSelectedDecoration(context)
-                      : null,
-                  child: _getSingleItemMenu(e),
-                );
-              }).toList(),
+                  .where(_roleFilter)
+                  .map(_selectedMenuMap).toList(),
             ),
           ),
           canTapOnHeader: true,
@@ -276,5 +268,16 @@ class _State extends State<AppMenu> {
     if (mounted) {
       setState(fn);
     }
+  }
+
+  bool _roleFilter(e) => hasRbaAccess(widget.currentUser, e.roles, e.link);
+
+  Widget _selectedMenuMap(e) {
+    return Container(
+      decoration: e?.link == widget.currentPage
+          ? _getSelectedDecoration(context)
+          : null,
+      child: _getSingleItemMenu(e),
+    );
   }
 }

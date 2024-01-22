@@ -105,7 +105,7 @@ class _State extends State<SuppliersPage> {
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()
-              : tableContextMenu(_contextItems(context)),
+              : getTableContextMenu(_contextItems(context)),
           _loading(_isLoading),
           getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],

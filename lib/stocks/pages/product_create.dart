@@ -12,10 +12,10 @@ class ProductCreatePage extends PageBase {
   final InventoryType inventoryType;
 
   const ProductCreatePage({
-    Key? key,
+    super.key,
     required this.inventoryType,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'ProductCreatePage');
+  }) : super(pageName: 'ProductCreatePage');
 
   @override
   State<StatefulWidget> createState() => _State();

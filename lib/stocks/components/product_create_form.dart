@@ -8,9 +8,9 @@ class ProductCreateForm extends StatelessWidget {
   final OnBackPage onBackPage;
 
   const ProductCreateForm({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

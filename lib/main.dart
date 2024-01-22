@@ -16,14 +16,14 @@ import 'package:smartstock/sales/pages/customers.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_cash_whole.dart';
-import 'package:smartstock/sales/pages/sales_invoice.dart';
+import 'package:smartstock/sales/pages/InvoicesPage.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/pages/sales_orders.dart';
 import 'package:smartstock/sales/pages/sold_items.dart';
 import 'package:smartstock/stocks/pages/ProductsPage.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/pages/purchases.dart';
+import 'package:smartstock/stocks/pages/PurchasesPage.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
 List<ModuleMenu> _onGetModules({
@@ -269,7 +269,7 @@ ModuleMenu _getInventoryMenu(
           page: purchasePage,
         ),
         ModuleMenu(
-          name: 'Transfer',
+          name: 'Transfers',
           link: transfersPage.pageName,
           roles: ['admin', 'manager'],
           icon: Icon(Icons.change_circle_outlined,
@@ -391,7 +391,7 @@ void main() {
   initializeSmartStock(onGetAppMenu: _onGetModules);
 
   // initializeSmartStock(
-  //     onGetModulesMenu: _getEmptyMenu,
-  //     onGetInitialModule: ({required onBackPage, required onChangePage}) =>
-  //         ProductsPage(onBackPage: onBackPage, onChangePage: onChangePage));
+  //     onGetAppMenu: _getEmptyMenu,
+  //     onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+  //         PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage));
 }

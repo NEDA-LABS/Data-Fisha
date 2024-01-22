@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/HeadineSmall.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -16,12 +16,12 @@ class ExpenseDetail extends StatelessWidget {
   final void Function() onRefresh;
 
   const ExpenseDetail({
-    Key? key,
+    super.key,
     required this.item,
     required this.onChangePage,
     required this.onBackPage,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class ExpenseDetail extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   item['receiptLink'] != null
-                      ? outlineActionButton(
+                      ? MenuContextAction(
                           onPressed: () {
                             final Uri url = Uri.parse('${item['receiptLink']}');
                             launchUrl(
@@ -59,7 +59,7 @@ class ExpenseDetail extends StatelessWidget {
                           title: 'View receipt',
                         )
                       : Container(),
-                  outlineActionButton(
+                  MenuContextAction(
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then(

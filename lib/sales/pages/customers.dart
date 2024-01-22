@@ -88,7 +88,7 @@ class _CustomersPage extends State<CustomersPage> {
       staticChildren: [
         getIsSmallScreen(context)
             ? Container()
-            : tableContextMenu(_contextCustomers(context)),
+            : getTableContextMenu(_contextCustomers(context)),
         _loadingView(_loading),
         getIsSmallScreen(context) ? Container() : _tableHeader(),
       ],

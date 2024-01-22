@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/HeadineSmall.dart';
-import 'package:smartstock/core/components/button.dart';
+import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
@@ -18,11 +18,11 @@ class ProductDetail extends StatelessWidget {
   final OnBackPage onBackPage;
 
   const ProductDetail({
-    Key? key,
+    super.key,
     required this.item,
     required this.onChangePage,
     required this.onBackPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class ProductDetail extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  outlineActionButton(
+                  MenuContextAction(
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then((v) {
@@ -69,7 +69,7 @@ class ProductDetail extends StatelessWidget {
                   //   },
                   //   title: 'Offset quantity',
                   // ),
-                  outlineActionButton(
+                  MenuContextAction(
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then((value) {
@@ -81,7 +81,7 @@ class ProductDetail extends StatelessWidget {
                     },
                     title: 'Track movement',
                   ),
-                  outlineActionButton(
+                  MenuContextAction(
                     onPressed: () {
                       var nav = Navigator.of(context);
                       nav.maybePop().then(

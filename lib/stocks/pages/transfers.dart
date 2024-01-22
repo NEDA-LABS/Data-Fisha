@@ -99,7 +99,7 @@ class _TransfersPage extends State<TransfersPage> {
         staticChildren: [
           getIsSmallScreen(context)
               ? Container()
-              : tableContextMenu(_contextTransfers(context)),
+              : getTableContextMenu(_contextTransfers(context)),
           _loadingView(_loading),
           getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],

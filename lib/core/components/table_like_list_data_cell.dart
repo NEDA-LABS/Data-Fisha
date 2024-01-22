@@ -3,13 +3,14 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 
 class TableLikeListTextDataCell extends StatelessWidget {
   final String name;
+  final double verticalPadding;
 
-  const TableLikeListTextDataCell(this.name, {Key? key}) : super(key: key);
+  const TableLikeListTextDataCell(this.name, {super.key, this.verticalPadding=14});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  const EdgeInsets.symmetric(vertical: 14),
+      padding:  EdgeInsets.symmetric(vertical: verticalPadding),
       child: BodyLarge(text: name),
     );
   }

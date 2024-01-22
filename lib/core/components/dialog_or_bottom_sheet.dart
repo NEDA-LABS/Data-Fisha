@@ -11,12 +11,40 @@ _bar(context) => Padding(
                 color: Theme.of(context).primaryColorDark,
                 borderRadius: const BorderRadius.all(Radius.circular(80))))));
 
-showDialogOrModalSheet(Widget content, context) => hasEnoughWidth(context)
-    ? showDialog(
-        context: context,
-        builder: (_) => Dialog(
-            child: Container(
-                constraints: const BoxConstraints(
-                    maxWidth: 600, minHeight: 200, maxHeight: 600),
-                child: content)))
-    : showModalBottomSheet(context: context, builder: (_) => Container(color: Theme.of(context).colorScheme.background,child: content,));
+showDialogOrModalSheet(Widget content, context) {
+  dialog()=>showDialog(
+    context: context,
+    builder: (_) {
+      return Dialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 1000,
+            minHeight: 200,
+            maxHeight: MediaQuery.of(context).size.height - 100,
+          ),
+          child: content,
+        ),
+      );
+    },
+  );
+  sheet()=>showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (_) {
+      return Container(
+        margin: const EdgeInsets.all(16),
+        color: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          child: content,
+        ),
+      );
+    },
+  );
+  return hasEnoughWidth(context) ? dialog() : sheet();
+}

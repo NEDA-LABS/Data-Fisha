@@ -20,21 +20,23 @@ class CancelProcessButtonsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        proceedText == null
+            ? Expanded(flex: 1, child: Container())
+            : Container(),
         Expanded(
           flex: 1,
           child: cancelText != null
               ? TertiaryAction(
-                  onPressed: onCancel ?? () {}, text: cancelText ?? '')
+                  onPressed: onCancel ?? () {}, text: cancelText ?? 'Cancel')
               : Container(),
         ),
         const WhiteSpacer(width: 16),
-        Expanded(
-          flex: 1,
-          child: proceedText != null
-              ? PrimaryAction(
-                  onPressed: onProceed ?? () {}, text: proceedText ?? '')
-              : Container(),
-        )
+        proceedText != null
+            ? Expanded(
+                flex: 1,
+                child: PrimaryAction(
+                    onPressed: onProceed ?? () {}, text: proceedText ?? 'Proceed'))
+            : Container()
       ],
     );
   }

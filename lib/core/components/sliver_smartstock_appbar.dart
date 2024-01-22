@@ -28,13 +28,14 @@ class SliverSmartStockAppBar extends SliverAppBar {
           title: Text(
             title,
             style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: Theme.of(context).colorScheme.onPrimary),
+              overflow: TextOverflow.ellipsis,
+              // color: Theme.of(context).colorScheme.onPrimary
+            ),
           ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          scrolledUnderElevation: 4,
-          surfaceTintColor: Theme.of(context).colorScheme.primary,
-          shadowColor: Theme.of(context).colorScheme.shadow,
+          // backgroundColor: Theme.of(context).colorScheme.primary,
+          scrolledUnderElevation: 5,
+          // surfaceTintColor: Theme.of(context).colorScheme.primary,
+          // shadowColor: Theme.of(context).colorScheme.shadow,
           bottom: showSearch
               ? (searchInput as PreferredSizeWidget?) ??
                   _getToolBarSearchInput(onSearch, searchHint,
@@ -42,7 +43,7 @@ class SliverSmartStockAppBar extends SliverAppBar {
               : null,
           leading: showBack
               ? IconButton(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  // color: Theme.of(context).colorScheme.onPrimary,
                   icon: const Icon(Icons.chevron_left),
                   onPressed: () => onBack != null
                       ? onBack()
@@ -65,9 +66,9 @@ PreferredSizeWidget _getToolBarSearchInput(
   Widget? searchByView,
 ) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(filters.isNotEmpty ? 114 : 64),
+    preferredSize: Size.fromHeight(filters.isNotEmpty ? 116 : 66),
     child: Container(
-      color: Theme.of(context).colorScheme.primary,
+      // color: Theme.of(context).colorScheme.primary,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,14 +78,20 @@ PreferredSizeWidget _getToolBarSearchInput(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: Theme.of(context).colorScheme.background),
+                border: Border.all(
+                    color: Theme.of(context).colorScheme.primary, width: 1),
+                color: Theme.of(context).colorScheme.surface),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: searchByView ?? const Icon(Icons.search),
+                  child: searchByView ??
+                      Icon(
+                        Icons.search,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
                 const WhiteSpacer(width: 4),
                 Expanded(

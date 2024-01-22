@@ -23,7 +23,7 @@ class _State extends State<StocksIndexPage> {
   @override
   Widget build(context) {
     var appBar = SliverSmartStockAppBar(
-      title: "Inventory summary",
+      title: "Products summary",
       showBack: true,
       onSearch: (p0) {
         widget.onBackPage();

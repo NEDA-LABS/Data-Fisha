@@ -85,7 +85,7 @@ class _State extends State<AddPurchasePaymentContent> {
     var payment = {'amount': doubleOrZero("${states['amount']}")};
     getActiveShop().then((shop) {
       updateState({'loading': true});
-      productsUpdatePurchasePaymentsRestAPI(id ?? '', payment, shop)
+      productsPurchasePaymentAddRestAPI(id ?? '', payment, shop)
           .then((value) => Navigator.of(context).maybePop())
           .catchError((onError) => updateState({'error': onError.toString()}))
           .whenComplete(() => updateState({'loading': false}));

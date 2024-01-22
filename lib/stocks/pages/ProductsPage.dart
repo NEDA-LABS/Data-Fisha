@@ -58,7 +58,7 @@ class _State extends State<ProductsPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: _getAppBar(),
       staticChildren: [
-        _ifLargerScreen(tableContextMenu(_getContextItems())),
+        _ifLargerScreen(getTableContextMenu(_getContextItems())),
         _loading(_isLoading),
         _ifLargerScreen(_tableHeader())
       ],

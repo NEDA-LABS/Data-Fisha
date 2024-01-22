@@ -46,7 +46,7 @@ class _State extends State<ExpenseCategoriesPage> {
         context: context,
       ),
       staticChildren: [
-        tableContextMenu(_contextItems(context)),
+        getTableContextMenu(_contextItems(context)),
         _loading(_isLoading),
         _tableHeader(),
       ],
