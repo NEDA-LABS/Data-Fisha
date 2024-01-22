@@ -16,7 +16,7 @@ import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
-class SaleLikePage extends StatefulWidget{
+class SaleLikePage extends StatefulWidget {
   final String title;
   final bool wholesale;
   final String backLink;
@@ -26,7 +26,7 @@ class SaleLikePage extends StatefulWidget{
   final Future Function({bool skipLocal}) onCustomerLikeList;
   final Widget Function() onCustomerLikeAddWidget;
   final Function(dynamic product, Function(dynamic)) onAddToCartView;
-  final Future Function(List<dynamic>, String, dynamic) onSubmitCart;
+  final Future Function(List<dynamic>, Map customer, dynamic) onSubmitCart;
   final bool showCustomerLike;
   final TextEditingController? searchTextController;
   final Future Function({bool skipLocal, String stringLike}) onGetProductsLike;
@@ -49,8 +49,8 @@ class SaleLikePage extends StatefulWidget{
     this.showCustomerLike = true,
     this.showDiscountView = true,
     required this.onGetProductsLike,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -104,16 +104,7 @@ class _State extends State<SaleLikePage> {
       office: 'Menu',
       current: widget.backLink,
       rightDrawer: _hasCarts(states)
-          ? SizedBox(
-              width: 350,
-              child: _cartDrawer(
-                states,
-                updateState,
-                context,
-                widget.wholesale,
-                (a) {},
-              ),
-            )
+          ? SizedBox(width: 350, child: _cartDrawer((p0) {}))
           : null,
       sliverAppBar: null,
       onBody: (drawer) => NestedScrollView(
@@ -140,16 +131,8 @@ class _State extends State<SaleLikePage> {
       };
 
   _onShowCheckoutSheet(states, updateState, context) {
-    return () => showFullScreeDialog(
-          context,
-          (refresh) => _cartDrawer(
-            states,
-            updateState,
-            context,
-            widget.wholesale,
-            refresh,
-          ),
-        );
+    return () =>
+        showFullScreeDialog(context, (refresh) => _cartDrawer(refresh));
   }
 
   _appBar(updateState) {
@@ -187,10 +170,9 @@ class _State extends State<SaleLikePage> {
 
   _fab(states, updateState) {
     return salesRefreshButton(
-      onPressed: () => updateState({"skip": true, 'query': ''}),
-      carts: states['carts'] ?? [],
-        context: context
-    );
+        onPressed: () => updateState({"skip": true, 'query': ''}),
+        carts: states['carts'] ?? [],
+        context: context);
   }
 
   _isLoading(snapshot) =>
@@ -222,7 +204,7 @@ class _State extends State<SaleLikePage> {
     );
   }
 
-  _cartDrawer(states, updateState, context, wholesale, refresh) {
+  _cartDrawer(void Function(VoidCallback) refresh) {
     return CartDrawer(
       showCustomerLike: widget.showCustomerLike,
       customerLikeLabel: widget.customerLikeLabel,
@@ -234,10 +216,17 @@ class _State extends State<SaleLikePage> {
       onRemoveItem: (id) {
         var remove = _prepareRemoveCart(states, updateState);
         remove(id);
-        refresh(() {});
+        var has = _hasCarts(states);
+        if (has == true) {
+          refresh(() {});
+        } else {
+          if (!hasEnoughWidth(context)) {
+            Navigator.of(context).maybePop();
+          }
+        }
       },
       onCheckout: (discount) {
-        var customer = '${states['customer'] ?? ''}';
+        Map customer = states['customer'] is Map?states['customer']:{};
         var carts = states['carts'];
         return widget.onSubmitCart(carts, customer, discount).then((value) {
           updateState({'carts': [], 'customer': ''});
@@ -270,7 +259,7 @@ class _State extends State<SaleLikePage> {
       },
       carts: _getCarts(states),
       showDiscountView: widget.showDiscountView,
-      wholesale: wholesale,
+      wholesale: widget.wholesale,
       customer: _getCustomer(states),
       onCustomerLikeList: widget.onCustomerLikeList,
       onCustomerLikeAddWidget: widget.onCustomerLikeAddWidget,
@@ -287,7 +276,9 @@ class _State extends State<SaleLikePage> {
   _prepareAddCartQuantity(states, updateState) => (String id, dynamic q) =>
       updateState({'carts': updateCartQuantity(id, q, states['carts'] ?? [])});
 
-  _showCheckoutError(context) => (error) => showInfoDialog(context, error);
+  _showCheckoutError(context) => (error){
+    showInfoDialog(context, error);
+  };
 
   @override
   void dispose() {

@@ -92,10 +92,10 @@ Future printPreviousSendTransfer(transfer) async {
   await posPrint(data: data);
 }
 
-Future _printTransferItems(List carts, discount, customer, batchId) async {
-  var items = cartItems(carts, discount, false, '$customer');
+Future _printTransferItems(List carts, discount, Map customer, batchId) async {
+  var items = cartItems(carts, discount, false, customer);
   var data = await cartItemsToPrinterData(
-      items, '$customer', (cart) => cart['stock']['purchase']);
+      items, customer, (cart) => cart['stock']['purchase']);
   await posPrint(data: data, qr: batchId);
 }
 
@@ -140,10 +140,10 @@ Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
   };
 }
 
-Future Function(List, String, dynamic) prepareOnSubmitTransfer(
+Future Function(List, Map shopName, dynamic) prepareOnSubmitTransfer(
         context, String type) =>
-    (List carts, String shopName, discount) async {
-      if (shopName.isEmpty) throw "Shop you transfer to/from required";
+    (List carts, Map shopName, discount) async {
+      if ('${shopName['businessName']}'.isEmpty) throw "Shop you transfer to/from required";
       String batchId = generateUUID();
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/transfer/$type';

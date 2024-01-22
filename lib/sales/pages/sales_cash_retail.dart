@@ -13,8 +13,8 @@ class SalesCashRetail extends PageBase {
   final OnBackPage onBackPage;
   final TextEditingController searchTextController = TextEditingController();
 
-  SalesCashRetail({Key? key, required this.onBackPage})
-      : super(key: key, pageName: 'SalesCashRetail');
+  SalesCashRetail({super.key, required this.onBackPage})
+      : super(pageName: 'SalesCashRetail');
 
   @override
   State<StatefulWidget> createState() => _State();

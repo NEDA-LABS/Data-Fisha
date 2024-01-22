@@ -26,7 +26,7 @@ Future<List> getCashSalesFromCacheOrRemote(
   return sales;
 }
 
-Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
+Future<List> _carts2Sales(List carts, dis, wholesale, Map customer, cartId) async {
   var currentUser = await getLocalCurrentUser();
   var discount = doubleOrZero('$dis');
   String stringDate = toSqlDate(DateTime.now());
@@ -51,8 +51,8 @@ Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
             "date": stringDate,
             // "time": stringTime,
             "timer": stringTime,
-            "customer": customer,
-            "customerObject": {'displayName': customer},
+            "customer": customer['displayName']??'',
+            "customerObject": {"id": '${customer['id']??'0'}', 'displayName': '${customer['displayName']??customer['name']??''}'},
             "user": currentUser['username'] ?? 'null',
             "sellerObject": {
               "username": currentUser['username'] ?? '',
@@ -69,18 +69,18 @@ Future<List> _carts2Sales(List carts, dis, wholesale, customer, cartId) async {
 }
 
 Future _printSaleItems(
-    List carts, discount, customer, wholesale, batchId) async {
-  var items = cartItems(carts, discount, wholesale, '$customer');
+    List carts, discount, Map customer, wholesale, batchId) async {
+  var items = cartItems(carts, discount, wholesale, customer);
   var data = await cartItemsToPrinterData(
       items,
-      '$customer',
+      customer,
       (cart) => wholesale == true
           ? cart['stock']['wholesalePrice']
           : cart['stock']['retailPrice']);
   await posPrint(data: data, qr: batchId);
 }
 
-_onSubmitSale(List carts, String customer, discount, wholesale) async {
+_onSubmitSale(List carts, Map customer, discount, wholesale) async {
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
@@ -98,13 +98,13 @@ _onSubmitSale(List carts, String customer, discount, wholesale) async {
       .catchError((e) {});
 }
 
-Future onSubmitRetailSale(List carts, String customer, discount) async {
+Future onSubmitRetailSale(List carts, Map customer, discount) async {
   return _onSubmitSale(carts, customer, discount, false);
 }
 
-Future onSubmitWholeSale(List carts, String customer, discount) async {
-  if (customer.isEmpty) {
-    throw "Please select customer, at the top right of the cart.";
+Future onSubmitWholeSale(List carts, Map customer, discount) async {
+  if ('${customer['displayName']??''}'.isEmpty) {
+    throw "Please select customer, at the top right of the cart";
   }
   return _onSubmitSale(carts, customer, discount, true);
 }

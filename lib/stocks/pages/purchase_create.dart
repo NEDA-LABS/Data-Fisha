@@ -63,7 +63,7 @@ class _State extends State<PurchaseCreatePage> {
     return doubleOrZero('${product['purchase']}');
   }
 
-  Future<Map> _carts2Purchase(List carts, supplier, batchId, pDetail) async {
+  Future<Map> _carts2Purchase(List carts, Map supplier, batchId, pDetail) async {
     var currentUser = await getLocalCurrentUser();
     var t =
         '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
@@ -85,7 +85,7 @@ class _State extends State<PurchaseCreatePage> {
       "refNumber": refNumber,
       "batchId": batchId,
       "amount": totalAmount,
-      "supplier": {"name": supplier},
+      "supplier": {"name": supplier['name']??'general'},
       "user": {"username": currentUser['username'] ?? ''},
       "type": type ?? 'receipt',
       "items": carts.map((e) {
@@ -98,7 +98,7 @@ class _State extends State<PurchaseCreatePage> {
             "product": e.product['product'],
             "stockable": e.product['stockable'] == true,
             "purchase": e.product['purchase'],
-            "supplier": supplier
+            "supplier": supplier['name']??'general'
           },
           "amount": doubleOrZero('${e.product['purchase']}') *
               doubleOrZero(e.quantity),
@@ -109,8 +109,8 @@ class _State extends State<PurchaseCreatePage> {
     };
   }
 
-  Future _onSubmitPurchase(List carts, String customer, discount) async {
-    if (customer.isEmpty) throw "Supplier required";
+  Future _onSubmitPurchase(List carts, Map customer, discount) async {
+    if ('${customer['name']??''}'.isEmpty) throw "Supplier required";
     String batchId = generateUUID();
     var shop = await getActiveShop();
     Map? pDetail;

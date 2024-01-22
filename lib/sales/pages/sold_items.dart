@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
@@ -220,9 +221,13 @@ class _State extends State<SoldItemsPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _productNameView(_filteredSoldItems[index]),
-              Text('${formatNumber(_filteredSoldItems[index]['amount'])}')
+              Expanded(
+                child: _productNameView(_filteredSoldItems[index]),
+              ),
+              const WhiteSpacer(width: 16),
+              BodyLarge(text: '${formatNumber(_filteredSoldItems[index]['amount'])}')
             ],
           ),
           subtitle: Row(

@@ -22,6 +22,9 @@ Future syncLocalDataToRemoteServer() async {
     var element = await getLocalSync(key);
     var getUrl = propertyOr('url', (p0) => '');
     var getPayload = propertyOr('payload', (p0) => {});
+    // if (kDebugMode) {
+    //   print(getPayload(element));
+    // }
     var response = await post(Uri.parse(getUrl(element)),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(getPayload(element)));

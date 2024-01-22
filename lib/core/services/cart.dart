@@ -52,7 +52,7 @@ double? getCartItemSubAmount(
 
 double? getCartItemDiscount(discount, items) => discount / items;
 
-List cartItems(List carts, dis, wholesale, customer) {
+List cartItems(List carts, dis, wholesale, Map customer) {
   return carts.map((value) {
     var discount = doubleOrZero('$dis');
     return {
@@ -63,8 +63,8 @@ List cartItems(List carts, dis, wholesale, customer) {
           quantity: value.quantity ?? 0,
           wholesale: wholesale),
       "product": value.product['product'],
-      'customer': customer,
-      'customerObject': {'displayName': customer},
+      'customer': '${customer['displayName']??customer['name']??''}',
+      'customerObject': {"id": '${customer['id']??'0'}', 'displayName': '${customer['displayName']??customer['name']??''}'},
       "quantity": value.quantity,
       "stock": value.product,
       "discount": getCartItemDiscount(discount, carts.length)
@@ -73,12 +73,12 @@ List cartItems(List carts, dis, wholesale, customer) {
 }
 
 Future<String> cartItemsToPrinterData(
-    List<dynamic> carts, String customer, onGetPrice,
+    List<dynamic> carts, Map customer, onGetPrice,
     {date}) async {
   String data = '-------------------------------\n';
   data = "$data${date ?? DateTime.now()}\n";
   data = '$data-------------------------------\n';
-  data = '$data To ---> $customer\n';
+  data = '$data To ---> ${customer['displayName']??customer['name']??''}\n';
   double totalBill = 0.0;
   int sn = 1;
   for (var cart in carts) {

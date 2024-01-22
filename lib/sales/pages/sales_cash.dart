@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -244,26 +246,21 @@ class _State extends State<SalesCashPage> {
   }
 
   Widget _customerView(c) {
-    var textStyle = const TextStyle(
-        fontWeight: FontWeight.w300,
-        color: Color(0xffababab),
-        height: 2.0,
-        fontSize: 12,
-        overflow: TextOverflow.ellipsis);
-    var mainTextStyle = const TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-        overflow: TextOverflow.ellipsis);
+    var getCustomerV2 = compose([
+      (x) => '${x ?? ''}'.trim(),
+      propertyOrNull('displayName'),
+      propertyOrNull('customer')
+    ]);
+    var getCustomerV1 =
+        compose([(x) => '${x ?? ''}'.trim(), propertyOrNull('customer')]);
     var subText = c['channel'] == 'whole' ? 'Wholesale' : 'Retail';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-            '${c['customer'] ?? ''}'.isEmpty
-                ? 'Walk in customer'
-                : c['customer'],
-            style: mainTextStyle),
-        Text(subText, style: textStyle)
+        BodyLarge(
+            text:
+                '${getCustomerV2(c).isEmpty ? (getCustomerV1(c).isEmpty ? 'Walk in customer' : getCustomerV1(c)) : getCustomerV2(c)}'),
+        LabelMedium(text: subText)
       ]),
     );
   }
@@ -279,7 +276,8 @@ class _State extends State<SalesCashPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _customerView(_sales[index]),
+              Expanded(child: _customerView(_sales[index])),
+              const WhiteSpacer(width: 16),
               Text('${compactNumber(_sales[index]['amount'])}')
             ],
           ),

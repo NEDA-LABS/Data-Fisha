@@ -15,26 +15,32 @@ Future productsPurchaseGetManyRestAPI({
   return itOrEmptyArray(purchases);
 }
 
+Future productsPurchaseDeleteRestAPI(String id, shop) async {
+  var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase/$id';
+  var deletePurchase = prepareHttpDeleteRequest({});
+  return deletePurchase(url);
+}
+
 Future productsPurchasePaymentAddRestAPI(String id, Map payment, shop) async {
   var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase/$id/payment';
-  var patchInvoice = prepareHttpPatchRequest(payment);
-  return patchInvoice(url);
+  var patchPurchase = prepareHttpPatchRequest(payment);
+  return patchPurchase(url);
 }
 
 Future productsPurchaseMetadataUpdateRestAPI(String id, Map metadata, shop) async {
   var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase/$id/metadata';
-  var patchInvoice = prepareHttpPatchRequest(metadata);
-  return patchInvoice(url);
+  var patchPurchase = prepareHttpPatchRequest(metadata);
+  return patchPurchase(url);
 }
 
 Future productsPurchaseAttachmentsUpdateRestAPI(String id, List<String> attachments, shop)async {
   var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase/$id/attachment';
-  var patchInvoice = prepareHttpPatchRequest(attachments);
-  return patchInvoice(url);
+  var patchPurchase = prepareHttpPatchRequest(attachments);
+  return patchPurchase(url);
 }
 
 Future productsPurchaseCreateRestAPI(Map purchase, shop)async {
   var url = '${shopFunctionsURL(shopToApp(shop))}/stock/purchase';
-  var createRequest = prepareHttpPutRequest(purchase);
-  return createRequest(url);
+  var createPurchase = prepareHttpPutRequest(purchase);
+  return createPurchase(url);
 }

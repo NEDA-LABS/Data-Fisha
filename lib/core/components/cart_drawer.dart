@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
@@ -39,8 +40,8 @@ class CartDrawer extends StatefulWidget {
     required this.onCustomer,
     required this.showCustomerLike,
     this.showDiscountView = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -52,7 +53,7 @@ class _State extends State<CartDrawer> {
   TextEditingController controller = TextEditingController();
 
   _prepareUpdateState() => ifDoElse(
-      (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
+      (x) => x is Map && mounted, (x) => setState(() => states.addAll(x)), (x) => null);
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +85,26 @@ class _State extends State<CartDrawer> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ChoicesInput(
                         choice: _customer,
-                        placeholder: widget.customerLikeLabel,
+                        // placeholder: widget.customerLikeLabel,
                         showBorder: true,
-                        onChoice: widget.onCustomer,
+                        label: widget.customerLikeLabel,
+                        onChoice: (p0) {
+                         if(mounted){
+                           setState(() {
+                             _customer = p0;
+                           });
+                         }
+                          widget.onCustomer(p0);
+                        },
                         onLoad: widget.onCustomerLikeList,
                         getAddWidget: widget.onCustomerLikeAddWidget,
-                        onField: (x) =>
-                            x?['name'] ?? x?['displayName'] ?? '$x'),
-                  )
+                        onField: (x){
+                          if(x is Map){
+                            return x['name'] ?? x['displayName'] ?? '$x';
+                          }
+                          return '';
+                        },
+                  ))
                 : Container(),
             Expanded(
               child: ListView.builder(

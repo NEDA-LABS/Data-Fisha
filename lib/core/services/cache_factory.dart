@@ -70,7 +70,8 @@ class CacheFactory {
     var getDbName = cacheDatabaseName(app);
     var db = await getSingleDb(_db);
     var store = _getStore(getDbName(collection));
-    return await store.find(db);
+    var a = await store.find(db);
+    return a.map((e) => e.value);
   }
 
   prepareSetAll(App app, String collection) =>

@@ -40,7 +40,7 @@ class _State extends State<CreateExpenseItemContent> {
               placeholder: "Choose category",
               onChoice: (d) => _updateState({'category': d, 'category_err': ''}),
               onLoad: getExpenseCategoriesFromCacheOrRemote,
-              onField: (p0) => p0["name"],
+              onField: (p0) => p0 is Map? p0["name"]: p0??'',
               getAddWidget: () => const CreateExpenseCategoryContent(),
             ),
             Container(

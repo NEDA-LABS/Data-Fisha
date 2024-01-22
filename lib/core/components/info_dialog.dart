@@ -9,10 +9,12 @@ Future showInfoDialog(context, message, {title = 'Info'}) {
     context: context,
     builder: (context) {
       return AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.info, color: Theme.of(context).colorScheme.error),
+            Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
             const WhiteSpacer(width: 8),
             BodyLarge(text: title)
           ],

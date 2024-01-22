@@ -46,6 +46,9 @@ shopUserDetail(Map item, context) => Padding(
                     showDialog(
                         context: context,
                         builder: (_) => DeleteDialog(
+                          onDone: (p0) {
+                            Navigator.of(context).maybePop();
+                          },
                             message:
                                 'Delete of "${item['username']}" is permanent, do you wish to continue ? ',
                             onConfirm: () => deleteUser(item['id'])));

@@ -68,6 +68,9 @@ class ExpenseDetail extends StatelessWidget {
                             context: context,
                             builder: (_) {
                               return DeleteDialog(
+                                onDone: (p0){
+                                  Navigator.of(context).maybePop();
+                                },
                                 message:
                                     'Delete of "${item['name']}" is permanent, do you wish to continue ? ',
                                 onConfirm: () => deleteExpense(item['id']),

@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
-import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/DialogContentWrapper.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/TextInput.dart';
@@ -14,10 +13,13 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/api_files.dart';
+import 'package:smartstock/core/services/date.dart';
+import 'package:smartstock/stocks/components/add_purchase_payment.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 _fn(Map d) => null;
@@ -27,12 +29,14 @@ class PurchaseDetails extends StatefulWidget {
   final Function(Map data) onDoneDelete;
   final Function(Map data) onDoneVerify;
   final Function(Map data) onDoneUpdate;
+  final Function(Map data) onDonePayment;
 
   const PurchaseDetails({
     required this.item,
     this.onDoneDelete = _fn,
     this.onDoneUpdate = _fn,
     this.onDoneVerify = _fn,
+    this.onDonePayment = _fn,
     super.key,
   });
 
@@ -100,51 +104,42 @@ class _State extends State<PurchaseDetails> {
     }).toList();
   }
 
-  List _getPayments(item) {
-    return itOrEmptyArray(item);
-    // if (item is List<Map<String, dynamic>>) {
-    //   return item;
-    //   // return item.map((e) => ({"date": e, "amount": item[e]})).toList();
-    // }
-    // return [];
-  }
-
-  Widget _getFileSelectBuilder(isEmpty, onPress) {
-    return Container(
-      margin: const EdgeInsets.only(top: 16),
-      child: InkWell(
-        onTap: onPress,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Container(
-                // height: 10,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                width: constraints.maxWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.background,
-                    width: 1,
-                  ),
-                ),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BodyLarge(text: "Click to select image"),
-                    WhiteSpacer(height: 6),
-                    LabelLarge(
-                      text: "Recommended ration 1:1",
-                      color: Colors.grey,
-                    ),
-                  ],
-                ));
-          },
-        ),
-      ),
-    );
-  }
+  // Widget _getFileSelectBuilder(isEmpty, onPress) {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 16),
+  //     child: InkWell(
+  //       onTap: onPress,
+  //       child: LayoutBuilder(
+  //         builder: (context, constraints) {
+  //           return Container(
+  //               // height: 10,
+  //               alignment: Alignment.center,
+  //               padding: const EdgeInsets.all(8),
+  //               width: constraints.maxWidth,
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(8),
+  //                 border: Border.all(
+  //                   color: Theme.of(context).colorScheme.background,
+  //                   width: 1,
+  //                 ),
+  //               ),
+  //               child: const Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                 children: [
+  //                   BodyLarge(text: "Click to select image"),
+  //                   WhiteSpacer(height: 6),
+  //                   LabelLarge(
+  //                     text: "Recommended ration 1:1",
+  //                     color: Colors.grey,
+  //                   ),
+  //                 ],
+  //               ));
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _sectionWrapper({required Widget child, required double top}) {
     var hPadding = EdgeInsets.only(left: 24, right: 24, top: top);
@@ -207,7 +202,7 @@ class _State extends State<PurchaseDetails> {
       top: top,
       child: Wrap(
         children: [
-          isInvoice(_item) == true
+          isInvoice(_item) == true && !verified
               ? MenuContextAction(
                   title: 'Make payment', onPressed: _makePayment)
               : Container(),
@@ -215,8 +210,8 @@ class _State extends State<PurchaseDetails> {
             title: verifying
                 ? 'Processing...'
                 : verified
-                    ? 'Mark not verified'
-                    : 'Mark as verified',
+                    ? 'Mark as draft'
+                    : 'Mark as reviewed',
             onPressed: verifying
                 ? null
                 : verified
@@ -287,7 +282,7 @@ class _State extends State<PurchaseDetails> {
     var getShopCurrency = compose(
         [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
     var getPayments = propertyOrNull('payments');
-    return _getPayments(getPayments(_item)).isNotEmpty
+    return itOrEmptyArray(getPayments(_item)).isNotEmpty
         ? _sectionWrapper(
             child: TableLikeListRow([
               const LabelSmall(text: 'DATE'),
@@ -302,7 +297,7 @@ class _State extends State<PurchaseDetails> {
 
   List<Widget> _getPaymentBody() {
     var getPayments = propertyOrNull('payments');
-    return _getPayments(getPayments(_item)).map<Widget>((item) {
+    return itOrEmptyArray(getPayments(_item)).map<Widget>((item) {
       return _sectionWrapper(
           child: TableLikeListRow([
             TableLikeListTextDataCell(
@@ -356,13 +351,28 @@ class _State extends State<PurchaseDetails> {
   }
 
   void _makePayment() {
-    // Navigator.of(context).maybePop().whenComplete(() {
-    //   showDialog(
-    //       context: context,
-    //       builder: (_) => Dialog(
-    //           child:
-    //               AddPurchasePaymentContent(_item['id'])));
-    // });
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          surfaceTintColor: Colors.transparent,
+          child: DialogContentWrapper(
+              child: AddPurchasePaymentContent(
+            purchase: _item,
+            onDone: (payment) {
+              _updateState(() {
+                _item['payments'] = [
+                  ...itOrEmptyArray(_item['payments']),
+                  {'date': toSqlDate(DateTime.now()), ...payment}
+                ];
+              });
+              widget.onDonePayment(payment);
+            },
+          )),
+        );
+      },
+    );
   }
 
   void _markNotVerified() {
@@ -384,7 +394,30 @@ class _State extends State<PurchaseDetails> {
     });
   }
 
+  _getInvPayment(purchase) {
+    if (purchase is Map) {
+      var type = purchase['type'];
+      if (type == 'invoice') {
+        var payments = purchase['payments'];
+        if (payments is List) {
+          double a = payments.fold(0,
+              (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+          return a;
+        }
+      } else {
+        return doubleOrZero(purchase['amount']);
+      }
+    }
+    return 0;
+  }
+
   void _markVerified() {
+    bool isPaid = _getInvPayment(_item) >= doubleOrZero(_item['amount']);
+    if (!isPaid) {
+      showInfoDialog(context,
+          'Invoice is not paid yet, you can not mark it as reviewed. Finalize purchase invoice payments');
+      return;
+    }
     _updateState(() {
       verifying = true;
     });
@@ -403,7 +436,19 @@ class _State extends State<PurchaseDetails> {
     });
   }
 
-  void _handleDelete() {}
+  void _handleDelete() {
+    showDeleteDialogHelper(
+      onDone: (p0) {
+        Navigator.of(context).maybePop().whenComplete(() {
+          widget.onDoneDelete(widget.item);
+        });
+      },
+      context: context,
+      name: 'purchase #${widget.item['id']}'
+          ' will revert all quantities of respective products if any and',
+      onDelete: () async => productsPurchaseDelete(id: widget.item['id']),
+    );
+  }
 
   _updateState(VoidCallback fn) {
     if (mounted) {

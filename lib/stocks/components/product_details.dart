@@ -87,6 +87,9 @@ class ProductDetail extends StatelessWidget {
                       nav.maybePop().then(
                         (value) {
                           showDeleteDialogHelper(
+                            onDone: (p0) {
+                              nav.maybePop();
+                            },
                               context: context,
                               name: item['product'],
                               onDelete: () => deleteProduct(item['id']));

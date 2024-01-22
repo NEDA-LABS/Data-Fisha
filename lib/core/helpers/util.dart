@@ -8,9 +8,12 @@ import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 firstLetterUpperCase(x) {
-  var first = '$x'.split('').first;
-  var other = '$x'.substring(1);
-  return first.toUpperCase() + other;
+  if(x is String && x.isNotEmpty){
+    var first = x.split('').first;
+    var other = x.substring(1);
+    return first.toUpperCase() + other;
+  }
+  return x??'';
 }
 
 //'http://localhost:3000'; //

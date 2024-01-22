@@ -68,9 +68,9 @@ class _State extends State<CreateExpenseContent> {
                   placeholder: "Click to select",
                   error: state['category_err'] ?? '',
                   onChoice: (d) {
-                    if (kDebugMode) {
-                      print(d);
-                    }
+                    // if (kDebugMode) {
+                    //   print(d);
+                    // }
                     _updateState({'category': d, 'category_err': ''});
                   },
                   onLoad: getExpenseCategoriesFromCacheOrRemote,

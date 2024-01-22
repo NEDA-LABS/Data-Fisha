@@ -32,3 +32,16 @@ Future productsPurchaseAttachmentsUpdate(
       await productsPurchaseAttachmentsUpdateRestAPI(id, files, shop);
   return response;
 }
+
+Future productsPurchasePaymentAdd(
+    {required String id, required Map payment}) async {
+  Map shop = await getActiveShop();
+  var response = await productsPurchasePaymentAddRestAPI(id, payment, shop);
+  return response;
+}
+
+Future productsPurchaseDelete({required String id}) async {
+  Map shop = await getActiveShop();
+  var response = await productsPurchaseDeleteRestAPI(id, shop);
+  return response;
+}

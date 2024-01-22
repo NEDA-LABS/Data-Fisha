@@ -93,7 +93,12 @@ class _State extends State<ShopUserCreatePage> {
         placeholder: 'Select',
         error: state['role_e'] ?? '',
         // getAddWidget: () => createCategoryContent(),
-        onField: (x) => '${x['name']}',
+        onField: (x){
+          if(x is Map){
+            return '${x['name']}';
+          }
+          return '';
+        },
         onLoad: ({skipLocal = false}) async => [
           {'name': 'manager'},
           {'name': 'user'}

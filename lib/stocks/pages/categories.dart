@@ -121,6 +121,9 @@ class _State extends State<CategoriesPage> {
                 trailing: IconButton(
                   onPressed: () {
                     showDeleteDialogHelper(
+                      onDone: (p0) {
+                        Navigator.of(context).maybePop();
+                      },
                         context: context,
                         name: firstLetterUpperCase(
                             '${_categories[index]['name']}'),

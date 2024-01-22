@@ -207,7 +207,7 @@ class _PurchasesPage extends State<PurchasesPage> {
         const WhiteSpacer(height: 5),
         ListTile(
           dense: true,
-          onTap: (){
+          onTap: () {
             // showDialogOrModalSheet(
             //     PurchaseDetails(context, _purchases[index]), context)
           },
@@ -275,24 +275,45 @@ class _PurchasesPage extends State<PurchasesPage> {
             child: InkWell(
               onTap: () => {
                 showDialogOrModalSheet(
-                  PurchaseDetails(item:_purchases[index], onDoneVerify: (data) {
-                    _updateState(() {
-                      _purchases[index]= {
-                        ..._purchases[index] as Map,
-                        'metadata': {
-                          ..._purchases[index]['metadata'] as Map,
-                          ...data
-                        }
-                      };
-                    });
-                  }, onDoneUpdate: (data) {
-                    _updateState(() {
-                      _purchases[index]= {
-                        ..._purchases[index] as Map,
-                        'images': data['images']
-                      };
-                    });
-                  },),
+                  PurchaseDetails(
+                    item: _purchases[index],
+                    onDoneVerify: (data) {
+                      _updateState(() {
+                        _purchases[index] = {
+                          ..._purchases[index] as Map,
+                          'metadata': {
+                            ..._purchases[index]['metadata'] as Map,
+                            ...data
+                          }
+                        };
+                      });
+                    },
+                    onDoneUpdate: (data) {
+                      _updateState(() {
+                        _purchases[index] = {
+                          ..._purchases[index] as Map,
+                          'images': data['images']
+                        };
+                      });
+                    },
+                    onDonePayment: (data) {
+                      _updateState(() {
+                        _purchases[index] = {
+                          ..._purchases[index] as Map,
+                          'payments': [
+                            ...itOrEmptyArray(_purchases[index]['payments']),
+                            data
+                          ]
+                        };
+                      });
+                    },
+                    onDoneDelete: (data) {
+                      _updateState(() {
+                        _purchases.removeAt(index);
+                      });
+                      Navigator.of(context).maybePop();
+                    },
+                  ),
                   context,
                 )
               },
@@ -326,18 +347,18 @@ class _PurchasesPage extends State<PurchasesPage> {
   }
 
   _getStatusView(purchase) {
-    var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
+    // var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
     var type = purchase['type'];
     var amount = purchase['amount'];
     var paidView = Container(
       height: 24,
-      width: 76,
+      width: 80,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: Text("Paid", style: tStyle),
+      child: const LabelMedium(text: "Paid"),
     );
     getPayment() {
       var payments = purchase['payments'];
@@ -355,13 +376,15 @@ class _PurchasesPage extends State<PurchasesPage> {
       } else {
         return Container(
           height: 24,
-          width: 76,
+          width: 80,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.errorContainer,
             borderRadius: BorderRadius.circular(5),
           ),
           alignment: Alignment.center,
-          child: Text("Partial", style: tStyle),
+          child: LabelMedium(
+              text:
+                  "Paid ${formatNumber((paid / amount) * 100, decimals: 0)}%"),
         );
       }
     }
