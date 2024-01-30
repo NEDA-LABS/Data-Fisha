@@ -1,7 +1,9 @@
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/types/OnGetPrice.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 
-appendToCarts(cart, List carts) {
+appendToCarts(CartModel cart, List<CartModel> carts) {
   var index = carts.indexWhere((x) => x.product['id'] == cart.product['id']);
   var updateOrAppend = ifDoElse((i) => i == -1, (i) {
     carts.add(cart);
@@ -19,30 +21,30 @@ appendToCarts(cart, List carts) {
   return allCarts;
 }
 
-removeCart(String id, List carts) =>
+removeCart(String id, List<CartModel> carts) =>
     carts.where((element) => element.product['id'] != id).toList();
 
-updateCartQuantity(String id, dynamic quantity, List carts) => carts.map((e) {
+updateCartQuantity(String id, double quantity, List<CartModel> carts) => carts.map((e) {
       if (e.product['id'] == id) {
         e.quantity = (e.quantity + quantity) > 1 ? (e.quantity + quantity) : 1;
       }
       return e;
     }).toList();
 
-cartTotalAmount(List carts, wholesale, onGetPrice) => carts.fold(
+cartTotalAmount(List<CartModel> carts, bool wholesale, OnGetPrice onGetPrice) => carts.fold(
     0,
     (dynamic t, element) =>
         t + getProductPrice(element, wholesale, onGetPrice));
 
-getProductPrice(cart, bool wholesale, onGetPrice) => wholesale
+getProductPrice(CartModel cart, bool wholesale, OnGetPrice onGetPrice) => wholesale
     ? (onGetPrice(cart.product)??propertyOr('amount', (p0) => 0)(cart.product)) * cart.quantity
     : (onGetPrice(cart.product)??propertyOr('amount', (p0) => 0)(cart.product)) * cart.quantity;
 
 double? getCartItemSubAmount(
-    {dynamic quantity = 0.0,
-    var product,
-    dynamic totalDiscount = 0.0,
-    dynamic totalItems = 0.0,
+    {double quantity = 0.0,
+    required Map product,
+    double totalDiscount = 0.0,
+    int totalItems = 0,
     bool wholesale = false}) {
   dynamic amount = (wholesale
       ? (quantity * product['wholesalePrice'])
@@ -52,7 +54,7 @@ double? getCartItemSubAmount(
 
 double? getCartItemDiscount(discount, items) => discount / items;
 
-List cartItems(List carts, dis, wholesale, Map customer) {
+List cartItems(List<CartModel> carts, dis, bool wholesale, Map customer) {
   return carts.map((value) {
     var discount = doubleOrZero('$dis');
     return {

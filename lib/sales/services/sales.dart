@@ -9,6 +9,7 @@ import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/sync.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/api_cash_sale.dart';
 
 Future<List> getCashSalesFromCacheOrRemote(
@@ -69,7 +70,7 @@ Future<List> _carts2Sales(List carts, dis, wholesale, Map customer, cartId) asyn
 }
 
 Future _printSaleItems(
-    List carts, discount, Map customer, wholesale, batchId) async {
+    List<CartModel> carts, double discount, Map customer, bool wholesale, String batchId) async {
   var items = cartItems(carts, discount, wholesale, customer);
   var data = await cartItemsToPrinterData(
       items,
@@ -80,7 +81,7 @@ Future _printSaleItems(
   await posPrint(data: data, qr: batchId);
 }
 
-_onSubmitSale(List carts, Map customer, discount, wholesale) async {
+_onSubmitSale(List<CartModel> carts, Map customer, discount, wholesale) async {
   String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
@@ -98,11 +99,11 @@ _onSubmitSale(List carts, Map customer, discount, wholesale) async {
       .catchError((e) {});
 }
 
-Future onSubmitRetailSale(List carts, Map customer, discount) async {
+Future onSubmitRetailSale(List<CartModel> carts, Map customer, discount) async {
   return _onSubmitSale(carts, customer, discount, false);
 }
 
-Future onSubmitWholeSale(List carts, Map customer, discount) async {
+Future onSubmitWholeSale(List<CartModel> carts, Map customer, discount) async {
   if ('${customer['displayName']??''}'.isEmpty) {
     throw "Please select customer, at the top right of the cart";
   }

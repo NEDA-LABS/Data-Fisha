@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
-import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/pages/sale_like.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/sales/components/create_customer_content.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/SaleLikePage.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
-import 'package:smartstock/sales/services/customer.dart';
-import 'package:smartstock/sales/services/invoice.dart';
 import 'package:smartstock/sales/services/products.dart';
 
 class InvoiceSalePage extends PageBase {
@@ -25,16 +22,17 @@ class _State extends State<InvoiceSalePage> {
     return SaleLikePage(
       wholesale: false,
       title: 'Invoice sale',
-      backLink: '/sales/invoice',
-      onSubmitCart: onSubmitInvoice,
-      customerLikeLabel: 'Select customer',
+      // backLink: '/sales/invoice',
+      // onSubmitCart: onSubmitInvoice,
+      // customerLikeLabel: 'Select customer',
       onBack: widget.onBackPage,
       onGetPrice: _getPrice,
-      onAddToCartView: _onPrepareSalesAddToCartView(context),
-      onCustomerLikeList: getCustomerFromCacheOrRemote,
-      onCustomerLikeAddWidget: () => const CreateCustomerContent(),
-      checkoutCompleteMessage: 'Checkout completed.',
+      onAddToCart: _onPrepareSalesAddToCartView(context),
+      // onCustomerLikeList: getCustomerFromCacheOrRemote,
+      // onCustomerLikeAddWidget: () => const CreateCustomerContent(),
+      // checkoutCompleteMessage: 'Checkout completed.',
       onGetProductsLike: getProductsFromCacheOrRemote,
+      onCheckout: (List<CartModel> carts) {},
     );
   }
 

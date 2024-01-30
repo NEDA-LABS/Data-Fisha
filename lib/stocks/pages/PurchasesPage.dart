@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/debounce.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -18,10 +18,10 @@ import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/stocks/components/PurchaseDetails.dart';
-import 'package:smartstock/stocks/pages/purchase_create.dart';
+import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends PageBase {

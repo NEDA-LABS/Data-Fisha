@@ -3,7 +3,7 @@ import 'package:smartstock/account/components/shop_user_details.dart';
 import 'package:smartstock/account/pages/user_create.dart';
 import 'package:smartstock/account/services/shop_users.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -12,7 +12,7 @@ import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 class UsersPage extends PageBase {

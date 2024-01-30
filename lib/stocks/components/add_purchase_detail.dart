@@ -1,36 +1,34 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/date_input.dart';
-import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/components/date_input.dart';
+import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/models/file_data.dart';
 
-import '../../core/components/BodyLarge.dart';
+// Future addPurchaseDetail({
+//   required BuildContext context,
+//   required onSubmit,
+// }) =>
+//     showDialog(
+//       context: context,
+//       builder: (c) {
+//         return Dialog(child: AddPurchaseDetailDialog(onSubmit: onSubmit));
+//       },
+//     );
 
-Future addPurchaseDetail({
-  required BuildContext context,
-  required onSubmit,
-}) =>
-    showDialog(
-      context: context,
-      builder: (c) {
-        return Dialog(child: _AddPurchaseDetailDialog(onSubmit: onSubmit));
-      },
-    );
+class AddPurchaseDetailContent extends StatefulWidget {
+  final Function(Map states,List<FileData?> files) onSubmit;
 
-class _AddPurchaseDetailDialog extends StatefulWidget {
-  final dynamic onSubmit;
-
-  const _AddPurchaseDetailDialog({required this.onSubmit});
+  const AddPurchaseDetailContent({super.key, required this.onSubmit});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<_AddPurchaseDetailDialog> {
+class _State extends State<AddPurchaseDetailContent> {
   Map states = {"reference": '', "type": 'receipt', 'date': '', 'due': ''};
-  PlatformFile? _platformFile;
+  List<FileData?> _files = [];
 
   _prepareUpdateState() => ifDoElse(
       (x) => x is Map, (x) => setState(() => states.addAll(x)), (x) => null);
@@ -81,40 +79,35 @@ class _State extends State<_AddPurchaseDetailDialog> {
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: LabelLarge(text: 'Purchase receipt'),
           ),
-          Container(
-            height: 48,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: OutlinedButton(
-                onPressed: _onUploadReceipt,
-                child: BodyLarge(
-                    text:
-                        'Select${_platformFile != null ? 'ed' : ''} file [ ${_platformFile?.name ?? ''} ]')),
-          ),
-          _addToCartButton(
-              context, states, _prepareUpdateState(), widget.onSubmit),
+          FileSelect(onFiles: (file) {
+            _files = file;
+          },),
+          _addToCartButton(),
         ],
       ),
     );
   }
 
-  _addToCartButton(context, states, updateState, onSubmit) => Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      height: 40,
-      width: MediaQuery.of(context).size.width,
-      child: TextButton(
-          onPressed: () {
-            updateState({'error_r': '', 'error_d': ''});
-            if ('${states['reference'] ?? ''}'.isEmpty) {
-              updateState({'error_r': 'Reference required'});
-            }
-            if ('${states['date'] ?? ''}'.isEmpty) {
-              updateState({'error_d': 'Purchase date required'});
-              return;
-            }
-            onSubmit(states,_platformFile);
-          },
-          style: _addToCartButtonStyle(context),
-          child: const Text("SUBMIT", style: TextStyle(color: Colors.white))));
+  _addToCartButton(){
+    return  Container(
+        margin: const EdgeInsets.symmetric(vertical: 15),
+        height: 40,
+        width: MediaQuery.of(context).size.width,
+        child: TextButton(
+            onPressed: () {
+              _prepareUpdateState()({'error_r': '', 'error_d': ''});
+              if ('${states['reference'] ?? ''}'.isEmpty) {
+                _prepareUpdateState()({'error_r': 'Reference required'});
+              }
+              if ('${states['date'] ?? ''}'.isEmpty) {
+                _prepareUpdateState()({'error_d': 'Purchase date required'});
+                return;
+              }
+              widget.onSubmit(states,_files);
+            },
+            style: _addToCartButtonStyle(context),
+            child: const Text("SUBMIT", style: TextStyle(color: Colors.white))));
+  }
 
   _addToCartButtonStyle(context) => ButtonStyle(
       backgroundColor:
@@ -126,34 +119,4 @@ class _State extends State<_AddPurchaseDetailDialog> {
           topRight: Radius.circular(30),
         ),
       );
-
-  void _onUploadReceipt() {
-    handleFile(value) {
-      FilePickerResult? result = value;
-      if (mounted) {
-        if (result != null) {
-          setState(() {
-            _platformFile = result.files.single;
-          });
-        } else {
-          showInfoDialog(context, "Fail to get selected file");
-        }
-      }
-    }
-
-    handleError(error) {
-      if (mounted) {
-        showInfoDialog(context, error);
-      }
-    }
-
-    FilePicker.platform
-        .pickFiles(
-            allowMultiple: false,
-            lockParentWindow: true,
-            withReadStream: true,
-            withData: false)
-        .then(handleFile)
-        .catchError(handleError);
-  }
 }

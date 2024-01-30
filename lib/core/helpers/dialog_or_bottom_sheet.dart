@@ -1,32 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/helpers/util.dart';
-
-_bar(context) => Padding(
-    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-    child: Center(
-        child: Container(
-            height: 8,
-            width: 80,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                borderRadius: const BorderRadius.all(Radius.circular(80))))));
 
 showDialogOrModalSheet(Widget content, context) {
   dialog()=>showDialog(
     context: context,
     builder: (_) {
-      return Dialog(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        child: Container(
-          constraints: BoxConstraints(
-            maxWidth: 1000,
-            minHeight: 200,
-            maxHeight: MediaQuery.of(context).size.height - 100,
-          ),
-          child: content,
-        ),
-      );
+      return getDialogLarge(context, content);
     },
   );
   sheet()=>showModalBottomSheet(

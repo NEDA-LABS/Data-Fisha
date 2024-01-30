@@ -12,7 +12,7 @@ typedef ChildBuilder = Widget Function(BuildContext context, dynamic index);
 class ResponsivePage extends StatefulWidget {
   final Color? backgroundColor;
   final String office;
-  final String current;
+  final String? current;
   final bool showLeftDrawer;
   final Widget? rightDrawer;
   final Widget Function(Drawer? drawer)? onBody;
@@ -32,7 +32,7 @@ class ResponsivePage extends StatefulWidget {
     this.showLeftDrawer = true,
     this.rightDrawer,
     this.onBody,
-    required this.sliverAppBar,
+    this.sliverAppBar,
     this.staticChildren = _emptyList,
     this.totalDynamicChildren = 0,
     this.dynamicChildBuilder = _emptyBuilder,
@@ -40,8 +40,8 @@ class ResponsivePage extends StatefulWidget {
     this.loading = false,
     this.onLoadMore,
     this.horizontalPadding = const EdgeInsets.symmetric(horizontal: 16.0),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

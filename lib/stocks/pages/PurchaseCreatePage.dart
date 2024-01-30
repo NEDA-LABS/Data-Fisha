@@ -1,22 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/pages/sale_like.dart';
-import 'package:smartstock/core/services/api_files.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/SaleLikePage.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/types/OnAddToCart.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
-import 'package:smartstock/stocks/components/add_purchase_detail.dart';
 import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
-import 'package:smartstock/stocks/components/create_supplier_content.dart';
-import 'package:smartstock/stocks/services/api_purchase.dart';
-import 'package:smartstock/stocks/services/purchase.dart';
-import 'package:smartstock/stocks/services/supplier.dart';
 
 class PurchaseCreatePage extends PageBase {
   final OnBackPage onBackPage;
@@ -35,22 +28,29 @@ class _State extends State<PurchaseCreatePage> {
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
-      showDiscountView: false,
+      // showDiscountView: false,
       title: 'Create purchase',
-      backLink: '/stock/purchases',
+      // backLink: '/stock/purchases',
       onBack: widget.onBackPage,
-      customerLikeLabel: 'Choose supplier',
-      onSubmitCart: _onSubmitPurchase,
+      // customerLikeLabel: 'Choose supplier',
+      // onSubmitCart: _onSubmitPurchase,
       onGetPrice: _onGetPrice,
-      onAddToCartView: _onSalesAddToCartView,
-      onCustomerLikeList: getSupplierFromCacheOrRemote,
-      onCustomerLikeAddWidget: () => const CreateSupplierContent(),
-      checkoutCompleteMessage: 'Purchase complete.',
+      onAddToCart: _onSalesAddToCartView,
+      // onCustomerLikeList: getSupplierFromCacheOrRemote,
+      // onCustomerLikeAddWidget: () => const CreateSupplierContent(),
+      // checkoutCompleteMessage: 'Purchase complete.',
       onGetProductsLike: getStockFromCacheOrRemote,
+      onCheckout: (List<CartModel> carts) {
+       if(kDebugMode){
+         print('------');
+         print('PUrchase checkout');
+         print('------');
+       }
+      },
     );
   }
 
-  _onSalesAddToCartView(product, onAddToCart) {
+  _onSalesAddToCartView(Map product, OnAddToCartSubmitCallback onAddToCart) {
     addPurchaseToCartView(
       onGetPrice: _onGetPrice,
       cart: CartModel(product: product, quantity: 1),
@@ -63,7 +63,8 @@ class _State extends State<PurchaseCreatePage> {
     return doubleOrZero('${product['purchase']}');
   }
 
-  Future<Map> _carts2Purchase(List carts, Map supplier, batchId, pDetail) async {
+  Future<Map> _carts2Purchase(
+      List<CartModel> carts, Map supplier, batchId, pDetail) async {
     var currentUser = await getLocalCurrentUser();
     var t =
         '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
@@ -85,7 +86,7 @@ class _State extends State<PurchaseCreatePage> {
       "refNumber": refNumber,
       "batchId": batchId,
       "amount": totalAmount,
-      "supplier": {"name": supplier['name']??'general'},
+      "supplier": {"name": supplier['name'] ?? 'general'},
       "user": {"username": currentUser['username'] ?? ''},
       "type": type ?? 'receipt',
       "items": carts.map((e) {
@@ -98,7 +99,7 @@ class _State extends State<PurchaseCreatePage> {
             "product": e.product['product'],
             "stockable": e.product['stockable'] == true,
             "purchase": e.product['purchase'],
-            "supplier": supplier['name']??'general'
+            "supplier": supplier['name'] ?? 'general'
           },
           "amount": doubleOrZero('${e.product['purchase']}') *
               doubleOrZero(e.quantity),
@@ -110,27 +111,31 @@ class _State extends State<PurchaseCreatePage> {
   }
 
   Future _onSubmitPurchase(List carts, Map customer, discount) async {
-    if ('${customer['name']??''}'.isEmpty) throw "Supplier required";
-    String batchId = generateUUID();
-    var shop = await getActiveShop();
-    Map? pDetail;
-    List<FileData?> file = [];
-    await addPurchaseDetail(
-        context: context,
-        onSubmit: (state, List<FileData?> platformFile) {
-          pDetail = state;
-          file = platformFile;
-          Navigator.of(context).maybePop();
-        });
-    if (pDetail is! Map) {
-      throw 'Purchase details ( reference, date, due and type ) required';
-    }
-    var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
-    return uploadFileToWeb3(file).then((fileResponse) {
-      return productsPurchaseCreateRestAPI({
-        ...purchase,
-        'images': fileResponse.map((e) => e['link'] ?? '').toList()
-      }, shop);
-    });
+    // if ('${customer['name'] ?? ''}'.isEmpty) throw "Supplier required";
+    // String batchId = generateUUID();
+    // var shop = await getActiveShop();
+    // Map? pDetail;
+    // List<FileData?> file = [];
+    // await showDialogOrFullScreenModal(AddPurchaseDetailContent(
+    //   onSubmit: (states, files) {
+    // if (pDetail is! Map) {
+    //   throw 'Purchase details ( reference, date, due and type ) required';
+    // }
+    // var purchase = await _carts2Purchase(carts, customer, batchId, pDetail);
+    // return uploadFileToWeb3(file).then((fileResponse) {
+    //   return productsPurchaseCreateRestAPI({
+    //     ...purchase,
+    //     'images': fileResponse.map((e) => e['link'] ?? '').toList()
+    //   }, shop);
+    // });
+    // },
+    // ), context);
+    // await addPurchaseDetail(
+    //     context: context,
+    //     onSubmit: (state, List<FileData?> platformFile) {
+    //       pDetail = state;
+    //       file = platformFile;
+    //       Navigator.of(context).maybePop();
+    //     });
   }
 }

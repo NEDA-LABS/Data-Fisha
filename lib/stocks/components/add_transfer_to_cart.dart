@@ -99,7 +99,7 @@ class _State extends State<_Dialog> {
     product["retailPrice"] = states['retailPrice'];
     product["wholesalePrice"] = states['wholesalePrice'];
     return CartModel(
-        product: product as Map<String, dynamic>?, quantity: states['q']);
+        product: product, quantity: doubleOrZero(states['q']));
   }
 
   _addToCartButtonStyle(context) => ButtonStyle(

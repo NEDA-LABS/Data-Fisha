@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/stock_summary.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
@@ -10,7 +10,7 @@ import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/components/expense_details.dart';
 import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';

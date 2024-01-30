@@ -1,8 +1,8 @@
 class CartModel{
-  dynamic quantity;
-  Map<String, dynamic>? product;
+  double quantity;
+  Map product;
 
-  CartModel({this.product, this.quantity});
+  CartModel({required this.product, required this.quantity});
 
-  Map<String, dynamic> toJSON() => {"quantity": quantity, "product": product};
+  Map toJSON() => {"quantity": quantity, "product": product};
 }

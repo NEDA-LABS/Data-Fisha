@@ -89,8 +89,7 @@ class _State extends State<_AddExpense2CartDialog> {
     Map product =
         states['p'] is Map ? (states['p'] as Map<String, dynamic>?)! : {};
     product['amount'] = states['amount'];
-    return CartModel(
-        product: product as Map<String, dynamic>?, quantity: 1);
+    return CartModel(product: product, quantity: 1);
   }
 
   _addToCartButtonStyle(context) => ButtonStyle(

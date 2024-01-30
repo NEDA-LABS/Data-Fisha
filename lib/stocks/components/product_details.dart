@@ -4,7 +4,7 @@ import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/HeadineSmall.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/offset_quantity_content.dart';
@@ -86,7 +86,7 @@ class ProductDetail extends StatelessWidget {
                       var nav = Navigator.of(context);
                       nav.maybePop().then(
                         (value) {
-                          showDeleteDialogHelper(
+                          showDialogDelete(
                             onDone: (p0) {
                               nav.maybePop();
                             },

@@ -24,6 +24,7 @@ import 'package:smartstock/stocks/pages/ProductsPage.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/PurchasesPage.dart';
+import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
 List<ModuleMenu> _onGetModules({
@@ -388,10 +389,10 @@ List<ModuleMenu> _getEmptyMenu({
 }
 
 void main() {
-  initializeSmartStock(onGetAppMenu: _onGetModules);
-
-  // initializeSmartStock(
-  //     onGetAppMenu: _getEmptyMenu,
-  //     onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-  //         PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage));
+  // initializeSmartStock(onGetAppMenu: _onGetModules);
+  //
+  initializeSmartStock(
+      onGetAppMenu: _getEmptyMenu,
+      onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+          PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage));
 }

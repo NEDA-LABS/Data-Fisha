@@ -8,6 +8,7 @@ import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/services/api_transfer.dart';
 
 Future<List<dynamic>> getTransfersRemote(String? date) async {
@@ -92,14 +93,14 @@ Future printPreviousSendTransfer(transfer) async {
   await posPrint(data: data);
 }
 
-Future _printTransferItems(List carts, discount, Map customer, batchId) async {
+Future _printTransferItems(List<CartModel> carts, discount, Map customer, batchId) async {
   var items = cartItems(carts, discount, false, customer);
   var data = await cartItemsToPrinterData(
       items, customer, (cart) => cart['stock']['purchase']);
   await posPrint(data: data, qr: batchId);
 }
 
-Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
+Future<Map> _carts2Transfer(List<CartModel> carts, shop2Name, batchId, shop1, type) async {
   // var shop2 = await shopName2Shop(shop2Name);
   var currentUser = await getLocalCurrentUser();
   var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
@@ -140,9 +141,9 @@ Future<Map> _carts2Transfer(List carts, shop2Name, batchId, shop1, type) async {
   };
 }
 
-Future Function(List, Map shopName, dynamic) prepareOnSubmitTransfer(
+Future Function(List<CartModel>, Map shopName, dynamic) prepareOnSubmitTransfer(
         context, String type) =>
-    (List carts, Map shopName, discount) async {
+    (List<CartModel> carts, Map shopName, discount) async {
       if ('${shopName['businessName']}'.isEmpty) throw "Shop you transfer to/from required";
       String batchId = generateUUID();
       var shop = await getActiveShop();

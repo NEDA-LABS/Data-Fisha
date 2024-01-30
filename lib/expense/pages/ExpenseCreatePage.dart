@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/components/create_expense_content.dart';
 

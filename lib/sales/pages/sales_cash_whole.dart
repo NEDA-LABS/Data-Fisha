@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
-import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/pages/sale_like.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/SaleLikePage.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -27,16 +27,17 @@ class _State extends State<SalesCashWhole> {
       wholesale: true,
       title: 'Wholesale',
       searchTextController: widget.searchTextController,
-      backLink: '/sales/cash',
-      onSubmitCart: onSubmitWholeSale,
-      customerLikeLabel: 'Select customer',
+      // backLink: '/sales/cash',
+      // onSubmitCart: onSubmitWholeSale,
+      // customerLikeLabel: 'Select customer',
       onBack: widget.onBackPage,
       onGetPrice: _getPrice,
-      onAddToCartView: _onPrepareSalesAddToCartView(context),
-      onCustomerLikeList: getCustomerFromCacheOrRemote,
-      onCustomerLikeAddWidget: () => const CreateCustomerContent(),
-      checkoutCompleteMessage: 'Checkout completed.',
+      onAddToCart: _onPrepareSalesAddToCartView(context),
+      // onCustomerLikeList: getCustomerFromCacheOrRemote,
+      // onCustomerLikeAddWidget: () => const CreateCustomerContent(),
+      // checkoutCompleteMessage: 'Checkout completed.',
       onGetProductsLike: getProductsFromCacheOrRemote,
+      onCheckout: (List<CartModel> carts) {},
     );
   }
 

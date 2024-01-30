@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/App.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/plugins/js_helper.dart';
 
 firstLetterUpperCase(x) {

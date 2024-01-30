@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 
-showDeleteDialogHelper({
+showDialogDelete({
   required BuildContext context,
   required name,
   required Future Function() onDelete,
@@ -16,5 +16,20 @@ showDeleteDialogHelper({
         onConfirm: () => onDelete(),
       );
     },
+  );
+}
+
+getDialogLarge(BuildContext context, Widget content){
+  return Dialog(
+    backgroundColor: Theme.of(context).colorScheme.surface,
+    surfaceTintColor: Colors.transparent,
+    child: Container(
+      constraints: BoxConstraints(
+        maxWidth: 1000,
+        minHeight: 200,
+        maxHeight: MediaQuery.of(context).size.height - 100,
+      ),
+      child: content,
+    ),
   );
 }

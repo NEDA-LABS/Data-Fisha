@@ -1,45 +1,48 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
-import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/types/OnCartCheckOut.dart';
+import 'package:smartstock/core/types/OnGetPrice.dart';
+import 'package:smartstock/sales/models/cart.model.dart';
 
 class CartDrawer extends StatefulWidget {
-  final Function(dynamic) onCheckout;
-  final Function(dynamic) onGetPrice;
+  final OnCartCheckout onCartCheckout;
+  final OnGetPrice onGetPrice;
   final Function(String) onRemoveItem;
-  final Future Function({bool skipLocal}) onCustomerLikeList;
-  final Widget Function() onCustomerLikeAddWidget;
+
+  // final Future Function({bool skipLocal}) onCustomerLikeList;
+  // final Widget Function() onCustomerLikeAddWidget;
   final Function(String, dynamic) onAddItem;
   final bool wholesale;
-  final String customerLikeLabel;
-  final dynamic customer;
-  final dynamic onCustomer;
-  final List carts;
-  final bool showCustomerLike;
-  final bool showDiscountView;
+
+  // final dynamic customer;
+  // final dynamic onCustomer;
+  final List<CartModel> carts;
+
+  // final bool showCustomerLike;
+  // final bool showDiscountView;
 
   const CartDrawer({
     required this.carts,
-    required this.onCheckout,
+    required this.onCartCheckout,
     required this.onGetPrice,
     required this.onRemoveItem,
-    required this.onCustomerLikeList,
-    required this.onCustomerLikeAddWidget,
+    // required this.onCustomerLikeList,
+    // required this.onCustomerLikeAddWidget,
     required this.onAddItem,
     required this.wholesale,
-    this.customerLikeLabel = 'Choose customer',
-    required this.customer,
-    required this.onCustomer,
-    required this.showCustomerLike,
-    this.showDiscountView = true,
+    // required this.customer,
+    // required this.onCustomer,
+    // required this.showCustomerLike,
+    // this.showDiscountView = true,
     super.key,
   });
 
@@ -48,209 +51,184 @@ class CartDrawer extends StatefulWidget {
 }
 
 class _State extends State<CartDrawer> {
-  dynamic _customer;
-  Map states = {'discount': 0, 'loading': false};
-  TextEditingController controller = TextEditingController();
+  // dynamic _customer;
+  // Map states = {'discount': 0, 'loading': false};
+  // TextEditingController controller = TextEditingController();
 
-  _prepareUpdateState() => ifDoElse(
-      (x) => x is Map && mounted, (x) => setState(() => states.addAll(x)), (x) => null);
+  // _updateState(VoidCallback fn) {
+  //   if (mounted) {
+  //     setState(fn);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getIsSmallScreen(context)
-          ? AppBar(
-              title: const TitleLarge(text: 'Cart'),
-              // elevation: 0,
-              // backgroundColor: Theme.of(context).colorScheme.surface,
-              centerTitle: true,
-            )
+          ? AppBar(title: const TitleLarge(text: 'Cart'), centerTitle: true)
           : null,
-      body: Container(
-        padding: const EdgeInsets.only(top: 16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border(
-            left: BorderSide(
-              color: Theme.of(context).colorScheme.shadow,
-              width: .2,
+      body: WithActiveShop(
+        onChild: (shop) {
+          return Container(
+            padding: const EdgeInsets.only(top: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              border: getIsSmallScreen(context)
+                  ? null
+                  : Border(
+                      left: BorderSide(
+                          color: Theme.of(context).colorScheme.shadow,
+                          width: .2),
+                    ),
             ),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            widget.showCustomerLike
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ChoicesInput(
-                        choice: _customer,
-                        // placeholder: widget.customerLikeLabel,
-                        showBorder: true,
-                        label: widget.customerLikeLabel,
-                        onChoice: (p0) {
-                         if(mounted){
-                           setState(() {
-                             _customer = p0;
-                           });
-                         }
-                          widget.onCustomer(p0);
-                        },
-                        onLoad: widget.onCustomerLikeList,
-                        getAddWidget: widget.onCustomerLikeAddWidget,
-                        onField: (x){
-                          if(x is Map){
-                            return x['name'] ?? x['displayName'] ?? '$x';
-                          }
-                          return '';
-                        },
-                  ))
-                : Container(),
-            Expanded(
-              child: ListView.builder(
-                controller: ScrollController(),
-                itemCount: widget.carts.length,
-                itemBuilder: _cartListItemBuilder(
-                  widget.carts,
-                  widget.wholesale,
-                  widget.onAddItem,
-                  widget.onRemoveItem,
-                  widget.onGetPrice,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // widget.showCustomerLike
+                //     ? _getChooseCustomerLikeInput()
+                //     : Container(),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: ScrollController(),
+                    itemCount: widget.carts.length,
+                    itemBuilder: _cartListItemBuilder(),
+                  ),
                 ),
-              ),
+                _cartSummary(shop)
+              ],
             ),
-            _cartSummary(
-              widget.carts,
-              widget.wholesale,
-              context,
-              widget.onCheckout,
-              widget.onGetPrice,
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _cartSummary(List carts, wholesale, context, onCheckout, onGetPrice) {
+  Widget _cartSummary(Map shop) {
     return Card(
       elevation: 5,
       child: Column(
         children: [
-          carts.isNotEmpty && onGetPrice(carts[0].product) != null
-              ? _totalAmountRow(carts, wholesale, onGetPrice)
+          widget.carts.isNotEmpty &&
+                  widget.onGetPrice(widget.carts[0].product) != null
+              ? _totalAmountRow(shop)
               : Container(),
-          carts.isNotEmpty &&
-                  onGetPrice(carts[0].product) != null &&
-                  widget.showDiscountView == true
-              ? _discountRow(
-                  states['discount'],
-                  (v) {
-                    _prepareUpdateState()({'discount': doubleOrZero(v)});
-                  },
-                )
-              : Container(),
+          // widget.carts.isNotEmpty &&
+          //         widget.onGetPrice(widget.carts[0].product) != null &&
+          //         widget.showDiscountView == true
+          //     ? _discountRow(shop)
+          //     : Container(),
           Container(
             margin: const EdgeInsets.all(8),
             height: 54,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
-            child: states['loading']
-                ? _progressIndicator()
-                : _submitButton(carts, states['discount'], wholesale,
-                    onCheckout, _prepareUpdateState(), onGetPrice),
+            child: _submitButton(),
           )
         ],
       ),
     );
   }
 
-  _submitButton(List carts, discount, bool wholesale, onCheckout, updateState,
-          onGetPrice) =>
-      TextButton(
-        onPressed: () {
-          updateState({'loading': true});
-          onCheckout(discount)
-              .whenComplete(() => updateState({'loading': false}));
-        },
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(
-              Theme.of(context).colorScheme.onPrimary),
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-        ),
-        child: Row(
-          children: [
-            const Expanded(child: BodyLarge(text: 'Checkout')),
-            FittedBox(
-              child: BodyLarge(
-                text:
-                    '${_formatPrice(_getFinalTotal(carts, discount, wholesale, onGetPrice))}',
-              ),
-            )
-          ],
-        ),
-      );
+  _submitButton() {
+    return PrimaryAction(
+      onPressed: widget.onCartCheckout,
+      // () {
+      // if (kDebugMode) {
+      //   print('++++++++');
+      // }
+      // updateState({'loading': true});
+      // doubleOrZero(states['discount']),
 
-  _formatPrice(price) =>
-      NumberFormat.currency(name: 'TZS ').format(doubleOrZero('$price'));
+      //     .whenComplete(() => updateState({'loading': false}));
+      // },
+      // style: ButtonStyle(
+      //   foregroundColor:
+      //       MaterialStateProperty.all(Theme.of(context).colorScheme.onPrimary),
+      //   backgroundColor:
+      //       MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+      // ),
+      text: 'CHECKOUT',
+      // child: FittedBox(child: BodyLarge(text: 'CHECKOUT')
+      // Row(
+      //   children: [
+      //     const Expanded(child: BodyLarge(text: 'CHECKOUT')),
+      // FittedBox(
+      //   child: BodyLarge(
+      //     text: '${formatNumber(_getFinalTotal(), decimals: 2)}',
+      //   ),
+      // )
+      // ],
+      // ),
+    );
+  }
 
-  _getFinalTotal(List carts, dynamic discount, bool wholesale, onGetPrice) =>
-      carts.fold(-discount,
-          (dynamic t, c) => t + getProductPrice(c, wholesale, onGetPrice));
+  // _getFinalTotal() {
+  //   combine(dynamic t, c) =>
+  //       t + getProductPrice(c, widget.wholesale, widget.onGetPrice);
+  //   return widget.carts.fold(-doubleOrZero(states['discount']), combine);
+  // }
 
-  _progressIndicator() => const Center(
-      child: CircularProgressIndicator(backgroundColor: Colors.white));
+  // Widget _progressIndicator() {
+  //   return const Center(
+  //       child: CircularProgressIndicator(backgroundColor: Colors.white));
+  // }
 
-  _totalAmountRow(List carts, wholesale, onGetPrice) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Expanded(child: TitleMedium(text: "Total")),
-            TitleMedium(
-                text: '${cartTotalAmount(carts, wholesale, onGetPrice)}')
-          ],
-        ),
-      );
+  Widget _totalAmountRow(Map shop) {
+    var getCurrency =
+        compose([propertyOrNull('currency'), propertyOrNull('settings')]);
+    var amount = formatNumber(
+        '${cartTotalAmount(widget.carts, widget.wholesale, widget.onGetPrice)}',
+        decimals: 2);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: Row(
+        children: [
+          const Expanded(child: TitleMedium(text: "TOTAL")),
+          TitleMedium(text: '${getCurrency(shop)} $amount')
+        ],
+      ),
+    );
+  }
 
-  _discountRow(dynamic discount, Function(dynamic) onDiscount) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Expanded(child: BodyLarge(text: 'Discount ( TZS )')),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5), border: Border.all()),
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              width: 150,
-              child: TextField(
-                autofocus: false,
-                maxLines: 1,
-                minLines: 1,
-                controller: controller,
-                keyboardType: TextInputType.number,
-                onChanged: onDiscount,
-                decoration: const InputDecoration(
-                  hintText: "Discount",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  // _discountRow(Map shop) {
+  //   var getCurrency =
+  //       compose([propertyOrNull('currency'), propertyOrNull('settings')]);
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Row(
+  //       children: [
+  //         const Expanded(child: BodyLarge(text: 'Discount')),
+  //         const WhiteSpacer(width: 8),
+  //         Container(
+  //           decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(5), border: Border.all()),
+  //           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+  //           width: 150,
+  //           child: TextInput(
+  //             controller: controller,
+  //             type: TextInputType.number,
+  //             onText: (v) {
+  //               _updateState(() {
+  //                 states.addAll({'discount': doubleOrZero(v)});
+  //               });
+  //             },
+  //             placeholder: '${getCurrency(shop)}',
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _checkoutCartItem(
-      {required cart,
-      required bool wholesale,
-      required BuildContext context,
-      required Function(String, dynamic) onAddItem,
-      required Function(dynamic) onGetPrice,
-      required Function(String) onRemoveItem}) {
+  Widget _checkoutCartItem(index) {
+    var cart = widget.carts[index];
     var quantity = cart.quantity;
-    var price = onGetPrice(cart.product) ??
+    var price = widget.onGetPrice(cart.product) ??
         propertyOr('amount', (p0) => 0)(cart.product);
     var wQuantity = propertyOr('wholesaleQuantity', (p0) => 1);
     var subTotal = quantity * price;
@@ -262,7 +240,7 @@ class _State extends State<CartDrawer> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              wholesale
+              widget.wholesale
                   ? BodyLarge(
                       text:
                           '$quantity (x${wQuantity(cart.product)}) @ $price = TZS $subTotal')
@@ -272,11 +250,12 @@ class _State extends State<CartDrawer> {
                   IconButton(
                       icon: Icon(Icons.remove_circle,
                           color: Theme.of(context).primaryColor),
-                      onPressed: () => onAddItem(cart.product['id'], -1)),
+                      onPressed: () =>
+                          widget.onAddItem(cart.product['id'], -1)),
                   IconButton(
                       icon: Icon(Icons.add_circle,
                           color: Theme.of(context).primaryColor),
-                      onPressed: () => onAddItem(cart.product['id'], 1)),
+                      onPressed: () => widget.onAddItem(cart.product['id'], 1)),
                 ],
               )
             ],
@@ -285,22 +264,50 @@ class _State extends State<CartDrawer> {
           trailing: IconButton(
             color: Colors.red,
             icon: const Icon(Icons.delete),
-            onPressed: () => onRemoveItem(cart.product['id']),
+            onPressed: () => widget.onRemoveItem(cart.product['id']),
           ),
         ),
-        Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: HorizontalLine())
       ],
     );
   }
 
-  _cartListItemBuilder(carts, wholesale, onAddItem, onRemoveItem, onGetPrice) =>
-      (context, index) => _checkoutCartItem(
-          cart: carts[index],
-          onGetPrice: onGetPrice,
-          wholesale: wholesale,
-          context: context,
-          onAddItem: onAddItem,
-          onRemoveItem: onRemoveItem);
+  _cartListItemBuilder() {
+    return (context, index) {
+      return _checkoutCartItem(index);
+    };
+  }
+
+// Widget _getChooseCustomerLikeInput() {
+//   onChoice(p0) {
+//     if (mounted) {
+//       setState(() {
+//         _customer = p0;
+//       });
+//     }
+//     widget.onCustomer(p0);
+//   }
+//
+//   onField(x) {
+//     if (x is Map) {
+//       return x['name'] ?? x['displayName'] ?? '$x';
+//     }
+//     return '';
+//   }
+//
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//     child: ChoicesInput(
+//       choice: _customer,
+//       showBorder: true,
+//       label: widget.customerLikeLabel,
+//       onChoice: onChoice,
+//       onLoad: widget.onCustomerLikeList,
+//       getAddWidget: widget.onCustomerLikeAddWidget,
+//       onField: onField,
+//     ),
+//   );
+// }
 }

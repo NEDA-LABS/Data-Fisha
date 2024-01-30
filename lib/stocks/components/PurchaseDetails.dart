@@ -437,7 +437,7 @@ class _State extends State<PurchaseDetails> {
   }
 
   void _handleDelete() {
-    showDeleteDialogHelper(
+    showDialogDelete(
       onDone: (p0) {
         Navigator.of(context).maybePop().whenComplete(() {
           widget.onDoneDelete(widget.item);

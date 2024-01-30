@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
-import 'package:smartstock/core/components/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/add_invoice_payment.dart';

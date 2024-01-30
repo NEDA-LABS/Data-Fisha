@@ -1,0 +1,1 @@
+typedef OnGetProductsLike = Future Function({bool skipLocal, String stringLike});

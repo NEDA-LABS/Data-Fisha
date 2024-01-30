@@ -3,6 +3,8 @@ import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/types/OnAddToCart.dart';
+import 'package:smartstock/core/types/OnGetPrice.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 void addPurchaseToCartView({
@@ -10,31 +12,32 @@ void addPurchaseToCartView({
   required CartModel cart,
   required onAddToCart,
   required onGetPrice,
-}) =>
-    showDialog(
-      context: context,
-      builder: (c) {
-        return Dialog(
-          child: _AddPurchase2CartDialog(
-            onGetPrice: onGetPrice,
-            cart: cart,
-            onAddToCart: onAddToCart,
-          ),
-        );
-      },
-    );
+}) {
+  showDialog(
+    context: context,
+    builder: (c) {
+      return Dialog(
+        child: _AddPurchase2CartDialog(
+          onGetPrice: onGetPrice,
+          cart: cart,
+          onAddToCart: onAddToCart,
+        ),
+      );
+    },
+  );
+}
 
 class _AddPurchase2CartDialog extends StatefulWidget {
   final CartModel cart;
-  final onAddToCart;
-  final onGetPrice;
+  final OnAddToCartSubmitCallback onAddToCart;
+  final OnGetPrice onGetPrice;
 
   const _AddPurchase2CartDialog({
     required this.cart,
     required this.onAddToCart,
     required this.onGetPrice,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -137,8 +140,7 @@ class _State extends State<_AddPurchase2CartDialog> {
     product["purchase"] = states['purchase'];
     product["retailPrice"] = states['retailPrice'];
     product["wholesalePrice"] = states['wholesalePrice'];
-    return CartModel(
-        product: product as Map<String, dynamic>?, quantity: states['q']);
+    return CartModel(product: product, quantity: doubleOrZero(states['q']));
   }
 
   _addToCartButtonStyle(context) => ButtonStyle(
