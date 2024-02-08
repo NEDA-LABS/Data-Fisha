@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/ProductsLike.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -51,7 +50,9 @@ class SalesLikeBody extends StatelessWidget {
 
   Widget _cartPreview(BuildContext context) {
     return carts.isNotEmpty
-        ? PrimaryAction(text: 'Cart [ ${_getTotalItems(carts)} Items ]', onPressed: onShowCart)
+        ? PrimaryAction(
+            text: 'Cart [ ${_getTotalItems(carts)} Items ]',
+            onPressed: onShowCart)
         : const SizedBox(width: 0, height: 0);
   }
 

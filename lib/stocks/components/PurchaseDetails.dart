@@ -66,7 +66,7 @@ class _State extends State<PurchaseDetails> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _getHeaderSection(top: 24),
+            _getHeaderSection(top: 16),
             _getActionsSection(top: 16),
             const WhiteSpacer(height: 8),
             const HorizontalLine(),
@@ -80,10 +80,10 @@ class _State extends State<PurchaseDetails> {
                       child: _getDetailSection(shop: shop, top: 8)),
                   SliverToBoxAdapter(child: _getFilesSection()),
                   SliverToBoxAdapter(child: _getPaymentHeader(shop: shop)),
-                  SliverList.list(children: _getPaymentBody()),
+                  SliverList.list(children: _getPaymentBody(shop: shop)),
                   SliverToBoxAdapter(child: _getItemsHeader(shop: shop)),
-                  SliverList.list(children: _getItemsBody()),
-                  // SliverToBoxAdapter(child: _getFooterSection(top: 16))
+                  SliverList.list(children: _getItemsBody(shop: shop)),
+                  const SliverToBoxAdapter(child: WhiteSpacer(height: 24))
                 ],
               ),
             ),
@@ -141,49 +141,66 @@ class _State extends State<PurchaseDetails> {
   //   );
   // }
 
-  Widget _sectionWrapper({required Widget child, required double top}) {
+  Widget _sectionWrapper({
+    required Widget child,
+    required double top,
+    Color? color,
+    double radius = 0,
+  }) {
     var hPadding = EdgeInsets.only(left: 24, right: 24, top: top);
-    return Container(padding: hPadding, child: child);
+    return Container(
+      margin: hPadding,
+      decoration: BoxDecoration(
+        // color: color,
+        border: color != null ? Border.all(color: color) : null,
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+      ),
+      child: child,
+    );
   }
 
   Widget _getDetailSection({required Map shop, required double top}) {
+    var isSmallScreen = getIsSmallScreen(context);
     var getPurchaseRef = propertyOr('refNumber', (p0) => '');
     var getPurchaseSupplier = propertyOr('supplier', (p0) => '');
     var getPurchaseAmount = propertyOr('amount', (p0) => '');
     var getShopCurrency = compose(
         [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
+    var referenceInput = TextInput(
+      onText: (p0) => null,
+      initialText: '${getPurchaseRef(_item)}',
+      label: 'Reference',
+      readOnly: true,
+    );
+    var supplierInput = TextInput(
+      onText: (p0) => null,
+      initialText: '${getPurchaseSupplier(_item)}',
+      label: 'Supplier',
+      readOnly: true,
+    );
+    var amountInput = TextInput(
+      onText: (p0) => null,
+      initialText: '${formatNumber(getPurchaseAmount(_item))}',
+      label: 'Amount ( ${getShopCurrency(shop)} )',
+      readOnly: true,
+    );
     return _sectionWrapper(
       top: top,
-      child: Row(
-        children: [
-          Expanded(
-            child: TextInput(
-              onText: (p0) => null,
-              initialText: '${getPurchaseRef(_item)}',
-              label: 'Reference',
-              readOnly: true,
+      child: isSmallScreen
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [referenceInput, supplierInput, amountInput],
+            )
+          : Row(
+              children: [
+                Expanded(child: referenceInput),
+                const WhiteSpacer(width: 16),
+                Expanded(child: supplierInput),
+                const WhiteSpacer(width: 16),
+                Expanded(child: amountInput),
+              ],
             ),
-          ),
-          const WhiteSpacer(width: 16),
-          Expanded(
-            child: TextInput(
-              onText: (p0) => null,
-              initialText: '${getPurchaseSupplier(_item)}',
-              label: 'Supplier',
-              readOnly: true,
-            ),
-          ),
-          const WhiteSpacer(width: 16),
-          Expanded(
-            child: TextInput(
-              onText: (p0) => null,
-              initialText: '${formatNumber(getPurchaseAmount(_item))}',
-              label: 'Amount ( ${getShopCurrency(shop)} )',
-              readOnly: true,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -234,118 +251,209 @@ class _State extends State<PurchaseDetails> {
   }
 
   _getHeaderSection({required double top}) {
+    var isSmallScreen = getIsSmallScreen(context);
     var getPurchaseId = propertyOr('id', (p0) => '');
     var getPurchaseDate = compose([
       DateFormat('yyyy-MM-dd HH:mm').format,
       DateTime.parse,
       propertyOr('createdAt', (p0) => DateTime.now().toIso8601String())
     ]);
+    var managePurchaseTitle =
+        BodyLarge(text: 'Manage purchase #${getPurchaseId(_item)}');
+    var createdTitle = BodyLarge(text: 'Created: ${getPurchaseDate(_item)}');
     return _sectionWrapper(
       top: top,
-      child: Row(
-        children: [
-          BodyLarge(text: 'Manage purchase #${getPurchaseId(_item)}'),
-          const Expanded(child: SizedBox()),
-          BodyLarge(text: 'Created: ${getPurchaseDate(_item)}')
-        ],
-      ),
+      child: isSmallScreen
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [managePurchaseTitle, createdTitle],
+            )
+          : Row(
+              children: [
+                managePurchaseTitle,
+                const Expanded(child: SizedBox()),
+                createdTitle
+              ],
+            ),
     );
   }
 
   _getFooterSection({required double top}) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var buttons = CancelProcessButtonsRow(
+      cancelText: _updatingAttachment ? null : "Close",
+      proceedText: _filesTouched
+          ? _updatingAttachment
+              ? 'Saving...'
+              : 'Update'
+          : null,
+      onCancel:
+          _updatingAttachment ? null : () => Navigator.of(context).maybePop(),
+      onProceed: _updatingAttachment ? null : _updateAttachment,
+    );
     return Container(
       padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(flex: 3, child: Container()),
-          Expanded(
-            flex: 1,
-            child: CancelProcessButtonsRow(
-              cancelText: _updatingAttachment ? null : "Close",
-              proceedText: _filesTouched
-                  ? _updatingAttachment
-                      ? 'Saving...'
-                      : 'Update'
-                  : null,
-              onCancel: _updatingAttachment
-                  ? null
-                  : () => Navigator.of(context).maybePop(),
-              onProceed: _updatingAttachment ? null : _updateAttachment,
-            ),
-          )
-        ],
-      ),
+      child: isSmallScreen
+          ? buttons
+          : Row(children: [
+              Expanded(flex: 3, child: Container()),
+              Expanded(flex: 1, child: buttons)
+            ]),
     );
   }
 
   _getPaymentHeader({required Map shop}) {
+    var isSmallScreen = getIsSmallScreen(context);
     var getShopCurrency = compose(
         [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
     var getPayments = propertyOrNull('payments');
     return itOrEmptyArray(getPayments(_item)).isNotEmpty
         ? _sectionWrapper(
-            child: TableLikeListRow([
-              const LabelSmall(text: 'DATE'),
-              LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
-              const LabelSmall(text: 'MODE'),
-              const LabelSmall(text: 'REFERENCE'),
-            ]),
+            child: isSmallScreen
+                ? const TableLikeListRow([LabelSmall(text: 'PAYMENTS')])
+                : TableLikeListRow([
+                    const LabelSmall(text: 'DATE'),
+                    LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
+                    const LabelSmall(text: 'MODE'),
+                    const LabelSmall(text: 'REFERENCE'),
+                  ]),
             top: 16,
           )
         : Container();
   }
 
-  List<Widget> _getPaymentBody() {
+  List<Widget> _getPaymentBody({required Map shop}) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var getShopCurrency = compose(
+      [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')],
+    );
     var getPayments = propertyOrNull('payments');
     return itOrEmptyArray(getPayments(_item)).map<Widget>((item) {
       return _sectionWrapper(
-          child: TableLikeListRow([
-            TableLikeListTextDataCell(
-              '${item?['date'] ?? ''}',
-              verticalPadding: 0,
-            ),
-            TableLikeListTextDataCell(
-              formatNumber('${item?['amount'] ?? ''}'),
-              verticalPadding: 0,
-            ),
-            TableLikeListTextDataCell(
-              '${item?['mode'] ?? ''}',
-              verticalPadding: 0,
-            ),
-            TableLikeListTextDataCell(
-              '${item?['reference'] ?? ''}',
-              verticalPadding: 0,
-            ),
-          ]),
-          top: 0);
+        radius: 8,
+        color: Theme.of(context).colorScheme.primaryContainer,
+        child: isSmallScreen
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TableLikeListRow(
+                    [
+                      TableLikeListTextDataCell(
+                        '${getShopCurrency(shop)} ${formatNumber('${item?['amount'] ?? ''}')}',
+                        verticalPadding: 0,
+                      ),
+                      TableLikeListTextDataCell(
+                        '${item?['reference'] ?? ''}',
+                        verticalPadding: 0,
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
+                    padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
+                  ),
+                  TableLikeListRow([
+                    TableLikeListTextDataCell(
+                      '${item?['date'] ?? ''}',
+                      verticalPadding: 0,
+                    ),
+                    TableLikeListTextDataCell(
+                      '${item?['mode'] ?? ''}',
+                      verticalPadding: 0,
+                      textAlign: TextAlign.end,
+                    ),
+                  ]),
+                ],
+              )
+            : TableLikeListRow([
+                TableLikeListTextDataCell(
+                  '${item?['date'] ?? ''}',
+                  verticalPadding: 0,
+                ),
+                TableLikeListTextDataCell(
+                  formatNumber('${item?['amount'] ?? ''}'),
+                  verticalPadding: 0,
+                ),
+                TableLikeListTextDataCell(
+                  '${item?['mode'] ?? ''}',
+                  verticalPadding: 0,
+                ),
+                TableLikeListTextDataCell(
+                  '${item?['reference'] ?? ''}',
+                  verticalPadding: 0,
+                ),
+              ]),
+        top: 8,
+      );
     }).toList();
   }
 
   _getItemsHeader({required Map shop}) {
+    var isSmallScreen = getIsSmallScreen(context);
     var getShopCurrency = compose(
         [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
     return _sectionWrapper(
-      child: TableLikeListRow([
-        const LabelSmall(text: 'PRODUCT'),
-        const LabelSmall(text: 'QUANTITY'),
-        LabelSmall(text: 'COST ( ${getShopCurrency(shop)} )'),
-        LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
-      ]),
+      child: isSmallScreen
+          ? const TableLikeListRow([LabelSmall(text: 'ITEMS')])
+          : TableLikeListRow([
+              const LabelSmall(text: 'PRODUCT'),
+              const LabelSmall(text: 'QUANTITY'),
+              LabelSmall(text: 'COST ( ${getShopCurrency(shop)} )'),
+              LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
+            ]),
       top: 16,
     );
   }
 
-  List<Widget> _getItemsBody() {
+  List<Widget> _getItemsBody({required Map shop}) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var getShopCurrency = compose(
+        [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
     var getItems = propertyOrNull('items');
     return itOrEmptyArray(getItems(_item)).map<Widget>((item) {
       return _sectionWrapper(
-        child: TableLikeListRow([
-          BodyLarge(text: '${item['product']}'),
-          Text('${item['quantity']}'),
-          Text(formatNumber('${item['purchase']}')),
-          Text(formatNumber('${item['amount']}')),
-        ]),
-        top: 0,
+        radius: 8,
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: isSmallScreen
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TableLikeListRow(
+                    [
+                      TableLikeListTextDataCell(
+                        firstLetterUpperCase('${item['product']}'),
+                        verticalPadding: 0,
+                      ),
+                      TableLikeListTextDataCell(
+                        '@${getShopCurrency(shop)} ${formatNumber('${item['purchase']}')}',
+                        textAlign: TextAlign.end,
+                        verticalPadding: 0,
+                      ),
+                    ],
+                    padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
+                  ),
+                  TableLikeListRow([
+                    TableLikeListTextDataCell(
+                      'QTY: ${item['quantity']}',
+                      verticalPadding: 0,
+                    ),
+                    TableLikeListTextDataCell(
+                      '${getShopCurrency(shop)} ${formatNumber('${item['amount']}')}',
+                      textAlign: TextAlign.end,
+                      verticalPadding: 0,
+                    ),
+                  ])
+                ],
+              )
+            : TableLikeListRow([
+                TableLikeListTextDataCell(
+                    firstLetterUpperCase('${item['product']}')),
+                TableLikeListTextDataCell('${item['quantity']}'),
+                TableLikeListTextDataCell(formatNumber('${item['purchase']}')),
+                TableLikeListTextDataCell(formatNumber('${item['amount']}')),
+              ]),
+        top: 8,
       );
     }).toList();
   }

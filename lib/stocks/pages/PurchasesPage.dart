@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/debounce.dart';
+import 'package:smartstock/core/components/full_screen_dialog.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
@@ -15,6 +17,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
@@ -206,11 +209,8 @@ class _PurchasesPage extends State<PurchasesPage> {
       children: [
         const WhiteSpacer(height: 5),
         ListTile(
-          dense: true,
-          onTap: () {
-            // showDialogOrModalSheet(
-            //     PurchaseDetails(context, _purchases[index]), context)
-          },
+          dense: false,
+          onTap: () => _onManagePurchase(index),
           contentPadding: const EdgeInsets.symmetric(horizontal: 2),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,30 +220,25 @@ class _PurchasesPage extends State<PurchasesPage> {
                 overflow: TextOverflow.ellipsis,
               ),
               const WhiteSpacer(width: 8),
+              WithActiveShop(onChild: (shop) {
+                var getShopCurrency = compose(
+                    [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
+                return BodyMedium(
+                  text:
+                  '${getShopCurrency(shop)} ${formatNumber('${_purchases[index]['amount']}', decimals: 0)}',
+                );
+              },)
+            ],
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BodyMedium(text: '${_purchases[index]['date']}'),
+              const WhiteSpacer(width: 8),
               _getStatusView(_purchases[index])
             ],
           ),
-          subtitle: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const WhiteSpacer(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  LabelMedium(text: '${_purchases[index]['date']}'),
-                  const WhiteSpacer(width: 8),
-                  LabelMedium(
-                      text:
-                          'Total ${formatNumber('${_purchases[index]['amount']}', decimals: 0)}'),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: LabelMedium(text: '${_purchases[index]['supplier']}'),
-              ),
-            ],
-          ),
+          leading: _getVerifiedForLargeScreen(_purchases[index]),
         ),
         const HorizontalLine(),
       ],
@@ -255,75 +250,32 @@ class _PurchasesPage extends State<PurchasesPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TableLikeListRow([
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BodyLarge(text: '${_purchases[index]['refNumber']}'),
-              LabelMedium(text: _purchases[index]['supplier'] ?? '')
-            ],
-          ),
-          TableLikeListTextDataCell(
-              '${toSqlDate(DateTime.tryParse(_purchases[index]['date']) ?? DateTime.now())}'),
-          TableLikeListTextDataCell(
-              '${formatNumber(_purchases[index]['amount'])}'),
-          TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),
-          Center(child: _getStatusView(_purchases[index])),
-          Center(child: _getVerifiedForLargeScreen(_purchases[index])),
-          Center(
-            child: InkWell(
-              onTap: () => {
-                showDialogOrModalSheet(
-                  PurchaseDetails(
-                    item: _purchases[index],
-                    onDoneVerify: (data) {
-                      _updateState(() {
-                        _purchases[index] = {
-                          ..._purchases[index] as Map,
-                          'metadata': {
-                            ..._purchases[index]['metadata'] as Map,
-                            ...data
-                          }
-                        };
-                      });
-                    },
-                    onDoneUpdate: (data) {
-                      _updateState(() {
-                        _purchases[index] = {
-                          ..._purchases[index] as Map,
-                          'images': data['images']
-                        };
-                      });
-                    },
-                    onDonePayment: (data) {
-                      _updateState(() {
-                        _purchases[index] = {
-                          ..._purchases[index] as Map,
-                          'payments': [
-                            ...itOrEmptyArray(_purchases[index]['payments']),
-                            data
-                          ]
-                        };
-                      });
-                    },
-                    onDoneDelete: (data) {
-                      _updateState(() {
-                        _purchases.removeAt(index);
-                      });
-                      Navigator.of(context).maybePop();
-                    },
-                  ),
-                  context,
-                )
-              },
+        InkWell(
+          onTap: () => _onManagePurchase(index),
+          child: TableLikeListRow([
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BodyLarge(text: '${_purchases[index]['refNumber']}'),
+                LabelMedium(text: _purchases[index]['supplier'] ?? '')
+              ],
+            ),
+            TableLikeListTextDataCell(
+                '${toSqlDate(DateTime.tryParse(_purchases[index]['date']) ?? DateTime.now())}'),
+            TableLikeListTextDataCell(
+                '${formatNumber(_purchases[index]['amount'])}'),
+            TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),
+            Center(child: _getStatusView(_purchases[index])),
+            Center(child: _getVerifiedForLargeScreen(_purchases[index])),
+            Center(
               child: LabelLarge(
                 text: 'Manage',
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-          ),
-        ]),
+          ]),
+        ),
         const HorizontalLine()
       ],
     );
@@ -347,9 +299,29 @@ class _PurchasesPage extends State<PurchasesPage> {
   }
 
   _getStatusView(purchase) {
-    // var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
+    getPayment() {
+      var payments = purchase['payments'];
+      if (payments is List) {
+        return payments.fold(0,
+                (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+      }
+      return 0;
+    }
+    var paid = getPayment();
     var type = purchase['type'];
     var amount = purchase['amount'];
+    var notPaidView = Container(
+      height: 24,
+      width: 80,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      alignment: Alignment.center,
+      child: LabelLarge(
+          text:
+          "Paid ${formatNumber((paid / amount) * 100, decimals: 0)}%"),
+    );
     var paidView = Container(
       height: 24,
       width: 80,
@@ -358,34 +330,14 @@ class _PurchasesPage extends State<PurchasesPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: const LabelMedium(text: "Paid"),
+      child: const LabelLarge(text: "Paid"),
     );
-    getPayment() {
-      var payments = purchase['payments'];
-      if (payments is List) {
-        return payments.fold(0,
-            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
-      }
-      return 0;
-    }
 
     if (type == 'invoice') {
-      var paid = getPayment();
       if (paid >= amount) {
         return paidView;
       } else {
-        return Container(
-          height: 24,
-          width: 80,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.errorContainer,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          alignment: Alignment.center,
-          child: LabelMedium(
-              text:
-                  "Paid ${formatNumber((paid / amount) * 100, decimals: 0)}%"),
-        );
+        return notPaidView;
       }
     }
     return paidView;
@@ -401,7 +353,7 @@ class _PurchasesPage extends State<PurchasesPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Record purchase'),
+                title: const Text('Add purchase'),
                 onTap: () {
                   widget.onChangePage(
                     PurchaseCreatePage(
@@ -474,5 +426,47 @@ class _PurchasesPage extends State<PurchasesPage> {
         ),
       );
     }
+  }
+
+  void _onManagePurchase(index) {
+    showDialogOrFullScreenModal(
+      PurchaseDetails(
+        item: _purchases[index],
+        onDoneVerify: (data) {
+          _updateState(() {
+            _purchases[index] = {
+              ..._purchases[index] as Map,
+              'metadata': {..._purchases[index]['metadata'] as Map, ...data}
+            };
+          });
+        },
+        onDoneUpdate: (data) {
+          _updateState(() {
+            _purchases[index] = {
+              ..._purchases[index] as Map,
+              'images': data['images']
+            };
+          });
+        },
+        onDonePayment: (data) {
+          _updateState(() {
+            _purchases[index] = {
+              ..._purchases[index] as Map,
+              'payments': [
+                ...itOrEmptyArray(_purchases[index]['payments']),
+                data
+              ]
+            };
+          });
+        },
+        onDoneDelete: (data) {
+          _updateState(() {
+            _purchases.removeAt(index);
+          });
+          Navigator.of(context).maybePop();
+        },
+      ),
+      context,
+    );
   }
 }

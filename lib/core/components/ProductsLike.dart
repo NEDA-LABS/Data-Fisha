@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
-import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/types/OnAddToCart.dart';
 import 'package:smartstock/core/types/OnAddToCartView.dart';
@@ -53,7 +52,11 @@ class ProductsLike extends StatelessWidget {
   Widget _productCardItem(BuildContext context, int index) {
     return Container(
       margin: const EdgeInsets.all(6),
-      decoration: solidRadiusBoxDecoration(context),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).colorScheme.primaryContainer),
+      ),
       child: InkWell(
         onTap: () => onAddToCartView(products[index], onAddToCart),
         child: Padding(

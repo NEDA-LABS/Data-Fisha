@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
+import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/cart_drawer.dart';
 import 'package:smartstock/core/components/full_screen_dialog.dart';
@@ -91,6 +94,7 @@ class _State extends State<SaleLikePage> {
           },
           body: Scaffold(
             floatingActionButton: _fab(),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             body: FutureBuilder<List>(future: _future(), builder: _getView),
           ),
         );
@@ -174,13 +178,15 @@ class _State extends State<SaleLikePage> {
   Widget _getView(context, snapshot) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _isLoading(snapshot)
             ? const LinearProgressIndicator()
-            : const SizedBox(height: 0),
+            : const SizedBox(),
         snapshot is AsyncSnapshot && snapshot.hasError
             ? BodyLarge(text: "${snapshot.error}")
-            : Container(),
+            : const SizedBox(),
+        // const LabelSmall(text: 'PRODUCTS'),
         Expanded(
           child: SalesLikeBody(
             onAddToCart: _onAddToCart,

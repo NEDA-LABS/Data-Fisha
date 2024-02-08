@@ -75,7 +75,7 @@ ModuleMenu _getAccountMenu(
         link: usersPage.pageName,
         icon: Icon(Icons.groups_outlined,
             color: Theme.of(context).colorScheme.primary),
-        roles: ["admin",'manager'],
+        roles: ["admin", 'manager'],
         page: usersPage,
       )
     ],
@@ -389,10 +389,14 @@ List<ModuleMenu> _getEmptyMenu({
 }
 
 void main() {
-  // initializeSmartStock(onGetAppMenu: _onGetModules);
-  //
   initializeSmartStock(
-      onGetAppMenu: _getEmptyMenu,
-      onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-          PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage));
+    onGetAppMenu: _onGetModules,
+    onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+        PurchaseCreatePage(onBackPage: onBackPage),
+  );
+
+  // initializeSmartStock(
+  //     onGetAppMenu: _getEmptyMenu,
+  //     onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+  //         PurchaseCreatePage(onBackPage: onBackPage));
 }
