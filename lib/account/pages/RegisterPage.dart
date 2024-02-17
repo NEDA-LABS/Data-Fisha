@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/RegisterForm.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 class RegisterPage extends PageBase {

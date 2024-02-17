@@ -12,7 +12,7 @@ import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/services/export.dart';

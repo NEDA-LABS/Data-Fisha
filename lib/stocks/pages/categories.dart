@@ -7,7 +7,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';

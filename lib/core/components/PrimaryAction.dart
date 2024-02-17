@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 
 class PrimaryAction extends StatelessWidget {
+  final bool disabled;
   final String text;
   final VoidCallback? onPressed;
 
-  const PrimaryAction({super.key, required this.text, required this.onPressed});
+  const PrimaryAction({super.key, required this.text, required this.onPressed, this.disabled=false});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: disabled?null:onPressed,
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all<Size>(const Size.fromHeight(48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

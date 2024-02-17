@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
-import 'package:smartstock/core/pages/SaleLikePage.dart';
+import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/sale_like_page.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
@@ -26,6 +27,7 @@ class _State extends State<TransferReceivePage> {
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
+      onQuickItem: (onAddToCartSubmitCallback) {},
       // showDiscountView: false,
       title: 'Receive transfer',
       // backLink: '/stock/transfers',
@@ -42,10 +44,21 @@ class _State extends State<TransferReceivePage> {
     );
   }
 
-  _onPrepareSalesAddToCartView(context, _) =>
-      (product, onAddToCart) => addPurchaseToCartView(
+  _onPrepareSalesAddToCartView(context, _){
+    return (product, submitCallback){
+      showDialogOrFullScreenModal(
+        AddPurchase2CartDialogContent(
           onGetPrice: _onGetPrice,
           cart: CartModel(product: product, quantity: 1),
-          onAddToCart: onAddToCart,
-          context: context);
+          onAddToCartSubmitCallback: submitCallback,
+        ),
+        context,
+      );
+      // addPurchaseToCartView(
+      //     onGetPrice: _onGetPrice,
+      //     cart: CartModel(product: product, quantity: 1),
+      //     onAddToCart: onAddToCart,
+      //     context: context);
+    };
+  }
 }

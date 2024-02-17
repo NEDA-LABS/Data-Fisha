@@ -1,4 +1,4 @@
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 
 class PageHistory {
   static final PageHistory _instance = PageHistory._internal();

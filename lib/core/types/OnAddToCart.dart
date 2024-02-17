@@ -1,3 +1,3 @@
-import 'package:smartstock/sales/models/cart.model.dart';
+import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
 
-typedef OnAddToCartSubmitCallback = dynamic Function(CartModel cart);
+typedef OnAddToCart = Function(Map product, OnAddToCartSubmitCallback onAddToCart);

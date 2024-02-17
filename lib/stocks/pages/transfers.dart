@@ -9,7 +9,7 @@ import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/transfer_details.dart';

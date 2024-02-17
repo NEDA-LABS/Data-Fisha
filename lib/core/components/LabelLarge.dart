@@ -6,8 +6,7 @@ class LabelLarge extends StatelessWidget {
   final TextAlign? textAlign;
   final Color? color;
 
-  const LabelLarge({Key? key, required this.text, this.overflow, this.color, this.textAlign})
-      : super(key: key);
+  const LabelLarge({super.key, required this.text, this.overflow, this.color, this.textAlign});
 
   @override
   Widget build(BuildContext context) {

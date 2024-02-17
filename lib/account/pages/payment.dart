@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/payment_body.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 
 class PaymentPage extends PageBase {
   final dynamic subscription;

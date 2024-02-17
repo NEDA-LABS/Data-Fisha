@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/add_sale_to_cart.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
-import 'package:smartstock/core/pages/SaleLikePage.dart';
+import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/sale_like_page.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/products.dart';
 
@@ -21,6 +21,7 @@ class _State extends State<InvoiceSalePage> {
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
+      onQuickItem: (onAddToCartSubmitCallback) {},
       title: 'Invoice sale',
       // backLink: '/sales/invoice',
       // onSubmitCart: onSubmitInvoice,

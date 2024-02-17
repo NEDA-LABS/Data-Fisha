@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
 import 'package:smartstock/core/types/OnAddToCart.dart';
-import 'package:smartstock/core/types/OnAddToCartView.dart';
 import 'package:smartstock/core/types/OnGetPrice.dart';
 
 class ProductsLike extends StatelessWidget {
@@ -26,10 +26,6 @@ class ProductsLike extends StatelessWidget {
       itemCount: itOrEmptyArray(products).length,
       shrinkWrap: true,
       gridDelegate: _delegate(),
-      // todo: implement add product after showing all available products
-      // if(index==itOrEmptyArray(products).length){
-      //   return Container(child: BodyLarge(text: 'Hi,',),);
-      // }
       itemBuilder: _productCardItem,
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 const _emptyList = <Widget>[];
@@ -14,7 +13,7 @@ class ResponsivePage extends StatefulWidget {
   final String office;
   final String? current;
   final bool showLeftDrawer;
-  final Widget? rightDrawer;
+  final Widget rightDrawer;
   final Widget Function(Drawer? drawer)? onBody;
   final SliverAppBar? sliverAppBar;
   final FloatingActionButton? fab;
@@ -30,7 +29,7 @@ class ResponsivePage extends StatefulWidget {
     this.office = '',
     this.current = '/',
     this.showLeftDrawer = true,
-    this.rightDrawer,
+    this.rightDrawer = const SizedBox(),
     this.onBody,
     this.sliverAppBar,
     this.staticChildren = _emptyList,
@@ -64,8 +63,8 @@ class _State extends State<ResponsivePage> {
 
   @override
   Widget build(BuildContext context) {
-    var getView = ifDoElse(_screenCheck, _getLargerView, _getSmallView);
-    return getView(context);
+    var isSmallScreen = getIsSmallScreen(context);
+    return isSmallScreen ? _getSmallView(context) : _getLargerView(context);
   }
 
   _customScrollView(bottomMargin) {
@@ -81,7 +80,7 @@ class _State extends State<ResponsivePage> {
               padding: widget.horizontalPadding,
               child: e,
             ));
-          }).toList(),
+          }),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -127,8 +126,6 @@ class _State extends State<ResponsivePage> {
     }
   }
 
-  _screenCheck(context) => hasEnoughWidth(context);
-
   _getLargerView(_) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +135,7 @@ class _State extends State<ResponsivePage> {
               ? widget.onBody!(null)
               : Scaffold(body: _customScrollView(24)),
         ),
-        widget.rightDrawer ?? const SizedBox(width: 0)
+        widget.rightDrawer
       ],
     );
   }

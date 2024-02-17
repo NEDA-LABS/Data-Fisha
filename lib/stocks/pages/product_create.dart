@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/product_create_form.dart';
 import 'package:smartstock/stocks/models/InventoryType.dart';
@@ -24,7 +24,7 @@ class ProductCreatePage extends PageBase {
 class _State extends State<ProductCreatePage> {
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: _getPageTitle(widget.inventoryType),
+      title: "Add product",
       showBack: true,
       onBack: widget.onBackPage,
       showSearch: false,
@@ -44,16 +44,16 @@ class _State extends State<ProductCreatePage> {
     );
   }
 
-  _getPageTitle(InventoryType inventoryType) {
-    switch (inventoryType) {
-      case InventoryType.product:
-        return "Add product";
-      case InventoryType.rawMaterial:
-        return "Add raw material";
-      case InventoryType.nonStockProduct:
-        return "Add non-stock product";
-      default:
-        return "Add product";
-    }
-  }
+  // _getPageTitle(InventoryType inventoryType) {
+  //   switch (inventoryType) {
+  //     case InventoryType.product:
+  //       return "Add product";
+  //     case InventoryType.rawMaterial:
+  //       return "Add raw material";
+  //     case InventoryType.nonStockProduct:
+  //       return "Add non-stock product";
+  //     default:
+  //       return "Add product";
+  //   }
+  // }
 }

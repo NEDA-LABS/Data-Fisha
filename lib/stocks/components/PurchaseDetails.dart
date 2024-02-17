@@ -18,6 +18,7 @@ import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/api_files.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/stocks/components/add_purchase_payment.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
@@ -50,9 +51,13 @@ class _State extends State<PurchaseDetails> {
   List<FileData?> _fileData = [];
   bool _filesTouched = false;
   bool _updatingAttachment = false;
+  Map _shop = {};
 
   @override
   void initState() {
+    getActiveShop().then((value){
+      _shop = value;
+    }).catchError((e){});
     _item = {...widget.item};
     _fileData = _getInitialFileData(_item);
     super.initState();
@@ -60,38 +65,34 @@ class _State extends State<PurchaseDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return WithActiveShop(
-      onChild: (shop) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _getHeaderSection(top: 16),
-            _getActionsSection(top: 16),
-            const WhiteSpacer(height: 8),
-            const HorizontalLine(),
-            Expanded(
-              child: CustomScrollView(
-                shrinkWrap: true,
-                slivers: [
-                  // SliverToBoxAdapter(child: _getHeaderSection(top: 24)),
-                  // SliverToBoxAdapter(child: _getActionsSection(top: 16)),
-                  SliverToBoxAdapter(
-                      child: _getDetailSection(shop: shop, top: 8)),
-                  SliverToBoxAdapter(child: _getFilesSection()),
-                  SliverToBoxAdapter(child: _getPaymentHeader(shop: shop)),
-                  SliverList.list(children: _getPaymentBody(shop: shop)),
-                  SliverToBoxAdapter(child: _getItemsHeader(shop: shop)),
-                  SliverList.list(children: _getItemsBody(shop: shop)),
-                  const SliverToBoxAdapter(child: WhiteSpacer(height: 24))
-                ],
-              ),
-            ),
-            const HorizontalLine(),
-            _getFooterSection(top: 16)
-          ],
-        );
-      },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _getHeaderSection(top: 16),
+        _getActionsSection(top: 16),
+        const WhiteSpacer(height: 8),
+        const HorizontalLine(),
+        Expanded(
+          child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: [
+              // SliverToBoxAdapter(child: _getHeaderSection(top: 24)),
+              // SliverToBoxAdapter(child: _getActionsSection(top: 16)),
+              SliverToBoxAdapter(
+                  child: _getDetailSection(shop: _shop, top: 8)),
+              SliverToBoxAdapter(child: _getFilesSection()),
+              SliverToBoxAdapter(child: _getPaymentHeader(shop: _shop)),
+              SliverList.list(children: _getPaymentBody(shop: _shop)),
+              SliverToBoxAdapter(child: _getItemsHeader(shop: _shop)),
+              SliverList.list(children: _getItemsBody(shop: _shop)),
+              const SliverToBoxAdapter(child: WhiteSpacer(height: 24))
+            ],
+          ),
+        ),
+        const HorizontalLine(),
+        _getFooterSection(top: 16)
+      ],
     );
   }
 

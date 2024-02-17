@@ -16,7 +16,7 @@ import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/components/order_details.dart';

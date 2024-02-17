@@ -14,7 +14,7 @@ import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/responsive_page_layout.dart';
 import 'package:smartstock/core/helpers/page_history.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';

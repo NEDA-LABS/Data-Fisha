@@ -13,7 +13,7 @@ class TableLikeListRow extends StatelessWidget {
     mapFn(e) => Expanded(flex: items.indexOf(e) == 0 ? 2 : 1, child: e);
     return Padding(
       padding: padding ?? const EdgeInsets.all(8),
-      child: Row(children: items.map(mapFn).toList()),
+      child: Row(mainAxisSize: MainAxisSize.min,children: items.map(mapFn).toList(),),
     );
   }
 }

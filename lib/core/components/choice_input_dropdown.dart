@@ -24,7 +24,7 @@ class ChoiceInputDropdown extends StatefulWidget {
   final Future Function({bool skipLocal}) onLoadDataFuture;
 
   const ChoiceInputDropdown({
-    Key? key,
+    super.key,
     required this.onTitle,
     required this.comparisonKey,
     required this.choice,
@@ -33,7 +33,7 @@ class ChoiceInputDropdown extends StatefulWidget {
     required this.label,
     required this.onLoadDataFuture,
     this.onCreateBuilder,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _ChoiceInputDropdown();

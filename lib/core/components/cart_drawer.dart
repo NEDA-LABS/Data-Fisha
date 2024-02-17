@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cart.dart';
-import 'package:smartstock/core/types/OnCartCheckOut.dart';
 import 'package:smartstock/core/types/OnGetPrice.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
 class CartDrawer extends StatefulWidget {
-  final OnCartCheckout onCartCheckout;
+  final VoidCallback onCartCheckout;
   final OnGetPrice onGetPrice;
   final Function(String) onRemoveItem;
 
@@ -51,6 +52,7 @@ class CartDrawer extends StatefulWidget {
 }
 
 class _State extends State<CartDrawer> {
+  Map _shop = {};
   // dynamic _customer;
   // Map states = {'discount': 0, 'loading': false};
   // TextEditingController controller = TextEditingController();
@@ -62,58 +64,64 @@ class _State extends State<CartDrawer> {
   // }
 
   @override
+  void initState() {
+    getActiveShop().then((value) {
+      setState(() {
+        _shop = value;
+      });
+    }).catchError((e) {});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getIsSmallScreen(context)
           ? AppBar(title: const TitleLarge(text: 'Cart'), centerTitle: true)
           : null,
-      body: WithActiveShop(
-        onChild: (shop) {
-          return Container(
-            padding: const EdgeInsets.only(top: 16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: getIsSmallScreen(context)
-                  ? null
-                  : Border(
-                      left: BorderSide(
-                          color: Theme.of(context).colorScheme.shadow,
-                          width: .2),
-                    ),
+      body: Container(
+        padding: const EdgeInsets.only(top: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: getIsSmallScreen(context)
+              ? null
+              : Border(
+            left: BorderSide(
+              color: Theme.of(context).colorScheme.shadow,
+              width: .2,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // widget.showCustomerLike
-                //     ? _getChooseCustomerLikeInput()
-                //     : Container(),
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    controller: ScrollController(),
-                    itemCount: widget.carts.length,
-                    itemBuilder: _cartListItemBuilder(),
-                  ),
-                ),
-                _cartSummary(shop)
-              ],
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // widget.showCustomerLike
+            //     ? _getChooseCustomerLikeInput()
+            //     : Container(),
+            Expanded(
+              child: widget.carts.isNotEmpty
+                  ? ListView.builder(
+                shrinkWrap: true,
+                controller: ScrollController(),
+                itemCount: widget.carts.length,
+                itemBuilder: _cartListItemBuilder(),
+              )
+                  : _getEmptyCartView(),
             ),
-          );
-        },
+            widget.carts.isNotEmpty ? _cartSummary() : const SizedBox()
+          ],
+        ),
       ),
     );
   }
 
-  Widget _cartSummary(Map shop) {
+  Widget _cartSummary() {
     return Card(
       elevation: 5,
       child: Column(
         children: [
-          widget.carts.isNotEmpty &&
-                  widget.onGetPrice(widget.carts[0].product) != null
-              ? _totalAmountRow(shop)
-              : Container(),
+          _totalAmountRow(),
           // widget.carts.isNotEmpty &&
           //         widget.onGetPrice(widget.carts[0].product) != null &&
           //         widget.showDiscountView == true
@@ -123,11 +131,13 @@ class _State extends State<CartDrawer> {
             margin: const EdgeInsets.all(8),
             height: 54,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-            ),
-            child: _submitButton(),
+            // decoration: BoxDecoration(
+            //   color: Theme.of(context).colorScheme.primary,
+            //   borderRadius: const BorderRadius.all(Radius.circular(4)),
+            // ),
+            child:
+                // widget.carts.isEmpty ? Container() :
+                _submitButton(),
           )
         ],
       ),
@@ -136,6 +146,7 @@ class _State extends State<CartDrawer> {
 
   _submitButton() {
     return PrimaryAction(
+      disabled: widget.carts.isEmpty,
       onPressed: widget.onCartCheckout,
       // () {
       // if (kDebugMode) {
@@ -178,7 +189,7 @@ class _State extends State<CartDrawer> {
   //       child: CircularProgressIndicator(backgroundColor: Colors.white));
   // }
 
-  Widget _totalAmountRow(Map shop) {
+  Widget _totalAmountRow() {
     var getCurrency =
         compose([propertyOrNull('currency'), propertyOrNull('settings')]);
     var amount = formatNumber(
@@ -189,7 +200,7 @@ class _State extends State<CartDrawer> {
       child: Row(
         children: [
           const Expanded(child: TitleMedium(text: "TOTAL")),
-          TitleMedium(text: '${getCurrency(shop)} $amount')
+          TitleMedium(text: '${getCurrency(_shop)} $amount')
         ],
       ),
     );
@@ -278,6 +289,24 @@ class _State extends State<CartDrawer> {
     return (context, index) {
       return _checkoutCartItem(index);
     };
+  }
+
+  Widget _getEmptyCartView() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.shopping_bag_outlined,
+            size: 48,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const WhiteSpacer(height: 8),
+          const LabelMedium(text: 'Cart is empty. Select items'),
+          const WhiteSpacer(height: 8),
+        ],
+      ),
+    );
   }
 
 // Widget _getChooseCustomerLikeInput() {

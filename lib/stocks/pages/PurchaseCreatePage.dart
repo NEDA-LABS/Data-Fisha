@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
-import 'package:smartstock/core/pages/SaleLikePage.dart';
+import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/sale_like_page.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/stocks.dart';
-import 'package:smartstock/core/types/OnAddToCart.dart';
+import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
 
@@ -27,35 +28,42 @@ class _State extends State<PurchaseCreatePage> {
   @override
   Widget build(BuildContext context) {
     return SaleLikePage(
+      onQuickItem: (onAddToCartSubmitCallback) {
+        _onAddToCart({}, onAddToCartSubmitCallback);
+      },
       wholesale: false,
-      // showDiscountView: false,
       title: 'Create purchase',
       // backLink: '/stock/purchases',
       onBack: widget.onBackPage,
       // customerLikeLabel: 'Choose supplier',
       // onSubmitCart: _onSubmitPurchase,
       onGetPrice: _onGetPrice,
-      onAddToCart: _onSalesAddToCartView,
+      onAddToCart: _onAddToCart,
       // onCustomerLikeList: getSupplierFromCacheOrRemote,
       // onCustomerLikeAddWidget: () => const CreateSupplierContent(),
       // checkoutCompleteMessage: 'Purchase complete.',
       onGetProductsLike: getStockFromCacheOrRemote,
       onCheckout: (List<CartModel> carts) {
-       if(kDebugMode){
-         print('------');
-         print('PUrchase checkout');
-         print('------');
-       }
+        if (kDebugMode) {
+          print('------');
+          print('Purchase checkout');
+          print('------');
+        }
       },
     );
   }
 
-  _onSalesAddToCartView(Map product, OnAddToCartSubmitCallback onAddToCart) {
-    addPurchaseToCartView(
-      onGetPrice: _onGetPrice,
-      cart: CartModel(product: product, quantity: 1),
-      onAddToCart: onAddToCart,
-      context: context,
+  _onAddToCart(Map product, OnAddToCartSubmitCallback submitCallback) {
+    showDialogOrFullScreenModal(
+      AddPurchase2CartDialogContent(
+        onGetPrice: _onGetPrice,
+        cart: CartModel(product: product, quantity: 1),
+        onAddToCartSubmitCallback: (cart) {
+          submitCallback(cart);
+          Navigator.of(context).maybePop();
+        },
+      ),
+      context,
     );
   }
 

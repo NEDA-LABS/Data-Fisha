@@ -12,19 +12,18 @@ import 'package:smartstock/report/pages/sales_category_performance.dart';
 import 'package:smartstock/report/pages/sales_invoice_overview.dart';
 import 'package:smartstock/report/pages/sales_product_performance.dart';
 import 'package:smartstock/report/pages/sales_seller_performance.dart';
+import 'package:smartstock/sales/pages/InvoicesPage.dart';
 import 'package:smartstock/sales/pages/customers.dart';
 import 'package:smartstock/sales/pages/sales_cash.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
-import 'package:smartstock/sales/pages/sales_cash_whole.dart';
-import 'package:smartstock/sales/pages/InvoicesPage.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/pages/sales_orders.dart';
 import 'package:smartstock/sales/pages/sold_items.dart';
 import 'package:smartstock/stocks/pages/ProductsPage.dart';
+import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
+import 'package:smartstock/stocks/pages/PurchasesPage.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/pages/PurchasesPage.dart';
-import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
 List<ModuleMenu> _onGetModules({
@@ -293,7 +292,7 @@ ModuleMenu _getSalesMenu(
     required OnChangePage onChangePage,
     required BuildContext context}) {
   var salesCashRetailPage = SalesCashRetail(onBackPage: onBackPage);
-  var salesCashWholePage = SalesCashWhole(onBackPage: onBackPage);
+  // var salesCashWholePage = SalesCashWhole(onBackPage: onBackPage);
   var invoiceCreatePage = InvoiceSalePage(onBackPage: onBackPage);
   var invoicesPage =
       InvoicesPage(onBackPage: onBackPage, onChangePage: onChangePage);
@@ -313,21 +312,21 @@ ModuleMenu _getSalesMenu(
     roles: ['*'],
     children: [
       ModuleMenu(
-        name: 'Create retail sale',
+        name: 'Create cash sale',
         link: salesCashRetailPage.pageName,
         icon: Icon(Icons.storefront_outlined,
             color: Theme.of(context).colorScheme.primary),
         roles: ['*'],
         page: salesCashRetailPage,
       ),
-      ModuleMenu(
-        name: 'Create wholesale',
-        link: '/sales/cash',
-        icon: Icon(Icons.business_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: salesCashWholePage,
-      ),
+      // ModuleMenu(
+      //   name: 'Create wholesale',
+      //   link: '/sales/cash',
+      //   icon: Icon(Icons.business_outlined,
+      //       color: Theme.of(context).colorScheme.primary),
+      //   roles: ['*'],
+      //   page: salesCashWholePage,
+      // ),
       ModuleMenu(
         name: 'Create invoice',
         link: invoiceCreatePage.pageName,

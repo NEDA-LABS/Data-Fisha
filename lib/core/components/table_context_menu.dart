@@ -15,8 +15,8 @@ _items(items){
     height: 62,
     child: Padding(
       padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      child: Wrap(
+        // scrollDirection: Axis.horizontal,
         children: [
           ...items
               .map((e) => _contextButton(text: e.name, pressed: e.pressed)),
@@ -27,9 +27,5 @@ _items(items){
 }
 
 getTableContextMenu(List<ContextMenu> items){
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [_items(items)],
-  );
+  return _items(items);
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
-import 'package:smartstock/core/pages/SaleLikePage.dart';
+import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/pages/sale_like_page.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/add_transfer_to_cart.dart';
@@ -26,6 +26,7 @@ class _State extends State<TransferSendPage> {
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
+      onQuickItem: (onAddToCartSubmitCallback) {},
       // showDiscountView: false,
       title: 'Send transfer',
       // backLink: '/stock/transfers',

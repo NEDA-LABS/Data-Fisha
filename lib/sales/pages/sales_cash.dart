@@ -6,21 +6,20 @@ import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/debounce.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/models/menu.dart';
-import 'package:smartstock/core/pages/PageBase.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 import 'package:smartstock/sales/pages/sales_cash_retail.dart';
-import 'package:smartstock/sales/pages/sales_cash_whole.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
 class SalesCashPage extends PageBase {
@@ -28,10 +27,10 @@ class SalesCashPage extends PageBase {
   final OnChangePage onChangePage;
 
   const SalesCashPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'SalesCashPage');
+  }) : super(pageName: 'SalesCashPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -115,15 +114,15 @@ class _State extends State<SalesCashPage> {
   _contextSales(context) {
     return [
       ContextMenu(
-        name: 'Add Retail',
+        name: 'Create',
         pressed: () =>
             widget.onChangePage(SalesCashRetail(onBackPage: widget.onBackPage)),
       ),
-      ContextMenu(
-        name: 'Add Wholesale',
-        pressed: () =>
-            widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
-      ),
+      // ContextMenu(
+      //   name: 'Add Wholesale',
+      //   pressed: () =>
+      //       widget.onChangePage(SalesCashWhole(onBackPage: widget.onBackPage)),
+      // ),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
   }
@@ -334,27 +333,27 @@ class _State extends State<SalesCashPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Add retail'),
+                title: const Text('Create'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   widget.onChangePage(
                       SalesCashRetail(onBackPage: widget.onBackPage));
                 },
               ),
-              const HorizontalLine(),
-              ListTile(
-                leading: const Icon(Icons.business),
-                title: const Text('Add wholesale'),
-                onTap: () {
-                  Navigator.of(context).maybePop();
-                  widget.onChangePage(
-                      SalesCashWhole(onBackPage: widget.onBackPage));
-                },
-              ),
+              // const HorizontalLine(),
+              // ListTile(
+              //   leading: const Icon(Icons.business),
+              //   title: const Text('Add wholesale'),
+              //   onTap: () {
+              //     Navigator.of(context).maybePop();
+              //     widget.onChangePage(
+              //         SalesCashWhole(onBackPage: widget.onBackPage));
+              //   },
+              // ),
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload sales'),
+                title: const Text('Reload'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();
