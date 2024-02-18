@@ -391,7 +391,7 @@ void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
     onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-        PurchaseCreatePage(onBackPage: onBackPage),
+        SalesCashRetail(onBackPage: onBackPage),
   );
 
   // initializeSmartStock(

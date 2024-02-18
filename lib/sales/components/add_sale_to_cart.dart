@@ -20,12 +20,12 @@ import 'package:smartstock/stocks/components/ProductExpireInput.dart';
 //
 // }
 
-class AddPurchase2CartDialogContent extends StatefulWidget {
+class AddSale2CartDialogContent extends StatefulWidget {
   final CartModel cart;
   final OnAddToCartSubmitCallback onAddToCartSubmitCallback;
   final OnGetPrice onGetPrice;
 
-  const AddPurchase2CartDialogContent({
+  const AddSale2CartDialogContent({
     required this.cart,
     required this.onAddToCartSubmitCallback,
     required this.onGetPrice,
@@ -36,18 +36,18 @@ class AddPurchase2CartDialogContent extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<AddPurchase2CartDialogContent> {
+class _State extends State<AddSale2CartDialogContent> {
   Map? _product = {};
   String _name = '';
   dynamic _quantity = '';
-  dynamic _purchase = '';
+  // dynamic _purchase = '';
   dynamic _retailPrice = '';
-  String _expire = '';
+  // String _expire = '';
 
   // Map _states = {};
   Map _errors = {};
   Map _shop = {};
-  bool _canExpire = false;
+  // bool _canExpire = false;
 
   _updateState(VoidCallback fn) {
     if (mounted) {
@@ -62,13 +62,13 @@ class _State extends State<AddPurchase2CartDialogContent> {
         _shop = value;
       });
     }).catchError((e) {});
-    _canExpire = _getFromCartProduct(widget.cart, 'expire', '') != '';
+    // _canExpire = _getFromCartProduct(widget.cart, 'expire', '') != '';
     _product = widget.cart.product;
     _name = widget.cart.product['product'] ?? '';
     _quantity = widget.cart.quantity;
-    _purchase = doubleOrZero('${widget.cart.product['purchase']}');
+    // _purchase = doubleOrZero('${widget.cart.product['purchase']}');
     _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
-    _expire = widget.cart.product['expire'] ?? '';
+    // _expire = widget.cart.product['expire'] ?? '';
     // _states = {
     // 'purchase': _getFromCartProduct(widget.cart, 'purchase', ''),
     // 'retailPrice': _getFromCartProduct(widget.cart, 'retailPrice', ''),
@@ -111,19 +111,19 @@ class _State extends State<AddPurchase2CartDialogContent> {
                 _errors = {..._errors, 'quantity': ''};
               });
             }),
-        TextInput(
-            label:
-                'Purchase cost ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item',
-            initialText: '$_purchase',
-            lines: 1,
-            error: '${_errors['purchase'] ?? ''}',
-            type: TextInputType.number,
-            onText: (v) {
-              _updateState(() {
-                _purchase = doubleOrZero(v);
-                _errors = {..._errors, 'purchase': ''};
-              });
-            }),
+        // TextInput(
+        //     label:
+        //         'Purchase cost ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item',
+        //     initialText: '$_purchase',
+        //     lines: 1,
+        //     error: '${_errors['purchase'] ?? ''}',
+        //     type: TextInputType.number,
+        //     onText: (v) {
+        //       _updateState(() {
+        //         _purchase = doubleOrZero(v);
+        //         _errors = {..._errors, 'purchase': ''};
+        //       });
+        //     }),
         TextInput(
             label:
                 "Sale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
@@ -137,20 +137,20 @@ class _State extends State<AddPurchase2CartDialogContent> {
                 _errors = {..._errors, 'retailPrice': ''};
               });
             }),
-        ProductExpireInput(
-          onCanExpire: (value) {
-            _canExpire = value;
-          },
-          onDate: (d) {
-            _updateState(() {
-              _expire = d;
-              _errors = {..._errors, 'expire': ''};
-            });
-          },
-          trackExpire: _canExpire,
-          error: _errors['expire'] ?? '',
-          date: _expire,
-        ),
+        // ProductExpireInput(
+        //   onCanExpire: (value) {
+        //     _canExpire = value;
+        //   },
+        //   onDate: (d) {
+        //     _updateState(() {
+        //       _expire = d;
+        //       _errors = {..._errors, 'expire': ''};
+        //     });
+        //   },
+        //   trackExpire: _canExpire,
+        //   error: _errors['expire'] ?? '',
+        //   date: _expire,
+        // ),
       ],
     );
     return Container(
@@ -181,7 +181,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
       onProceed: () {
         var valid = _validateForm();
         if (valid == true) {
-          widget.onAddToCartSubmitCallback(_getPurchaseCart());
+          widget.onAddToCartSubmitCallback(_getSaleCart());
         }
       },
     );
@@ -209,14 +209,14 @@ class _State extends State<AddPurchase2CartDialogContent> {
   //       ),
   //     );
 
-  _getPurchaseCart() {
+  _getSaleCart() {
     Map product = _product is Map && _product?['id'] != null
         ? (_product as Map<String, dynamic>?)!
         : {'id': _name, '_type': 'quick', 'product': _name};
-    product["purchase"] = _purchase;
+    // product["purchase"] = _purchase;
     product["retailPrice"] = _retailPrice;
     product["wholesalePrice"] = _retailPrice;
-    product["expire"] = _canExpire ? _expire : '';
+    // product["expire"] = _canExpire ? _expire : '';
     return CartModel(product: product, quantity: _quantity);
   }
 
@@ -235,20 +235,20 @@ class _State extends State<AddPurchase2CartDialogContent> {
     }
     // var purchasePrice = doubleOrZero('${_states['purchase']}');
     // var sellPrice = doubleOrZero('${_states['retailPrice']}');
-    if (_purchase == 0 || _purchase >= _retailPrice) {
-      _errors['purchase'] =
-          'Purchase price required, must be greater than zero and less than sale price';
-      hasError = false;
-    }
-    if (_retailPrice == 0 || _retailPrice <= _purchase) {
+    // if (_purchase == 0 || _purchase >= _retailPrice) {
+    //   _errors['purchase'] =
+    //       'Purchase price required, must be greater than zero and less than sale price';
+    //   hasError = false;
+    // }
+    if (_retailPrice == 0 ) {
       _errors['retailPrice'] =
-          'Sale price required, must be greater than zero and purchase price';
+          'Sale price required, must be greater than zero';
       hasError = false;
     }
-    if (_canExpire == true && _expire == '') {
-      _errors['expire'] = 'Expire date required';
-      hasError = false;
-    }
+    // if (_canExpire == true && _expire == '') {
+    //   _errors['expire'] = 'Expire date required';
+    //   hasError = false;
+    // }
     _updateState(() {});
     return hasError;
   }

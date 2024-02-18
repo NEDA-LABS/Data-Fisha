@@ -198,7 +198,7 @@ class _State extends State<ProductForm> {
   Widget _priceInput(Map shop) {
     return TextInput(
       onText: (d) => updateFormState({"retailPrice": d}),
-      label: "Sell price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+      label: "Sale price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
       placeholder: "",
       error: _errors['retailPrice'] ?? '',
       initialText: '${_product['retailPrice'] ?? ''}',
@@ -432,7 +432,7 @@ class _State extends State<ProductForm> {
     if (cost < price && '${product?['purchase'] ?? ''}'.isNotEmpty) {
       return true;
     } else {
-      error['purchase'] = 'Required, and must be less than sell price';
+      error['purchase'] = 'Required, and must be less than sale price';
       return false;
     }
   }
