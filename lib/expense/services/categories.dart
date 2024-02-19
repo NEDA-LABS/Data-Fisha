@@ -7,10 +7,8 @@ import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/services/api_categories.dart';
 import 'package:smartstock/expense/services/cache_categories.dart';
 
-Future<List<dynamic>> getExpenseCategoriesFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+Future<List<dynamic>> getExpenseCategoriesFromCacheOrRemote(
+    [skipLocal = false, stringLike = '']) async {
   var shop = await getActiveShop();
   var categories =
       skipLocal ? [] : await getLocalExpenseCategories(shopToApp(shop));

@@ -276,7 +276,7 @@ class _State extends State<RegisterForm> {
             {'country': x, 'e_country': x.isNotEmpty ? '' : 'Country required'});
       },
       error: states['e_country'] ?? '',
-      onLoad: ({skipLocal = false}) async => getCountries(),
+      onLoad: ([skipLocal = false]) async => getCountries(),
       placeholder: "Choose country",
       onField: (a) {
         if(a is Map){

@@ -93,17 +93,19 @@ Future printPreviousSendTransfer(transfer) async {
   await posPrint(data: data);
 }
 
-Future _printTransferItems(List<CartModel> carts, discount, Map customer, batchId) async {
+Future _printTransferItems(
+    List<CartModel> carts, discount, Map customer, batchId) async {
   var items = cartItems(carts, discount, false, customer);
   var data = await cartItemsToPrinterData(
       items, customer, (cart) => cart['stock']['purchase']);
   await posPrint(data: data, qr: batchId);
 }
 
-Future<Map> _carts2Transfer(List<CartModel> carts, shop2Name, batchId, shop1, type) async {
+Future<Map> _carts2Transfer(
+    List<CartModel> carts, shop2Name, batchId, shop1, type) async {
   // var shop2 = await shopName2Shop(shop2Name);
   var currentUser = await getLocalCurrentUser();
-  var t = '${cartTotalAmount(carts, false, (product) => product['purchase'])}';
+  var t = '${cartTotalAmount(carts, (product) => product['purchase'])}';
   var totalAmount = doubleOrZero(t);
   return {
     "date": DateTime.now().toIso8601String(),
@@ -144,7 +146,8 @@ Future<Map> _carts2Transfer(List<CartModel> carts, shop2Name, batchId, shop1, ty
 Future Function(List<CartModel>, Map shopName, dynamic) prepareOnSubmitTransfer(
         context, String type) =>
     (List<CartModel> carts, Map shopName, discount) async {
-      if ('${shopName['businessName']}'.isEmpty) throw "Shop you transfer to/from required";
+      if ('${shopName['businessName']}'.isEmpty)
+        throw "Shop you transfer to/from required";
       String batchId = generateUUID();
       var shop = await getActiveShop();
       // var url = '${shopFunctionsURL(shopToApp(shop))}/transfer/$type';

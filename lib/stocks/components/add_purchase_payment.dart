@@ -54,7 +54,7 @@ class _State extends State<AddPurchasePaymentContent> {
                 },
                 label: 'Payment method',
                 choice: _states['mode'],
-                onLoad: ({skipLocal = false}) async {
+                onLoad: ([skipLocal = false]) async {
                   return [
                     'CASH',
                     'M-PESA',

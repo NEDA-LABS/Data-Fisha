@@ -12,7 +12,7 @@ class ChoicesInput extends StatefulWidget {
   final String comparisonKey;
   final Function(dynamic) onChoice;
   final dynamic choice;
-  final Future Function({bool skipLocal}) onLoad;
+  final Future Function(bool skipLocal) onLoad;
   final Widget Function()? getAddWidget;
   final String label;
   final String placeholder;

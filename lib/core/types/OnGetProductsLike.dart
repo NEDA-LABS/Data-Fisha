@@ -1,1 +1,1 @@
-typedef OnGetProductsLike = Future Function({bool skipLocal, String stringLike});
+typedef OnGetProductsLike = Future Function(bool skipLocal, String stringLike);

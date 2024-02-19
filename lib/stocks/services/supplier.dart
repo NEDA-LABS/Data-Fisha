@@ -7,10 +7,8 @@ import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_suppliers.dart';
 import 'package:smartstock/stocks/services/supplier_cache.dart';
 
-Future<List<dynamic>> getSupplierFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+Future<List<dynamic>> getSupplierFromCacheOrRemote(
+    [skipLocal = false, stringLike = '']) async {
   var shop = await getActiveShop();
   var suppliers = skipLocal ? [] : await getLocalSuppliers(shopToApp(shop));
   var getItOrRemoteAndSave = ifDoElse(

@@ -62,7 +62,8 @@ class _State extends State<AddPurchase2CartDialogContent> {
         _shop = value;
       });
     }).catchError((e) {});
-    _canExpire = _getFromCartProduct(widget.cart, 'expire', '') != '';
+    var exp = _getFromCartProduct(widget.cart, 'expire', '');
+    _canExpire =  exp != '' && exp != null;
     _product = widget.cart.product;
     _name = widget.cart.product['product'] ?? '';
     _quantity = widget.cart.quantity;
@@ -212,7 +213,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
   _getPurchaseCart() {
     Map product = _product is Map && _product?['id'] != null
         ? (_product as Map<String, dynamic>?)!
-        : {'id': _name, '_type': 'quick', 'product': _name};
+        : {'id': _name, '__type': 'quick', 'product': _name};
     product["purchase"] = _purchase;
     product["retailPrice"] = _retailPrice;
     product["wholesalePrice"] = _retailPrice;

@@ -19,10 +19,10 @@ class CategoriesPage extends PageBase {
   final OnChangePage onChangePage;
 
   const CategoriesPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'CategoriesPage');
+  }) : super(pageName: 'CategoriesPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -43,7 +43,7 @@ class _State extends State<CategoriesPage> {
         if (p0.startsWith('-1:') == false) {
           setState(() {
             _query = p0;
-            getCategoryFromCacheOrRemote(skipLocal: false).then((value) {
+            getCategoryFromCacheOrRemote(false).then((value) {
               _categories = value
                   .where((element) => '${element['name']}'
                       .toLowerCase()
@@ -121,9 +121,9 @@ class _State extends State<CategoriesPage> {
                 trailing: IconButton(
                   onPressed: () {
                     showDialogDelete(
-                      onDone: (p0) {
-                        Navigator.of(context).maybePop();
-                      },
+                        onDone: (p0) {
+                          Navigator.of(context).maybePop();
+                        },
                         context: context,
                         name: firstLetterUpperCase(
                             '${_categories[index]['name']}'),
@@ -158,7 +158,7 @@ class _State extends State<CategoriesPage> {
     setState(() {
       _isLoading = true;
     });
-    getCategoryFromCacheOrRemote(skipLocal: true).then(
+    getCategoryFromCacheOrRemote(true).then(
       (value) {
         _categories = value;
       },
@@ -208,9 +208,9 @@ class _State extends State<CategoriesPage> {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 800),
           child: Dialog(
-            child: CreateCategoryContent(onNewCategory: (category) {
-
-            },),
+            child: CreateCategoryContent(
+              onNewCategory: (category) {},
+            ),
           ),
         ),
       ),

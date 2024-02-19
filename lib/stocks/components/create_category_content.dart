@@ -118,7 +118,7 @@ class _State extends State<CreateCategoryContent> {
           print(value);
         }
         widget.onNewCategory({...category, ...itOrEmptyArray(value)[0] ?? {}});
-        getCategoryFromCacheOrRemote(skipLocal: true)
+        getCategoryFromCacheOrRemote(true)
             .then((value) => null)
             .catchError((error) {})
             .whenComplete(() {

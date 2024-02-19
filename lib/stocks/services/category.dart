@@ -7,10 +7,8 @@ import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category_cache.dart';
 
-Future<List<dynamic>> getCategoryFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+Future<List<dynamic>> getCategoryFromCacheOrRemote(
+    [skipLocal = false, stringLike = '']) async {
   var shop = await getActiveShop();
   var categories = skipLocal ? [] : await getLocalCategories(shopToApp(shop));
   var getItOrRemoteAndSave = ifDoElse(
@@ -29,7 +27,7 @@ Future<List<dynamic>> getCategoryFromCacheOrRemote({
 
 Future<List> _filterAndSort(Map data) async {
   var categories = data['categories'];
-  String stringLike = data['query']??'';
+  String stringLike = data['query'] ?? '';
   _where(x) =>
       x['name'] != null &&
       '${x['name']}'.toLowerCase().contains(stringLike.toLowerCase());

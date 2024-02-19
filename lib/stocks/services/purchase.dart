@@ -45,3 +45,9 @@ Future productsPurchaseDelete({required String id}) async {
   var response = await productsPurchaseDeleteRestAPI(id, shop);
   return response;
 }
+
+Future productsPurchaseCreate({required Map purchase}) async {
+  Map shop = await getActiveShop();
+  var response = await productsPurchaseCreateRestAPI(purchase, shop);
+  return response;
+}

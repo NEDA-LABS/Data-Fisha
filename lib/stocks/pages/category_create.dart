@@ -12,9 +12,9 @@ class CategoryCreatePage extends PageBase {
   final OnBackPage onBackPage;
 
   const CategoryCreatePage({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'CategoryCreatePage');
+  }) : super(pageName: 'CategoryCreatePage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -42,50 +42,50 @@ class _State extends State<CategoryCreatePage> {
 
   @override
   Widget build(context) => ResponsivePage(
-    current: '/stock/',
-    sliverAppBar: _appBar(context),
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    staticChildren: [
-      // getIsSmallScreen(context)
-      //     ? Container()
-      //     : tableContextMenu(_contextItems(context)),
-      // _loading(_isLoading),
-      CreateCategoryContent(onNewCategory: (category) {
-
-      },)
-      // _tableHeader(),
-    ],
-    // dynamicChildBuilder: (context, index) {
-    //   return Column(
-    //     mainAxisSize: MainAxisSize.min,
-    //     crossAxisAlignment: CrossAxisAlignment.stretch,
-    //     children: [
-    //       ListTile(
-    //           title: TableLikeListTextDataCell(
-    //               '${_categories[index]['name']}'),
-    //           subtitle: Text(
-    //             '${_categories[index]['description']}',
-    //             style: const TextStyle(
-    //                 fontSize: 12, fontWeight: FontWeight.w300),
-    //           )),
-    //       const SizedBox(height: 5),
-    //       HorizontalLine(),
-    //     ],
-    //   );
-    // },
-    fab: FloatingActionButton(
-      onPressed: () => _showMobileContextMenu(context),
-      child: const Icon(Icons.unfold_more_outlined),
-    ),
-    totalDynamicChildren: _categories.length,
-  );
+        current: '/stock/',
+        sliverAppBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        staticChildren: [
+          // getIsSmallScreen(context)
+          //     ? Container()
+          //     : tableContextMenu(_contextItems(context)),
+          // _loading(_isLoading),
+          CreateCategoryContent(
+            onNewCategory: (category) {},
+          )
+          // _tableHeader(),
+        ],
+        // dynamicChildBuilder: (context, index) {
+        //   return Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     crossAxisAlignment: CrossAxisAlignment.stretch,
+        //     children: [
+        //       ListTile(
+        //           title: TableLikeListTextDataCell(
+        //               '${_categories[index]['name']}'),
+        //           subtitle: Text(
+        //             '${_categories[index]['description']}',
+        //             style: const TextStyle(
+        //                 fontSize: 12, fontWeight: FontWeight.w300),
+        //           )),
+        //       const SizedBox(height: 5),
+        //       HorizontalLine(),
+        //     ],
+        //   );
+        // },
+        fab: FloatingActionButton(
+          onPressed: () => _showMobileContextMenu(context),
+          child: const Icon(Icons.unfold_more_outlined),
+        ),
+        totalDynamicChildren: _categories.length,
+      );
 
   _fetchCategories() {
     setState(() {
       _isLoading = true;
     });
-    getCategoryFromCacheOrRemote(skipLocal: true).then(
-          (value) {
+    getCategoryFromCacheOrRemote(true).then(
+      (value) {
         _categories = value;
       },
     ).whenComplete(() {
@@ -134,9 +134,9 @@ class _State extends State<CategoryCreatePage> {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
           child: Dialog(
-            child: CreateCategoryContent(onNewCategory: (category) {
-
-            },),
+            child: CreateCategoryContent(
+              onNewCategory: (category) {},
+            ),
           ),
         ),
       ),

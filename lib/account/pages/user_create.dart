@@ -13,8 +13,8 @@ import 'package:smartstock/core/helpers/util.dart';
 class ShopUserCreatePage extends PageBase {
   final OnBackPage onBackPage;
 
-  const ShopUserCreatePage({required this.onBackPage, Key? key})
-      : super(key: key, pageName: 'ShopUserCreatePage');
+  const ShopUserCreatePage({required this.onBackPage, super.key})
+      : super(pageName: 'ShopUserCreatePage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -99,7 +99,7 @@ class _State extends State<ShopUserCreatePage> {
           }
           return '';
         },
-        onLoad: ({skipLocal = false}) async => [
+        onLoad: ([skipLocal = false]) async => [
           {'name': 'manager'},
           {'name': 'user'}
         ],
@@ -116,7 +116,7 @@ class _State extends State<ShopUserCreatePage> {
         multiple: true,
         // getAddWidget: () => createCategoryContent(),
         onField: (x) => '${x['businessName']}',
-        onLoad: ({skipLocal = false}) async => await getUserShops(),
+        onLoad: ([skipLocal = false]) async => await getUserShops(),
       ),
       Container(
         width: MediaQuery.of(context).size.width,

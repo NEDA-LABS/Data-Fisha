@@ -193,7 +193,7 @@ class _State extends State<CartDrawer> {
     var getCurrency =
         compose([propertyOrNull('currency'), propertyOrNull('settings')]);
     var amount = formatNumber(
-        '${cartTotalAmount(widget.carts, widget.wholesale, widget.onGetPrice)}',
+        '${cartTotalAmount(widget.carts, widget.onGetPrice)}',
         decimals: 2);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),

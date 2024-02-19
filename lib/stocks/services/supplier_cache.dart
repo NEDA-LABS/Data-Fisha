@@ -7,7 +7,7 @@ const _suppliersId = 'suppliers';
 
 Future getLocalSuppliers(App app) async {
   var getSuppliersLocally = CacheFactory().prepareGetData(app, _suppliersTable);
-  var suppliers = getSuppliersLocally(_suppliersId);
+  var suppliers = await getSuppliersLocally(_suppliersId);
   return itOrEmptyArray(suppliers);
 }
 

@@ -33,7 +33,7 @@ Future _printInvoiceItems(List<CartModel> carts, discount, Map customer, batchId
 Future<Map> _carts2Invoice(List<CartModel> carts, dis, Map customer, cartId, batchId) async {
   var discount = doubleOrZero('$dis');
   var totalAmount = doubleOrZero(
-      '${cartTotalAmount(carts, false, (product) => product['retailPrice'])}');
+      '${cartTotalAmount(carts, (product) => product['retailPrice'])}');
   String date = toSqlDate(DateTime.now());
   String due = toSqlDate(DateTime.now().add(const Duration(days: 14)));
   return {

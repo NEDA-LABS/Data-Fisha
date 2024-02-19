@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
@@ -17,8 +21,10 @@ import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
+import 'package:smartstock/core/services/api_shop.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/location.dart';
 import 'package:smartstock/core/types/OnAddToCart.dart';
 import 'package:smartstock/core/types/OnCheckout.dart';
 import 'package:smartstock/core/types/OnGetPrice.dart';
@@ -61,7 +67,7 @@ class _State extends State<SaleLikePage> {
   List<CartModel> _carts = [];
   Map _shop = {};
 
-  // StreamSubscription<Position>? _locationSubscriptionStream;
+  StreamSubscription<Position>? _locationSubscriptionStream;
 
   @override
   void initState() {
@@ -71,23 +77,29 @@ class _State extends State<SaleLikePage> {
         _shop = value;
       });
     }).catchError((e) {});
-    // _locationSubscriptionStream =
-    //     getLocationChangeStream().listen((Position? position) {
-    //   if (position != null) {
-    //     updateShopLocation(
-    //       latitude: position.latitude.toString(),
-    //       longitude: position.longitude.toString(),
-    //     ).then((value) {
-    //       if (kDebugMode) {
-    //         print(value);
-    //       }
-    //     }).catchError((error) {
-    //       if (kDebugMode) {
-    //         print(error);
-    //       }
-    //     });
-    //   }
-    // });
+    _locationSubscriptionStream =
+        getLocationChangeStream().listen((Position? position) {
+      if (position != null) {
+        updateShopLocation(
+          latitude: position.latitude.toString(),
+          longitude: position.longitude.toString(),
+        ).then((value) {
+          if (kDebugMode) {
+            print(value);
+          }
+        }).catchError((error) {
+          if (kDebugMode) {
+            print(error);
+          }
+        });
+      }
+    });
+    widget.searchTextController?.addListener(() {
+      if (widget.searchTextController?.value.text.isEmpty == true) {
+        // print("Empty LISTERNERRRRR");
+        _refresh(false);
+      }
+    });
     super.initState();
   }
 
@@ -115,9 +127,11 @@ class _State extends State<SaleLikePage> {
                       widget.onQuickItem(_onAddToCartCallback);
                     })
                 : getTableContextMenu([
-                    ContextMenu(name: 'Quick item', pressed: () {
-                      widget.onQuickItem(_onAddToCartCallback);
-                    }),
+                    ContextMenu(
+                        name: 'Quick item',
+                        pressed: () {
+                          widget.onQuickItem(_onAddToCartCallback);
+                        }),
                     ContextMenu(name: 'Reload', pressed: () => _refresh(true)),
                   ]),
             // DisplayTextSmall(text: 'Items'),
@@ -313,9 +327,7 @@ class _State extends State<SaleLikePage> {
       onSearch: (text) {
         if (text.startsWith('qr_code:')) {
           var barCodeQ = text.replaceFirst('qr_code:', '');
-          widget
-              .onGetProductsLike(skipLocal: false, stringLike: barCodeQ)
-              .then((value) {
+          widget.onGetProductsLike(false, barCodeQ).then((value) {
             Map? inventory = itOrEmptyArray(value).firstWhere((element) {
               var getBarCode = propertyOrNull('barcode');
               var barCode = getBarCode(element);
@@ -326,8 +338,10 @@ class _State extends State<SaleLikePage> {
             }
           }).catchError((e) {});
         } else {
-          _query = text;
-          _refresh(false, _query);
+          if (text.isNotEmpty) {
+            _query = text;
+            _refresh(false, _query);
+          }
         }
       },
       context: context,
@@ -353,7 +367,7 @@ class _State extends State<SaleLikePage> {
                 leading: const Icon(Icons.add),
                 title: const BodyLarge(text: 'Quick item'),
                 onTap: () {
-                  Navigator.of(context).maybePop().whenComplete((){
+                  Navigator.of(context).maybePop().whenComplete(() {
                     widget.onQuickItem(_onAddToCartCallback);
                   });
                 },
@@ -363,7 +377,7 @@ class _State extends State<SaleLikePage> {
                 leading: const Icon(Icons.refresh),
                 title: const BodyLarge(text: 'Reload'),
                 onTap: () {
-                  Navigator.of(context).maybePop().whenComplete((){
+                  Navigator.of(context).maybePop().whenComplete(() {
                     _refresh(true);
                   });
                 },
@@ -439,7 +453,13 @@ class _State extends State<SaleLikePage> {
         //   showInfoDialog(context, widget.checkoutCompleteMessage);
         // });
         // }).catchError(_showCheckoutError(context));
-        widget.onCheckout(_carts);
+        if (getIsSmallScreen(context)) {
+          Navigator.of(context).maybePop().whenComplete(() {
+            widget.onCheckout(_carts);
+          });
+        } else {
+          widget.onCheckout(_carts);
+        }
       },
       carts: _carts,
       // showDiscountView: widget.showDiscountView,
@@ -468,8 +488,9 @@ class _State extends State<SaleLikePage> {
 
   @override
   void dispose() {
+    widget.searchTextController?.dispose();
     // if (_locationSubscriptionStream != null) {
-    //   _locationSubscriptionStream?.cancel();
+    _locationSubscriptionStream?.cancel();
     // }
     super.dispose();
   }
@@ -478,7 +499,7 @@ class _State extends State<SaleLikePage> {
     setState(() {
       _loading = true;
     });
-    widget.onGetProductsLike(skipLocal: skip, stringLike: q).then((value) {
+    widget.onGetProductsLike(skip, q).then((value) {
       _items = value;
     }).catchError((error) {
       showInfoDialog(context, error);
@@ -493,14 +514,9 @@ class _State extends State<SaleLikePage> {
     setState(() {
       _loading = true;
     });
-    widget
-        .onGetProductsLike(skipLocal: false, stringLike: _query)
-        .then((value) {
+    widget.onGetProductsLike(false, _query).then((value) {
       if (itOrEmptyArray(value).isEmpty) {
-        return widget.onGetProductsLike(
-          skipLocal: true,
-          stringLike: '',
-        );
+        return widget.onGetProductsLike(true, '');
       } else {
         return value;
       }

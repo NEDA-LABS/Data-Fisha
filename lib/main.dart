@@ -19,11 +19,12 @@ import 'package:smartstock/sales/pages/sales_cash_retail.dart';
 import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
 import 'package:smartstock/sales/pages/sales_orders.dart';
 import 'package:smartstock/sales/pages/sold_items.dart';
-import 'package:smartstock/stocks/pages/ProductsPage.dart';
-import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
-import 'package:smartstock/stocks/pages/PurchasesPage.dart';
+import 'package:smartstock/stocks/pages/products_page.dart';
+import 'package:smartstock/stocks/pages/purchase_create_page.dart';
+import 'package:smartstock/stocks/pages/purchases_page.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
+import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers.dart';
 
 List<ModuleMenu> _onGetModules({
@@ -226,6 +227,8 @@ ModuleMenu _getInventoryMenu(
       TransfersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var productsSummaryPage =
       StocksIndexPage(onBackPage: onBackPage, onChangePage: onChangePage);
+  var productsVendors =
+      SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   return ModuleMenu(
       name: 'Inventory',
       icon: Icon(Icons.inventory_2_outlined,
@@ -254,12 +257,12 @@ ModuleMenu _getInventoryMenu(
               color: Theme.of(context).colorScheme.primary),
           page: categoriesPage,
         ),
-        // ModuleMenu(
-        //     name: 'Suppliers',
-        //     link: '/stock/suppliers',
-        //     roles: ['admin', 'manager'],
-        //     icon: const Icon(Icons.support_agent_sharp),
-        //     page: SuppliersPage(onBackPage: onBackPage)),
+        ModuleMenu(
+            name: 'Vendors',
+            link: '/stock/suppliers',
+            roles: ['admin', 'manager'],
+            icon: Icon(Icons.support_agent_sharp, color: Theme.of(context).colorScheme.primary,),
+            page: SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage,)),
         ModuleMenu(
           name: 'Purchases',
           link: purchasePage.pageName,
@@ -391,7 +394,7 @@ void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
     onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-        PurchaseCreatePage(onBackPage: onBackPage),
+        PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage),
   );
 
   // initializeSmartStock(

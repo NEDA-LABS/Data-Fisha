@@ -222,10 +222,7 @@ class _State extends State<ProductsPage> {
                 _isLoading = true;
                 _isExporting = true;
               });
-              getStockFromCacheOrRemote(
-                stringLike: '',
-                skipLocal: true,
-              ).then((data) {
+              getStockFromCacheOrRemote(true, '').then((data) {
                 _allProducts = data;
                 exportToCsv('stock_export', data);
               }).catchError((error) {
@@ -289,10 +286,7 @@ class _State extends State<ProductsPage> {
         _skipLocal = false;
       });
     } else {
-      getStockFromCacheOrRemote(
-        stringLike: query,
-        skipLocal: _skipLocal,
-      ).then((data) {
+      getStockFromCacheOrRemote(_skipLocal, query).then((data) {
         _allProducts = data;
       }).catchError((error) {
         showInfoDialog(context, error);
@@ -454,6 +448,7 @@ class _State extends State<ProductsPage> {
   }
 
   Widget _largerScreenChildBuilder(context, index) {
+    var product = _getFilteredProducts()[index];
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -461,17 +456,15 @@ class _State extends State<ProductsPage> {
         InkWell(
           onTap: () => _productItemClicked(_getFilteredProducts()[index]),
           child: TableLikeListRow([
+            TableLikeListTextDataCell('${product['product']}'),
             TableLikeListTextDataCell(
-                '${_getFilteredProducts()[index]['product']}'),
+                '${product['stockable'] == false ? 'N/A' : formatNumber(product['quantity'])}'),
+            TableLikeListTextDataCell('${formatNumber(product['purchase'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['quantity'])}'),
+                '${formatNumber(product['retailPrice'])}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['purchase'])}'),
-            TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['retailPrice'])}'),
-            TableLikeListTextDataCell(
-                '${formatNumber(_getFilteredProducts()[index]['wholesalePrice'])}'),
-            _renderStockStatus(_getFilteredProducts()[index]),
+                '${formatNumber(product['wholesalePrice'])}'),
+            _renderStockStatus(product),
           ]),
         ),
         const HorizontalLine()

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
@@ -8,8 +7,6 @@ import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/debounce.dart';
-import 'package:smartstock/core/components/full_screen_dialog.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -17,14 +14,15 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/stocks/components/PurchaseDetails.dart';
-import 'package:smartstock/stocks/pages/PurchaseCreatePage.dart';
+import 'package:smartstock/stocks/components/purchase_details.dart';
+import 'package:smartstock/stocks/pages/purchase_create_page.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 
 class PurchasesPage extends PageBase {
@@ -220,14 +218,18 @@ class _PurchasesPage extends State<PurchasesPage> {
                 overflow: TextOverflow.ellipsis,
               ),
               const WhiteSpacer(width: 8),
-              WithActiveShop(onChild: (shop) {
-                var getShopCurrency = compose(
-                    [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
-                return BodyMedium(
-                  text:
-                  '${getShopCurrency(shop)} ${formatNumber('${_purchases[index]['amount']}', decimals: 0)}',
-                );
-              },)
+              WithActiveShop(
+                onChild: (shop) {
+                  var getShopCurrency = compose([
+                    propertyOr('currency', (p0) => 'TZS'),
+                    propertyOrNull('settings')
+                  ]);
+                  return BodyMedium(
+                    text:
+                        '${getShopCurrency(shop)} ${formatNumber('${_purchases[index]['amount']}', decimals: 0)}',
+                  );
+                },
+              )
             ],
           ),
           subtitle: Row(
@@ -303,10 +305,11 @@ class _PurchasesPage extends State<PurchasesPage> {
       var payments = purchase['payments'];
       if (payments is List) {
         return payments.fold(0,
-                (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
+            (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
       }
       return 0;
     }
+
     var paid = getPayment();
     var type = purchase['type'];
     var amount = purchase['amount'];
@@ -319,8 +322,7 @@ class _PurchasesPage extends State<PurchasesPage> {
       ),
       alignment: Alignment.center,
       child: LabelLarge(
-          text:
-          "Paid ${formatNumber((paid / amount) * 100, decimals: 0)}%"),
+          text: "Paid ${formatNumber((paid / amount) * 100, decimals: 0)}%"),
     );
     var paidView = Container(
       height: 24,

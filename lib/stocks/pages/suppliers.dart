@@ -15,11 +15,13 @@ import 'package:smartstock/stocks/services/supplier.dart';
 
 class SuppliersPage extends PageBase {
   final OnBackPage onBackPage;
+  final OnChangePage onChangePage;
 
   const SuppliersPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'SuppliersPage');
+    required this.onChangePage,
+  }) : super(pageName: 'VendorsPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -32,7 +34,7 @@ class _State extends State<SuppliersPage> {
 
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Suppliers",
+      title: "Vendors",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
@@ -41,7 +43,7 @@ class _State extends State<SuppliersPage> {
         if (p0.startsWith('-1:') == false) {
           setState(() {
             _query = p0;
-            getSupplierFromCacheOrRemote(skipLocal: false).then((value) {
+            getSupplierFromCacheOrRemote(false).then((value) {
               _suppliers = value
                   .where((element) => '${element['name']}'
                       .toLowerCase()
@@ -82,7 +84,7 @@ class _State extends State<SuppliersPage> {
     setState(() {
       _isLoading = true;
     });
-    getSupplierFromCacheOrRemote(skipLocal: true).then((value) {
+    getSupplierFromCacheOrRemote(true).then((value) {
       _suppliers = value;
     }).whenComplete(() {
       setState(() {

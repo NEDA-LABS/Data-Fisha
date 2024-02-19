@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 import 'package:smartstock/core/services/date.dart';
@@ -16,7 +18,7 @@ class DateInput extends StatefulWidget {
   final DateTime initialDate;
 
   const DateInput({
-    Key? key,
+    super.key,
     required this.onText,
     this.initialText = '',
     this.label = '',
@@ -26,7 +28,7 @@ class DateInput extends StatefulWidget {
     required this.firstDate,
     required this.initialDate,
     required this.lastDate,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _DateInputState();
@@ -66,8 +68,7 @@ class _DateInputState extends State<DateInput> {
 
   _label(label) => Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Text(label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200)));
+      child: LabelMedium(text: label));
 
   _actionsItems(data, BuildContext context) => Row(children: [
         IconButton(
@@ -114,7 +115,6 @@ class _DateInputState extends State<DateInput> {
   }
 
   void _showDate() {
-    print('Date clicked');
     showDatePicker(
       context: context,
       initialDate: widget.initialDate,

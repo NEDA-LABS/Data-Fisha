@@ -23,7 +23,7 @@ class TextInput extends StatefulWidget {
   TextEditingController? controller;
 
   TextInput({
-    Key? key,
+    super.key,
     required this.onText,
     this.initialText = '',
     this.placeholder = '',
@@ -37,7 +37,7 @@ class TextInput extends StatefulWidget {
     this.readOnly = false,
     this.controller,
     this.value,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

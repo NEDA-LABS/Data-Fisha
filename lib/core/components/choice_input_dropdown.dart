@@ -21,7 +21,7 @@ class ChoiceInputDropdown extends StatefulWidget {
   final bool multiple;
   final String label;
   final Widget Function()? onCreateBuilder;
-  final Future Function({bool skipLocal}) onLoadDataFuture;
+  final Future Function(bool skipLocal) onLoadDataFuture;
 
   const ChoiceInputDropdown({
     super.key,
@@ -64,10 +64,10 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
     _updateState(() {
       _loading = true;
     });
-    widget.onLoadDataFuture(skipLocal: false).then((value) async {
+    widget.onLoadDataFuture(false).then((value) async {
       _data = itOrEmptyArray(value);
       if (_data.isEmpty) {
-        _data = itOrEmptyArray(await widget.onLoadDataFuture(skipLocal: true));
+        _data = itOrEmptyArray(await widget.onLoadDataFuture(true));
       }
       return _data;
     }).then((value) {
@@ -90,7 +90,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
     _updateState(() {
       _loading = true;
     });
-    widget.onLoadDataFuture(skipLocal: true).then((value) {
+    widget.onLoadDataFuture(true).then((value) {
       _data = itOrEmptyArray(value);
     }).whenComplete(() {
       _updateState(() {

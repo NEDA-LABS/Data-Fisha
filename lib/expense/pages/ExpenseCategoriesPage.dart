@@ -3,12 +3,11 @@ import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/expense/components/create_category_content.dart';
 import 'package:smartstock/expense/services/categories.dart';
 
@@ -18,7 +17,7 @@ class ExpenseCategoriesPage extends PageBase {
   const ExpenseCategoriesPage({
     Key? key,
     required this.onBackPage,
-  }) : super(key: key,pageName: 'ExpenseCategoriesPage');
+  }) : super(key: key, pageName: 'ExpenseCategoriesPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -101,8 +100,7 @@ class _State extends State<ExpenseCategoriesPage> {
     ];
   }
 
-  _tableHeader() =>
-      const TableLikeListRow([TableLikeListHeaderCell('Name')]);
+  _tableHeader() => const TableLikeListRow([TableLikeListHeaderCell('Name')]);
 
   _fields() => ['name'];
 
@@ -113,7 +111,7 @@ class _State extends State<ExpenseCategoriesPage> {
     setState(() {
       _isLoading = true;
     });
-    getExpenseCategoriesFromCacheOrRemote(skipLocal: remote, stringLike: _query)
+    getExpenseCategoriesFromCacheOrRemote(remote,_query)
         .then((value) {
       _categories = value;
     }).catchError((err) {

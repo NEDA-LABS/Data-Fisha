@@ -7,18 +7,16 @@ import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_stocks.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
-Future<List<dynamic>> getStockFromCacheOrRemote({
-  skipLocal = false,
-  stringLike = '',
-}) async {
+Future<List<dynamic>> getStockFromCacheOrRemote(
+    [skipLocal = false, stringLike = '']) async {
   var shop = await getActiveShop();
   var stocks = skipLocal ? [] : await getLocalStocks(shopToApp(shop));
   var getItOrRemoteAndSave = ifDoElse(
     (x) => x == null || (x is List && x.isEmpty),
     (_) async {
       List rStocks = await productsAllRestAPI(shop);
-      rStocks = await compute(
-          _pruneAndSortStocks, {'stocks': rStocks, 'query': ''});
+      rStocks =
+          await compute(_pruneAndSortStocks, {'stocks': rStocks, 'query': ''});
       await saveLocalStocks(shopToApp(shop), rStocks);
       return rStocks;
     },

@@ -6,7 +6,7 @@ import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
-import 'package:smartstock/stocks/pages/ProductsPage.dart';
+import 'package:smartstock/stocks/pages/products_page.dart';
 import 'package:smartstock/stocks/services/inventories_filters.dart';
 import 'package:smartstock/stocks/services/stocks_report.dart';
 
