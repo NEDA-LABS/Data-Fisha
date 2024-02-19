@@ -257,7 +257,7 @@ getShopCategories() {
       'name': 'Consultants & Professionals'
     },
     {'value': 'finance_insurance', 'name': 'Financial Services'},
-    {'value': 'product_provider', 'name': 'General: I make or sell a PRODUCT'},
+    {'value': 'product_provider', 'name': 'General: I make or sale a PRODUCT'},
     {'value': 'service_provider', 'name': 'General: I provide a SERVICE'},
     {'value': 'hair_spa_aesthetics', 'name': 'Hair, Spa & Aesthetics'},
     {

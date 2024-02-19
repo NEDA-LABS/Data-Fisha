@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/add_sale_to_cart.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like_page.dart';
+import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
+import 'package:smartstock/sales/components/add_sale_to_cart.dart';
+import 'package:smartstock/sales/components/sale_checkout_dialog.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/products.dart';
 
@@ -22,32 +25,52 @@ class _State extends State<SalesCashRetail> {
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
-      onQuickItem: (onAddToCartSubmitCallback) {},
+      onQuickItem: (submitCallback) {
+        _onAddToCart({}, submitCallback);
+      },
       searchTextController: widget.searchTextController,
-      title: 'Retail',
+      title: 'Create sale',
       // onSubmitCart: onSubmitRetailSale,
       onBack: widget.onBackPage,
       // customerLikeLabel: 'Select customer',
       onGetPrice: _getPrice,
-      onAddToCart: _onPrepareSalesAddToCartView(context),
+      onAddToCart: _onAddToCart,
       // onCustomerLikeList: getCustomerFromCacheOrRemote,
       // onCustomerLikeAddWidget: () => const CreateCustomerContent(),
       // checkoutCompleteMessage: 'Checkout completed.',
       onGetProductsLike: getProductsFromCacheOrRemote,
-      onCheckout: (List<CartModel> carts) {},
+      onCheckout: _onCheckout,
     );
   }
 
-  _onPrepareSalesAddToCartView(context) {
-    return (product, onAddToCart) {
-      return salesAddToCart(
+  _onAddToCart(Map product, OnAddToCartSubmitCallback submitCallback) {
+    showDialogOrFullScreenModal(
+      AddSale2CartDialogContent(
         onGetPrice: _getPrice,
         cart: CartModel(product: product, quantity: 1),
-        onAddToCart: onAddToCart,
-        context: context,
-      );
-    };
+        onAddToCartSubmitCallback: (cart) {
+          submitCallback(cart);
+          Navigator.of(context).maybePop();
+        },
+      ),
+      context,
+    );
   }
 
+  // _onPrepareSalesAddToCartView(context) {
+  //   return (product, onAddToCart) {
+  //     return salesAddToCart(
+  //       onGetPrice: _getPrice,
+  //       cart: CartModel(product: product, quantity: 1),
+  //       onAddToCart: onAddToCart,
+  //       context: context,
+  //     );
+  //   };
+  // }
+
   dynamic _getPrice(product) => doubleOrZero(product['retailPrice']);
+
+  _onCheckout(List<CartModel> carts) {
+    showDialogOrFullScreenModal(SaleCheckoutDialog(carts), context);
+  }
 }

@@ -47,7 +47,7 @@ class _State extends State<StocksIndexPage> {
 //       name: 'Inventories',
 //       link: '/stock/products',
 //       roles: [],
-//       icon: Icons.sell,
+//       icon: Icons.sale,
 //       svgName: 'product_icon.svg',
 //       onClick: () => widget.onChangePage(
 //         ProductsPage(
