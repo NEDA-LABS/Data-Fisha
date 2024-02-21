@@ -11,9 +11,8 @@ import 'package:smartstock/sales/services/products.dart';
 
 class SalesCashRetail extends PageBase {
   final OnBackPage onBackPage;
-  final TextEditingController searchTextController = TextEditingController();
 
-  SalesCashRetail({super.key, required this.onBackPage})
+  const SalesCashRetail({super.key, required this.onBackPage})
       : super(pageName: 'SalesCashRetail');
 
   @override
@@ -21,6 +20,7 @@ class SalesCashRetail extends PageBase {
 }
 
 class _State extends State<SalesCashRetail> {
+  final TextEditingController _searchTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SaleLikePage(
@@ -28,7 +28,7 @@ class _State extends State<SalesCashRetail> {
       onQuickItem: (submitCallback) {
         _onAddToCart({}, submitCallback);
       },
-      searchTextController: widget.searchTextController,
+      searchTextController: _searchTextController,
       title: 'Create sale',
       // onSubmitCart: onSubmitRetailSale,
       onBack: widget.onBackPage,
@@ -72,5 +72,11 @@ class _State extends State<SalesCashRetail> {
 
   _onCheckout(List<CartModel> carts) {
     showDialogOrFullScreenModal(SaleCheckoutDialog(carts), context);
+  }
+
+  @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -19,9 +20,9 @@ class SalesCashTrackingPage extends PageBase {
   final OnBackPage onBackPage;
 
   const SalesCashTrackingPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'SalesCashTrackingPage');
+  }) : super(pageName: 'SalesCashTrackingPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -45,14 +46,21 @@ class _State extends State<SalesCashTrackingPage> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       current: '/report/',
       sliverAppBar: _appBar(context),
-      onBody: (d) {
-        return NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                [_appBar(context)],
-            body: Scaffold(drawer: d, body: _body()));
-      },
+      staticChildren: [
+        _loadingView(_loading),
+        _rangePicker(),
+        _tableHeader(),
+        _salesList(),
+      ],
+      // onBody: (d) {
+      //   return NestedScrollView(
+      //       headerSliverBuilder: (context, innerBoxIsScrolled) =>
+      //           [_appBar(context)],
+      //       body: Scaffold(drawer: d, body: _body()));
+      // },
     );
   }
 
@@ -68,13 +76,13 @@ class _State extends State<SalesCashTrackingPage> {
     if (a == 'amount') {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text('${doubleOrZero(b)}'),
+        child: BodyLarge(text: '${doubleOrZero(b)}'),
       );
     }
     if (a == 'quantity') {
-      return Text('${doubleOrZero(_itemsSize(c))}');
+      return BodyLarge(text: '${doubleOrZero(_itemsSize(c))}');
     }
-    return Text('$b');
+    return BodyLarge(text: '$b');
   }
 
   _itemsSize(c) {
@@ -115,22 +123,22 @@ class _State extends State<SalesCashTrackingPage> {
   }
 
   _tableHeader() {
-    var height = 38.0;
-    var smallView = SizedBox(
-      height: height,
-      child: const TableLikeListRow([
-        TableLikeListHeaderCell('Date'),
-        TableLikeListHeaderCell('Amount ( TZS )'),
-        TableLikeListHeaderCell('Customer'),
+    // var height = 38.0;
+    var smallView = const SizedBox(
+      // height: height,
+      child: TableLikeListRow([
+        LabelMedium(text: 'DATE'),
+        LabelMedium(text: 'AMOUNT ( TZS )'),
+        LabelMedium(text: 'CUSTOMER'),
       ]),
     );
-    var bigView = SizedBox(
-      height: height,
-      child: const TableLikeListRow([
-        TableLikeListHeaderCell('Date'),
-        TableLikeListHeaderCell('Amount ( TZS )'),
-        TableLikeListHeaderCell('Items'),
-        TableLikeListHeaderCell('Customer'),
+    var bigView = const SizedBox(
+      // height: height,
+      child: TableLikeListRow([
+        LabelMedium(text: 'DATE'),
+        LabelMedium(text: 'AMOUNT ( TZS )'),
+        LabelMedium(text: 'ITEM'),
+        LabelMedium(text: 'CUSTOMER'),
       ]),
     );
     return getIsSmallScreen(context) ? smallView : bigView;
@@ -209,8 +217,8 @@ class _State extends State<SalesCashTrackingPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_getTimer(c), style: mainTextStyle),
-        Text(subText, style: textStyle)
+        BodyLarge(text: _getTimer(c)),
+        BodyLarge(text: subText)
       ]),
     );
   }
@@ -228,16 +236,16 @@ class _State extends State<SalesCashTrackingPage> {
     );
   }
 
-  _body() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _loadingView(_loading),
-        _rangePicker(),
-        _tableHeader(),
-        _salesList(),
-      ],
-    );
-  }
+  // _body() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       _loadingView(_loading),
+  //       _rangePicker(),
+  //       _tableHeader(),
+  //       _salesList(),
+  //     ],
+  //   );
+  // }
 }

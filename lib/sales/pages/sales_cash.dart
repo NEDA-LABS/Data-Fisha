@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
@@ -277,21 +278,19 @@ class _State extends State<SalesCashPage> {
             children: [
               Expanded(child: _customerView(_sales[index])),
               const WhiteSpacer(width: 16),
-              Text('${compactNumber(_sales[index]['amount'])}')
+              BodyLarge(text: '${compactNumber(_sales[index]['amount'])}')
             ],
           ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${_getTimer(_sales[index])}',
-                style: const TextStyle(
-                    overflow: TextOverflow.ellipsis, fontSize: 14),
+              BodyLarge(
+                text: '${_getTimer(_sales[index])}',
+                overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                'Items ${doubleOrZero(_itemsSize(_sales[index]))}',
-                style: const TextStyle(
-                    overflow: TextOverflow.ellipsis, fontSize: 14),
+              LabelLarge(
+                text: 'ITEMS ${doubleOrZero(_itemsSize(_sales[index]))}',
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -333,7 +332,7 @@ class _State extends State<SalesCashPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create'),
+                title: const BodyLarge(text: 'Create'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   widget.onChangePage(
@@ -343,7 +342,6 @@ class _State extends State<SalesCashPage> {
               // const HorizontalLine(),
               // ListTile(
               //   leading: const Icon(Icons.business),
-              //   title: const Text('Add wholesale'),
               //   onTap: () {
               //     Navigator.of(context).maybePop();
               //     widget.onChangePage(
@@ -353,7 +351,7 @@ class _State extends State<SalesCashPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload'),
+                title: const BodyLarge(text: 'Reload'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();

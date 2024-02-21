@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smartstock/core/components/BodySmall.dart';
-import 'package:smartstock/core/components/Histogram.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
 import 'package:smartstock/stocks/pages/products_page.dart';
@@ -15,10 +12,10 @@ class StocksSummary extends StatefulWidget {
   final OnBackPage onBackPage;
 
   const StocksSummary({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -40,7 +37,7 @@ class _State extends State<StocksSummary> {
         print(err);
       }
     }).whenComplete(() {
-      if(mounted){
+      if (mounted) {
         setState(() {
           loading = false;
         });
@@ -66,17 +63,6 @@ class _State extends State<StocksSummary> {
             ? _getProductsCompactScreen(summary, context)
             : _getProductsLargeScreen(summary, context),
         space,
-        // const BodySmall(text: 'Group by categories'),
-        // space,
-        // _getGroups(summary).isNotEmpty
-        //     ? Histogram(
-        //         height: 230,
-        //         data: _getGroups(summary).map((e) {
-        //           return HistogramData(
-        //               x: e['name'], y: '${e['total']}', name: e['name']);
-        //         }).toList(),
-        //       )
-        //     : Container(),
         ...isSmallScreen
             ? [
                 Row(
@@ -134,15 +120,14 @@ class _State extends State<StocksSummary> {
 
   Widget _getItemPurchaseValue(Map summary) {
     return _expandedByOne(
-      child: NumberCard(
-          'Purchase value', summary['values']?['purchase_value'], 0),
+      child:
+          NumberCard('Purchase value', summary['values']?['purchase_value'], 0),
     );
   }
 
   Widget _getRetailValue(Map summary) {
     return _expandedByOne(
-      child: NumberCard(
-          'Retail value', summary['values']?['retail_value'], 0),
+      child: NumberCard('Retail value', summary['values']?['retail_value'], 0),
     );
   }
 

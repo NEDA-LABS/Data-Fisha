@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/add_invoice_payment.dart';
 
@@ -12,8 +13,7 @@ invoiceDetails(context, item) => ListView(
         _header(context, item),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Text('Items',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+          child: TitleMedium(text: 'Items'),
         ),
         _tableHeader(),
         ...itOrEmptyArray(item['items'])
@@ -21,29 +21,24 @@ invoiceDetails(context, item) => ListView(
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
-                      child: Text('${item['stock']['product']}')),
-                  Text('${item['quantity']}'),
-                  Text('${item['amount']}'),
-                ]))
-            .toList() as List<Widget>,
+                      child: BodyLarge(text: '${item['stock']['product']}')),
+                  BodyLarge(text: '${item['quantity']}'),
+                  BodyLarge(text: '${item['amount']}'),
+                ])),
         _getPayments(item['payments']).isNotEmpty
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: Text('Payments',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+                child: BodyLarge(text: 'Payments'),
               )
             : Container(),
-        ...itOrEmptyArray(_getPayments(item['payments']))
-            .map<Widget>((item) => TableLikeListRow([
-                  Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 16),
-                      child: Text('${_formatDate(item['date'] ?? '')}')),
-                  const Text(''),
-                  Text('${formatNumber(item['amount'])}'),
-                ]))
-            .toList(),
+        ...itOrEmptyArray(_getPayments(item['payments'])).map<Widget>((item) =>
+            TableLikeListRow([
+              Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: BodyLarge(text: '${_formatDate(item['date'] ?? '')}')),
+              BodyLarge(text: '${formatNumber(item['amount'])}'),
+            ])),
         Container(
           height: 40,
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
@@ -56,10 +51,12 @@ invoiceDetails(context, item) => ListView(
                         Dialog(child: AddInvoicePaymentContent(item['id'])));
               });
             },
-            child: const Text('Add payment', style: TextStyle(fontSize: 16)),
+            child: const BodyLarge(text: 'Add payment'),
           ),
         ),
-        const SizedBox(height: 24,)
+        const SizedBox(
+          height: 24,
+        )
       ],
     );
 
@@ -91,16 +88,15 @@ _header(context, item) => Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-           Expanded(
-              child: Text(
-            '#${item['id']}',
+          Expanded(
+              child: BodyLarge(
+            text: '#${item['id']}',
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
+            color: Theme.of(context).colorScheme.onPrimary,
           )),
-          Text(
-            '${item['date']}',
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          )
+          BodyLarge(
+              text: '${item['date']}',
+              color: Theme.of(context).colorScheme.onPrimary)
         ],
       ),
     );

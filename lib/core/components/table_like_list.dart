@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -70,7 +71,7 @@ class _State extends State<TableLikeList> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text(err)],
+        children: [BodyLarge(text: err)],
       ),
     );
   }
@@ -78,7 +79,7 @@ class _State extends State<TableLikeList> {
   _tableRow(item, List<String> keys, onCell, onItemPressed) {
     keyToView(k) => onCell != null
         ? onCell(k, item[k] ?? '', item) as Widget
-        : Text('${item[k] ?? ''}');
+        : BodyLarge(text: '${item[k] ?? ''}');
     return Column(children: [
       Container(
         constraints: const BoxConstraints(minHeight: 48),
@@ -135,7 +136,7 @@ class _State extends State<TableLikeList> {
       child: Center(
         child: OutlinedButton(
           onPressed: widget.loading ? null : _loadMore,
-          child: Text(widget.loading ? 'Waiting...' : 'Load more'),
+          child: BodyLarge(text: widget.loading ? 'Waiting...' : 'Load more'),
         ),
       ),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -81,10 +83,10 @@ class _State extends State<PastExpensesByItemOverview> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(error),
+          BodyLarge(text: error),
           OutlinedButton(
               onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
+              child: const BodyLarge(text: 'Retry'))
         ],
       ),
     );
@@ -95,22 +97,17 @@ class _State extends State<PastExpensesByItemOverview> {
       margin: const EdgeInsets.all(5),
       decoration: solidRadiusBoxDecoration(context),
       child: Container(
-        height: getIsSmallScreen(context)
-            ? chartCardMobileHeight
-            : chartCardDesktopHeight,
+        // height: getIsSmallScreen(context)
+        //     ? chartCardMobileHeight
+        //     : chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Expenses by item',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Color(0xFF1C1C1C),
-                ),
+              const BodyLarge(
+                text: 'Expenses by item'
               ),
               Expanded(
                 child: ListView(
@@ -124,20 +121,11 @@ class _State extends State<PastExpensesByItemOverview> {
                               // mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '${e['name'] ?? ''}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Color(0xFF1C1C1C)),
+                                BodyMedium(
+                                  text: '${e['name'] ?? ''}',
                                 ),
-                                Text(
-                                  '${compactNumber(e['total'] ?? 0)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Color(0xFF1C1C1C)),
+                                BodyMedium(
+                                  text: '${compactNumber(e['total'] ?? 0)}',
                                 ),
                               ],
                             ),

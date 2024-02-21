@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
@@ -82,10 +84,10 @@ class _State extends State<PastTopProducts> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(error),
+          BodyLarge(text: error),
           OutlinedButton(
               onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
+              child: const BodyLarge(text:'Retry'))
         ],
       ),
     );
@@ -106,14 +108,7 @@ class _State extends State<PastTopProducts> {
             children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                child: Text(
-                  'Top selling products',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Color(0xFF1C1C1C),
-                  ),
-                ),
+                child: BodyMedium(text: 'Top selling products'),
               ),
               const TableLikeListRow([
                 TableLikeListHeaderCell('Name'),
@@ -134,36 +129,26 @@ class _State extends State<PastTopProducts> {
                     if (key == 'amount') {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
-                        child: Text(
-                          '${compactNumber(doubleOrZero(p1))}',
-                          style: style,
-                        ),
+                        child: BodyMedium(
+                            text: '${compactNumber(doubleOrZero(p1))}'),
                       );
                     }
                     if (key == 'profit') {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
-                        child: Text(
-                          '${compactNumber(doubleOrZero(p1))}',
-                          style: style,
-                        ),
+                        child: BodyMedium(
+                            text: '${compactNumber(doubleOrZero(p1))}'),
                       );
                     }
                     if (key == 'margin') {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
-                        child: Text(
-                          '${doubleOrZero(p1)}%',
-                          style: style,
-                        ),
+                        child: BodyMedium(text: '${doubleOrZero(p1)}%'),
                       );
                     }
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(0, 4, 4, 4.0),
-                      child: Text(
-                        '$p1',
-                        style: style,
-                      ),
+                      child: BodyMedium(text: '$p1'),
                     );
                   },
                   keys: const [

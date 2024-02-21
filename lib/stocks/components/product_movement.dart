@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
@@ -47,12 +48,12 @@ class _State extends State<ProductMovementDetails> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                Text('${snapshot.error}'),
+                BodyLarge(text: '${snapshot.error}'),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: OutlinedButton(
                       onPressed: () => _updateState({'a': 1}),
-                      child: const Text('Retry')),
+                      child: const BodyLarge(text: 'Retry')),
                 )
               ],
             ),
@@ -73,10 +74,10 @@ class _State extends State<ProductMovementDetails> {
                           Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 16),
-                              child: Text('${_getDate(item[0])}')),
+                              child: BodyLarge(text: '${_getDate(item[0])}')),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('${item[5]}'),
+                            child: BodyLarge(text: '${item[5]}'),
                           ),
                           paddingText(item[4]),
                           paddingText(item[1]),
@@ -95,7 +96,7 @@ class _State extends State<ProductMovementDetails> {
 
   paddingText(item) => Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('${doubleOrZero('$item')}'),
+        child: BodyLarge(text: '${doubleOrZero('$item')}'),
       );
 
   _getDate(data) {
@@ -131,15 +132,10 @@ class _State extends State<ProductMovementDetails> {
         child: Row(
           children: [
             Expanded(
-                child: Text(
+                child: BodyLarge(text:
               'Movements of ${item['product']}',
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              overflow: TextOverflow.ellipsis
             )),
-            // Text(
-            //   '${item['product']}',
-            //   style: const TextStyle(color: Colors.white, fontSize: 16),
-            // )
           ],
         ),
       );

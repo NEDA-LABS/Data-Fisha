@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -88,8 +89,7 @@ class _State extends State<_Dialog> {
       child: TextButton(
           onPressed: () => onAddToCart(_getTransferCart(states)),
           style: _addToCartButtonStyle(context),
-          child: const Text("ADD TO CART",
-              style: TextStyle(color: Colors.white))));
+          child: const BodyLarge(text: "ADD TO CART")));
 
   _getTransferCart(states) {
     Map product = states['p'] is Map
@@ -109,21 +109,13 @@ class _State extends State<_Dialog> {
   _productAndPrice(Map<String, dynamic> product, onGetPrice) => Padding(
       padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
       child: Column(children: <Widget>[
-        Text(product["product"],
-            softWrap: true,
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500)),
+        BodyLarge(text: product["product"]),
         _amountWidget(product, onGetPrice)
       ]));
 
   _amountWidget(product, onGetPrice) => Container(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Text('TZS ${onGetPrice(product)}',
-          //formattedAmount(product, wholesale),
-          style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17)));
+      child: BodyLarge(text: 'TZS ${onGetPrice(product)}'));
 
   _addToCartBoxDecoration() => const BoxDecoration(
         borderRadius: BorderRadius.only(

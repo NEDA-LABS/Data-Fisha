@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 
 class ReportDateRange extends StatefulWidget {
   final Function(DateTimeRange?, String? period) onRange;
@@ -40,13 +42,8 @@ class _State extends State<ReportDateRange> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              _getToday(date),
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-              ),
+            child: TitleMedium(
+              text: _getToday(date)
             ),
           ),
           Row(
@@ -61,22 +58,22 @@ class _State extends State<ReportDateRange> {
                   isDense: true,
                   decoration: const InputDecoration(
                       border: InputBorder.none,
-                      label: Text('Period'),
+                      label: BodyLarge(text: 'Period'),
                       hoverColor: Colors.transparent,
                       focusColor: Colors.transparent),
                   value: period,
                   items: const [
                     DropdownMenuItem<String>(
                       value: 'day',
-                      child: Text('Day'),
+                      child: BodyLarge(text: 'Day'),
                     ),
                     DropdownMenuItem<String>(
                       value: 'month',
-                      child: Text('Month'),
+                      child: BodyLarge(text: 'Month'),
                     ),
                     DropdownMenuItem<String>(
                       value: 'year',
-                      child: Text('Year'),
+                      child: BodyLarge(text: 'Year'),
                     ),
                   ],
                   onChanged: (value) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -139,25 +141,22 @@ class _CustomersPage extends State<CustomersPage> {
     return Column(
       children: [
         ListTile(
-          title: Text(
-            '${_customers[index]['displayName']}',
-            style:
-                const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16),
+          title: BodyLarge(
+            text: '${_customers[index]['displayName']}',
+            overflow: TextOverflow.ellipsis
           ),
           subtitle: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              LabelLarge(text:
                 '${_customers[index]['phone']}',
-                style: const TextStyle(
-                    overflow: TextOverflow.ellipsis, fontSize: 13),
+                overflow: TextOverflow.ellipsis,
               ),
               '${_customers[index]['email'] ?? ''}'.isNotEmpty
-                  ? Text(
+                  ? LabelLarge(text:
                       '${_customers[index]['email']}',
-                      style: const TextStyle(
-                          overflow: TextOverflow.ellipsis, fontSize: 13),
+                      overflow: TextOverflow.ellipsis,
                     )
                   : Container()
             ],
@@ -178,13 +177,13 @@ class _CustomersPage extends State<CustomersPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create customer'),
+                title: const BodyLarge(text: 'Create customer'),
                 onTap: _createDialog,
               ),
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload customers'),
+                title: const BodyLarge(text: 'Reload customers'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh(skip: true);

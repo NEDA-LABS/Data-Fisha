@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/RegisterForm.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
@@ -25,9 +26,9 @@ class _State extends State<RegisterPage>{
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: const Text('Open account'),
+        // backgroundColor: Theme.of(context).colorScheme.primary,
+        // foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const BodyLarge(text: 'Open account'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),

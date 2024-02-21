@@ -4,6 +4,7 @@ import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -77,16 +78,16 @@ class _State extends State<LoginForm> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Info"),
-            content: Text('$value'),
+            title: const BodyMedium(text: "Info"),
+            content: BodyLarge(text: '$value'),
           ),
         );
       }).catchError((error) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Error"),
-            content: Text('$error'),
+            title: const BodyMedium(text: "Error"),
+            content: BodyLarge(text: '$error'),
           ),
         );
       }).whenComplete(() {
@@ -142,7 +143,7 @@ class _State extends State<LoginForm> {
       showDialog(
           context: context,
           builder: (context) =>
-              AlertDialog(title: const Text('Error'), content: Text('$error')));
+              AlertDialog(title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')));
     }).whenComplete(() => updateState({'loading': false}));
   }
 
@@ -178,13 +179,8 @@ class _State extends State<LoginForm> {
     Widget line = const Expanded(flex: 1, child: HorizontalLine());
     Widget orText = const Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: Text(
-        'OR',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          // color: Colors.black,
-        ),
+      child: BodyMedium(
+        text: 'OR',
       ),
     );
     return Padding(
@@ -242,13 +238,8 @@ class _State extends State<LoginForm> {
             ),
           ),
         ),
-        child: const Text(
-          "Open account for free.",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColorDark,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
+        child: const BodyLarge(
+          text: "Open account for free.",
         ),
       ),
     );
@@ -279,16 +270,11 @@ class _State extends State<LoginForm> {
             onTap: states['reset_loading'] == true
                 ? null
                 : _resetTapped(context, states, updateState),
-            child: Text(
-              states['reset_loading'] == true
+            child: BodyMedium(
+              text: states['reset_loading'] == true
                   ? 'Waiting...'
                   : 'Reset account password.',
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                fontWeight: FontWeight.w200,
-                fontSize: 14,
-                // color: Theme.of(context).primaryColorDark,
-              ),
             ),
           ),
         ],

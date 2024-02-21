@@ -36,6 +36,7 @@ class _State extends State<ProductCreatePage> {
   Widget build(context) {
     return ResponsivePage(
       sliverAppBar: _appBar(context),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       staticChildren: [
         const WhiteSpacer(height: 24),
         ProductCreateForm(onBackPage: widget.onBackPage),

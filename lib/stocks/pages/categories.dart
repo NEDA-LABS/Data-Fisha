@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/components/create_category_content.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category.dart';
@@ -88,9 +90,7 @@ class _State extends State<CategoriesPage> {
         sliverAppBar: _appBar(context),
         backgroundColor: Theme.of(context).colorScheme.surface,
         staticChildren: [
-          getIsSmallScreen(context)
-              ? Container()
-              : getTableContextMenu(_contextItems(context)),
+          getTableContextMenu(_contextItems(context)),
           _loading(_isLoading),
           // _tableHeader(),
         ],
@@ -136,11 +136,6 @@ class _State extends State<CategoriesPage> {
                     color: Theme.of(context).colorScheme.error,
                   ),
                 ),
-                // subtitle: Text(
-                //   '${_categories[index]['description']}',
-                //   style: const TextStyle(
-                //       fontSize: 12, fontWeight: FontWeight.w300),
-                // ),
               ),
               // const SizedBox(height: 5),
               const HorizontalLine(),
@@ -179,7 +174,7 @@ class _State extends State<CategoriesPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create category'),
+                title: const BodyLarge(text: 'Create category'),
                 onTap: () {
                   Navigator.of(context)
                       .maybePop()
@@ -189,7 +184,7 @@ class _State extends State<CategoriesPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload categories'),
+                title: const BodyLarge(text: 'Reload categories'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetchCategories();
@@ -202,21 +197,12 @@ class _State extends State<CategoriesPage> {
   }
 
   _createCategory() {
-    showDialog(
-      context: context,
-      builder: (c) => Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Dialog(
-            child: CreateCategoryContent(
-              onNewCategory: (category) {},
-            ),
-          ),
-        ),
-      ),
-    ).whenComplete(() {
-      _fetchCategories();
-    });
+    showDialogOrFullScreenModal(
+      CreateCategoryContent(onNewCategory: (category) {
+        _fetchCategories();
+      }),
+      context,
+    );
   }
 
   Future _deleteCategory(id) async {

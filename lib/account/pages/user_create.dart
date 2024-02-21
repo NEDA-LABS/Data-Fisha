@@ -38,6 +38,7 @@ class _State extends State<ShopUserCreatePage> {
   Widget build(context) {
     return ResponsivePage(
       current: '/account/',
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: _appBar(context),
       staticChildren: [
         Center(

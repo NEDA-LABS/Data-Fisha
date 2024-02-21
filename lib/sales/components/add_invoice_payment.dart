@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -52,9 +53,8 @@ class _State extends State<AddInvoicePaymentContent> {
                             ? null
                             : () => _submitAddInvoicePayment(
                                 widget.id, states, updateState),
-                        child: Text(
-                          states['loading'] ? "Waiting..." : "Submit.",
-                          style: const TextStyle(fontSize: 16),
+                        child: BodyLarge(
+                          text: states['loading'] ? "Waiting..." : "Submit."
                         ),
                       ),
                     ),
@@ -62,7 +62,7 @@ class _State extends State<AddInvoicePaymentContent> {
                 ],
               ),
             ),
-            Text(states['error'] ?? '')
+            BodyLarge(text: states['error'] ?? '')
           ],
         ),
       ),

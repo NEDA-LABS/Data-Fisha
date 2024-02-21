@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
-ByteStream _getByteStream(List<int>? bytes) {
+http.ByteStream _getByteStream(List<int>? bytes) {
   // final file = result.files.first;
   // final fileReadStream = file.readStream;
   if (bytes == null) {
@@ -18,7 +17,8 @@ ByteStream _getByteStream(List<int>? bytes) {
   return http.ByteStream.fromBytes(bytes);
 }
 
-MultipartFile _getMultipartFromStream(FileData file, ByteStream stream) {
+http.MultipartFile _getMultipartFromStream(
+    FileData file, http.ByteStream stream) {
   Map metadata = _getFileMetaData(file);
   MediaType? contentType = _getContentType(file);
   return http.MultipartFile(
@@ -72,10 +72,10 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
 
   for (FileData? file in files) {
     if (file != null && file.stream != null) {
-      ByteStream stream = _getByteStream(file.stream);
+      http.ByteStream stream = _getByteStream(file.stream);
       // Map meta = _getFileMetaData(file);
       // metadata[meta['filename']] = meta;
-      MultipartFile multipartFile = _getMultipartFromStream(file, stream);
+      http.MultipartFile multipartFile = _getMultipartFromStream(file, stream);
       request.files.add(multipartFile);
     }
   }
@@ -112,8 +112,7 @@ Future<List<Map>> uploadFileToWeb3(List<FileData?> files) async {
     ...files
         .where((element) => element?.path?.startsWith('http') == true)
         .map((e) => {'link': e?.path})
-        .where((x) => x['link'] != null)
-        .toList(),
+        .where((x) => x['link'] != null),
     ...links,
   ];
 }

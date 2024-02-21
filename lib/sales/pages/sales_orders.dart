@@ -2,9 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/debounce.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
@@ -12,11 +13,12 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/with_active_shop.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
 import 'package:smartstock/sales/components/order_details.dart';
@@ -39,6 +41,7 @@ class OrdersPage extends PageBase {
 }
 
 class _OrdersPage extends State<OrdersPage> {
+  Map _shop = {};
   final _debounce = Debounce(milliseconds: 500);
   bool _loading = false;
   String _query = '';
@@ -102,22 +105,18 @@ class _OrdersPage extends State<OrdersPage> {
     return [ContextMenu(name: 'Reload', pressed: () => _refresh())];
   }
 
-  _tableHeader() {
+  Widget _tableHeader() {
     var height = 38.0;
-    return WithActiveShop(
-      onChild: (shop) {
-        return SizedBox(
-          height: height,
-          child: TableLikeListRow([
-            const TableLikeListHeaderCell('Customer'),
-            const TableLikeListHeaderCell('Date'),
-            TableLikeListHeaderCell(
-                'Amount ( ${shop['settings']?['currency'] ?? 'TZS'} )'),
-            const TableLikeListHeaderCell('Status'),
-            const TableLikeListHeaderCell('Action', horizontal: 16),
-          ]),
-        );
-      },
+    return SizedBox(
+      height: height,
+      child: TableLikeListRow([
+        const LabelMedium(text: 'CUSTOMER'),
+        const LabelMedium(text: 'DATE'),
+        LabelMedium(text:
+        'AMOUNT ( ${_shop['settings']?['currency'] ?? 'TZS'} )'),
+        const LabelMedium(text: 'STATUS'),
+        const LabelMedium(text: 'ACTION'),
+      ]),
     );
   }
 
@@ -126,6 +125,11 @@ class _OrdersPage extends State<OrdersPage> {
 
   @override
   void initState() {
+    getActiveShop().then((value) {
+      setState(() {
+        _shop = value;
+      });
+    });
     _refresh();
     super.initState();
   }
@@ -134,9 +138,7 @@ class _OrdersPage extends State<OrdersPage> {
   Widget build(context) {
     var isSmallScreen = getIsSmallScreen(context);
     var tableHeader = isSmallScreen ? Container() : _tableHeader();
-    var menuContext = isSmallScreen
-        ? Container()
-        : getTableContextMenu(_contextInvoices(context));
+    var menuContext = getTableContextMenu(_contextInvoices(context));
     var fab = FloatingActionButton(
       onPressed: () => _showMobileContextMenu(context),
       child: const Icon(Icons.unfold_more_outlined),
@@ -145,7 +147,11 @@ class _OrdersPage extends State<OrdersPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       current: '/sales/',
       sliverAppBar: _appBar(context),
-      staticChildren: [menuContext, _loadingView(_loading), tableHeader],
+      staticChildren: [
+        menuContext,
+        _loadingView(_loading),
+        tableHeader,
+      ],
       fab: fab,
       totalDynamicChildren: _orders.length,
       dynamicChildBuilder:
@@ -246,13 +252,10 @@ class _OrdersPage extends State<OrdersPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${_orders[index]['date']}'),
-                  WithActiveShop(
-                    onChild: (shop) {
-                      return Text(
-                          '${shop['settings']?['currency'] ?? 'TZS'} ${formatNumber('${_orders[index]['amount']}')}');
-                    },
-                  ),
+                  BodyLarge(text: '${_orders[index]['date']}'),
+                  BodyLarge(
+                      text:
+                          '${_shop['settings']?['currency'] ?? 'TZS'} ${formatNumber('${_orders[index]['amount']}')}'),
                 ],
               ),
             ],
@@ -393,22 +396,10 @@ class _OrdersPage extends State<OrdersPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ListTile(
-              //   leading: const Icon(Icons.add),
-              //   title: const Text('Add invoice'),
-              //   onTap: () {
-              //     Navigator.of(context).maybePop();
-              //     widget.onChangePage(
-              //       InvoiceSalePage(
-              //         onBackPage: widget.onBackPage,
-              //       ),
-              //     );
-              //   },
-              // ),
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload orders'),
+                title: const BodyLarge(text: 'Reload orders'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();

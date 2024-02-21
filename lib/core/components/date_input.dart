@@ -104,7 +104,7 @@ class _DateInputState extends State<DateInput> {
               ],
             ),
           ),
-          inputErrorMessageOrEmpty(widget.error)
+          InputErrorMessageOrEmpty(widget.error??'')
         ],
       );
 

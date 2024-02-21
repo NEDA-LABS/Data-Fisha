@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 class NumberCard extends StatelessWidget {
@@ -13,11 +16,11 @@ class NumberCard extends StatelessWidget {
     this.title,
     this.value,
     this.percentage, {
-    Key? key,
+    super.key,
     this.isWarning = false,
     this.isDanger = false,
     this.onClick,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +32,19 @@ class NumberCard extends StatelessWidget {
         : isDanger
             ? dangerColor
             : normalColor;
-    return Card(
+    var borderColor = isWarning
+        ? warningColor
+        : isDanger
+            ? dangerColor
+            : Theme.of(context).colorScheme.primaryContainer;
+    return Container(
       // height: 112,
-      elevation: 0,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        border: Border.all(color: borderColor),
+        color: color,
+      ),
       margin: const EdgeInsets.all(5),
-      color: color,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         onTap: onClick,
@@ -45,13 +56,8 @@ class NumberCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(20, 24, 0, 8),
-                child: Text(
+                child: BodyMedium(text:
                   "$title",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    // color: Color(0xFF1C1C1C),
-                  ),
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -61,14 +67,7 @@ class NumberCard extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(formatNumber(value, decimals: 2),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24,
-                        // color: Color(0xFF1C1C1C),
-                        // overflow: TextOverflow.fade,
-                      ),
-                      textAlign: TextAlign.left),
+                  child: TitleLarge(text: formatNumber(value, decimals: 2)),
                 ),
               )
             ],

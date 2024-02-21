@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -22,8 +23,6 @@ class SaleInvoiceDetail extends StatefulWidget {
 class _State extends State<SaleInvoiceDetail> {
   @override
   Widget build(BuildContext context) {
-    // var titleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
-    // var title = Text(sale['product'] ?? '', style: titleStyle);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -113,16 +112,16 @@ class _State extends State<SaleInvoiceDetail> {
   _listItem(e, item) {
     var titleStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
     var subStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-    dynamic subtitle = Text('${item[e]}', style: subStyle);
+    dynamic subtitle = BodyLarge(text: '${item[e]}');
     if (e == 'sellerObject') {
       var getSeller = compose(
           [propertyOr('username', (p0) => ''), propertyOrNull('sellerObject')]);
-      subtitle = Text('${getSeller(item)}', style: subStyle);
+      subtitle = BodyLarge(text: '${getSeller(item)}');
     }
     if (e == 'customer') {
       var getSeller = compose(
           [propertyOr('displayName', (p0) => ''), propertyOrNull('customer')]);
-      subtitle = Text('${getSeller(item)}', style: subStyle);
+      subtitle = BodyLarge(text: '${getSeller(item)}');
     }
     if (e == 'payment') {
       subtitle = Padding(
@@ -134,8 +133,8 @@ class _State extends State<SaleInvoiceDetail> {
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('${item['date']} --> '),
-                Text('${item['amount']}'),
+                BodyLarge(text: '${item['date']} --> '),
+                BodyLarge(text: '${item['amount']}'),
               ],
             );
           }).toList(),
@@ -143,7 +142,7 @@ class _State extends State<SaleInvoiceDetail> {
       );
     }
     return ListTile(
-      title: Text('$e', style: titleStyle),
+      title: BodyLarge(text: '$e'),
       subtitle: subtitle,
       dense: true,
     );

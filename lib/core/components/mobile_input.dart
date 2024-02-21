@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/components/input_error_message.dart';
 
@@ -55,17 +56,15 @@ class _State extends State<MobileInput> {
                 keyboardType: TextInputType.phone,
               ),
             ),
-            inputErrorMessageOrEmpty(widget.error),
+            InputErrorMessageOrEmpty(widget.error),
           ],
         ),
       ),
     );
   }
 
-  _labelStyle() => const TextStyle(fontSize: 14, fontWeight: FontWeight.w200);
-
   _labelPadding() => const EdgeInsets.fromLTRB(0, 8, 0, 8);
 
   _label(label) => Padding(
-      padding: _labelPadding(), child: Text(label ?? '', style: _labelStyle()));
+      padding: _labelPadding(), child: LabelLarge(text: label ?? ''));
 }

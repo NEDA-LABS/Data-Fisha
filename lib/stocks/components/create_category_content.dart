@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
@@ -30,40 +34,38 @@ class _State extends State<CreateCategoryContent> {
 
   @override
   Widget build(BuildContext context) {
+    var isSmallScreen = getIsSmallScreen(context);
+    var form = ListView(
+      shrinkWrap: true,
+      children: [
+        const TitleLarge(text: 'Category'),
+        TextInput(
+            onText: (d) => updateState({'name': d.toLowerCase().trim()}),
+            label: "Name",
+            error: err['name'] ?? ''),
+        const WhiteSpacer(height: 16),
+        TextInput(
+            onText: (d) => updateState({'description': d}),
+            label: "Description",
+            lines: 3,
+            placeholder: 'Optional'),
+        const WhiteSpacer(height: 16),
+        FileSelect(
+          onFiles: (file) {
+            _platformFiles = file;
+          },
+        ),
+      ],
+    );
     return Container(
-      height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.all(16),
+      width: isSmallScreen?null: 500,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            flex: 1,
-            child: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  TextInput(
-                      onText: (d) =>
-                          updateState({'name': d.toLowerCase().trim()}),
-                      label: "Name",
-                      error: err['name'] ?? ''),
-                  const WhiteSpacer(height: 16),
-                  TextInput(
-                      onText: (d) => updateState({'description': d}),
-                      label: "Description",
-                      lines: 3,
-                      placeholder: 'Optional'),
-                  const WhiteSpacer(height: 16),
-                  FileSelect(
-                    onFiles: (file) {
-                      _platformFiles = file;
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
+          isSmallScreen ? Expanded(child: form) : form,
+          Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: CancelProcessButtonsRow(
               cancelText: 'Cancel',

@@ -288,7 +288,7 @@ class _State extends State<SoldItemsPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.download_rounded),
-                title: const Text('Export'),
+                title: const BodyLarge(text: 'Export'),
                 onTap: () {
                   Navigator.of(context).maybePop().whenComplete(() {
                     _handleOnExport();
@@ -298,7 +298,7 @@ class _State extends State<SoldItemsPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload'),
+                title: const BodyLarge(text: 'Reload'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();

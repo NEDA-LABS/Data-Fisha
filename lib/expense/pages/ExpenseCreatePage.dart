@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/pages/page_base.dart';
@@ -21,6 +22,7 @@ class _State extends State<ExpenseCreatePage> {
   @override
   Widget build(BuildContext context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: SliverSmartStockAppBar(
         title: 'Create expense',
         context: context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -49,9 +50,8 @@ class _State extends State<UpdateUserPasswordContent> {
                       height: 40,
                       child: OutlinedButton(
                         onPressed: progress ? null : _offsetQuantity,
-                        child: Text(
-                          progress ? "Waiting..." : "Confirm",
-                          style: const TextStyle(fontSize: 16),
+                        child: BodyLarge(
+                          text: progress ? "Waiting..." : "Confirm"
                         ),
                       ),
                     ),
@@ -59,7 +59,7 @@ class _State extends State<UpdateUserPasswordContent> {
                 ],
               ),
             ),
-            Text(reqErr, style: const TextStyle(color: Colors.red),)
+            BodyLarge(text: reqErr,color: Colors.red)
           ]),
         ),
       );

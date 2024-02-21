@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 
 enum ScreenMode { liveFeed, gallery }
 
@@ -91,7 +92,7 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: BodyLarge(text: widget.title),
         // actions: [
         //   if (_allowPicker)
         //     Padding(
@@ -166,7 +167,7 @@ class _CameraViewState extends State<CameraView> {
             scale: scale,
             child: Center(
               child: _changingCameraLens
-                  ? const Center(child: Text('Changing camera lens'))
+                  ? const Center(child: BodyLarge(text: 'Changing camera lens'))
                   : CameraPreview(_controller!),
             ),
           ),
@@ -216,22 +217,22 @@ class _CameraViewState extends State<CameraView> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          child: const Text('From Gallery'),
+          child: const BodyLarge(text: 'From Gallery'),
           onPressed: () => _getImage(ImageSource.gallery),
         ),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          child: const Text('Take a picture'),
+          child: const BodyLarge(text: 'Take a picture'),
           onPressed: () => _getImage(ImageSource.camera),
         ),
       ),
       if (_image != null)
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-              '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
+          child: BodyLarge(
+              text: '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
         ),
     ]);
   }

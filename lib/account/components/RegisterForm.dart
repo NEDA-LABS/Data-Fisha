@@ -4,6 +4,7 @@ import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/helpers/configs.dart';
@@ -122,7 +123,7 @@ class _State extends State<RegisterForm> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                title: const Text('Error'), content: Text('$error')));
+                title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')));
       }
 
       var data = {

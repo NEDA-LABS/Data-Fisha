@@ -9,20 +9,22 @@ import 'package:smartstock/sales/services/products.dart';
 class InvoiceSalePage extends PageBase {
   final OnBackPage onBackPage;
 
-  const InvoiceSalePage({Key? key, required this.onBackPage})
-      : super(key: key, pageName: 'InvoiceSalePage');
+  const InvoiceSalePage({super.key, required this.onBackPage})
+      : super(pageName: 'InvoiceSalePage');
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<InvoiceSalePage> {
+  final TextEditingController _searchTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SaleLikePage(
       wholesale: false,
       onQuickItem: (onAddToCartSubmitCallback) {},
       title: 'Invoice sale',
+      searchTextController: _searchTextController,
       // backLink: '/sales/invoice',
       // onSubmitCart: onSubmitInvoice,
       // customerLikeLabel: 'Select customer',
@@ -47,4 +49,10 @@ class _State extends State<InvoiceSalePage> {
       };
 
   dynamic _getPrice(product) => doubleOrZero(product['retailPrice']);
+
+  @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
+  }
 }

@@ -25,7 +25,7 @@ import 'package:smartstock/stocks/pages/purchases_page.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
-import 'package:smartstock/stocks/pages/transfers.dart';
+import 'package:smartstock/stocks/pages/transfers_page.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -259,10 +259,10 @@ ModuleMenu _getInventoryMenu(
         ),
         ModuleMenu(
             name: 'Vendors',
-            link: '/stock/suppliers',
+            link: productsVendors.pageName,
             roles: ['admin', 'manager'],
             icon: Icon(Icons.support_agent_sharp, color: Theme.of(context).colorScheme.primary,),
-            page: SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage,)),
+            page: productsVendors),
         ModuleMenu(
           name: 'Purchases',
           link: purchasePage.pageName,
@@ -393,8 +393,8 @@ List<ModuleMenu> _getEmptyMenu({
 void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
-    onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-        PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage),
+    // onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+    //     TransfersPage(onBackPage: onBackPage, onChangePage: onChangePage),
   );
 
   // initializeSmartStock(

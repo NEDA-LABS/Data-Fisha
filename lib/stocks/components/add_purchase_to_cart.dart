@@ -253,33 +253,4 @@ class _State extends State<AddPurchase2CartDialogContent> {
     _updateState(() {});
     return hasError;
   }
-
-// _addToCartButtonStyle(context) => ButtonStyle(
-//     backgroundColor:
-//         MaterialStateProperty.all(Theme.of(context).primaryColorDark));
-
-// _productAndPrice(Map<String, dynamic> product, onGetPrice) {
-//   return Padding(
-//       padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
-//       child: Column(children: <Widget>[
-//         BodyLarge(text: product["product"]),
-//         // _amountWidget(product, onGetPrice)
-//       ]));
-// }
-
-// _amountWidget(product, onGetPrice) => Container(
-//     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-//     child: Text('TZS ${onGetPrice(product)}',
-//         //formattedAmount(product, wholesale),
-//         style: const TextStyle(
-//             // color: Colors.black,
-//             fontWeight: FontWeight.bold,
-//             fontSize: 17)));
-
-// _addToCartBoxDecoration() => const BoxDecoration(
-//       borderRadius: BorderRadius.only(
-//         topLeft: Radius.circular(30),
-//         topRight: Radius.circular(30),
-//       ),
-//     );
 }

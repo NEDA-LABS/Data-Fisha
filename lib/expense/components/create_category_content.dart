@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/expense/services/categories.dart';
 
@@ -35,11 +37,10 @@ class _State extends State<CreateExpenseCategoryContent> {
                       child: OutlinedButton(
                         onPressed:
                             state['creating'] == true ? null : _onPressed,
-                        child: Text(
-                          state['creating'] == true
+                        child: BodyLarge(
+                          text: state['creating'] == true
                               ? "Waiting..."
                               : "Create category.",
-                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ),
@@ -47,7 +48,7 @@ class _State extends State<CreateExpenseCategoryContent> {
                 ],
               ),
             ),
-            Text(state['req_err'])
+            BodyLarge(text: state['req_err'])
           ],
         ),
       ),

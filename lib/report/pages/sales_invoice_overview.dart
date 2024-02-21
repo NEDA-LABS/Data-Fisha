@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/bar_chart.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -49,6 +51,7 @@ class _State extends State<OverviewInvoiceSales> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       office: 'Menu',
       current: '/report/',
       sliverAppBar: _appBar(),
@@ -59,9 +62,9 @@ class _State extends State<OverviewInvoiceSales> {
           margin: const EdgeInsets.all(5),
           decoration: solidRadiusBoxDecoration(context),
           child: Container(
-            height: getIsSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
+            // height: getIsSmallScreen(context)
+            //     ? chartCardMobileHeight
+            //     : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -167,10 +170,10 @@ class _State extends State<OverviewInvoiceSales> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(error),
+          BodyLarge(text: error),
           OutlinedButton(
               onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
+              child: const BodyLarge(text: 'Retry'))
         ],
       ),
     );
@@ -183,9 +186,9 @@ class _State extends State<OverviewInvoiceSales> {
       children: [
         Card(
           child: Container(
-            height: getIsSmallScreen(context)
-                ? chartCardMobileHeight
-                : chartCardDesktopHeight,
+            // height: getIsSmallScreen(context)
+            //     ? chartCardMobileHeight
+            //     : chartCardDesktopHeight,
             padding: const EdgeInsets.all(8),
             child: BarChart(
               [_sales2Series(dailySales)],
@@ -211,10 +214,10 @@ class _State extends State<OverviewInvoiceSales> {
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListHeaderCell('Date'),
+      LabelMedium(text: 'DATE'),
       // tableLikeListTextHeader('Retail ( Tsh )'),
       // tableLikeListTextHeader('Wholesale ( Tsh )'),
-      TableLikeListHeaderCell('Total ( Tsh )'),
+      LabelMedium(text: 'TOTAL'),
     ]);
   }
 

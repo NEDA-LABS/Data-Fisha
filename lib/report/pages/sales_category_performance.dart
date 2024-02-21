@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -18,9 +18,9 @@ class CategoryPerformance extends PageBase {
   final OnBackPage onBackPage;
 
   const CategoryPerformance({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'CategoryPerformance');
+  }) : super(pageName: 'CategoryPerformance');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -44,6 +44,7 @@ class _State extends State<CategoryPerformance> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       office: 'Menu',
       current: '/report/',
       sliverAppBar: _appBar(),
@@ -76,9 +77,9 @@ class _State extends State<CategoryPerformance> {
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListHeaderCell('Category'),
-      TableLikeListHeaderCell('Quantity'),
-      TableLikeListHeaderCell('Amount ( Tsh )'),
+      LabelMedium(text: 'CATEGORY'),
+      LabelMedium(text: 'QUANTITY'),
+      LabelMedium(text: 'AMOUNT ( Tsh )'),
       // tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }
@@ -105,7 +106,7 @@ class _State extends State<CategoryPerformance> {
             ),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }

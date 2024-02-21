@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
+import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/api_stocks.dart';
 import 'package:smartstock/core/services/api_subscription.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -10,7 +10,6 @@ import 'package:smartstock/core/services/cache_stocks.dart';
 import 'package:smartstock/core/services/cache_subscription.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cache_user.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/products_syncs.dart';
 
 Future syncLocalDataToRemoteServer() async {
@@ -25,15 +24,18 @@ Future syncLocalDataToRemoteServer() async {
     // if (kDebugMode) {
     //   print(getPayload(element));
     // }
-    var response = await post(Uri.parse(getUrl(element)),
-        headers: {'content-type': 'application/json'},
-        body: jsonEncode(getPayload(element)));
-    if (response.statusCode == 200) {
-      await removeLocalSync(key);
-      return key;
-    } else {
-      throw response.body;
-    }
+    var httpPostRequest = prepareHttpPostRequest(getPayload(element));
+    // var response =
+    await httpPostRequest(getUrl(element));
+    // post(Uri.parse(),
+    //     headers: {'content-type': 'application/json'},
+    //     body: jsonEncode();
+    // if (response.statusCode == 200) {
+    await removeLocalSync(key);
+    return key;
+    // } else {
+    //   throw response.body;
+    // }
   }
 }
 
@@ -71,7 +73,7 @@ Future updateLocalProducts(List<dynamic> args) async {
   }
   if (maybeSync == true) {
     var shop = await getActiveShop();
-    if(shop is Map && shop['projectId']!=null){
+    if (shop is Map && shop['projectId'] != null) {
       var products = await productsAllRestAPI(shop);
       await saveLocalStocks(shopToApp(shop), products);
       return products is List ? products.length : products;

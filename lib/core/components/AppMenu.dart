@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
@@ -10,6 +11,7 @@ import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/rbac.dart';
 
 _callback() {}
@@ -39,17 +41,24 @@ class AppMenu extends StatefulWidget {
 }
 
 class _State extends State<AppMenu> {
+  Map _shop = {};
   final Map<String, bool> _expansionState = {};
 
   @override
-  Widget build(BuildContext context) {
-    return WithActiveShop(onChild: _modulesMenuContent);
+  void initState() {
+    getActiveShop().then((value){
+      setState(() {
+        _shop = value;
+      });
+    });
+    super.initState();
   }
 
-  Widget _modulesMenuContent(Map shop) {
+  @override
+  Widget build(BuildContext context) {
     var getOfficeName = compose([propertyOr('businessName', (p0) => 'Menu')]);
     var getOfficeLogo =
-        compose([propertyOrNull('logo'), propertyOrNull('ecommerce')]);
+    compose([propertyOrNull('logo'), propertyOrNull('ecommerce')]);
     return Container(
       height: MediaQuery.of(context).size.height,
       decoration: _getContainerDecoration(),
@@ -62,8 +71,8 @@ class _State extends State<AppMenu> {
               controller: ScrollController(),
               children: [
                 const WhiteSpacer(height: 24),
-                _officeName('${getOfficeName(shop)}'),
-                _officeLogo('${getOfficeLogo(shop)}'),
+                _officeName('${getOfficeName(_shop)}'),
+                _officeLogo('${getOfficeLogo(_shop)}'),
                 _changeOfficeTextButton(),
                 ..._getMenuItems(),
                 _logOutMenuItem(context)
@@ -75,6 +84,10 @@ class _State extends State<AppMenu> {
       ),
     );
   }
+  //
+  // Widget _modulesMenuContent(Map shop) {
+  //
+  // }
 
   Widget _officeName(String? name) {
     return Center(
@@ -175,7 +188,7 @@ class _State extends State<AppMenu> {
   Widget _getVersion() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Center(child: Text('v$version')),
+      child: Center(child: BodyLarge(text: 'v$version')),
     );
   }
 

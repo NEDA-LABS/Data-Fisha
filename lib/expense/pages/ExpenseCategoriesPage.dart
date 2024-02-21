@@ -55,21 +55,6 @@ class _State extends State<ExpenseCategoriesPage> {
         ]);
       },
       totalDynamicChildren: _categories.length,
-      // onBody: (d) => Scaffold(
-      //   body: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-      //     children: [
-      //       Expanded(
-      //         child: TableLikeList(
-      //           onFuture: () async => _categories, keys: _fields(),
-      //           // onItemPressed: _showOption,
-      //           // onCell: (key,data)=>Text('@$data')
-      //         ),
-      //       ),
-      //       // _tableFooter()
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -122,25 +107,4 @@ class _State extends State<ExpenseCategoriesPage> {
       });
     });
   }
-
-// _showOption(element) {
-//   showDialogOrModalSheet(Container(
-//     constraints: BoxConstraints(
-//       maxWidth: 500
-//     ),
-//     child: Column(
-//       mainAxisSize: MainAxisSize.min,
-//       crossAxisAlignment: CrossAxisAlignment.stretch,
-//       children: [
-//         Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 8.0),
-//           child: Text("Options"),
-//         ),
-//         TextButton(onPressed: () {
-//
-//         }, child: Text("Delete"))
-//       ],
-//     ),
-//   ), context);
-// }
 }

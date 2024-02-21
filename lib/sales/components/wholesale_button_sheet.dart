@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 
 void wholesaleBottomSheet({required BuildContext context, var stock}) {
   Scaffold.of(context).showBottomSheet((context) => Container(
@@ -23,14 +25,9 @@ void wholesaleBottomSheet({required BuildContext context, var stock}) {
                             child: Center(
                               child: Column(
                                 children: <Widget>[
-                                  Text(
-                                    stock["product"],
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 19),
-                                  ),
-                                  Text(stock["wholesalePrice"].toString(),
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 25)),
+                                  BodyMedium(text: stock["product"]),
+                                  BodyLarge(
+                                      text: stock["wholesalePrice"].toString()),
                                 ],
                               ),
                             ),
@@ -75,12 +72,10 @@ void wholesaleBottomSheet({required BuildContext context, var stock}) {
                           ),
                           height: 30,
                           width: 70,
-                          child: const Center(
-                            child: Text(
-                              "ADD",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
+                          child: Center(
+                            child: BodyLarge(
+                                text: "ADD",
+                                color: Theme.of(context).colorScheme.onPrimary),
                           ),
                         ),
                       ),
@@ -93,39 +88,3 @@ void wholesaleBottomSheet({required BuildContext context, var stock}) {
         ),
       ));
 }
-
-// Widget productCardItem(
-//     {String productCategory, String productName, String productPrice}) {
-//   return Card(
-//     color: Colors.white,
-//     elevation: 4,
-//     child: Column(
-//       children: <Widget>[
-//         Spacer(
-//           flex: 1,
-//         ),
-//         Expanded(
-//           child: Text(
-//             productCategory != null ? productCategory : "No Listed Category",
-//             style: TextStyle(color: Colors.grey),
-//           ),
-//         ),
-//         Expanded(
-//             child: Text(
-//           productName != null ? productName : "No Listed Name",
-//           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-//         )),
-//         Spacer(),
-//         Expanded(
-//             child: Text(
-//           productPrice != null ? productPrice : "No Listed Price",
-//           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-//         )),
-//         Spacer(
-//           flex: 1,
-//         )
-//       ],
-//     ),
-//   );
-// }
-// // }

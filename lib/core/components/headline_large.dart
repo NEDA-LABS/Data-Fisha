@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class HeadlineLarge extends StatelessWidget{
   final String text;
 
-  const HeadlineLarge({Key? key, required this.text}) : super(key: key);
+  const HeadlineLarge({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

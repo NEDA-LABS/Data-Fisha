@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/CardRoot.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
@@ -9,10 +8,10 @@ import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/mobileQrScanIconButton.dart';
-import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/models/file_data.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/models/file_data.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/stocks/components/ProductDescriptionInput.dart';
 import 'package:smartstock/stocks/components/ProductExpireInput.dart';
 import 'package:smartstock/stocks/components/ProductNameInput.dart';
@@ -48,6 +47,7 @@ class _State extends State<ProductForm> {
   List<FileData?> _fileData = [];
   List _categories = [];
   var _loading = false;
+  Map _shop = {};
 
   clearFormState() {
     _product = {};
@@ -61,6 +61,11 @@ class _State extends State<ProductForm> {
 
   @override
   void initState() {
+    getActiveShop().then((value) {
+      _updateState(() {
+        _shop = value;
+      });
+    });
     _product = {...widget.product};
     _stockable = _product['stockable'] == true;
     _canExpire = '${_product['expire'] ?? ''}'.isNotEmpty;
@@ -75,14 +80,12 @@ class _State extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    return WithActiveShop(onChild: (shop) {
-      var isSmallScreen = getIsSmallScreen(context);
-      if (isSmallScreen) {
-        return _getSmallScreenView(shop);
-      } else {
-        return _getLargeScreenView(shop);
-      }
-    });
+    var isSmallScreen = getIsSmallScreen(context);
+    if (isSmallScreen) {
+      return _getSmallScreenView(_shop);
+    } else {
+      return _getLargeScreenView(_shop);
+    }
   }
 
   Widget _getDescriptionInput() {
@@ -263,69 +266,63 @@ class _State extends State<ProductForm> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CardRoot(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                flex: 4,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [_getProductNameInput(), _getCategoryInput()],
-                ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [_getProductNameInput(), _getCategoryInput()],
               ),
-              const WhiteSpacer(width: 8),
-              Expanded(flex: 2, child: _barcodeInput())
-            ],
-          ),
+            ),
+            const WhiteSpacer(width: 8),
+            Expanded(flex: 2, child: _barcodeInput())
+          ],
         ),
         const WhiteSpacer(height: 16),
-        CardRoot(child: _imagesInput()),
+        _imagesInput(),
         const WhiteSpacer(height: 16),
-        CardRoot(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(flex: 1, child: _priceInput(shop)),
-                  const WhiteSpacer(width: 8),
-                  Expanded(flex: 1, child: _costPriceInput(shop))
-                ],
-              ),
-              const WhiteSpacer(height: 8),
-              // Row(
-              //   children: [
-              //     Expanded(flex: 1, child: _costPriceInput(shop)),
-              //     const WhiteSpacer(width: 8),
-              //     Expanded(flex: 1, child: Container())
-              //   ],
-              // )
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(flex: 1, child: _priceInput(shop)),
+                const WhiteSpacer(width: 8),
+                Expanded(flex: 1, child: _costPriceInput(shop))
+              ],
+            ),
+            const WhiteSpacer(height: 8),
+            // Row(
+            //   children: [
+            //     Expanded(flex: 1, child: _costPriceInput(shop)),
+            //     const WhiteSpacer(width: 8),
+            //     Expanded(flex: 1, child: Container())
+            //   ],
+            // )
+          ],
         ),
         const WhiteSpacer(height: 16),
-        CardRoot(child: _getDescriptionInput()),
+        _getDescriptionInput(),
         const WhiteSpacer(height: 16),
-        CardRoot(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(flex: 1, child: _quantityInput()),
-                  Expanded(flex: 1, child: Container()),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(flex: 1, child: _expireInput()),
-                  Expanded(flex: 1, child: Container()),
-                ],
-              )
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(flex: 1, child: _quantityInput()),
+                Expanded(flex: 1, child: Container()),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(flex: 1, child: _expireInput()),
+                Expanded(flex: 1, child: Container()),
+              ],
+            )
+          ],
         ),
         const WhiteSpacer(height: 16),
         Container(
@@ -344,52 +341,46 @@ class _State extends State<ProductForm> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CardRoot(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _getProductNameInput(),
-                    const WhiteSpacer(height: 8),
-                    _barcodeInput(),
-                    const WhiteSpacer(height: 8),
-                    _getCategoryInput(),
-                    const WhiteSpacer(height: 16),
-                    _imagesInput()
-                  ],
-                ),
-              )
-            ],
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _getProductNameInput(),
+                  const WhiteSpacer(height: 8),
+                  _barcodeInput(),
+                  const WhiteSpacer(height: 8),
+                  _getCategoryInput(),
+                  const WhiteSpacer(height: 16),
+                  _imagesInput()
+                ],
+              ),
+            )
+          ],
         ),
         const WhiteSpacer(height: 16),
-        CardRoot(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _priceInput(shop),
-              // _wholesalePriceInput(shop),
-              const WhiteSpacer(height: 8),
-              _costPriceInput(shop)
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _priceInput(shop),
+            // _wholesalePriceInput(shop),
+            const WhiteSpacer(height: 8),
+            _costPriceInput(shop)
+          ],
         ),
         const WhiteSpacer(height: 16),
-        CardRoot(child: _getDescriptionInput()),
+        _getDescriptionInput(),
         const WhiteSpacer(height: 16),
-        CardRoot(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _quantityInput(),
-              const WhiteSpacer(height: 8),
-              _expireInput()
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _quantityInput(),
+            const WhiteSpacer(height: 8),
+            _expireInput()
+          ],
         ),
         const WhiteSpacer(height: 16),
         Container(

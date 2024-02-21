@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
-import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -44,6 +44,7 @@ class _State extends State<SellerPerformance> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       office: 'Menu',
       current: '/report/',
       sliverAppBar: _appBar(),
@@ -54,36 +55,8 @@ class _State extends State<SellerPerformance> {
       ],
       totalDynamicChildren: dailySales.length,
       dynamicChildBuilder: _largerScreenChildBuilder,
-      // onBody: (x) {
-      //   return SingleChildScrollView(
-      //     padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-      //     child: Center(
-      //       child: Container(
-      //         constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-      //         child: Column(
-      //           crossAxisAlignment: CrossAxisAlignment.stretch,
-      //           mainAxisSize: MainAxisSize.min,
-      //           children: [
-      //             _whatToShow(),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   );
-      // },
     );
   }
-
-  // charts.Series<dynamic, String> _sales2Series(List sales) {
-  //   return charts.Series<dynamic, String>(
-  //     id: 'Sales',
-  //     colorFn: (_, __) =>
-  //         charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-  //     domainFn: (dynamic sales, _) => sales['date'],
-  //     measureFn: (dynamic sales, _) => sales['amount'],
-  //     data: dailySales,
-  //   );
-  // }
 
   _showLoading() => loading ? const LinearProgressIndicator() : Container();
 
@@ -101,66 +74,6 @@ class _State extends State<SellerPerformance> {
       });
     });
   }
-
-  // _loading() {
-  //   return const SizedBox(
-  //     height: 100,
-  //     child: Center(
-  //       child: SizedBox(
-  //         height: 30,
-  //         width: 30,
-  //         child: CircularProgressIndicator(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // _retry() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(10),
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Text(error),
-  //         OutlinedButton(
-  //             onPressed: () => setState(() => _fetchData()),
-  //             child: const Text('Retry'))
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
-  // _chartAndTable() {
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       // Card(
-  //       //   child: Container(
-  //       //     height: 350,
-  //       //     padding: const EdgeInsets.all(8),
-  //       //     child: BarChart(
-  //       //       [_sales2Series(dailySales)],
-  //       //       animate: true,
-  //       //     ),
-  //       //   ),
-  //       // ),
-  //       // const SizedBox(height: 16),
-  //       Card(
-  //         child: Container(
-  //           constraints: const BoxConstraints(maxHeight: 500),
-  //           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-  //           child: TableLikeList(
-  //             onFuture: () async => dailySales,
-  //             keys: _fields(),
-  //           ),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
 
   Widget _largerScreenChildBuilder(context, index) {
     return Column(
@@ -184,16 +97,16 @@ class _State extends State<SellerPerformance> {
             ),
           ]),
         ),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListHeaderCell('Seller'),
-      TableLikeListHeaderCell('Quantity'),
-      TableLikeListHeaderCell('Amount ( Tsh )'),
+      LabelMedium(text: 'SELLER'),
+      LabelMedium(text: 'QUANTITY'),
+      LabelMedium(text: 'AMOUNT'),
       // tableLikeListTextHeader('Total ( Tsh )'),
     ]);
   }
@@ -244,13 +157,4 @@ class _State extends State<SellerPerformance> {
       context: context,
     );
   }
-
-// _whatToShow() {
-//   var getView = ifDoElse(
-//       (x) => x,
-//       (_) => _loading(),
-//       ifDoElse(
-//           (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
-//   return getView(loading);
-// }
 }

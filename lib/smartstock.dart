@@ -43,8 +43,8 @@ class SmartStock extends StatefulWidget {
 class _State extends State<SmartStock> {
   int i = 0;
   PageBase? child = const DashboardIndexPage();
-  bool loading = false;
-  bool initialized = false;
+  bool _loading = false;
+  bool _initialized = false;
   Map? user;
   var _shouldSubsRun = true;
   var _shouldProductsSyncsRun = true;
@@ -66,7 +66,7 @@ class _State extends State<SmartStock> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading == true) {
+    if (_loading == true) {
       return Container();
     }
     if (user is Map && propertyOrNull('username')(user) != null) {
@@ -164,9 +164,9 @@ class _State extends State<SmartStock> {
   }
 
   _getLoginUser() {
-    loading = true;
+    _loading = true;
     user = null;
-    initialized = false;
+    _initialized = false;
     _updateState();
     getLocalCurrentUser().then((value) async {
       var shop = await getActiveShop();
@@ -183,21 +183,21 @@ class _State extends State<SmartStock> {
         child = initialPage;
       } else {
         var role = propertyOrNull('role')(user);
-        if (role != 'admin' && initialized == false) {
+        if (role != 'admin' && _initialized == false) {
           child = SalesCashRetail(onBackPage: _onBackPage);
         }
       }
       if (child != null) {
         PageHistory().add(child!);
       }
-      initialized = true;
+      _initialized = true;
     }).catchError((err) {
       if (kDebugMode) {
         print(err);
       }
       user = null;
     }).whenComplete(() {
-      loading = false;
+      _loading = false;
       _updateState();
     });
   }

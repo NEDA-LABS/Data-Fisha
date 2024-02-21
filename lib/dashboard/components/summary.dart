@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/dashboard/components/number_card.dart';
@@ -66,28 +68,12 @@ class _State extends State<DashboardSummary> {
         _getTotalSalesView(),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-          child: Text(
-            'Past 7 days revenue.',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+          child: BodyMedium(
+            text: 'Past 7 days revenue.',
           ),
         ),
         _getHistorySales(),
         const SizedBox(height: 8),
-        // PastTopProducts(date: date),
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        //   child: Text(
-        //     'Past 7 days expenses.',
-        //     style: TextStyle(
-        //       fontSize: 14,
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //   ),
-        // ),
-        // _getHistoryExpenses()
       ],
     );
   }
@@ -113,10 +99,10 @@ class _State extends State<DashboardSummary> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(error),
+          BodyLarge(text: error),
           OutlinedButton(
               onPressed: () => _updateState(() => _fetchData()),
-              child: const Text('Retry'))
+              child: const BodyLarge(text: 'Retry'))
         ],
       ),
     );
@@ -129,14 +115,8 @@ class _State extends State<DashboardSummary> {
         onTap: _showDatePicker,
         child: Row(
           children: [
-            Text(
-              _getToday(date),
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                // color: Color(0xFF1C1C1C),
-              ),
+            BodyMedium(
+              text: _getToday(date)
             ),
             const Icon(
               Icons.keyboard_arrow_down,
@@ -254,14 +234,14 @@ class _State extends State<DashboardSummary> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PastSalesOverview(date: date),
+                // PastSalesOverview(date: date),
                 PastSalesByCategory(date: date)
               ],
             ),
         (context) => Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(flex: 2, child: PastSalesOverview(date: date)),
+                // Expanded(flex: 2, child: PastSalesOverview(date: date)),
                 Expanded(flex: 1, child: PastSalesByCategory(date: date))
               ],
             ));

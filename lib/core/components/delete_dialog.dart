@@ -9,7 +9,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 class DeleteDialog extends StatefulWidget {
   final String message;
   final Future Function() onConfirm;
-  final  Function(dynamic) onDone;
+  final Function(dynamic) onDone;
 
   const DeleteDialog({
     required this.message,
@@ -39,12 +39,7 @@ class _State extends State<DeleteDialog> {
             const TitleMedium(text: 'Info'),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                widget.message,
-                softWrap: true,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-              ),
+              child: BodyLarge(text: widget.message),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -91,7 +86,7 @@ class _State extends State<DeleteDialog> {
     setState(() {
       loading = true;
     });
-    widget.onConfirm().then((value){
+    widget.onConfirm().then((value) {
       widget.onDone(value);
     }).catchError((err) {
       showInfoDialog(context, err);

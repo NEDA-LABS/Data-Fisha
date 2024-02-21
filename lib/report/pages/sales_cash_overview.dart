@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/Histogram.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -21,9 +22,9 @@ class OverviewCashSales extends PageBase {
   final OnBackPage onBackPage;
 
   const OverviewCashSales({
-    Key? key,
+    super.key,
     required this.onBackPage,
-  }) : super(key: key, pageName: 'OverviewCashSales');
+  }) : super(pageName: 'OverviewCashSales');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -48,6 +49,7 @@ class _State extends State<OverviewCashSales> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       office: 'Menu',
       current: '/report/',
       sliverAppBar: _appBar(),
@@ -90,17 +92,17 @@ class _State extends State<OverviewCashSales> {
   _tableHeader() {
     if (getIsSmallScreen(context)) {
       return const TableLikeListRow([
-        TableLikeListHeaderCell('Date'),
-        TableLikeListHeaderCell('Total'),
-        TableLikeListHeaderCell('Profit'),
+        LabelMedium(text: 'DATE'),
+        LabelMedium(text: 'TOTAL'),
+        LabelMedium(text: 'PROFIT'),
       ]);
     }
     return const TableLikeListRow([
-      TableLikeListHeaderCell('Date'),
-      TableLikeListHeaderCell('Sales'),
-      TableLikeListHeaderCell('COG'),
-      TableLikeListHeaderCell('Expenses'),
-      TableLikeListHeaderCell('Profit'),
+      LabelMedium(text: 'DATE'),
+      LabelMedium(text: 'SALES'),
+      LabelMedium(text: 'COG'),
+      LabelMedium(text: 'EXPENSES'),
+      LabelMedium(text: 'PROFIT'),
     ]);
   }
 

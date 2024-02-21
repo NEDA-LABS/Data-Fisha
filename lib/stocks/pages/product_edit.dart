@@ -11,10 +11,10 @@ class ProductEditPage extends PageBase {
   final OnBackPage onBackPage;
 
   const ProductEditPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.product,
-  }) : super(key: key, pageName: 'ProductEditPage');
+  }) : super(pageName: 'ProductEditPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -37,6 +37,7 @@ class _State extends State<ProductEditPage> {
     return ResponsivePage(
       current: '/stock/',
       sliverAppBar: _appBar(context),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       staticChildren: [
         const WhiteSpacer(height: 24),
         ProductUpdateForm(

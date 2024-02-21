@@ -15,11 +15,6 @@ orderDetails(context, item) {
     shrinkWrap: true,
     children: [
       _header(context, item),
-      // const Padding(
-      //   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-      //   child: Text('Items',
-      //       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
-      // ),
       const HorizontalLine(),
       const WhiteSpacer(height: 8),
       _tableHeader(),

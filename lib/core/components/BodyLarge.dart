@@ -7,11 +7,11 @@ class BodyLarge extends StatelessWidget {
   final Color? color;
 
   const BodyLarge({
-    Key? key,
+    super.key,
     required this.text,
     this.textAlign,
     this.overflow, this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

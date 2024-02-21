@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -47,17 +48,14 @@ class _State extends State<OffsetQuantityContent> {
                       height: 40,
                       child: OutlinedButton(
                         onPressed: progress ? null : _offsetQuantity,
-                        child: Text(
-                          progress ? "Waiting..." : "Offset quantity.",
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                        child: BodyLarge(text: progress ? "Waiting..." : "Offset quantity."),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Text(reqErr)
+            BodyLarge(text: reqErr)
           ]),
         ),
       );

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class DisplayTextSmall extends StatelessWidget {
   final String text;
 
-  const DisplayTextSmall({Key? key, required this.text}) : super(key: key);
+  const DisplayTextSmall({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

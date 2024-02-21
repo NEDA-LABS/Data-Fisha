@@ -61,7 +61,7 @@ class _State extends State<TextInput> {
       children: [
         _label(),
         _input(context),
-        inputErrorMessageOrEmpty(widget.error),
+        InputErrorMessageOrEmpty(widget.error),
       ],
     );
   }

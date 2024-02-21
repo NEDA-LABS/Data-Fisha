@@ -37,70 +37,49 @@ class ProductDetail extends StatelessWidget {
               title: HeadlineSmall(text: item['product'] ?? ''),
               dense: true,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MenuContextAction(
-                    onPressed: () {
-                      var nav = Navigator.of(context);
-                      nav.maybePop().then((v) {
-                        onChangePage(
-                            ProductEditPage(product: item, onBackPage: onBackPage));
-                      });
-                    },
-                    title: 'Edit details',
-                  ),
-                  // outlineActionButton(
-                  //   onPressed: () {
-                  //     showDialog(
-                  //       context: context,
-                  //       builder: (_) => Dialog(
-                  //         child: Container(
-                  //           constraints: const BoxConstraints(maxWidth: 400),
-                  //           child: OffsetQuantityContent(
-                  //             productId: item['id'],
-                  //             product: item['product'],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  //   title: 'Offset quantity',
-                  // ),
-                  MenuContextAction(
-                    onPressed: () {
-                      var nav = Navigator.of(context);
-                      nav.maybePop().then((value) {
-                        showDialogOrModalSheet(
-                          ProductMovementDetails(item: item),
-                          context,
-                        );
-                      });
-                    },
-                    title: 'Track movement',
-                  ),
-                  MenuContextAction(
-                    onPressed: () {
-                      var nav = Navigator.of(context);
-                      nav.maybePop().then(
-                        (value) {
-                          showDialogDelete(
-                            onDone: (p0) {
-                              nav.maybePop();
-                            },
-                              context: context,
-                              name: item['product'],
-                              onDelete: () => deleteProduct(item['id']));
-                        },
+            Wrap(
+              children: [
+                MenuContextAction(
+                  onPressed: () {
+                    var nav = Navigator.of(context);
+                    nav.maybePop().then((v) {
+                      onChangePage(
+                          ProductEditPage(product: item, onBackPage: onBackPage));
+                    });
+                  },
+                  title: 'Edit details',
+                ),
+                MenuContextAction(
+                  onPressed: () {
+                    var nav = Navigator.of(context);
+                    nav.maybePop().then((value) {
+                      showDialogOrModalSheet(
+                        ProductMovementDetails(item: item),
+                        context,
                       );
-                    },
-                    title: 'Delete',
-                    textColor: Theme.of(context).colorScheme.error,
-                  )
-                ],
-              ),
+                    });
+                  },
+                  title: 'Track movement',
+                ),
+                MenuContextAction(
+                  onPressed: () {
+                    var nav = Navigator.of(context);
+                    nav.maybePop().then(
+                      (value) {
+                        showDialogDelete(
+                          onDone: (p0) {
+                            nav.maybePop();
+                          },
+                            context: context,
+                            name: item['product'],
+                            onDelete: () => deleteProduct(item['id']));
+                      },
+                    );
+                  },
+                  title: 'Delete',
+                  textColor: Theme.of(context).colorScheme.error,
+                )
+              ],
             ),
             ...item.keys
                 .where((k) => k != 'product')

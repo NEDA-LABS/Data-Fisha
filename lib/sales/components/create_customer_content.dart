@@ -86,7 +86,7 @@ class _State extends State<CreateCustomerContent> {
                 ],
               ),
             ),
-            Text(states['error'] ?? '')
+            BodyLarge(text: states['error'] ?? '')
           ],
         ),
       ),

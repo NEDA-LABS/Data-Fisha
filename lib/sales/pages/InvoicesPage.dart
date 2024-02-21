@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/debounce.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
@@ -236,8 +237,8 @@ class _InvoicesPage extends State<InvoicesPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${_invoices[index]['date']}'),
-                  Text(
+                  BodyLarge(text: '${_invoices[index]['date']}'),
+                  BodyLarge(text:
                       'total ${compactNumber('${_invoices[index]['amount']}')}'),
                 ],
               ),
@@ -296,7 +297,7 @@ class _InvoicesPage extends State<InvoicesPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: Text("Paid", style: tStyle),
+      child: LabelLarge(text: "PAID"),
     );
     getPayment() {
       var payments = invoice['payments'];
@@ -319,8 +320,7 @@ class _InvoicesPage extends State<InvoicesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,
-        child: Text("${formatNumber((paid * 100) / amount, decimals: 0)}%",
-            style: tStyle),
+        child: LabelLarge(text: "${formatNumber((paid * 100) / amount, decimals: 0)}%"),
       );
     }
   }
@@ -335,7 +335,7 @@ class _InvoicesPage extends State<InvoicesPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Add invoice'),
+                title: const BodyLarge(text: 'Add invoice'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   widget.onChangePage(
@@ -348,7 +348,7 @@ class _InvoicesPage extends State<InvoicesPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload invoices'),
+                title: const BodyLarge(text: 'Reload invoices'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _refresh();

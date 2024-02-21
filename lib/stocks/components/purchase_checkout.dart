@@ -212,12 +212,14 @@ class _State extends State<PurchaseCheckout> {
       error: '${_errors['vendor'] ?? ''}',
       onChoice: (p0) {
         _updateState(() {
-          _vendor = p0??{};
+          _vendor = p0 ?? {};
           _errors = {..._errors, 'vendor': ''};
         });
       },
       onField: (p0) => p0?['name'] ?? '',
-      getAddWidget: () => const CreateSupplierContent(),
+      getAddWidget: () => CreateSupplierContent(onDone: () {
+        getSupplierFromCacheOrRemote(true).catchError((e)=>[]);
+      }),
       onLoad: (bool skipLocal) async {
         return getSupplierFromCacheOrRemote(skipLocal);
       },
@@ -609,7 +611,7 @@ class _State extends State<PurchaseCheckout> {
         _updateState(() {
           _confirmingPurchase = false;
         });
-      }).whenComplete((){
+      }).whenComplete(() {
         _updateState(() {
           _confirmingPurchase = false;
         });

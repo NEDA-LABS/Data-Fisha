@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -7,6 +9,7 @@ import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -105,9 +108,7 @@ class _State extends State<SuppliersPage> {
         sliverAppBar: _appBar(context),
         backgroundColor: Theme.of(context).colorScheme.surface,
         staticChildren: [
-          getIsSmallScreen(context)
-              ? Container()
-              : getTableContextMenu(_contextItems(context)),
+          getTableContextMenu(_contextItems(context)),
           _loading(_isLoading),
           getIsSmallScreen(context) ? Container() : _tableHeader(),
         ],
@@ -130,17 +131,17 @@ class _State extends State<SuppliersPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create supplier'),
+                title: const BodyLarge(text: 'Create supplier'),
                 onTap: () {
                   Navigator.of(context)
                       .maybePop()
                       .whenComplete(() => _createSupplier());
                 },
               ),
-              HorizontalLine(),
+              const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload suppliers'),
+                title: const BodyLarge(text: 'Reload suppliers'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetchSuppliers();
@@ -153,17 +154,9 @@ class _State extends State<SuppliersPage> {
   }
 
   _createSupplier() {
-    showDialog(
-      context: context,
-      builder: (c) => Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: const Dialog(
-            child: CreateSupplierContent(),
-          ),
-        ),
-      ),
-    );
+    showDialogOrFullScreenModal(CreateSupplierContent(onDone: (){
+      _fetchSuppliers();
+    },), context);
   }
 
   Widget _largerScreen(context, index) {
@@ -177,7 +170,7 @@ class _State extends State<SuppliersPage> {
           TableLikeListTextDataCell('${_suppliers[index]['email']}'),
           TableLikeListTextDataCell('${_suppliers[index]['address']}'),
         ]),
-        HorizontalLine()
+        const HorizontalLine()
       ],
     );
   }
@@ -203,16 +196,16 @@ class _State extends State<SuppliersPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ListTile(
-          title: Text(name, style: style),
+          title: BodyLarge(text: name),
           subtitle: mobile.isEmpty
               ? null
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text('$mobile - $email', style: sub_style),
+                  child: LabelLarge(text: '$mobile - $email', overflow: TextOverflow.ellipsis),
                 ),
         ),
         const SizedBox(height: 5),
-        HorizontalLine(),
+        const HorizontalLine(),
       ],
     );
   }

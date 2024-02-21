@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 
 Widget showProductLoading() => Container(
       color: Colors.white,
@@ -12,10 +13,7 @@ Widget showProductLoading() => Container(
             ),
             const CircularProgressIndicator(),
             Container(height: 20),
-            const Text(
-              "Fetching products",
-              style: TextStyle(fontSize: 20),
-            )
+            const TitleMedium(text: "Fetching products")
           ],
         ),
       ),

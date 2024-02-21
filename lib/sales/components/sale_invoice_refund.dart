@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -58,7 +59,7 @@ class _State extends State<SaleInvoiceRefundContent> {
                 error: states['e_q'] ?? '',
                 placeholder: ''),
             _submitButton(context, states, updateState),
-            Text(states['error'] ?? '')
+            BodyLarge(text: states['error'] ?? '')
           ],
         ),
       ),
@@ -76,9 +77,8 @@ class _State extends State<SaleInvoiceRefundContent> {
         onPressed: states['loading'] == true
             ? null
             : () => _submitRefund(states, updateState),
-        child: Text(
-          states['loading'] ? "Waiting..." : "Submit.",
-          style: const TextStyle(fontSize: 16),
+        child: BodyLarge(text:
+          states['loading'] ? "Waiting..." : "Submit."
         ),
       ),
     );

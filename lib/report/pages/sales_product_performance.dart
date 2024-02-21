@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/report/components/date_range.dart';
@@ -44,6 +44,7 @@ class _State extends State<ProductPerformance> {
   @override
   Widget build(context) {
     return ResponsivePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       office: 'Menu',
       current: '/report/',
       sliverAppBar: _appBar(),
@@ -83,73 +84,7 @@ class _State extends State<ProductPerformance> {
     });
   }
 
-  // _loading() {
-  //   return const SizedBox(
-  //     height: 100,
-  //     child: Center(
-  //       child: SizedBox(
-  //         height: 30,
-  //         width: 30,
-  //         child: CircularProgressIndicator(),
-  //       ),
-  //     ),
-  //   );
-  // }
   _showLoading() => loading ? const LinearProgressIndicator() : Container();
-
-  // _retry() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(10),
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Text(error),
-  //         OutlinedButton(
-  //             onPressed: () => setState(() => _fetchData()),
-  //             child: const Text('Retry'))
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // _chartAndTable() {
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       // Card(
-  //       //   child: Container(
-  //       //     height: 350,
-  //       //     padding: const EdgeInsets.all(8),
-  //       //     child: BarChart(
-  //       //       [_sales2Series(dailySales)],
-  //       //       animate: true,
-  //       //     ),
-  //       //   ),
-  //       // ),
-  //       // const SizedBox(height: 16),
-  //       _tableHeader(),
-  //       Card(
-  //         child: Container(
-  //           constraints: const BoxConstraints(maxHeight: 500),
-  //           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-  //           child: TableLikeList(
-  //             onFuture: () async => dailySales,
-  //             keys: _fields(),
-  //             onCell: (a, b, c) {
-  //               if (a != 'id') {
-  //                 return Text('${doubleOrZero(b)}');
-  //               }
-  //               return Text('$b');
-  //             },
-  //           ),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
 
   Widget _largerScreenChildBuilder(context, index) {
     return Column(
@@ -185,10 +120,10 @@ class _State extends State<ProductPerformance> {
 
   _tableHeader() {
     return const TableLikeListRow([
-      TableLikeListHeaderCell('Product'),
-      TableLikeListHeaderCell('Quantity'),
-      TableLikeListHeaderCell('Amount ( Tsh )'),
-      TableLikeListHeaderCell('Margin ( % )'),
+      LabelMedium(text: 'PRODUCT'),
+      LabelMedium(text: 'QUANTITY'),
+      LabelMedium(text: 'AMOUNT'),
+      LabelMedium(text: 'MARGIN ( % )'),
     ]);
   }
 

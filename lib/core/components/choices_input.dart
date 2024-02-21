@@ -162,7 +162,7 @@ class _State extends State<ChoicesInput> {
           ],
         ),
       ),
-      inputErrorMessageOrEmpty(widget.error)
+      InputErrorMessageOrEmpty(widget.error)
     ]);
   }
 }

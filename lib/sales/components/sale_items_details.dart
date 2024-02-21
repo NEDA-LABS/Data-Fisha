@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
@@ -51,11 +53,7 @@ class _State extends State<SaleItemsDetails> {
       height: 50,
       color: Theme.of(context).primaryColorDark,
       padding: const EdgeInsets.all(16),
-      child: const Text(
-        'Items',
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Colors.white, fontSize: 16),
-      ),
+      child: const BodyLarge(text: 'Items', overflow: TextOverflow.ellipsis),
     );
   }
 
@@ -83,7 +81,8 @@ class _State extends State<SaleItemsDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      margin: nameMargin, child: Text('${getName(item)}')),
+                      margin: nameMargin,
+                      child: BodyLarge(text: '${getName(item)}')),
                   Container(
                     margin: nameMargin,
                     child: TextButton(
@@ -92,9 +91,8 @@ class _State extends State<SaleItemsDetails> {
                           widget.onRefund(item);
                         });
                       },
-                      child: Text(
-                        'Refund',
-                        style: refundTextStyle,
+                      child: BodyMedium(
+                        text: 'Refund'
                       ),
                     ),
                   ),
@@ -105,11 +103,10 @@ class _State extends State<SaleItemsDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      margin: nameMargin, child: Text('${getQuantity(item)}')),
+                      margin: nameMargin, child: BodyLarge(text: '${getQuantity(item)}')),
                   Container(
                       margin: nameMargin,
-                      child: Text('${getQuantityRefund(item)}',
-                          style: refundTextStyle))
+                      child: BodyMedium(text: '${getQuantityRefund(item)}'))
                 ],
               ),
               Column(
@@ -117,12 +114,11 @@ class _State extends State<SaleItemsDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      margin: nameMargin, child: Text('${getAmount(item)}')),
+                      margin: nameMargin, child: BodyLarge(text: '${getAmount(item)}')),
                   Container(
                     margin: nameMargin,
-                    child: Text(
-                      '${getAmountRefund(item)}',
-                      style: refundTextStyle,
+                    child: BodyMedium(
+                      text: '${getAmountRefund(item)}'
                     ),
                   )
                 ],

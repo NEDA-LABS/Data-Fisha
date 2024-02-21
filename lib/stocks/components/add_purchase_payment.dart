@@ -84,8 +84,6 @@ class _State extends State<AddPurchasePaymentContent> {
                     : _submitAddPurchasePayment,
                 onCancel: () => Navigator.of(context).maybePop(),
               )
-              // Text(_states['error'] ?? '',
-              //     style: const TextStyle(color: Colors.red)),
             ],
           ),
         ),

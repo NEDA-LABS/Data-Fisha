@@ -25,10 +25,10 @@ class ProductUpdateForm extends StatefulWidget {
   final OnBackPage onBackPage;
 
   const ProductUpdateForm({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.product,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -45,34 +46,7 @@ class _State extends State<CategoryCreatePage> {
         current: '/stock/',
         sliverAppBar: _appBar(context),
         backgroundColor: Theme.of(context).colorScheme.surface,
-        staticChildren: [
-          // getIsSmallScreen(context)
-          //     ? Container()
-          //     : tableContextMenu(_contextItems(context)),
-          // _loading(_isLoading),
-          CreateCategoryContent(
-            onNewCategory: (category) {},
-          )
-          // _tableHeader(),
-        ],
-        // dynamicChildBuilder: (context, index) {
-        //   return Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     crossAxisAlignment: CrossAxisAlignment.stretch,
-        //     children: [
-        //       ListTile(
-        //           title: TableLikeListTextDataCell(
-        //               '${_categories[index]['name']}'),
-        //           subtitle: Text(
-        //             '${_categories[index]['description']}',
-        //             style: const TextStyle(
-        //                 fontSize: 12, fontWeight: FontWeight.w300),
-        //           )),
-        //       const SizedBox(height: 5),
-        //       HorizontalLine(),
-        //     ],
-        //   );
-        // },
+        staticChildren: [CreateCategoryContent(onNewCategory: (category) {})],
         fab: FloatingActionButton(
           onPressed: () => _showMobileContextMenu(context),
           child: const Icon(Icons.unfold_more_outlined),
@@ -105,7 +79,7 @@ class _State extends State<CategoryCreatePage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create category'),
+                title: const BodyLarge(text: 'Create category'),
                 onTap: () {
                   Navigator.of(context)
                       .maybePop()
@@ -115,7 +89,7 @@ class _State extends State<CategoryCreatePage> {
               HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload categories'),
+                title: const BodyLarge(text: 'Reload categories'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetchCategories();

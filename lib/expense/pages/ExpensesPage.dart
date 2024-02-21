@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -136,7 +137,7 @@ class _State extends State<ExpenseExpensesPage> {
                     '${formatNumber(_expenses[index]['amount'])}'),
               ],
             ),
-            subtitle: Text('${_expenses[index]['date']}'),
+            subtitle: BodyLarge(text: '${_expenses[index]['date']}'),
           ),
           const SizedBox(height: 5),
           const HorizontalLine(),
@@ -205,7 +206,7 @@ class _State extends State<ExpenseExpensesPage> {
           children: [
             ListTile(
               leading: const Icon(Icons.add),
-              title: const Text('Add expense'),
+              title: const BodyLarge(text: 'Add expense'),
               onTap: () {
                 widget.onChangePage(
                   ExpenseCreatePage(onBackPage: widget.onBackPage),
@@ -214,7 +215,7 @@ class _State extends State<ExpenseExpensesPage> {
             ),
             ListTile(
               leading: const Icon(Icons.refresh),
-              title: const Text('Reload expenses'),
+              title: const BodyLarge(text: 'Reload expenses'),
               onTap: () {
                 Navigator.of(context).maybePop();
                 _refresh();

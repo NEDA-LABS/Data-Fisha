@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
@@ -112,16 +113,9 @@ class _State extends State<ChooseShop> {
               width: 110,
               // decoration: const BoxDecoration(shape: BoxShape.circle),
               padding: const EdgeInsets.all(8),
-              child: Text(
-                shop['businessName'],
-                softWrap: true,
+              child: BodyMedium(
+                text: shop['businessName']??'',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  // color: Theme.of(context).primaryColor,
-                  // fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  // overflow: TextOverflow.ellipsis,
-                ),
               ),
             )
           ],

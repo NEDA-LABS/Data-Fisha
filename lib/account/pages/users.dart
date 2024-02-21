@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/shop_user_details.dart';
 import 'package:smartstock/account/pages/user_create.dart';
 import 'package:smartstock/account/services/shop_users.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
@@ -141,7 +142,7 @@ class _State extends State<UsersPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text('Create user'),
+                title: BodyLarge(text: 'Create user'),
                 onTap: () {
                   Navigator.of(context).maybePop().whenComplete(
                     () {
@@ -155,7 +156,7 @@ class _State extends State<UsersPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Reload users'),
+                title: const BodyLarge(text: 'Reload users'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetch();

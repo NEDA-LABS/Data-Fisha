@@ -34,32 +34,3 @@ class MenuContextAction extends StatelessWidget {
   }
 }
 
-// raisedButton({
-//   Function? onPressed,
-//   required String title,
-//   double height = 34,
-//   Color textColor = const Color(0xffffffff),
-// }) {
-//   return Container(
-//     height: height,
-//     margin: const EdgeInsets.symmetric(vertical: 8),
-//     child: Builder(builder: (context) {
-//       return OutlinedButton(
-//         style: ButtonStyle(
-//           backgroundColor:
-//               MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-//           overlayColor: MaterialStateProperty.all<Color>(primaryBaseLightColor),
-//         ),
-//         onPressed: onPressed as void Function()?,
-//         child: Text(
-//           title,
-//           style: TextStyle(
-//             fontWeight: FontWeight.w500,
-//             color: textColor,
-//             fontSize: 16,
-//           ),
-//         ),
-//       );
-//     }),
-//   );
-// }

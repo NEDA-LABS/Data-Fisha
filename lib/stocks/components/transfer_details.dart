@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -12,8 +14,7 @@ transferDetails(context, item) => ListView(
         _header(context, item),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Text('Items',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+          child: TitleMedium(text: 'Items'),
         ),
         _tableHeader(),
         ...item['items']
@@ -21,8 +22,8 @@ transferDetails(context, item) => ListView(
                   Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 16),
-                      child: Text('${item['product']}')),
-                  Text('${item['quantity']}')
+                      child: BodyLarge(text: '${item['product']}')),
+                  BodyLarge(text: '${item['quantity']}')
                 ]))
             .toList() as List<Widget>,
         Container(
@@ -38,7 +39,7 @@ transferDetails(context, item) => ListView(
                     printPreviousSendTransfer(item);
                   }
                 },
-                child: const Text('Print.', style: TextStyle(fontSize: 16)))),
+                child: const BodyLarge(text: 'Print'))),
         const SizedBox(height: 24)
       ],
     );
@@ -58,11 +59,9 @@ _header(context, item) => Container(
     padding: const EdgeInsets.all(16),
     child: Row(children: [
       const Expanded(
-          child: Text('Transfer details',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.white, fontSize: 16))),
-      Text('${_formDate(item['date'])}',
-          style: const TextStyle(color: Colors.white, fontSize: 16))
+          child: BodyLarge(
+              text: 'Transfer details', overflow: TextOverflow.ellipsis)),
+      BodyLarge(text: '${_formDate(item['date'])}',color: Theme.of(context).colorScheme.onPrimary,)
     ]));
 
 _formDate(d) {

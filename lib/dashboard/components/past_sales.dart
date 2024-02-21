@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/solid_radius_decoration.dart';
 import 'package:smartstock/core/components/time_series_chart.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -104,10 +105,10 @@ class _State extends State<PastSalesOverview> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(error),
+          BodyLarge(text: error),
           OutlinedButton(
               onPressed: () => setState(() => _fetchData()),
-              child: const Text('Retry'))
+              child: const BodyLarge(text: 'Retry'))
         ],
       ),
     );
@@ -118,9 +119,9 @@ class _State extends State<PastSalesOverview> {
       margin: const EdgeInsets.all(5),
       decoration: solidRadiusBoxDecoration(context),
       child: Container(
-        height: getIsSmallScreen(context)
-            ? chartCardMobileHeight
-            : chartCardDesktopHeight,
+        // height: getIsSmallScreen(context)
+        //     ? chartCardMobileHeight
+        //     : chartCardDesktopHeight,
         padding: const EdgeInsets.all(8),
         child: TimeSeriesChart(
           [],

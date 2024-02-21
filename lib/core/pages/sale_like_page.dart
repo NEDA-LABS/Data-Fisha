@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
@@ -37,7 +37,7 @@ class SaleLikePage extends StatefulWidget {
   final bool wholesale;
   final OnGetPrice onGetPrice;
   final OnAddToCart onAddToCart;
-  final OnQuickItem onQuickItem;
+  final OnQuickItem? onQuickItem;
   final OnCheckout onCheckout;
   final TextEditingController? searchTextController;
   final OnGetProductsLike onGetProductsLike;
@@ -49,7 +49,7 @@ class SaleLikePage extends StatefulWidget {
     required this.onCheckout,
     required this.onGetPrice,
     required this.onAddToCart,
-    required this.onQuickItem,
+    this.onQuickItem,
     this.onBack,
     this.searchTextController,
     required this.onGetProductsLike,
@@ -121,21 +121,27 @@ class _State extends State<SaleLikePage> {
             _loading ? const LinearProgressIndicator() : const SizedBox(),
             isSmallScreen ? const WhiteSpacer(height: 16) : const SizedBox(),
             isSmallScreen
-                ? PrimaryAction(
-                    text: 'Quick item',
-                    onPressed: () {
-                      widget.onQuickItem(_onAddToCartCallback);
-                    })
-                : getTableContextMenu([
-                    ContextMenu(
-                        name: 'Quick item',
-                        pressed: () {
-                          widget.onQuickItem(_onAddToCartCallback);
-                        }),
-                    ContextMenu(name: 'Reload', pressed: () => _refresh(true)),
-                  ]),
-            // DisplayTextSmall(text: 'Items'),
-            // HorizontalLine(),
+                ? widget.onQuickItem != null
+                    ? PrimaryAction(
+                        text: 'Quick item',
+                        onPressed: () {
+                          widget.onQuickItem!(_onAddToCartCallback);
+                        })
+                    : Container()
+                : getTableContextMenu(widget.onQuickItem != null
+                    ? [
+                        ContextMenu(
+                            name: 'Quick item',
+                            pressed: () {
+                              widget.onQuickItem!(_onAddToCartCallback);
+                            }),
+                        ContextMenu(
+                            name: 'Reload', pressed: () => _refresh(true)),
+                      ]
+                    : [
+                        ContextMenu(
+                            name: 'Reload', pressed: () => _refresh(true))
+                      ]),
             isSmallScreen || _items.isEmpty ? Container() : _tableHeader(),
             _items.isEmpty && !_loading
                 ? Center(
@@ -169,20 +175,6 @@ class _State extends State<SaleLikePage> {
               : (a, b) => _largerScreenChildBuilder(a, b),
           totalDynamicChildren: _items.length,
           fab: isSmallScreen && _carts.isEmpty ? _fab() : null,
-          // onBody: (drawer) {
-          //   return NestedScrollView(
-          //     headerSliverBuilder: (context, innerBoxIsScrolled) {
-          //       return [
-          //         _states['hab'] == true ? Container() : _appBar(_updateState)
-          //       ];
-          //     },
-          //     body: Scaffold(
-          //       // floatingActionButton: _fab(),
-          //       backgroundColor: Theme.of(context).colorScheme.surface,
-          //       body: FutureBuilder<List>(future: _future(), builder: _getView),
-          //     ),
-          //   );
-          // },
         ),
       ),
       isSmallScreen && _carts.isNotEmpty
@@ -196,8 +188,8 @@ class _State extends State<SaleLikePage> {
       LabelSmall(text: 'ITEM NAME'),
       // LabelSmall(text:'QUANTITY'),
       // LabelSmall(text: 'COST ( ${shop['settings']?['currency']??''} )'),
-      LabelSmall(text: 'CATEGORY'),
-      Center(child: LabelSmall(text: "VALUE")),
+      LabelSmall(text: 'QUANTITY'),
+      Center(child: LabelSmall(text: "UNIT VALUE")),
       Center(child: LabelSmall(text: "ACTION")),
     ]);
   }
@@ -208,21 +200,15 @@ class _State extends State<SaleLikePage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InkWell(
-          onTap: () {
-            widget.onAddToCart(_items[index], _onAddToCartCallback);
-          },
+          onTap: () => widget.onAddToCart(_items[index], _onAddToCartCallback),
           child: TableLikeListRow([
             TableLikeListTextDataCell(
                 firstLetterUpperCase('${_items[index]['product']}')),
-            TableLikeListTextDataCell('${_items[index]['category']}'),
+            _getQuantityLabel(_items[index]),
             Center(
               child: TableLikeListTextDataCell(
                   '${_shop['settings']?['currency'] ?? ''} ${formatNumber('${widget.onGetPrice(_items[index])}')}'),
             ),
-            // TableLikeListTextDataCell(
-            //     '${formatNumber(_items[index]['purchase'])}'),
-            // _renderStockStatus(_items[index]),
-            // Container()
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -257,30 +243,35 @@ class _State extends State<SaleLikePage> {
           },
           title: BodyLarge(
               text: firstLetterUpperCase('${_items[index]['product']}')),
-          subtitle: Column(
+          subtitle: Row(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const WhiteSpacer(height: 4),
-              LabelLarge(
+              const BodyMedium(text: 'Qty : '),
+              _getQuantityLabel(_items[index])
+            ],
+          ),
+          trailing: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              BodyLarge(
                 text:
                     '${_shop['settings']?['currency'] ?? ''} ${formatNumber(_items[index]['purchase'])}',
               ),
-              LabelMedium(text: _items[index]['category'])
-            ],
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LabelLarge(
-                text: 'Select',
-                overflow: TextOverflow.ellipsis,
-                color: Theme.of(context).colorScheme.primary,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LabelLarge(
+                    text: 'Select',
+                    overflow: TextOverflow.ellipsis,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: Theme.of(context).primaryColor,
+                  )
+                ],
               ),
-              Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).primaryColor,
-              )
             ],
           ),
           // dense: true,
@@ -363,16 +354,18 @@ class _State extends State<SaleLikePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const BodyLarge(text: 'Quick item'),
-                onTap: () {
-                  Navigator.of(context).maybePop().whenComplete(() {
-                    widget.onQuickItem(_onAddToCartCallback);
-                  });
-                },
-              ),
-              const HorizontalLine(),
+              widget.onQuickItem != null
+                  ? ListTile(
+                      leading: const Icon(Icons.add),
+                      title: const BodyLarge(text: 'Quick item'),
+                      onTap: () {
+                        Navigator.of(context).maybePop().whenComplete(() {
+                          widget.onQuickItem!(_onAddToCartCallback);
+                        });
+                      },
+                    )
+                  : Container(),
+              widget.onQuickItem != null ? const HorizontalLine() : Container(),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const BodyLarge(text: 'Reload'),
@@ -428,8 +421,6 @@ class _State extends State<SaleLikePage> {
 
   Widget _cartDrawer(void Function(VoidCallback) refresh) {
     return CartDrawer(
-      // showCustomerLike: widget.showCustomerLike,
-      // customerLikeLabel: widget.customerLikeLabel,
       onAddItem: (id, q) {
         _prepareAddCartQuantity(id, q);
         refresh(() {});
@@ -445,14 +436,6 @@ class _State extends State<SaleLikePage> {
         }
       },
       onCartCheckout: () {
-        // Map customer = states['customer'] is Map ? states['customer'] : {};
-        // var carts = states['carts'];
-        // return widget.onSubmitCart(carts, customer, discount).then((value) {
-        // updateState({'carts': [], 'customer': ''});
-        // Navigator.of(context).maybePop().whenComplete(() {
-        //   showInfoDialog(context, widget.checkoutCompleteMessage);
-        // });
-        // }).catchError(_showCheckoutError(context));
         if (getIsSmallScreen(context)) {
           Navigator.of(context).maybePop().whenComplete(() {
             widget.onCheckout(_carts);
@@ -462,12 +445,7 @@ class _State extends State<SaleLikePage> {
         }
       },
       carts: _carts,
-      // showDiscountView: widget.showDiscountView,
       wholesale: widget.wholesale,
-      // customer: _getCustomer(states),
-      // onCustomerLikeList: widget.onCustomerLikeList,
-      // onCustomerLikeAddWidget: widget.onCustomerLikeAddWidget,
-      // onCustomer: (d) => updateState({"customer": d}),
       onGetPrice: widget.onGetPrice,
     );
   }
@@ -488,7 +466,7 @@ class _State extends State<SaleLikePage> {
 
   @override
   void dispose() {
-    widget.searchTextController?.dispose();
+    // widget.searchTextController?.dispose();
     // if (_locationSubscriptionStream != null) {
     _locationSubscriptionStream?.cancel();
     // }
@@ -529,5 +507,18 @@ class _State extends State<SaleLikePage> {
         _loading = false;
       });
     });
+  }
+
+  Widget _getQuantityLabel(item) {
+    var quantity = doubleOrZero(item?['quantity'] ?? '');
+    var stockable = item?['stockable'] == true;
+    // var pc = Theme.of(context).colorScheme.primary;
+    var ec = Theme.of(context).colorScheme.error;
+    return BodyMedium(
+      text: stockable
+          ? '${quantity <= 0 ? 'o/s, ' : ''} ${formatNumber(quantity)}'
+          : 'n/a',
+      color: stockable ? (quantity <= 0 ? ec : null) : null,
+    );
   }
 }

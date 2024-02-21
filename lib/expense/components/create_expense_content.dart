@@ -124,30 +124,6 @@ class _State extends State<CreateExpenseContent> {
               text: state['creating'] == true ? "Waiting..." : "Save expense",
               onPressed: state['creating'] == true ? () {} : _onPressed,
             )
-            // Container(
-            //   height: 64,
-            //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: SizedBox(
-            //           height: 40,
-            //           child: OutlinedButton(
-            //             onPressed:
-            //                 state['creating'] == true ? null : _onPressed,
-            //             child: Text(
-            //               state['creating'] == true
-            //                   ? "Waiting..."
-            //                   : "Save expense",
-            //               style: const TextStyle(fontSize: 16),
-            //             ),
-            //           ),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
-            // Text(state['req_err'])
           ],
         ),
       ),

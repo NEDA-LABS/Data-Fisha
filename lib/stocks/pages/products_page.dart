@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
@@ -27,11 +29,11 @@ class ProductsPage extends PageBase {
   final Map<String, dynamic Function(dynamic)> initialFilter;
 
   const ProductsPage({
-    Key? key,
+    super.key,
     this.initialFilter = const {},
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'ProductsPage');
+  }) : super(pageName: 'ProductsPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -58,7 +60,10 @@ class _State extends State<ProductsPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: _getAppBar(),
       staticChildren: [
-        _ifLargerScreen(getTableContextMenu(_getContextItems())),
+        // _ifLargerScreen(
+            getTableContextMenu(_getContextItems())
+        // ),
+        ,
         _loading(_isLoading),
         _ifLargerScreen(_tableHeader())
       ],
@@ -327,11 +332,9 @@ class _State extends State<ProductsPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 margin: const EdgeInsets.only(right: 8),
               ),
-              Text(_['stockable'] == false ? 'N/A' : 'In stock',
-                  style: _inStyle()),
+              BodyMedium(text: _['stockable'] == false ? 'N/A' : 'In stock', color: healthColor ),
               appendQuantity
-                  ? Text(' ( ${formatNumber(_['quantity'])} )',
-                      style: _inStyle())
+                  ? BodyMedium(text: ' ( ${formatNumber(_['quantity'])} )', color: healthColor,)
                   : Container(),
             ],
           ),
@@ -346,10 +349,9 @@ class _State extends State<ProductsPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 margin: const EdgeInsets.only(right: 8),
               ),
-              Text('Out stock', style: _outStyle()),
+              BodyMedium(text: 'Out stock', color: criticalColor,),
               appendQuantity
-                  ? Text(' ( ${formatNumber(_['quantity'])} )',
-                      style: _outStyle())
+                  ? BodyMedium(text: ' ( ${formatNumber(_['quantity'])} )', color: criticalColor,)
                   : Container(),
             ],
           ))(product);
@@ -365,36 +367,16 @@ class _State extends State<ProductsPage> {
             ListTile(
               leading: const Icon(Icons.card_giftcard),
               trailing: const Icon(Icons.chevron_right),
-              title: Text(_getAddProductMenu().name),
+              title: BodyLarge(text: _getAddProductMenu().name),
               onTap: () {
                 _getAddProductMenu().pressed();
                 Navigator.of(context).maybePop();
               },
             ),
             const HorizontalLine(),
-            // ListTile(
-            //   leading: const Icon(Icons.free_breakfast),
-            //   trailing: const Icon(Icons.chevron_right),
-            //   title: Text(_getAddNonStockableProductMenu().name),
-            //   onTap: () {
-            //     _getAddNonStockableProductMenu().pressed();
-            //     Navigator.of(context).maybePop();
-            //   },
-            // ),
-            const HorizontalLine(),
-            // ListTile(
-            //   leading: const Icon(Icons.home_repair_service_rounded),
-            //   trailing: const Icon(Icons.chevron_right),
-            //   title: Text(_getAddServiceMenu().name),
-            //   onTap: () {
-            //     _getAddServiceMenu().pressed();
-            //     Navigator.of(context).maybePop();
-            //   },
-            // ),
-            const HorizontalLine(),
             ListTile(
               leading: const Icon(Icons.file_download_rounded),
-              title: Text(_getExportMenu().name),
+              title: BodyLarge(text: _getExportMenu().name),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 _getExportMenu().pressed();
@@ -404,7 +386,7 @@ class _State extends State<ProductsPage> {
             const HorizontalLine(),
             ListTile(
               leading: const Icon(Icons.refresh),
-              title: Text(_getReloadMenu().name),
+              title: BodyLarge(text: _getReloadMenu().name),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.of(context).maybePop();

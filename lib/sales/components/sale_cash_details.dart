@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -21,17 +22,11 @@ class CashSaleDetail extends StatefulWidget {
 class _State extends State<CashSaleDetail> {
   @override
   Widget build(BuildContext context) {
-    // var titleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
-    // var title = Text(sale['product'] ?? '', style: titleStyle);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
         shrinkWrap: true,
-        children: [
-          // ListTile(title: title, dense: true),
-          _actionButtons(context),
-          ..._saleFields()
-        ],
+        children: [_actionButtons(context), ..._saleFields()],
       ),
     );
   }
@@ -88,16 +83,14 @@ class _State extends State<CashSaleDetail> {
   }
 
   _listItem(e, item) {
-    var titleStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
-    var subStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-    var subtitle = Text('${item[e]}', style: subStyle);
+    var subtitle = BodyLarge(text: '${item[e]}');
     if (e == 'sellerObject') {
       var getSeller = compose(
           [propertyOr('username', (p0) => ''), propertyOrNull('sellerObject')]);
-      subtitle = Text('${getSeller(item)}', style: subStyle);
+      subtitle = BodyLarge(text: '${getSeller(item)}');
     }
     return ListTile(
-      title: Text('$e', style: titleStyle),
+      title: BodyLarge(text: '$e'),
       subtitle: subtitle,
       dense: true,
     );

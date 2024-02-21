@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -56,7 +57,7 @@ class _State extends State<CashSaleRefundContent> {
                 error: states['e_q'] ?? '',
                 placeholder: ''),
             _submitButton(context, states, updateState),
-            Text(states['error'] ?? '')
+            BodyLarge(text: states['error'] ?? '')
           ],
         ),
       ),
@@ -74,9 +75,8 @@ class _State extends State<CashSaleRefundContent> {
         onPressed: states['loading'] == true
             ? null
             : () => _submitRefund(states, updateState),
-        child: Text(
+        child: BodyLarge(text:
           states['loading'] ? "Waiting..." : "Submit.",
-          style: const TextStyle(fontSize: 16),
         ),
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/update_user_password_content.dart';
 import 'package:smartstock/account/services/shop_users.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/MenuContextAction.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/delete_dialog.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
@@ -9,9 +11,7 @@ shopUserDetail(Map item, context) => Padding(
     padding: const EdgeInsets.all(16.0),
     child: ListView(shrinkWrap: true, children: [
       ListTile(
-          title: Text(item['username'] ?? '',
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+          title: TitleMedium(text: item['username'] ?? ''),
           dense: true,
           onTap: null),
       SingleChildScrollView(
@@ -61,9 +61,7 @@ shopUserDetail(Map item, context) => Padding(
     ]));
 
 _listItem(e, item) => ListTile(
-    title: Text('$e',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
-    subtitle: Text('${item[e]}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+    title: BodyLarge(text: '$e'),
+    subtitle: BodyLarge(text: '${item[e]}'),
     // onTap: () {},
     dense: true);

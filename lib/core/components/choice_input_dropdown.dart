@@ -132,7 +132,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
         var text = '${widget.onTitle(items[index]) ?? ''}';
         return widget.multiple
             ? CheckboxListTile(
-                title: Text(firstLetterUpperCase(text)),
+                title: BodyLarge(text: firstLetterUpperCase(text)),
                 value: _selected.keys.contains(_sha1e(items[index])),
                 onChanged: (v) {
                   setState(() {

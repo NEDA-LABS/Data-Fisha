@@ -80,17 +80,6 @@ class _State extends State<PaymentBody> {
                   const TableLikeListHeaderCell(""),
                   TableLikeListHeaderCell("${_getBalance(_remoteSubscription)}")
                 ]),
-                // const Text(
-                //     'Ukimaliza weka kumbukumbu namba apo chini. Kisha bofya thibitisha malipo.'),
-                // TextInput(
-                //   onText: (v) {},
-                //   placeholder: 'Kumbukumbu namba',
-                // ),
-                // raisedButton(
-                //   title: 'Thibitisha malipo.',
-                //   height: 40,
-                // ),
-                // const Text('Payment instruction'),
                 Card(
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -124,33 +113,6 @@ Ukishalipa tuma ujuma kwenda namba 0764 943 055 ukisema umeshalipa.
                   ),
                 )
                 // SizedBox(height: 16),
-                // Card(
-                //   child: Column(
-                //     mainAxisSize: MainAxisSize.min,
-                //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                //     children: [
-                //       Text('MITANDAO MINGINE'),
-                //       HorizontalLine(),
-                //       Text('''
-                //
-                //       ''')
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(height: 16),
-                // Card(
-                //   child: Column(
-                //     mainAxisSize: MainAxisSize.min,
-                //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                //     children: [
-                //       Text('BENKI'),
-                //       HorizontalLine(),
-                //       Text('''
-                //
-                //       ''')
-                //     ],
-                //   ),
-                // )
               ],
             ),
           ),

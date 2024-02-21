@@ -23,6 +23,7 @@ class _State extends State<ProfilePage>{
     return ResponsivePage(
       office: 'Menu',
       current: '/account/',
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sliverAppBar: SliverSmartStockAppBar(
         title: "Profile",
         showBack: true,
