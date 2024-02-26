@@ -5,12 +5,13 @@ import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/smartstock.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/TextInput.dart';
-import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/smartstock.dart';
 
 class LoginForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -75,21 +76,33 @@ class _State extends State<LoginForm> {
       }
       updateState({'e_u': '', 'reset_loading': true});
       accountResetPassword(username).then((value) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const BodyMedium(text: "Info"),
-            content: BodyLarge(text: '$value'),
-          ),
+        showTransactionCompleteDialog(
+          context,
+          (value?['message'])??'$value', title: 'Error',
+          // builder: (context) => AlertDialog(
+          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
         );
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => AlertDialog(
+        //     title: const BodyMedium(text: "Info"),
+        //     content: BodyLarge(text: '$value'),
+        //   ),
+        // );
       }).catchError((error) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const BodyMedium(text: "Error"),
-            content: BodyLarge(text: '$error'),
-          ),
+        showTransactionCompleteDialog(
+          context,
+          (error?['message'])??'$error', title: 'Error',
+          // builder: (context) => AlertDialog(
+          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
         );
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => AlertDialog(
+        //     title: const BodyMedium(text: "Error"),
+        //     content: BodyLarge(text: '$error'),
+        //   ),
+        // );
       }).whenComplete(() {
         updateState({'reset_loading': false});
       });
@@ -140,10 +153,16 @@ class _State extends State<LoginForm> {
         );
       }
     }).catchError((error) {
-      showDialog(
-          context: context,
-          builder: (context) =>
-              AlertDialog(title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')));
+      showTransactionCompleteDialog(
+        context,
+        (error?['message'])??'$error', title: 'Error',
+        // builder: (context) => AlertDialog(
+        //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+      );
+      // showDialog(
+      //     context: context,
+      //     builder: (context) =>
+      //         AlertDialog(title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')));
     }).whenComplete(() => updateState({'loading': false}));
   }
 

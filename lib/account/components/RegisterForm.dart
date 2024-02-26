@@ -5,6 +5,7 @@ import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/smartstock.dart';
 import 'package:smartstock/core/helpers/configs.dart';
@@ -106,7 +107,7 @@ class _State extends State<RegisterForm> {
     if ((email is String && email.isEmpty) || email is! String) {
       err['e_email'] = 'Email required';
     }
-    if ((country is String && country.isEmpty) || country is! String) {
+    if ((country is Map && country['name'].isEmpty) || country is! Map) {
       err['e_country'] = 'Country required';
     }
     if ((mobile is String && mobile.isEmpty) || mobile is! String) {
@@ -120,10 +121,12 @@ class _State extends State<RegisterForm> {
     var isValid = _isFormValid(states, updateState);
     if (isValid == true) {
       lE(error) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')));
+        showTransactionCompleteDialog(
+          context,
+          (error?['message'])??'$error', title: 'Error',
+          // builder: (context) => AlertDialog(
+          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+        );
       }
 
       var data = {
@@ -134,9 +137,9 @@ class _State extends State<RegisterForm> {
         'lastname': '.',
         'mobile': '255${states['mobile']}',
         'businessName': states['businessName'],
-        'region': states['country'],
-        'country': states['country'],
-        'street': states['country'],
+        'region': states['country']?['name'] ?? 'n/a',
+        'country': states['country']?['name'] ?? 'n/a',
+        'street': states['country']?['name'] ?? 'n/a',
         'vendor': {'name': getVendorName(), 'cost': getVendorCost()}
       };
       updateState({'loading': true});
@@ -271,17 +274,19 @@ class _State extends State<RegisterForm> {
     return ChoicesInput(
       choice: _country,
       label: "Country",
-      onChoice: (x){
-        _country=x;
-        updateState(
-            {'country': x, 'e_country': x.isNotEmpty ? '' : 'Country required'});
+      onChoice: (x) {
+        _country = x;
+        updateState({
+          'country': x,
+          'e_country': x.isNotEmpty ? '' : 'Country required'
+        });
       },
       error: states['e_country'] ?? '',
       onLoad: ([skipLocal = false]) async => getCountries(),
       placeholder: "Choose country",
       onField: (a) {
-        if(a is Map){
-          return '${a['name']??''} - ${a['code']??''}';
+        if (a is Map) {
+          return '${a['name'] ?? ''} - ${a['code'] ?? ''}';
         }
         return '';
       },
@@ -308,12 +313,14 @@ class _State extends State<RegisterForm> {
               height: 48,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(48)
-              ),
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(48)),
               child: TextButton(
                 onPressed: () => _registerPressed(states, updateState, context),
-                child: BodyLarge(text: "Register", color: Theme.of(context).colorScheme.onPrimary,),
+                child: BodyLarge(
+                  text: "Register",
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
     );
