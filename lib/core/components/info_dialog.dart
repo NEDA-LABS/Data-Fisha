@@ -50,7 +50,7 @@ Future showTransactionCompleteDialog(
       // ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: BodyLarge(text: message, textAlign: TextAlign.center),
+        child: BodyLarge(text: '$message', textAlign: TextAlign.center),
       ),
       // onPrint != null ? const WhiteSpacer(height: 16) : Container(),
       // onPrint != null
