@@ -124,7 +124,7 @@ class _State extends State<UsersPage> {
     getShopUsers().then((value) {
       users = value is List ? value : [];
     }).catchError((err) {
-      showInfoDialog(context, err);
+      showTransactionCompleteDialog(context, err);
     }).whenComplete(() {
       setState(() {
         loading = false;

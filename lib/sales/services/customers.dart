@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/sales/services/api_customer.dart';
 import 'package:smartstock/sales/services/cache_customer.dart';
-
 
 Future<List<dynamic>> getCustomerFromCacheOrRemote({
   skipLocal = false,
@@ -20,7 +19,7 @@ Future<List<dynamic>> getCustomerFromCacheOrRemote({
       List rCustomers = await salesCustomersRestAPI(shop);
       rCustomers = await compute(
           _filterAndSort, {"customers": rCustomers, "query": stringLike});
-      await saveLocalCustomers(shopToApp(shop), rCustomers);
+      saveLocalCustomers(shopToApp(shop), rCustomers).catchError((e) {});
       return rCustomers;
     },
     (x) => compute(_filterAndSort, {"customers": x, "query": stringLike}),

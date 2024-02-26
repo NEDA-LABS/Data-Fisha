@@ -19,6 +19,7 @@ import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/core/services/cart.dart';
+import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
@@ -27,14 +28,12 @@ import 'package:smartstock/stocks/services/supplier.dart';
 _fn(dynamic d) => null;
 
 class PurchaseCheckout extends StatefulWidget {
-  final String batchId;
   final List<CartModel> carts;
-  final Function(dynamic data) onDoneSaving;
+  final Function(dynamic data) onDone;
 
   const PurchaseCheckout({
     required this.carts,
-    required this.batchId,
-    this.onDoneSaving = _fn,
+    this.onDone = _fn,
     super.key,
   });
 
@@ -43,6 +42,7 @@ class PurchaseCheckout extends StatefulWidget {
 }
 
 class _State extends State<PurchaseCheckout> {
+  final String _batchId = generateUUID();
   bool verifying = false;
   List<FileData?> _fileData = [];
   bool _confirmingPurchase = false;
@@ -96,52 +96,6 @@ class _State extends State<PurchaseCheckout> {
           ],
         ));
   }
-
-  // List<FileData?> _getInitialFileData(Map purchase) {
-  //   return itOrEmptyArray(purchase['images']).map((x) {
-  //     String name = x.split('/').last;
-  //     String ext = name.split('.').last;
-  //     return FileData(
-  //         stream: null, extension: ext, size: -1, name: name, path: x);
-  //   }).toList();
-  // }
-
-  // Widget _getFileSelectBuilder(isEmpty, onPress) {
-  //   return Container(
-  //     margin: const EdgeInsets.only(top: 16),
-  //     child: InkWell(
-  //       onTap: onPress,
-  //       child: LayoutBuilder(
-  //         builder: (context, constraints) {
-  //           return Container(
-  //               // height: 10,
-  //               alignment: Alignment.center,
-  //               padding: const EdgeInsets.all(8),
-  //               width: constraints.maxWidth,
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(8),
-  //                 border: Border.all(
-  //                   color: Theme.of(context).colorScheme.background,
-  //                   width: 1,
-  //                 ),
-  //               ),
-  //               child: const Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                 children: [
-  //                   BodyLarge(text: "Click to select image"),
-  //                   WhiteSpacer(height: 6),
-  //                   LabelLarge(
-  //                     text: "Recommended ration 1:1",
-  //                     color: Colors.grey,
-  //                   ),
-  //                 ],
-  //               ));
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _sectionWrapper({
     required Widget child,
@@ -422,67 +376,6 @@ class _State extends State<PurchaseCheckout> {
     }).toList();
   }
 
-  // void _makePayment() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) {
-  //       return Dialog(
-  //         backgroundColor: Theme.of(context).colorScheme.surface,
-  //         surfaceTintColor: Colors.transparent,
-  //         child: DialogContentWrapper(
-  //             child: AddPurchasePaymentContent(
-  //           purchase: _item,
-  //           onDone: (payment) {
-  //             _updateState(() {
-  //               _item['payments'] = [
-  //                 ...itOrEmptyArray(_item['payments']),
-  //                 {'date': toSqlDate(DateTime.now()), ...payment}
-  //               ];
-  //             });
-  //             widget.onDonePayment(payment);
-  //           },
-  //         )),
-  //       );
-  //     },
-  //   );
-  // }
-  //
-  // void _markNotVerified() {
-  //   // _updateState(() {
-  //   //   verifying = true;
-  //   // });
-  //   // productsPurchaseMetadataUpdate(
-  //   //   id: _item['id'],
-  //   //   metadata: {'verified': false},
-  //   // ).then((value) {
-  //   //   _item['metadata'] = {..._item['metadata'] ?? {}, 'verified': false};
-  //   //   widget.onDoneVerify({'verified': false});
-  //   // }).catchError((error) {
-  //   //   showInfoDialog(context, error, title: 'Error');
-  //   // }).whenComplete(() {
-  //   //   _updateState(() {
-  //   //     verifying = false;
-  //   //   });
-  //   // });
-  // }
-
-  // _getInvPayment(purchase) {
-  //   if (purchase is Map) {
-  //     var type = purchase['type'];
-  //     if (type == 'invoice') {
-  //       var payments = purchase['payments'];
-  //       if (payments is List) {
-  //         double a = payments.fold(0,
-  //             (dynamic a, element) => a + doubleOrZero('${element['amount']}'));
-  //         return a;
-  //       }
-  //     } else {
-  //       return doubleOrZero(purchase['amount']);
-  //     }
-  //   }
-  //   return 0;
-  // }
-
   _updateState(VoidCallback fn) {
     if (mounted) {
       setState(fn);
@@ -559,7 +452,7 @@ class _State extends State<PurchaseCheckout> {
       "date": _purchaseDate,
       "due": _purchaseDue,
       "refNumber": _reference,
-      "batchId": widget.batchId,
+      "batchId": _batchId,
       "amount": totalAmount,
       "supplier": {"name": _vendor['name'] ?? 'general'},
       "user": {"username": currentUser['username'] ?? ''},
@@ -603,11 +496,11 @@ class _State extends State<PurchaseCheckout> {
         _updateState(() {
           _confirmingPurchase = false;
         });
-        showInfoDialog(context, 'Purchase added').whenComplete(() {
-          widget.onDoneSaving(value);
+        showTransactionCompleteDialog(context, 'Purchase added').whenComplete(() {
+          widget.onDone(value);
         });
       }).catchError((error) {
-        showInfoDialog(context, error, title: 'Error');
+        showTransactionCompleteDialog(context, error, title: 'Error');
         _updateState(() {
           _confirmingPurchase = false;
         });

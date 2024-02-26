@@ -96,7 +96,6 @@ class _State extends State<SaleLikePage> {
     });
     widget.searchTextController?.addListener(() {
       if (widget.searchTextController?.value.text.isEmpty == true) {
-        // print("Empty LISTERNERRRRR");
         _refresh(false);
       }
     });
@@ -419,6 +418,12 @@ class _State extends State<SaleLikePage> {
     return carts.fold(0, (dynamic a, element) => a + element.quantity);
   }
 
+  _clearCart(){
+    _updateState(() {
+      _carts=[];
+    });
+  }
+
   Widget _cartDrawer(void Function(VoidCallback) refresh) {
     return CartDrawer(
       onAddItem: (id, q) {
@@ -438,10 +443,10 @@ class _State extends State<SaleLikePage> {
       onCartCheckout: () {
         if (getIsSmallScreen(context)) {
           Navigator.of(context).maybePop().whenComplete(() {
-            widget.onCheckout(_carts);
+            widget.onCheckout(_carts,_clearCart);
           });
         } else {
-          widget.onCheckout(_carts);
+          widget.onCheckout(_carts,_clearCart);
         }
       },
       carts: _carts,
@@ -480,7 +485,7 @@ class _State extends State<SaleLikePage> {
     widget.onGetProductsLike(skip, q).then((value) {
       _items = value;
     }).catchError((error) {
-      showInfoDialog(context, error);
+      showTransactionCompleteDialog(context, error);
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -501,7 +506,7 @@ class _State extends State<SaleLikePage> {
     }).then((value) {
       _items = itOrEmptyArray(value);
     }).catchError((error) {
-      showInfoDialog(context, error);
+      showTransactionCompleteDialog(context, error);
     }).whenComplete(() {
       setState(() {
         _loading = false;

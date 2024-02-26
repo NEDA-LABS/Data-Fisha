@@ -12,7 +12,6 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
@@ -55,9 +54,9 @@ class _State extends State<PurchaseDetails> {
 
   @override
   void initState() {
-    getActiveShop().then((value){
+    getActiveShop().then((value) {
       _shop = value;
-    }).catchError((e){});
+    }).catchError((e) {});
     _item = {...widget.item};
     _fileData = _getInitialFileData(_item);
     super.initState();
@@ -79,8 +78,7 @@ class _State extends State<PurchaseDetails> {
             slivers: [
               // SliverToBoxAdapter(child: _getHeaderSection(top: 24)),
               // SliverToBoxAdapter(child: _getActionsSection(top: 16)),
-              SliverToBoxAdapter(
-                  child: _getDetailSection(shop: _shop, top: 8)),
+              SliverToBoxAdapter(child: _getDetailSection(shop: _shop, top: 8)),
               SliverToBoxAdapter(child: _getFilesSection()),
               SliverToBoxAdapter(child: _getPaymentHeader(shop: _shop)),
               SliverList.list(children: _getPaymentBody(shop: _shop)),
@@ -495,7 +493,9 @@ class _State extends State<PurchaseDetails> {
       _item['metadata'] = {..._item['metadata'] ?? {}, 'verified': false};
       widget.onDoneVerify({'verified': false});
     }).catchError((error) {
-      showInfoDialog(context, error, title: 'Error');
+      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
+
+      });
     }).whenComplete(() {
       _updateState(() {
         verifying = false;
@@ -523,8 +523,10 @@ class _State extends State<PurchaseDetails> {
   void _markVerified() {
     bool isPaid = _getInvPayment(_item) >= doubleOrZero(_item['amount']);
     if (!isPaid) {
-      showInfoDialog(context,
-          'Invoice is not paid yet, you can not mark it as reviewed. Finalize purchase invoice payments');
+      showTransactionCompleteDialog(context,
+          'Invoice is not paid yet, you can not mark it as reviewed. Finalize purchase invoice payments',onClose: (){
+
+          });
       return;
     }
     _updateState(() {
@@ -537,7 +539,9 @@ class _State extends State<PurchaseDetails> {
       _item['metadata'] = {..._item['metadata'] ?? {}, 'verified': true};
       widget.onDoneVerify({'verified': true});
     }).catchError((error) {
-      showInfoDialog(context, error, title: 'Error');
+      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
+
+      });
     }).whenComplete(() {
       _updateState(() {
         verifying = false;
@@ -604,12 +608,16 @@ class _State extends State<PurchaseDetails> {
       // if (kDebugMode) {
       //   print(value);
       // }
-      showInfoDialog(context, 'Attachments updated');
+      showTransactionCompleteDialog(context, 'Attachments updated',onClose: (){
+
+      });
       _filesTouched = false;
       widget.onDoneUpdate({'images': _item['images']});
     }).catchError((error) {
       _item['images'] = [];
-      showInfoDialog(context, error, title: 'Error');
+      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
+
+      });
     }).whenComplete(() {
       _updateState(() {
         _updatingAttachment = false;

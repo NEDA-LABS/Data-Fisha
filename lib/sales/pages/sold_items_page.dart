@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/SearchFilter.dart';
 import 'package:smartstock/core/models/date_range_name.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/sales/services/report.dart';
@@ -29,10 +28,10 @@ class SoldItemsPage extends PageBase {
   final OnChangePage onChangePage;
 
   const SoldItemsPage({
-    Key? key,
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'SoldItemsPage');
+  }) : super(pageName: 'SoldItemsPage');
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -41,6 +40,7 @@ class SoldItemsPage extends PageBase {
 class _State extends State<SoldItemsPage> {
   bool _loading = false;
   TextEditingController _searchInputController = TextEditingController();
+
   // int size = 20;
   List _filteredSoldItems = [];
   List _soldItems = [];
@@ -150,8 +150,9 @@ class _State extends State<SoldItemsPage> {
   @override
   Widget build(context) {
     var isSmallScreen = getIsSmallScreen(context);
-    var tableContext =
-        isSmallScreen ? Container() : getTableContextMenu(_contextSales(context));
+    var tableContext = isSmallScreen
+        ? Container()
+        : getTableContextMenu(_contextSales(context));
     var tableHeader = isSmallScreen ? Container() : _tableHeader();
     var fab = FloatingActionButton(
         onPressed: () => _showMobileContextMenu(context),
@@ -189,7 +190,9 @@ class _State extends State<SoldItemsPage> {
         _searchInputController = TextEditingController();
       }
     }).catchError((error) {
-      showInfoDialog(context, error, title: "Error");
+      showTransactionCompleteDialog(context, error, title: "Error",onClose: (){
+
+      });
     }).whenComplete(() {
       _updateState(() {
         _loading = false;
@@ -227,7 +230,8 @@ class _State extends State<SoldItemsPage> {
                 child: _productNameView(_filteredSoldItems[index]),
               ),
               const WhiteSpacer(width: 16),
-              BodyLarge(text: '${formatNumber(_filteredSoldItems[index]['amount'])}')
+              BodyLarge(
+                  text: '${formatNumber(_filteredSoldItems[index]['amount'])}')
             ],
           ),
           subtitle: Row(
@@ -342,7 +346,9 @@ class _State extends State<SoldItemsPage> {
       _rangeName = DateRangeName.custom;
       _refresh();
     }).catchError((error) {
-      showInfoDialog(context, error);
+      showTransactionCompleteDialog(context, error,onClose: (){
+
+      });
     });
   }
 

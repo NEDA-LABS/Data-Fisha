@@ -53,7 +53,7 @@ class ExpenseDetail extends StatelessWidget {
                                   : LaunchMode.externalApplication,
                               webOnlyWindowName: '_blank'
                             ).then((_) {}).catchError((error) {
-                              showInfoDialog(context, error);
+                              showTransactionCompleteDialog(context, error);
                             });
                           },
                           title: 'View receipt',

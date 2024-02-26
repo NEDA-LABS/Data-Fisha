@@ -1,19 +1,18 @@
 import 'dart:async';
 
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
 import 'package:smartstock/core/services/cart.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/sync.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/api_invoice.dart';
 
-Future<List> getInvoiceSalesFromCacheOrRemote(
-    startAt, size, [String filterBy='customer', String filterValue='']) async {
+Future<List> getInvoiceSalesFromCacheOrRemote(startAt, size,
+    [String filterBy = 'customer', String filterValue = '']) async {
   var shop = await getActiveShop();
   var getInvoices = prepareGetRemoteInvoiceSales(
       size: size,
@@ -23,14 +22,9 @@ Future<List> getInvoiceSalesFromCacheOrRemote(
   return await getInvoices(shop);
 }
 
-Future _printInvoiceItems(List<CartModel> carts, discount, Map customer, batchId) async {
-  var items = cartItems(carts, discount, false, customer);
-  var data = await cartItemsToPrinterData(
-      items, customer, (cart) => cart['stock']['retailPrice']);
-  await posPrint(data: data, qr: batchId);
-}
-
-Future<Map> _carts2Invoice(List<CartModel> carts, dis, Map customer, cartId, batchId) async {
+Future<Map> _carts2Invoice(
+    List<CartModel> carts, dis, Map customer, cartId, batchId,
+    {required double taxPercentage}) async {
   var discount = doubleOrZero('$dis');
   var totalAmount = doubleOrZero(
       '${cartTotalAmount(carts, (product) => product['retailPrice'])}');
@@ -58,22 +52,28 @@ Future<Map> _carts2Invoice(List<CartModel> carts, dis, Map customer, cartId, bat
           "stockable": cart.product['stockable'],
           "id": cart.product['id'],
           "purchase": cart.product['purchase'],
-        }
+        },
+        "metadata": {"tax": taxPercentage / carts.length}
       };
     }).toList()
   };
 }
 
-Future onSubmitInvoice(List<CartModel> carts, Map customer, double discount) async {
-  if ('${customer['displayName']??''}'.isEmpty) {
+Future onSubmitInvoice(
+    {required List<CartModel> carts,
+    required Map customer,
+    required double discount,
+    required double taxPercentage,
+    required String cartId}) async {
+  if ('${customer['displayName'] ?? ''}'.isEmpty) {
     throw "Please select customer, at the top right of the cart.";
   }
-  String cartId = generateUUID();
+  // String cartId = generateUUID();
   String batchId = generateUUID();
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/invoice';
-  var invoice =
-      await _carts2Invoice(carts, discount, customer, cartId, batchId);
+  var invoice = await _carts2Invoice(carts, discount, customer, cartId, batchId,
+      taxPercentage: taxPercentage);
   var offlineFirst = await isOfflineFirstEnv();
   if (offlineFirst == true) {
     await saveLocalSync(batchId, url, invoice);
@@ -82,5 +82,4 @@ Future onSubmitInvoice(List<CartModel> carts, Map customer, double discount) asy
     var saveInvoice = prepareHttpPutRequest(invoice);
     await saveInvoice(url);
   }
-  _printInvoiceItems(carts, discount, customer, cartId).catchError((e) => null);
 }

@@ -12,7 +12,6 @@ import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -20,14 +19,14 @@ import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
-import 'package:smartstock/sales/pages/sales_cash_retail.dart';
+import 'package:smartstock/sales/pages/register_sale_page.dart';
 import 'package:smartstock/sales/services/sales.dart';
 
-class SalesCashPage extends PageBase {
+class ReceiptsPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
-  const SalesCashPage({
+  const ReceiptsPage({
     super.key,
     required this.onBackPage,
     required this.onChangePage,
@@ -37,7 +36,7 @@ class SalesCashPage extends PageBase {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SalesCashPage> {
+class _State extends State<ReceiptsPage> {
   final _debounce = Debounce(milliseconds: 500);
   bool _loading = false;
   String _query = '';
@@ -71,7 +70,7 @@ class _State extends State<SalesCashPage> {
 
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Cash sales",
+      title: "Sales receipts",
       showBack: true,
       backLink: '/sales/',
       showSearch: true,
@@ -117,7 +116,7 @@ class _State extends State<SalesCashPage> {
       ContextMenu(
         name: 'Create',
         pressed: () =>
-            widget.onChangePage(SalesCashRetail(onBackPage: widget.onBackPage)),
+            widget.onChangePage(RegisterSalePage(onBackPage: widget.onBackPage)),
       ),
       // ContextMenu(
       //   name: 'Add Wholesale',
@@ -132,10 +131,10 @@ class _State extends State<SalesCashPage> {
     return const SizedBox(
       height: 38,
       child: TableLikeListRow([
-        TableLikeListHeaderCell('Customer'),
-        TableLikeListHeaderCell('Amount ( TZS )'),
-        TableLikeListHeaderCell('Items'),
-        TableLikeListHeaderCell('Date'),
+        LabelMedium(text: 'CUSTOMER'),
+        LabelMedium(text: 'AMOUNT'),
+        LabelMedium(text: 'ITEMS'),
+        LabelMedium(text: 'DATE'),
       ]),
     );
   }
@@ -157,9 +156,7 @@ class _State extends State<SalesCashPage> {
       sliverAppBar: _appBar(context),
       staticChildren: [
         _loadingView(_loading),
-        getIsSmallScreen(context)
-            ? Container()
-            : getTableContextMenu(_contextSales(context)),
+        getTableContextMenu(_contextSales(context)),
         getIsSmallScreen(context) ? Container() : _tableHeader(),
       ],
       loading: _loading,
@@ -336,7 +333,7 @@ class _State extends State<SalesCashPage> {
                 onTap: () {
                   Navigator.of(context).maybePop();
                   widget.onChangePage(
-                      SalesCashRetail(onBackPage: widget.onBackPage));
+                      RegisterSalePage(onBackPage: widget.onBackPage));
                 },
               ),
               // const HorizontalLine(),

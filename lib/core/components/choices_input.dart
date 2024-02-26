@@ -24,7 +24,7 @@ class ChoicesInput extends StatefulWidget {
   const ChoicesInput({
     super.key,
     required this.onChoice,
-    this.comparisonKey='id',
+    this.comparisonKey = 'id',
     required this.choice,
     required this.onLoad,
     this.getAddWidget,
@@ -41,12 +41,10 @@ class ChoicesInput extends StatefulWidget {
 }
 
 class _State extends State<ChoicesInput> {
-
   @override
   void initState() {
     super.initState();
   }
-
 
   Widget _getFullWidthText() {
     return Expanded(
@@ -147,22 +145,25 @@ class _State extends State<ChoicesInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      widget.label.isNotEmpty
-          ? _getLabel(widget.label)
-          : const SizedBox(height: 0),
-      Container(
-        decoration: widget.showBorder
-            ? getInputBoxDecoration(context, widget.error)
-            : null,
-        child: Row(
-          children: [
-            _getFullWidthText(),
-            _actions(widget.onChoice, widget.getAddWidget, widget.onField)
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        widget.label.isNotEmpty
+            ? _getLabel(widget.label)
+            : const SizedBox(height: 0),
+        Container(
+          decoration: widget.showBorder
+              ? getInputBoxDecoration(context, widget.error)
+              : null,
+          child: Row(
+            children: [
+              _getFullWidthText(),
+              _actions(widget.onChoice, widget.getAddWidget, widget.onField)
+            ],
+          ),
         ),
-      ),
-      InputErrorMessageOrEmpty(widget.error)
-    ]);
+        InputErrorMessageOrEmpty(widget.error)
+      ],
+    );
   }
 }

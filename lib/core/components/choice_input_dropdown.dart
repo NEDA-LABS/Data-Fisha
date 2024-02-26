@@ -78,7 +78,7 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
       if (kDebugMode) {
         print(error);
       }
-      showInfoDialog(context, error);
+      showTransactionCompleteDialog(context, error);
     }).whenComplete(() {
       _updateState(() {
         _loading = false;

@@ -175,10 +175,10 @@ class _State extends State<CreateExpenseContent> {
             };
           }).toList());
     }).then((value) {
-      showInfoDialog(context, 'Expense created successful');
+      showTransactionCompleteDialog(context, 'Expense created successful');
       widget.onBackPage();
     }).catchError((e) {
-      showInfoDialog(context, e);
+      showTransactionCompleteDialog(context, e);
     }).whenComplete(() => _updateState({'creating': false}));
   }
 }

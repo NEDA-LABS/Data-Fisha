@@ -19,7 +19,7 @@ import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/sales/pages/sales_cash_retail.dart';
+import 'package:smartstock/sales/pages/register_sale_page.dart';
 import 'package:uuid/uuid.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io_client;
@@ -184,7 +184,7 @@ class _State extends State<SmartStock> {
       } else {
         var role = propertyOrNull('role')(user);
         if (role != 'admin' && _initialized == false) {
-          child = SalesCashRetail(onBackPage: _onBackPage);
+          child = RegisterSalePage(onBackPage: _onBackPage);
         }
       }
       if (child != null) {

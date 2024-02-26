@@ -143,10 +143,10 @@ Ukishalipa tuma ujuma kwenda namba 0764 943 055 ukisema umeshalipa.
         });
         Navigator.of(context).maybePop();
       } else {
-        showInfoDialog(context, 'It seems payment not received yet');
+        showTransactionCompleteDialog(context, 'It seems payment not received yet');
       }
     }).catchError((err) {
-      showInfoDialog(context, err, title: 'Error');
+      showTransactionCompleteDialog(context, err, title: 'Error');
     }).whenComplete(() {
       setState(() {
         loading = false;

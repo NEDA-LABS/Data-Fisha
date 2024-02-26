@@ -100,7 +100,7 @@ class _State extends State<ExpenseCategoriesPage> {
         .then((value) {
       _categories = value;
     }).catchError((err) {
-      showInfoDialog(context, '$err', title: 'Error');
+      showTransactionCompleteDialog(context, '$err', title: 'Error');
     }).whenComplete(() {
       setState(() {
         _isLoading = false;

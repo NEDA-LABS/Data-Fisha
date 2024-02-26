@@ -89,7 +89,7 @@ class _State extends State<DeleteDialog> {
     widget.onConfirm().then((value) {
       widget.onDone(value);
     }).catchError((err) {
-      showInfoDialog(context, err);
+      showTransactionCompleteDialog(context, err);
     }).whenComplete(() {
       setState(() {
         loading = false;

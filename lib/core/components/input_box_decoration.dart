@@ -9,7 +9,7 @@ _boxBorder(error, context) => Border.all(
 
 _boxRadius() => const BorderRadius.all(Radius.circular(8));
 
-getInputBoxDecoration(BuildContext context, String? error) => BoxDecoration(
-    color: Theme.of(context).colorScheme.surface,
+getInputBoxDecoration(BuildContext context, String? error, [Color? color]) => BoxDecoration(
+    color: color??Theme.of(context).colorScheme.surface,
     border: _boxBorder(error, context),
     borderRadius: _boxRadius());

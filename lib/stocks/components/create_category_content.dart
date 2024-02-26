@@ -127,7 +127,7 @@ class _State extends State<CreateCategoryContent> {
           Navigator.of(context).maybePop();
         });
       }).catchError((err) {
-        showInfoDialog(context, err);
+        showTransactionCompleteDialog(context, err);
       }).whenComplete(() {
         setState(() {
           createProgress = false;

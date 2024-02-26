@@ -68,12 +68,12 @@ class _State extends State<PurchaseCreatePage> {
     return doubleOrZero('${product['purchase']}');
   }
 
-  void _onCheckout(List<CartModel> carts) {
+  void _onCheckout(List<CartModel> carts,clearCart) {
     showDialogOrFullScreenModal(
       PurchaseCheckout(
-        batchId: generateUUID(),
         carts: carts,
-        onDoneSaving: (data) {
+        onDone: (data) {
+          clearCart();
           getProductsFromCacheOrRemote(true).catchError((e) => []);
           Navigator.of(context).maybePop().whenComplete(() {
             widget.onBackPage();

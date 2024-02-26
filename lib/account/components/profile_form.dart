@@ -129,9 +129,9 @@ class _State extends State<ProfileForm> {
       "firstname": fullname.replaceAll('.', ''),
       "lastname": '.'
     }).then((value) {
-      showInfoDialog(context, "Details updated");
+      showTransactionCompleteDialog(context, "Details updated");
     }).catchError((err) {
-      showInfoDialog(context, err, title: 'Error!');
+      showTransactionCompleteDialog(context, err, title: 'Error!');
     }).whenComplete(() {
       setState(() {
         loading = false;

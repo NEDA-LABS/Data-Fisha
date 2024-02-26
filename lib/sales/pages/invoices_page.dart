@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/debounce.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/date.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/invoice_details.dart';
-import 'package:smartstock/sales/pages/sales_invoice_retail.dart';
+import 'package:smartstock/sales/pages/register_sale_page.dart';
 import 'package:smartstock/sales/services/invoice.dart';
 
 class InvoicesPage extends PageBase {
@@ -91,8 +91,8 @@ class _InvoicesPage extends State<InvoicesPage> {
     return [
       ContextMenu(
         name: 'Create',
-        pressed: () =>
-            widget.onChangePage(InvoiceSalePage(onBackPage: widget.onBackPage)),
+        pressed: () => widget
+            .onChangePage(RegisterSalePage(onBackPage: widget.onBackPage)),
       ),
       ContextMenu(name: 'Reload', pressed: () => _refresh())
     ];
@@ -103,11 +103,11 @@ class _InvoicesPage extends State<InvoicesPage> {
     return SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListHeaderCell('Customer'),
-        TableLikeListHeaderCell('Date'),
-        TableLikeListHeaderCell('Amount ( TZS )'),
-        TableLikeListHeaderCell('Paid ( TZS )'),
-        TableLikeListHeaderCell('Status'),
+        LabelMedium(text: 'CUSTOMER'),
+        LabelMedium(text: 'DATE'),
+        LabelMedium(text: 'AMOUNT'),
+        LabelMedium(text: 'PAID'),
+        LabelMedium(text: 'STATUS'),
       ]),
     );
   }
@@ -238,8 +238,9 @@ class _InvoicesPage extends State<InvoicesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BodyLarge(text: '${_invoices[index]['date']}'),
-                  BodyLarge(text:
-                      'total ${compactNumber('${_invoices[index]['amount']}')}'),
+                  BodyLarge(
+                      text:
+                          'total ${compactNumber('${_invoices[index]['amount']}')}'),
                 ],
               ),
             ],
@@ -287,7 +288,6 @@ class _InvoicesPage extends State<InvoicesPage> {
   }
 
   _getStatusView(invoice) {
-    var tStyle = const TextStyle(fontSize: 14, color: Color(0xFF1C1C1C));
     var amount = doubleOrZero(invoice['amount']);
     var paidView = Container(
       height: 24,
@@ -297,7 +297,7 @@ class _InvoicesPage extends State<InvoicesPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: LabelLarge(text: "PAID"),
+      child: const LabelLarge(text: "PAID"),
     );
     getPayment() {
       var payments = invoice['payments'];
@@ -320,7 +320,8 @@ class _InvoicesPage extends State<InvoicesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,
-        child: LabelLarge(text: "${formatNumber((paid * 100) / amount, decimals: 0)}%"),
+        child: LabelLarge(
+            text: "${formatNumber((paid * 100) / amount, decimals: 0)}%"),
       );
     }
   }
@@ -339,9 +340,7 @@ class _InvoicesPage extends State<InvoicesPage> {
                 onTap: () {
                   Navigator.of(context).maybePop();
                   widget.onChangePage(
-                    InvoiceSalePage(
-                      onBackPage: widget.onBackPage,
-                    ),
+                    RegisterSalePage(onBackPage: widget.onBackPage),
                   );
                 },
               ),

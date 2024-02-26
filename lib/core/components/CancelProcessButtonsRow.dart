@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:smartstock/core/components/PrimaryAction.dart';
 import 'package:smartstock/core/components/TertriaryAction.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/helpers/util.dart';
 
 class CancelProcessButtonsRow extends StatelessWidget {
   final String? cancelText;
@@ -20,12 +19,12 @@ class CancelProcessButtonsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isSmallScreen = getIsSmallScreen(context);
+    // var isSmallScreen = getIsSmallScreen(context);
     return Row(
       children: [
-        proceedText == null && !isSmallScreen
-            ? Expanded(flex: 1, child: Container())
-            : Container(),
+        // proceedText == null && !isSmallScreen
+        //     ? Expanded(flex: 1, child: Container())
+        //     : Container(),
         Expanded(
           flex: 1,
           child: cancelText != null
@@ -33,7 +32,7 @@ class CancelProcessButtonsRow extends StatelessWidget {
                   onPressed: onCancel ?? () {}, text: cancelText ?? 'Cancel')
               : Container(),
         ),
-        WhiteSpacer(width: proceedText != null?16:0),
+        WhiteSpacer(width: proceedText != null ? 16 : 0),
         proceedText != null
             ? Expanded(
                 flex: 1,

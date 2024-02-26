@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/api.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_sync.dart';
@@ -8,7 +11,6 @@ import 'package:smartstock/core/services/date.dart';
 import 'package:smartstock/core/services/printer.dart';
 import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/sync.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/api_cash_sale.dart';
 
@@ -27,88 +29,100 @@ Future<List> getCashSalesFromCacheOrRemote(
   return sales;
 }
 
-Future<List> _carts2Sales(List carts, dis, wholesale, Map customer, cartId) async {
+Future<List> _cartToCashSale(
+    {required List carts,
+    required double discount,
+    required Map customer,
+    required String cartId,
+    required double taxPercentage}) async {
   var currentUser = await getLocalCurrentUser();
-  var discount = doubleOrZero('$dis');
+  // var discount = doubleOrZero('$dis');
   String stringDate = toSqlDate(DateTime.now());
   String stringTime = DateTime.now().toIso8601String();
-  String channel = wholesale ? 'whole' : 'retail';
-  return carts
-      .map((value) => ({
-            "amount": getCartItemSubAmount(
-                totalItems: carts.length,
-                totalDiscount: discount,
-                product: value.product,
-                quantity: value.quantity ?? 0,
-                wholesale: wholesale),
-            "discount": getCartItemDiscount(discount, carts.length),
-            "quantity": wholesale
-                ? (value.quantity ?? 0 * value.product['wholesaleQuantity'])
-                : value.quantity,
-            "product": value.product['product'],
-            "category": value.product['category'] ?? 'general',
-            "unit": value.product['unit'] ?? 'general',
-            "channel": channel,
-            "date": stringDate,
-            // "time": stringTime,
-            "timer": stringTime,
-            "customer": customer['displayName']??'',
-            "customerObject": {"id": '${customer['id']??'0'}', 'displayName': '${customer['displayName']??customer['name']??''}'},
-            "user": currentUser['username'] ?? 'null',
-            "sellerObject": {
-              "username": currentUser['username'] ?? '',
-              "lastname": currentUser['lastname'] ?? '',
-              "firstname": currentUser['firstname'] ?? '',
-              "email": currentUser['email'] ?? ''
-            },
-            "stock": value.product,
-            "cartId": cartId,
-            "batch": generateUUID(),
-            "stockId": value.product['id']
-          }))
-      .toList();
+  String channel = 'retail';
+  return carts.map((value) {
+    return {
+      "amount": getCartItemSubAmount(
+        totalItems: carts.length,
+        totalDiscount: discount,
+        product: value.product,
+        quantity: value.quantity ?? 0,
+      ),
+      "discount": (discount / carts.length),
+      "quantity": value.quantity,
+      "product": value.product['product'],
+      "category": value.product['category'] ?? 'general',
+      // "unit": value.product['unit'] ?? 'general',
+      "channel": channel,
+      "date": stringDate,
+      // "time": stringTime,
+      "timer": stringTime,
+      "customer": customer['displayName'] ?? '',
+      "customerObject": {
+        "id": '${customer['id'] ?? '0'}',
+        'displayName': '${customer['displayName'] ?? customer['name'] ?? ''}'
+      },
+      "user": currentUser['username'] ?? 'null',
+      "sellerObject": {
+        "username": currentUser['username'] ?? '',
+        "lastname": currentUser['lastname'] ?? '',
+        "firstname": currentUser['firstname'] ?? '',
+        "email": currentUser['email'] ?? ''
+      },
+      "stock": value.product,
+      "cartId": cartId,
+      "batch": generateUUID(),
+      "stockId": value.product['id'],
+      "metadata": {"tax": taxPercentage / carts.length}
+    };
+  }).toList();
 }
 
-Future _printSaleItems(
-    List<CartModel> carts, double discount, Map customer, bool wholesale, String batchId) async {
-  var items = cartItems(carts, discount, wholesale, customer);
-  var data = await cartItemsToPrinterData(
-      items,
-      customer,
-      (cart) => wholesale == true
-          ? cart['stock']['wholesalePrice']
-          : cart['stock']['retailPrice']);
-  await posPrint(data: data, qr: batchId);
-}
-
-_onSubmitSale(List<CartModel> carts, Map customer, discount, wholesale) async {
-  String cartId = generateUUID();
-  String batchId = generateUUID();
+Future onSubmitCashSale({
+  required List<CartModel> carts,
+  required double discount,
+  required Map customer,
+  required double taxPercentage,
+  required String cartId,
+}) async {
   var shop = await getActiveShop();
   var url = '${shopFunctionsURL(shopToApp(shop))}/sale/cash';
-  var sales = await _carts2Sales(carts, discount, wholesale, customer, cartId);
+  var sales = await _cartToCashSale(
+    carts: carts,
+    customer: customer,
+    discount: discount,
+    taxPercentage: taxPercentage,
+    cartId: cartId,
+  );
   var offlineFirst = await isOfflineFirstEnv();
   if (offlineFirst == true) {
-    await saveLocalSync(batchId, url, sales);
+    String lid = generateUUID();
+    await saveLocalSync(lid, url, sales);
     oneTimeLocalSyncs();
   } else {
     var saveSales = prepareHttpPostRequest(sales);
     await saveSales(url);
   }
-  _printSaleItems(carts, discount, customer, wholesale, cartId)
-      .catchError((e) {});
 }
 
-Future onSubmitRetailSale(List<CartModel> carts, Map customer, discount) async {
-  return _onSubmitSale(carts, customer, discount, false);
-}
+// Future printSaleCartItems({
+//   required List<CartModel> carts,
+//   required double discount,
+//   required Map customer,
+//   required int taxPercentage,
+// }) async {
+//   var items = cartItems(carts, discount, customer);
+//   var data = await cartItemsToPrinterData(
+//       items, customer, (cart) => cart['stock']['retailPrice']);
+//   await posPrint(data: data);
+// }
 
-Future onSubmitWholeSale(List<CartModel> carts, Map customer, discount) async {
-  if ('${customer['displayName']??''}'.isEmpty) {
-    throw "Please select customer, at the top right of the cart";
-  }
-  return _onSubmitSale(carts, customer, discount, true);
-}
+// Future onSubmitWholeSale(List<CartModel> carts, Map customer, discount) async {
+//   if ('${customer['displayName']??''}'.isEmpty) {
+//     throw "Please select customer, at the top right of the cart";
+//   }
+//   return _onSubmitSale(carts, customer, discount, true);
+// }
 
 Future rePrintASale(sale) async {
   mapItem(item) {
@@ -143,10 +157,7 @@ Future rePrintASale(sale) async {
 
   var getId = propertyOr('id', (p0) => 0);
   var data = await cartItemsToPrinterData(
-    getItems(sale),
-    getCustomer(sale),
-    onGetPrice,
-    date: getDate(sale),
-  );
+      getItems(sale), getCustomer(sale), onGetPrice,
+      date: getDate(sale));
   await posPrint(data: data, force: true, qr: getId(sale));
 }

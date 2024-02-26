@@ -169,7 +169,7 @@ class _State extends State<ShopUserCreatePage> {
       // print(value);
       // navigateTo('/account/users');
     }).catchError((onError) {
-      showInfoDialog(context, '$onError}', title: "Error!");
+      showTransactionCompleteDialog(context, '$onError}', title: "Error!");
     }).whenComplete(() {
       setState(() {
         loading = false;

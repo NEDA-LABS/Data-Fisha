@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/sales/components/create_customer_content.dart';
-import 'package:smartstock/sales/services/customer.dart';
+import 'package:smartstock/sales/services/customers.dart';
 
 class CustomersPage extends PageBase {
   final OnBackPage onBackPage;
 
-  const CustomersPage({Key? key, required this.onBackPage}) : super(key: key,pageName: 'CustomersPage');
+  const CustomersPage({super.key, required this.onBackPage})
+      : super(pageName: 'CustomersPage');
 
   @override
   State<StatefulWidget> createState() => _CustomersPage();
@@ -37,7 +39,7 @@ class _CustomersPage extends State<CustomersPage> {
         showSearch: true,
         onBack: widget.onBackPage,
         onSearch: (d) {
-          if('$d'.startsWith('-1:')==false){
+          if (d.startsWith('-1:') == false) {
             setState(() {
               if (mounted) {
                 _query = d;
@@ -142,20 +144,19 @@ class _CustomersPage extends State<CustomersPage> {
       children: [
         ListTile(
           title: BodyLarge(
-            text: '${_customers[index]['displayName']}',
-            overflow: TextOverflow.ellipsis
-          ),
+              text: '${_customers[index]['displayName']}',
+              overflow: TextOverflow.ellipsis),
           subtitle: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              LabelLarge(text:
-                '${_customers[index]['phone']}',
+              LabelLarge(
+                text: '${_customers[index]['phone']}',
                 overflow: TextOverflow.ellipsis,
               ),
               '${_customers[index]['email'] ?? ''}'.isNotEmpty
-                  ? LabelLarge(text:
-                      '${_customers[index]['email']}',
+                  ? LabelLarge(
+                      text: '${_customers[index]['email']}',
                       overflow: TextOverflow.ellipsis,
                     )
                   : Container()
@@ -196,14 +197,16 @@ class _CustomersPage extends State<CustomersPage> {
   }
 
   _createDialog() {
-    showDialog(
-      context: context,
-      builder: (c) => Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: const Dialog(child: CreateCustomerContent()),
+    showDialogOrFullScreenModal(
+      Container(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: CreateCustomerContent(
+          onDone: () {
+            _refresh(skip: true);
+          },
         ),
       ),
+      context,
     );
   }
 }

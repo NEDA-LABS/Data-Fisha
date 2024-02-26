@@ -44,17 +44,14 @@ double? getCartItemSubAmount(
     {double quantity = 0.0,
     required Map product,
     double totalDiscount = 0.0,
-    int totalItems = 0,
-    bool wholesale = false}) {
-  dynamic amount = (wholesale
-      ? (quantity * product['wholesalePrice'])
-      : (quantity * product['retailPrice']));
-  return amount - getCartItemDiscount(totalDiscount, totalItems);
+    int totalItems = 0,}) {
+  dynamic amount = (quantity * product['retailPrice']);
+  return amount - (totalDiscount/totalItems);
 }
 
-double? getCartItemDiscount(discount, items) => discount / items;
+// double? getCartItemDiscount(discount, items) => discount / items;
 
-List cartItems(List<CartModel> carts, dis, bool wholesale, Map customer) {
+List cartItems(List<CartModel> carts, dis, Map customer) {
   return carts.map((value) {
     var discount = doubleOrZero('$dis');
     return {
@@ -62,8 +59,7 @@ List cartItems(List<CartModel> carts, dis, bool wholesale, Map customer) {
           totalItems: carts.length,
           totalDiscount: discount,
           product: value.product,
-          quantity: value.quantity ?? 0,
-          wholesale: wholesale),
+          quantity: value.quantity ?? 0,),
       "product": value.product['product'],
       'customer': '${customer['displayName'] ?? customer['name'] ?? ''}',
       'customerObject': {
@@ -72,7 +68,7 @@ List cartItems(List<CartModel> carts, dis, bool wholesale, Map customer) {
       },
       "quantity": value.quantity,
       "stock": value.product,
-      "discount": getCartItemDiscount(discount, carts.length)
+      "discount": (discount/carts.length)
     };
   }).toList();
 }

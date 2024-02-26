@@ -43,13 +43,14 @@ class _State extends State<TransferSendPage> {
     );
   }
 
-  void _onCheckout(List<CartModel> carts) {
+  void _onCheckout(List<CartModel> carts,clearCart) {
     showDialogOrFullScreenModal(
       TransferCheckout(
         batchId: generateUUID(),
         type: 'send',
         carts: carts,
         onDone: (data) {
+          clearCart();
           getProductsFromCacheOrRemote(true).catchError((e) => []);
           Navigator.of(context).maybePop().whenComplete(() {
             widget.onBackPage();
