@@ -145,7 +145,7 @@ Future rePrintASale(sale) async {
         propertyOrNull('customer'),
       ],
     ),
-    propertyOr('customer', (_) => ''),
+    (x) => {'displayName': x['customer'] ?? '', 'id': '0'},
   );
   var getAmount = propertyOr('amount', (p0) => 0);
   var getQuantity = propertyOr('quantity', (p0) => 0);
