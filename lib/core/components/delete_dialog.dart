@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
@@ -89,7 +87,7 @@ class _State extends State<DeleteDialog> {
     widget.onConfirm().then((value) {
       widget.onDone(value);
     }).catchError((err) {
-      showTransactionCompleteDialog(context, err);
+      showTransactionCompleteDialog(context, err,canDismiss: true, title: 'Error');
     }).whenComplete(() {
       setState(() {
         loading = false;

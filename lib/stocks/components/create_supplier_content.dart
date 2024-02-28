@@ -143,11 +143,11 @@ class _State extends State<CreateSupplierContent> {
     return createIFValid(shop).then((r) {
       if (r == 'nope') return;
       widget.onDone();
-      showTransactionCompleteDialog(context, 'Vendor created successful').whenComplete(() {
+      showTransactionCompleteDialog(context, 'Vendor created successful',canDismiss: true).whenComplete(() {
         Navigator.of(context).maybePop();
       });
     }).catchError((err) {
-      showTransactionCompleteDialog(context, '$err, Please try again');
+      showTransactionCompleteDialog(context, '$err, Please try again',canDismiss: true);
     }).whenComplete(() {
       _updateState(() {
         _createProgress = false;

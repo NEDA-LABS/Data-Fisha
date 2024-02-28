@@ -4,7 +4,7 @@ import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/expense/pages/ExpensesPage.dart';
+import 'package:smartstock/expense/pages/expenses_page.dart';
 import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
 import 'package:smartstock/report/pages/sales_cash_tracking.dart';
@@ -156,7 +156,7 @@ ModuleMenu _getExpensesMenu(
     required OnBackPage onBackPage,
     required OnChangePage onChangePage}) {
   var expenseAllPage =
-      ExpenseExpensesPage(onBackPage: onBackPage, onChangePage: onChangePage);
+      ExpensesPage(onBackPage: onBackPage, onChangePage: onChangePage);
 
   return ModuleMenu(
       name: 'Expenses',

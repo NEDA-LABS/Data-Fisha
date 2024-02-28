@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/choices_input.dart';
 import 'package:smartstock/core/components/TextInput.dart';
-import 'package:smartstock/expense/components/create_category_content.dart';
+import 'package:smartstock/core/components/choices_input.dart';
+import 'package:smartstock/expense/components/create_category_form.dart';
 import 'package:smartstock/expense/services/categories.dart';
 import 'package:smartstock/expense/services/items.dart';
 
-class CreateExpenseItemContent extends StatefulWidget {
-  const CreateExpenseItemContent({Key? key}) : super(key: key);
+class CreateExpenseItemForm extends StatefulWidget {
+  const CreateExpenseItemForm({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<CreateExpenseItemContent> {
+class _State extends State<CreateExpenseItemForm> {
   Map state = {
     "name": "",
     "name_err": "",
@@ -39,10 +39,11 @@ class _State extends State<CreateExpenseItemContent> {
               choice: state['category'],
               label: "Category",
               placeholder: "Choose category",
-              onChoice: (d) => _updateState({'category': d, 'category_err': ''}),
+              onChoice: (d) =>
+                  _updateState({'category': d, 'category_err': ''}),
               onLoad: getExpenseCategoriesFromCacheOrRemote,
-              onField: (p0) => p0 is Map? p0["name"]: p0??'',
-              getAddWidget: () => const CreateExpenseCategoryContent(),
+              onField: (p0) => p0 is Map ? p0["name"] : p0 ?? '',
+              getAddWidget: () => const CreateExpenseCategoryForm(),
             ),
             Container(
               height: 64,
@@ -58,7 +59,7 @@ class _State extends State<CreateExpenseItemContent> {
                         child: BodyLarge(
                           text: state['creating'] == true
                               ? "Waiting..."
-                              : "Create item.",
+                              : "Create item",
                         ),
                       ),
                     ),

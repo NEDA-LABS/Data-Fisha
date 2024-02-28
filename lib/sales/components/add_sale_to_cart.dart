@@ -106,6 +106,7 @@ class _State extends State<AddSale2CartDialogContent> {
             label:
                 "Sale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
             initialText: '$_retailPrice',
+            readOnly: doubleOrZero(widget.cart.product['id'])>0,
             lines: 1,
             error: '${_errors['retailPrice'] ?? ''}',
             type: TextInputType.number,

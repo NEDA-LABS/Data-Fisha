@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/expense/services/categories.dart';
 
-class CreateExpenseCategoryContent extends StatefulWidget {
-  const CreateExpenseCategoryContent({Key? key}) : super(key: key);
+class CreateExpenseCategoryForm extends StatefulWidget {
+  const CreateExpenseCategoryForm({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<CreateExpenseCategoryContent> {
+class _State extends State<CreateExpenseCategoryForm> {
   Map state = {"name": "", "name_err": "", "req_err": "", "creating": false};
 
   @override

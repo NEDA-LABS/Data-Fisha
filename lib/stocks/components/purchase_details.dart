@@ -493,9 +493,7 @@ class _State extends State<PurchaseDetails> {
       _item['metadata'] = {..._item['metadata'] ?? {}, 'verified': false};
       widget.onDoneVerify({'verified': false});
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: false);
     }).whenComplete(() {
       _updateState(() {
         verifying = false;
@@ -524,9 +522,7 @@ class _State extends State<PurchaseDetails> {
     bool isPaid = _getInvPayment(_item) >= doubleOrZero(_item['amount']);
     if (!isPaid) {
       showTransactionCompleteDialog(context,
-          'Invoice is not paid yet, you can not mark it as reviewed. Finalize purchase invoice payments',onClose: (){
-
-          });
+          'Invoice is not paid yet, you can not mark it as reviewed. Finalize purchase invoice payments',canDismiss: true, title: 'Error');
       return;
     }
     _updateState(() {
@@ -539,9 +535,7 @@ class _State extends State<PurchaseDetails> {
       _item['metadata'] = {..._item['metadata'] ?? {}, 'verified': true};
       widget.onDoneVerify({'verified': true});
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: true);
     }).whenComplete(() {
       _updateState(() {
         verifying = false;
@@ -608,16 +602,12 @@ class _State extends State<PurchaseDetails> {
       // if (kDebugMode) {
       //   print(value);
       // }
-      showTransactionCompleteDialog(context, 'Attachments updated',onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, 'Attachments updated',canDismiss: true);
       _filesTouched = false;
       widget.onDoneUpdate({'images': _item['images']});
     }).catchError((error) {
       _item['images'] = [];
-      showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: true);
     }).whenComplete(() {
       _updateState(() {
         _updatingAttachment = false;

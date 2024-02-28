@@ -496,11 +496,11 @@ class _State extends State<PurchaseCheckout> {
         _updateState(() {
           _confirmingPurchase = false;
         });
-        showTransactionCompleteDialog(context, 'Purchase added').whenComplete(() {
+        showTransactionCompleteDialog(context, 'Purchase added',canDismiss: false, onClose: (){
           widget.onDone(value);
         });
       }).catchError((error) {
-        showTransactionCompleteDialog(context, error, title: 'Error');
+        showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: false);
         _updateState(() {
           _confirmingPurchase = false;
         });

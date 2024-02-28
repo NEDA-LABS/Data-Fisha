@@ -16,9 +16,9 @@ class PaymentBody extends StatefulWidget {
   final dynamic initialSubscription;
 
   const PaymentBody({
-    Key? key,
+    super.key,
     required this.initialSubscription,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -143,10 +143,10 @@ Ukishalipa tuma ujuma kwenda namba 0764 943 055 ukisema umeshalipa.
         });
         Navigator.of(context).maybePop();
       } else {
-        showTransactionCompleteDialog(context, 'It seems payment not received yet');
+        showTransactionCompleteDialog(context, 'It seems payment not received yet',canDismiss: true);
       }
     }).catchError((err) {
-      showTransactionCompleteDialog(context, err, title: 'Error');
+      showTransactionCompleteDialog(context, err, title: 'Error',canDismiss: true);
     }).whenComplete(() {
       setState(() {
         loading = false;

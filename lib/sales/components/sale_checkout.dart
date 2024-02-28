@@ -40,11 +40,11 @@ class _State extends State<SaleCheckout> {
   bool verifying = false;
   bool _confirmingSale = false;
   Map _shop = {};
-  Map _customer = {};
+  Map _customer = {'id': 0, 'displayName': 'Walk In Customer'};
   Map _errors = {};
   String _discount = '0';
   String _tax = '0';
-  Map _paymentMethod = {};
+  Map _paymentMethod = {"name": "Cash", "value": "cash"};
 
   @override
   void initState() {
@@ -413,6 +413,7 @@ class _State extends State<SaleCheckout> {
         showTransactionCompleteDialog(
           context,
           message,
+          canDismiss: false,
           onPrint: () {
             _printSaleItems().catchError((e) {
               if (kDebugMode) {
@@ -424,7 +425,7 @@ class _State extends State<SaleCheckout> {
           widget.onDone(value);
         });
       }).catchError((error) {
-        showTransactionCompleteDialog(context, error, title: 'Error');
+        showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: true);
         _updateState(() {
           _confirmingSale = false;
         });

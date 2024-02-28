@@ -371,15 +371,13 @@ class _State extends State<TransferCheckout> {
         _updateState(() {
           _confirming = false;
         });
-        showTransactionCompleteDialog(context, 'Transfer submitted',onClose: (){
-
-        }).whenComplete(() {
+        showTransactionCompleteDialog(context, 'Transfer submitted',
+            onClose: () {
           widget.onDone(value);
-        });
+        }, canDismiss: false);
       }).catchError((error) {
-        showTransactionCompleteDialog(context, error, title: 'Error',onClose: (){
-
-        });
+        showTransactionCompleteDialog(context, error,
+            title: 'Error', canDismiss: true);
         _updateState(() {
           _confirming = false;
         });

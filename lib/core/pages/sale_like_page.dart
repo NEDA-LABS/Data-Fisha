@@ -485,7 +485,7 @@ class _State extends State<SaleLikePage> {
     widget.onGetProductsLike(skip, q).then((value) {
       _items = value;
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error);
+      showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -506,7 +506,7 @@ class _State extends State<SaleLikePage> {
     }).then((value) {
       _items = itOrEmptyArray(value);
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error);
+      showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -521,7 +521,7 @@ class _State extends State<SaleLikePage> {
     var ec = Theme.of(context).colorScheme.error;
     return BodyMedium(
       text: stockable
-          ? '${quantity <= 0 ? 'o/s, ' : ''} ${formatNumber(quantity)}'
+          ? '${formatNumber(quantity)}'
           : 'n/a',
       color: stockable ? (quantity <= 0 ? ec : null) : null,
     );

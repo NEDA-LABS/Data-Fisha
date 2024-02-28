@@ -231,9 +231,7 @@ class _State extends State<ProductsPage> {
                 _allProducts = data;
                 exportToCsv('stock_export', data);
               }).catchError((error) {
-                showTransactionCompleteDialog(context, error,onClose: (){
-
-                });
+                showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
               }).whenComplete(() {
                 setState(() {
                   _isLoading = false;
@@ -296,9 +294,7 @@ class _State extends State<ProductsPage> {
       getStockFromCacheOrRemote(_skipLocal, query).then((data) {
         _allProducts = data;
       }).catchError((error) {
-        showTransactionCompleteDialog(context, error,onClose: (){
-
-        });
+        showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
       }).whenComplete(() {
         setState(() {
           _isLoading = false;

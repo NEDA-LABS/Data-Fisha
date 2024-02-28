@@ -110,11 +110,11 @@ class _State extends State<AddPurchasePaymentContent> {
     productsPurchasePaymentAdd(id: id, payment: payment).then((value) {
       widget.onDone(payment);
       Navigator.of(context).maybePop().whenComplete(() {
-        showTransactionCompleteDialog(context, 'Payment added to purchase invoice');
+        showTransactionCompleteDialog(context, 'Payment added to purchase invoice',canDismiss: true);
       });
       // Navigator.of(context).maybePop();
     }).catchError((onError) {
-      showTransactionCompleteDialog(context, onError);
+      showTransactionCompleteDialog(context, onError,canDismiss: true);
     }).whenComplete(() {
       _updateState({'loading': false});
     });

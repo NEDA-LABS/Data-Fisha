@@ -190,9 +190,7 @@ class _State extends State<SoldItemsPage> {
         _searchInputController = TextEditingController();
       }
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error, title: "Error",onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, error, title: "Error",canDismiss: true);
     }).whenComplete(() {
       _updateState(() {
         _loading = false;
@@ -346,9 +344,7 @@ class _State extends State<SoldItemsPage> {
       _rangeName = DateRangeName.custom;
       _refresh();
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error,onClose: (){
-
-      });
+      showTransactionCompleteDialog(context, error,canDismiss: true);
     });
   }
 

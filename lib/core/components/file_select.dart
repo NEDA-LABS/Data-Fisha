@@ -268,7 +268,7 @@ class _State extends State<FileSelect> {
 
     handleError(error) {
       if (mounted) {
-        showTransactionCompleteDialog(context, error);
+        showTransactionCompleteDialog(context, error, title: 'Error',canDismiss: true);
       }
     }
 

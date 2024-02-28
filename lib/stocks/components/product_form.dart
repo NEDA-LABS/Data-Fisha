@@ -443,7 +443,7 @@ class _State extends State<ProductForm> {
     ].where((element) => element == false);
     if (invalids.isNotEmpty) {
       _updateState(() => null);
-      showTransactionCompleteDialog(context, "Please, enter all required fields");
+      showTransactionCompleteDialog(context, "Please, enter all required fields",canDismiss: true);
     } else {
       _updateState(() {
         // _errors = {};
@@ -458,7 +458,7 @@ class _State extends State<ProductForm> {
         'supplier': 'general',
         'wholesalePrice': _product['retailPrice'] ?? '0'
       }, shop: shop, files: _fileData).catchError((error) {
-        showTransactionCompleteDialog(context, error);
+        showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
       }).whenComplete(() {
         _updateState(() {
           _loading = false;

@@ -2,18 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/models/file_data.dart';
-import 'package:smartstock/core/services/cache_shop.dart';
-import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/models/file_data.dart';
+import 'package:smartstock/core/services/api_files.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/stocks/services/api_categories.dart';
 import 'package:smartstock/stocks/services/category.dart';
 
@@ -59,7 +58,7 @@ class _State extends State<CreateCategoryContent> {
     );
     return Container(
       padding: const EdgeInsets.all(16),
-      width: isSmallScreen?null: 500,
+      width: isSmallScreen ? null : 500,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,7 +126,7 @@ class _State extends State<CreateCategoryContent> {
           Navigator.of(context).maybePop();
         });
       }).catchError((err) {
-        showTransactionCompleteDialog(context, err);
+        showTransactionCompleteDialog(context, err,canDismiss: true);
       }).whenComplete(() {
         setState(() {
           createProgress = false;

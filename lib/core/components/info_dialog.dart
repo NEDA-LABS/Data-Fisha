@@ -10,6 +10,7 @@ Future showTransactionCompleteDialog(
   String title = 'Info',
   VoidCallback? onClose,
   VoidCallback? onPrint,
+  required bool canDismiss,
 }) {
   var isContainError = title.toLowerCase().contains('error');
   var errorColor = Theme.of(context).colorScheme.error;
@@ -79,5 +80,5 @@ Future showTransactionCompleteDialog(
     ],
   );
 
-  return showDialogOrModalSheet(view, context, canClose: false);
+  return showDialogOrModalSheet(view, context, canDismiss: canDismiss);
 }

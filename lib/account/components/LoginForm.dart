@@ -79,6 +79,7 @@ class _State extends State<LoginForm> {
         showTransactionCompleteDialog(
           context,
           (value?['message'])??'$value', title: 'Error',
+            canDismiss: true
           // builder: (context) => AlertDialog(
           //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
         );
@@ -93,6 +94,7 @@ class _State extends State<LoginForm> {
         showTransactionCompleteDialog(
           context,
           (error?['message'])??'$error', title: 'Error',
+            canDismiss: true
           // builder: (context) => AlertDialog(
           //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
         );
@@ -156,6 +158,7 @@ class _State extends State<LoginForm> {
       showTransactionCompleteDialog(
         context,
         (error?['message'])??'$error', title: 'Error',
+          canDismiss: true
         // builder: (context) => AlertDialog(
         //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
       );

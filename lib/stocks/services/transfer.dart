@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
@@ -18,9 +19,7 @@ Future<List<dynamic>> transfersGetRemote(String? startAt) async {
 }
 
 Future printPreviousReceiveTransfer(transfer) async {
-  // print(transfer);
-  var getShopName =
-      compose([propertyOrNull('name'), propertyOrNull('to_shop')]);
+  var getShopName = propertyOrNull('otherShop')??'';
   // var getBatchId = propertyOrNull('batchId');
   var getCarts = compose([itOrEmptyArray, propertyOrNull('items')]);
   String data = '-------------------------------\n';
@@ -41,14 +40,14 @@ Future printPreviousReceiveTransfer(transfer) async {
       data,
       '-------------------------------\n',
       '$sn. $p\n',
-      '\t$q @ $price = TZS $t\n',
+      '\t$q @ ${formatNumber(price)} = ${formatNumber(t)}\n',
     ].join('');
     sn++;
   }
   data = [
     '$data\n',
     '--------------------------------\n',
-    'Total Bill : $totalBill\n',
+    'Total Bill : ${formatNumber(totalBill)}\n',
     '--------------------------------\n',
   ].join('');
   await posPrint(data: data);
@@ -56,8 +55,7 @@ Future printPreviousReceiveTransfer(transfer) async {
 
 Future printPreviousSendTransfer(transfer) async {
   // print(transfer);
-  var getShopName =
-      compose([propertyOrNull('name'), propertyOrNull('to_shop')]);
+  var getShopName = propertyOrNull('otherShop')??'';
   var getCarts = compose([itOrEmptyArray, propertyOrNull('items')]);
   String data = '-------------------------------\n';
   data = "$data${DateTime.now().toUtc()}\n";
@@ -77,14 +75,14 @@ Future printPreviousSendTransfer(transfer) async {
       data,
       '-------------------------------\n',
       '$sn. $p\n',
-      '\t$q @ $price = TZS $t\n',
+      '\t$q @ ${formatNumber(price)} = ${formatNumber(t)}\n',
     ].join('');
     sn++;
   }
   data = [
     '$data\n',
     '--------------------------------\n',
-    'Total Bill : $totalBill\n',
+    'Total Bill : ${formatNumber(totalBill)}\n',
     '--------------------------------\n',
   ].join('');
   await posPrint(data: data);

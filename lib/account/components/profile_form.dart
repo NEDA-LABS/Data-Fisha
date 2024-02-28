@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/account/services/api_account.dart';
 import 'package:smartstock/account/services/profile.dart';
 import 'package:smartstock/core/components/PrimaryAction.dart';
-import 'package:smartstock/core/components/MenuContextAction.dart';
-import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 
 class ProfileForm extends StatefulWidget {
-  const ProfileForm({Key? key}) : super(key: key);
+  const ProfileForm({super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -112,7 +110,7 @@ class _State extends State<ProfileForm> {
   _onPressed() {
     String fullname = state['fullname'] ?? '';
     var mobile = state['mobile'];
-    var emails = state['emails']??'';
+    var emails = state['emails'] ?? '';
     // if (!(fullname is String && fullname.isNotEmpty)) {
     //   updateState({'fullname_e': 'Field required'});
     // }
@@ -129,9 +127,9 @@ class _State extends State<ProfileForm> {
       "firstname": fullname.replaceAll('.', ''),
       "lastname": '.'
     }).then((value) {
-      showTransactionCompleteDialog(context, "Details updated");
+      showTransactionCompleteDialog(context, "Details updated",canDismiss: true);
     }).catchError((err) {
-      showTransactionCompleteDialog(context, err, title: 'Error!');
+      showTransactionCompleteDialog(context, err, title: 'Error!',canDismiss: true);
     }).whenComplete(() {
       setState(() {
         loading = false;

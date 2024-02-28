@@ -1,51 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
+import 'package:smartstock/expense/components/create_expense_form.dart';
 import 'package:smartstock/expense/components/expense_details.dart';
-import 'package:smartstock/expense/pages/ExpenseCreatePage.dart';
 
 import '../services/expenses.dart';
 
-class ExpenseExpensesPage extends PageBase {
+class ExpensesPage extends PageBase {
   final OnBackPage onBackPage;
   final OnChangePage onChangePage;
 
-  const ExpenseExpensesPage({
-    Key? key,
+  const ExpensesPage({
+    super.key,
     required this.onBackPage,
     required this.onChangePage,
-  }) : super(key: key, pageName: 'ExpenseExpensesPage');
+  }) : super(pageName: 'ExpenseExpensesPage');
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ExpenseExpensesPage> {
+class _State extends State<ExpensesPage> {
   bool _loading = false;
   int size = 20;
   List _expenses = [];
+  Map _shop = {};
 
   _contextSales(context) {
     return [
-      ContextMenu(
-        name: 'Add expense',
-        pressed: () => widget.onChangePage(
-          ExpenseCreatePage(onBackPage: widget.onBackPage),
-        ),
-      ),
-      ContextMenu(name: 'Reload expenses', pressed: () => _refresh())
+      ContextMenu(name: 'Create', pressed: _showCreateExpense),
+      ContextMenu(name: 'Reload', pressed: _refresh)
     ];
   }
 
@@ -54,19 +52,31 @@ class _State extends State<ExpenseExpensesPage> {
     return SizedBox(
       height: height,
       child: const TableLikeListRow([
-        TableLikeListHeaderCell('Item'),
-        TableLikeListHeaderCell('Category'),
-        TableLikeListHeaderCell('Amount ( TZS )'),
-        TableLikeListHeaderCell('Date'),
+        LabelMedium(text: 'ITEM'),
+        LabelMedium(text: 'CATEGORY'),
+        LabelMedium(text: 'AMOUNT'),
+        LabelMedium(text: 'DATE'),
       ]),
     );
   }
 
-  _loadingView(bool show) =>
-      show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  _loadingView(bool show) {
+    return show ? const LinearProgressIndicator(minHeight: 4) : Container();
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
 
   @override
   void initState() {
+    getActiveShop().then((value) {
+      _updateState(() {
+        _shop = value;
+      });
+    }).catchError((e) {});
     _refresh();
     super.initState();
   }
@@ -84,10 +94,8 @@ class _State extends State<ExpenseExpensesPage> {
       ),
       staticChildren: [
         _loadingView(_loading),
-        getIsSmallScreen(context)
-            ? Container()
-            : getTableContextMenu(_contextSales(context)),
-        getIsSmallScreen(context) ? Container() : _tableHeader(),
+        getTableContextMenu(_contextSales(context)),
+        _tableHeader(),
       ],
       totalDynamicChildren: _expenses.length,
       dynamicChildBuilder:
@@ -107,12 +115,12 @@ class _State extends State<ExpenseExpensesPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InkWell(
-          onTap: ()=>_showDetails(index),
+          onTap: () => _showDetails(index),
           child: TableLikeListRow([
             TableLikeListTextDataCell('${_expenses[index]['name']}'),
             TableLikeListTextDataCell('${_expenses[index]['category']}'),
             TableLikeListTextDataCell(
-                '${formatNumber(_expenses[index]['amount'])}'),
+                '${_shop['settings']?['currency'] ?? 'TZS'} ${formatNumber(_expenses[index]['amount'])}'),
             TableLikeListTextDataCell('${_expenses[index]['date']}'),
           ]),
         ),
@@ -123,7 +131,7 @@ class _State extends State<ExpenseExpensesPage> {
 
   Widget _smallScreen(context, index) {
     return InkWell(
-      onTap: ()=>_showDetails(index),
+      onTap: () => _showDetails(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,7 +142,7 @@ class _State extends State<ExpenseExpensesPage> {
               children: [
                 TableLikeListTextDataCell('${_expenses[index]['name']}'),
                 TableLikeListTextDataCell(
-                    '${formatNumber(_expenses[index]['amount'])}'),
+                    '${_shop['settings']?['currency'] ?? 'TZS'} ${formatNumber(_expenses[index]['amount'])}'),
               ],
             ),
             subtitle: BodyLarge(text: '${_expenses[index]['date']}'),
@@ -206,20 +214,17 @@ class _State extends State<ExpenseExpensesPage> {
           children: [
             ListTile(
               leading: const Icon(Icons.add),
-              title: const BodyLarge(text: 'Add expense'),
-              onTap: () {
-                widget.onChangePage(
-                  ExpenseCreatePage(onBackPage: widget.onBackPage),
-                );
+              title: const BodyLarge(text: 'Create'),
+              onTap: (){
+                Navigator.of(context).maybePop().whenComplete((){
+                  _showCreateExpense();
+                });
               },
             ),
             ListTile(
               leading: const Icon(Icons.refresh),
-              title: const BodyLarge(text: 'Reload expenses'),
-              onTap: () {
-                Navigator.of(context).maybePop();
-                _refresh();
-              },
+              title: const BodyLarge(text: 'Reload'),
+              onTap: _refresh,
             ),
           ],
         ),
@@ -228,7 +233,7 @@ class _State extends State<ExpenseExpensesPage> {
     );
   }
 
-  void _showDetails(index){
+  void _showDetails(index) {
     showDialogOrModalSheet(
       ExpenseDetail(
         item: _expenses[index],
@@ -236,6 +241,15 @@ class _State extends State<ExpenseExpensesPage> {
         onBackPage: widget.onBackPage,
         onRefresh: _refresh,
       ),
+      context,
+    );
+  }
+
+  void _showCreateExpense() {
+    showDialogOrFullScreenModal(
+      CreateExpenseForm(onDone: (){
+        _refresh();
+      }),
       context,
     );
   }
