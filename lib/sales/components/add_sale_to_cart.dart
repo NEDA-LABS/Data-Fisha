@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
-import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/input_box_decoration.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
@@ -97,12 +98,14 @@ class _State extends State<AddSale2CartDialogContent> {
               });
             }),
         const WhiteSpacer(height: 16),
-        const LabelLarge(text: 'SELECT PRICE'),
+        const LabelMedium(text: 'SELECT PRICE'),
+        const WhiteSpacer(height: 8),
         _getPrices(),
         const WhiteSpacer(height: 8),
         const WhiteSpacer(height: 16),
-        const LabelLarge(text: 'SUB TOTAL'),
-        BodyLarge(text: '${_shop['settings']?['currency']??''} ${_getSubTotal()}'),
+        const LabelMedium(text: 'SUB TOTAL'),
+        BodyLarge(
+            text: '${_shop['settings']?['currency'] ?? ''} ${_getSubTotal()}'),
       ],
     );
     return Container(
@@ -144,8 +147,10 @@ class _State extends State<AddSale2CartDialogContent> {
     Map product = _product is Map && _product?['id'] != null
         ? (_product as Map<String, dynamic>?)!
         : {'id': _name, '_type': 'quick', 'product': _name};
-    product["retailPrice"] = _retailPrice;
-    product["wholesalePrice"] = _wholesalePrice;
+    product["retailPrice"] =
+        _selectedPrice == 'retail' ? _retailPrice : _wholesalePrice;
+    product["wholesalePrice"] =
+        _selectedPrice == 'retail' ? _retailPrice : _wholesalePrice;
     return CartModel(product: product, quantity: _quantity);
   }
 
@@ -170,6 +175,43 @@ class _State extends State<AddSale2CartDialogContent> {
     return hasError;
   }
 
+  Widget _selectedIcon() {
+    return Container(
+      height: 30,
+      width: 30,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          color: Theme.of(context).colorScheme.primary),
+      child: Center(
+          child: Icon(
+        Icons.check,
+        color: Theme.of(context).colorScheme.onPrimary,
+      )),
+    );
+  }
+
+  Widget _notSelectedIcon() {
+    return Container(
+      height: 30,
+      width: 30,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
+        // color: Theme.of(context).colorScheme.error,
+        border: Border.all(
+          width: 1,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      child: Center(
+          child: Icon(
+        Icons.check,
+        color: Theme.of(context).colorScheme.onSurface,
+      )),
+    );
+  }
+
   _getPrices() {
     if (_isQuickSale) {
       return TextInput(
@@ -187,30 +229,60 @@ class _State extends State<AddSale2CartDialogContent> {
           });
     } else {
       var currency = _shop['settings']?['currency'] ?? 'TZS';
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          {"value": _retailPrice, 'id': 'Sale price ( $currency ) / Item'},
-          {
-            'value': _wholesalePrice,
-            'id': 'Wholesale price ( $currency ) / Item'
-          }
-        ].map((e) {
-          return Expanded(
-            child: TextInput(
-              label: e['id'],
-              initialText: '${e['value']}',
-              readOnly: true,
-              type: TextInputType.number,
-              onText: (v) {},
+      return Column(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+          decoration: getInputBoxDecoration(context, ''),
+          child: ListTile(
+              dense: true,
+              enableFeedback: false,
+              onTap: () {
+                _updateState(() {
+                  _selectedPrice = 'retail';
+                });
+              },
+              trailing: _selectedPrice == 'retail'
+                  ? _selectedIcon()
+                  : _notSelectedIcon(),
+              title: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LabelMedium(text: 'Retail price ( $currency ) / Item'),
+                  BodyLarge(text: formatNumber(_retailPrice))
+                ],
+              )),
+        ),
+        const WhiteSpacer(height: 8),
+        Container(
+          decoration: getInputBoxDecoration(context, ''),
+          child: ListTile(
+            dense: true,
+            enableFeedback: false,
+            onTap: () {
+              _updateState(() {
+                _selectedPrice = 'wholesale';
+              });
+            },
+            trailing: _selectedPrice == 'wholesale'
+                ? _selectedIcon()
+                : _notSelectedIcon(),
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LabelMedium(text: 'Wholesale price ( $currency ) / Item'),
+                BodyLarge(text: formatNumber(_wholesalePrice))
+              ],
             ),
-          );
-        }).toList(),
-      );
+          ),
+        )
+      ]);
     }
   }
 
   _getSubTotal() {
-
+    return formatNumber(_selectedPrice == 'retail'
+        ? doubleOrZero(_retailPrice * _quantity)
+        : doubleOrZero(_wholesalePrice * _quantity));
   }
 }
