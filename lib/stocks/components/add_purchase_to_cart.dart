@@ -11,15 +11,6 @@ import 'package:smartstock/core/types/OnGetPrice.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/ProductExpireInput.dart';
 
-// void addPurchaseToCartView({
-//   required BuildContext context,
-//   required CartModel cart,
-//   required onAddToCart,
-//   required onGetPrice,
-// }) {
-//
-// }
-
 class AddPurchase2CartDialogContent extends StatefulWidget {
   final CartModel cart;
   final OnAddToCartSubmitCallback onAddToCartSubmitCallback;
@@ -42,9 +33,8 @@ class _State extends State<AddPurchase2CartDialogContent> {
   dynamic _quantity = '';
   dynamic _purchase = '';
   dynamic _retailPrice = '';
+  dynamic _wholesalePrice = '';
   String _expire = '';
-
-  // Map _states = {};
   Map _errors = {};
   Map _shop = {};
   bool _canExpire = false;
@@ -58,24 +48,21 @@ class _State extends State<AddPurchase2CartDialogContent> {
   @override
   void initState() {
     getActiveShop().then((value) {
-      setState(() {
+      _updateState(() {
         _shop = value;
       });
     }).catchError((e) {});
     var exp = _getFromCartProduct(widget.cart, 'expire', '');
-    _canExpire =  exp != '' && exp != null;
-    _product = widget.cart.product;
-    _name = widget.cart.product['product'] ?? '';
-    _quantity = widget.cart.quantity;
-    _purchase = doubleOrZero('${widget.cart.product['purchase']}');
-    _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
-    _expire = widget.cart.product['expire'] ?? '';
-    // _states = {
-    // 'purchase': _getFromCartProduct(widget.cart, 'purchase', ''),
-    // 'retailPrice': _getFromCartProduct(widget.cart, 'retailPrice', ''),
-    // 'wholesalePrice': _getFromCartProduct(widget.cart, 'wholesalePrice',''),
-    // 'expire': _getFromCartProduct(widget.cart, 'expire', ''),
-    // };
+    _updateState(() {
+      _canExpire =  exp != '' && exp != null;
+      _product = widget.cart.product;
+      _name = widget.cart.product['product'] ?? '';
+      _quantity = widget.cart.quantity;
+      _purchase = doubleOrZero('${widget.cart.product['purchase']}');
+      _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
+      _wholesalePrice = doubleOrZero('${widget.cart.product['wholesalePrice']}');
+      _expire = widget.cart.product['expire'] ?? '';
+    });
     super.initState();
   }
 
@@ -83,10 +70,8 @@ class _State extends State<AddPurchase2CartDialogContent> {
   Widget build(BuildContext context) {
     var isSmallScreen = getIsSmallScreen(context);
     var list = ListView(
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       shrinkWrap: true,
       children: <Widget>[
-        // _productAndPrice(_states['p'], widget.onGetPrice),
         TextInput(
             label: 'Item',
             initialText: _name,
@@ -127,7 +112,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
             }),
         TextInput(
             label:
-                "Sale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+                "Retail price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
             initialText: '$_retailPrice',
             lines: 1,
             error: '${_errors['retailPrice'] ?? ''}',
@@ -136,6 +121,19 @@ class _State extends State<AddPurchase2CartDialogContent> {
               _updateState(() {
                 _retailPrice = doubleOrZero(v);
                 _errors = {..._errors, 'retailPrice': ''};
+              });
+            }),
+        TextInput(
+            label:
+                "Wholesale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+            initialText: '$_wholesalePrice',
+            lines: 1,
+            error: '${_errors['wholesalePrice'] ?? ''}',
+            type: TextInputType.number,
+            onText: (v) {
+              _updateState(() {
+                _wholesalePrice = doubleOrZero(v);
+                _errors = {..._errors, 'wholesalePrice': ''};
               });
             }),
         ProductExpireInput(
@@ -154,23 +152,24 @@ class _State extends State<AddPurchase2CartDialogContent> {
         ),
       ],
     );
+    var mainView = Column(
+      mainAxisSize: isSmallScreen ? MainAxisSize.max : MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const WhiteSpacer(height: 16),
+        const TitleLarge(text: "Add to cart"),
+        // const HorizontalLine(),
+        isSmallScreen ? Expanded(child: list) : list,
+        // const HorizontalLine(),
+        const WhiteSpacer(height: 16),
+        _getFooterSection()
+      ],
+    );
     return Container(
       // decoration: _addToCartBoxDecoration(),
       constraints: isSmallScreen ? null : const BoxConstraints(maxWidth: 500),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisSize: isSmallScreen ? MainAxisSize.max : MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const WhiteSpacer(height: 16),
-          const TitleLarge(text: "Add to cart"),
-          // const HorizontalLine(),
-          isSmallScreen ? Expanded(child: list) : list,
-          // const HorizontalLine(),
-          const WhiteSpacer(height: 16),
-          _getFooterSection()
-        ],
-      ),
+      child: isSmallScreen? mainView: SingleChildScrollView(child: mainView),
     );
   }
 
@@ -216,7 +215,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
         : {'id': _name, '__type': 'quick', 'product': _name};
     product["purchase"] = _purchase;
     product["retailPrice"] = _retailPrice;
-    product["wholesalePrice"] = _retailPrice;
+    product["wholesalePrice"] = _wholesalePrice;
     product["expire"] = _canExpire ? _expire : '';
     return CartModel(product: product, quantity: _quantity);
   }
@@ -244,6 +243,11 @@ class _State extends State<AddPurchase2CartDialogContent> {
     if (_retailPrice == 0 || _retailPrice <= _purchase) {
       _errors['retailPrice'] =
           'Sale price required, must be greater than zero and purchase price';
+      hasError = false;
+    }
+    if (_wholesalePrice == 0 || _wholesalePrice <= _purchase) {
+      _errors['wholesalePrice'] =
+      'Wholesale price required, must be greater than zero and purchase price';
       hasError = false;
     }
     if (_canExpire == true && _expire == '') {

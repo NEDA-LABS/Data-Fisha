@@ -108,22 +108,23 @@ class _State extends State<AddSale2CartDialogContent> {
             text: '${_shop['settings']?['currency'] ?? ''} ${_getSubTotal()}'),
       ],
     );
+    var mainView = Column(
+      mainAxisSize: isSmallScreen ? MainAxisSize.max : MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const WhiteSpacer(height: 16),
+        const TitleLarge(text: "Add to cart"),
+        // const HorizontalLine(),
+        isSmallScreen ? Expanded(child: list) : list,
+        // const HorizontalLine(),
+        const WhiteSpacer(height: 16),
+        _getFooterSection()
+      ],
+    );
     return Container(
       constraints: isSmallScreen ? null : const BoxConstraints(maxWidth: 500),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisSize: isSmallScreen ? MainAxisSize.max : MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const WhiteSpacer(height: 16),
-          const TitleLarge(text: "Add to cart"),
-          // const HorizontalLine(),
-          isSmallScreen ? Expanded(child: list) : list,
-          // const HorizontalLine(),
-          const WhiteSpacer(height: 16),
-          _getFooterSection()
-        ],
-      ),
+      child: isSmallScreen?mainView:SingleChildScrollView(child: mainView),
     );
   }
 
