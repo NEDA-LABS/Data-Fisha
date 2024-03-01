@@ -272,7 +272,7 @@ class _State extends State<SaleLikePage> {
             children: [
               BodyLarge(
                 text:
-                    '${_shop['settings']?['currency'] ?? ''} ${formatNumber(_items[index]['purchase'])}',
+                    '${_shop['settings']?['currency'] ?? ''} ${formatNumber(widget.onGetRetailPrice(_items[index]))}',
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
