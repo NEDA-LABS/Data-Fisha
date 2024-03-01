@@ -24,7 +24,7 @@ class ProductCreatePage extends PageBase {
 class _State extends State<ProductCreatePage> {
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Add product",
+      title: "New product",
       showBack: true,
       onBack: widget.onBackPage,
       showSearch: false,
@@ -45,16 +45,16 @@ class _State extends State<ProductCreatePage> {
     );
   }
 
-  // _getPageTitle(InventoryType inventoryType) {
-  //   switch (inventoryType) {
-  //     case InventoryType.product:
-  //       return "Add product";
-  //     case InventoryType.rawMaterial:
-  //       return "Add raw material";
-  //     case InventoryType.nonStockProduct:
-  //       return "Add non-stock product";
-  //     default:
-  //       return "Add product";
-  //   }
-  // }
+// _getPageTitle(InventoryType inventoryType) {
+//   switch (inventoryType) {
+//     case InventoryType.product:
+//       return "Add product";
+//     case InventoryType.rawMaterial:
+//       return "Add raw material";
+//     case InventoryType.nonStockProduct:
+//       return "Add non-stock product";
+//     default:
+//       return "Add product";
+//   }
+// }
 }

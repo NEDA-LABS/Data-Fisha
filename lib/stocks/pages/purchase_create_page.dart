@@ -3,7 +3,6 @@ import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/pages/sale_like_page.dart';
-import 'package:smartstock/core/services/security.dart';
 import 'package:smartstock/core/services/stocks.dart';
 import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
@@ -33,17 +32,11 @@ class _State extends State<PurchaseCreatePage> {
         _onAddToCart({}, onAddToCartSubmitCallback);
       },
       wholesale: false,
-      title: 'Create purchase',
-      // backLink: '/stock/purchases',
+      title: 'New purchase',
       onBack: widget.onBackPage,
       searchTextController: _editingController,
-      // customerLikeLabel: 'Choose supplier',
-      // onSubmitCart: _onSubmitPurchase,
-      onGetPrice: _onGetPrice,
+      onGetRetailPrice: _onGetPrice,
       onAddToCart: _onAddToCart,
-      // onCustomerLikeList: getSupplierFromCacheOrRemote,
-      // onCustomerLikeAddWidget: () => const CreateSupplierContent(),
-      // checkoutCompleteMessage: 'Purchase complete.',
       onGetProductsLike: getStockFromCacheOrRemote,
       onCheckout: _onCheckout,
     );
@@ -68,7 +61,7 @@ class _State extends State<PurchaseCreatePage> {
     return doubleOrZero('${product['purchase']}');
   }
 
-  void _onCheckout(List<CartModel> carts,clearCart) {
+  void _onCheckout(List<CartModel> carts, clearCart) {
     showDialogOrFullScreenModal(
       PurchaseCheckout(
         carts: carts,

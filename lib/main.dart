@@ -7,7 +7,7 @@ import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/expense/pages/expenses_page.dart';
 import 'package:smartstock/initializer.dart';
 import 'package:smartstock/report/pages/sales_cash_overview.dart';
-import 'package:smartstock/report/pages/sales_cash_tracking.dart';
+import 'package:smartstock/report/pages/sales_tracking.dart';
 import 'package:smartstock/report/pages/sales_category_performance.dart';
 import 'package:smartstock/report/pages/sales_invoice_overview.dart';
 import 'package:smartstock/report/pages/sales_product_performance.dart';
@@ -86,7 +86,7 @@ ModuleMenu _getReportMenu(
     required OnChangePage onChangePage}) {
   var cashOverviewPage = OverviewCashSales(onBackPage: onBackPage);
   var invoiceOverviewPage = OverviewInvoiceSales(onBackPage: onBackPage);
-  var salesCashTrackingPage = SalesCashTrackingPage(onBackPage: onBackPage);
+  var salesCashTrackingPage = SalesTrackingPage(onBackPage: onBackPage);
   var productPerformancePage = ProductPerformance(onBackPage: onBackPage);
   var sellerPerformancePage = SellerPerformance(onBackPage: onBackPage);
   var categoryPerformancePage = CategoryPerformance(onBackPage: onBackPage);

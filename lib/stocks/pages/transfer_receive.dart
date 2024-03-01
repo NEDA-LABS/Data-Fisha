@@ -34,7 +34,7 @@ class _State extends State<TransferReceivePage> {
     return SaleLikePage(
       wholesale: false,
       title: 'Receive transfer',
-      onGetPrice: _onGetPrice,
+      onGetRetailPrice: _onGetPrice,
       onBack: widget.onBackPage,
       onAddToCart: _onAddToCart,
       onGetProductsLike: getStockFromCacheOrRemote,

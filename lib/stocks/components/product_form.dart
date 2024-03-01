@@ -209,6 +209,18 @@ class _State extends State<ProductForm> {
     );
   }
 
+  Widget _wholesalePriceInput(Map shop) {
+    return TextInput(
+      onText: (d) => updateFormState({"wholesalePrice": d}),
+      label:
+          "Wholesale price ( ${shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+      placeholder: "",
+      error: _errors['wholesalePrice'] ?? '',
+      initialText: '${_product['wholesalePrice'] ?? ''}',
+      type: TextInputType.number,
+    );
+  }
+
   Widget _costPriceInput(Map shop) {
     return TextInput(
       onText: (d) => updateFormState({"purchase": d}),
@@ -289,9 +301,11 @@ class _State extends State<ProductForm> {
           children: [
             Row(
               children: [
+                Expanded(flex: 1, child: _costPriceInput(shop)),
+                const WhiteSpacer(width: 8),
                 Expanded(flex: 1, child: _priceInput(shop)),
                 const WhiteSpacer(width: 8),
-                Expanded(flex: 1, child: _costPriceInput(shop))
+                Expanded(flex: 1, child: _wholesalePriceInput(shop)),
               ],
             ),
             const WhiteSpacer(height: 8),
@@ -365,10 +379,12 @@ class _State extends State<ProductForm> {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _priceInput(shop),
+            _costPriceInput(shop),
             // _wholesalePriceInput(shop),
             const WhiteSpacer(height: 8),
-            _costPriceInput(shop)
+            _priceInput(shop),
+            const WhiteSpacer(height: 8),
+            _wholesalePriceInput(shop),
           ],
         ),
         const WhiteSpacer(height: 16),
@@ -428,6 +444,18 @@ class _State extends State<ProductForm> {
     }
   }
 
+  _wholesalePriceHigherValid(product, error) {
+    var cost = doubleOrZero('${product?['purchase'] ?? ''}');
+    var price = doubleOrZero('${product?['wholesalePrice'] ?? ''}');
+    if(price>0 && price<cost){
+      error['wholesalePrice'] = 'Must be greater than purchase cost price';
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   _onSubmit(Map shop) {
     _updateState(() {
       _errors = {};
@@ -436,6 +464,7 @@ class _State extends State<ProductForm> {
       _fieldIsValidString('product', _product, _errors),
       _fieldIsValidString('category', _product, _errors),
       _costIsLowePriceValid(_product, _errors),
+      _wholesalePriceHigherValid(_product, _errors),
       _fieldIsValidNumber('retailPrice', _product, _errors),
       _stockable != true
           ? true
@@ -443,7 +472,9 @@ class _State extends State<ProductForm> {
     ].where((element) => element == false);
     if (invalids.isNotEmpty) {
       _updateState(() => null);
-      showTransactionCompleteDialog(context, "Please, enter all required fields",canDismiss: true);
+      showTransactionCompleteDialog(
+          context, "Please, attend all required fields",
+          canDismiss: true, title: 'Error');
     } else {
       _updateState(() {
         // _errors = {};
@@ -456,9 +487,11 @@ class _State extends State<ProductForm> {
         'purchasable': true,
         'expire': _canExpire ? (_product['expire'] ?? '') : '',
         'supplier': 'general',
-        'wholesalePrice': _product['retailPrice'] ?? '0'
+        'wholesalePrice':
+            _product['wholesalePrice'] ?? _product['retailPrice'] ?? '0'
       }, shop: shop, files: _fileData).catchError((error) {
-        showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
+        showTransactionCompleteDialog(context, error,
+            canDismiss: true, title: 'Error');
       }).whenComplete(() {
         _updateState(() {
           _loading = false;

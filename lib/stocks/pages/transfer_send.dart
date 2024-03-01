@@ -34,7 +34,7 @@ class _State extends State<TransferSendPage> {
     return SaleLikePage(
       wholesale: false,
       title: 'Send transfer',
-      onGetPrice: _onGetPrice,
+      onGetRetailPrice: _onGetPrice,
       onBack: widget.onBackPage,
       onAddToCart: _onAddToCart,
       searchTextController: _editingController,

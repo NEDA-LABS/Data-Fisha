@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/types/OnAddToCartSubmitCallback.dart';
 import 'package:smartstock/core/types/OnGetPrice.dart';
 import 'package:smartstock/sales/models/cart.model.dart';
 
-// void addPurchaseToCartView({
-//   required BuildContext context,
-//   required CartModel cart,
-//   required onAddToCart,
-//   required onGetPrice,
-// }) {
-//
-// }
-
 class AddSale2CartDialogContent extends StatefulWidget {
   final CartModel cart;
   final OnAddToCartSubmitCallback onAddToCartSubmitCallback;
-  final OnGetPrice onGetPrice;
+  final OnGetPrice onGetRetailPrice;
+  final OnGetPrice onGetWholesalePrice;
 
   const AddSale2CartDialogContent({
     required this.cart,
     required this.onAddToCartSubmitCallback,
-    required this.onGetPrice,
+    required this.onGetRetailPrice,
+    required this.onGetWholesalePrice,
     super.key,
   });
 
@@ -39,17 +33,12 @@ class _State extends State<AddSale2CartDialogContent> {
   Map? _product = {};
   String _name = '';
   dynamic _quantity = '';
-
-  // dynamic _purchase = '';
   dynamic _retailPrice = '';
-
-  // String _expire = '';
-
-  // Map _states = {};
+  dynamic _wholesalePrice = '';
   Map _errors = {};
   Map _shop = {};
-
-  // bool _canExpire = false;
+  bool _isQuickSale = false;
+  String _selectedPrice = 'retail';
 
   _updateState(VoidCallback fn) {
     if (mounted) {
@@ -60,14 +49,19 @@ class _State extends State<AddSale2CartDialogContent> {
   @override
   void initState() {
     getActiveShop().then((value) {
-      setState(() {
+      _updateState(() {
         _shop = value;
       });
     }).catchError((e) {});
-    _product = widget.cart.product;
-    _name = widget.cart.product['product'] ?? '';
-    _quantity = widget.cart.quantity;
-    _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
+    _updateState(() {
+      _isQuickSale = doubleOrZero(widget.cart.product['id']) == 0;
+      _product = widget.cart.product;
+      _name = widget.cart.product['product'] ?? '';
+      _quantity = widget.cart.quantity;
+      _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
+      _wholesalePrice =
+          doubleOrZero('${widget.cart.product['wholesalePrice']}');
+    });
     super.initState();
   }
 
@@ -102,20 +96,13 @@ class _State extends State<AddSale2CartDialogContent> {
                 _errors = {..._errors, 'quantity': ''};
               });
             }),
-        TextInput(
-            label:
-                "Sale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
-            initialText: '$_retailPrice',
-            readOnly: doubleOrZero(widget.cart.product['id'])>0,
-            lines: 1,
-            error: '${_errors['retailPrice'] ?? ''}',
-            type: TextInputType.number,
-            onText: (v) {
-              _updateState(() {
-                _retailPrice = doubleOrZero(v);
-                _errors = {..._errors, 'retailPrice': ''};
-              });
-            }),
+        const WhiteSpacer(height: 16),
+        const LabelLarge(text: 'SELECT PRICE'),
+        _getPrices(),
+        const WhiteSpacer(height: 8),
+        const WhiteSpacer(height: 16),
+        const LabelLarge(text: 'SUB TOTAL'),
+        BodyLarge(text: '${_shop['settings']?['currency']??''} ${_getSubTotal()}'),
       ],
     );
     return Container(
@@ -153,21 +140,12 @@ class _State extends State<AddSale2CartDialogContent> {
         padding: const EdgeInsets.symmetric(vertical: 16), child: buttons);
   }
 
-  _getFromCartProduct(CartModel cart, String property, [def = 0]) {
-    var safePrice = compose([
-      propertyOr(property, (p0) => def),
-      propertyOr('product', (p0) => {}),
-      (x) => cart.toJSON()
-    ]);
-    return safePrice(cart);
-  }
-
   _getSaleCart() {
     Map product = _product is Map && _product?['id'] != null
         ? (_product as Map<String, dynamic>?)!
         : {'id': _name, '_type': 'quick', 'product': _name};
     product["retailPrice"] = _retailPrice;
-    product["wholesalePrice"] = _retailPrice;
+    product["wholesalePrice"] = _wholesalePrice;
     return CartModel(product: product, quantity: _quantity);
   }
 
@@ -190,5 +168,49 @@ class _State extends State<AddSale2CartDialogContent> {
     }
     _updateState(() {});
     return hasError;
+  }
+
+  _getPrices() {
+    if (_isQuickSale) {
+      return TextInput(
+          label:
+              "Sale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+          initialText: '$_retailPrice',
+          lines: 1,
+          error: '${_errors['retailPrice'] ?? ''}',
+          type: TextInputType.number,
+          onText: (v) {
+            _updateState(() {
+              _retailPrice = doubleOrZero(v);
+              _errors = {..._errors, 'retailPrice': ''};
+            });
+          });
+    } else {
+      var currency = _shop['settings']?['currency'] ?? 'TZS';
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          {"value": _retailPrice, 'id': 'Sale price ( $currency ) / Item'},
+          {
+            'value': _wholesalePrice,
+            'id': 'Wholesale price ( $currency ) / Item'
+          }
+        ].map((e) {
+          return Expanded(
+            child: TextInput(
+              label: e['id'],
+              initialText: '${e['value']}',
+              readOnly: true,
+              type: TextInputType.number,
+              onText: (v) {},
+            ),
+          );
+        }).toList(),
+      );
+    }
+  }
+
+  _getSubTotal() {
+
   }
 }

@@ -35,7 +35,8 @@ import 'package:smartstock/sales/models/cart.model.dart';
 class SaleLikePage extends StatefulWidget {
   final String title;
   final bool wholesale;
-  final OnGetPrice onGetPrice;
+  final OnGetPrice onGetRetailPrice;
+  final OnGetPrice? onGetWholesalePrice;
   final OnAddToCart onAddToCart;
   final OnQuickItem? onQuickItem;
   final OnCheckout onCheckout;
@@ -47,7 +48,8 @@ class SaleLikePage extends StatefulWidget {
     required this.title,
     required this.wholesale,
     required this.onCheckout,
-    required this.onGetPrice,
+    required this.onGetRetailPrice,
+    this.onGetWholesalePrice,
     required this.onAddToCart,
     this.onQuickItem,
     this.onBack,
@@ -183,13 +185,22 @@ class _State extends State<SaleLikePage> {
   }
 
   _tableHeader() {
-    return const TableLikeListRow([
-      LabelSmall(text: 'ITEM NAME'),
+    return TableLikeListRow([
+      const LabelSmall(text: 'ITEM NAME'),
       // LabelSmall(text:'QUANTITY'),
       // LabelSmall(text: 'COST ( ${shop['settings']?['currency']??''} )'),
-      LabelSmall(text: 'QUANTITY'),
-      Center(child: LabelSmall(text: "UNIT VALUE")),
-      Center(child: LabelSmall(text: "ACTION")),
+      const LabelSmall(text: 'QUANTITY'),
+      Center(
+          child: LabelSmall(
+              text:
+                  "PRICE\n( ${_shop['settings']?['currency'] ?? ''} )")),
+      widget.onGetWholesalePrice != null
+          ? Center(
+              child: LabelSmall(
+                  text:
+                      "WHOLE PRICE\n( ${_shop['settings']?['currency'] ?? ''} )"))
+          : Container(),
+      const Center(child: LabelSmall(text: "ACTION")),
     ]);
   }
 
@@ -206,8 +217,14 @@ class _State extends State<SaleLikePage> {
             _getQuantityLabel(_items[index]),
             Center(
               child: TableLikeListTextDataCell(
-                  '${_shop['settings']?['currency'] ?? ''} ${formatNumber('${widget.onGetPrice(_items[index])}')}'),
+                  '${formatNumber('${widget.onGetRetailPrice(_items[index])}')}'),
             ),
+            widget.onGetWholesalePrice != null
+                ? Center(
+                    child: TableLikeListTextDataCell(
+                        '${formatNumber('${widget.onGetWholesalePrice!(_items[index])}')}'),
+                  )
+                : Container(),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -418,9 +435,9 @@ class _State extends State<SaleLikePage> {
     return carts.fold(0, (dynamic a, element) => a + element.quantity);
   }
 
-  _clearCart(){
+  _clearCart() {
     _updateState(() {
-      _carts=[];
+      _carts = [];
     });
   }
 
@@ -443,15 +460,15 @@ class _State extends State<SaleLikePage> {
       onCartCheckout: () {
         if (getIsSmallScreen(context)) {
           Navigator.of(context).maybePop().whenComplete(() {
-            widget.onCheckout(_carts,_clearCart);
+            widget.onCheckout(_carts, _clearCart);
           });
         } else {
-          widget.onCheckout(_carts,_clearCart);
+          widget.onCheckout(_carts, _clearCart);
         }
       },
       carts: _carts,
       wholesale: widget.wholesale,
-      onGetPrice: widget.onGetPrice,
+      onGetPrice: widget.onGetRetailPrice,
     );
   }
 
@@ -485,7 +502,8 @@ class _State extends State<SaleLikePage> {
     widget.onGetProductsLike(skip, q).then((value) {
       _items = value;
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
+      showTransactionCompleteDialog(context, error,
+          canDismiss: true, title: 'Error');
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -506,7 +524,8 @@ class _State extends State<SaleLikePage> {
     }).then((value) {
       _items = itOrEmptyArray(value);
     }).catchError((error) {
-      showTransactionCompleteDialog(context, error,canDismiss: true, title: 'Error');
+      showTransactionCompleteDialog(context, error,
+          canDismiss: true, title: 'Error');
     }).whenComplete(() {
       setState(() {
         _loading = false;
@@ -520,9 +539,7 @@ class _State extends State<SaleLikePage> {
     // var pc = Theme.of(context).colorScheme.primary;
     var ec = Theme.of(context).colorScheme.error;
     return BodyMedium(
-      text: stockable
-          ? '${formatNumber(quantity)}'
-          : 'n/a',
+      text: stockable ? '${formatNumber(quantity)}' : 'n/a',
       color: stockable ? (quantity <= 0 ? ec : null) : null,
     );
   }

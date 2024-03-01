@@ -19,10 +19,12 @@ Future<dynamic> productCreateRemote({
   required Map shop,
 }) async {
   var urls = (await uploadFileToWeb3(fileData));
+  var retailPrice = doubleOrZero(product['retailPrice']);
+  var wholesalePrice = doubleOrZero(product['wholesalePrice']);
   product['images'] = urls.map((e) => e['link'] ?? '').toList();
-  product['retailPrice'] = doubleOrZero(product['retailPrice']);
+  product['retailPrice'] = retailPrice;
   product['barcode'] = product['barcode'] ?? '';
-  product['wholesalePrice'] = doubleOrZero(product['retailPrice']);
+  product['wholesalePrice'] = wholesalePrice>0?wholesalePrice:retailPrice;
   product['stockable'] = product['stockable'] ?? true;
   product['quantity'] =
       product['stockable'] == true ? doubleOrZero(product['quantity']) : 0;

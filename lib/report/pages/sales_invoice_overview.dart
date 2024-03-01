@@ -1,20 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/Histogram.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/components/bar_chart.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/components/solid_radius_decoration.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/table_like_list_data_cell.dart';
-import 'package:smartstock/core/components/table_like_list_header_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
-import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/models/HistogramData.dart';
 import 'package:smartstock/core/pages/page_base.dart';
+import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/report/components/date_range.dart';
 import 'package:smartstock/report/components/export_options.dart';
 import 'package:smartstock/report/services/export.dart';
@@ -33,6 +35,7 @@ class OverviewInvoiceSales extends PageBase {
 }
 
 class _State extends State<OverviewInvoiceSales> {
+  Map _shop = {};
   var loading = false;
   String error = '';
   var dateRange = DateTimeRange(
@@ -44,6 +47,11 @@ class _State extends State<OverviewInvoiceSales> {
 
   @override
   void initState() {
+    getActiveShop().then((value) {
+      _updateState(() {
+        _shop = value;
+      });
+    }).catchError((e) {});
     _fetchData();
     super.initState();
   }
@@ -58,81 +66,167 @@ class _State extends State<OverviewInvoiceSales> {
       staticChildren: [
         _rangePicker(),
         _showLoading(),
-        Container(
-          margin: const EdgeInsets.all(5),
-          decoration: solidRadiusBoxDecoration(context),
-          child: Container(
-            // height: getIsSmallScreen(context)
-            //     ? chartCardMobileHeight
-            //     : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: BarChart(
-              [_sales2Series(dailySales)],
-              animate: true,
-            ),
-          ),
-        ),
+        dailySales.isNotEmpty
+            ? Histogram(
+                height: 200,
+                data: dailySales.map((e) {
+                  return HistogramData(
+                      x: e['date'], y: '${e['amount']}', name: e['date']);
+                }).toList())
+            : Container(),
         const SizedBox(height: 16),
         _tableHeader(),
       ],
       totalDynamicChildren: dailySales.length,
-      dynamicChildBuilder: (context, index) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            InkWell(
-              child: TableLikeListRow([
-                TableLikeListTextDataCell('${dailySales[index]['date']}'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TableLikeListTextDataCell(
-                      '${formatNumber(dailySales[index]['amount'])}'),
-                ),
-              ]),
-            ),
-            const HorizontalLine()
-          ],
-        );
-      },
-      // onBody: (x) {
-      //   return Scaffold(
-      //     drawer: x,
-      //     body: SingleChildScrollView(
-      //       padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-      //       child: Center(
-      //         child: Container(
-      //           constraints: BoxConstraints(maxWidth: maximumBodyWidth),
-      //           child: Column(
-      //             crossAxisAlignment: CrossAxisAlignment.stretch,
-      //             mainAxisSize: MainAxisSize.min,
-      //             children: [
-      //               _rangePicker(),
-      //               _whatToShow(),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     bottomNavigationBar: bottomBar(3, moduleMenus(), context),
-      //   );
-      // },
+      dynamicChildBuilder: _getDynamicBuilder,
     );
   }
 
-  _showLoading() => loading ? const LinearProgressIndicator() : Container();
-
-  Map<dynamic, String> _sales2Series(List sales) {
-    return {};
-    // return Map<dynamic, String>(
-    //   id: 'Sales',
-    //   colorFn: (_, __) =>
-    //       charts.ColorUtil.fromDartColor(Theme.of(context).primaryColorDark),
-    //   domainFn: (dynamic sales, _) => sales['date'],
-    //   measureFn: (dynamic sales, _) => sales['amount'],
-    //   data: dailySales,
-    // );
+  Widget _getDynamicBuilder(context, index) {
+    if (getIsSmallScreen(context)) {
+      return _smallScreenChildBuilder(context, index);
+    } else {
+      return _largerScreenChildBuilder(context, index);
+    }
   }
+
+  Widget _largerScreenChildBuilder(context, index) {
+    var amountPaid = doubleOrZero(dailySales[index]['amount_paid']);
+    var cogs = doubleOrZero(dailySales[index]['cogs']);
+    var amount = doubleOrZero(dailySales[index]['amount']);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          child: TableLikeListRow([
+            TableLikeListTextDataCell('${dailySales[index]['date']}'),
+            TableLikeListTextDataCell('${formatNumber(amount)}'),
+            TableLikeListTextDataCell('${formatNumber(amountPaid)}'),
+            TableLikeListTextDataCell('${formatNumber(cogs)}'),
+            TableLikeListTextDataCell('${formatNumber(amountPaid - cogs)}'),
+          ]),
+        ),
+        const HorizontalLine()
+      ],
+    );
+  }
+
+  Widget _smallScreenChildBuilder(context, index) {
+    var amount = doubleOrZero(dailySales[index]['amount']);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          onTap: () => _showMoreDetails(dailySales[index]),
+          title: LabelLarge(text: '${dailySales[index]['date']}'),
+          // isThreeLine: true,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const WhiteSpacer(height: 8),
+              BodyLarge(
+                  text:
+                      '${_shop['settings']?['currency'] ?? ''} ${formatNumber(amount)}'),
+              // const WhiteSpacer(height: 4),
+              // const BodyMedium(text:'Click for more details'),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              LabelMedium(
+                  text: 'View', color: Theme.of(context).colorScheme.primary),
+              Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.primary,
+              )
+            ],
+          ),
+        ),
+        const HorizontalLine()
+      ],
+    );
+  }
+
+  _showMoreDetails(Map item) {
+    var currency = _shop['settings']?['currency'] ?? '';
+    var amountPaid = doubleOrZero(item['amount_paid']);
+    var cogs = doubleOrZero(item['cogs']);
+    var amount = doubleOrZero(item['amount']);
+    showDialogOrModalSheet(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  const LabelMedium(text: 'DATE'),
+                  BodyLarge(text: item['date']),
+                  const WhiteSpacer(height: 16),
+                  const LabelMedium(text: 'AMOUNT'),
+                  BodyLarge(text: '$currency ${formatNumber(amount)}'),
+                  const WhiteSpacer(height: 16),
+                  const LabelMedium(text: 'AMOUNT PAID'),
+                  BodyLarge(text: '$currency ${formatNumber(amountPaid)}'),
+                  const WhiteSpacer(height: 16),
+                  const LabelMedium(text: 'COGS'),
+                  BodyLarge(
+                      text: '$currency ( ${formatNumber(item['cogs'])} )'),
+                  const WhiteSpacer(height: 16),
+                  // const LabelMedium(text: 'EXPENSE'),
+                  // BodyLarge(
+                  //     text: '$currency ( ${formatNumber(item['expense'])} )'),
+                  // const WhiteSpacer(height: 16),
+                  const LabelMedium(text: 'PROFIT'),
+                  BodyLarge(
+                      text: '$currency ${formatNumber(amountPaid-cogs)}'),
+                  // const WhiteSpacer(height: 8),
+                ],
+              ),
+            ),
+            const HorizontalLine(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CancelProcessButtonsRow(
+                cancelText: 'Close',
+                onCancel: () {
+                  Navigator.of(context).maybePop();
+                },
+              ),
+            )
+          ],
+        ),
+        context);
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
+
+  _tableHeader() {
+    if (getIsSmallScreen(context)) {
+      return Container();
+    }
+    return TableLikeListRow([
+      const LabelMedium(text: 'DATE'),
+      LabelMedium(text: 'AMOUNT\n( ${_shop['settings']?['currency'] ?? ''} )'),
+      LabelMedium(
+          text: 'AMOUNT PAID\n( ${_shop['settings']?['currency'] ?? ''} )'),
+      LabelMedium(text: 'COGS\n( ${_shop['settings']?['currency'] ?? ''} )'),
+      LabelMedium(text: 'PROFIT\n( ${_shop['settings']?['currency'] ?? ''} )'),
+    ]);
+  }
+
+  _showLoading() => loading ? const LinearProgressIndicator() : Container();
 
   _fetchData() {
     setState(() {
@@ -147,82 +241,6 @@ class _State extends State<OverviewInvoiceSales> {
         loading = false;
       });
     });
-  }
-
-  _loading() {
-    return const SizedBox(
-      height: 100,
-      child: Center(
-        child: SizedBox(
-          height: 30,
-          width: 30,
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-
-  _retry() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          BodyLarge(text: error),
-          OutlinedButton(
-              onPressed: () => setState(() => _fetchData()),
-              child: const BodyLarge(text: 'Retry'))
-        ],
-      ),
-    );
-  }
-
-  _chartAndTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Card(
-          child: Container(
-            // height: getIsSmallScreen(context)
-            //     ? chartCardMobileHeight
-            //     : chartCardDesktopHeight,
-            padding: const EdgeInsets.all(8),
-            child: BarChart(
-              [_sales2Series(dailySales)],
-              animate: true,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        _tableHeader(),
-        Card(
-          child: Container(
-            constraints: const BoxConstraints(maxHeight: 500),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            child: TableLikeList(
-              onFuture: () async => dailySales,
-              keys: _fields(),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  _tableHeader() {
-    return const TableLikeListRow([
-      LabelMedium(text: 'DATE'),
-      // tableLikeListTextHeader('Retail ( Tsh )'),
-      // tableLikeListTextHeader('Wholesale ( Tsh )'),
-      LabelMedium(text: 'TOTAL'),
-    ]);
-  }
-
-  _fields() {
-    return ['date', 'amount'];
   }
 
   _rangePicker() {
@@ -267,14 +285,5 @@ class _State extends State<OverviewInvoiceSales> {
       // backLink: '/report/',
       context: context,
     );
-  }
-
-  _whatToShow() {
-    var getView = ifDoElse(
-        (x) => x,
-        (_) => _loading(),
-        ifDoElse(
-            (_) => error.isNotEmpty, (_) => _retry(), (_) => _chartAndTable()));
-    return getView(loading);
   }
 }

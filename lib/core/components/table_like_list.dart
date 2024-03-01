@@ -21,9 +21,9 @@ class TableLikeList extends StatefulWidget {
     this.onLoadMore,
     this.onItemPressed = _a,
     this.onCell,
-    Key? key,
+    super.key,
     this.loading = false,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -80,16 +80,20 @@ class _State extends State<TableLikeList> {
     keyToView(k) => onCell != null
         ? onCell(k, item[k] ?? '', item) as Widget
         : BodyLarge(text: '${item[k] ?? ''}');
-    return Column(children: [
-      Container(
-        constraints: const BoxConstraints(minHeight: 48),
-        child: InkWell(
-          onTap: () => onItemPressed(item),
-          child: TableLikeListRow(keys.map(keyToView).toList()),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: InkWell(
+            onTap: () => onItemPressed(item),
+            child: TableLikeListRow(keys.map(keyToView).toList()),
+          ),
         ),
-      ),
-      const HorizontalLine()
-    ]);
+        const HorizontalLine()
+      ],
+    );
   }
 
   _tableRows(List data, context, List<String> keys, onCell, onPress) {

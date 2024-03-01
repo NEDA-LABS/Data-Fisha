@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
-import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
-import 'package:smartstock/core/components/table_like_list.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
+import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
@@ -16,10 +16,10 @@ import 'package:smartstock/report/services/export.dart';
 import 'package:smartstock/report/services/report.dart';
 import 'package:smartstock/sales/components/sale_cash_details.dart';
 
-class SalesCashTrackingPage extends PageBase {
+class SalesTrackingPage extends PageBase {
   final OnBackPage onBackPage;
 
-  const SalesCashTrackingPage({
+  const SalesTrackingPage({
     super.key,
     required this.onBackPage,
   }) : super(pageName: 'SalesCashTrackingPage');
@@ -28,7 +28,7 @@ class SalesCashTrackingPage extends PageBase {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SalesCashTrackingPage> {
+class _State extends State<SalesTrackingPage> {
   bool _loading = false;
   int size = 20;
   var dateRange = DateTimeRange(
@@ -53,14 +53,29 @@ class _State extends State<SalesCashTrackingPage> {
         _loadingView(_loading),
         _rangePicker(),
         _tableHeader(),
-        _salesList(),
       ],
-      // onBody: (d) {
-      //   return NestedScrollView(
-      //       headerSliverBuilder: (context, innerBoxIsScrolled) =>
-      //           [_appBar(context)],
-      //       body: Scaffold(drawer: d, body: _body()));
-      // },
+      dynamicChildBuilder: (context, index) {
+        return _tableRow(_sales[index]);
+      },
+      totalDynamicChildren: _sales.length,
+    );
+  }
+
+  _tableRow(item) {
+    Widget keyToView(k) => _onCell(k, item[k] ?? '', item);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: InkWell(
+            onTap: () => _onItemPressed(item),
+            child: TableLikeListRow(_fields().map<Widget>(keyToView).toList()),
+          ),
+        ),
+        const HorizontalLine()
+      ],
     );
   }
 
@@ -69,20 +84,20 @@ class _State extends State<SalesCashTrackingPage> {
         CashSaleDetail(sale: item, pageContext: context), context);
   }
 
-  Widget _onCell(a, b, c) {
-    if (a == 'date') {
-      return _dateView(c);
+  Widget _onCell(key, item, items) {
+    if (key == 'date') {
+      return _dateView(items);
     }
-    if (a == 'amount') {
+    if (key == 'amount') {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: BodyLarge(text: '${doubleOrZero(b)}'),
+        child: BodyLarge(text: '${doubleOrZero(item)}'),
       );
     }
-    if (a == 'quantity') {
-      return BodyLarge(text: '${doubleOrZero(_itemsSize(c))}');
+    if (key == 'quantity') {
+      return BodyLarge(text: '${doubleOrZero(_itemsSize(items))}');
     }
-    return BodyLarge(text: '$b');
+    return BodyLarge(text: '$item');
   }
 
   _itemsSize(c) {
@@ -96,18 +111,6 @@ class _State extends State<SalesCashTrackingPage> {
     var date = DateTime.tryParse(getTimer(c)) ?? DateTime.now();
     var dateFormat = DateFormat('yyyy-MM-dd HH:mm');
     return dateFormat.format(date);
-    // return '${getTimer(c)}'.replaceAll('T', ' ');
-    // var getItems = propertyOr('items', (p0) => []);
-    // var items = itOrEmptyArray(getItems(c)) as List;
-    // var productsName = [];
-    // for (var item in items) {
-    //   var getProduct =
-    //       compose([propertyOrNull('product'), propertyOrNull('stock')]);
-    //   productsName.add(getProduct(item));
-    // }
-    // return productsName.length > 2
-    //     ? '${productsName.sublist(1, 3).join(', ')} & more'
-    //     : productsName.join(',');
   }
 
   _appBar(context) {
@@ -144,7 +147,7 @@ class _State extends State<SalesCashTrackingPage> {
     return getIsSmallScreen(context) ? smallView : bigView;
   }
 
-  _fields() {
+  List<String> _fields() {
     return getIsSmallScreen(context)
         ? ['date', 'amount', 'customer']
         : ['date', 'amount', 'quantity', 'customer'];
@@ -187,65 +190,34 @@ class _State extends State<SalesCashTrackingPage> {
     );
   }
 
+  _updateState(VoidCallback fn) {
+    setState(fn);
+  }
+
   _refresh() {
-    setState(() {
+    _updateState(() {
       _loading = true;
     });
     getSalesCashTracking(dateRange).then((value) {
       if (value is List) {
-        _sales = value;
+        _updateState(() {
+          _sales = value;
+        });
       }
     }).whenComplete(() {
-      setState(() {
+      _updateState(() {
         _loading = false;
       });
     });
   }
 
   Widget _dateView(c) {
-    // var date = DateTime.tryParse(c['timer']) ?? DateTime.now();
-    var textStyle = const TextStyle(
-        fontWeight: FontWeight.w300,
-        color: Colors.grey,
-        height: 2.0,
-        overflow: TextOverflow.ellipsis);
-    var mainTextStyle = const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        overflow: TextOverflow.ellipsis);
     var subText = c['channel'] == 'whole' ? 'Wholesale' : 'Retail';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        BodyLarge(text: _getTimer(c)),
-        BodyLarge(text: subText)
-      ]),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [BodyLarge(text: _getTimer(c)), BodyLarge(text: subText)]),
     );
   }
-
-  _salesList() {
-    return Expanded(
-      child: TableLikeList(
-        onFuture: () async => _sales,
-        keys: _fields(),
-        onCell: _onCell,
-        onItemPressed: _onItemPressed,
-        // onLoadMore: () async => _loadMore(),
-        loading: _loading,
-      ),
-    );
-  }
-
-  // _body() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: [
-  //       _loadingView(_loading),
-  //       _rangePicker(),
-  //       _tableHeader(),
-  //       _salesList(),
-  //     ],
-  //   );
-  // }
 }

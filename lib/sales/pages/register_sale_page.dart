@@ -30,7 +30,8 @@ class _State extends State<RegisterSalePage> {
       searchTextController: _searchTextController,
       title: 'Create sale',
       onBack: widget.onBackPage,
-      onGetPrice: _getPrice,
+      onGetRetailPrice: _getRetailPrice,
+      onGetWholesalePrice: _getWholesalePrice,
       onAddToCart: _onAddToCart,
       onGetProductsLike: getProductsFromCacheOrRemote,
       onCheckout: _onCheckout,
@@ -40,7 +41,8 @@ class _State extends State<RegisterSalePage> {
   _onAddToCart(Map product, OnAddToCartSubmitCallback submitCallback) {
     showDialogOrFullScreenModal(
       AddSale2CartDialogContent(
-        onGetPrice: _getPrice,
+        onGetRetailPrice: _getRetailPrice,
+        onGetWholesalePrice: _getWholesalePrice,
         cart: CartModel(product: product, quantity: 1),
         onAddToCartSubmitCallback: (cart) {
           submitCallback(cart);
@@ -51,7 +53,8 @@ class _State extends State<RegisterSalePage> {
     );
   }
 
-  dynamic _getPrice(product) => doubleOrZero(product['retailPrice']);
+  dynamic _getRetailPrice(product) => doubleOrZero(product['retailPrice']);
+  dynamic _getWholesalePrice(product) => doubleOrZero(product['wholesalePrice']);
 
   _onCheckout(List<CartModel> carts, clearCart) {
     showDialogOrFullScreenModal(
