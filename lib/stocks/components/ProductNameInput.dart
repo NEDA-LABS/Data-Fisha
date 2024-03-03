@@ -13,8 +13,8 @@ class ProductNameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextInput(
       onText: onText,
-      label: "Product name",
-      placeholder: 'Brand + generic name',
+      label: "Waste name",
+      placeholder: '',
       error: error,
       initialText: text,
     );

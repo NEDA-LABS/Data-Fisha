@@ -53,7 +53,7 @@ class _State extends State<LoginForm> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _iconContainer('icon-192.svg'),
+              _iconContainer('icon-192.png'),
               _usernameInput(states, _prepareUpdateState()),
               _passwordInput(states, _prepareUpdateState()),
               _loginButton(states, _prepareUpdateState(), context),
@@ -271,12 +271,12 @@ class _State extends State<LoginForm> {
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
         child: Builder(
           builder: (context) => SizedBox(
-            width: 70,
-            height: 70,
-            child: SvgPicture.asset(
+            width: 80,
+            height: 80,
+            child: Image.asset(
               'assets/svg/$svg',
               width: 24,
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.fitHeight,
             ),
           ),
         ),

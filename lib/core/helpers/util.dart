@@ -88,11 +88,12 @@ isWebMobilePlatform() =>
         defaultTargetPlatform == TargetPlatform.android);
 
 Future<bool> isOfflineFirstEnv() async {
-  var a = await JSHelper().callHasDirectPosPrinterAPI();
-  if (a == true) {
-    return true;
-  }
-  return kIsWeb == true && isWebMobilePlatform() == false;
+  return false;
+  // var a = await JSHelper().callHasDirectPosPrinterAPI();
+  // if (a == true) {
+  //   return true;
+  // }
+  // return kIsWeb == true && isWebMobilePlatform() == false;
 }
 
 var doubleOrZero = compose([

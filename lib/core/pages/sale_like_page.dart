@@ -154,7 +154,7 @@ class _State extends State<SaleLikePage> {
                           text: _query.isNotEmpty
                               ? 'Sorry, filter "$_query" does not match any data.\n'
                                   'Please clear filter or refresh'
-                              : 'No pre-saved products found. Use "Quick Item" to add to cart or refresh',
+                              : 'No pre-saved wastes found. Use "Quick Item" to add to cart or refresh',
                         ),
                         const WhiteSpacer(height: 8),
                         InkWell(

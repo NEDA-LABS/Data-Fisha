@@ -136,20 +136,20 @@ class _State extends State<AddPurchase2CartDialogContent> {
                 _errors = {..._errors, 'wholesalePrice': ''};
               });
             }),
-        ProductExpireInput(
-          onCanExpire: (value) {
-            _canExpire = value;
-          },
-          onDate: (d) {
-            _updateState(() {
-              _expire = d;
-              _errors = {..._errors, 'expire': ''};
-            });
-          },
-          trackExpire: _canExpire,
-          error: _errors['expire'] ?? '',
-          date: _expire,
-        ),
+        // ProductExpireInput(
+        //   onCanExpire: (value) {
+        //     _canExpire = value;
+        //   },
+        //   onDate: (d) {
+        //     _updateState(() {
+        //       _expire = d;
+        //       _errors = {..._errors, 'expire': ''};
+        //     });
+        //   },
+        //   trackExpire: _canExpire,
+        //   error: _errors['expire'] ?? '',
+        //   date: _expire,
+        // ),
       ],
     );
     var mainView = Column(

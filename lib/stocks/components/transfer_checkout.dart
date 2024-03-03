@@ -244,7 +244,7 @@ class _State extends State<TransferCheckout> {
       child: isSmallScreen
           ? const TableLikeListRow([LabelSmall(text: 'ITEMS')])
           : TableLikeListRow([
-              const LabelSmall(text: 'PRODUCT'),
+              const LabelSmall(text: 'WASTE'),
               const LabelSmall(text: 'QUANTITY'),
               LabelSmall(text: 'COST ( ${getShopCurrency(shop)} )'),
               LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),

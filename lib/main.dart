@@ -21,6 +21,7 @@ import 'package:smartstock/sales/pages/sold_items_page.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
 import 'package:smartstock/stocks/pages/index.dart';
 import 'package:smartstock/stocks/pages/products_page.dart';
+import 'package:smartstock/stocks/pages/purchase_create_page.dart';
 import 'package:smartstock/stocks/pages/purchases_page.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
 import 'package:smartstock/stocks/pages/transfers_page.dart';
@@ -37,10 +38,10 @@ List<ModuleMenu> _onGetModules({
         context: context, onBackPage: onBackPage, onChangePage: onChangePage),
     _getInventoryMenu(
         context: context, onBackPage: onBackPage, onChangePage: onChangePage),
-    _getExpensesMenu(
-        context: context, onBackPage: onBackPage, onChangePage: onChangePage),
-    _getReportMenu(
-        context: context, onBackPage: onBackPage, onChangePage: onChangePage),
+    // _getExpensesMenu(
+    //     context: context, onBackPage: onBackPage, onChangePage: onChangePage),
+    // _getReportMenu(
+    //     context: context, onBackPage: onBackPage, onChangePage: onChangePage),
     _getAccountMenu(
         context: context, onBackPage: onBackPage, onChangePage: onChangePage),
   ];
@@ -221,74 +222,80 @@ ModuleMenu _getInventoryMenu(
       CategoriesPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var purchasePage =
       PurchasesPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var transfersPage =
-      TransfersPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var productsSummaryPage =
-      StocksIndexPage(onBackPage: onBackPage, onChangePage: onChangePage);
+  var purchaseCreate = PurchaseCreatePage(onBackPage: onBackPage);
+  // var productsSummaryPage =
+  //     StocksIndexPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var productsVendors =
       SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   return ModuleMenu(
-      name: 'Inventory',
-      icon: Icon(Icons.inventory_2_outlined,
-          color: Theme.of(context).colorScheme.primary),
-      link: productsPage.pageName,
-      page: productsPage,
-      roles: [
-        'admin',
-        'manager'
-      ],
-      children: [
-        ModuleMenu(
-          name: 'Products',
-          link: productsPage.pageName,
+    name: 'Collect',
+    icon: Icon(Icons.inventory_2_outlined,
+        color: Theme.of(context).colorScheme.primary),
+    link: purchaseCreate.pageName,
+    page: purchaseCreate,
+    roles: ['admin', 'manager'],
+    children: [
+      ModuleMenu(
+        name: 'Create',
+        link: purchaseCreate.pageName,
+        roles: ['admin', 'manager'],
+        page: purchaseCreate,
+        icon: Icon(Icons.add_shopping_cart,
+            color: Theme.of(context).colorScheme.primary),
+        // onClick: () => null,
+      ),
+      ModuleMenu(
+        name: 'Wastes',
+        link: productsPage.pageName,
+        roles: ['admin', 'manager'],
+        page: productsPage,
+        icon: Icon(Icons.sell_outlined,
+            color: Theme.of(context).colorScheme.primary),
+        // onClick: () => null,
+      ),
+      ModuleMenu(
+        name: 'Categories',
+        link: categoriesPage.pageName,
+        roles: ['admin', 'manager'],
+        icon: Icon(Icons.category_outlined,
+            color: Theme.of(context).colorScheme.primary),
+        page: categoriesPage,
+      ),
+      ModuleMenu(
+          name: 'Pickers',
+          link: productsVendors.pageName,
           roles: ['admin', 'manager'],
-          page: productsPage,
-          icon: Icon(Icons.sell_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          // onClick: () => null,
-        ),
-        ModuleMenu(
-          name: 'Categories',
-          link: categoriesPage.pageName,
-          roles: ['admin', 'manager'],
-          icon: Icon(Icons.category_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          page: categoriesPage,
-        ),
-        ModuleMenu(
-            name: 'Vendors',
-            link: productsVendors.pageName,
-            roles: ['admin', 'manager'],
-            icon: Icon(
-              Icons.support_agent_sharp,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            page: productsVendors),
-        ModuleMenu(
-          name: 'Purchases',
-          link: purchasePage.pageName,
-          roles: ['admin', 'manager'],
-          icon: Icon(Icons.receipt_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          page: purchasePage,
-        ),
-        ModuleMenu(
-          name: 'Transfers',
-          link: transfersPage.pageName,
-          roles: ['admin', 'manager'],
-          icon: Icon(Icons.change_circle_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          page: transfersPage,
-        ),
-        ModuleMenu(
-          name: 'Summary',
-          link: productsSummaryPage.pageName,
-          roles: ['admin', 'manager'],
-          icon: Icon(Icons.bar_chart_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          page: productsSummaryPage,
-        ),
-      ]);
+          icon: Icon(
+            Icons.support_agent_sharp,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          page: productsVendors),
+      ModuleMenu(
+        name: 'Collected',
+        link: purchasePage.pageName,
+        roles: ['admin', 'manager'],
+        icon: Icon(Icons.receipt_outlined,
+            color: Theme.of(context).colorScheme.primary),
+        page: purchasePage,
+      ),
+      // ModuleMenu(
+      //   name: 'Transfers',
+      //   link: transfersPage.pageName,
+      //   roles: ['admin', 'manager'],
+      //   icon: Icon(Icons.change_circle_outlined,
+      //       color: Theme.of(context).colorScheme.primary),
+      //   page: transfersPage,
+      // ),
+      // ModuleMenu(
+      //   name: 'Summary',
+      //   link: productsSummaryPage.pageName,
+      //   roles: ['admin', 'manager'],
+      //   icon: Icon(Icons.bar_chart_outlined,
+      //       color: Theme.of(context).colorScheme.primary),
+      //   page: productsSummaryPage,
+      // ),
+    ],
+  );
 }
 
 ModuleMenu _getSalesMenu(
@@ -307,7 +314,7 @@ ModuleMenu _getSalesMenu(
       OrdersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var customersPage = CustomersPage(onBackPage: onBackPage);
   return ModuleMenu(
-    name: 'Point of sale',
+    name: 'Disburse',
     icon: Icon(Icons.point_of_sale_outlined,
         color: Theme.of(context).colorScheme.primary),
     link: registerSalePage.pageName,
@@ -339,7 +346,7 @@ ModuleMenu _getSalesMenu(
       //   page: invoiceCreatePage,
       // ),
       ModuleMenu(
-        name: 'Sold items',
+        name: 'Disbursed wastes',
         link: soldItemsPage.pageName,
         icon: Icon(Icons.paste_outlined,
             color: Theme.of(context).colorScheme.primary),
@@ -370,14 +377,14 @@ ModuleMenu _getSalesMenu(
         roles: ['*'],
         page: customersPage,
       ),
-      ModuleMenu(
-        name: 'Orders',
-        link: ordersPage.pageName,
-        icon: Icon(Icons.local_mall_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: ordersPage,
-      ),
+      // ModuleMenu(
+      //   name: 'Orders',
+      //   link: ordersPage.pageName,
+      //   icon: Icon(Icons.local_mall_outlined,
+      //       color: Theme.of(context).colorScheme.primary),
+      //   roles: ['*'],
+      //   page: ordersPage,
+      // ),
     ],
   );
 }
@@ -393,8 +400,8 @@ List<ModuleMenu> _getEmptyMenu({
 void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
-    // onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-    //     TransfersPage(onBackPage: onBackPage, onChangePage: onChangePage),
+    onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+        SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage),
   );
 
   // initializeSmartStock(

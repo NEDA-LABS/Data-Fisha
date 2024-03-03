@@ -36,7 +36,7 @@ initializeSmartStock({
   WidgetsFlutterBinding.ensureInitialized();
   CacheFactory().init();
   ensureGeolocatorWeb();
-  periodicLocalDataSyncs(localDataCallbackDispatcher);
+  // periodicLocalDataSyncs(localDataCallbackDispatcher);
   runApp(
     MainWidget(
       onGetModulesMenu: onGetAppMenu,

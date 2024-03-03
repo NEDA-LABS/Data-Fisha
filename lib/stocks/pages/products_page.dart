@@ -131,20 +131,20 @@ class _State extends State<ProductsPage> {
             });
           },
         ),
-        SearchFilter(
-          name: 'Expired',
-          selected: _filters['expired'] != null,
-          onClick: () {
-            var name = 'expired';
-            setState(() {
-              if (_filters.containsKey(name)) {
-                _filters.removeWhere((key, value) => key == name);
-              } else {
-                _filters = getExpiredProductsFilter(name);
-              }
-            });
-          },
-        ),
+        // SearchFilter(
+        //   name: 'Expired',
+        //   selected: _filters['expired'] != null,
+        //   onClick: () {
+        //     var name = 'expired';
+        //     setState(() {
+        //       if (_filters.containsKey(name)) {
+        //         _filters.removeWhere((key, value) => key == name);
+        //       } else {
+        //         _filters = getExpiredProductsFilter(name);
+        //       }
+        //     });
+        //   },
+        // ),
         SearchFilter(
           name: 'Near to expire',
           selected: _filters['near_expired'] != null,
@@ -173,7 +173,7 @@ class _State extends State<ProductsPage> {
 
   ContextMenu _getAddProductMenu() {
     return ContextMenu(
-      name: 'Add product',
+      name: 'Add item',
       pressed: () {
         widget.onChangePage(
           ProductCreatePage(

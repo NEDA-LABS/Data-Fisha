@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/LabelLarge.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
@@ -85,69 +88,84 @@ class _State extends State<CategoriesPage> {
   }
 
   @override
-  Widget build(context) => ResponsivePage(
-        current: '/stock/',
-        sliverAppBar: _appBar(context),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        staticChildren: [
-          getTableContextMenu(_contextItems(context)),
-          _loading(_isLoading),
-          // _tableHeader(),
-        ],
-        dynamicChildBuilder: (context, index) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ListTile(
-                title: TableLikeListTextDataCell(
-                    firstLetterUpperCase('${_categories[index]['name']}')),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SizedBox(
-                    width: 60,
-                    // height: 60,
-                    child: Image.network(
-                      '${_categories[index]['image']}',
-                      errorBuilder: (context, error, stackTrace) => Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              borderRadius: BorderRadius.circular(8))),
-                    ),
-                  ),
-                ),
-                trailing: IconButton(
-                  onPressed: () {
-                    showDialogDelete(
-                        onDone: (p0) {
-                          Navigator.of(context).maybePop();
-                        },
-                        context: context,
-                        name: firstLetterUpperCase(
-                            '${_categories[index]['name']}'),
-                        onDelete: () {
-                          return _deleteCategory('${_categories[index]['id']}');
-                        });
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).colorScheme.error,
+  Widget build(context) {
+    return ResponsivePage(
+      current: '/stock/',
+      sliverAppBar: _appBar(context),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      staticChildren: [
+        getTableContextMenu(_contextItems(context)),
+        _loading(_isLoading),
+        // _tableHeader(),
+      ],
+      dynamicChildBuilder: (context, index) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ListTile(
+              onTap: () => _onManageCategory(index),
+              contentPadding: EdgeInsets.zero,
+              title: BodyLarge(text:
+                  firstLetterUpperCase('${_categories[index]['name']}')),
+              subtitle: _categories[index]['description'] != '' && _categories[index]['description'] != 'null' && !getIsSmallScreen(context)
+                  ? LabelLarge(text: firstLetterUpperCase('${_categories[index]['description']}'))
+                  : null,
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.network(
+                    '${_categories[index]['image']}',
+                    errorBuilder: (context, error, stackTrace) => Container(
+                        decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(8))),
                   ),
                 ),
               ),
-              // const SizedBox(height: 5),
-              const HorizontalLine(),
-            ],
-          );
-        },
-        fab: FloatingActionButton(
-          onPressed: () => _showMobileContextMenu(context),
-          child: const Icon(Icons.unfold_more_outlined),
-        ),
-        totalDynamicChildren: _categories.length,
-      );
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LabelLarge(
+                    text: 'Manage',
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: Theme.of(context).primaryColor,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            const HorizontalLine(),
+            const SizedBox(height: 16),
+          ],
+        );
+      },
+      fab: FloatingActionButton(
+        onPressed: () => _showMobileContextMenu(context),
+        child: const Icon(Icons.unfold_more_outlined),
+      ),
+      totalDynamicChildren: _categories.length,
+    );
+  }
+
+  _onDelete(index) {
+    showDialogDelete(
+      onDone: (p0) {
+        Navigator.of(context).maybePop();
+      },
+      context: context,
+      name: firstLetterUpperCase('${_categories[index]['name']}'),
+      onDelete: () {
+        return _deleteCategory('${_categories[index]['id']}');
+      },
+    );
+  }
 
   _fetchCategories() {
     setState(() {
@@ -174,7 +192,7 @@ class _State extends State<CategoriesPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.add),
-                title: const BodyLarge(text: 'Create category'),
+                title: const BodyLarge(text: 'Create'),
                 onTap: () {
                   Navigator.of(context)
                       .maybePop()
@@ -184,7 +202,7 @@ class _State extends State<CategoriesPage> {
               const HorizontalLine(),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const BodyLarge(text: 'Reload categories'),
+                title: const BodyLarge(text: 'Reload'),
                 onTap: () {
                   Navigator.of(context).maybePop();
                   _fetchCategories();
@@ -210,5 +228,61 @@ class _State extends State<CategoriesPage> {
     var deleteCategory = prepareDeleteCategoryAPI(id);
     await deleteCategory(shop);
     _fetchCategories();
+  }
+
+  void _onManageCategory(index) {
+    showDialogOrModalSheet(
+        Container(
+          padding: const EdgeInsets.all(16),
+          constraints: getIsSmallScreen(context)
+              ? null
+              : const BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BodyLarge(text: 'Manage category " ${_categories[index]?['name']??''} "'),
+              const WhiteSpacer(height: 16),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                onTap: () {
+                  Navigator.of(context).maybePop().whenComplete(() {
+                    _onEditCategory(index);
+                  });
+                },
+                leading: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: const BodyLarge(text: 'Edit category'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                onTap: () {
+                  Navigator.of(context).maybePop().whenComplete(() {
+                    _onDelete(index);
+                  });
+                },
+                leading: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                title: const BodyLarge(text: 'Delete category'),
+              )
+            ],
+          ),
+        ),
+        context);
+  }
+
+  void _onEditCategory(index) {
+    showDialogOrFullScreenModal(
+      CreateCategoryContent(
+          category: _categories[index],
+          onNewCategory: (category) {
+            _fetchCategories();
+          }),
+      context,
+    );
   }
 }

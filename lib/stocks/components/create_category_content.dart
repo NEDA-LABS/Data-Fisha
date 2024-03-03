@@ -18,18 +18,40 @@ import 'package:smartstock/stocks/services/category.dart';
 
 class CreateCategoryContent extends StatefulWidget {
   final dynamic Function(Map category) onNewCategory;
+  final Map? category;
 
-  const CreateCategoryContent({super.key, required this.onNewCategory});
+  const CreateCategoryContent(
+      {super.key, required this.onNewCategory, this.category});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<CreateCategoryContent> {
-  var category = {};
-  var err = {};
-  var createProgress = false;
+  // Map _category = {};
+  String _name = '';
+  String _description = '';
+  var _err = {};
+  var _createProgress = false;
   List<FileData?> _platformFiles = [];
+
+  @override
+  void initState() {
+    if (widget.category is Map) {
+      _updateState(() {
+        _name = widget.category!['name'];
+        _description = widget.category!['description'];
+        _platformFiles = _getInitialFileData(widget.category!);
+      });
+    }
+    super.initState();
+  }
+
+  _updateState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +61,29 @@ class _State extends State<CreateCategoryContent> {
       children: [
         const TitleLarge(text: 'Category'),
         TextInput(
-            onText: (d) => updateState({'name': d.toLowerCase().trim()}),
+            initialText: _name,
+            onText: (d) {
+              _updateState(() {
+                _name = d;
+                _err['name'] = '';
+              });
+            },
             label: "Name",
-            error: err['name'] ?? ''),
+            error: _err['name'] ?? ''),
         const WhiteSpacer(height: 16),
         TextInput(
-            onText: (d) => updateState({'description': d}),
+            initialText: _description,
+            onText: (d) {
+              _updateState(() {
+                _description = d;
+              });
+            },
             label: "Description",
             lines: 3,
             placeholder: 'Optional'),
         const WhiteSpacer(height: 16),
         FileSelect(
+          files: _platformFiles,
           onFiles: (file) {
             _platformFiles = file;
           },
@@ -69,8 +103,12 @@ class _State extends State<CreateCategoryContent> {
             child: CancelProcessButtonsRow(
               cancelText: 'Cancel',
               onCancel: () => Navigator.of(context).maybePop(),
-              proceedText: createProgress ? "Waiting..." : "Create category",
-              onProceed: createProgress ? null : () => _createCategory(context),
+              proceedText: _createProgress
+                  ? "Waiting..."
+                  : doubleOrZero(widget.category?['id']) > 0
+                      ? "Update"
+                      : "Create",
+              onProceed: _createProgress ? null : _createCategory,
             ),
           ),
         ],
@@ -78,47 +116,57 @@ class _State extends State<CreateCategoryContent> {
     );
   }
 
-  updateState(Map<String, String> map) {
-    category.addAll(map);
+  // updateState(Map<String, String> map) {
+  //   _category.addAll(map);
+  // }
+
+  List<FileData?> _getInitialFileData(Map category) {
+    return justArray(category['image']).map((x) {
+      String name = x.split('/').last;
+      String ext = name.split('.').last;
+      return FileData(
+          stream: null, extension: ext, size: -1, name: name, path: x);
+    }).toList();
   }
 
   bool _validateName() {
     var isString = ifDoElse((x) => x, (x) => x, (x) {
-      err['name'] = 'Name required';
+      _err['name'] = 'Name required';
       return x;
     });
-    setState(() => {});
-    return isString(
-        category['name'] is String && '${category['name']}'.isNotEmpty);
+    _updateState(() => {});
+    return isString(_name.trim().isNotEmpty);
   }
 
-  _createCategory(context) async {
+  _createCategory() async {
     var shop = await getActiveShop();
     if (_validateName()) {
-      setState(() {
-        err = {};
-        createProgress = true;
+      _updateState(() {
+        _err = {};
+        _createProgress = true;
       });
       uploadFileToWeb3(_platformFiles).then((fileResponse) {
         if (kDebugMode) {
           print(fileResponse);
         }
-        var createCategory = prepareUpsertCategoryAPI({
-          ...category,
-          'image': fileResponse.map((e) => e['link']).join(','),
-          'file': fileResponse
-              .map((e) => {
-                    "link": e['link'],
-                    "tags": 'receipt,expense,expenses',
-                  })
-              .toList()
-        });
-        return createCategory(shop);
+        var id = doubleOrZero(widget.category?['id']);
+        var category = {
+          'name': _name,
+          'description': _description,
+          'image': fileResponse.map((e) => e['link']).join(',')
+        };
+        var updateCategory = prepareUpdateCategoryAPI(id, category);
+        var createCategory = prepareUpsertCategoryAPI(category);
+        return id > 0 ? updateCategory(shop) : createCategory(shop);
       }).then((value) {
         if (kDebugMode) {
           print(value);
         }
-        widget.onNewCategory({...category, ...itOrEmptyArray(value)[0] ?? {}});
+        widget.onNewCategory({
+          'name': _name,
+          'description': _description,
+          ...itOrEmptyArray(value)[0] ?? {}
+        });
         getCategoryFromCacheOrRemote(true)
             .then((value) => null)
             .catchError((error) {})
@@ -126,10 +174,10 @@ class _State extends State<CreateCategoryContent> {
           Navigator.of(context).maybePop();
         });
       }).catchError((err) {
-        showTransactionCompleteDialog(context, err,canDismiss: true);
+        showTransactionCompleteDialog(context, err, canDismiss: true);
       }).whenComplete(() {
-        setState(() {
-          createProgress = false;
+        _updateState(() {
+          _createProgress = false;
         });
       });
     }

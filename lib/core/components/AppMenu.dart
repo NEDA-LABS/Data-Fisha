@@ -66,12 +66,12 @@ class _State extends State<AppMenu> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          _officeName('${getOfficeName(_shop)}'),
           Expanded(
             child: ListView(
               controller: ScrollController(),
               children: [
-                const WhiteSpacer(height: 24),
-                _officeName('${getOfficeName(_shop)}'),
+                // const WhiteSpacer(height: 24),
                 _officeLogo('${getOfficeLogo(_shop)}'),
                 _changeOfficeTextButton(),
                 ..._getMenuItems(),
@@ -107,7 +107,7 @@ class _State extends State<AppMenu> {
             height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(80),
-              color: Theme.of(context).colorScheme.tertiary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: '$url'.startsWith('http')
                 ? Image.network('$url', errorBuilder: (a, b, c) => Container())

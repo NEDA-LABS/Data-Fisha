@@ -10,14 +10,14 @@ import 'package:smartstock/core/models/App.dart';
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF0E5FAE),
+  primary: Color(0xFF2BAE0E),
   onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFD5E3FF),
-  onPrimaryContainer: Color(0xFF001C3B),
-  secondary: Color(0xFF9D4303),
+  primaryContainer: Color(0xFFE9FFD5),
+  onPrimaryContainer: Color(0xFF083B00),
+  secondary: Color(0xFF039D86),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFFFDBCB),
-  onSecondaryContainer: Color(0xFF341100),
+  secondaryContainer: Color(0xFFCBFFF5),
+  onSecondaryContainer: Color(0xFF00342C),
   tertiary: Color(0xFF0E5FAE),
   onTertiary: Color(0xFFFFFFFF),
   tertiaryContainer: Color(0xFFD5E3FF),
@@ -35,23 +35,23 @@ const lightColorScheme = ColorScheme(
   outline: Color(0xFF74777F),
   onInverseSurface: Color(0xFFF1F0F4),
   inverseSurface: Color(0xFF2F3033),
-  inversePrimary: Color(0xFFA6C8FF),
+  inversePrimary: Color(0xFFBCFFA6),
   shadow: Color(0xFF000000),
-  surfaceTint: Color(0xFF0E5FAE),
+  surfaceTint: Color(0xFF2BAE0E),
   outlineVariant: Color(0xFFC4C6CF),
   scrim: Color(0xFF000000),
 );
 
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: Color(0xFFA6C8FF),
-  onPrimary: Color(0xFF003060),
-  primaryContainer: Color(0xFF004787),
-  onPrimaryContainer: Color(0xFFD5E3FF),
-  secondary: Color(0xFFFFB691),
-  onSecondary: Color(0xFF552100),
-  secondaryContainer: Color(0xFF783100),
-  onSecondaryContainer: Color(0xFFFFDBCB),
+  primary: Color(0xFFB9FFA6),
+  onPrimary: Color(0xFF156000),
+  primaryContainer: Color(0xFF1D8700),
+  onPrimaryContainer: Color(0xFFDDFFD5),
+  secondary: Color(0xFFFFED91),
+  onSecondary: Color(0xFF554700),
+  secondaryContainer: Color(0xFF786000),
+  onSecondaryContainer: Color(0xFFFFF0CB),
   tertiary: Color(0xFFA6C8FF),
   onTertiary: Color(0xFF003060),
   tertiaryContainer: Color(0xFF004787),
@@ -60,18 +60,18 @@ const darkColorScheme = ColorScheme(
   errorContainer: Color(0xFF93000A),
   onError: Color(0xFF690005),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: Color(0xFF000000),
+  background: Color(0xFF1C1C1C),
   onBackground: Color(0xFFE3E2E6),
-  surface: Color(0xFF111111),
+  surface: Color(0xFF181818),
   onSurface: Color(0xFFE3E2E6),
   surfaceVariant: Color(0xFF111111),
   onSurfaceVariant: Color(0xFFC4C6CF),
   outline: Color(0xFF8D9199),
   onInverseSurface: Color(0xFF1A1C1E),
   inverseSurface: Color(0xFFE3E2E6),
-  inversePrimary: Color(0xFF0E5FAE),
+  inversePrimary: Color(0xFF4EAE0E),
   shadow: Color(0xFF606060),
-  surfaceTint: Color(0xFFA6C8FF),
+  surfaceTint: Color(0xFFB9FFA6),
   outlineVariant: Color(0xFF43474E),
   scrim: Color(0xFF000000),
 );
@@ -86,10 +86,10 @@ App smartStockApp =
     App(applicationId: 'smartstock_lb', projectId: 'smartstock');
 
 getVendorName(){
-  return 'SMARTSTOCK';
+  return 'CHATAFISHA';
 }
 getVendorCost() {
-  return 10000;
+  return 0;
 }
 
 String version = "2.0.1-2024.03.01-b.0";

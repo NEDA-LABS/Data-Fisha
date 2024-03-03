@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/file_select.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
+import 'package:smartstock/core/models/file_data.dart';
+import 'package:smartstock/core/services/api_files.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/stocks/services/api_suppliers.dart';
 
 class CreateSupplierContent extends StatefulWidget {
   final VoidCallback onDone;
+  final Map? supplier;
 
-  const CreateSupplierContent({super.key, required this.onDone});
+  const CreateSupplierContent({super.key, required this.onDone, this.supplier});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -24,6 +28,20 @@ class _State extends State<CreateSupplierContent> {
   var _address = ' ';
   var _errors = {};
   var _createProgress = false;
+  List<FileData?> _platformFiles = [];
+
+  @override
+  void initState() {
+    if (widget.supplier is Map) {
+      _updateState(() {
+        _name = widget.supplier!['name'];
+        _number = widget.supplier!['number'];
+        _address = widget.supplier!['address'];
+        _platformFiles = _getInitialFileData(widget.supplier!);
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +49,7 @@ class _State extends State<CreateSupplierContent> {
       shrinkWrap: true,
       children: [
         TextInput(
+          initialText: _name,
           onText: (d) {
             _updateState(() {
               _name = d;
@@ -41,6 +60,7 @@ class _State extends State<CreateSupplierContent> {
           error: '${_errors['name'] ?? ''}',
         ),
         TextInput(
+          initialText: _number,
           onText: (d) {
             _updateState(() {
               _number = d;
@@ -56,6 +76,7 @@ class _State extends State<CreateSupplierContent> {
         //     label: "Email",
         //     placeholder: 'Optional'),
         TextInput(
+          initialText: _address,
             onText: (d) {
               _updateState(() {
                 _address = d;
@@ -65,6 +86,13 @@ class _State extends State<CreateSupplierContent> {
             label: "Address",
             lines: 3,
             placeholder: 'Optional'),
+        const WhiteSpacer(height: 16),
+        FileSelect(
+          files: _platformFiles,
+          onFiles: (file) {
+            _platformFiles = file;
+          },
+        ),
       ],
     );
     var isSmallScreen = getIsSmallScreen(context);
@@ -82,7 +110,11 @@ class _State extends State<CreateSupplierContent> {
             onCancel: () {
               Navigator.of(context).maybePop();
             },
-            proceedText: _createProgress ? "Waiting..." : "Proceed",
+            proceedText: _createProgress
+                ? "Waiting..."
+                : doubleOrZero(widget.supplier?['id']) > 0
+                    ? "Update"
+                    : "Create",
             onProceed: _createProgress ? null : _submit,
           )
         ],
@@ -130,28 +162,60 @@ class _State extends State<CreateSupplierContent> {
       _createProgress = true;
     });
     var shop = await getActiveShop();
+    // var supplier = {
+    //   'name': _name,
+    //   'number': _number,
+    //   'address': _address,
+    //   'id': _name.toLowerCase()
+    // };
+    var id = doubleOrZero(widget.supplier?['id'] ?? '0');
     var createIFValid = ifDoElse(
       (_) => _validSupplier(),
       (_) => productCreateSupplierRestAPI({
         'name': _name,
         'number': _number,
         'address': _address,
-        'id': _name.toLowerCase()
+        'id': _name.toLowerCase(),
+        'image': justArray(_).map((e) => e['link']).join(',')
       }, shop),
       (_) async => 'nope',
     );
-    return createIFValid(shop).then((r) {
+    var updateIFValid = ifDoElse(
+      (_) => _validSupplier(),
+      (_) => prepareUpdateSupplierAPI(id, {
+        'name': _name,
+        'mobile': _number,
+        'address': _address,
+        'image': justArray(_).map((e) => e['link']).join(',')
+      })(shop),
+      (_) async => 'nope',
+    );
+    uploadFileToWeb3(_platformFiles).then((fileResponse) {
+      return (id > 0 ? updateIFValid(fileResponse) : createIFValid(fileResponse));
+    }).then((r) {
       if (r == 'nope') return;
       widget.onDone();
-      showTransactionCompleteDialog(context, 'Vendor created successful',canDismiss: true).whenComplete(() {
+      showTransactionCompleteDialog(context, 'Picker created successful',
+              canDismiss: true)
+          .whenComplete(() {
         Navigator.of(context).maybePop();
       });
     }).catchError((err) {
-      showTransactionCompleteDialog(context, '$err, Please try again',canDismiss: true);
+      showTransactionCompleteDialog(context, '$err, Please try again',
+          canDismiss: true);
     }).whenComplete(() {
       _updateState(() {
         _createProgress = false;
       });
     });
+  }
+
+  List<FileData?> _getInitialFileData(Map category) {
+    return justArray(category['image']).where((t) => '$t'.toLowerCase()!='null').map((x) {
+      String name = '$x'.split('/').last;
+      String ext = name.split('.').last;
+      return FileData(
+          stream: null, extension: ext, size: -1, name: name, path: x);
+    }).toList();
   }
 }

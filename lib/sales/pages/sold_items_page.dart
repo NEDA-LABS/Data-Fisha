@@ -128,7 +128,7 @@ class _State extends State<SoldItemsPage> {
     return const SizedBox(
       height: 38,
       child: TableLikeListRow([
-        TableLikeListHeaderCell('Product'),
+        TableLikeListHeaderCell('Waste'),
         TableLikeListHeaderCell('Amount ( TZS )'),
         TableLikeListHeaderCell('Quantity'),
         TableLikeListHeaderCell('Purchase ( TZS )'),

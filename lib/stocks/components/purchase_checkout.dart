@@ -161,7 +161,7 @@ class _State extends State<PurchaseCheckout> {
       label: 'Due date',
     );
     var supplierInput = ChoicesInput(
-      label: 'Vendor',
+      label: 'Picker',
       choice: _vendor,
       error: '${_errors['vendor'] ?? ''}',
       onChoice: (p0) {
@@ -312,7 +312,7 @@ class _State extends State<PurchaseCheckout> {
       child: isSmallScreen
           ? const TableLikeListRow([LabelSmall(text: 'ITEMS')])
           : TableLikeListRow([
-              const LabelSmall(text: 'PRODUCT'),
+              const LabelSmall(text: 'WASTE'),
               const LabelSmall(text: 'QUANTITY'),
               LabelSmall(text: 'COST ( ${getShopCurrency(shop)} )'),
               LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
@@ -401,7 +401,7 @@ class _State extends State<PurchaseCheckout> {
     });
     var hasError = true;
     if (_vendor['id'] == null) {
-      _errors['vendor'] = 'Vendor required';
+      _errors['vendor'] = 'Picker required';
       hasError = false;
     }
     if (_reference == '') {

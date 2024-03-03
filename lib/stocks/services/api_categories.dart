@@ -27,3 +27,13 @@ Future Function(dynamic shop) prepareDeleteCategoryAPI(id) {
     shopToApp
   ]);
 }
+
+
+Future Function(dynamic shop) prepareUpdateCategoryAPI(id,Map category) {
+  var httpPutRequest = prepareHttpPutRequest(category);
+  return composeAsync([
+    httpPutRequest,
+        (app) => '${shopFunctionsURL(app)}/stock/categories/$id',
+    shopToApp
+  ]);
+}

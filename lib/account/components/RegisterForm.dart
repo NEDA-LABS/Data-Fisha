@@ -123,7 +123,7 @@ class _State extends State<RegisterForm> {
       lE(error) {
         showTransactionCompleteDialog(
           context,
-          (error?['message'])??'$error', title: 'Error',
+          '$error', title: 'Error',
             canDismiss: true
           // builder: (context) => AlertDialog(
           //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')

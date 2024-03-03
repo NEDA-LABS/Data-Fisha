@@ -135,20 +135,20 @@ class _State extends State<ProductForm> {
     );
   }
 
-  Widget _barcodeInput() {
-    return TextInput(
-      onText: (d) => updateFormState({"barcode": d}),
-      label: "Barcode / Qrcode",
-      placeholder: "Optional",
-      error: _errors['barcode'] ?? '',
-      value: '${_product['barcode'] ?? ''}',
-      initialText: '${_product['barcode'] ?? ''}',
-      icon: mobileQrScanIconButton(context, (code) {
-        updateFormState({"barcode": '$code'});
-        refresh();
-      }),
-    );
-  }
+  // Widget _barcodeInput() {
+  //   return TextInput(
+  //     onText: (d) => updateFormState({"barcode": d}),
+  //     label: "Barcode / Qrcode",
+  //     placeholder: "Optional",
+  //     error: _errors['barcode'] ?? '',
+  //     value: '${_product['barcode'] ?? ''}',
+  //     initialText: '${_product['barcode'] ?? ''}',
+  //     icon: mobileQrScanIconButton(context, (code) {
+  //       updateFormState({"barcode": '$code'});
+  //       refresh();
+  //     }),
+  //   );
+  // }
 
   Widget _imagesInput() {
     return FileSelect(
@@ -247,17 +247,17 @@ class _State extends State<ProductForm> {
     );
   }
 
-  Widget _expireInput() {
-    return ProductExpireInput(
-      onCanExpire: (value) {
-        _canExpire = value;
-      },
-      onDate: (d) => updateFormState({"expire": d}),
-      trackExpire: _canExpire,
-      error: _errors['expire'] ?? '',
-      date: _product['expire'] ?? '',
-    );
-  }
+  // Widget _expireInput() {
+  //   return ProductExpireInput(
+  //     onCanExpire: (value) {
+  //       _canExpire = value;
+  //     },
+  //     onDate: (d) => updateFormState({"expire": d}),
+  //     trackExpire: _canExpire,
+  //     error: _errors['expire'] ?? '',
+  //     date: _product['expire'] ?? '',
+  //   );
+  // }
 
   Widget _submitButton(Map shop) {
     return TextButton(
@@ -286,11 +286,11 @@ class _State extends State<ProductForm> {
               flex: 4,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [_getProductNameInput(), _getCategoryInput()],
+                children: [_getProductNameInput()],
               ),
             ),
             const WhiteSpacer(width: 8),
-            Expanded(flex: 2, child: _barcodeInput())
+            Expanded(flex: 2, child: _getCategoryInput())
           ],
         ),
         const WhiteSpacer(height: 16),
@@ -332,7 +332,7 @@ class _State extends State<ProductForm> {
             ),
             Row(
               children: [
-                Expanded(flex: 1, child: _expireInput()),
+                // Expanded(flex: 1, child: _expireInput()),
                 Expanded(flex: 1, child: Container()),
               ],
             )
@@ -365,9 +365,9 @@ class _State extends State<ProductForm> {
                 children: [
                   _getProductNameInput(),
                   const WhiteSpacer(height: 8),
-                  _barcodeInput(),
-                  const WhiteSpacer(height: 8),
                   _getCategoryInput(),
+                  // const WhiteSpacer(height: 8),
+                  // _getCategoryInput(),
                   const WhiteSpacer(height: 16),
                   _imagesInput()
                 ],
@@ -394,8 +394,8 @@ class _State extends State<ProductForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _quantityInput(),
-            const WhiteSpacer(height: 8),
-            _expireInput()
+            // const WhiteSpacer(height: 8),
+            // _expireInput()
           ],
         ),
         const WhiteSpacer(height: 16),
