@@ -1,20 +1,5 @@
 {
   "projects": {
-    "default": "smart-stock-manager",
-    "web": "smart-stock-manager",
-    "stable": "smart-stock-manager"
-  },
-  "targets": {
-    "smart-stock-manager": {
-      "hosting": {
-        "web": [
-          "smart-stock-manager"
-        ],
-        "edge": [
-          "edge-smartstock"
-        ]
-      }
-    }
-  },
-  "etags": {}
+    "default": "chatafishaapp"
+  }
 }

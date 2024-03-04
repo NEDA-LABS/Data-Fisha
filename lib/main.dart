@@ -400,8 +400,8 @@ List<ModuleMenu> _getEmptyMenu({
 void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
-    onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-        SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage),
+    // onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+    //     SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage),
   );
 
   // initializeSmartStock(
