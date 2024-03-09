@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/CancelProcessButtonsRow.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/TextInput.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
@@ -32,9 +34,10 @@ class _State extends State<AddPurchase2CartDialogContent> {
   String _name = '';
   dynamic _quantity = '';
   dynamic _purchase = '';
-  dynamic _retailPrice = '';
-  dynamic _wholesalePrice = '';
-  String _expire = '';
+
+  // dynamic _retailPrice = '';
+  // dynamic _wholesalePrice = '';
+  // String _expire = '';
   Map _errors = {};
   Map _shop = {};
   bool _canExpire = false;
@@ -52,16 +55,16 @@ class _State extends State<AddPurchase2CartDialogContent> {
         _shop = value;
       });
     }).catchError((e) {});
-    var exp = _getFromCartProduct(widget.cart, 'expire', '');
+    // var exp = _getFromCartProduct(widget.cart, 'expire', '');
     _updateState(() {
-      _canExpire =  exp != '' && exp != null;
+      // _canExpire =  exp != '' && exp != null;
       _product = widget.cart.product;
-      _name = widget.cart.product['product'] ?? '';
+      _name = widget.cart.product['name'] ?? '';
       _quantity = widget.cart.quantity;
-      _purchase = doubleOrZero('${widget.cart.product['purchase']}');
-      _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
-      _wholesalePrice = doubleOrZero('${widget.cart.product['wholesalePrice']}');
-      _expire = widget.cart.product['expire'] ?? '';
+      // _purchase = doubleOrZero('${widget.cart.product['purchase']}');
+      // _retailPrice = doubleOrZero('${widget.cart.product['retailPrice']}');
+      // _wholesalePrice = doubleOrZero('${widget.cart.product['wholesalePrice']}');
+      // _expire = widget.cart.product['expire'] ?? '';
     });
     super.initState();
   }
@@ -73,7 +76,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
       shrinkWrap: true,
       children: <Widget>[
         TextInput(
-            label: 'Item',
+            label: 'Waste name',
             initialText: _name,
             lines: 1,
             error: '${_errors['name'] ?? ''}',
@@ -86,7 +89,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
               });
             }),
         TextInput(
-            label: 'Quantity',
+            label: 'Kilogram',
             initialText: '$_quantity',
             lines: 1,
             error: '${_errors['q'] ?? ''}',
@@ -98,8 +101,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
               });
             }),
         TextInput(
-            label:
-                'Purchase cost ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item',
+            label: 'Cost ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Kg',
             initialText: '$_purchase',
             lines: 1,
             error: '${_errors['purchase'] ?? ''}',
@@ -110,32 +112,39 @@ class _State extends State<AddPurchase2CartDialogContent> {
                 _errors = {..._errors, 'purchase': ''};
               });
             }),
-        TextInput(
-            label:
-                "Retail price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
-            initialText: '$_retailPrice',
-            lines: 1,
-            error: '${_errors['retailPrice'] ?? ''}',
-            type: TextInputType.number,
-            onText: (v) {
-              _updateState(() {
-                _retailPrice = doubleOrZero(v);
-                _errors = {..._errors, 'retailPrice': ''};
-              });
-            }),
-        TextInput(
-            label:
-                "Wholesale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
-            initialText: '$_wholesalePrice',
-            lines: 1,
-            error: '${_errors['wholesalePrice'] ?? ''}',
-            type: TextInputType.number,
-            onText: (v) {
-              _updateState(() {
-                _wholesalePrice = doubleOrZero(v);
-                _errors = {..._errors, 'wholesalePrice': ''};
-              });
-            }),
+        const WhiteSpacer(height: 16),
+        const LabelMedium(text: 'SUB TOTAL'),
+        const WhiteSpacer(height: 8),
+        BodyLarge(
+            text:
+                '${_shop['settings']?['currency'] ?? 'TZS'} ${formatNumber(doubleOrZero(_quantity) * doubleOrZero(_purchase))}'),
+        const WhiteSpacer(height: 16)
+        // TextInput(
+        //     label:
+        //         "Retail price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+        //     initialText: '$_retailPrice',
+        //     lines: 1,
+        //     error: '${_errors['retailPrice'] ?? ''}',
+        //     type: TextInputType.number,
+        //     onText: (v) {
+        //       _updateState(() {
+        //         _retailPrice = doubleOrZero(v);
+        //         _errors = {..._errors, 'retailPrice': ''};
+        //       });
+        //     }),
+        // TextInput(
+        //     label:
+        //         "Wholesale price ( ${_shop['settings']?['currency'] ?? 'TZS'} ) / Item",
+        //     initialText: '$_wholesalePrice',
+        //     lines: 1,
+        //     error: '${_errors['wholesalePrice'] ?? ''}',
+        //     type: TextInputType.number,
+        //     onText: (v) {
+        //       _updateState(() {
+        //         _wholesalePrice = doubleOrZero(v);
+        //         _errors = {..._errors, 'wholesalePrice': ''};
+        //       });
+        //     }),
         // ProductExpireInput(
         //   onCanExpire: (value) {
         //     _canExpire = value;
@@ -169,7 +178,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
       // decoration: _addToCartBoxDecoration(),
       constraints: isSmallScreen ? null : const BoxConstraints(maxWidth: 500),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: isSmallScreen? mainView: SingleChildScrollView(child: mainView),
+      child: isSmallScreen ? mainView : SingleChildScrollView(child: mainView),
     );
   }
 
@@ -189,14 +198,14 @@ class _State extends State<AddPurchase2CartDialogContent> {
         padding: const EdgeInsets.symmetric(vertical: 16), child: buttons);
   }
 
-  _getFromCartProduct(CartModel cart, String property, [def = 0]) {
-    var safePrice = compose([
-      propertyOr(property, (p0) => def),
-      propertyOr('product', (p0) => {}),
-      (x) => cart.toJSON()
-    ]);
-    return safePrice(cart);
-  }
+  // _getFromCartProduct(CartModel cart, String property, [def = 0]) {
+  //   var safePrice = compose([
+  //     propertyOr(property, (p0) => def),
+  //     propertyOr('product', (p0) => {}),
+  //     (x) => cart.toJSON()
+  //   ]);
+  //   return safePrice(cart);
+  // }
 
   // _addToCartButton(context, states, onAddToCart) => Container(
   //       margin: const EdgeInsets.symmetric(vertical: 15),
@@ -210,13 +219,11 @@ class _State extends State<AddPurchase2CartDialogContent> {
   //     );
 
   _getPurchaseCart() {
-    Map product = _product is Map && _product?['id'] != null
-        ? (_product as Map<String, dynamic>?)!
-        : {'id': _name, '__type': 'quick', 'product': _name};
+    Map product = {'id': _name, '__type': 'quick', 'product': _name};
     product["purchase"] = _purchase;
-    product["retailPrice"] = _retailPrice;
-    product["wholesalePrice"] = _wholesalePrice;
-    product["expire"] = _canExpire ? _expire : '';
+    product["retailPrice"] = _purchase + 1;
+    product["wholesalePrice"] = _purchase + 1;
+    // product["expire"] = _canExpire ? _expire : '';
     return CartModel(product: product, quantity: _quantity);
   }
 
@@ -226,7 +233,7 @@ class _State extends State<AddPurchase2CartDialogContent> {
     });
     var hasError = true;
     if (_name == '') {
-      _errors['name'] = 'Item name required';
+      _errors['name'] = 'Waste name required';
       hasError = false;
     }
     if (_quantity == 0) {
@@ -235,25 +242,24 @@ class _State extends State<AddPurchase2CartDialogContent> {
     }
     // var purchasePrice = doubleOrZero('${_states['purchase']}');
     // var sellPrice = doubleOrZero('${_states['retailPrice']}');
-    if (_purchase == 0 || _purchase >= _retailPrice) {
-      _errors['purchase'] =
-          'Purchase price required, must be greater than zero and less than sale price';
+    if (doubleOrZero(_purchase) <= 0) {
+      _errors['purchase'] = 'Cost price required, must be greater than zero';
       hasError = false;
     }
-    if (_retailPrice == 0 || _retailPrice <= _purchase) {
-      _errors['retailPrice'] =
-          'Sale price required, must be greater than zero and purchase price';
-      hasError = false;
-    }
-    if (_wholesalePrice == 0 || _wholesalePrice <= _purchase) {
-      _errors['wholesalePrice'] =
-      'Wholesale price required, must be greater than zero and purchase price';
-      hasError = false;
-    }
-    if (_canExpire == true && _expire == '') {
-      _errors['expire'] = 'Expire date required';
-      hasError = false;
-    }
+    // if (_retailPrice == 0 || _retailPrice <= _purchase) {
+    //   _errors['retailPrice'] =
+    //       'Sale price required, must be greater than zero and purchase price';
+    //   hasError = false;
+    // }
+    // if (_wholesalePrice == 0 || _wholesalePrice <= _purchase) {
+    //   _errors['wholesalePrice'] =
+    //   'Wholesale price required, must be greater than zero and purchase price';
+    //   hasError = false;
+    // }
+    // if (_canExpire == true && _expire == '') {
+    //   _errors['expire'] = 'Expire date required';
+    //   hasError = false;
+    // }
     _updateState(() {});
     return hasError;
   }

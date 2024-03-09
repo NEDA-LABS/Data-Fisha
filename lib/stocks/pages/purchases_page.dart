@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/components/LabelSmall.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
@@ -11,7 +10,6 @@ import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/search_by_container.dart';
 import 'package:smartstock/core/components/sliver_smartstock_appbar.dart';
 import 'package:smartstock/core/components/table_context_menu.dart';
-import 'package:smartstock/core/components/table_like_list_data_cell.dart';
 import 'package:smartstock/core/components/table_like_list_row.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
 import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
@@ -53,7 +51,7 @@ class _PurchasesPage extends State<PurchasesPage> {
 
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Purchases",
+      title: "Collected wastes",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
@@ -67,11 +65,8 @@ class _PurchasesPage extends State<PurchasesPage> {
               child: const BodyLarge(text: "Purchase date"),
               value: {'name': "Date", 'value': 'date'}),
           SearchByFilter(
-              child: const BodyLarge(text: "Supplier"),
-              value: {'name': "Supplier", 'value': 'supplier'}),
-          SearchByFilter(
-              child: const BodyLarge(text: "Type"),
-              value: {'name': "Type", 'value': 'type'})
+              child: const BodyLarge(text: "Picker"),
+              value: {'name': "Picker", 'value': 'supplier'})
         ],
         currentValue: _searchByMap['name'] ?? '',
         onUpdate: (searchMap) {
@@ -108,11 +103,11 @@ class _PurchasesPage extends State<PurchasesPage> {
 
   _tableHeader() {
     return TableLikeListRow([
-      const LabelSmall(text: 'REFERENCE'),
+      const LabelSmall(text: 'PICKER'),
       const LabelSmall(text: 'DATE'),
       LabelSmall(text: 'COST ( ${_shop['settings']?['currency']} )'),
-      LabelSmall(text: 'PAID ( ${_shop['settings']?['currency']} )'),
-      const Center(child: LabelSmall(text: 'STATUS')),
+      // LabelSmall(text: 'PAID ( ${_shop['settings']?['currency']} )'),
+      // const Center(child: LabelSmall(text: 'STATUS')),
       const Center(child: LabelSmall(text: 'REVIEW')),
       const Center(child: LabelSmall(text: 'ACTION')),
     ]);
@@ -251,16 +246,17 @@ class _PurchasesPage extends State<PurchasesPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BodyLarge(text: '${_purchases[index]['refNumber']}'),
-                LabelMedium(text: _purchases[index]['supplier'] ?? '')
+                WhiteSpacer(height: 16),
+                BodyLarge(text: _purchases[index]['supplier'] ?? ''),
+                WhiteSpacer(height: 16)
               ],
             ),
-            TableLikeListTextDataCell(
-                '${toSqlDate(DateTime.tryParse(_purchases[index]['date']) ?? DateTime.now())}'),
-            TableLikeListTextDataCell(
-                '${formatNumber(_purchases[index]['amount'])}'),
-            TableLikeListTextDataCell('${_getInvPayment(_purchases[index])}'),
-            Center(child: _getStatusView(_purchases[index])),
+            BodyLarge(
+                text:
+                    '${toSqlDate(DateTime.tryParse(_purchases[index]['date']) ?? DateTime.now())}'),
+            BodyLarge(text: '${formatNumber(_purchases[index]['amount'])}'),
+            // BodyLarge(text:'${_getInvPayment(_purchases[index])}'),
+            // Center(child: _getStatusView(_purchases[index])),
             Center(child: _getVerifiedForLargeScreen(_purchases[index])),
             Center(
               child: LabelLarge(

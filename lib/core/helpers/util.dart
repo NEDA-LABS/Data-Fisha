@@ -110,7 +110,7 @@ compactNumber(value) =>
     NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
         .format(doubleOrZero(value));
 
-formatNumber(value, {decimals = 2}) {
+formatNumber(value, {decimals = 3}) {
   var formatted = NumberFormat.currency(decimalDigits: decimals, symbol: '')
       .format(doubleOrZero(value));
   var formattedChunks = formatted.split('.');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/LabelMedium.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/components/ResponsivePage.dart';
 import 'package:smartstock/core/helpers/dialog_or_bottom_sheet.dart';
@@ -80,7 +81,7 @@ class _State extends State<ProductsPage> {
 
   _getAppBar() {
     return SliverSmartStockAppBar(
-      title: "Products",
+      title: "Waste categories",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,
@@ -88,78 +89,78 @@ class _State extends State<ProductsPage> {
       onSearch: _updateQuery,
       searchHint: 'Search...',
       context: context,
-      filters: [
-        SearchFilter(
-          name: 'Negatives',
-          selected: _filters['negative'] != null,
-          onClick: () {
-            var name = 'negative';
-            setState(() {
-              if (_filters.containsKey(name)) {
-                _filters.removeWhere((key, value) => key == name);
-              } else {
-                _filters = getNegativeProductFilter(name);
-              }
-            });
-          },
-        ),
-        SearchFilter(
-          name: 'Zeros',
-          selected: _filters['zeros'] != null,
-          onClick: () {
-            setState(() {
-              var filterName = 'zeros';
-              if (_filters.containsKey(filterName)) {
-                _filters.removeWhere((key, value) => key == filterName);
-              } else {
-                _filters = getZeroProductsFilter(filterName);
-              }
-            });
-          },
-        ),
-        SearchFilter(
-          name: 'Positives',
-          selected: _filters['positives'] != null,
-          onClick: () {
-            setState(() {
-              var name = 'positives';
-              if (_filters.containsKey(name)) {
-                _filters.removeWhere((key, value) => key == name);
-              } else {
-                _filters = getPositiveProductsFilter(name);
-              }
-            });
-          },
-        ),
-        // SearchFilter(
-        //   name: 'Expired',
-        //   selected: _filters['expired'] != null,
-        //   onClick: () {
-        //     var name = 'expired';
-        //     setState(() {
-        //       if (_filters.containsKey(name)) {
-        //         _filters.removeWhere((key, value) => key == name);
-        //       } else {
-        //         _filters = getExpiredProductsFilter(name);
-        //       }
-        //     });
-        //   },
-        // ),
-        SearchFilter(
-          name: 'Near to expire',
-          selected: _filters['near_expired'] != null,
-          onClick: () {
-            var name = 'near_expired';
-            setState(() {
-              if (_filters.containsKey(name)) {
-                _filters.removeWhere((key, value) => key == name);
-              } else {
-                _filters = getNearExpiredProductsFilter(name);
-              }
-            });
-          },
-        )
-      ],
+      // filters: [
+      //   SearchFilter(
+      //     name: 'Negatives',
+      //     selected: _filters['negative'] != null,
+      //     onClick: () {
+      //       var name = 'negative';
+      //       setState(() {
+      //         if (_filters.containsKey(name)) {
+      //           _filters.removeWhere((key, value) => key == name);
+      //         } else {
+      //           _filters = getNegativeProductFilter(name);
+      //         }
+      //       });
+      //     },
+      //   ),
+      //   SearchFilter(
+      //     name: 'Zeros',
+      //     selected: _filters['zeros'] != null,
+      //     onClick: () {
+      //       setState(() {
+      //         var filterName = 'zeros';
+      //         if (_filters.containsKey(filterName)) {
+      //           _filters.removeWhere((key, value) => key == filterName);
+      //         } else {
+      //           _filters = getZeroProductsFilter(filterName);
+      //         }
+      //       });
+      //     },
+      //   ),
+      //   SearchFilter(
+      //     name: 'Positives',
+      //     selected: _filters['positives'] != null,
+      //     onClick: () {
+      //       setState(() {
+      //         var name = 'positives';
+      //         if (_filters.containsKey(name)) {
+      //           _filters.removeWhere((key, value) => key == name);
+      //         } else {
+      //           _filters = getPositiveProductsFilter(name);
+      //         }
+      //       });
+      //     },
+      //   ),
+      //   // SearchFilter(
+      //   //   name: 'Expired',
+      //   //   selected: _filters['expired'] != null,
+      //   //   onClick: () {
+      //   //     var name = 'expired';
+      //   //     setState(() {
+      //   //       if (_filters.containsKey(name)) {
+      //   //         _filters.removeWhere((key, value) => key == name);
+      //   //       } else {
+      //   //         _filters = getExpiredProductsFilter(name);
+      //   //       }
+      //   //     });
+      //   //   },
+      //   // ),
+      //   SearchFilter(
+      //     name: 'Near to expire',
+      //     selected: _filters['near_expired'] != null,
+      //     onClick: () {
+      //       var name = 'near_expired';
+      //       setState(() {
+      //         if (_filters.containsKey(name)) {
+      //           _filters.removeWhere((key, value) => key == name);
+      //         } else {
+      //           _filters = getNearExpiredProductsFilter(name);
+      //         }
+      //       });
+      //     },
+      //   )
+      // ],
     );
   }
 
@@ -173,7 +174,7 @@ class _State extends State<ProductsPage> {
 
   ContextMenu _getAddProductMenu() {
     return ContextMenu(
-      name: 'Add item',
+      name: 'New category',
       pressed: () {
         widget.onChangePage(
           ProductCreatePage(
@@ -256,12 +257,12 @@ class _State extends State<ProductsPage> {
   }
 
   _tableHeader() => const TableLikeListRow([
-        TableLikeListHeaderCell('Name'),
-        TableLikeListHeaderCell('Quantity'),
-        TableLikeListHeaderCell('Purchase ( Tsh )'),
-        TableLikeListHeaderCell('Retail ( Tsh )'),
-        TableLikeListHeaderCell("Wholesale ( Tsh )"),
-        TableLikeListHeaderCell("Status"),
+        LabelMedium(text: 'NAME'),
+    // LabelMedium(text: 'QUANTITY'),
+    // LabelMedium(text: 'Purchase ( Tsh )'),
+    //     TableLikeListHeaderCell('Retail ( Tsh )'),
+    //     TableLikeListHeaderCell("Wholesale ( Tsh )"),
+    //     TableLikeListHeaderCell("Status"),
       ]);
 
   _loading(bool show) =>

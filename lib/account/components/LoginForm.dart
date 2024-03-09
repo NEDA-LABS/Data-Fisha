@@ -156,8 +156,7 @@ class _State extends State<LoginForm> {
       }
     }).catchError((error) {
       showTransactionCompleteDialog(
-        context,
-        (error?['message'])??'$error', title: 'Error',
+        context,'$error', title: 'Error',
           canDismiss: true
         // builder: (context) => AlertDialog(
         //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')

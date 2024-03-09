@@ -174,7 +174,7 @@ class _State extends State<PurchaseDetails> {
     var supplierInput = TextInput(
       onText: (p0) => null,
       initialText: '${getPurchaseSupplier(_item)}',
-      label: 'Supplier',
+      label: 'Picker',
       readOnly: true,
     );
     var amountInput = TextInput(
@@ -218,10 +218,10 @@ class _State extends State<PurchaseDetails> {
       top: top,
       child: Wrap(
         children: [
-          isInvoice(_item) == true && !verified
-              ? MenuContextAction(
-                  title: 'Make payment', onPressed: _makePayment)
-              : Container(),
+          // isInvoice(_item) == true && !verified
+          //     ? MenuContextAction(
+          //         title: 'Make payment', onPressed: _makePayment)
+          //     : Container(),
           MenuContextAction(
             title: verifying
                 ? 'Processing...'
@@ -258,7 +258,7 @@ class _State extends State<PurchaseDetails> {
       propertyOr('createdAt', (p0) => DateTime.now().toIso8601String())
     ]);
     var managePurchaseTitle =
-        BodyLarge(text: 'Manage purchase #${getPurchaseId(_item)}');
+        BodyLarge(text: 'Manage waste purchase #${getPurchaseId(_item)}');
     var createdTitle = BodyLarge(text: 'Created: ${getPurchaseDate(_item)}');
     return _sectionWrapper(
       top: top,
@@ -395,9 +395,9 @@ class _State extends State<PurchaseDetails> {
       child: isSmallScreen
           ? const TableLikeListRow([LabelSmall(text: 'ITEMS')])
           : TableLikeListRow([
-              const LabelSmall(text: 'PRODUCT'),
-              const LabelSmall(text: 'QUANTITY'),
-              LabelSmall(text: 'COST ( ${getShopCurrency(shop)} )'),
+              const LabelSmall(text: 'WASTE'),
+              const LabelSmall(text: 'KILOGRAM'),
+              LabelSmall(text: 'COST ( ${getShopCurrency(shop)} ) / KG'),
               LabelSmall(text: 'AMOUNT ( ${getShopCurrency(shop)} )'),
             ]),
       top: 16,

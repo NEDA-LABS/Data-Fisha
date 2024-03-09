@@ -34,10 +34,10 @@ List<ModuleMenu> _onGetModules({
   return [
     _getDashboardMenu(
         context: context, onBackPage: onBackPage, onChangePage: onChangePage),
-    _getSalesMenu(
-        context: context, onBackPage: onBackPage, onChangePage: onChangePage),
     _getInventoryMenu(
         context: context, onBackPage: onBackPage, onChangePage: onChangePage),
+    // _getSalesMenu(
+    //     context: context, onBackPage: onBackPage, onChangePage: onChangePage),
     // _getExpensesMenu(
     //     context: context, onBackPage: onBackPage, onChangePage: onChangePage),
     // _getReportMenu(
@@ -54,146 +54,146 @@ ModuleMenu _getAccountMenu(
   var profilePage = ProfilePage(onBackPage: onBackPage);
   var usersPage = UsersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   return ModuleMenu(
-    name: 'Account',
+    name: 'My profile',
     icon: Icon(Icons.supervised_user_circle_outlined,
         color: Theme.of(context).colorScheme.primary),
     link: profilePage.pageName,
     page: profilePage,
     roles: ['*'],
-    children: [
-      ModuleMenu(
-        name: 'My profile',
-        link: profilePage.pageName,
-        icon: Icon(Icons.person_outline,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ["*"],
-        page: profilePage,
-      ),
-      ModuleMenu(
-        name: 'Users',
-        link: usersPage.pageName,
-        icon: Icon(Icons.groups_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ["admin", 'manager'],
-        page: usersPage,
-      )
-    ],
+    // children: [
+    //   ModuleMenu(
+    //     name: 'My profile',
+    //     link: profilePage.pageName,
+    //     icon: Icon(Icons.person_outline,
+    //         color: Theme.of(context).colorScheme.primary),
+    //     roles: ["*"],
+    //     page: profilePage,
+    //   ),
+    //   ModuleMenu(
+    //     name: 'Users',
+    //     link: usersPage.pageName,
+    //     icon: Icon(Icons.groups_outlined,
+    //         color: Theme.of(context).colorScheme.primary),
+    //     roles: ["admin", 'manager'],
+    //     page: usersPage,
+    //   )
+    // ],
   );
 }
 
-ModuleMenu _getReportMenu(
-    {required BuildContext context,
-    required OnBackPage onBackPage,
-    required OnChangePage onChangePage}) {
-  var cashOverviewPage = OverviewCashSales(onBackPage: onBackPage);
-  var invoiceOverviewPage = OverviewInvoiceSales(onBackPage: onBackPage);
-  var salesCashTrackingPage = SalesTrackingPage(onBackPage: onBackPage);
-  var productPerformancePage = ProductPerformance(onBackPage: onBackPage);
-  var sellerPerformancePage = SellerPerformance(onBackPage: onBackPage);
-  var categoryPerformancePage = CategoryPerformance(onBackPage: onBackPage);
-  return ModuleMenu(
-      name: 'Reports',
-      icon: Icon(Icons.data_saver_off_outlined,
-          color: Theme.of(context).colorScheme.primary),
-      link: cashOverviewPage.pageName,
-      page: cashOverviewPage,
-      roles: [
-        'admin'
-      ],
-      children: [
-        ModuleMenu(
-          name: 'Cash overview',
-          link: cashOverviewPage.pageName,
-          icon: Icon(Icons.bar_chart_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: cashOverviewPage,
-        ),
-        ModuleMenu(
-          name: 'Invoices overview',
-          link: invoiceOverviewPage.pageName,
-          icon: Icon(Icons.stacked_bar_chart_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: invoiceOverviewPage,
-        ),
-        ModuleMenu(
-          name: 'Sales tracking',
-          link: salesCashTrackingPage.pageName,
-          icon: Icon(Icons.ssid_chart_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: salesCashTrackingPage,
-        ),
-        ModuleMenu(
-          name: 'Product performance',
-          link: productPerformancePage.pageName,
-          icon: Icon(Icons.trending_up_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: productPerformancePage,
-        ),
-        ModuleMenu(
-          name: 'Seller performance',
-          link: sellerPerformancePage.pageName,
-          icon: Icon(Icons.multiline_chart_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: sellerPerformancePage,
-        ),
-        ModuleMenu(
-          name: 'Category overview',
-          link: categoryPerformancePage.pageName,
-          icon: Icon(Icons.category_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['admin'],
-          page: categoryPerformancePage,
-        ),
-      ]);
-}
+// ModuleMenu _getReportMenu(
+//     {required BuildContext context,
+//     required OnBackPage onBackPage,
+//     required OnChangePage onChangePage}) {
+//   var cashOverviewPage = OverviewCashSales(onBackPage: onBackPage);
+//   var invoiceOverviewPage = OverviewInvoiceSales(onBackPage: onBackPage);
+//   var salesCashTrackingPage = SalesTrackingPage(onBackPage: onBackPage);
+//   var productPerformancePage = ProductPerformance(onBackPage: onBackPage);
+//   var sellerPerformancePage = SellerPerformance(onBackPage: onBackPage);
+//   var categoryPerformancePage = CategoryPerformance(onBackPage: onBackPage);
+//   return ModuleMenu(
+//       name: 'Reports',
+//       icon: Icon(Icons.data_saver_off_outlined,
+//           color: Theme.of(context).colorScheme.primary),
+//       link: cashOverviewPage.pageName,
+//       page: cashOverviewPage,
+//       roles: [
+//         'admin'
+//       ],
+//       children: [
+//         ModuleMenu(
+//           name: 'Cash overview',
+//           link: cashOverviewPage.pageName,
+//           icon: Icon(Icons.bar_chart_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: cashOverviewPage,
+//         ),
+//         ModuleMenu(
+//           name: 'Invoices overview',
+//           link: invoiceOverviewPage.pageName,
+//           icon: Icon(Icons.stacked_bar_chart_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: invoiceOverviewPage,
+//         ),
+//         ModuleMenu(
+//           name: 'Sales tracking',
+//           link: salesCashTrackingPage.pageName,
+//           icon: Icon(Icons.ssid_chart_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: salesCashTrackingPage,
+//         ),
+//         ModuleMenu(
+//           name: 'Product performance',
+//           link: productPerformancePage.pageName,
+//           icon: Icon(Icons.trending_up_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: productPerformancePage,
+//         ),
+//         ModuleMenu(
+//           name: 'Seller performance',
+//           link: sellerPerformancePage.pageName,
+//           icon: Icon(Icons.multiline_chart_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: sellerPerformancePage,
+//         ),
+//         ModuleMenu(
+//           name: 'Category overview',
+//           link: categoryPerformancePage.pageName,
+//           icon: Icon(Icons.category_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['admin'],
+//           page: categoryPerformancePage,
+//         ),
+//       ]);
+// }
 
-ModuleMenu _getExpensesMenu(
-    {required BuildContext context,
-    required OnBackPage onBackPage,
-    required OnChangePage onChangePage}) {
-  var expenseAllPage =
-      ExpensesPage(onBackPage: onBackPage, onChangePage: onChangePage);
-
-  return ModuleMenu(
-      name: 'Expenses',
-      icon: Icon(Icons.receipt_long_outlined,
-          color: Theme.of(context).colorScheme.primary),
-      link: expenseAllPage.pageName,
-      page: expenseAllPage,
-      roles: [
-        '*'
-      ],
-      children: [
-        // ModuleMenu(
-        //   name: 'Create',
-        //   link: expenseCreatePage.pageName,
-        //   icon: Icon(Icons.receipt,color: Theme.of(context).colorScheme.primary),
-        //   roles: ['*'],
-        //   page: expenseCreatePage,
-        // ),
-        ModuleMenu(
-          name: 'All expenses',
-          link: expenseAllPage.pageName,
-          icon: Icon(Icons.receipt_outlined,
-              color: Theme.of(context).colorScheme.primary),
-          roles: ['*'],
-          page: expenseAllPage,
-        ),
-        // ModuleMenu(
-        //   name: 'Summary',
-        //   link: expenseIndex.pageName,
-        //   icon: Icon(Icons.bar_chart_outlined,
-        //       color: Theme.of(context).colorScheme.primary),
-        //   roles: ['*'],
-        //   page: expenseIndex,
-        // ),
-      ]);
-}
+// ModuleMenu _getExpensesMenu(
+//     {required BuildContext context,
+//     required OnBackPage onBackPage,
+//     required OnChangePage onChangePage}) {
+//   var expenseAllPage =
+//       ExpensesPage(onBackPage: onBackPage, onChangePage: onChangePage);
+//
+//   return ModuleMenu(
+//       name: 'Expenses',
+//       icon: Icon(Icons.receipt_long_outlined,
+//           color: Theme.of(context).colorScheme.primary),
+//       link: expenseAllPage.pageName,
+//       page: expenseAllPage,
+//       roles: [
+//         '*'
+//       ],
+//       children: [
+//         // ModuleMenu(
+//         //   name: 'Create',
+//         //   link: expenseCreatePage.pageName,
+//         //   icon: Icon(Icons.receipt,color: Theme.of(context).colorScheme.primary),
+//         //   roles: ['*'],
+//         //   page: expenseCreatePage,
+//         // ),
+//         ModuleMenu(
+//           name: 'All expenses',
+//           link: expenseAllPage.pageName,
+//           icon: Icon(Icons.receipt_outlined,
+//               color: Theme.of(context).colorScheme.primary),
+//           roles: ['*'],
+//           page: expenseAllPage,
+//         ),
+//         // ModuleMenu(
+//         //   name: 'Summary',
+//         //   link: expenseIndex.pageName,
+//         //   icon: Icon(Icons.bar_chart_outlined,
+//         //       color: Theme.of(context).colorScheme.primary),
+//         //   roles: ['*'],
+//         //   page: expenseIndex,
+//         // ),
+//       ]);
+// }
 
 ModuleMenu _getDashboardMenu(
     {required BuildContext context,
@@ -244,15 +244,15 @@ ModuleMenu _getInventoryMenu(
             color: Theme.of(context).colorScheme.primary),
         // onClick: () => null,
       ),
-      ModuleMenu(
-        name: 'Wastes',
-        link: productsPage.pageName,
-        roles: ['admin', 'manager'],
-        page: productsPage,
-        icon: Icon(Icons.sell_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        // onClick: () => null,
-      ),
+      // ModuleMenu(
+      //   name: 'Categories',
+      //   link: productsPage.pageName,
+      //   roles: ['admin', 'manager'],
+      //   page: productsPage,
+      //   icon: Icon(Icons.sell_outlined,
+      //       color: Theme.of(context).colorScheme.primary),
+      //   // onClick: () => null,
+      // ),
       ModuleMenu(
         name: 'Categories',
         link: categoriesPage.pageName,
@@ -400,8 +400,8 @@ List<ModuleMenu> _getEmptyMenu({
 void main() {
   initializeSmartStock(
     onGetAppMenu: _onGetModules,
-    // onGetInitialPage: ({required onBackPage, required onChangePage}) =>
-    //     SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage),
+    onGetInitialPage: ({required onBackPage, required onChangePage}) =>
+        PurchaseCreatePage(onBackPage: onBackPage),
   );
 
   // initializeSmartStock(

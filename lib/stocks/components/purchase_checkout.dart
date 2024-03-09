@@ -24,6 +24,7 @@ import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/stocks/components/create_supplier_content.dart';
 import 'package:smartstock/stocks/services/purchase.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
+import 'package:uuid/uuid.dart';
 
 _fn(dynamic d) => null;
 
@@ -50,7 +51,7 @@ class _State extends State<PurchaseCheckout> {
   Map _vendor = {};
   Map _errors = {};
   bool _isInvoice = false;
-  String _reference = '';
+  // String _reference = '';
   String _purchaseDate = '';
   String _purchaseDue = '';
 
@@ -71,7 +72,7 @@ class _State extends State<PurchaseCheckout> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _getHeaderSection(top: 16),
-            _getActionsSection(top: 16),
+            // _getActionsSection(top: 16),
             const WhiteSpacer(height: 8),
             const HorizontalLine(),
             Expanded(
@@ -124,16 +125,16 @@ class _State extends State<PurchaseCheckout> {
     var isSmallScreen = getIsSmallScreen(context);
     var getShopCurrency = compose(
         [propertyOr('currency', (p0) => 'TZS'), propertyOrNull('settings')]);
-    var referenceInput = TextInput(
-      onText: (p0) {
-        setState(() {
-          _reference = p0;
-          _errors = {..._errors, 'reference': ''};
-        });
-      },
-      error: '${_errors['reference'] ?? ''}',
-      label: 'Reference',
-    );
+    // var referenceInput = TextInput(
+    //   onText: (p0) {
+    //     setState(() {
+    //       _reference = p0;
+    //       _errors = {..._errors, 'reference': ''};
+    //     });
+    //   },
+    //   error: '${_errors['reference'] ?? ''}',
+    //   label: 'Reference',
+    // );
     var dateInput = DateInput(
       initialDate: DateTime.now(),
       lastDate: DateTime.now(),
@@ -188,8 +189,8 @@ class _State extends State<PurchaseCheckout> {
       top: top,
       child: isSmallScreen
           ? Column(mainAxisSize: MainAxisSize.min, children: [
-              referenceInput,
-              const WhiteSpacer(width: 16),
+              // referenceInput,
+              // const WhiteSpacer(width: 16),
               supplierInput,
               const WhiteSpacer(width: 16),
               amountInput,
@@ -207,8 +208,8 @@ class _State extends State<PurchaseCheckout> {
                     // crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(child: supplierInput),
-                      const WhiteSpacer(width: 8),
-                      Expanded(child: referenceInput),
+                      // const WhiteSpacer(width: 8),
+                      // Expanded(child: referenceInput),
                       const WhiteSpacer(width: 8),
                       Expanded(child: amountInput),
                     ],
@@ -264,7 +265,7 @@ class _State extends State<PurchaseCheckout> {
     //   DateTime.parse,
     //   propertyOr('createdAt', (p0) => DateTime.now().toIso8601String())
     // ]);
-    var managePurchaseTitle = const BodyLarge(text: 'Complete purchase order');
+    var managePurchaseTitle = const BodyLarge(text: 'Complete collect order');
     // var createdTitle = BodyLarge(text: 'Created: ${getPurchaseDate(_item)}');
     return _sectionWrapper(
       top: top,
@@ -404,10 +405,10 @@ class _State extends State<PurchaseCheckout> {
       _errors['vendor'] = 'Picker required';
       hasError = false;
     }
-    if (_reference == '') {
-      _errors['reference'] = 'Reference required';
-      hasError = false;
-    }
+    // if (_reference == '') {
+    //   _errors['reference'] = 'Reference required';
+    //   hasError = false;
+    // }
     if (_purchaseDate == '') {
       _errors['date'] = 'Purchase date required';
       hasError = false;
@@ -450,24 +451,24 @@ class _State extends State<PurchaseCheckout> {
     }
     return {
       "date": _purchaseDate,
-      "due": _purchaseDue,
-      "refNumber": _reference,
+      "due": _purchaseDate,
+      "refNumber": _vendor['name'] ?? 'general',
       "batchId": _batchId,
       "amount": totalAmount,
       "supplier": {"name": _vendor['name'] ?? 'general'},
       "user": {"username": currentUser['username'] ?? ''},
-      "type": _isInvoice ? 'invoice' : 'cash',
+      "type": 'cash',
       "images": files,
       "items": widget.carts.map((e) {
         return {
-          "wholesalePrice": e.product['wholesalePrice'],
-          "retailPrice": e.product['retailPrice'],
-          "expire": e.product['expire'] ?? '',
+          "wholesalePrice": doubleOrZero(e.product['purchase']),
+          "retailPrice": doubleOrZero(e.product['purchase']),
+          "expire": '',
           "product": {
             "id": e.product['id'],
             "__type": e.product['__type'] ?? 'old',
             "product": e.product['product'],
-            "stockable": e.product['stockable'] == true,
+            "stockable": false,
             "purchase": doubleOrZero(e.product['purchase']),
             "supplier": _vendor['name'] ?? 'general'
           },

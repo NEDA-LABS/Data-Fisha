@@ -9,6 +9,7 @@ import 'package:smartstock/sales/models/cart.model.dart';
 import 'package:smartstock/sales/services/products.dart';
 import 'package:smartstock/stocks/components/add_purchase_to_cart.dart';
 import 'package:smartstock/stocks/components/purchase_checkout.dart';
+import 'package:smartstock/stocks/services/category.dart';
 
 class PurchaseCreatePage extends PageBase {
   final OnBackPage onBackPage;
@@ -32,12 +33,12 @@ class _State extends State<PurchaseCreatePage> {
         _onAddToCart({}, onAddToCartSubmitCallback);
       },
       wholesale: false,
-      title: 'New purchase',
+      title: 'New collect',
       onBack: widget.onBackPage,
       searchTextController: _editingController,
       onGetRetailPrice: _onGetPrice,
       onAddToCart: _onAddToCart,
-      onGetProductsLike: getStockFromCacheOrRemote,
+      onGetProductsLike: getCategoryFromCacheOrRemote,
       onCheckout: _onCheckout,
     );
   }

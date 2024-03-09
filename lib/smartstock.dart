@@ -1,30 +1,17 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
-import 'package:smartstock/account/pages/payment.dart';
-import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/LabelLarge.dart';
-import 'package:smartstock/core/components/WhiteSpacer.dart';
-import 'package:smartstock/core/components/headline_large.dart';
 import 'package:smartstock/core/components/responsive_page_layout.dart';
 import 'package:smartstock/core/helpers/page_history.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
-import 'package:smartstock/core/plugins/sync.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
 import 'package:smartstock/sales/pages/register_sale_page.dart';
 import 'package:uuid/uuid.dart';
-
-// import 'package:socket_io_client/socket_io_client.dart' as io_client;
-
-import 'core/plugins/sync_common.dart';
 
 class SmartStock extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -46,10 +33,12 @@ class _State extends State<SmartStock> {
   bool _loading = false;
   bool _initialized = false;
   Map? user;
-  var _shouldSubsRun = true;
-  var _shouldProductsSyncsRun = true;
-  var _shouldShowSubsDialog = true;
-  var _payNowClicked = false;
+
+  // var _shouldSubsRun = true;
+
+  // var _shouldProductsSyncsRun = true;
+  // var _shouldShowSubsDialog = true;
+  // var _payNowClicked = false;
   Timer? _subscriptionTimer;
   Timer? _productRefreshTimer;
 
@@ -58,9 +47,9 @@ class _State extends State<SmartStock> {
   @override
   void initState() {
     _getLoginUser();
-    _periodicSubscriptionCheck();
-    _periodProductsSync();
-    _listeningForStockChanges();
+    // _periodicSubscriptionCheck();
+    // _periodProductsSync();
+    // _listeningForStockChanges();
     super.initState();
   }
 
@@ -202,211 +191,211 @@ class _State extends State<SmartStock> {
     });
   }
 
-  void _periodicSubscriptionCheck() {
-    _subscriptionTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
-      if (_shouldSubsRun) {
-        try {
-          _shouldSubsRun = false;
-          dynamic value = {};
-          if (isNativeMobilePlatform() == true) {
-            final resultPort = ReceivePort();
-            await Isolate.spawn(checkSubscription,
-                [resultPort.sendPort, ServicesBinding.rootIsolateToken]);
-            value = await (resultPort.first);
-          } else {
-            value = await compute(checkSubscription, [1]);
-          }
-          if (kDebugMode) {
-            print('Subscription: $value');
-          }
-          var getSubscription = propertyOrNull('subscription');
-          if (getSubscription(value) == false && _shouldShowSubsDialog) {
-            _shouldShowSubsDialog = false;
-            _showD(value);
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print(_);
-          }
-        } finally {
-          _shouldSubsRun = true;
-        }
-      } else {
-        if (kDebugMode) {
-          print('another subscription sync running');
-        }
-      }
-    });
-  }
+  // void _periodicSubscriptionCheck() {
+  //   _subscriptionTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
+  //     if (_shouldSubsRun) {
+  //       try {
+  //         _shouldSubsRun = false;
+  //         dynamic value = {};
+  //         if (isNativeMobilePlatform() == true) {
+  //           final resultPort = ReceivePort();
+  //           await Isolate.spawn(checkSubscription,
+  //               [resultPort.sendPort, ServicesBinding.rootIsolateToken]);
+  //           value = await (resultPort.first);
+  //         } else {
+  //           value = await compute(checkSubscription, [1]);
+  //         }
+  //         if (kDebugMode) {
+  //           print('Subscription: $value');
+  //         }
+  //         var getSubscription = propertyOrNull('subscription');
+  //         if (getSubscription(value) == false && _shouldShowSubsDialog) {
+  //           _shouldShowSubsDialog = false;
+  //           _showD(value);
+  //         }
+  //       } catch (e) {
+  //         if (kDebugMode) {
+  //           print(_);
+  //         }
+  //       } finally {
+  //         _shouldSubsRun = true;
+  //       }
+  //     } else {
+  //       if (kDebugMode) {
+  //         print('another subscription sync running');
+  //       }
+  //     }
+  //   });
+  // }
 
-  void _periodProductsSync() {
-    _productRefreshTimer =
-        Timer.periodic(const Duration(minutes: 3), (_) async {
-      if (_shouldProductsSyncsRun) {
-        try {
-          _shouldProductsSyncsRun = false;
-          dynamic value = {};
-          if (isNativeMobilePlatform() == true) {
-            final resultPort = ReceivePort();
-            await Isolate.spawn(updateLocalProducts,
-                [resultPort.sendPort, ServicesBinding.rootIsolateToken]);
-            value = await (resultPort.first);
-          } else {
-            value = await compute(updateLocalProducts, [1]);
-          }
-          if (kDebugMode) {
-            print('Products sync: $value');
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print(_);
-          }
-        } finally {
-          _shouldProductsSyncsRun = true;
-        }
-      } else {
-        if (kDebugMode) {
-          print('Another products sync running');
-        }
-      }
-    });
-  }
+  // void _periodProductsSync() {
+  // _productRefreshTimer =
+  //     Timer.periodic(const Duration(minutes: 3), (_) async {
+  //   if (_shouldProductsSyncsRun) {
+  //     try {
+  //       _shouldProductsSyncsRun = false;
+  //       dynamic value = {};
+  //       if (isNativeMobilePlatform() == true) {
+  //         final resultPort = ReceivePort();
+  //         await Isolate.spawn(updateLocalProducts,
+  //             [resultPort.sendPort, ServicesBinding.rootIsolateToken]);
+  //         value = await (resultPort.first);
+  //       } else {
+  //         value = await compute(updateLocalProducts, [1]);
+  //       }
+  //       if (kDebugMode) {
+  //         print('Products sync: $value');
+  //       }
+  //     } catch (e) {
+  //       if (kDebugMode) {
+  //         print(_);
+  //       }
+  //     } finally {
+  //       _shouldProductsSyncsRun = true;
+  //     }
+  //   } else {
+  //     if (kDebugMode) {
+  //       print('Another products sync running');
+  //     }
+  //   }
+  // });
+  // }
 
-  void _listeningForStockChanges() {
-    // _socket = io_client.io('$baseUrl/changes/stock/products', io_client.OptionBuilder()
-    // .enableReconnection()
-    // .enableAutoConnect()
-    // .setTransports(['websocket'])
-    // .build());
-    // getActiveShop().then((value) {
-    //   if (value is Map && value['projectId'] != null) {
-    //     var projectId = value['projectId'];
-    //     _socket?.onConnect((_) {
-    //       if (kDebugMode) {
-    //         print('connected stock socket');
-    //       }
-    //       _socket?.emit('${projectId}_stocks', {
-    //         'auth': {'projectId': projectId}
-    //       });
-    //     });
-    //     _socket?.on('${projectId}_stocks', (data) => print(data));
-    //     _socket?.onDisconnect((_) => print('disconnect from stock changes'));
-    //     // socket.on('fromServer', (_) => print(_));
-    //   }
-    // }).catchError((error) {
-    //   if (kDebugMode) {
-    //     print(error);
-    //   }
-    // });
-  }
+  // void _listeningForStockChanges() {
+  // _socket = io_client.io('$baseUrl/changes/stock/products', io_client.OptionBuilder()
+  // .enableReconnection()
+  // .enableAutoConnect()
+  // .setTransports(['websocket'])
+  // .build());
+  // getActiveShop().then((value) {
+  //   if (value is Map && value['projectId'] != null) {
+  //     var projectId = value['projectId'];
+  //     _socket?.onConnect((_) {
+  //       if (kDebugMode) {
+  //         print('connected stock socket');
+  //       }
+  //       _socket?.emit('${projectId}_stocks', {
+  //         'auth': {'projectId': projectId}
+  //       });
+  //     });
+  //     _socket?.on('${projectId}_stocks', (data) => print(data));
+  //     _socket?.onDisconnect((_) => print('disconnect from stock changes'));
+  //     // socket.on('fromServer', (_) => print(_));
+  //   }
+  // }).catchError((error) {
+  //   if (kDebugMode) {
+  //     print(error);
+  //   }
+  // });
+  // }
 
-  void _showD(dynamic value) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return WillPopScope(
-          onWillPop: () async {
-            if (_payNowClicked == true) {
-              return true;
-            }
-            var noGrace = value is Map && value['force'] == true;
-            return noGrace == true ? false : true;
-          },
-          child: Dialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  constraints:
-                      const BoxConstraints(minHeight: 210, maxWidth: 400),
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(4)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LabelLarge(text: 'You have unpaid invoice'),
-                      const WhiteSpacer(height: 8),
-                      HeadlineLarge(
-                          text: 'TZ ${formatNumber(value['balance'])}'),
-                      const WhiteSpacer(height: 16),
-                      const BodyLarge(
-                          text:
-                              'For all your shops, to continue using the service you must pay'),
-                      const WhiteSpacer(height: 24),
-                      Row(
-                        children: [
-                          value is Map && value['force'] == true
-                              ? Container()
-                              : Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .maybePop()
-                                          .whenComplete(() {
-                                        _shouldShowSubsDialog = true;
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                      ),
-                                      child: const BodyMedium(text: 'CANCEL'),
-                                    ),
-                                  ),
-                                ),
-                          const WhiteSpacer(width: 8),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                _payNowClicked = true;
-                                Navigator.of(context)
-                                    .maybePop()
-                                    .whenComplete(() {
-                                  Navigator.of(context)
-                                      .push(
-                                    MaterialPageRoute(
-                                      fullscreenDialog: true,
-                                      builder: (context) {
-                                        return PaymentPage(subscription: value);
-                                      },
-                                    ),
-                                  )
-                                      .whenComplete(() {
-                                    _shouldShowSubsDialog = true;
-                                  });
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
-                                ),
-                                child: const BodyMedium(text: 'PAY NOW'),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void _showD(dynamic value) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (_) {
+  //       return WillPopScope(
+  //         onWillPop: () async {
+  //           if (_payNowClicked == true) {
+  //             return true;
+  //           }
+  //           var noGrace = value is Map && value['force'] == true;
+  //           return noGrace == true ? false : true;
+  //         },
+  //         child: Dialog(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Container(
+  //                 padding: const EdgeInsets.all(24),
+  //                 constraints:
+  //                     const BoxConstraints(minHeight: 210, maxWidth: 400),
+  //                 decoration:
+  //                     BoxDecoration(borderRadius: BorderRadius.circular(4)),
+  //                 child: Column(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     const LabelLarge(text: 'You have unpaid invoice'),
+  //                     const WhiteSpacer(height: 8),
+  //                     HeadlineLarge(
+  //                         text: 'TZ ${formatNumber(value['balance'])}'),
+  //                     const WhiteSpacer(height: 16),
+  //                     const BodyLarge(
+  //                         text:
+  //                             'For all your shops, to continue using the service you must pay'),
+  //                     const WhiteSpacer(height: 24),
+  //                     Row(
+  //                       children: [
+  //                         value is Map && value['force'] == true
+  //                             ? Container()
+  //                             : Expanded(
+  //                                 child: InkWell(
+  //                                   onTap: () {
+  //                                     Navigator.of(context)
+  //                                         .maybePop()
+  //                                         .whenComplete(() {
+  //                                       _shouldShowSubsDialog = true;
+  //                                     });
+  //                                   },
+  //                                   child: Container(
+  //                                     padding: const EdgeInsets.all(8),
+  //                                     decoration: BoxDecoration(
+  //                                       borderRadius: BorderRadius.circular(4),
+  //                                       color: Theme.of(context)
+  //                                           .colorScheme
+  //                                           .secondaryContainer,
+  //                                     ),
+  //                                     child: const BodyMedium(text: 'CANCEL'),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                         const WhiteSpacer(width: 8),
+  //                         Expanded(
+  //                           child: InkWell(
+  //                             onTap: () {
+  //                               _payNowClicked = true;
+  //                               Navigator.of(context)
+  //                                   .maybePop()
+  //                                   .whenComplete(() {
+  //                                 Navigator.of(context)
+  //                                     .push(
+  //                                   MaterialPageRoute(
+  //                                     fullscreenDialog: true,
+  //                                     builder: (context) {
+  //                                       return PaymentPage(subscription: value);
+  //                                     },
+  //                                   ),
+  //                                 )
+  //                                     .whenComplete(() {
+  //                                   _shouldShowSubsDialog = true;
+  //                                 });
+  //                               });
+  //                             },
+  //                             child: Container(
+  //                               padding: const EdgeInsets.all(8),
+  //                               decoration: BoxDecoration(
+  //                                 borderRadius: BorderRadius.circular(4),
+  //                                 color: Theme.of(context)
+  //                                     .colorScheme
+  //                                     .primaryContainer,
+  //                               ),
+  //                               child: const BodyMedium(text: 'PAY NOW'),
+  //                             ),
+  //                           ),
+  //                         )
+  //                       ],
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -416,16 +405,16 @@ class _State extends State<SmartStock> {
     super.dispose();
   }
 
-  _calculateCanPop() {
-    if (kDebugMode) {
-      print('------');
-      print('Back pressed');
-      print('------');
-    }
-    if (PageHistory().getLength() == 1) {
-      return true;
-    }
-    _onBackPage();
-    return false;
-  }
+// _calculateCanPop() {
+//   if (kDebugMode) {
+//     print('------');
+//     print('Back pressed');
+//     print('------');
+//   }
+//   if (PageHistory().getLength() == 1) {
+//     return true;
+//   }
+//   _onBackPage();
+//   return false;
+// }
 }

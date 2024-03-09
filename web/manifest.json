@@ -1,11 +1,11 @@
 {
-    "name": "SmartStock",
-    "short_name": "SmartStock",
+    "name": "Chatafisha",
+    "short_name": "Chatafisha",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Business management tool.",
+    "background_color": "green",
+    "theme_color": "green",
+    "description": "Waste management",
     "orientation": "natural",
     "prefer_related_applications": false,
     "icons": [

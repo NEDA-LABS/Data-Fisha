@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -67,18 +68,18 @@ class _State extends State<SaleLikePage> {
   bool _loading = false;
   List _items = [];
   List<CartModel> _carts = [];
-  Map _shop = {};
+  // Map _shop = {};
 
   StreamSubscription<Position>? _locationSubscriptionStream;
 
   @override
   void initState() {
     _initialLoad();
-    getActiveShop().then((value) {
-      _updateState(() {
-        _shop = value;
-      });
-    }).catchError((e) {});
+    // getActiveShop().then((value) {
+    //   _updateState(() {
+    //     _shop = value;
+    //   });
+    // }).catchError((e) {});
     _locationSubscriptionStream =
         getLocationChangeStream().listen((Position? position) {
       if (position != null) {
@@ -143,7 +144,7 @@ class _State extends State<SaleLikePage> {
                         ContextMenu(
                             name: 'Reload', pressed: () => _refresh(true))
                       ]),
-            isSmallScreen || _items.isEmpty ? Container() : _tableHeader(),
+            // isSmallScreen || _items.isEmpty ? Container() : _tableHeader(),
             _items.isEmpty && !_loading
                 ? Center(
                     child: Column(
@@ -154,7 +155,7 @@ class _State extends State<SaleLikePage> {
                           text: _query.isNotEmpty
                               ? 'Sorry, filter "$_query" does not match any data.\n'
                                   'Please clear filter or refresh'
-                              : 'No pre-saved wastes found. Use "Quick Item" to add to cart or refresh',
+                              : 'No pre-saved waste category found. Use "Quick Item" to add to cart or refresh',
                         ),
                         const WhiteSpacer(height: 8),
                         InkWell(
@@ -171,9 +172,7 @@ class _State extends State<SaleLikePage> {
                 : Container(),
             isSmallScreen ? const WhiteSpacer(height: 16) : const SizedBox(),
           ],
-          dynamicChildBuilder: isSmallScreen
-              ? (a, b) => _smallScreenChildBuilder(a, b)
-              : (a, b) => _largerScreenChildBuilder(a, b),
+          dynamicChildBuilder: _largerScreenChildBuilder,
           totalDynamicChildren: _items.length,
           fab: isSmallScreen && _carts.isEmpty ? _fab() : null,
         ),
@@ -184,51 +183,54 @@ class _State extends State<SaleLikePage> {
     ]);
   }
 
-  _tableHeader() {
-    return TableLikeListRow([
-      const LabelSmall(text: 'ITEM NAME'),
-      // LabelSmall(text:'QUANTITY'),
-      // LabelSmall(text: 'COST ( ${shop['settings']?['currency']??''} )'),
-      const LabelSmall(text: 'QUANTITY'),
-      Center(
-          child: LabelSmall(
-              text:
-                  "PRICE\n( ${_shop['settings']?['currency'] ?? ''} )")),
-      widget.onGetWholesalePrice != null
-          ? Center(
-              child: LabelSmall(
-                  text:
-                      "WHOLE PRICE\n( ${_shop['settings']?['currency'] ?? ''} )"))
-          : Container(),
-      const Center(child: LabelSmall(text: "ACTION")),
-    ]);
-  }
+  // _tableHeader() {
+  //   return TableLikeListRow([
+  //     const LabelSmall(text: 'ITEM NAME'),
+  //     // LabelSmall(text:'QUANTITY'),
+  //     // LabelSmall(text: 'COST ( ${shop['settings']?['currency']??''} )'),
+  //     // const LabelSmall(text: 'QUANTITY'),
+  //     // Center(
+  //     //     child: LabelSmall(
+  //     //         text:
+  //     //             "PRICE\n( ${_shop['settings']?['currency'] ?? ''} )")),
+  //     // widget.onGetWholesalePrice != null
+  //     //     ? Center(
+  //     //         child: LabelSmall(
+  //     //             text:
+  //     //                 "WHOLE PRICE\n( ${_shop['settings']?['currency'] ?? ''} )"))
+  //     //     : Container(),
+  //     const Center(child: LabelSmall(text: "ACTION")),
+  //   ]);
+  // }
 
   Widget _largerScreenChildBuilder(context, index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InkWell(
           onTap: () => widget.onAddToCart(_items[index], _onAddToCartCallback),
-          child: TableLikeListRow([
-            TableLikeListTextDataCell(
-                firstLetterUpperCase('${_items[index]['product']}')),
-            _getQuantityLabel(_items[index]),
-            Center(
-              child: TableLikeListTextDataCell(
-                  '${formatNumber('${widget.onGetRetailPrice(_items[index])}')}'),
-            ),
-            widget.onGetWholesalePrice != null
-                ? Center(
-                    child: TableLikeListTextDataCell(
-                        '${formatNumber('${widget.onGetWholesalePrice!(_items[index])}')}'),
-                  )
-                : Container(),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SizedBox(
+                    width: 100,
+                    height: 70,
+                    child: Image.network(
+                      '${_items[index]['image']}',
+                      errorBuilder: (context, error, stackTrace) => Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(8))),
+                    ),
+                  ),
+                ),
+                const WhiteSpacer(width: 16),
+                BodyLarge(text:
+                    firstLetterUpperCase('${_items[index]['name']}')),
+                const Expanded(child: WhiteSpacer(width: 16)),
                 LabelLarge(
                   text: 'Select',
                   overflow: TextOverflow.ellipsis,
@@ -238,65 +240,74 @@ class _State extends State<SaleLikePage> {
                   Icons.chevron_right,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ],
-            ),
-          ]),
+                // Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //
+                //   ],
+                // ),
+              ]),
+              const WhiteSpacer(height: 8)
+            ],
+          ),
         ),
-        const HorizontalLine()
+        const HorizontalLine(),
+        const WhiteSpacer(height: 8)
       ],
     );
   }
 
-  Widget _smallScreenChildBuilder(context, index) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-          onTap: () {
-            widget.onAddToCart(_items[index], _onAddToCartCallback);
-          },
-          title: BodyLarge(
-              text: firstLetterUpperCase('${_items[index]['product']}')),
-          subtitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BodyMedium(text: 'Qty : '),
-              _getQuantityLabel(_items[index])
-            ],
-          ),
-          trailing: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              BodyLarge(
-                text:
-                    '${_shop['settings']?['currency'] ?? ''} ${formatNumber(widget.onGetRetailPrice(_items[index]))}',
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  LabelLarge(
-                    text: 'Select',
-                    overflow: TextOverflow.ellipsis,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).primaryColor,
-                  )
-                ],
-              ),
-            ],
-          ),
-          // dense: true,
-        ),
-        const SizedBox(height: 5),
-        const HorizontalLine(),
-      ],
-    );
-  }
+  // Widget _smallScreenChildBuilder(context, index) {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //     children: [
+  //       ListTile(
+  //         contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+  //         onTap: () {
+  //           widget.onAddToCart(_items[index], _onAddToCartCallback);
+  //         },
+  //         title:
+  //             BodyLarge(text: firstLetterUpperCase('${_items[index]['name']}')),
+  //         subtitle: Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const BodyMedium(text: 'Qty : '),
+  //             _getQuantityLabel(_items[index])
+  //           ],
+  //         ),
+  //         trailing: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: [
+  //             BodyLarge(
+  //               text:
+  //                   '${_shop['settings']?['currency'] ?? ''} ${formatNumber(widget.onGetRetailPrice(_items[index]))}',
+  //             ),
+  //             Row(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 LabelLarge(
+  //                   text: 'Select',
+  //                   overflow: TextOverflow.ellipsis,
+  //                   color: Theme.of(context).colorScheme.primary,
+  //                 ),
+  //                 Icon(
+  //                   Icons.chevron_right,
+  //                   color: Theme.of(context).primaryColor,
+  //                 )
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //         // dense: true,
+  //       ),
+  //       const SizedBox(height: 5),
+  //       const HorizontalLine(),
+  //     ],
+  //   );
+  // }
 
   // List<CartModel> _getCarts(Map data) {
   //   List<CartModel> carts = itOrEmptyArray(data['carts']);
@@ -332,24 +343,24 @@ class _State extends State<SaleLikePage> {
       searchHint: "Search here...",
       onBack: widget.onBack,
       onSearch: (text) {
-        if (text.startsWith('qr_code:')) {
-          var barCodeQ = text.replaceFirst('qr_code:', '');
-          widget.onGetProductsLike(false, barCodeQ).then((value) {
-            Map? inventory = itOrEmptyArray(value).firstWhere((element) {
-              var getBarCode = propertyOrNull('barcode');
-              var barCode = getBarCode(element);
-              return barCode == barCodeQ && barCodeQ != '' && barCodeQ != '_';
-            }, orElse: () => null);
-            if (inventory != null) {
-              widget.onAddToCart(inventory, _onAddToCartCallback);
-            }
-          }).catchError((e) {});
-        } else {
+        // if (text.startsWith('qr_code:')) {
+        //   var barCodeQ = text.replaceFirst('qr_code:', '');
+        //   widget.onGetProductsLike(false, barCodeQ).then((value) {
+        //     Map? inventory = itOrEmptyArray(value).firstWhere((element) {
+        //       var getBarCode = propertyOrNull('barcode');
+        //       var barCode = getBarCode(element);
+        //       return barCode == barCodeQ && barCodeQ != '' && barCodeQ != '_';
+        //     }, orElse: () => null);
+        //     if (inventory != null) {
+        //       widget.onAddToCart(inventory, _onAddToCartCallback);
+        //     }
+        //   }).catchError((e) {});
+        // } else {
           if (text.isNotEmpty) {
             _query = text;
             _refresh(false, _query);
           }
-        }
+        // }
       },
       context: context,
     );
@@ -533,14 +544,14 @@ class _State extends State<SaleLikePage> {
     });
   }
 
-  Widget _getQuantityLabel(item) {
-    var quantity = doubleOrZero(item?['quantity'] ?? '');
-    var stockable = item?['stockable'] == true;
-    // var pc = Theme.of(context).colorScheme.primary;
-    var ec = Theme.of(context).colorScheme.error;
-    return BodyMedium(
-      text: stockable ? '${formatNumber(quantity)}' : 'n/a',
-      color: stockable ? (quantity <= 0 ? ec : null) : null,
-    );
-  }
+  // Widget _getQuantityLabel(item) {
+  //   var quantity = doubleOrZero(item?['quantity'] ?? '');
+  //   var stockable = item?['stockable'] == true;
+  //   // var pc = Theme.of(context).colorScheme.primary;
+  //   var ec = Theme.of(context).colorScheme.error;
+  //   return BodyMedium(
+  //     text: stockable ? '${formatNumber(quantity)}' : 'n/a',
+  //     color: stockable ? (quantity <= 0 ? ec : null) : null,
+  //   );
+  // }
 }
