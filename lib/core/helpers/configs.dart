@@ -83,7 +83,7 @@ var primaryBaseColorValue = const Color(0xff005aa9);
 var primaryBaseLightColor = const Color(0x1a005aa9);
 
 App smartStockApp =
-    App(applicationId: 'smartstock_lb', projectId: 'smartstock');
+    App(applicationId: 'chatafisha', projectId: 'chatafisha');
 
 getVendorName(){
   return 'CHATAFISHA';
