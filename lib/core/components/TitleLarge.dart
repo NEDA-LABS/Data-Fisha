@@ -5,8 +5,7 @@ class TitleLarge extends StatelessWidget {
   final Color? color;
   final TextOverflow? overflow;
 
-  const TitleLarge({Key? key, required this.text, this.overflow, this.color})
-      : super(key: key);
+  const TitleLarge({super.key, required this.text, this.overflow, this.color});
 
   @override
   Widget build(BuildContext context) {

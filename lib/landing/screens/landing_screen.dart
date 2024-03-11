@@ -1,12 +1,9 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/LoginPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/DisplayTextMedium.dart';
-import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/logo_black.dart';
@@ -109,12 +106,12 @@ class LandingScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-         Row(
+        Row(
           // mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const DisplayTextMedium(text: 'Let\'s get\nStarted'),
             const WhiteSpacer(width: 16),
-            getIsSmallScreen(context)?Container():const LogoBlack(size: 100)
+            getIsSmallScreen(context) ? Container() : const LogoBlack(size: 100)
           ],
         ),
         const BodyLarge(
