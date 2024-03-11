@@ -24,8 +24,8 @@ class _State extends State<MainWidget> {
   Widget build(BuildContext context) {
     var lightTheme =
         ThemeData(colorScheme: lightColorScheme, fontFamily: 'Syne');
-    var darkTheme =
-        ThemeData(colorScheme: darkColorScheme, fontFamily: 'Syne');
+    // var darkTheme =
+    //     ThemeData(colorScheme: darkColorScheme, fontFamily: 'Syne');
     return MaterialApp(
       builder: (context, child) {
         return MediaQuery(
@@ -35,7 +35,7 @@ class _State extends State<MainWidget> {
       },
       debugShowCheckedModeBanner: kDebugMode,
       theme: lightTheme,
-      darkTheme: darkTheme,
+      darkTheme: lightTheme,
       home: SafeArea(
         child: SmartStock(
           onGetModulesMenu: widget.onGetModulesMenu,
