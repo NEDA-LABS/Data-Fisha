@@ -5,6 +5,7 @@ import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/LabelLarge.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
+import 'package:smartstock/core/components/logo_black.dart';
 import 'package:smartstock/core/components/with_active_shop.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/helpers/functional.dart';
@@ -46,7 +47,7 @@ class _State extends State<AppMenu> {
 
   @override
   void initState() {
-    getActiveShop().then((value){
+    getActiveShop().then((value) {
       setState(() {
         _shop = value;
       });
@@ -58,7 +59,7 @@ class _State extends State<AppMenu> {
   Widget build(BuildContext context) {
     var getOfficeName = compose([propertyOr('businessName', (p0) => 'Menu')]);
     var getOfficeLogo =
-    compose([propertyOrNull('logo'), propertyOrNull('ecommerce')]);
+        compose([propertyOrNull('logo'), propertyOrNull('ecommerce')]);
     return Container(
       height: MediaQuery.of(context).size.height,
       decoration: _getContainerDecoration(),
@@ -84,6 +85,7 @@ class _State extends State<AppMenu> {
       ),
     );
   }
+
   //
   // Widget _modulesMenuContent(Map shop) {
   //
@@ -107,11 +109,18 @@ class _State extends State<AppMenu> {
             height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(80),
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.inversePrimary,
             ),
             child: '$url'.startsWith('http')
-                ? Image.network('$url', errorBuilder: (a, b, c) => Container())
-                : Container()),
+                ? Image.network('$url',
+                    errorBuilder: (a, b, c) => const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: LogoBlack(size: 70),
+                        ))
+                : const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: LogoBlack(size: 70),
+                  )),
       ),
     );
   }
@@ -259,7 +268,8 @@ class _State extends State<AppMenu> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: itOrEmptyArray(item.children)
                   .where(_roleFilter)
-                  .map(_selectedMenuMap).toList(),
+                  .map(_selectedMenuMap)
+                  .toList(),
             ),
           ),
           canTapOnHeader: true,

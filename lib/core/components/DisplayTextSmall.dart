@@ -10,7 +10,7 @@ class DisplayTextSmall extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         fontSize: 36,
         height: 1.22
       ),

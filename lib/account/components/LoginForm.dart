@@ -11,7 +11,7 @@ import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/smartstock.dart';
+import 'package:smartstock/chatafisha.dart';
 
 class LoginForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -43,25 +43,22 @@ class _State extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _iconContainer('icon-192.png'),
-              _usernameInput(states, _prepareUpdateState()),
-              _passwordInput(states, _prepareUpdateState()),
-              _loginButton(states, _prepareUpdateState(), context),
-              _resetAccount(context, states, _prepareUpdateState()),
-              _orSeparatorView(),
-              _registerButton(states, _prepareUpdateState(), context)
-            ],
-          ),
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _iconContainer('icon-192.png'),
+            _usernameInput(states, _prepareUpdateState()),
+            _passwordInput(states, _prepareUpdateState()),
+            _loginButton(states, _prepareUpdateState(), context),
+            _resetAccount(context, states, _prepareUpdateState()),
+            _orSeparatorView(),
+            _registerButton(states, _prepareUpdateState(), context)
+          ],
         ),
       ),
     );

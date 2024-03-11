@@ -1,20 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
-class TitleMedium extends StatelessWidget{
+class TitleMedium extends StatelessWidget {
+  final Color? color;
   final String text;
 
-  const TitleMedium({Key? key, required this.text}) : super(key: key);
+  const TitleMedium({super.key, required this.text, this.color});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-          height: 1.5,
+      style: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        height: 1.5,
+        color: color
       ),
     );
   }
-
 }

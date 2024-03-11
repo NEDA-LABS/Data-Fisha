@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/smartstock.dart';
+import 'package:smartstock/chatafisha.dart';
 import 'package:smartstock/core/services/api_account.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';

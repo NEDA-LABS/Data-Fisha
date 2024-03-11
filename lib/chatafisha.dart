@@ -10,6 +10,7 @@ import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/core/services/cache_shop.dart';
 import 'package:smartstock/core/services/cache_user.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
+import 'package:smartstock/landing/screens/landing_screen.dart';
 import 'package:smartstock/sales/pages/register_sale_page.dart';
 import 'package:uuid/uuid.dart';
 
@@ -98,7 +99,7 @@ class _State extends State<SmartStock> {
         // },
       );
     } else {
-      return LoginPage(
+      return LandingScreen(
         onGetModulesMenu: widget.onGetModulesMenu,
         onGetInitialModule: widget.onGetInitialPage,
       );

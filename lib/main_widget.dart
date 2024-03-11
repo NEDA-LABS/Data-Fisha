@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
-import 'smartstock.dart';
+import 'chatafisha.dart';
 
 class MainWidget extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -23,9 +23,9 @@ class _State extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     var lightTheme =
-        ThemeData(colorScheme: lightColorScheme, fontFamily: 'Inter');
+        ThemeData(colorScheme: lightColorScheme, fontFamily: 'Syne');
     var darkTheme =
-        ThemeData(colorScheme: darkColorScheme, fontFamily: 'Inter');
+        ThemeData(colorScheme: darkColorScheme, fontFamily: 'Syne');
     return MaterialApp(
       builder: (context, child) {
         return MediaQuery(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smartstock/account/states/shops.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/smartstock.dart';
+import 'package:smartstock/chatafisha.dart';
 import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/helpers/util.dart';
 

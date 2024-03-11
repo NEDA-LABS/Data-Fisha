@@ -53,6 +53,9 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter-VariableFont_slnt,wght.ttf
+    - family: Syne
+      fonts:
+        - asset: assets/fonts/Syne-VariableFont_wght.ttf
 #        - asset: assets/fonts/static/Inter-Black.ttf
 #        - asset: assets/fonts/static/Inter-Bold.ttf
 #        - asset: assets/fonts/static/Inter-ExtraBold.ttf

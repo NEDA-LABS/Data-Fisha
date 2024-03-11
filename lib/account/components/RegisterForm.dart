@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
-import 'package:smartstock/account/pages/LoginPage.dart';
-import 'package:smartstock/account/services/register.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/chatafisha.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
-import 'package:smartstock/core/components/BodyMedium.dart';
-import 'package:smartstock/core/components/info_dialog.dart';
-import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/smartstock.dart';
-import 'package:smartstock/core/helpers/configs.dart';
-import 'package:smartstock/core/components/BodySmall.dart';
-import 'package:smartstock/core/components/choices_input.dart';
-import 'package:smartstock/core/components/horizontal_line.dart';
-import 'package:smartstock/core/components/mobile_input.dart';
 import 'package:smartstock/core/components/TextInput.dart';
-import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/components/horizontal_line.dart';
+import 'package:smartstock/core/components/info_dialog.dart';
+import 'package:smartstock/core/components/mobile_input.dart';
+import 'package:smartstock/core/helpers/configs.dart';
+import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/account.dart';
 
 class RegisterForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -32,7 +27,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _State extends State<RegisterForm> {
-  dynamic _country;
+  final Map _country = {"name": 'Tanzania, United Republic of', 'code': 'TZ'};
   Map states = {
     'loading': false,
     'username': '',
@@ -40,7 +35,7 @@ class _State extends State<RegisterForm> {
     'businessName': '',
     'fullname': '',
     'email': '',
-    'country': '',
+    'country': {"name": 'Tanzania, United Republic of', 'code': 'TZ'},
     'mobile': '',
     'show': false,
     'e_username': '',
@@ -57,28 +52,21 @@ class _State extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        constraints: const BoxConstraints(maxWidth: 500),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _businessInput(states, _prepareUpdateState()),
-            _fullnameInput(states, _prepareUpdateState()),
-            _emailInput(states, _prepareUpdateState()),
-            _countryInput(states, _prepareUpdateState()),
-            _mobileInput(states, _prepareUpdateState()),
-            _separatorView(),
-            _usernameInput(states, _prepareUpdateState()),
-            _passwordInput(states, _prepareUpdateState()),
-            _registerButton(states, _prepareUpdateState(), context),
-            _goToLogin(context),
-          ],
-        ),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _businessInput(states, _prepareUpdateState()),
+        _fullnameInput(states, _prepareUpdateState()),
+        _emailInput(states, _prepareUpdateState()),
+        _countryInput(states, _prepareUpdateState()),
+        _mobileInput(states, _prepareUpdateState()),
+        _separatorView(),
+        _usernameInput(states, _prepareUpdateState()),
+        _passwordInput(states, _prepareUpdateState()),
+        _registerButton(states, _prepareUpdateState(), context),
+        // _goToLogin(context),
+      ],
     );
   }
 
@@ -99,7 +87,7 @@ class _State extends State<RegisterForm> {
     }
     if ((businessName is String && businessName.isEmpty) ||
         businessName is! String) {
-      err['e_business'] = 'Business name required';
+      err['e_business'] = 'Center name required';
     }
     if ((fullname is String && fullname.isEmpty) || businessName is! String) {
       err['e_fullname'] = 'Fullname required';
@@ -121,13 +109,11 @@ class _State extends State<RegisterForm> {
     var isValid = _isFormValid(states, updateState);
     if (isValid == true) {
       lE(error) {
-        showTransactionCompleteDialog(
-          context,
-          '$error', title: 'Error',
-            canDismiss: true
-          // builder: (context) => AlertDialog(
-          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
-        );
+        showTransactionCompleteDialog(context, '$error',
+            title: 'Error', canDismiss: true
+            // builder: (context) => AlertDialog(
+            //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+            );
       }
 
       var data = {
@@ -239,11 +225,11 @@ class _State extends State<RegisterForm> {
 
   _businessInput(states, updateState) {
     return TextInput(
-      label: "Business name",
+      label: "Center name",
       initialText: states['businessName'],
       onText: (x) => updateState({
         'businessName': x,
-        'e_business': x.isNotEmpty ? '' : 'Business name required'
+        'e_business': x.isNotEmpty ? '' : 'Center name required'
       }),
       error: states['e_business'] ?? '',
     );
@@ -272,25 +258,26 @@ class _State extends State<RegisterForm> {
   }
 
   _countryInput(states, updateState) {
-    return ChoicesInput(
-      choice: _country,
+    return TextInput(
+      initialText: _country['name'],
       label: "Country",
-      onChoice: (x) {
-        _country = x;
-        updateState({
-          'country': x,
-          'e_country': x.isNotEmpty ? '' : 'Country required'
-        });
+      readOnly: true,
+      onText: (x) {
+        // _country = x;
+        // updateState({
+        //   'country': x,
+        //   'e_country': x.isNotEmpty ? '' : 'Country required'
+        // });
       },
       error: states['e_country'] ?? '',
-      onLoad: ([skipLocal = false]) async => getCountries(),
+      // onLoad: ([skipLocal = false]) async => getCountries(),
       placeholder: "Choose country",
-      onField: (a) {
-        if (a is Map) {
-          return '${a['name'] ?? ''} - ${a['code'] ?? ''}';
-        }
-        return '';
-      },
+      // onField: (a) {
+      //   if (a is Map) {
+      //     return '${a['name'] ?? ''} - ${a['code'] ?? ''}';
+      //   }
+      //   return '';
+      // },
     );
   }
 
@@ -327,28 +314,28 @@ class _State extends State<RegisterForm> {
     );
   }
 
-  _goToLogin(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(flex: 2, child: Container()),
-          InkWell(
-            onTap: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(
-                    onGetModulesMenu: widget.onGetModulesMenu,
-                    onGetInitialModule: widget.onGetInitialModule,
-                  ),
-                ),
-                (route) => false,
-              );
-            },
-            child: const BodySmall(text: 'Already have account? Go to login.'),
-          ),
-        ],
-      ),
-    );
-  }
+// _goToLogin(context) {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(vertical: 16),
+//     child: Row(
+//       children: [
+//         Expanded(flex: 2, child: Container()),
+//         InkWell(
+//           onTap: () {
+//             Navigator.of(context).pushAndRemoveUntil(
+//               MaterialPageRoute(
+//                 builder: (context) => LoginPage(
+//                   onGetModulesMenu: widget.onGetModulesMenu,
+//                   onGetInitialModule: widget.onGetInitialModule,
+//                 ),
+//               ),
+//               (route) => false,
+//             );
+//           },
+//           child: const BodySmall(text: 'Already have account? Go to login.'),
+//         ),
+//       ],
+//     ),
+//   );
+// }
 }

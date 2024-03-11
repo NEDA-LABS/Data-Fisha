@@ -146,7 +146,7 @@ class _State extends State<PurchaseCheckout> {
         });
       },
       error: '${_errors['date'] ?? ''}',
-      label: 'Purchase date',
+      label: 'Date',
     );
     var dueDateInput = DateInput(
       initialDate: DateTime.now(),
@@ -410,7 +410,7 @@ class _State extends State<PurchaseCheckout> {
     //   hasError = false;
     // }
     if (_purchaseDate == '') {
-      _errors['date'] = 'Purchase date required';
+      _errors['date'] = 'Date required';
       hasError = false;
     }
     if (_purchaseDue == '' && _isInvoice) {
@@ -497,7 +497,7 @@ class _State extends State<PurchaseCheckout> {
         _updateState(() {
           _confirmingPurchase = false;
         });
-        showTransactionCompleteDialog(context, 'Purchase added',canDismiss: false, onClose: (){
+        showTransactionCompleteDialog(context, 'Waste collected successful',canDismiss: false, onClose: (){
           widget.onDone(value);
         });
       }).catchError((error) {
