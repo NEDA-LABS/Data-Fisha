@@ -30,7 +30,7 @@ class SmartStock extends StatefulWidget {
 
 class _State extends State<SmartStock> {
   int i = 0;
-  PageBase? child = const DashboardIndexPage();
+  PageBase? _child;
   bool _loading = false;
   bool _initialized = false;
   Map? user;
@@ -47,6 +47,9 @@ class _State extends State<SmartStock> {
 
   @override
   void initState() {
+    setState(() {
+      _child = DashboardIndexPage(onBackPage:_onBackPage, onChangePage: _onChangePage);
+    });
     _getLoginUser();
     // _periodicSubscriptionCheck();
     // _periodProductsSync();
@@ -76,14 +79,14 @@ class _State extends State<SmartStock> {
           _onBackPage();
         },
         child: ResponsivePageLayout(
-          currentPage: child?.pageName ?? const Uuid().v4(),
+          currentPage: _child?.pageName ?? const Uuid().v4(),
           currentUser: user ?? {},
           onGetModulesMenu: widget.onGetModulesMenu,
           onGetInitialModule: widget.onGetInitialPage,
           showLeftDrawer: menus.isNotEmpty,
           menus: menus,
           onChangePage: _onChangePage,
-          child: child ?? Container(),
+          child: _child ?? Container(),
         ),
         // onWillPop: () async {
         //   if (kDebugMode) {
@@ -107,7 +110,7 @@ class _State extends State<SmartStock> {
   }
 
   _onChangePage(PageBase page) {
-    child = page;
+    _child = page;
     if (PageHistory().getIsNotEmpty()) {
       PageBase lastWidget = PageHistory().getLast();
       if (lastWidget.pageName == page.pageName) {
@@ -133,7 +136,7 @@ class _State extends State<SmartStock> {
     goBack(int offset) {
       var last = PageHistory().getAt(length - offset);
       if (last != null) {
-        child = last;
+        _child = last;
         PageHistory().removeAt(length - 1);
         _updateState();
       }
@@ -170,15 +173,15 @@ class _State extends State<SmartStock> {
       var initialPage = widget.onGetInitialPage(
           onBackPage: _onBackPage, onChangePage: _onChangePage);
       if (initialPage != null) {
-        child = initialPage;
+        _child = initialPage;
       } else {
         var role = propertyOrNull('role')(user);
         if (role != 'admin' && _initialized == false) {
-          child = RegisterSalePage(onBackPage: _onBackPage);
+          _child = RegisterSalePage(onBackPage: _onBackPage);
         }
       }
-      if (child != null) {
-        PageHistory().add(child!);
+      if (_child != null) {
+        PageHistory().add(_child!);
       }
       _initialized = true;
     }).catchError((err) {

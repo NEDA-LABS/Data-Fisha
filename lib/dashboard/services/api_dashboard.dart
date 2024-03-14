@@ -1,11 +1,12 @@
-import 'package:smartstock/core/helpers/functional.dart';
-import 'package:smartstock/core/services/api.dart';
-import 'package:smartstock/core/helpers/util.dart';
+import 'dart:async';
 
-getDashboardSummary(shop, date) {
-  var request = composeAsync([
-    (app) => httpGetRequest('${shopFunctionsURL(app)}/report/dashboard?date=$date'),
-    shopToApp,
-  ]);
-  return request(shop);
+import 'package:smartstock/core/helpers/util.dart';
+import 'package:smartstock/core/services/api.dart';
+
+Future getDashboardSummary(shop, date) async {
+  var postHttp =
+      prepareHttpPostRequest({'name': 'total_purchase_item_quantity'});
+  var response = await postHttp(
+      '${shopFunctionsURL(shopToApp(shop))}/report/custom?date=$date');
+  return response;
 }

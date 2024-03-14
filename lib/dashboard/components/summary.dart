@@ -134,25 +134,25 @@ class _State extends State<DashboardSummary> {
   }
 
   void _fetchData() {
-    _updateState(() {
-      loading = true;
-      error = '';
-    });
-    prepareGetDashboardData(date).then((value) {
-      _updateState(() {
-        data = value;
-      });
-    }).catchError((onError) {
-      _updateState(() {
-        error = '$onError';
-      });
-    }).whenComplete(() {
-      if (mounted) {
-        _updateState(() {
-          loading = false;
-        });
-      }
-    });
+    // _updateState(() {
+    //   loading = true;
+    //   error = '';
+    // });
+    // prepareGetDashboardData(date).then((value) {
+    //   _updateState(() {
+    //     data = value;
+    //   });
+    // }).catchError((onError) {
+    //   _updateState(() {
+    //     error = '$onError';
+    //   });
+    // }).whenComplete(() {
+    //   if (mounted) {
+    //     _updateState(() {
+    //       loading = false;
+    //     });
+    //   }
+    // });
   }
 
   _getTotalSalesView() {

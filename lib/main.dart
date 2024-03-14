@@ -199,7 +199,8 @@ ModuleMenu _getDashboardMenu(
     {required BuildContext context,
     required OnBackPage onBackPage,
     required OnChangePage onChangePage}) {
-  var dashboardIndex = const DashboardIndexPage();
+  var dashboardIndex =
+      DashboardIndexPage(onChangePage: onChangePage, onBackPage: onBackPage);
   return ModuleMenu(
     name: 'Dashboard',
     icon: Icon(
