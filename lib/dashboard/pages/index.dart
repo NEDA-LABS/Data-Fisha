@@ -15,6 +15,7 @@ import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/pages/page_base.dart';
 import 'package:smartstock/dashboard/services/dashboard.dart';
 import 'package:smartstock/stocks/pages/purchase_create_page.dart';
+import 'package:smartstock/stocks/pages/purchases_page.dart';
 import 'package:smartstock/stocks/services/supplier.dart';
 
 class DashboardIndexPage extends PageBase {
@@ -112,7 +113,7 @@ class _State extends State<DashboardIndexPage> {
         const WhiteSpacer(width: 16),
         // Expanded(child: Container()),
         PrimaryAction(
-            text: 'Offset-data',
+            text: 'Create offset',
             onPressed: () {
               widget.onChangePage(
                   PurchaseCreatePage(onBackPage: widget.onBackPage));
@@ -142,7 +143,7 @@ class _State extends State<DashboardIndexPage> {
         ),
         const WhiteSpacer(height: 16),
         PrimaryAction(
-            text: 'Offset-data',
+            text: 'Create offset',
             onPressed: () {
               widget.onChangePage(
                   PurchaseCreatePage(onBackPage: widget.onBackPage));
@@ -166,7 +167,8 @@ class _State extends State<DashboardIndexPage> {
           children: [
             const TitleLarge(text: 'Total waste collected'),
             const WhiteSpacer(height: 8),
-            DisplayTextMedium(text: '${formatNumber(_collected,decimals: 2)} Kg'),
+            DisplayTextMedium(
+                text: '${formatNumber(_collected, decimals: 2)} Kg'),
             const WhiteSpacer(height: 8),
             Container(
               // height: 24,
@@ -174,7 +176,14 @@ class _State extends State<DashboardIndexPage> {
               decoration: BoxDecoration(
                   color: const Color(0xffFA5A23),
                   borderRadius: BorderRadius.circular(20)),
-              child: const BodyLarge(text: 'Offset', color: Colors.white),
+              child: InkWell(
+                child: const BodyLarge(text: 'More', color: Colors.white),
+                onTap: () {
+                  widget.onChangePage(PurchasesPage(
+                      onChangePage: widget.onChangePage,
+                      onBackPage: widget.onBackPage));
+                },
+              ),
             )
           ],
         ),
@@ -205,7 +214,9 @@ class _State extends State<DashboardIndexPage> {
                   color: Theme.of(context).colorScheme.onPrimaryContainer),
             ),
             const WhiteSpacer(height: 8),
-            DisplayTextMedium(text: '${formatNumber(doubleOrZero(_collected)/1000,decimals: 3)} Cc'),
+            DisplayTextMedium(
+                text:
+                    '${formatNumber(doubleOrZero(_collected) / 1000, decimals: 3)} Cc'),
             const WhiteSpacer(height: 8),
             const BodyLarge(
                 text: 'Impact calculator', color: Color(0xffFA5A23)),
@@ -224,7 +235,7 @@ class _State extends State<DashboardIndexPage> {
         //   children: [
         const TitleLarge(text: 'Total waste collected'),
         const WhiteSpacer(height: 8),
-        DisplayTextMedium(text: '${formatNumber(_collected,decimals: 2)} Kg'),
+        DisplayTextMedium(text: '${formatNumber(_collected, decimals: 2)} Kg'),
         // const WhiteSpacer(height: 8),
         // Container(
         //   // height: 24,
@@ -263,7 +274,9 @@ class _State extends State<DashboardIndexPage> {
               color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
         const WhiteSpacer(height: 8),
-        DisplayTextMedium(text: '${formatNumber(doubleOrZero(_collected)/1000,decimals: 3)} Cc'),
+        DisplayTextMedium(
+            text:
+                '${formatNumber(doubleOrZero(_collected) / 1000, decimals: 3)} Cc'),
         const WhiteSpacer(height: 8),
         const BodyLarge(text: 'Impact calculator', color: Color(0xffFA5A23)),
         const BodyLarge(text: 'www.chatafisha.com'),
@@ -284,7 +297,7 @@ class _State extends State<DashboardIndexPage> {
     });
     getCenterDashboardData(DateTime.now()).then((value) {
       setState(() {
-        _collected = doubleOrZero(value is Map?(value['sum']):0);
+        _collected = doubleOrZero(value is Map ? (value['sum']) : 0);
       });
       return getSupplierFromCacheOrRemote(true);
     }).then((value) {

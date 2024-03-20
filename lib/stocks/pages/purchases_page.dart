@@ -51,7 +51,7 @@ class _PurchasesPage extends State<PurchasesPage> {
 
   _appBar(context) {
     return SliverSmartStockAppBar(
-      title: "Collected wastes",
+      title: "All offsets",
       showBack: true,
       backLink: '/stock/',
       showSearch: true,

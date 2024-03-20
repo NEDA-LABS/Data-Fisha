@@ -229,7 +229,7 @@ ModuleMenu _getInventoryMenu(
   var productsVendors =
       SuppliersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   return ModuleMenu(
-    name: 'Collect',
+    name: 'Offset',
     icon: Icon(Icons.inventory_2_outlined,
         color: Theme.of(context).colorScheme.primary),
     link: purchaseCreate.pageName,
@@ -272,7 +272,7 @@ ModuleMenu _getInventoryMenu(
           ),
           page: productsVendors),
       ModuleMenu(
-        name: 'Collected',
+        name: 'All offsets',
         link: purchasePage.pageName,
         roles: ['admin', 'manager'],
         icon: Icon(Icons.receipt_outlined,

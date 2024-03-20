@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:smartstock/account/pages/LoginPage.dart';
+import 'package:smartstock/account/components/LoginForm.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/DisplayTextMedium.dart';
-import 'package:smartstock/core/components/TitleMedium.dart';
+import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/logo_black.dart';
 import 'package:smartstock/core/components/logo_white.dart';
 import 'package:smartstock/core/components/surface_with_image.dart';
+import 'package:smartstock/core/helpers/dialog_or_fullscreen.dart';
 import 'package:smartstock/core/helpers/util.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -23,13 +24,17 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: SurfaceWithImage(
+      body: SurfaceWithImage(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           child: ListView(
-            // mainAxisSize: MainAxisSize.min,
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            padding: getIsSmallScreen(context)
+                ? const EdgeInsets.all(0)
+                : EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width > 1100
+                        ? (MediaQuery.of(context).size.width - 1100) / 2
+                        : 0),
             shrinkWrap: true,
             children: [
               _getHeader(context),
@@ -119,32 +124,32 @@ class LandingScreen extends StatelessWidget {
                 'Welcome to Chatafisha, your one step away from making real impact'),
         const WhiteSpacer(height: 16),
         InkWell(
-          onTap: () => _signIn(context),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.primary),
-            height: 58,
-            child: Center(
-                child: TitleMedium(
-              text: 'Already have account',
-              color: Theme.of(context).colorScheme.onPrimary,
-            )),
-          ),
-        ),
-        const WhiteSpacer(height: 16),
-        InkWell(
           onTap: () => _registerAccount(context),
           child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Theme.of(context).colorScheme.tertiary),
-              height: 58,
+                  color: const Color(0xffD9E2DE)),
+              height: 98,
               child: Center(
-                  child: TitleMedium(
+                  child: TitleLarge(
                 text: 'Open an account',
-                color: Theme.of(context).colorScheme.onTertiary,
+                // color: ,
               ))),
+        ),
+        const WhiteSpacer(height: 16),
+        InkWell(
+          onTap: () => _signIn(context),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xffD9D9D9)),
+            height: 98,
+            child: Center(
+                child: TitleLarge(
+              text: 'Already have account',
+              // color: Theme.of(context).colorScheme.onPrimary,
+            )),
+          ),
         ),
       ],
     );
@@ -226,13 +231,20 @@ class LandingScreen extends StatelessWidget {
   void _onTupeSupport() {}
 
   void _signIn(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return LoginPage(
-            onGetModulesMenu: onGetModulesMenu,
-            onGetInitialModule: onGetInitialModule);
-      },
-    ));
+    showDialogOrFullScreenModal(
+      LoginForm(
+        onGetModulesMenu: onGetModulesMenu,
+        onGetInitialModule: onGetInitialModule,
+      ),
+      context,
+    );
+    // Navigator.of(context).push(MaterialPageRoute(
+    //   builder: (context) {
+    //     return LoginPage(
+    //         onGetModulesMenu: onGetModulesMenu,
+    //         onGetInitialModule: onGetInitialModule);
+    //   },
+    // ));
   }
 
   void _registerAccount(BuildContext context) {

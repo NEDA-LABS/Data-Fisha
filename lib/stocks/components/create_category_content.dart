@@ -28,7 +28,6 @@ class CreateCategoryContent extends StatefulWidget {
 }
 
 class _State extends State<CreateCategoryContent> {
-  // Map _category = {};
   String _name = '';
   String _description = '';
   var _err = {};

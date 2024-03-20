@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/components/RegisterForm.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
+import 'package:smartstock/core/components/DisplayTextSmall.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/logo_white.dart';
@@ -33,20 +34,17 @@ class _State extends State<RegisterPage> {
       ),
       body: SurfaceWithImage(
         child: ListView(
-          // shrinkWrap: true,
-          padding: const EdgeInsets.all(24),
+          padding: getIsSmallScreen(context)
+              ? const EdgeInsets.all(24)
+              : EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width > 1100
+                      ? (MediaQuery.of(context).size.width - 1100) / 2
+                      : 24,
+                  vertical: 24),
+          shrinkWrap: true,
+          // padding: const EdgeInsets.all(24),
           children: [
-            const TitleLarge(text: 'Welcome to Chatafisha, your one step'),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const TitleLarge(text: 'away from making'),
-                const WhiteSpacer(width: 8),
-                TitleLarge(
-                    text: 'real + impact',
-                    color: Theme.of(context).colorScheme.primary)
-              ],
-            ),
+            ..._getHeaders(context),
             const WhiteSpacer(height: 24),
             _getBody(context)
           ],
@@ -95,7 +93,7 @@ class _State extends State<RegisterPage> {
             ),
             BodyLarge(
               text:
-              'Earn carbon credits through the offsets of plastic waste into usable goods and building materials.',
+                  'Earn carbon credits through the offsets of plastic waste into usable goods and building materials.',
               color: Theme.of(context).colorScheme.onPrimary,
             )
           ],
@@ -134,5 +132,32 @@ class _State extends State<RegisterPage> {
         const WhiteSpacer(width: 24),
       ],
     );
+  }
+
+  List<Widget> _getHeaders(BuildContext context) {
+    // var isSmallScreen = getIsSmallScreen(context);
+    var text1 = 'Welcome to Chatafisha, your one step';
+    var text2 = 'away from making';
+    var text3 = 'real + impact';
+    return [
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.topLeft,
+        child: DisplayTextSmall(text: text1),
+      ),
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.topLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DisplayTextSmall(text: text2),
+            const WhiteSpacer(width: 8),
+            DisplayTextSmall(
+                text: text3, color: Theme.of(context).colorScheme.primary)
+          ],
+        ),
+      ),
+    ];
   }
 }

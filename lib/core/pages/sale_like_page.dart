@@ -39,7 +39,7 @@ class SaleLikePage extends StatefulWidget {
   final OnGetPrice onGetRetailPrice;
   final OnGetPrice? onGetWholesalePrice;
   final OnAddToCart onAddToCart;
-  final OnQuickItem? onQuickItem;
+  final OnQuickItem onQuickItem;
   final OnCheckout onCheckout;
   final TextEditingController? searchTextController;
   final OnGetProductsLike onGetProductsLike;
@@ -52,7 +52,7 @@ class SaleLikePage extends StatefulWidget {
     required this.onGetRetailPrice,
     this.onGetWholesalePrice,
     required this.onAddToCart,
-    this.onQuickItem,
+    required this.onQuickItem,
     this.onBack,
     this.searchTextController,
     required this.onGetProductsLike,
@@ -122,59 +122,37 @@ class _State extends State<SaleLikePage> {
           staticChildren: [
             _loading ? const LinearProgressIndicator() : const SizedBox(),
             isSmallScreen ? const WhiteSpacer(height: 16) : const SizedBox(),
-            isSmallScreen
-                ? widget.onQuickItem != null
-                    ? PrimaryAction(
-                        text: 'Quick item',
-                        onPressed: () {
-                          widget.onQuickItem!(_onAddToCartCallback);
-                        })
-                    : Container()
-                : getTableContextMenu(widget.onQuickItem != null
-                    ? [
-                        ContextMenu(
-                            name: 'Quick item',
-                            pressed: () {
-                              widget.onQuickItem!(_onAddToCartCallback);
-                            }),
-                        ContextMenu(
-                            name: 'Reload', pressed: () => _refresh(true)),
-                      ]
-                    : [
-                        ContextMenu(
-                            name: 'Reload', pressed: () => _refresh(true))
-                      ]),
+            // isSmallScreen
+            //     ? widget.onQuickItem != null
+            //         ? PrimaryAction(
+            //             text: 'Quick item',
+            //             onPressed: () {
+            //               widget.onQuickItem!(_onAddToCartCallback);
+            //             })
+            //         : Container()
+            //     : getTableContextMenu(widget.onQuickItem != null
+            //         ? [
+            //             ContextMenu(
+            //                 name: 'Quick item',
+            //                 pressed: () {
+            //                   widget.onQuickItem!(_onAddToCartCallback);
+            //                 }),
+            //             ContextMenu(
+            //                 name: 'Reload', pressed: () => _refresh(true)),
+            //           ]
+            //         : [
+            //             ContextMenu(
+            //                 name: 'Reload', pressed: () => _refresh(true))
+            //           ]),
             // isSmallScreen || _items.isEmpty ? Container() : _tableHeader(),
             _items.isEmpty && !_loading
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const WhiteSpacer(height: 16),
-                        BodyLarge(
-                          text: _query.isNotEmpty
-                              ? 'Sorry, filter "$_query" does not match any data.\n'
-                                  'Please clear filter or refresh'
-                              : 'No pre-saved waste category found. Use "Quick Item" to add to cart or refresh',
-                        ),
-                        const WhiteSpacer(height: 8),
-                        InkWell(
-                          hoverColor: Colors.transparent,
-                          onTap: _initialLoad,
-                          child: BodyLarge(
-                            text: 'Refresh data',
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                ? widget.onQuickItem(_onAddToCartCallback)
                 : Container(),
             isSmallScreen ? const WhiteSpacer(height: 16) : const SizedBox(),
           ],
           dynamicChildBuilder: _largerScreenChildBuilder,
           totalDynamicChildren: _items.length,
-          fab: isSmallScreen && _carts.isEmpty ? _fab() : null,
+          // fab: isSmallScreen && _carts.isEmpty ? _fab() : null,
         ),
       ),
       isSmallScreen && _carts.isNotEmpty
@@ -339,7 +317,7 @@ class _State extends State<SaleLikePage> {
       title: widget.title,
       searchTextController: widget.searchTextController,
       showBack: true,
-      showSearch: true,
+      showSearch: false,
       searchHint: "Search here...",
       onBack: widget.onBack,
       onSearch: (text) {
@@ -366,47 +344,47 @@ class _State extends State<SaleLikePage> {
     );
   }
 
-  _fab() {
-    return FloatingActionButton(
-      onPressed: () => _showMobileContextMenu(context),
-      child: const Icon(Icons.unfold_more_outlined),
-    );
-  }
+  // _fab() {
+  //   return FloatingActionButton(
+  //     onPressed: () => _showMobileContextMenu(context),
+  //     child: const Icon(Icons.unfold_more_outlined),
+  //   );
+  // }
 
-  void _showMobileContextMenu(context) {
-    showDialogOrModalSheet(
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              widget.onQuickItem != null
-                  ? ListTile(
-                      leading: const Icon(Icons.add),
-                      title: const BodyLarge(text: 'Quick item'),
-                      onTap: () {
-                        Navigator.of(context).maybePop().whenComplete(() {
-                          widget.onQuickItem!(_onAddToCartCallback);
-                        });
-                      },
-                    )
-                  : Container(),
-              widget.onQuickItem != null ? const HorizontalLine() : Container(),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: const BodyLarge(text: 'Reload'),
-                onTap: () {
-                  Navigator.of(context).maybePop().whenComplete(() {
-                    _refresh(true);
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-        context);
-  }
+  // void _showMobileContextMenu(context) {
+  //   showDialogOrModalSheet(
+  //       Container(
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.stretch,
+  //           children: [
+  //             // widget.onQuickItem != null
+  //             //     ? ListTile(
+  //             //         leading: const Icon(Icons.add),
+  //             //         title: const BodyLarge(text: 'Quick item'),
+  //             //         onTap: () {
+  //             //           Navigator.of(context).maybePop().whenComplete(() {
+  //             //             widget.onQuickItem!(_onAddToCartCallback);
+  //             //           });
+  //             //         },
+  //             //       )
+  //             //     : Container(),
+  //             // widget.onQuickItem != null ? const HorizontalLine() : Container(),
+  //             // ListTile(
+  //             //   leading: const Icon(Icons.refresh),
+  //             //   title: const BodyLarge(text: 'Reload'),
+  //             //   onTap: () {
+  //             //     Navigator.of(context).maybePop().whenComplete(() {
+  //             //       _refresh(true);
+  //             //     });
+  //             //   },
+  //             // ),
+  //           ],
+  //         ),
+  //       ),
+  //       context);
+  // }
 
   // Widget _getView(context, snapshot) {
   //   return Column(

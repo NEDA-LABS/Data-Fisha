@@ -199,7 +199,6 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // _getHeader(),
           _getSearchInput(),
           _loading
               ? const Expanded(
@@ -261,6 +260,8 @@ class _ChoiceInputDropdown extends State<ChoiceInputDropdown> {
                 context: context,
                 builder: (context) {
                   return Dialog(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    surfaceTintColor: Theme.of(context).colorScheme.surface,
                     child:
                         DialogContentWrapper(child: widget.onCreateBuilder!()),
                   );

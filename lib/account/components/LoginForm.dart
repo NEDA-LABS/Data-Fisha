@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smartstock/account/pages/ChooseShopPage.dart';
 import 'package:smartstock/account/pages/RegisterPage.dart';
 import 'package:smartstock/account/states/shops.dart';
+import 'package:smartstock/chatafisha.dart';
 import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
+import 'package:smartstock/core/components/DisplayTextSmall.dart';
 import 'package:smartstock/core/components/TextInput.dart';
+import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/horizontal_line.dart';
 import 'package:smartstock/core/components/info_dialog.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/account.dart';
-import 'package:smartstock/chatafisha.dart';
 
 class LoginForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -43,23 +44,38 @@ class _State extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        constraints: const BoxConstraints(maxWidth: 400),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _iconContainer('icon-192.png'),
-            _usernameInput(states, _prepareUpdateState()),
-            _passwordInput(states, _prepareUpdateState()),
-            _loginButton(states, _prepareUpdateState(), context),
-            _resetAccount(context, states, _prepareUpdateState()),
-            _orSeparatorView(),
-            _registerButton(states, _prepareUpdateState(), context)
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(getIsSmallScreen(context) ? 24 : 48),
+      constraints: const BoxConstraints(maxWidth: 450),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          getIsSmallScreen(context)
+              ? Container()
+              : Container(
+                  width: 1,
+                  height: 260,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+          WhiteSpacer(width: getIsSmallScreen(context) ? 0 : 24),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // _iconContainer('icon-192.png'),
+                const DisplayTextSmall(text: 'Welcome\nback to chatafisha'),
+                _usernameInput(states, _prepareUpdateState()),
+                _passwordInput(states, _prepareUpdateState()),
+                _loginButton(states, _prepareUpdateState(), context),
+                _resetAccount(context, states, _prepareUpdateState()),
+                // _orSeparatorView(),
+                // _registerButton(states, _prepareUpdateState(), context)
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -73,13 +89,11 @@ class _State extends State<LoginForm> {
       }
       updateState({'e_u': '', 'reset_loading': true});
       accountResetPassword(username).then((value) {
-        showTransactionCompleteDialog(
-          context,
-          (value?['message'])??'$value', title: 'Error',
-            canDismiss: true
-          // builder: (context) => AlertDialog(
-          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
-        );
+        showTransactionCompleteDialog(context, (value?['message']) ?? '$value',
+            title: 'Error', canDismiss: true
+            // builder: (context) => AlertDialog(
+            //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+            );
         // showDialog(
         //   context: context,
         //   builder: (context) => AlertDialog(
@@ -88,13 +102,11 @@ class _State extends State<LoginForm> {
         //   ),
         // );
       }).catchError((error) {
-        showTransactionCompleteDialog(
-          context,
-          (error?['message'])??'$error', title: 'Error',
-            canDismiss: true
-          // builder: (context) => AlertDialog(
-          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
-        );
+        showTransactionCompleteDialog(context, (error?['message']) ?? '$error',
+            title: 'Error', canDismiss: true
+            // builder: (context) => AlertDialog(
+            //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+            );
         // showDialog(
         //   context: context,
         //   builder: (context) => AlertDialog(
@@ -152,12 +164,11 @@ class _State extends State<LoginForm> {
         );
       }
     }).catchError((error) {
-      showTransactionCompleteDialog(
-        context,'$error', title: 'Error',
-          canDismiss: true
-        // builder: (context) => AlertDialog(
-        //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
-      );
+      showTransactionCompleteDialog(context, '$error',
+          title: 'Error', canDismiss: true
+          // builder: (context) => AlertDialog(
+          //     title: const BodyMedium(text: 'Error'), content: BodyLarge(text: '$error')
+          );
       // showDialog(
       //     context: context,
       //     builder: (context) =>
@@ -218,9 +229,8 @@ class _State extends State<LoginForm> {
                 height: 48,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(48)
-                ),
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(48)),
                 child: TextButton(
                   onPressed: () => _loginPressed(states, updateState, context),
                   // style: ButtonStyle(
@@ -281,21 +291,19 @@ class _State extends State<LoginForm> {
   _resetAccount(context, states, updateState) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(flex: 2, child: Container()),
-          InkWell(
-            onTap: states['reset_loading'] == true
-                ? null
-                : _resetTapped(context, states, updateState),
-            child: BodyMedium(
-              text: states['reset_loading'] == true
-                  ? 'Waiting...'
-                  : 'Reset account password.',
-              textAlign: TextAlign.end,
-            ),
+      child: Center(
+        child: InkWell(
+          onTap: states['reset_loading'] == true
+              ? null
+              : _resetTapped(context, states, updateState),
+          child: BodyMedium(
+            color: Theme.of(context).colorScheme.primary,
+            text: states['reset_loading'] == true
+                ? 'Waiting...'
+                : 'Reset account password',
+            textAlign: TextAlign.end,
           ),
-        ],
+        ),
       ),
     );
   }
