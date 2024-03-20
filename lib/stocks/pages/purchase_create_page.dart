@@ -51,8 +51,8 @@ class _State extends State<PurchaseCreatePage> {
       cart: CartModel(product: product, quantity: 1),
       onAddToCartSubmitCallback: (cart) {
         submitCallback(cart);
-        Navigator.of(context).maybePop();
-        _editingController.clear();
+        // Navigator.of(context).maybePop();
+        // _editingController.clear();
       },
     );
     // ,

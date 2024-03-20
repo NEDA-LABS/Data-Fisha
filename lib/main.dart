@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:smartstock/account/pages/profile.dart';
-import 'package:smartstock/account/pages/users.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/models/menu.dart';
 import 'package:smartstock/dashboard/pages/index.dart';
-import 'package:smartstock/expense/pages/expenses_page.dart';
 import 'package:smartstock/initializer.dart';
-import 'package:smartstock/report/pages/sales_cash_overview.dart';
-import 'package:smartstock/report/pages/sales_tracking.dart';
-import 'package:smartstock/report/pages/sales_category_performance.dart';
-import 'package:smartstock/report/pages/sales_invoice_overview.dart';
-import 'package:smartstock/report/pages/sales_product_performance.dart';
-import 'package:smartstock/report/pages/sales_seller_performance.dart';
-import 'package:smartstock/sales/pages/customers_page.dart';
-import 'package:smartstock/sales/pages/invoices_page.dart';
-import 'package:smartstock/sales/pages/orders_page.dart';
-import 'package:smartstock/sales/pages/receipts_page.dart';
-import 'package:smartstock/sales/pages/register_sale_page.dart';
-import 'package:smartstock/sales/pages/sold_items_page.dart';
 import 'package:smartstock/stocks/pages/categories.dart';
-import 'package:smartstock/stocks/pages/index.dart';
-import 'package:smartstock/stocks/pages/products_page.dart';
 import 'package:smartstock/stocks/pages/purchase_create_page.dart';
 import 'package:smartstock/stocks/pages/purchases_page.dart';
 import 'package:smartstock/stocks/pages/suppliers.dart';
-import 'package:smartstock/stocks/pages/transfers_page.dart';
 
 List<ModuleMenu> _onGetModules({
   required BuildContext context,
@@ -52,7 +35,7 @@ ModuleMenu _getAccountMenu(
     required OnBackPage onBackPage,
     required OnChangePage onChangePage}) {
   var profilePage = ProfilePage(onBackPage: onBackPage);
-  var usersPage = UsersPage(onBackPage: onBackPage, onChangePage: onChangePage);
+  // var usersPage = UsersPage(onBackPage: onBackPage, onChangePage: onChangePage);
   return ModuleMenu(
     name: 'My profile',
     icon: Icon(Icons.supervised_user_circle_outlined,
@@ -217,8 +200,8 @@ ModuleMenu _getInventoryMenu(
     {required BuildContext context,
     required OnBackPage onBackPage,
     required OnChangePage onChangePage}) {
-  var productsPage =
-      ProductsPage(onBackPage: onBackPage, onChangePage: onChangePage);
+  // var productsPage =
+  //     ProductsPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var categoriesPage =
       CategoriesPage(onBackPage: onBackPage, onChangePage: onChangePage);
   var purchasePage =
@@ -299,104 +282,104 @@ ModuleMenu _getInventoryMenu(
   );
 }
 
-ModuleMenu _getSalesMenu(
-    {required OnBackPage onBackPage,
-    required OnChangePage onChangePage,
-    required BuildContext context}) {
-  var registerSalePage = RegisterSalePage(onBackPage: onBackPage);
-  // var invoiceCreatePage = InvoiceSalePage(onBackPage: onBackPage);
-  var invoicesPage =
-      InvoicesPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var receiptsPage =
-      ReceiptsPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var soldItemsPage =
-      SoldItemsPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var ordersPage =
-      OrdersPage(onBackPage: onBackPage, onChangePage: onChangePage);
-  var customersPage = CustomersPage(onBackPage: onBackPage);
-  return ModuleMenu(
-    name: 'Disburse',
-    icon: Icon(Icons.point_of_sale_outlined,
-        color: Theme.of(context).colorScheme.primary),
-    link: registerSalePage.pageName,
-    page: registerSalePage,
-    roles: ['*'],
-    children: [
-      ModuleMenu(
-        name: 'Create',
-        link: registerSalePage.pageName,
-        icon: Icon(Icons.add_shopping_cart,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: registerSalePage,
-      ),
-      // ModuleMenu(
-      //   name: 'Create wholesale',
-      //   link: '/sales/cash',
-      //   icon: Icon(Icons.business_outlined,
-      //       color: Theme.of(context).colorScheme.primary),
-      //   roles: ['*'],
-      //   page: salesCashWholePage,
-      // ),
-      // ModuleMenu(
-      //   name: 'Create invoice',
-      //   link: invoiceCreatePage.pageName,
-      //   icon: Icon(Icons.add_card_outlined,
-      //       color: Theme.of(context).colorScheme.primary),
-      //   roles: ['*'],
-      //   page: invoiceCreatePage,
-      // ),
-      ModuleMenu(
-        name: 'Disbursed wastes',
-        link: soldItemsPage.pageName,
-        icon: Icon(Icons.paste_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: soldItemsPage,
-      ),
-      ModuleMenu(
-        name: 'Invoices',
-        link: invoicesPage.pageName,
-        icon: Icon(Icons.receipt_long_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: invoicesPage,
-      ),
-      ModuleMenu(
-        name: 'Receipts',
-        link: receiptsPage.pageName,
-        icon: Icon(Icons.receipt_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: receiptsPage,
-      ),
-      ModuleMenu(
-        name: 'Customers',
-        link: customersPage.pageName,
-        icon: Icon(Icons.supervised_user_circle_outlined,
-            color: Theme.of(context).colorScheme.primary),
-        roles: ['*'],
-        page: customersPage,
-      ),
-      // ModuleMenu(
-      //   name: 'Orders',
-      //   link: ordersPage.pageName,
-      //   icon: Icon(Icons.local_mall_outlined,
-      //       color: Theme.of(context).colorScheme.primary),
-      //   roles: ['*'],
-      //   page: ordersPage,
-      // ),
-    ],
-  );
-}
+// ModuleMenu _getSalesMenu(
+//     {required OnBackPage onBackPage,
+//     required OnChangePage onChangePage,
+//     required BuildContext context}) {
+//   var registerSalePage = RegisterSalePage(onBackPage: onBackPage);
+//   // var invoiceCreatePage = InvoiceSalePage(onBackPage: onBackPage);
+//   var invoicesPage =
+//       InvoicesPage(onBackPage: onBackPage, onChangePage: onChangePage);
+//   var receiptsPage =
+//       ReceiptsPage(onBackPage: onBackPage, onChangePage: onChangePage);
+//   var soldItemsPage =
+//       SoldItemsPage(onBackPage: onBackPage, onChangePage: onChangePage);
+//   var ordersPage =
+//       OrdersPage(onBackPage: onBackPage, onChangePage: onChangePage);
+//   var customersPage = CustomersPage(onBackPage: onBackPage);
+//   return ModuleMenu(
+//     name: 'Disburse',
+//     icon: Icon(Icons.point_of_sale_outlined,
+//         color: Theme.of(context).colorScheme.primary),
+//     link: registerSalePage.pageName,
+//     page: registerSalePage,
+//     roles: ['*'],
+//     children: [
+//       ModuleMenu(
+//         name: 'Create',
+//         link: registerSalePage.pageName,
+//         icon: Icon(Icons.add_shopping_cart,
+//             color: Theme.of(context).colorScheme.primary),
+//         roles: ['*'],
+//         page: registerSalePage,
+//       ),
+//       // ModuleMenu(
+//       //   name: 'Create wholesale',
+//       //   link: '/sales/cash',
+//       //   icon: Icon(Icons.business_outlined,
+//       //       color: Theme.of(context).colorScheme.primary),
+//       //   roles: ['*'],
+//       //   page: salesCashWholePage,
+//       // ),
+//       // ModuleMenu(
+//       //   name: 'Create invoice',
+//       //   link: invoiceCreatePage.pageName,
+//       //   icon: Icon(Icons.add_card_outlined,
+//       //       color: Theme.of(context).colorScheme.primary),
+//       //   roles: ['*'],
+//       //   page: invoiceCreatePage,
+//       // ),
+//       ModuleMenu(
+//         name: 'Disbursed wastes',
+//         link: soldItemsPage.pageName,
+//         icon: Icon(Icons.paste_outlined,
+//             color: Theme.of(context).colorScheme.primary),
+//         roles: ['*'],
+//         page: soldItemsPage,
+//       ),
+//       ModuleMenu(
+//         name: 'Invoices',
+//         link: invoicesPage.pageName,
+//         icon: Icon(Icons.receipt_long_outlined,
+//             color: Theme.of(context).colorScheme.primary),
+//         roles: ['*'],
+//         page: invoicesPage,
+//       ),
+//       ModuleMenu(
+//         name: 'Receipts',
+//         link: receiptsPage.pageName,
+//         icon: Icon(Icons.receipt_outlined,
+//             color: Theme.of(context).colorScheme.primary),
+//         roles: ['*'],
+//         page: receiptsPage,
+//       ),
+//       ModuleMenu(
+//         name: 'Customers',
+//         link: customersPage.pageName,
+//         icon: Icon(Icons.supervised_user_circle_outlined,
+//             color: Theme.of(context).colorScheme.primary),
+//         roles: ['*'],
+//         page: customersPage,
+//       ),
+//       // ModuleMenu(
+//       //   name: 'Orders',
+//       //   link: ordersPage.pageName,
+//       //   icon: Icon(Icons.local_mall_outlined,
+//       //       color: Theme.of(context).colorScheme.primary),
+//       //   roles: ['*'],
+//       //   page: ordersPage,
+//       // ),
+//     ],
+//   );
+// }
 
-List<ModuleMenu> _getEmptyMenu({
-  required context,
-  required onBackPage,
-  required onChangePage,
-}) {
-  return [];
-}
+// List<ModuleMenu> _getEmptyMenu({
+//   required context,
+//   required onBackPage,
+//   required onChangePage,
+// }) {
+//   return [];
+// }
 
 void main() {
   initializeSmartStock(
