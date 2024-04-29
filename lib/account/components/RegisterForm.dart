@@ -11,6 +11,7 @@ import 'package:smartstock/core/helpers/configs.dart';
 import 'package:smartstock/core/helpers/functional.dart';
 import 'package:smartstock/core/helpers/util.dart';
 import 'package:smartstock/core/services/account.dart';
+import 'package:smartstock/core/services/security.dart';
 
 class RegisterForm extends StatefulWidget {
   final OnGeAppMenu onGetModulesMenu;
@@ -58,7 +59,7 @@ class _State extends State<RegisterForm> {
       children: [
         _businessInput(states, _prepareUpdateState()),
         _fullnameInput(states, _prepareUpdateState()),
-        _emailInput(states, _prepareUpdateState()),
+        // _emailInput(states, _prepareUpdateState()),
         _countryInput(states, _prepareUpdateState()),
         _mobileInput(states, _prepareUpdateState()),
         _separatorView(),
@@ -75,7 +76,7 @@ class _State extends State<RegisterForm> {
     var password = states['password'];
     var businessName = states['businessName'];
     var fullname = states['fullname'];
-    var email = states['email'];
+    // var email = '${generateUUID()}@chatafisha.co.tz';
     var country = states['country'];
     var mobile = states['mobile'];
     var err = {};
@@ -92,9 +93,9 @@ class _State extends State<RegisterForm> {
     if ((fullname is String && fullname.isEmpty) || businessName is! String) {
       err['e_fullname'] = 'Fullname required';
     }
-    if ((email is String && email.isEmpty) || email is! String) {
-      err['e_email'] = 'Email required';
-    }
+    // if ((email is String && email.isEmpty) || email is! String) {
+    //   err['e_email'] = 'Email required';
+    // }
     if ((country is Map && country['name'].isEmpty) || country is! Map) {
       err['e_country'] = 'Country required';
     }
@@ -119,7 +120,7 @@ class _State extends State<RegisterForm> {
       var data = {
         "username": states['username'],
         'password': states['password'],
-        'email': states['email'],
+        'email': '${generateUUID()}@chatafisha.co.tz',
         'firstname': states['fullname'],
         'lastname': '.',
         'mobile': '255${states['mobile']}',
@@ -235,15 +236,15 @@ class _State extends State<RegisterForm> {
     );
   }
 
-  _emailInput(states, updateState) {
-    return TextInput(
-      label: "Email",
-      initialText: states['email'],
-      onText: (x) => updateState(
-          {'email': x, 'e_email': x.isNotEmpty ? '' : 'Email required'}),
-      error: states['e_email'] ?? '',
-    );
-  }
+  // _emailInput(states, updateState) {
+  //   return TextInput(
+  //     label: "Email",
+  //     initialText: states['email'],
+  //     onText: (x) => updateState(
+  //         {'email': x, 'e_email': x.isNotEmpty ? '' : 'Email required'}),
+  //     error: states['e_email'] ?? '',
+  //   );
+  // }
 
   _mobileInput(states, updateState) {
     return MobileInput(

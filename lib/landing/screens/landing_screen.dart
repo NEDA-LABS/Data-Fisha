@@ -5,6 +5,7 @@ import 'package:smartstock/core/components/BodyLarge.dart';
 import 'package:smartstock/core/components/BodyMedium.dart';
 import 'package:smartstock/core/components/DisplayTextMedium.dart';
 import 'package:smartstock/core/components/TitleLarge.dart';
+import 'package:smartstock/core/components/TitleMedium.dart';
 import 'package:smartstock/core/components/WhiteSpacer.dart';
 import 'package:smartstock/core/components/logo_black.dart';
 import 'package:smartstock/core/components/logo_white.dart';
@@ -54,6 +55,8 @@ class LandingScreen extends StatelessWidget {
       child: const Row(
         children: [
           LogoBlack(size: 48),
+          WhiteSpacer(width: 8),
+          TitleLarge(text: "Chatafisha")
           // Expanded(child: Container()),
           // Container(
           //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

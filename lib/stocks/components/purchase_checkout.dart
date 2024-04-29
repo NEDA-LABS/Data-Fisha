@@ -356,7 +356,8 @@ class _State extends State<PurchaseCheckout> {
                       verticalPadding: 0,
                     ),
                     TableLikeListTextDataCell(
-                      '${getShopCurrency(shop)} ${formatNumber('${item.product['amount']}')}',
+                      '${getShopCurrency(shop)} ${formatNumber(
+                          '${doubleOrZero('${item.quantity}') * doubleOrZero('${item.product['purchase']}')}')}',
                       textAlign: TextAlign.end,
                       verticalPadding: 0,
                     ),
